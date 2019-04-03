@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - '10.13.0'
+before_script: npm install
+script: npm run-script build
+after_success:
+  - zip -r -q -o pack.zip  ./build
+  - curl -F "token=$TOKEN" -F "commit=$TRAVIS_COMMIT" -F "source=frontend" -F "filename=@pack.zip" -H "Expect:" http://cloudreve.org/deploy.php

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="{$options.themeColor}" />
+    <link rel="manifest" href="/manifest.json">
+    <title>我的文件 - {$options.siteName}</title>
+    <script type="text/javascript">
+        colorTheme = {:json_encode($options["themeConfig"])};
+        isHomePage = true;
+        pageId="";
+        isSharePage = false;
+        uploadConfig = {
+            saveType: "{$policyData.policy_type}",
+            maxSize: "{$policyData.max_size}mb",
+            allowedType: [{$extLimit}],
+            allowSource: "{$policyData.origin_link}",
+            upUrl: "{$policyData.server}",
+            allowShare: "{$groupData.allow_share}",
+            allowRemoteDownload: "{:explode(",",$groupData.aria2)[0]}",
+            allowTorrentDownload: "{:explode(",",$groupData.aria2)[1]}",
+        };
+        if(uploadConfig.saveType == "oss" || uploadConfig.saveType == "upyun" || uploadConfig.saveType == "s3"){
+            ChunkSize = "0";
+        }else if(uploadConfig.saveType == "qiniu" ){
+            ChunkSize = 4*1024*1024;
+        }else{
+          ChunkSize = {$chunkSize};
+        }
+        apiURL = {
+            imgThumb: "/File/Thumb",
+            preview: "/File/Preview",
+            download: "/File/Download",
+            docPreiview: '/File/DocPreview',
+            listFile:"/File/ListFile"
+        };
+        userInfo = {
+            uid: {$userInfo.uid},
+            nick: "{$userInfo.userNick}",
+            email: "{$userInfo.userMail}",
+            group: "{$userInfo.groupData.group_name}",
+            groupId: {$userInfo.groupData.id},
+            groupColor: "{$userInfo.groupData.color}",
+        };
+        siteInfo = {
+            mainTitle: "{$options.siteName}",
+        };
+        pathCache = {};
+        path = "{$path}";
+        mediaType = {},
+        isMobile = window.innerWidth < 600;
+    </script>
+</head>
+
+<body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+</body>
+
+</html>
