@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="{$options.themeColor}" />
+    <link rel="manifest" href="/manifest.json">
+    <title>离线下载管理- {$options.siteName}</title>
+    <script type="text/javascript">
+        colorTheme = {:json_encode($options["themeConfig"])};
+        isHomePage = false;
+        isSharePage = false;
+        pageId="shareLock";
+        userInfo = {
+            uid: {$userInfo.uid},
+            nick: "{$userInfo.userNick}",
+            email: "{$userInfo.userMail}",
+            group: "{$userInfo.groupData.group_name}",
+            groupId: {$userInfo.groupData.id},
+            groupColor: "{$userInfo.groupData.color}",
+        };
+        siteInfo = {
+            mainTitle: "离线下载",
+        };
+        uploadConfig = {
+            allowSource: false,
+            allowShare: false,
+            allowRemoteDownload: "0",
+            allowTorrentDownload: "0",
+        };
+        isMobile = window.innerWidth < 600;
+    </script>
+</head>
+
+<body>
+
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+</body>
+</html>

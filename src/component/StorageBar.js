@@ -57,7 +57,7 @@ const styles = theme => ({
         bottom: "0px",
         position: "absolute",
         backgroundColor:theme.palette.background.paper,
-    }
+    },
 })
 
 class StorageBarCompoment extends Component {
@@ -72,8 +72,8 @@ class StorageBarCompoment extends Component {
 
     componentDidMount = ()=>{
         if(this.firstLoad){
-            this.updateStatus();
             this.firstLoad = !this.firstLoad;
+            this.updateStatus();
         }
         
     }

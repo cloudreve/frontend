@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DocIcon from '@material-ui/icons/FileCopy';
 import ShareIcon from '@material-ui/icons/Share';
 import BackIcon from '@material-ui/icons/ArrowBack';
+import SdStorage from '@material-ui/icons/SdStorage';
 import OpenIcon from '@material-ui/icons/OpenInNew'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
 import OpenFolderIcon from '@material-ui/icons/FolderOpen'
@@ -435,6 +436,12 @@ class NavbarCompoment extends Component {
                                 <DownloadIcon className={classes.iconFix} />
                         </ListItemIcon>
                         <ListItemText inset primary="离线下载" />
+                    </ListItem>
+                    <ListItem button key="容量配额"  onClick={()=>window.location.href="/Home/Quota"}>
+                        <ListItemIcon>
+                                <SdStorage className={classes.iconFix} />
+                        </ListItemIcon>
+                        <ListItemText inset primary="容量配额" />
                     </ListItem>
                 {!window.isSharePage&&
                     <div>
