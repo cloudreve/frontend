@@ -95,6 +95,12 @@ export const openRenameDialog = () => {
     }
 }
 
+export const openResaveDialog = () => {
+    return {
+        type: 'OPEN_RESAVE_DIALOG',
+    }
+}
+
 export const openMoveDialog = () => {
     return {
         type: 'OPEN_MOVE_DIALOG',

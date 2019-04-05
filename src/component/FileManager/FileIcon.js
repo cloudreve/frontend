@@ -279,7 +279,7 @@ class FileIconCompoment extends Component {
                         [classes.notSelected]: !isSelected,
                     }, classes.button)}
                 >
-                {(this.props.file.pic!==""&& this.props.file.pic!==" "&&allowSharePreview())&&
+                {(this.props.file.pic!==""&& this.props.file.pic!==" "&& this.props.file.pic!=="null,null"&&allowSharePreview())&&
                     <div className={classes.preview}> 
                     <LazyLoadImage
                         className = {classNames({

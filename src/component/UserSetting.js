@@ -10,6 +10,7 @@ import DateIcon from '@material-ui/icons/DateRange'
 import EmailIcon from '@material-ui/icons/Email'
 import HomeIcon from '@material-ui/icons/Home'
 import LinkIcon from '@material-ui/icons/Phonelink'
+import AlarmOff from '@material-ui/icons/AlarmOff'
 import InputIcon from '@material-ui/icons/Input'
 import SecurityIcon from '@material-ui/icons/Security'
 import NickIcon from '@material-ui/icons/PermContactCalendar'
@@ -37,8 +38,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import blue from '@material-ui/core/colors/blue';
 import yellow from '@material-ui/core/colors/yellow';
 import { ListItemIcon } from '@material-ui/core';
+import Backup from '@material-ui/icons/Backup'
 import Switch from '@material-ui/core/Switch';
-
+import SettingsInputHdmi from '@material-ui/icons/SettingsInputHdmi'
 const styles = theme => ({
 
     layout: {
@@ -160,6 +162,8 @@ class UserSettingCompoment extends Component {
         showWebDavUrl:false,
         showWebDavUserName:false,
         changeWebDavPwd:false,
+        groupBackModal:false,
+        changePolicy:false,
     }
 
     handleClose = () => {
@@ -173,8 +177,22 @@ class UserSettingCompoment extends Component {
             showWebDavUrl:false,
             showWebDavUserName:false,
             changeWebDavPwd:false,
+            groupBackModal:false,
+            changePolicy:false,
         });
     };
+
+    doChangeGroup = ()=>{
+        axios.post('/Member/groupBack', {
+            t:"comfirm",
+        }).then( (response)=> {
+            this.props.toggleSnackbar("top","right","解约成功，更改会在数分钟后生效" ,"success");
+            this.handleClose();
+        })
+        .catch((error) =>{
+            this.props.toggleSnackbar("top","right",error.message ,"error");
+        });
+    }
 
     useGravatar = ()=>{
         this.setState({
@@ -184,6 +202,27 @@ class UserSettingCompoment extends Component {
             t:"comfirm",
         }).then( (response)=> {
             window.location.reload();
+            this.setState({
+                loading:"",
+            })
+        })
+        .catch((error) =>{
+            this.props.toggleSnackbar("top","right",error.message ,"error");
+            this.setState({
+                loading:"",
+            })
+        });
+    }
+
+    changePolicy = id =>{
+        axios.post('/Member/ChangePolicy', {
+            id:id,
+        }).then( (response)=> {
+            if(response.data.error==="1"){
+                this.props.toggleSnackbar("top","right",response.data.msg ,"error");
+            }else{
+                window.location.reload();
+            }
             this.setState({
                 loading:"",
             })
@@ -424,12 +463,44 @@ class UserSettingCompoment extends Component {
                             </ListItemSecondaryAction>
                         </ListItem>
                         <Divider/>
-                        <ListItem button>
+                        <ListItem button onClick={()=>window.location.href="/Home/Quota?buyGroup=1"}>
                            <ListItemIcon className={classes.iconFix}><GroupIcon/></ListItemIcon>
                             <ListItemText primary="用户组" />
                             
                             <ListItemSecondaryAction>
-                            <Typography className={classes.infoText} color="textSecondary">{window.userInfo.group}</Typography>
+                            <Typography className={classes.infoText} color="textSecondary">{window.userInfo.group}{window.userInfo.expired>0&&
+                                <span>(还有{Math.ceil(window.userInfo.expired / 86400)}天)</span>
+                            }</Typography>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                        {window.userInfo.expired>0&&
+                        <div>
+                            <Divider/>
+                            <ListItem button onClick={()=>this.setState({groupBackModal:true})}>
+                                <ListItemIcon className={classes.iconFix}><AlarmOff/></ListItemIcon>
+                                <ListItemText primary="手动解约当前用户组" />
+                                
+                                <ListItemSecondaryAction>
+                                <RightIcon className={classes.rightIcon}/>
+                            </ListItemSecondaryAction>
+                            </ListItem></div>
+                        }
+                        <Divider/>
+                        <ListItem button onClick={()=>window.location.href=(window.userInfo.qqBind?"/Member/UnbindQQ":"/Member/BindQQ")}>
+                           <ListItemIcon className={classes.iconFix}><SettingsInputHdmi/></ListItemIcon>
+                            <ListItemText primary="QQ账号" />
+                            
+                            <ListItemSecondaryAction className={classes.flexContainer}>
+                            <Typography className={classes.infoTextWithIcon} color="textSecondary">{window.userInfo.qqBind?"解除绑定":"绑定"}</Typography><RightIcon className={classes.rightIconWithText}/>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                        <Divider/>
+                        <ListItem button onClick={()=>this.setState({changePolicy:true})}>
+                           <ListItemIcon className={classes.iconFix}><Backup/></ListItemIcon>
+                            <ListItemText primary="上传策略" />
+                            
+                            <ListItemSecondaryAction className={classes.flexContainer}>
+                            <Typography className={classes.infoTextWithIcon} color="textSecondary">{window.userInfo.policy}</Typography><RightIcon className={classes.rightIconWithText}/>
                             </ListItemSecondaryAction>
                         </ListItem>
                         <Divider/>
@@ -529,6 +600,22 @@ class UserSettingCompoment extends Component {
 
                 </div>
                 <Dialog
+                open={this.state.changePolicy}
+                onClose={this.handleClose}
+                >
+                <DialogTitle>切换上传策略</DialogTitle>
+                <List>
+                    {window.userInfo.policyOption.map((value,index)=>(
+                        <ListItem button component="label" key={index} onClick={()=>this.changePolicy(value.id)}>
+                        <Avatar className={classes.uploadFromFile}>
+                                <Backup />
+                            </Avatar>
+                        <ListItemText primary={value.name} />
+                    </ListItem>
+                    ))}
+                </List>
+                </Dialog>
+                <Dialog
                 open={this.state.avatarModal}
                 onClose={this.handleClose}
                 >
@@ -586,6 +673,25 @@ class UserSettingCompoment extends Component {
                     </Button>
                     <Button onClick={this.changeNick} color="primary" disabled={this.state.loading==="nick"||this.state.nick===""}>
                         保存
+                    </Button>
+                </DialogActions>
+                </Dialog>
+                <Dialog
+                open={this.state.groupBackModal}
+                onClose={this.handleClose}
+                >
+                <DialogTitle>解约用户组</DialogTitle>
+                <DialogContent>
+
+                    将要退回到初始用户组，且所支付金额无法退还，确定要继续吗？
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleClose} color="default">
+                        取消
+                    </Button>
+                    <Button onClick={this.doChangeGroup} color="primary" >
+                        确定
                     </Button>
                 </DialogActions>
                 </Dialog>

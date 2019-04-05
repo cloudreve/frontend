@@ -26,6 +26,7 @@ const styles = theme => ({
             marginLeft: 'auto',
             marginRight: 'auto',
         },
+        marginBottom:"50px",
     },
 
     gird: {
@@ -199,10 +200,17 @@ class QuotaCompoment extends Component {
                 </Grid>
                 <Typography color="textSecondary" variant="h3" className={classes.title}>可用容量包</Typography>
                 <Paper className={classes.paper}>
-                <Button variant="contained" color="secondary" className={classes.button}>
+                <Button 
+                variant="contained" 
+                color="secondary" 
+                className={classes.button}
+                onClick={()=>window.location.href="/Home/Quota?buyPack=1"}
+                >
                     购买容量包
                 </Button>
-                <Button variant="contained" className={classes.button}>
+                <Button variant="contained" className={classes.button}
+                 onClick={()=>window.location.href="/Home/Quota?redeem=1"}
+                >
                     使用激活码兑换
                 </Button>
                 <div className={classes.table}>

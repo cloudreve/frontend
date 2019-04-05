@@ -5,7 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Navbar from "../component/Navbar.js"
 import AlertBar from "../component/Snackbar"
 import Quota from "../component/Quota"
+import BuyQuota from "../component/BuyQuota"
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { checkGetParameters } from '../untils/index';
 
 const theme = createMuiTheme(window.colorTheme);
 const styles = theme => ({
@@ -34,7 +36,18 @@ class QuatoApp extends Component {
 						<Navbar />
 						<main className={classes.content}>
 							<div className={classes.toolbar} />
-							<Quota/>
+							{checkGetParameters("buyPack")&&
+								<BuyQuota tabID={0}/>
+							}
+							{checkGetParameters("buyGroup")&&
+								<BuyQuota tabID={1}/>
+							}
+							{checkGetParameters("redeem")&&
+								<BuyQuota tabID={2}/>
+							}
+							{!checkGetParameters("redeem")&&!(checkGetParameters("buyGroup")||checkGetParameters("buyPack"))&&
+								<Quota/>
+							}
 						</main>
 					</div></MuiThemeProvider>
 			</React.Fragment>

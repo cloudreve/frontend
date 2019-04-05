@@ -206,6 +206,15 @@ const cloudreveApp = (state = [], action) => {
                     contextOpen:false,
                 }),
             });
+        case 'OPEN_RESAVE_DIALOG':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    modals: Object.assign({}, state.viewUpdate.modals, {
+                        resave:true,
+                    }),
+                    contextOpen:false,
+                }),
+            });
         case 'OPEN_SHARE_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
@@ -264,6 +273,7 @@ const cloudreveApp = (state = [], action) => {
                         remoteDownload:false,
                         torrentDownload:false,
                         getSource:false,
+                        resave:false,
                     }),
                 }),
             });

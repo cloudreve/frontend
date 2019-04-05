@@ -13,6 +13,7 @@ import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
+import Modals from "./FileManager/Modals"
 import axios from 'axios'
 const styles = theme => ({
     layout: {
@@ -142,6 +143,7 @@ class SharedFileCompoment extends Component {
 
         return (
              <div className={classes.layout}>
+             <Modals/>
                 <div className={classes.fileCotainer}>
                    <FileIcon file={file} share={true}/></div>
                 <div className={classes.buttonCotainer}>

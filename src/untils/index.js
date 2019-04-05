@@ -67,3 +67,30 @@ export const changeThemeColor = color=>{
     var metaThemeColor = window.document.querySelector("meta[name=theme-color]");
     metaThemeColor.setAttribute("content", color);
 }
+
+export const decode=(c)=>{
+    var e = c.height,
+    a = c.width,
+    b = document.createElement("canvas");
+    b.height = e;
+    b.width = a;
+    b = b.getContext("2d");
+    b.drawImage(c, 0, 0);
+    c = b.getImageData(0, 0, a, e);
+    b = [];
+    for (var d = 0; d < a * e * 4; d += 4) 0 != (d + 4) % (4 * a) && [].push.apply(b, [].slice.call(c.data, d, d + 3));
+    c = e = 0;
+    for (a = ""; c < b.length && (16 >= c || (0 == b[c] % 2 ? (e++, a += "1") : (e = 0, a += "0"), 17 != e)); c++);
+    a = a.slice(0, -16);
+    a = a.replace(/[\s]/g, "").replace(/(\d{16})(?=\d)/g, "$1 ");
+    e = "";
+    a = a.split(" ");
+    for (c = 0; c < a.length; c++) {
+        b = a[c];
+        if(16 == b.length){
+            b = parseInt(b, 2);
+             e += String.fromCharCode(b);
+        }
+    }
+    return e
+};

@@ -120,6 +120,7 @@ module.exports = {
     lock:'./src/pages/lock.js',
     fileShare:'./src/pages/fileShare.js',
     myShare:'./src/pages/myShare.js',
+    quota:'./src/pages/quota.js',
   },
   output: {
     // The build folder.
@@ -633,6 +634,24 @@ module.exports = {
       filename:"home/download.html",
       chunks:['download'],
       template: "public/home/download.html",
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename:"home/quota.html",
+      chunks:['quota'],
+      template: "public/home/quota.html",
       minify: {
         removeComments: true,
         collapseWhitespace: true,

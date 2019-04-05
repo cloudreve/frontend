@@ -31,6 +31,7 @@ const defaultStatus = {
             music:false,
             remoteDownload:false,
             torrentDownload:false,
+            resave:false,
         },
         snackbar:{
             toggle:false,

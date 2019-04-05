@@ -189,6 +189,27 @@ class ModalsCompoment extends Component {
         });
     }
 
+    submitResave = e => {
+        e.preventDefault();
+        this.props.setModalsLoading(true);
+        axios.post('/Share/ReSave/'+window.shareInfo.shareId, {
+            path:this.state.selectedPath === "//"?"/":this.state.selectedPath,
+        })
+        .then( (response)=> {
+            if(response.data.result.success){
+                this.onClose();
+                this.props.refreshFileList(); 
+            }else{
+                this.props.toggleSnackbar("top","right",response.data.result.error,"warning");
+            }
+            this.props.setModalsLoading(false);
+        })
+        .catch((error) =>{
+            this.props.toggleSnackbar("top","right",error.message ,"error");
+            this.props.setModalsLoading(false);
+        });
+    }
+
     submitMove = e =>{
         e.preventDefault();
         this.props.setModalsLoading(true);
@@ -498,6 +519,32 @@ class ModalsCompoment extends Component {
                         </Button>
                         <div className={classes.wrapper}>
                             <Button onClick={this.submitMove} color="primary" disabled={this.state.selectedPath==="" || this.props.modalsLoading }>
+                                确定
+                                {this.props.modalsLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                            </Button>
+                        </div>
+                    </DialogActions>
+                
+                </Dialog>
+                <Dialog
+                open={this.props.modalsStatus.resave}
+                onClose={this.onClose}
+                aria-labelledby="form-dialog-title"
+                >
+                <DialogTitle id="form-dialog-title">保存至</DialogTitle>
+                <PathSelector presentPath={this.props.path} selected={this.props.selected} onSelect ={ this.setMoveTarget}/>
+
+                {this.state.selectedPath!==""&&<DialogContent className={classes.contentFix}>
+                    <DialogContentText >
+                    保存至 <strong>{this.state.selectedPathName}</strong>
+                    </DialogContentText>
+                </DialogContent>}
+                    <DialogActions>
+                        <Button onClick={this.onClose}>
+                            取消
+                        </Button>
+                        <div className={classes.wrapper}>
+                            <Button onClick={this.submitResave} color="primary" disabled={this.state.selectedPath==="" || this.props.modalsLoading }>
                                 确定
                                 {this.props.modalsLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
                             </Button>

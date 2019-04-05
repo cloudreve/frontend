@@ -12,6 +12,8 @@ import Chip from '@material-ui/core/Chip';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
+import SaveIcon from '@material-ui/icons/Save';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
     LogoutVariant,
     HomeAccount,
@@ -21,7 +23,7 @@ import {
     AccountPlus
 } from 'mdi-material-ui'
 import {
-
+    openResaveDialog
 }from "../actions/index"
 
 const mapStateToProps = state => {
@@ -35,7 +37,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        openResave:()=>{
+            dispatch(openResaveDialog())
+        }
     }
 }
 
@@ -98,6 +102,10 @@ class UserAvatarCompoment extends Component {
                 
                 <Grow in={((this.props.selected.length <=1) && !(!this.props.isMultiple&&this.props.withFile))}>
                        <div>
+                       {(window.userInfo.uid!==-1 && window.isSharePage)&&<Tooltip title="保存到我的网盘"><IconButton onClick={()=>this.props.openResave()} color="inherit" 
+                        >
+                            <SaveIcon/>
+                        </IconButton></Tooltip>}
                        {(window.userInfo.uid!==-1)&&<IconButton onClick={()=>window.location.href="/Member/Setting"} color="inherit" 
                         >
                             <SettingIcon/>

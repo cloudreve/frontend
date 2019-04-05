@@ -33,6 +33,7 @@ const defaultStatus = {
             remoteDownload:false,
             torrentDownload:false,
             getSource:false,
+            resave:false,
         },
         snackbar:{
             toggle:false,

@@ -178,7 +178,31 @@ class LoginFormCompoment extends Component {
                             </div>
                         </div>
                         }
-                        <Button
+                        {window.qqLogin&&
+                            <div>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={this.state.loading}
+                                    className={classes.submit}
+                                >
+                                    登录
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    style={{marginLeft:"10px"}}
+                                    disabled={this.state.loading}
+                                    className={classes.submit}
+                                    onClick={()=>window.location.href="/Member/QQLogin"}
+                                >
+                                    使用QQ登录
+                                </Button>
+                            </div>
+                        }
+                        {!window.qqLogin&&
+                            <Button
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -187,7 +211,9 @@ class LoginFormCompoment extends Component {
                             className={classes.submit}
                         >
                             登录
-                        </Button>  </form>                          <Divider/>
+                        </Button>
+                        }
+                      </form>                          <Divider/>
                         <div className={classes.link}>
                             <div>
                                 <Link href={"/Member/FindPwd"}>
