@@ -39,8 +39,8 @@ const styles = theme => ({
         boxShadow: "0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)",
     },
     avatarImg:{
-        width: "80px",
-        height: "80px",
+        width: "76px",
+        height: "76px",
     },
     nickName:{
         color: "#fff",
