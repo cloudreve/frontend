@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import Typography from '@material-ui/core/Typography';
 import {
+    openResaveDialog,
+    setUserPopover
 }from "../actions/index"
 
 const mapStateToProps = state => {
@@ -13,6 +15,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        setUserPopover:anchor=>{
+            dispatch(setUserPopover(anchor))
+        }
     }
 }
 
@@ -57,13 +62,17 @@ const styles = theme => ({
 
 class UserInfoCompoment extends Component {
 
+    showUserInfo = e=>{
+        this.props.setUserPopover(e.currentTarget);
+    }
+
     render() {
         const { classes} = this.props;
 
         return (
             <div className={classes.userNav}>
                 <div className={classes.flexAvatar}>
-                    <a href={"/Profile/"+window.userInfo.uid} className={classes.avatar}>
+                    <a onClick={this.showUserInfo} className={classes.avatar}>
                         {(window.userInfo.uid!==-1)&&<img alt="avatar" src={"/Member/Avatar/"+window.userInfo.uid+"/l"} className={classes.avatarImg}></img>}
                         {(window.userInfo.uid===-1)&&<img alt="avatar" src={"/Member/Avatar/0/l"} className={classes.avatarImg}></img>}
                     </a>

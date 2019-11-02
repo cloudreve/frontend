@@ -89,6 +89,14 @@ export const openCreateFolderDialog = () => {
     }
 }
 
+export const setUserPopover = anchor => {
+    return {
+        type: 'SET_USER_POPOVER',
+        anchor: anchor,
+    }
+}
+
+
 export const openRenameDialog = () => {
     return {
         type: 'OPEN_RENAME_DIALOG',
