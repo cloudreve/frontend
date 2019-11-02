@@ -285,10 +285,10 @@ class DownloadCompoment extends Component {
                         <Typography color="primary" variant="h6" noWrap>
                             {value.fileName}
                         </Typography>
-                        <LinearProgress color="secondary" variant="determinate" value={value.percent} />
+                        <LinearProgress color="secondary" variant="determinate" value={value.percent*100} />
                         <Typography variant="subtitle1" color="textSecondary" noWrap >
                             {value.hasOwnProperty("completedLength")&&
-                                <span>{value.percent.toFixed(2)}% - {value.completedLength==="0"?"0Bytes":sizeToString(value.completedLength)}/{value.totalLength==="0"?"0Bytes":sizeToString(value.totalLength)} - {value.downloadSpeed==="0"?"0B/s":sizeToString(value.downloadSpeed)+"/s"}</span>
+                                <span>{(value.percent*100).toFixed(2)}% - {value.completedLength==="0"?"0Bytes":sizeToString(value.completedLength)}/{value.totalLength==="0"?"0Bytes":sizeToString(value.totalLength)} - {value.downloadSpeed==="0"?"0B/s":sizeToString(value.downloadSpeed)+"/s"}</span>
                             }
                             {!value.hasOwnProperty("completedLength")&&
                             <span> - </span>

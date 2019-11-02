@@ -44,7 +44,7 @@ class FileManager extends Component {
                 <Navigator/>
                 <Explorer/>
                 <img src='/static/img/sign.png' style={{display:"none"}}
-                 onError={()=>window.location.href="/FixComplete"}
+                //  onError={()=>window.location.href="/FixComplete"}
                  ref={this.image} onLoad={this.handleImageLoaded} />
              </div>
         );

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="{$options.themeColor}" />
+    <link rel="manifest" href="/manifest.json">
+    <title>我的文件 - {$options.siteName}</title>
+    <script type="text/javascript">colorTheme = {"palette":{"common":{"black":"#000","white":"#fff"},"background":{"paper":"#fff","default":"#fafafa"},"primary":{"light":"#7986cb","main":"#3f51b5","dark":"#303f9f","contrastText":"#fff"},"secondary":{"light":"#ff4081","main":"#f50057","dark":"#c51162","contrastText":"#fff"},"error":{"light":"#e57373","main":"#f44336","dark":"#d32f2f","contrastText":"#fff"},"text":{"primary":"rgba(0, 0, 0, 0.87)","secondary":"rgba(0, 0, 0, 0.54)","disabled":"rgba(0, 0, 0, 0.38)","hint":"rgba(0, 0, 0, 0.38)"},"explorer":{"filename":"#474849","icon":"#8f8f8f","bgSelected":"#D5DAF0","emptyIcon":"#e8e8e8"}}};
+        isHomePage = true;
+        pageId="";
+        isSharePage = false;
+        uploadConfig = {
+            saveType: "local",
+            maxSize: "10mb",
+            allowedType: [],
+            allowSource: "0",
+            upUrl: "/Upload",
+            allowShare: "1",
+            allowRemoteDownload: "0",
+            allowTorrentDownload: "0",
+        };
+        if(uploadConfig.saveType == "oss" || uploadConfig.saveType == "upyun" || uploadConfig.saveType == "s3"){
+            ChunkSize = "0";
+        }else if(uploadConfig.saveType == "qiniu" ){
+            ChunkSize = 4*1024*1024;
+        }else{
+          ChunkSize = 10485760;
+        }
+        apiURL = {
+            imgThumb: "/File/Thumb",
+            preview: "/File/Preview",
+            download: "/File/Download",
+            docPreiview: '/File/DocPreview',
+            listFile:"/File/ListFile"
+        };
+        userInfo = {
+            uid: 1,
+            nick: "Admin",
+            email: "admin@cloudreve.org",
+            group: "管理员",
+            groupId: 1,
+            groupColor: "danger",
+        };
+        siteInfo = {
+            mainTitle: "Cloudreve",
+        };
+        pathCache = {};
+        path = "/";
+        mediaType = {},
+        isMobile = window.innerWidth < 600;
+    </script>
+</head>
+
+<body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+</body>
+
+</html> 

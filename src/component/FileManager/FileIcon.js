@@ -217,6 +217,7 @@ class FileIconCompoment extends Component {
 
     state={
         loading:false,
+        showPicIcon:false,
     }
 
     render() {
@@ -279,7 +280,7 @@ class FileIconCompoment extends Component {
                         [classes.notSelected]: !isSelected,
                     }, classes.button)}
                 >
-                {(this.props.file.pic!==""&& this.props.file.pic!==" "&& this.props.file.pic!=="null,null"&&allowSharePreview())&&
+                {(this.props.file.pic!==""&&!this.state.showPicIcon&& this.props.file.pic!==" "&& this.props.file.pic!=="null,null"&&allowSharePreview())&&
                     <div className={classes.preview}> 
                     <LazyLoadImage
                         className = {classNames({
@@ -289,6 +290,7 @@ class FileIconCompoment extends Component {
                         src={window.apiURL.imgThumb+"?isImg=true&path="+encodeURIComponent(this.props.file.path==="/"?this.props.file.path+this.props.file.name:this.props.file.path+"/"+this.props.file.name)}
                         afterLoad = {()=>this.setState({loading:false})}
                         beforeLoad = {()=>this.setState({loading:true})}
+                        onError={()=>this.setState({showPicIcon:true})}
                         />  
                         <ContentLoader
                         height={150}
@@ -304,13 +306,13 @@ class FileIconCompoment extends Component {
                 
                     </div>
                 }
-                {(this.props.file.pic===""|| this.props.file.pic===" "||!allowSharePreview())&&
+                {(this.props.file.pic===""||this.state.showPicIcon|| this.props.file.pic===" "||this.props.file.pic==="null,null"||!allowSharePreview())&&
                     <div className={classes.previewIcon}>
                         {iconBig}
                     </div>
                    
             } 
-            {(this.props.file.pic===""|| this.props.file.pic===" "||!allowSharePreview())&& <Divider/> }
+            {(this.props.file.pic===""|| this.state.showPicIcon||this.props.file.pic===" "||this.props.file.pic==="null,null"||!allowSharePreview())&& <Divider/> }
                     <div className={classes.fileInfo}>
                         {!this.props.share&&<div className={classNames(classes.icon, {
                             [classes.iconSelected]: isSelected,
