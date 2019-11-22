@@ -1,27 +1,31 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import classNames from 'classnames';
 import { toggleSnackbar, } from "../actions/index"
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios'
+
+
+import {
+    withStyles,
+    Typography,
+    Paper,
+    Button,
+    Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from '@material-ui/core';
 
 
 const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop: '50px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: 'auto',
             marginRight: 'auto',
@@ -33,7 +37,7 @@ const styles = theme => ({
         marginTop: "30px",
     },
     paper: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         color: theme.palette.text.secondary,
     },
     data: {
@@ -89,7 +93,7 @@ const styles = theme => ({
         marginBottom: "30px",
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
     table:{
         overflowX:"auto",

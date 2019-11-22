@@ -89,19 +89,8 @@ module.exports = {
     // require.resolve('webpack/hot/dev-server'),
     hot:require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
-    index:paths.appIndexJs,
-    video:'./src/pages/video.js',
-    markdown:'./src/pages/markdown.js',
-    folderShare:'./src/pages/folderShare.js',
-    lock:'./src/pages/lock.js',
-    fileShare:'./src/pages/fileShare.js',
-    setting:'./src/pages/setting.js',
-    profile:'./src/pages/profile.js',
-    myShare:'./src/pages/myShare.js',
-    search:'./src/pages/search.js',
-    download:'./src/pages/download.js',
-    login:'./src/pages/login.js',
-    quota:'./src/pages/quota.js',
+    index:'./src/index.js',
+
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
@@ -344,80 +333,9 @@ module.exports = {
       inject: true,
       filename:"index.html",
       chunks:['index'],
-      template: './public/dev/index.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['video'],
-      filename:"video.html",
-      template: './public/video.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['markdown'],
-      filename:"markdown.html",
-      template: './public/markdown.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['folderShare'],
-      filename:"folderShare.html",
-      template: './public/folderShare.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['fileShare'],
-      filename:"fileShare.html",
-      template: './public/fileShare.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['lock'],
-      filename:"lock.html",
-      template: './public/lock.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['setting'],
-      filename:"setting.html",
-      template: './public/setting.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['profile'],
-      filename:"profile.html",
-      template: './public/profile.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['myShare'],
-      filename:"myShare.html",
-      template: './public/myShare.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['search'],
-      filename:"search.html",
-      template: './public/explore/result.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['download'],
-      filename:"download.html",
-      template: './public/home/download.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['quota'],
-      filename:"quota.html",
-      template: './public/home/quota.html',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks:['login'],
-      filename:"login.html",
       template: './public/member/login.html',
     }),
+    
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">

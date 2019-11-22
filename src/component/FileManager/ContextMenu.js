@@ -19,13 +19,6 @@ import {
  } from "../../actions/index"
 import {isPreviewable,isTorrent} from "../../config"
 import {allowSharePreview} from "../../untils/index"
-import { withStyles } from '@material-ui/core/styles';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import UploadIcon from '@material-ui/icons/CloudUpload'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
 import NewFolderIcon from '@material-ui/icons/CreateNewFolder'
@@ -37,6 +30,8 @@ import LinkIcon from '@material-ui/icons/InsertLink'
 import DeleteIcon from '@material-ui/icons/Delete'
 import OpenIcon from '@material-ui/icons/OpenInNew'
 import {MagnetOn} from 'mdi-material-ui'
+
+import { withStyles, Popover, Typography, MenuList, MenuItem, Divider, ListItemIcon } from '@material-ui/core';
 
 const styles = theme => ({
     propover:{
@@ -337,5 +332,5 @@ const ContextMenu = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(ContextMenuCompoment))
-  
+
 export default ContextMenu

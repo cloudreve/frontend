@@ -1,46 +1,50 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Divider from '@material-ui/core/Divider';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import VpnIcon from '@material-ui/icons/VpnKeyOutlined';
-import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 import { toggleSnackbar, } from "../../actions/index"
-import Typography from '@material-ui/core/Typography';
 import axios from 'axios'
+
+import {
+    withStyles,
+    Button,
+    FormControl,
+    Divider,
+    Input,
+    InputLabel,
+    Paper,
+    Avatar,
+    Typography,
+} from '@material-ui/core';
+
 const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop: '110px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 400,
             marginLeft: 'auto',
             marginRight: 'auto',
         },
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+        padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
     },
     avatar: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
+        marginTop: theme.spacing(1),
     },
     submit: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing(3),
     },
     link: {
         marginTop: "10px",

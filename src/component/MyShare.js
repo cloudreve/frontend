@@ -1,16 +1,7 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Tooltip from '@material-ui/core/Tooltip';
-import Card from '@material-ui/core/Card';
-import Avatar from '@material-ui/core/Avatar';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
 import { toggleSnackbar,}from "../actions/index"
-import Typography from '@material-ui/core/Typography';
 import axios from 'axios'
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import OpenIcon from '@material-ui/icons/OpenInNew';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -18,12 +9,24 @@ import LockIcon from '@material-ui/icons/Lock';
 import UnlockIcon from '@material-ui/icons/LockOpen';
 import EyeIcon from '@material-ui/icons/RemoveRedEye';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+
+import {
+    withStyles,
+    Tooltip,
+    Card,
+    Avatar,
+    CardHeader,
+    CardActions,
+    Typography,
+    Grid,
+    IconButton,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Button,
+    TextField,
+} from '@material-ui/core';
 
 const styles = theme => ({
     card: {
@@ -36,9 +39,9 @@ const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop:'50px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
           width: 1100,
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -266,5 +269,5 @@ const MyShare = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(MyShareCompoment))
-  
+
 export default MyShare

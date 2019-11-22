@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grow from '@material-ui/core/Grow';
 import { connect } from 'react-redux'
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import SettingIcon from '@material-ui/icons/Settings'
 import SaveIcon from '@material-ui/icons/Save';
-import Tooltip from '@material-ui/core/Tooltip';
 import UserAvatarPopover from './UserAvatarPopover';
 import {
     AccountCircle,
@@ -16,6 +11,8 @@ import {
     openResaveDialog,
     setUserPopover
 }from "../actions/index"
+
+import { withStyles, Grow, Avatar, IconButton, Tooltip } from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -125,5 +122,5 @@ const UserAvatar = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(UserAvatarCompoment))
-  
+
 export default UserAvatar

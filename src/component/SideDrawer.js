@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Drawer from '@material-ui/core/Drawer';
-import { withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import List from '@material-ui/core/List';
+import { Drawer, withStyles, Divider, ListItem, ListItemIcon, ListItemText, List } from '@material-ui/core';
 const drawerWidth = 240;
 const styles = theme => ({
     drawer: {

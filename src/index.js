@@ -1,11 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
-
+import {
+    HashRouter as Router,
+    Switch,
+    Route,
+  } from "react-router-dom";
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
+import App from "./App"
 import cloureveApp from './reducers'
+
+serviceWorker.register();
 
 const defaultStatus = {
     navigator:{
@@ -61,13 +67,17 @@ const defaultStatus = {
         keywords:null,
     }
 };
-
 let store = createStore(cloureveApp,defaultStatus)
+
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <Router>
+            <Switch>
+                <Route path="">
+                    <App/>
+                </Route>
+            </Switch>
+        </Router>
     </Provider>
 , document.getElementById('root'));
-
-
 

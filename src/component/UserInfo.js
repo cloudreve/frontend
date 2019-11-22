@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Typography from '@material-ui/core/Typography';
 import {
     openResaveDialog,
     setUserPopover
 }from "../actions/index"
+
+import { withStyles, Typography } from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -94,5 +94,5 @@ const UserInfo = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(UserInfoCompoment))
-  
+
 export default UserInfo

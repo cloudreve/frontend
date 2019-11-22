@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
 import RightIcon from '@material-ui/icons/KeyboardArrowRight'
 import MoreIcon from '@material-ui/icons/MoreHoriz'
 import ViewListIcon from '@material-ui/icons/ViewList'
@@ -13,11 +10,6 @@ import ViewSmallIcon from '@material-ui/icons/ViewComfy'
 import TextTotateVerticalIcon from '@material-ui/icons/TextRotateVertical'
 import FolderIcon from '@material-ui/icons/Folder'
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share'
 import NewFolderIcon from '@material-ui/icons/CreateNewFolder'
 import RefreshIcon from '@material-ui/icons/Refresh'
@@ -36,6 +28,17 @@ import {
 } from "../../actions/index"
 import axios from 'axios'
 import {setCookie,setGetParameter} from "../../untils/index"
+
+import {
+    withStyles,
+    Divider,
+    Button,
+    Menu,
+    MenuItem,
+    ListItemIcon,
+    ListItemText,
+    IconButton,
+} from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -460,5 +463,5 @@ const Navigator = connect(
     mapStateToProps,
     mapDispatchToProps
   )( withStyles(styles)(NavigatorCompoment))
-  
+
 export default Navigator

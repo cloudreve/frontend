@@ -1,27 +1,22 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import FileIcon from "../component/FileManager/FileIcon"
 import PreviewIcon from "@material-ui/icons/RemoveRedEye"
 import InfoIcon from "@material-ui/icons/Info"
 import DownloadIcon from "@material-ui/icons/CloudDownload"
-import Button from '@material-ui/core/Button';
 import {allowSharePreview,sizeToString} from "../untils/index"
 import { toggleSnackbar,}from "../actions/index"
 import { isPreviewable,}from "../config"
-import Popper from '@material-ui/core/Popper';
-import Typography from '@material-ui/core/Typography';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
 import Modals from "./FileManager/Modals"
 import axios from 'axios'
+import { withStyles, Button, Popper, Typography, Fade, Paper } from '@material-ui/core';
 const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop:'110px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
           width: 1100,
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -41,13 +36,13 @@ const styles = theme => ({
         marginTop: "20px",
       },
       button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
       },
       paper: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
       },
       icon:{
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
       }
 })
 const mapStateToProps = state => {
@@ -176,5 +171,5 @@ const SharedFile = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(SharedFileCompoment))
-  
+
 export default SharedFile

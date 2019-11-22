@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import Divider from '@material-ui/core/Divider';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core/Avatar';
 import { toggleSnackbar,}from "../actions/index"
 import axios from 'axios'
+
+import {
+    withStyles,
+    Button,
+    Card,
+    Divider,
+    CardHeader,
+    CardContent,
+    CardActions,
+    TextField,
+    Avatar,
+} from '@material-ui/core';
+
 const styles = theme => ({
     card: {
         maxWidth: 400,
@@ -22,9 +26,9 @@ const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop:'110px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
           width: 1100,
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -136,5 +140,5 @@ const LockedFile = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(LockedFileCompoment))
-  
+
 export default LockedFile

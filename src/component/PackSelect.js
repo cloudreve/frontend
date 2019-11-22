@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
+import { withStyles, ButtonBase, Typography } from '@material-ui/core';
 const styles = theme => ({
     container:{
         border:" 1px solid #e6e9eb",

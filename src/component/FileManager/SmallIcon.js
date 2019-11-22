@@ -2,12 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import Tooltip from '@material-ui/core/Tooltip';
 import ImageIcon from '@material-ui/icons/PhotoSizeSelectActual'
 import VideoIcon from '@material-ui/icons/Videocam'
 import AudioIcon from '@material-ui/icons/Audiotrack'
@@ -15,6 +10,8 @@ import PdfIcon from "@material-ui/icons/PictureAsPdf"
 import {FileWordBox,FilePowerpointBox,FileExcelBox,ScriptText,MagnetOn,ZipBox,WindowRestore,Android} from 'mdi-material-ui'
 import FileShowIcon from "@material-ui/icons/InsertDriveFile"
 import {mediaType} from "../../config"
+
+import { withStyles, ButtonBase, Typography, Tooltip } from '@material-ui/core';
 
 const styles = theme => ({
     container: {

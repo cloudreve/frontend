@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Card from '@material-ui/core/Card';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import ImageIcon from '@material-ui/icons/PhotoSizeSelectActual'
 import VideoIcon from '@material-ui/icons/Videocam'
 import AudioIcon from '@material-ui/icons/Audiotrack'
@@ -11,14 +8,20 @@ import RefreshIcon from "@material-ui/icons/Refresh"
 import DeleteIcon from "@material-ui/icons/Delete"
 import FileShowIcon from "@material-ui/icons/InsertDriveFile"
 import {FileWordBox,FilePowerpointBox,FileExcelBox,ScriptText,MagnetOn,ZipBox,WindowRestore,Android} from 'mdi-material-ui'
-import CardContent from '@material-ui/core/CardContent';
 import { toggleSnackbar,}from "../actions/index"
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import axios from 'axios'
-import IconButton from '@material-ui/core/IconButton';
 import {sizeToString} from '../untils/index'
 import {mediaType} from "../config"
+
+import {
+    withStyles,
+    Card,
+    LinearProgress,
+    CardContent,
+    Typography,
+    Button,
+    IconButton,
+} from '@material-ui/core';
 
 const styles = theme => ({
     card: {
@@ -35,9 +38,9 @@ const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop:'30px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
           width: 700,
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -351,5 +354,5 @@ const Download = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(DownloadCompoment))
-  
+
 export default Download

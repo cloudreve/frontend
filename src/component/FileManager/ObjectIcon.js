@@ -12,7 +12,6 @@ import {
     openMusicDialog,
     toggleSnackbar
 } from "../../actions/index"
-import { withStyles } from '@material-ui/core/styles';
 import Folder from "./Folder"
 import FileIcon from "./FileIcon"
 import SmallIcon from "./SmallIcon"
@@ -20,6 +19,7 @@ import TableItem from "./TableRow"
 import classNames from 'classnames';
 import {isPreviewable} from "../../config"
 import {allowSharePreview} from "../../untils/index"
+import { withStyles } from '@material-ui/core';
 const styles = theme => ({
     container: {
         padding: "7px",

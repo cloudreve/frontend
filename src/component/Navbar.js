@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import { withTheme } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { connect } from 'react-redux'
 import VideoIcon from '@material-ui/icons/VideoLibrary';
@@ -21,24 +16,10 @@ import OpenFolderIcon from '@material-ui/icons/FolderOpen'
 import RenameIcon from '@material-ui/icons/BorderColor'
 import MoveIcon from '@material-ui/icons/Input'
 import DeleteIcon from '@material-ui/icons/Delete'
-import Button from '@material-ui/core/Button';
-import Drawer from '@material-ui/core/Drawer';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
-import IconButton from '@material-ui/core/IconButton';
-import Hidden from '@material-ui/core/Hidden';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import FolderShared from '@material-ui/icons/FolderShared';
 import SaveIcon from '@material-ui/icons/Save';
-import List from '@material-ui/core/List';
 import MenuIcon from '@material-ui/icons/Menu';
-import Badge from '@material-ui/core/Badge';
-import Grow from '@material-ui/core/Grow';
-import Tooltip from '@material-ui/core/Tooltip';
 import {isPreviewable} from "../config"
 import {
     drawerToggleAction,
@@ -67,6 +48,29 @@ import {
     AccountArrowRight,
     AccountPlus
 } from 'mdi-material-ui'
+
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    withStyles,
+    withTheme,
+    Button,
+    Drawer,
+    SwipeableDrawer,
+    IconButton,
+    Hidden,
+    Avatar,
+    Divider,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    List,
+    Badge,
+    Grow,
+    Tooltip,
+} from '@material-ui/core';
+
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
 
@@ -148,7 +152,7 @@ const styles = theme => ({
         flexShrink: 0,
     },
     icon: {
-        marginRight: theme.spacing.unit * 2,
+        marginRight: theme.spacing(2),
     },
     menuButton: {
         marginRight: 20,
@@ -187,7 +191,7 @@ const styles = theme => ({
       },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3,
+        padding: theme.spacing(3),
     },
     hiddenButton: {
         display: "none",
@@ -201,7 +205,7 @@ const styles = theme => ({
 
     },
     nested: {
-        paddingLeft: theme.spacing.unit * 4,
+        paddingLeft: theme.spacing(4),
     },
       sectionForFile:{
 
@@ -210,7 +214,7 @@ const styles = theme => ({
 
       },
     extendedIcon: {
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
     },
     addButton:{
         marginLeft: "40px",
@@ -680,6 +684,6 @@ NavbarCompoment.propTypes = {
 const Navbar = connect(
     mapStateToProps,
     mapDispatchToProps
-  )( withTheme()(withStyles(styles)(NavbarCompoment)))
-  
+  )( withTheme(withStyles(styles)(NavbarCompoment)))
+
 export default Navbar

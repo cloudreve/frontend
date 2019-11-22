@@ -1,23 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core/styles';
-
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import {allowSharePreview} from "../../untils/index"
 import ImageIcon from '@material-ui/icons/PhotoSizeSelectActual'
 import VideoIcon from '@material-ui/icons/Videocam'
 import AudioIcon from '@material-ui/icons/Audiotrack'
 import PdfIcon from "@material-ui/icons/PictureAsPdf"
-import Divider from "@material-ui/core/Divider"
 import FileShowIcon from "@material-ui/icons/InsertDriveFile"
-import Tooltip from '@material-ui/core/Tooltip';
 import {FileWordBox,FilePowerpointBox,FileExcelBox,ScriptText,MagnetOn,ZipBox,WindowRestore,Android} from 'mdi-material-ui'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ContentLoader from 'react-content-loader'
 import {mediaType} from "../../config"
+
+import { withStyles, ButtonBase, Typography, Divider, Tooltip } from '@material-ui/core';
 
 const styles = theme => ({
     container: {

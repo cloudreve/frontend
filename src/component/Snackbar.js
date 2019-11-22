@@ -4,17 +4,15 @@ import { connect } from 'react-redux'
 import {
  } from "../actions/index"
 import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import Snackbar from '@material-ui/core/Snackbar'
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
-import green from '@material-ui/core/colors/green';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import amber from '@material-ui/core/colors/amber';
-import IconButton from '@material-ui/core/IconButton';
 import WarningIcon from '@material-ui/icons/Warning';
+
+import { green, amber } from '@material-ui/core/colors';
+
+import { withStyles, SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -52,7 +50,7 @@ const styles1 = theme => ({
       },
       iconVariant: {
         opacity: 0.9,
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
       },
       message: {
         display: 'flex',
@@ -89,18 +87,18 @@ function MySnackbarContent(props) {
       />
     );
   }
-  MySnackbarContent.propTypes = {
-    classes: PropTypes.object.isRequired,
-    className: PropTypes.string,
-    message: PropTypes.node,
-    onClose: PropTypes.func,
-    variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
-  };
-  
-const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);  
+MySnackbarContent.propTypes = {
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  message: PropTypes.node,
+  onClose: PropTypes.func,
+  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 const styles = theme => ({
     margin: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
 })
 class SnackbarCompoment extends Component {
@@ -146,5 +144,5 @@ const AlertBar = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(SnackbarCompoment))
-  
+
 export default AlertBar

@@ -1,29 +1,32 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 import { toggleSnackbar,}from "../actions/index"
-import Typography from '@material-ui/core/Typography';
 import axios from 'axios'
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
 import LeftIcon from '@material-ui/icons/KeyboardArrowLeft'
 import RighttIcon from '@material-ui/icons/KeyboardArrowRight'
-import Grid from '@material-ui/core/Grid';
+
+import {
+    withStyles,
+    Paper,
+    Avatar,
+    Typography,
+    Tabs,
+    Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    IconButton,
+    Grid,
+} from '@material-ui/core';
 
 const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop:'50px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
         marginBottom: "30px",
         [theme.breakpoints.up("sm")]: {
           width: 700,
@@ -249,5 +252,5 @@ const Profile = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(ProfileCompoment))
-  
+
 export default Profile

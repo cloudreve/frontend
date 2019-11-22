@@ -5,26 +5,29 @@ import { connect } from 'react-redux'
 import {navitateTo,changeContextMenu,navitateUp} from "../../actions/index"
 import ObjectIcon from "./ObjectIcon"
 import ContextMenu from "./ContextMenu"
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Paper from '@material-ui/core/Paper'
 import EmptyIcon from "@material-ui/icons/Unarchive"
 import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied"
 import classNames from 'classnames';
 import ImgPreivew from "./ImgPreview"
-import Button from '@material-ui/core/Button';
 import UpIcon from '@material-ui/icons/ArrowUpward'
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    withStyles,
+    Typography,
+    Grid,
+    CircularProgress,
+    Paper,
+    Button,
+} from '@material-ui/core';
 
 const styles = theme => ({
     paper: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
         margin:"10px",
@@ -65,7 +68,7 @@ const styles = theme => ({
         marginTop:"40px",
     },
     errorBox:{
-        padding: theme.spacing.unit * 4,
+        padding: theme.spacing(4),
     },
     errorMsg:{
         marginTop:"10px",
@@ -266,6 +269,6 @@ ExplorerCompoment.propTypes = {
 const Explorer = connect(
     mapStateToProps,
     mapDispatchToProps
-  )( withStyles(styles)(ExplorerCompoment))  
-  
+  )( withStyles(styles)(ExplorerCompoment))
+
 export default Explorer

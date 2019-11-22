@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Avatar from '@material-ui/core/Avatar';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
 import {
     LogoutVariant,
     HomeAccount,
@@ -19,6 +11,17 @@ import {
 import {
     setUserPopover
 }from "../actions/index"
+
+import {
+    withStyles,
+    Avatar,
+    Popover,
+    Typography,
+    Chip,
+    ListItemIcon,
+    MenuItem,
+    Divider,
+} from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -147,5 +150,5 @@ const UserAvatarPopover = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(UserAvatarPopoverCompoment))
-  
+
 export default UserAvatarPopover

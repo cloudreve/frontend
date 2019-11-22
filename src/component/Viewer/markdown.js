@@ -1,19 +1,18 @@
 import React, { Component } from 'react'
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
 import {
     toggleSnackbar,
 } from "../../actions/index"
 import axios from 'axios'
 import { connect } from 'react-redux'
 import {editSuffix} from "../../config"
+import { Paper, withStyles } from '@material-ui/core';
 const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop:'30px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
           width: 1100,
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -155,5 +154,5 @@ const MarkdownViewer = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(MarkdownViewerCompoment))
-  
+
 export default MarkdownViewer

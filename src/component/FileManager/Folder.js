@@ -2,13 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder'
 import classNames from 'classnames';
-import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles, ButtonBase, Typography, Tooltip } from '@material-ui/core';
 
 const styles = theme => ({
     container: {

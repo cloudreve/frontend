@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
 import PhotoIcon from '@material-ui/icons/InsertPhoto'
 import GroupIcon from '@material-ui/icons/Group'
 import DateIcon from '@material-ui/icons/DateRange'
@@ -17,37 +13,42 @@ import NickIcon from '@material-ui/icons/PermContactCalendar'
 import LockIcon from '@material-ui/icons/Lock'
 import VerifyIcon from '@material-ui/icons/VpnKey'
 import ColorIcon from '@material-ui/icons/Palette'
-import Avatar from '@material-ui/core/Avatar';
-import Paper from '@material-ui/core/Paper';
 import { toggleSnackbar,}from "../actions/index"
-import Typography from '@material-ui/core/Typography';
 import axios from 'axios'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
-import List from '@material-ui/core/List';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import RightIcon from '@material-ui/icons/KeyboardArrowRight'
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import blue from '@material-ui/core/colors/blue';
-import yellow from '@material-ui/core/colors/yellow';
-import { ListItemIcon } from '@material-ui/core';
+import {
+    ListItemIcon,
+    withStyles,
+    Button,
+    Divider,
+    TextField,
+    Avatar,
+    Paper,
+    Typography,
+    List,
+    ListItem,
+    ListItemSecondaryAction,
+    ListItemText,
+    ListItemAvatar,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Switch,
+} from '@material-ui/core';
 import Backup from '@material-ui/icons/Backup'
-import Switch from '@material-ui/core/Switch';
 import SettingsInputHdmi from '@material-ui/icons/SettingsInputHdmi'
+import { blue, yellow } from '@material-ui/core/colors';
 const styles = theme => ({
 
     layout: {
         width: 'auto',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
           width: 700,
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -877,5 +878,5 @@ const UserSetting = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(UserSettingCompoment))
-  
+
 export default UserSetting

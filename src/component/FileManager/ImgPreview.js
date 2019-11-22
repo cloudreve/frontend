@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
 import { 
     showImgPreivew,
 }from "../../actions/index"
 import {imgPreviewSuffix} from "../../config"
 import PhotoSwipe from'react-photoswipe';
+import { withStyles } from '@material-ui/core';
 import('react-photoswipe/lib/photoswipe.css')
 
 const styles = theme => ({

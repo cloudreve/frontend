@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CssBaseline from '@material-ui/core/CssBaseline';
-
-import { withStyles } from '@material-ui/core/styles';
 
 import Navbar from "../component/Navbar.js"
 import AlertBar from "../component/Snackbar"
 import FileManager from "../component/FileManager/FileManager"
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+
+import { CssBaseline, withStyles, MuiThemeProvider } from '@material-ui/core';
 
 const theme = createMuiTheme(window.colorTheme);
 const styles = theme => ({
@@ -17,7 +16,7 @@ const styles = theme => ({
 	},
 	content: {
 		flexGrow: 1,
-		padding: theme.spacing.unit * 0,
+		padding: theme.spacing(0),
 		minWidth: 0,
 	},
 	toolbar: theme.mixins.toolbar,

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 
-import { withStyles } from '@material-ui/core/styles';
-
 import Navigator from "./Navigator"
+
 import Explorer from "./Explorer"
 import Modals from "./Modals"
 import {decode} from "../../untils/index"
+import { withStyles } from '@material-ui/core';
 const styles = theme => ({
 
 })

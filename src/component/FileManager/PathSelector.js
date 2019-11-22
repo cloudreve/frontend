@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/Folder'
-import { withStyles } from '@material-ui/core/styles';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import RightIcon from "@material-ui/icons/KeyboardArrowRight"
 import UpIcon from "@material-ui/icons/ArrowUpward"
 import { connect } from 'react-redux'
@@ -16,6 +9,16 @@ import {
     toggleSnackbar,
 } from "../../actions/index"
 import axios from 'axios'
+
+import {
+    MenuList,
+    MenuItem,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    withStyles,
+    ListItemSecondaryAction,
+} from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -149,7 +152,7 @@ PathSelectorCompoment.propTypes = {
     presentPath:PropTypes.string.isRequired,
     selected:PropTypes.array.isRequired,
 };
-  
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps

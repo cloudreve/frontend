@@ -1,39 +1,42 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import { toggleSnackbar, } from "../actions/index"
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
 import SdStorage from '@material-ui/icons/SdStorage'
 import ShopIcon from '@material-ui/icons/ShoppingCart'
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField'
-import Grid from '@material-ui/core/Grid';
 import axios from 'axios'
 import PackSelect from './PackSelect'
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle'
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import StarIcon from '@material-ui/icons/StarBorder';
 import LocalPlay from '@material-ui/icons/LocalPlay'
+
+import {
+    withStyles,
+    AppBar,
+    Tabs,
+    Tab,
+    Typography,
+    Paper,
+    Button,
+    TextField,
+    Grid,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+} from '@material-ui/core';
 
 const styles = theme => ({
     layout: {
         width: 'auto',
         marginTop: '50px',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: 'auto',
             marginRight: 'auto',
@@ -45,7 +48,7 @@ const styles = theme => ({
         marginTop: "30px",
     },
     paper: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         color: theme.palette.text.secondary,
     },
     title:{
@@ -53,15 +56,15 @@ const styles = theme => ({
         marginBottom: "30px",
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
     action:{
         textAlign:"right",
         marginTop:"20px",
     },
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
         width: 70,
         textAlign:"center!important",
     },
@@ -80,11 +83,11 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'baseline',
-        marginBottom: theme.spacing.unit * 2,
+        marginBottom: theme.spacing(2),
       },
       cardActions: {
         [theme.breakpoints.up('sm')]: {
-          paddingBottom: theme.spacing.unit * 2,
+          paddingBottom: theme.spacing(2),
         },
       },
       redeemContainer:{

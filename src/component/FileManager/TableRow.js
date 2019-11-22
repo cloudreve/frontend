@@ -2,11 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder'
 import classNames from 'classnames';
 import ImageIcon from '@material-ui/icons/PhotoSizeSelectActual'
@@ -17,6 +12,8 @@ import {FileWordBox,FilePowerpointBox,FileExcelBox,ScriptText,MagnetOn,ZipBox,Wi
 import FileShowIcon from "@material-ui/icons/InsertDriveFile"
 import {sizeToString} from "../../untils/index"
 import {mediaType} from "../../config"
+
+import { withStyles, TableCell, TableRow, Typography } from '@material-ui/core';
 
 const styles = theme => ({
     selected: {

@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import StorageIcon from '@material-ui/icons/Storage'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import Tooltip from '@material-ui/core/Tooltip';
 import {
     toggleSnackbar,
 }from "../actions/index"
+
+import { withStyles, LinearProgress, Typography, Divider, Tooltip } from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -149,5 +146,5 @@ const StorageBar = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(StorageBarCompoment))
-  
+
 export default StorageBar

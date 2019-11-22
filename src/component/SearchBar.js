@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import InputBase from '@material-ui/core/InputBase';
-import Popper from '@material-ui/core/Popper';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
 import FileIcon from '@material-ui/icons/InsertDriveFile'
 import ShareIcon from '@material-ui/icons/Share'
 import { connect } from 'react-redux'
 import {
     searchMyFile,
 }from "../actions/index"
+
+import {
+    withStyles,
+    InputBase,
+    Popper,
+    Fade,
+    Paper,
+    MenuItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from '@material-ui/core';
 
 const mapStateToProps = state => {
     return {
@@ -42,16 +45,16 @@ const styles = theme => ({
         '&:hover': {
           backgroundColor: fade(theme.palette.common.white, 0.25),
         },
-        marginRight: theme.spacing.unit * 2,
+        marginRight: theme.spacing(2),
         marginLeft: 0,
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing.unit * 7.2,
+          marginLeft: theme.spacing(7.2),
           width: 'auto',
         },
       },
       searchIcon: {
-        width: theme.spacing.unit * 9,
+        width: theme.spacing(9),
         height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
@@ -64,10 +67,10 @@ const styles = theme => ({
         width: '100%',
       },
       inputInput: {
-        paddingTop: theme.spacing.unit,
-        paddingRight: theme.spacing.unit,
-        paddingBottom: theme.spacing.unit,
-        paddingLeft: theme.spacing.unit * 7,
+        paddingTop: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+        paddingLeft: theme.spacing(7),
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
@@ -176,5 +179,5 @@ const SearchBar = connect(
     mapStateToProps,
     mapDispatchToProps
 )( withStyles(styles)(SearchBarCompoment))
-  
+
 export default SearchBar

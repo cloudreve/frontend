@@ -1,27 +1,31 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import FileIcon from '@material-ui/icons/InsertDriveFile';
 import PhotoIcon from '@material-ui/icons/MusicNote';
 import VideoIcon from '@material-ui/icons/Videocam';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import MusicIcon from '@material-ui/icons/MusicNote';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Slide from '@material-ui/core/Slide';
-import Avatar from '@material-ui/core/Avatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
-import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
-import DialogContent from '@material-ui/core/DialogContent';
+import { isWidthDown } from '@material-ui/core/withWidth';
+
+import {
+    withStyles,
+    Dialog,
+    ListItemText,
+    ListItem,
+    List,
+    Divider,
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
+    LinearProgress,
+    Slide,
+    Avatar,
+    ListItemSecondaryAction,
+    withWidth,
+    DialogContent,
+} from '@material-ui/core';
 
 const styles = theme => ({
     appBar: {
