@@ -205,3 +205,10 @@ export const saveFile = () => {
         type: 'SAVE_FILE',
     }
 }
+
+export const setSiteConfig = (config) => {
+    return {
+        type: 'SET_SITE_CONFIG',
+        config:config,
+    }
+}

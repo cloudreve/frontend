@@ -83,6 +83,7 @@ const mapStateToProps = state => {
         withFile:state.explorer.selectProps.withFile,
         path:state.navigator.path, 
         keywords:state.explorer.keywords,
+        title:state.siteConfig.title,
     }
 }
 
@@ -523,7 +524,7 @@ class NavbarCompoment extends Component {
                         }
                         {(this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))&&
                         <Typography variant="h6" color="inherit" noWrap>
-                            {window.isSharePage&&window.pageId===""&&<FolderShared className={classes.folderShareIcon}/>}{window.siteInfo.mainTitle}
+                            {window.isSharePage&&window.pageId===""&&<FolderShared className={classes.folderShareIcon}/>}{this.props.title}
         				</Typography>
                         }
 

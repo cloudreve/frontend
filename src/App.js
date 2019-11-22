@@ -4,6 +4,7 @@ import Navbar from "./component/Navbar.js"
 import AlertBar from "./component/Snackbar"
 import LoginForm from "./component/Login/LoginForm"
 import { createMuiTheme } from '@material-ui/core/styles';
+import { connect,useSelector } from 'react-redux'
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -15,23 +16,31 @@ import {
 
 import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 
-const theme = createMuiTheme(window.colorTheme);
-
-const useStyles  = makeStyles(theme=>({
-	root: {
-		display: 'flex',
-	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing.unit * 0,
-		minWidth: 0,
-	},
-	toolbar: theme.mixins.toolbar,
-}));
+const mapStateToProps = state => {
+    return {
+        theme: state.siteConfig.theme,
+    }
+}
 
 export default function App(){
+	const themeConfig = useSelector(state => state.siteConfig.theme)
+
+	let theme = createMuiTheme(themeConfig);
+
+	const useStyles  = makeStyles(theme=>({
+		root: {
+			display: 'flex',
+		},
+		content: {
+			flexGrow: 1,
+			padding: theme.spacing.unit * 0,
+			minWidth: 0,
+		},
+		toolbar: theme.mixins.toolbar,
+	}));
 
 	const classes = useStyles();
+
 	let { path, url } = useRouteMatch();
 	return (
 		<React.Fragment>

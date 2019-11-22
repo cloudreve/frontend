@@ -230,6 +230,10 @@ const cloudreveApp = (state = [], action) => {
                     contextOpen:false,
                 }),
             });
+        case 'SET_SITE_CONFIG':
+                return Object.assign({}, state, {
+                    siteConfig: action.config,
+                });
         case 'OPEN_MUSIC_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
