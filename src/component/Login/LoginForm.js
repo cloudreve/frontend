@@ -152,6 +152,7 @@ class LoginFormCompoment extends Component {
     
 
     render() {
+        console.log(this.props.location);
         const { classes } = this.props;
 
 

@@ -15,7 +15,9 @@ import {
 
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 
+// Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
+const FileManager = React.lazy(() => import ("./component/FileManager/FileManager.js" ));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -32,7 +34,7 @@ export default function App() {
         toolbar: theme.mixins.toolbar
     }));
 
-    const classes = useStyles();
+	const classes = useStyles();
 
     let { path, url } = useRouteMatch();
     return (
@@ -49,7 +51,9 @@ export default function App() {
                                 我是私有页面
                             </AuthRoute>
 							<AuthRoute path={`${path}Home`}>
-                                我是私有Home页面
+								<Suspense fallback={<div>Loading...</div>}>
+                               		<FileManager/>
+								</Suspense>
                             </AuthRoute>
                             <Route path={`${path}Login`}>
                                 <Suspense fallback={<div>Loading...</div>}>

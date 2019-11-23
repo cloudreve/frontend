@@ -13,10 +13,21 @@
         mainTitle: "Cloudreve演示站",
     };
     uploadConfig = {
-        allowSource: false,
-        allowShare: false,
-        allowRemoteDownload: "0",
-        allowTorrentDownload: "0",
-    };
+		saveType: "local",
+		maxSize: "10mb",
+		allowedType: [],
+		allowSource: "0",
+		upUrl: "/Upload",
+		allowShare: "1",
+		allowRemoteDownload: "0",
+		allowTorrentDownload: "0",
+	};
+	if(uploadConfig.saveType == "oss" || uploadConfig.saveType == "upyun" || uploadConfig.saveType == "s3"){
+		ChunkSize = "0";
+	}else if(uploadConfig.saveType == "qiniu" ){
+		ChunkSize = 4*1024*1024;
+	}else{
+	  ChunkSize = 10485760;
+	}
     isMobile = window.innerWidth < 600;</script></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div>
 </body></html>

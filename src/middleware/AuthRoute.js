@@ -11,7 +11,7 @@ function AuthRoute({ children, ...rest }) {
       <Route
         {...rest}
         render={({ location }) =>
-        Auth.isAuthenticated ? (
+        Auth.Check() ? (
             children
           ) : (
             <Redirect

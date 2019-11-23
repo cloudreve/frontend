@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
-
+import {withRouter} from  'react-router-dom'
 import RightIcon from '@material-ui/icons/KeyboardArrowRight'
 import MoreIcon from '@material-ui/icons/MoreHoriz'
 import ViewListIcon from '@material-ui/icons/ViewList'
@@ -174,7 +174,8 @@ class NavigatorCompoment extends Component {
             folders:path!==null?path.substr(1).split("/"):this.props.path.substr(1).split("/"),
         });
         var newPath = path!==null?path:this.props.path;
-        var apiURL = this.keywords===null?window.apiURL.listFile:'/File/SearchFile';
+        // var apiURL = this.keywords===null?window.apiURL.listFile:'/File/SearchFile';
+        var apiURL = '/File/SearchFile';
         newPath = this.keywords===null?newPath:this.keywords;
         axios.post(apiURL, {
             action: 'list',
@@ -183,7 +184,7 @@ class NavigatorCompoment extends Component {
         .then( (response)=> {
             this.props.updateFileList(response.data.result);
             this.props.setNavigatorLoadingStatus(false);
-            let pathTemp = (null?path.substr(1).split("/"):this.props.path.substr(1).split("/")).join(",");
+            let pathTemp = (path!==null?path.substr(1).split("/"):this.props.path.substr(1).split("/")).join(",");
             setCookie("path_tmp",encodeURIComponent(pathTemp),1);
             if(this.keywords===null){
                 setGetParameter("path",encodeURIComponent(newPath));
@@ -462,6 +463,6 @@ NavigatorCompoment.propTypes = {
 const Navigator = connect(
     mapStateToProps,
     mapDispatchToProps
-  )( withStyles(styles)(NavigatorCompoment))
+  )( withStyles(styles)(withRouter(NavigatorCompoment)))
 
 export default Navigator

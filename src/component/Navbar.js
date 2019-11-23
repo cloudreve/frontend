@@ -40,6 +40,7 @@ import {
 import {allowSharePreview,checkGetParameters,changeThemeColor} from "../untils/index"
 import Uploader from "./Uploader.js"
 import {sizeToString} from "../untils/index"
+import pathHelper from "../untils/page"
 import SezrchBar from "./SearchBar"
 import StorageBar from "./StorageBar"
 import UserAvatar from "./UserAvatar"
@@ -48,7 +49,7 @@ import {
     AccountArrowRight,
     AccountPlus
 } from 'mdi-material-ui'
-
+import {withRouter} from  'react-router-dom'
 import {
     AppBar,
     Toolbar,
@@ -70,6 +71,7 @@ import {
     Grow,
     Tooltip,
 } from '@material-ui/core';
+import Auth from "../middleware/Auth"
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -299,7 +301,7 @@ class NavbarCompoment extends Component {
     }
 
     loadUploader() {
-        if (window.isHomePage) {
+        if (this.props.location.pathname=="/Home") {
             return (<Uploader queueChange={queued => this.updateQueueStatus(queued)} ref={this.UploaderRef} />)
         }
     }
@@ -329,14 +331,14 @@ class NavbarCompoment extends Component {
                 window.open(window.apiURL.preview+"/?action=preview&path="+encodeURIComponent(previewPath));  
                 return;
             case 'video':
-                if(window.isSharePage){
+                if(pathHelper.isSharePage(this.props.location.pathname)){
                     window.location.href=("/Viewer/Video?share=true&shareKey="+window.shareInfo.shareId+"&path="+encodeURIComponent(previewPath));  
                     return;
                 }
                 window.location.href=("/Viewer/Video?path="+encodeURIComponent(previewPath));  
                 return;
             case 'edit':
-                if(window.isSharePage){
+                if(pathHelper.isSharePage(this.props.location.pathname)){
                     window.location.href=("/Viewer/Markdown?share=true&shareKey="+window.shareInfo.shareId+"&path="+encodeURIComponent(previewPath));  
                     return;
                 }
@@ -361,10 +363,10 @@ class NavbarCompoment extends Component {
 
         const drawer = (
             <div id="container">
-                {window.isMobile&&
+                {pathHelper.isMobile()&&
                     <UserInfo/>
                 }
-                {window.isHomePage&&
+                {pathHelper.isHomePage(this.props.location.pathname)&&
                      <div className={classes.addButton}>
                      <Badge badgeContent={this.state.queued} classes={{ badge: classes.badgeFix }} invisible={this.state.queued === 0} color="secondary">
                          <Button
@@ -382,7 +384,7 @@ class NavbarCompoment extends Component {
                            </Badge>
                            </div>
                 }
-                {(!window.isHomePage&&(window.userInfo.uid!==-1))&&
+                {(!pathHelper.isHomePage(this.props.location.pathname)&&Auth.Check())&&
                 <div>
                     <ListItem button key="我的文件" onClick={()=>window.location.href="/"}>
                     <ListItemIcon>     
@@ -393,7 +395,7 @@ class NavbarCompoment extends Component {
                 </div>
                 }
 
-                {window.isHomePage&&<div>
+                {pathHelper.isHomePage(this.props.location.pathname)&&<div>
                     <List> 
                     <Divider/>
                     <ListItem button id="pickfiles" className={classes.hiddenButton}>
@@ -429,26 +431,26 @@ class NavbarCompoment extends Component {
                     <ListItemText primary="文档" />
                 </ListItem> <Divider className={classes.dividerFix}/></div>}
 
-                {window.userInfo.uid!==-1&&<div>
+                {Auth.Check()&&<div>
                     <ListItem button key="我的分享"  onClick={()=>window.location.href="/Share/My"}>
                         <ListItemIcon>
                                 <ShareIcon className={classes.iconFix} />
                         </ListItemIcon>
-                        <ListItemText inset primary="我的分享" />
+                        <ListItemText  primary="我的分享" />
                     </ListItem>
                     <ListItem button key="离线下载"  onClick={()=>window.location.href="/Home/Download"}>
                         <ListItemIcon>
                                 <DownloadIcon className={classes.iconFix} />
                         </ListItemIcon>
-                        <ListItemText inset primary="离线下载" />
+                        <ListItemText  primary="离线下载" />
                     </ListItem>
                     <ListItem button key="容量配额"  onClick={()=>window.location.href="/Home/Quota"}>
                         <ListItemIcon>
                                 <SdStorage className={classes.iconFix} />
                         </ListItemIcon>
-                        <ListItemText inset primary="容量配额" />
+                        <ListItemText  primary="容量配额" />
                     </ListItem>
-                {!window.isSharePage&&
+                {!pathHelper.isSharePage(this.props.location.pathname)&&
                     <div>
                         <StorageBar></StorageBar>
                         </div>
@@ -456,7 +458,7 @@ class NavbarCompoment extends Component {
                 
                     </div>
                 }
-                {window.userInfo.uid===-1&&
+                {!Auth.Check()&&
                 <div>
                     <ListItem button key="登录" onClick={()=>window.location.href="/Login"}>
                         <ListItemIcon>
@@ -472,7 +474,7 @@ class NavbarCompoment extends Component {
                 </ListItem>
                 </div>
                 }
-                {window.isSharePage&&
+                {pathHelper.isSharePage(this.props.location.pathname)&&
                     <div className={classes.stickFooter}>
                         <Divider/>
                         <a className={classes.shareInfoContainer} href={"/Profile/"+window.shareInfo.ownerUid}>
@@ -493,7 +495,7 @@ class NavbarCompoment extends Component {
             <div>
                 <AppBar position="fixed" className={classes.appBar} color={(this.props.selected.length <=1 && ! (!this.props.isMultiple&&this.props.withFile))?"primary":"default"}> 
                     <Toolbar>
-                    {(((this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))||!window.isHomePage)&&!window.isSharePage)&&
+                    {(((this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))||!pathHelper.isHomePage(this.props.location.pathname))&&!pathHelper.isSharePage(this.props.location.pathname))&&
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
@@ -503,7 +505,7 @@ class NavbarCompoment extends Component {
                             <MenuIcon />
                         </IconButton>
                     }
-                        {(((this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))||!window.isHomePage)&&!window.isSharePage)&&<IconButton
+                        {(((this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))||!pathHelper.isHomePage(this.props.location.pathname))&&!pathHelper.isSharePage(this.props.location.pathname))&&<IconButton
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={()=>this.props.handleDesktopToggle(!this.props.desktopOpen)}
@@ -511,7 +513,7 @@ class NavbarCompoment extends Component {
                         >
                             <MenuIcon />
                         </IconButton>}
-                        {((this.props.selected.length >1 || (!this.props.isMultiple&&this.props.withFile) )&& (window.isHomePage||window.isSharePage))&&
+                        {((this.props.selected.length >1 || (!this.props.isMultiple&&this.props.withFile) )&& (pathHelper.isHomePage(this.props.location.pathname)||pathHelper.isSharePage(this.props.location.pathname)))&&
                             <Grow in={(this.props.selected.length >1) || (!this.props.isMultiple&&this.props.withFile)}>
                                 <IconButton
                                     color="inherit"
@@ -524,17 +526,17 @@ class NavbarCompoment extends Component {
                         }
                         {(this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))&&
                         <Typography variant="h6" color="inherit" noWrap>
-                            {window.isSharePage&&window.pageId===""&&<FolderShared className={classes.folderShareIcon}/>}{this.props.title}
+                            {pathHelper.isSharePage(this.props.location.pathname)&&window.pageId===""&&<FolderShared className={classes.folderShareIcon}/>}{this.props.title}
         				</Typography>
                         }
 
-                        {(!this.props.isMultiple&&this.props.withFile&&!window.isMobile)&&
+                        {(!this.props.isMultiple&&this.props.withFile&&!pageHelper.isMobile())&&
                         <Typography variant="h6" color="inherit" noWrap>
-                            {this.props.selected[0].name} {(window.isHomePage||window.isSharePage)&&"("+sizeToString(this.props.selected[0].size)+")"} 
+                            {this.props.selected[0].name} {(pathHelper.isHomePage(this.props.location.pathname)||pathHelper.isSharePage(this.props.location.pathname))&&"("+sizeToString(this.props.selected[0].size)+")"} 
         				</Typography>
                         }
 
-                        {(this.props.selected.length >1&&!window.isMobile)&&
+                        {(this.props.selected.length >1&&!pageHelper.isMobile())&&
                         <Typography variant="h6" color="inherit" noWrap>
                             {this.props.selected.length}个对象
         				</Typography>
@@ -543,7 +545,7 @@ class NavbarCompoment extends Component {
                             <SezrchBar/>
                         }
                         <div className={classes.grow} />
-                        {((this.props.selected.length>1 || (!this.props.isMultiple&&this.props.withFile)) && !window.isHomePage&&!window.isSharePage && window.userInfo.uid!==-1&&!checkGetParameters("share"))&&
+                        {((this.props.selected.length>1 || (!this.props.isMultiple&&this.props.withFile)) && !pathHelper.isHomePage(this.props.location.pathname)&&!pathHelper.isSharePage(this.props.location.pathname) && Auth.Check()&&!checkGetParameters("share"))&&
                             <div className={classes.sectionForFile}>
                                 <Tooltip title="保存">
                                     <IconButton color="inherit" onClick={()=>this.props.saveFile()}>
@@ -552,7 +554,7 @@ class NavbarCompoment extends Component {
                                 </Tooltip>
                             </div>
                         }
-                        {((this.props.selected.length>1 || (!this.props.isMultiple&&this.props.withFile) )&& (window.isHomePage||window.isSharePage))&&
+                        {((this.props.selected.length>1 || (!this.props.isMultiple&&this.props.withFile) )&& (pathHelper.isHomePage(this.props.location.pathname)||pathHelper.isSharePage(this.props.location.pathname)))&&
                             <div className={classes.sectionForFile}>
                                 {(!this.props.isMultiple&&this.props.withFile&&isPreviewable(this.props.selected[0].name))&&
                                     <Grow in={(!this.props.isMultiple&&this.props.withFile&&isPreviewable(this.props.selected[0].name))}>
@@ -587,7 +589,7 @@ class NavbarCompoment extends Component {
                                         </Tooltip>
                                     </Grow>
                                 }
-                                {(!this.props.isMultiple&&!window.isSharePage)&&
+                                {(!this.props.isMultiple&&!pathHelper.isSharePage(this.props.location.pathname))&&
                                     <Grow in={(!this.props.isMultiple)}>
                                         <Tooltip title="分享">
                                             <IconButton color="inherit" onClick={()=>this.props.openShareDialog()}>
@@ -596,7 +598,7 @@ class NavbarCompoment extends Component {
                                         </Tooltip>
                                     </Grow>
                                 }
-                                {(!this.props.isMultiple&&!window.isSharePage)&&
+                                {(!this.props.isMultiple&&!pathHelper.isSharePage(this.props.location.pathname))&&
                                     <Grow in={(!this.props.isMultiple)}>
                                         <Tooltip title="重命名">
                                             <IconButton color="inherit" onClick={()=>this.props.openRenameDialog()}>
@@ -605,8 +607,8 @@ class NavbarCompoment extends Component {
                                         </Tooltip>
                                     </Grow>
                                 }
-                                {!window.isSharePage&&<div>
-                                    {!window.isMobile&&<Grow in={(this.props.selected.length!==0)&&!window.isMobile}>
+                                {!pathHelper.isSharePage(this.props.location.pathname)&&<div>
+                                    {!pageHelper.isMobile()&&<Grow in={(this.props.selected.length!==0)&&!pageHelper.isMobile()}>
                                     <Tooltip title="移动">
                                         <IconButton color="inherit" onClick={()=>this.props.openMoveDialog()}>
                                             <MoveIcon/>
@@ -685,6 +687,6 @@ NavbarCompoment.propTypes = {
 const Navbar = connect(
     mapStateToProps,
     mapDispatchToProps
-  )( withTheme(withStyles(styles)(NavbarCompoment)))
+  )( withTheme(withStyles(styles)(withRouter(NavbarCompoment))))
 
 export default Navbar

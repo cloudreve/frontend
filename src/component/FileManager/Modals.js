@@ -399,7 +399,7 @@ class ModalsCompoment extends Component {
         
         const { classes} = this.props;
 
-        const previewApi = window.apiURL.preview;
+        const previewApi = "window.apiURL.preview";
 
         return (
             <div>
