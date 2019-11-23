@@ -15,7 +15,7 @@ const explorer = (state = [], action) => {
     switch (action.type) {
         case 'UPDATE_FILE_LIST':
             var dirList =  action.list.filter(function (x) {
-                return x .type === "dir";
+                return x.type === "dir";
             });
             return Object.assign({}, state, {
                 fileList: action.list,

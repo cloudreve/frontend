@@ -1,11 +1,11 @@
-const fakeAuth = {
-    isAuthenticated: true,
+const Auth = {
+    isAuthenticated: false,
     authenticate(cb) {
-      fakeAuth.isAuthenticated = true;
-      setTimeout(cb, 100); // fake async
+      Auth.isAuthenticated = true;
     },
     signout(cb) {
-      fakeAuth.isAuthenticated = false;
-      setTimeout(cb, 100);
-    }
+      Auth.isAuthenticated = false;
+    },
 };
+
+export default Auth

@@ -1,5 +1,5 @@
 import React from "react";
-import fakeAuth from "./Auth"
+import Auth from "./Auth"
 import {
     BrowserRouter as Router,
     Route,
@@ -11,7 +11,7 @@ function AuthRoute({ children, ...rest }) {
       <Route
         {...rest}
         render={({ location }) =>
-          fakeAuth.isAuthenticated ? (
+        Auth.isAuthenticated ? (
             children
           ) : (
             <Redirect

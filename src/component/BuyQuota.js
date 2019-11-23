@@ -163,7 +163,7 @@ class BuyQuotaCompoment extends Component {
                     dialog:"success",
                 });
             }
-        }) .catch((error) =>{
+        }).catch((error) =>{
             this.setState({
                 loading:false,
             });
@@ -194,7 +194,7 @@ class BuyQuotaCompoment extends Component {
                     redeemInfo:response.data.result,
                 });
             }
-        }) .catch((error) =>{
+        }).catch((error) =>{
             this.setState({
                 loading:false,
             });
@@ -245,7 +245,7 @@ class BuyQuotaCompoment extends Component {
                     this.querryLoop(response.data.id);
                 }, 3000);
             }
-        }) .catch((error) =>{
+        }).catch((error) =>{
             this.setState({
                 loading:false,
             });

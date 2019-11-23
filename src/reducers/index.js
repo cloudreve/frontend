@@ -166,9 +166,9 @@ const cloudreveApp = (state = [], action) => {
         case 'NAVIGATOR_TO':
             return doNavigate(action.path,state);
         case 'NAVIGATOR_UP':
-            let pathSplit = state.navigator.path.split("/");
+            var pathSplit = state.navigator.path.split("/");
             pathSplit.pop();
-            let newPath = pathSplit.length===1?"/":pathSplit.join("/");
+            var newPath = pathSplit.length===1?"/":pathSplit.join("/");
             return doNavigate(newPath,state);
         case 'OPEN_CREATE_FOLDER_DIALOG':
             return Object.assign({}, state, {

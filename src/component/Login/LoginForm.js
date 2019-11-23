@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { toggleSnackbar, } from "../../actions/index"
-import axios from 'axios'
-
+import Placeholder from "../placeholder/captcha"
+import {withRouter} from  'react-router-dom'
+import API from "../../middleware/Api"
+import Auth from "../../middleware/Auth"
 import {
     withStyles,
     Button,
@@ -56,10 +58,19 @@ const styles = theme => ({
     captchaContainer:{
         display:"flex",
         marginTop: "10px",
-    }
+    },
+    captchaPlaceholder:{
+        width:200,
+    },
 })
 const mapStateToProps = state => {
     return {
+        loginCaptcha: state.siteConfig.loginCaptcha,
+        title: state.siteConfig.title,
+        regCaptcha: state.siteConfig.regCaptcha,
+        forgetCaptcha: state.siteConfig.forgetCaptcha,
+        emailActive: state.siteConfig.emailActive,
+        QQLogin: state.siteConfig.QQLogin,
     }
 }
 
@@ -78,13 +89,22 @@ class LoginFormCompoment extends Component {
         pwd:"",
         captcha:"",
         loading:false,
-        captchaUrl:"/captcha?initial",
+        captchaData:null,
     }
 
     refreshCaptcha = ()=>{
-        this.setState({
-            captchaUrl:"/captcha?"+Math.random(),
+        API.get("/Captcha").then((response) =>{
+            this.setState({
+                captchaData:response.data,
+            });
+        }).catch((error)=> {
+            this.props.toggleSnackbar("top", "right", "无法加载验证码：" + error.message, "error");
         });
+        
+    }
+
+    componentDidMount = ()=>{
+        this.refreshCaptcha()
     }
 
     login = e=>{
@@ -92,36 +112,37 @@ class LoginFormCompoment extends Component {
         this.setState({
             loading:true,
         });
-        axios.post('/Member/Login',{
-            userMail:this.state.email,
-            userPass:this.state.pwd,
+        API.post('/User/Session',{
+            userName:this.state.email,
+            Password:this.state.pwd,
             captchaCode:this.state.captcha,
         }).then( (response)=> {
-            if(response.data.code!=="200"){
+            // console.log(response);
+            // if(response.data.code!=="200"){
+            //     this.setState({
+            //         loading:false,
+            //     });
+            //     if(response.data.message==="tsp"){
+            //         window.location.href="/Member/TwoStep";
+            //     }else{
+            //         this.props.toggleSnackbar("top","right",response.data.message,"warning");
+            //         this.refreshCaptcha();
+            //     }
+            // }else{
                 this.setState({
                     loading:false,
                 });
-                if(response.data.message==="tsp"){
-                    window.location.href="/Member/TwoStep";
-                }else{
-                    this.props.toggleSnackbar("top","right",response.data.message,"warning");
-                    this.refreshCaptcha();
-                }
-            }else{
-                this.setState({
-                    loading:false,
-                });
-                window.location.href="/Home";
+                Auth.authenticate(response.data);
+                this.props.history.push('/Home')
                 this.props.toggleSnackbar("top","right","登录成功","success");
-            }
+            // }
         })
         .catch((error) =>{
             this.setState({
                 loading:false,
             });
-            this.props.toggleSnackbar("top","right",error.message,"error");
-            
-            
+            this.props.toggleSnackbar("top","right",error.message,"warning");    
+            this.refreshCaptcha(); 
         });
     }
 
@@ -141,7 +162,7 @@ class LoginFormCompoment extends Component {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        登录{window.siteInfo.mainTitle}
+                        登录{this.props.title}
                     </Typography>
                     <form className={classes.form} onSubmit={this.login}>
                         <FormControl margin="normal" required fullWidth>
@@ -165,7 +186,7 @@ class LoginFormCompoment extends Component {
                             value={this.state.pwd}
                             autoComplete />
                         </FormControl>
-                        {window.captcha==="1"&&
+                        {this.props.loginCaptcha&&
                         <div className={classes.captchaContainer}>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="captcha">验证码</InputLabel>
@@ -178,11 +199,12 @@ class LoginFormCompoment extends Component {
                                 autoComplete />
                                
                             </FormControl> <div>
-                                <img src={this.state.captchaUrl} alt="captcha" onClick={this.refreshCaptcha}></img>
+                                {this.state.captchaData ===null && <div className={classes.captchaPlaceholder}><Placeholder/></div>}
+                                {this.state.captchaData !==null && <img src={this.state.captchaData} alt="captcha" onClick={this.refreshCaptcha}></img>}
                             </div>
                         </div>
                         }
-                        {window.qqLogin&&
+                        {this.props.QQLogin&&
                             <div>
                                 <Button
                                     type="submit"
@@ -205,7 +227,7 @@ class LoginFormCompoment extends Component {
                                 </Button>
                             </div>
                         }
-                        {!window.qqLogin&&
+                        {!this.props.QQLogin&&
                             <Button
                             type="submit"
                             fullWidth
@@ -241,6 +263,6 @@ class LoginFormCompoment extends Component {
 const LoginForm = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(LoginFormCompoment))
+)(withStyles(styles)(withRouter(LoginFormCompoment)))
 
 export default LoginForm

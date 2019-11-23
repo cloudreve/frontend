@@ -1,14 +1,23 @@
-import axios from 'axios'
+import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://127.0.0.1:5000/Api/V3'
+    baseURL: "http://127.0.0.1:5000/Api/V3",
+    withCredentials: true,
+    crossDomain: true,
 });
 
-instance.interceptors.response.use(function (response) {
-    response.data = response.data.data
-    return response;
-}, function (error) {
-    return Promise.reject(error);
-});
+instance.interceptors.response.use(
+    function(response) {
+        response.rawData = response.data;
+        response.data = response.data.data;
+        if (response.rawData.code != 0){
+            throw new Error(response.rawData.msg);
+        }
+        return response;
+    },
+    function(error) {
+        return Promise.reject(error);
+    }
+);
 
-export default instance
+export default instance;

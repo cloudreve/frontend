@@ -59,7 +59,7 @@ const styles = theme => ({
 
 class PathSelectorCompoment extends Component {
 
-    state={
+    state = {
         presentPath:"/",
         dirList:[],
         selectedTarget:null,

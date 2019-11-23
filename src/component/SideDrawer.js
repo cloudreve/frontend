@@ -1,50 +1,58 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import UploadIcon from '@material-ui/icons/CloudUpload';
-import { Drawer, withStyles, Divider, ListItem, ListItemIcon, ListItemText, List } from '@material-ui/core';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+import {
+    Drawer,
+    withStyles,
+    Divider,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    List
+} from "@material-ui/core";
 const drawerWidth = 240;
 const styles = theme => ({
     drawer: {
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up("sm")]: {
             width: drawerWidth,
-            flexShrink: 0,
-        },
+            flexShrink: 0
+        }
     },
     drawerPaper: {
-        width: drawerWidth,
+        width: drawerWidth
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: theme.mixins.toolbar
 });
 class SideDrawer extends Component {
-
     state = {
-        mobileOpen: false,
+        mobileOpen: false
     };
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-    upload(){
+    upload() {
         alert("");
-    }   
+    }
 
     render() {
         const { classes } = this.props;
-        
+
         const drawer = (
-            <div><div className={classes.toolbar} />
+            <div>
+                <div className={classes.toolbar} />
                 <List>
                     <ListItem button key="上传文d件" onClick={this.upload}>
-                        <ListItemIcon><UploadIcon /></ListItemIcon>
+                        <ListItemIcon>
+                            <UploadIcon />
+                        </ListItemIcon>
                         <ListItemText primary="上传文d件" />
                     </ListItem>
-
                 </List>
                 <Divider />
-                <List>
-
-                </List></div>
+                <List></List>
+            </div>
         );
 
         return (
@@ -54,16 +62,16 @@ class SideDrawer extends Component {
                         container={this.props.container}
                         variant="temporary"
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.drawerPaper
                         }}
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        anchor={theme.direction === "rtl" ? "right" : "left"}
                         open={this.state.mobileOpen}
                         onClose={this.handleDrawerToggle}
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.drawerPaper
                         }}
                         ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
+                            keepMounted: true // Better open performance on mobile.
                         }}
                     >
                         {drawer}
@@ -72,7 +80,7 @@ class SideDrawer extends Component {
                 <Hidden xsDown implementation="css">
                     <Drawer
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.drawerPaper
                         }}
                         variant="permanent"
                         open
@@ -83,10 +91,9 @@ class SideDrawer extends Component {
             </nav>
         );
     }
-
 }
 SideDrawer.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(SideDrawer);

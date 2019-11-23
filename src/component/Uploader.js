@@ -120,12 +120,12 @@ class UploaderCompoment extends Component {
         }
     }
 
-    componentDidMount() {
-        const { isScriptLoaded, isScriptLoadSucceed } = this.props
-        if (isScriptLoaded && isScriptLoadSucceed) {
-        }
+    // componentDidMount() {
+    //     // const { isScriptLoaded, isScriptLoadSucceed } = this.props
+    //     // if (isScriptLoaded && isScriptLoadSucceed) {
+    //     // }
         
-    }
+    // }
 
     onError(){
 
