@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React,{ useCallback,useState,useEffect} from 'react'
+import { useDispatch,useSelector  } from 'react-redux'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { makeStyles } from "@material-ui/core";
 import { toggleSnackbar, } from "../../actions/index"
 import Placeholder from "../placeholder/captcha"
-import {withRouter} from  'react-router-dom'
+import {useHistory} from  'react-router-dom'
 import API from "../../middleware/Api"
 import Auth from "../../middleware/Auth"
 import {
@@ -19,7 +20,7 @@ import {
     Typography,
 } from '@material-ui/core';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
     layout: {
         width: 'auto',
         marginTop: '110px',
@@ -62,60 +63,54 @@ const styles = theme => ({
     captchaPlaceholder:{
         width:200,
     },
-})
-const mapStateToProps = state => {
-    return {
-        loginCaptcha: state.siteConfig.loginCaptcha,
-        title: state.siteConfig.title,
-        regCaptcha: state.siteConfig.regCaptcha,
-        forgetCaptcha: state.siteConfig.forgetCaptcha,
-        emailActive: state.siteConfig.emailActive,
-        QQLogin: state.siteConfig.QQLogin,
-    }
-}
+}));
 
-const mapDispatchToProps = dispatch => {
-    return {
-        toggleSnackbar: (vertical, horizontal, msg, color) => {
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color))
-        },
-    }
-}
 
-class LoginFormCompoment extends Component {
+function LoginForm (){
 
-    state={
-        email:"",
-        pwd:"",
-        captcha:"",
-        loading:false,
-        captchaData:null,
-    }
+    const [email, setEmail] = useState("");
+    const [pwd, setPwd] = useState("");
+    const [captcha, setCaptcha] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [captchaData, setCaptchaData] = useState(null);
 
-    refreshCaptcha = ()=>{
+    const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha)
+    const title=  useSelector(state => state.siteConfig.title)
+    const regCaptcha=  useSelector(state => state.siteConfig.regCaptcha)
+    const forgetCaptcha=  useSelector(state => state.siteConfig.forgetCaptcha)
+    const emailActive=  useSelector(state => state.siteConfig.emailActive)
+    const QQLogin=  useSelector(state => state.siteConfig.QQLogin)
+
+    const dispatch = useDispatch()
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) => dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    )
+
+    let history = useHistory();
+
+    const classes = useStyles();
+
+    const refreshCaptcha = ()=>{
         API.get("/Captcha").then((response) =>{
-            this.setState({
-                captchaData:response.data,
-            });
+            setCaptchaData(response.data)
         }).catch((error)=> {
-            this.props.toggleSnackbar("top", "right", "无法加载验证码：" + error.message, "error");
+            ToggleSnackbar("top", "right", "无法加载验证码：" + error.message, "error");
         });
         
     }
 
-    componentDidMount = ()=>{
-        this.refreshCaptcha()
-    }
+    useEffect(() => {
+        refreshCaptcha()
+    },[])
 
-    login = e=>{
+    const login = e=>{
         e.preventDefault();
-        this.setState({
-            loading:true,
-        });
+        setLoading(true);
         API.post('/User/Session',{
-            userName:this.state.email,
-            Password:this.state.pwd,
-            captchaCode:this.state.captcha,
+            userName:email,
+            Password:pwd,
+            captchaCode:captcha,
         }).then( (response)=> {
             // console.log(response);
             // if(response.data.code!=="200"){
@@ -129,32 +124,18 @@ class LoginFormCompoment extends Component {
             //         this.refreshCaptcha();
             //     }
             // }else{
-                this.setState({
-                    loading:false,
-                });
+                setLoading(false)
                 Auth.authenticate(response.data);
-                this.props.history.push('/Home')
-                this.props.toggleSnackbar("top","right","登录成功","success");
+                history.push('/Home');
+                ToggleSnackbar("top","right","登录成功","success");
             // }
         })
         .catch((error) =>{
-            this.setState({
-                loading:false,
-            });
-            this.props.toggleSnackbar("top","right",error.message,"warning");    
-            this.refreshCaptcha(); 
+            setLoading(false)
+            ToggleSnackbar("top","right",error.message,"warning");    
+            refreshCaptcha(); 
         });
     }
-
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
-    
-
-    render() {
-        console.log(this.props.location);
-        const { classes } = this.props;
-
 
         return (
             <div className={classes.layout}>
@@ -163,55 +144,55 @@ class LoginFormCompoment extends Component {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        登录{this.props.title}
+                        登录{title}
                     </Typography>
-                    <form className={classes.form} onSubmit={this.login}>
+                    <form className={classes.form} onSubmit={login}>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">电子邮箱</InputLabel>
                             <Input 
                             id="email" 
                             type="email" 
                             name="email" 
-                            onChange={this.handleChange("email")} 
+                            onChange={e => setEmail(e.target.value)} 
                             autoComplete
-                            value={this.state.email}
+                            value={email}
                             autoFocus />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="password">密码</InputLabel>
                             <Input 
                             name="password" 
-                            onChange={this.handleChange("pwd")} 
+                            onChange={e => setPwd(e.target.value)} 
                             type="password" 
                             id="password" 
-                            value={this.state.pwd}
+                            value={pwd}
                             autoComplete />
                         </FormControl>
-                        {this.props.loginCaptcha&&
+                        {loginCaptcha&&
                         <div className={classes.captchaContainer}>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="captcha">验证码</InputLabel>
                                 <Input 
                                 name="captcha" 
-                                onChange={this.handleChange("captcha")} 
+                                onChange={e => setCaptcha(e.target.value)} 
                                 type="text" 
                                 id="captcha" 
-                                value={this.state.captcha}
+                                value={captcha}
                                 autoComplete />
                                
                             </FormControl> <div>
-                                {this.state.captchaData ===null && <div className={classes.captchaPlaceholder}><Placeholder/></div>}
-                                {this.state.captchaData !==null && <img src={this.state.captchaData} alt="captcha" onClick={this.refreshCaptcha}></img>}
+                                {captchaData ===null && <div className={classes.captchaPlaceholder}><Placeholder/></div>}
+                                {captchaData !==null && <img src={captchaData} alt="captcha" onClick={refreshCaptcha}></img>}
                             </div>
                         </div>
                         }
-                        {this.props.QQLogin&&
+                        {QQLogin&&
                             <div>
                                 <Button
                                     type="submit"
                                     variant="contained"
                                     color="primary"
-                                    disabled={this.state.loading}
+                                    disabled={loading}
                                     className={classes.submit}
                                 >
                                     登录
@@ -220,7 +201,7 @@ class LoginFormCompoment extends Component {
                                     variant="contained"
                                     color="secondary"
                                     style={{marginLeft:"10px"}}
-                                    disabled={this.state.loading}
+                                    disabled={loading}
                                     className={classes.submit}
                                     onClick={()=>window.location.href="/Member/QQLogin"}
                                 >
@@ -228,13 +209,13 @@ class LoginFormCompoment extends Component {
                                 </Button>
                             </div>
                         }
-                        {!this.props.QQLogin&&
+                        {!QQLogin&&
                             <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
-                            disabled={this.state.loading}
+                            disabled={loading}
                             className={classes.submit}
                         >
                             登录
@@ -257,13 +238,9 @@ class LoginFormCompoment extends Component {
                 </Paper>
             </div>
         );
-    }
+    
 
 }
 
-const LoginForm = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(withRouter(LoginFormCompoment)))
 
 export default LoginForm

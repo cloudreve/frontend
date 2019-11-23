@@ -28,7 +28,7 @@ const defaultStatus = InitSiteConfig({
         refresh:true,
     },
     viewUpdate:{
-        open:true,
+        open:false,
         explorerViewMethod: "icon",
         sortMethod:"timePos",
         contextType:"none",  
