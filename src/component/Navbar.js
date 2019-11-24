@@ -301,7 +301,7 @@ class NavbarCompoment extends Component {
     }
 
     loadUploader() {
-        if (this.props.location.pathname=="/Home") {
+        if (pathHelper.isHomePage(this.props.location.pathname)) {
             return (<Uploader queueChange={queued => this.updateQueueStatus(queued)} ref={this.UploaderRef} />)
         }
     }

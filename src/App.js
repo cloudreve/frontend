@@ -50,12 +50,12 @@ export default function App() {
                             <AuthRoute exact path={path}>
                                 我是私有页面
                             </AuthRoute>
-							<AuthRoute path={`${path}Home`}>
+							<AuthRoute path={`${path}home`}>
 								<Suspense fallback={<div>Loading...</div>}>
                                		<FileManager/>
 								</Suspense>
                             </AuthRoute>
-                            <Route path={`${path}Login`}>
+                            <Route path={`${path}login`}>
                                 <Suspense fallback={<div>Loading...</div>}>
                                     <LoginForm />
                                 </Suspense>

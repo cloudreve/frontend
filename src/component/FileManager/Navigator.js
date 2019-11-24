@@ -25,6 +25,7 @@ import {
     setSelectedTarget,
     openCreateFolderDialog,
     openShareDialog,
+    drawerToggleAction,
 } from "../../actions/index"
 import API from '../../middleware/Api'
 import {setCookie,setGetParameter,fixUrlHash} from "../../untils/index"
@@ -85,6 +86,9 @@ const mapDispatchToProps = dispatch => {
         },
         openShareDialog:()=>{
             dispatch(openShareDialog())
+        },
+        handleDesktopToggle: open => {
+            dispatch(drawerToggleAction(open))
         },
     }
 }
@@ -161,6 +165,8 @@ class NavigatorCompoment extends Component {
 
     componentDidMount = ()=>{
         this.renderPath();
+        // 如果是在个人文件管理页，首次加载时打开侧边栏
+        this.props.handleDesktopToggle(true);
         // 后退操作时重新导航
         window.onpopstate = (event)=>{
             var url = new URL(fixUrlHash(window.location.href));
