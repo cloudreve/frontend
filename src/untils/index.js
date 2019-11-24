@@ -6,6 +6,12 @@ export const sizeToString = (bytes) => {
     return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i]; 
 }
 
+export const fixUrlHash = (path)=> {
+    var relativePath = path.split('#')
+    var url = new URL('http://example.com/' + relativePath[1]);
+    return url.toString();
+  }
+
 export const setCookie = (name,value,days)=>{
     if (days) {
         var date = new Date();
@@ -17,7 +23,7 @@ export const setCookie = (name,value,days)=>{
 export const setGetParameter = (paramName, paramValue) =>{
     var url = window.location.href;
     var hash = window.location.hash;
-    url = url.replace(hash, '');
+
     if (url.indexOf(paramName + "=") >= 0)
     {
         var prefix = url.substring(0, url.indexOf(paramName));

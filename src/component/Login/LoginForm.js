@@ -92,7 +92,7 @@ function LoginForm (){
     const classes = useStyles();
 
     const refreshCaptcha = ()=>{
-        API.get("/Captcha").then((response) =>{
+        API.get("/captcha").then((response) =>{
             setCaptchaData(response.data)
         }).catch((error)=> {
             ToggleSnackbar("top", "right", "无法加载验证码：" + error.message, "error");
@@ -107,7 +107,7 @@ function LoginForm (){
     const login = e=>{
         e.preventDefault();
         setLoading(true);
-        API.post('/User/Session',{
+        API.post('/user/session',{
             userName:email,
             Password:pwd,
             captchaCode:captcha,
@@ -126,7 +126,7 @@ function LoginForm (){
             // }else{
                 setLoading(false)
                 Auth.authenticate(response.data);
-                history.push('/Home');
+                history.push('/home');
                 ToggleSnackbar("top","right","登录成功","success");
             // }
         })

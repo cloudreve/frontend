@@ -26,8 +26,8 @@ import {
     openCreateFolderDialog,
     openShareDialog,
 } from "../../actions/index"
-import axios from 'axios'
-import {setCookie,setGetParameter} from "../../untils/index"
+import API from '../../middleware/Api'
+import {setCookie,setGetParameter,fixUrlHash} from "../../untils/index"
 
 import {
     withStyles,
@@ -157,11 +157,13 @@ class NavigatorCompoment extends Component {
         super(props);
         this.element = React.createRef();
     }
+    
 
     componentDidMount = ()=>{
         this.renderPath();
+        // 后退操作时重新导航
         window.onpopstate = (event)=>{
-            var url = new URL(window.location.href);
+            var url = new URL(fixUrlHash(window.location.href));
             var c = url.searchParams.get("path");
             if(c!==null&&c!==this.props.path){
                 this.props.navigateToPath(c);
@@ -174,15 +176,15 @@ class NavigatorCompoment extends Component {
             folders:path!==null?path.substr(1).split("/"):this.props.path.substr(1).split("/"),
         });
         var newPath = path!==null?path:this.props.path;
-        // var apiURL = this.keywords===null?window.apiURL.listFile:'/File/SearchFile';
-        var apiURL = '/File/SearchFile';
+        var apiURL = this.keywords===null?'/directory':'/File/SearchFile';
         newPath = this.keywords===null?newPath:this.keywords;
-        axios.post(apiURL, {
-            action: 'list',
-            path: newPath
+        API.get(apiURL, {
+            params: { 
+                path: newPath,
+            } 
         })
         .then( (response)=> {
-            this.props.updateFileList(response.data.result);
+            this.props.updateFileList(response.data);
             this.props.setNavigatorLoadingStatus(false);
             let pathTemp = (path!==null?path.substr(1).split("/"):this.props.path.substr(1).split("/")).join(",");
             setCookie("path_tmp",encodeURIComponent(pathTemp),1);

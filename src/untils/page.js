@@ -1,10 +1,10 @@
 const statusHelper = {
 
     isHomePage(path){
-        return path == "/Home"
+        return path == "/home"
     },
     isSharePage(path){
-        return path == "/Share"
+        return path == "/share"
     },
     isMobile(){
         return window.innerWidth < 600;
