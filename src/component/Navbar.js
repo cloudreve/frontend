@@ -530,13 +530,13 @@ class NavbarCompoment extends Component {
         				</Typography>
                         }
 
-                        {(!this.props.isMultiple&&this.props.withFile&&!pageHelper.isMobile())&&
+                        {(!this.props.isMultiple&&this.props.withFile&&!pathHelper.isMobile())&&
                         <Typography variant="h6" color="inherit" noWrap>
                             {this.props.selected[0].name} {(pathHelper.isHomePage(this.props.location.pathname)||pathHelper.isSharePage(this.props.location.pathname))&&"("+sizeToString(this.props.selected[0].size)+")"} 
         				</Typography>
                         }
 
-                        {(this.props.selected.length >1&&!pageHelper.isMobile())&&
+                        {(this.props.selected.length >1&&!pathHelper.isMobile())&&
                         <Typography variant="h6" color="inherit" noWrap>
                             {this.props.selected.length}个对象
         				</Typography>
@@ -608,7 +608,7 @@ class NavbarCompoment extends Component {
                                     </Grow>
                                 }
                                 {!pathHelper.isSharePage(this.props.location.pathname)&&<div>
-                                    {!pageHelper.isMobile()&&<Grow in={(this.props.selected.length!==0)&&!pageHelper.isMobile()}>
+                                    {!pathHelper.isMobile()&&<Grow in={(this.props.selected.length!==0)&&!pathHelper.isMobile()}>
                                     <Tooltip title="移动">
                                         <IconButton color="inherit" onClick={()=>this.props.openMoveDialog()}>
                                             <MoveIcon/>

@@ -29,7 +29,6 @@ import {
 } from "../../actions/index"
 import API from '../../middleware/Api'
 import {setCookie,setGetParameter,fixUrlHash} from "../../untils/index"
-
 import {
     withStyles,
     Divider,
@@ -178,6 +177,7 @@ class NavigatorCompoment extends Component {
     }
 
     renderPath = (path=null)=>{
+        this.props.setNavigatorError(false,null); 
         this.setState({
             folders:path!==null?path.substr(1).split("/"):this.props.path.substr(1).split("/"),
         });

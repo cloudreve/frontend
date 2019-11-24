@@ -315,7 +315,9 @@ class FileIconCompoment extends Component {
                             [classes.iconNotSelected]: !isSelected,
                         })}>{icon}</div>}
                         <Tooltip title={this.props.file.name} aria-label={this.props.file.name}>
-                            <Typography className={classNames(classes.folderName, {
+                            <Typography 
+                            variant="body2"
+                            className={classNames(classes.folderName, {
                                 [classes.folderNameSelected]: isSelected,
                                 [classes.folderNameNotSelected]: !isSelected,
                                 [classes.shareFix]:this.props.share,

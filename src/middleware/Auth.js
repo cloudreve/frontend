@@ -16,7 +16,7 @@ const Auth = {
         }
         return false;
     },
-    signout(cb) {
+    signout() {
         localStorage.removeItem("user");
         Auth.isAuthenticated = false;
     }

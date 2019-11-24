@@ -102,7 +102,9 @@ class FolderCompoment extends Component {
                         [classes.iconNotSelected]: !isSelected,
                     })}><FolderIcon /></div>
                     <Tooltip title={this.props.folder.name} aria-label={this.props.folder.name}>
-                        <Typography className={classNames(classes.folderName, {
+                        <Typography 
+                        variant="body2"
+                        className={classNames(classes.folderName, {
                             [classes.folderNameSelected]: isSelected,
                             [classes.folderNameNotSelected]: !isSelected,
                         })}>{this.props.folder.name}</Typography>
