@@ -53,6 +53,10 @@ const styles = theme => ({
         marginBottom:10,
         color:"#ff5722",
     },
+    listAction:{
+        marginLeft:20,
+        marginRight:20,
+    },
 });
 class FileList extends Component {
 
@@ -189,15 +193,15 @@ class FileList extends Component {
                 }
             
                 if(item.status ===5){
-                    progressItem = (<ListItemText primary={item.name} secondary={<div className={classes.successStatus}>已完成<br/></div>} />);
+                    progressItem = (<ListItemText className={classes.listAction} primary={item.name} secondary={<div className={classes.successStatus}>已完成<br/></div>} />);
                 }else if (item.status ===2){
-                    progressItem = (<ListItemText primary={item.name} secondary={<div>{window.plupload.formatSize(item.speed).toUpperCase()}/s 已上传 {window.plupload.formatSize(item.loaded).toUpperCase()} , 共 {window.plupload.formatSize(item.size).toUpperCase()} - {item.percent}% <br/><LinearProgress variant="determinate" value={item.percent} className={classes.progressBar} /></div>}/>);
+                    progressItem = (<ListItemText className={classes.listAction} primary={item.name} secondary={<div>{window.plupload.formatSize(item.speed).toUpperCase()}/s 已上传 {window.plupload.formatSize(item.loaded).toUpperCase()} , 共 {window.plupload.formatSize(item.size).toUpperCase()} - {item.percent}% <br/><LinearProgress variant="determinate" value={item.percent} className={classes.progressBar} /></div>}/>);
                 }else if (item.status ===1){
-                    progressItem = (<ListItemText primary={item.name} secondary={<div>排队中<br/><LinearProgress className={classes.progressBar}/></div>} />);
+                    progressItem = (<ListItemText className={classes.listAction} primary={item.name} secondary={<div>排队中<br/><LinearProgress className={classes.progressBar}/></div>} />);
                 }else if (item.status ===4){
-                    progressItem = (<ListItemText primary={item.name} secondary={<div className={classes.errorStatus}>{item.errMsg}<br/></div>} />);
+                    progressItem = (<ListItemText className={classes.listAction} primary={item.name} secondary={<div className={classes.errorStatus}>{item.errMsg}<br/></div>} />);
                 }else{
-                    progressItem = (<ListItemText primary={item.name} secondary={item.status} />);
+                    progressItem = (<ListItemText className={classes.listAction} primary={item.name} secondary={item.status} />);
                 }
                 return (
                     <div key={i}>
@@ -206,7 +210,6 @@ class FileList extends Component {
                                 {queueIcon}
                             </Avatar>
                             {progressItem}
-                            
                             <ListItemSecondaryAction>
                                 <IconButton aria-label="Delete" onClick={()=>this.cancelUpload(item)}>
                                     <DeleteIcon />
