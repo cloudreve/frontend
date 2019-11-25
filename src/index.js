@@ -109,7 +109,7 @@ const defaultStatus = InitSiteConfig({
     }
 });
 
-let store = createStore(cloureveApp, defaultStatus);
+let store = createStore(cloureveApp, defaultStatus,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 UpdateSiteConfig(store);
 
 ReactDOM.render(

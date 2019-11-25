@@ -3,6 +3,7 @@ import scriptLoader from "../loader/index.js";
 import { connect } from "react-redux";
 import { refreshFileList, refreshStorage } from "../actions/index";
 import FileList from "./Upload/FileList.js";
+import Auth from "../middleware/Auth"
 
 let loaded = false;
 
@@ -53,21 +54,26 @@ class UploaderCompoment extends Component {
                     return;
                 }
                 loaded = true;
+                var user = Auth.GetUser();
+                window.uploadConfig = user.policy;
+                console.log(window.uploadConfig);
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
                     browse_button: "pickfiles",
                     container: "container",
                     drop_element: "container",
-                    max_file_size: window.uploadConfig.maxSize,
+                    max_file_size: user.policy.maxSize,
                     dragdrop: true,
-                    chunk_size: window.ChunkSize,
+                    chunk_size: user.policy.saveType == "qiniu" ? 4*1024*1024 : 0,
                     filters: {
-                        mime_types: window.uploadConfig.allowedType
+                        mime_types: user.policy.allowedType
                     },
                     // iOS不能多选？
                     multi_selection: true,
-                    uptoken_url: "/Upload/Token",
+                    uptoken_url: "/api/v3/file/token",
+                    uptoken:user.policy.saveType == "local" ? "token" : null,
                     domain: "s",
+                    max_retries:0,
                     get_new_uptoken: true,
                     auto_start: true,
                     log_level: 5,
@@ -86,6 +92,7 @@ class UploaderCompoment extends Component {
                             this.setState({ queued: up.total.queued });
                         },
                         UploadProgress: (up, file) => {
+                            console.log("UploadProgress",file);
                             this.fileList["updateStatus"](file);
                         },
                         UploadComplete: (up, file) => {

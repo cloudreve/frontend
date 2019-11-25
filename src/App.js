@@ -41,7 +41,7 @@ export default function App() {
         <React.Fragment>
             <ThemeProvider theme={theme}>
                 <div className={classes.root} id="container">
-                    <CssBaseline />
+                <CssBaseline />
                     <AlertBar />
                     <Navbar />
                     <main className={classes.content}>

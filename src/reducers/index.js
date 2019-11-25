@@ -165,6 +165,38 @@ const cloudreveApp = (state = [], action) => {
             });
         case 'NAVIGATOR_TO':
             return doNavigate(action.path,state);
+        case 'TOGGLE_DAYLIGHT_MODE':
+            const copy = Object.assign({}, state);
+            if (copy.siteConfig.theme.palette.type === undefined || copy.siteConfig.theme.palette.type === "light"){
+                return {
+                    ...state,
+                    siteConfig: {
+                        ...state.siteConfig,
+                        theme:{
+                            ...state.siteConfig.theme,
+                            palette:{
+                                ...state.siteConfig.theme.palette,
+                                type:"dark",
+                            }
+                        },
+                    },
+                };
+            }
+            return {
+                ...state,
+                siteConfig: {
+                    ...state.siteConfig,
+                    theme:{
+                        ...state.siteConfig.theme,
+                        palette:{
+                            ...state.siteConfig.theme.palette,
+                            type:"light",
+                        }
+                    },
+                },
+            };
+            return copy
+      
         case 'APPLY_THEME':
             if (state.siteConfig.themes !== null){
                 let themes = JSON.parse(state.siteConfig.themes);

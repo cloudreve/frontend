@@ -27,12 +27,12 @@ import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 const styles = theme => ({
     selected: {
         "&:hover": {},
-        backgroundColor: theme.palette.explorer.bgSelected
+        backgroundColor: theme.palette.type == "dark" ? theme.palette.background.paper : theme.palette.explorer.bgSelected,
     },
 
     notSelected: {
         "&:hover": {
-            backgroundColor: "#ececec"
+            backgroundColor: theme.palette.background.default,
         }
     },
     icon: {
@@ -106,12 +106,12 @@ const styles = theme => ({
         verticalAlign: "middle"
     },
     folderNameSelected: {
-        color: theme.palette.primary.dark,
+        color: theme.palette.type == "dark" ? "#fff" : theme.palette.primary.dark,
         fontWeight: "500",
         userSelect: "none"
     },
     folderNameNotSelected: {
-        color: theme.palette.explorer.filename,
+        color: theme.palette.text.secondary,
         userSelect: "none"
     },
     folderName: {

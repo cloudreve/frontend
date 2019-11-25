@@ -112,7 +112,7 @@ const styles = theme => ({
         },
         height:"48px",
         overflow:"hidden",
-        backgroundColor:"#fff",
+        backgroundColor:theme.palette.background.paper,
     },
     navigatorContainer:{
         "display": "flex",

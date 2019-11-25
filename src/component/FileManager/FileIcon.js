@@ -24,20 +24,20 @@ const styles = theme => ({
         "&:hover": {
             border: "1px solid #d0d0d0",
         },
-        backgroundColor: theme.palette.explorer.bgSelected,
+        backgroundColor: theme.palette.type == "dark" ? "#fff" : theme.palette.explorer.bgSelected,
 
     },
 
     notSelected: {
         "&:hover": {
-            backgroundColor: "#f9f9f9",
+            backgroundColor: theme.palette.background.default,
             border: "1px solid #d0d0d0",
         },
         backgroundColor: theme.palette.background.paper,
     },
 
     button: {
-        border: "1px solid #dadce0",
+        border: "1px solid "+theme.palette.divider,
         width: "100%",
         borderRadius: "6px",
         boxSizing: "border-box",
@@ -46,11 +46,11 @@ const styles = theme => ({
         display: "initial",
     },
     folderNameSelected: {
-        color: theme.palette.primary.dark,
+        color: theme.palette.type == "dark" ? theme.palette.background.paper : theme.palette.primary.dark,
         fontWeight: "500",
     },
     folderNameNotSelected: {
-        color: theme.palette.explorer.filename,
+        color: theme.palette.text.secondary,
     },
     folderName: {
         marginTop: "15px",

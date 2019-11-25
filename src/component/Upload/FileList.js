@@ -93,7 +93,7 @@ class FileList extends Component {
     updateStatus(file){
         var filesNow = this.state.files;
         var fileID = filesNow.findIndex((f) => { return f.id === file.id });
-        if (fileID !== -1) {
+        if (!file.errMsg) {
             if(filesNow[fileID].status!==4){
                 filesNow[fileID] = file;
                 this.setState({
@@ -203,6 +203,7 @@ class FileList extends Component {
                 }else{
                     progressItem = (<ListItemText className={classes.listAction} primary={item.name} secondary={item.status} />);
                 }
+
                 return (
                     <div key={i}>
                         <ListItem button >
