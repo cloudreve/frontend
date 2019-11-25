@@ -126,6 +126,13 @@ export const openShareDialog = () => {
     };
 };
 
+export const applyThemes = (theme)=>{
+    return {
+        type:'APPLY_THEME',
+        theme:theme,
+    };
+}
+
 export const openMusicDialog = () => {
     return {
         type: "OPEN_MUSIC_DIALOG"

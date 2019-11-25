@@ -2,7 +2,7 @@ import React,{ useCallback,useState,useEffect} from 'react'
 import { useDispatch,useSelector  } from 'react-redux'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from "@material-ui/core";
-import { toggleSnackbar, } from "../../actions/index"
+import { toggleSnackbar, applyThemes} from "../../actions/index"
 import Placeholder from "../placeholder/captcha"
 import {useHistory} from  'react-router-dom'
 import API from "../../middleware/Api"
@@ -86,6 +86,10 @@ function LoginForm (){
         (vertical, horizontal, msg, color) => dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     )
+    const ApplyThemes = useCallback(
+        (theme) => dispatch(applyThemes(theme)),
+        [dispatch]
+    )
 
     let history = useHistory();
 
@@ -126,6 +130,12 @@ function LoginForm (){
             // }else{
                 setLoading(false)
                 Auth.authenticate(response.data);
+
+                // 设置用户主题色
+                if (response.data["preferred_theme"] !== ""){
+                    ApplyThemes(response.data["preferred_theme"]);
+                }
+                
                 history.push('/home');
                 ToggleSnackbar("top","right","登录成功","success");
             // }

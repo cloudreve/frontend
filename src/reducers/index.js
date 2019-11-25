@@ -165,6 +165,18 @@ const cloudreveApp = (state = [], action) => {
             });
         case 'NAVIGATOR_TO':
             return doNavigate(action.path,state);
+        case 'APPLY_THEME':
+            if (state.siteConfig.themes !== null){
+                let themes = JSON.parse(state.siteConfig.themes);
+                if (themes[action.theme] === undefined){
+                    return state;
+                }
+                return Object.assign({}, state, {
+                    siteConfig: Object.assign({}, state.siteConfig, {
+                        theme:themes[action.theme],
+                    }),
+                });
+            }
         case 'NAVIGATOR_UP':
             var pathSplit = state.navigator.path.split("/");
             pathSplit.pop();
