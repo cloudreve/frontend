@@ -22,7 +22,6 @@ export const setCookie = (name,value,days)=>{
 
 export const setGetParameter = (paramName, paramValue) =>{
     var url = window.location.href;
-    var hash = window.location.hash;
 
     if (url.indexOf(paramName + "=") >= 0)
     {

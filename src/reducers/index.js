@@ -165,8 +165,8 @@ const cloudreveApp = (state = [], action) => {
             });
         case 'NAVIGATOR_TO':
             return doNavigate(action.path,state);
-        case 'TOGGLE_DAYLIGHT_MODE':
-            const copy = Object.assign({}, state);
+        case 'TOGGLE_DAYLIGHT_MODE':{
+            let copy = Object.assign({}, state);
             if (copy.siteConfig.theme.palette.type === undefined || copy.siteConfig.theme.palette.type === "light"){
                 return {
                     ...state,
@@ -195,8 +195,7 @@ const cloudreveApp = (state = [], action) => {
                     },
                 },
             };
-            return copy
-      
+        }
         case 'APPLY_THEME':
             if (state.siteConfig.themes !== null){
                 let themes = JSON.parse(state.siteConfig.themes);
@@ -209,6 +208,7 @@ const cloudreveApp = (state = [], action) => {
                     }),
                 });
             }
+            break
         case 'NAVIGATOR_UP':
             var pathSplit = state.navigator.path.split("/");
             pathSplit.pop();

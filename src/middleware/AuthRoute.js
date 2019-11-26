@@ -1,7 +1,6 @@
 import React from "react";
 import Auth from "./Auth"
 import {
-    BrowserRouter as Router,
     Route,
     Redirect,
   } from "react-router-dom";

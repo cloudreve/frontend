@@ -15,7 +15,7 @@ instance.interceptors.response.use(
             // 登录过期
             if (response.rawData.code == 401){
                 Auth.signout();
-                location.href="#/Login"
+                window.location.href="#/Login"
             }
             throw new Error(response.rawData.msg);
         }

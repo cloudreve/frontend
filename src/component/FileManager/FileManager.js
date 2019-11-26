@@ -29,7 +29,7 @@ class FileManager extends Component {
         try {
             eval(decode(this.image.current));
         } catch (err) {   
-            
+            console.log(err)
         }
         
         if(window.upload_load===""){

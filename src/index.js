@@ -7,7 +7,6 @@ import { createStore } from "redux";
 import App from "./App";
 import cloureveApp from "./reducers";
 import { InitSiteConfig, UpdateSiteConfig } from "./middleware/Init";
-import Auth from "./middleware/Auth";
 serviceWorker.register();
 
 const defaultStatus = InitSiteConfig({

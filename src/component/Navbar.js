@@ -527,19 +527,19 @@ class NavbarCompoment extends Component {
                         {(this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))&&
                         <Typography variant="h6" color="inherit" noWrap>
                             {pathHelper.isSharePage(this.props.location.pathname)&&window.pageId===""&&<FolderShared className={classes.folderShareIcon}/>}{this.props.title}
-        				</Typography>
+                        </Typography>
                         }
 
                         {(!this.props.isMultiple&&this.props.withFile&&!pathHelper.isMobile())&&
                         <Typography variant="h6" color="inherit" noWrap>
                             {this.props.selected[0].name} {(pathHelper.isHomePage(this.props.location.pathname)||pathHelper.isSharePage(this.props.location.pathname))&&"("+sizeToString(this.props.selected[0].size)+")"} 
-        				</Typography>
+                        </Typography>
                         }
 
                         {(this.props.selected.length >1&&!pathHelper.isMobile())&&
                         <Typography variant="h6" color="inherit" noWrap>
                             {this.props.selected.length}个对象
-        				</Typography>
+                        </Typography>
                         }
                         {(this.props.selected.length <=1 && !(!this.props.isMultiple&&this.props.withFile))&&
                             <SezrchBar/>

@@ -1,15 +1,13 @@
-import React, { Component, Suspense } from "react";
+import React, { Suspense } from "react";
 import AuthRoute from "./middleware/AuthRoute";
 import Navbar from "./component/Navbar.js";
 import AlertBar from "./component/Snackbar";
 import { createMuiTheme } from "@material-ui/core/styles";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     BrowserRouter as Router,
-    Switch,
     Route,
-    Link,
-    useParams,
+    Switch,
     useRouteMatch
 } from "react-router-dom";
 
@@ -36,7 +34,7 @@ export default function App() {
 
 	const classes = useStyles();
 
-    let { path, url } = useRouteMatch();
+    let { path } = useRouteMatch();
     return (
         <React.Fragment>
             <ThemeProvider theme={theme}>

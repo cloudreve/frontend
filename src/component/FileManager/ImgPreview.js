@@ -71,8 +71,7 @@ class ImgPreviewCompoment extends Component {
                     }else{
                         items.push(newImg);
                     }
-                    
-                };
+                }
             });
             items.unshift(firstOne);
             this.setState({
