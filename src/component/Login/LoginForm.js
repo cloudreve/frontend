@@ -104,7 +104,10 @@ function LoginForm (){
     }
 
     useEffect(() => {
-        refreshCaptcha()
+        if (loginCaptcha){
+            refreshCaptcha()
+        }
+        
     },[])
 
     const login = e=>{

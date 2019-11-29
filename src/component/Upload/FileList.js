@@ -7,7 +7,6 @@ import AddIcon from '@material-ui/icons/AddCircleOutline';
 import MusicIcon from '@material-ui/icons/MusicNote';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { isWidthDown } from '@material-ui/core/withWidth';
-
 import {
     withStyles,
     Dialog,

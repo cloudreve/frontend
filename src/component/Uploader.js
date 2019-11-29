@@ -3,6 +3,7 @@ import scriptLoader from "../loader/index.js";
 import { connect } from "react-redux";
 import { refreshFileList, refreshStorage } from "../actions/index";
 import FileList from "./Upload/FileList.js";
+import UploadButton from "./Upload/Fab.js";
 import Auth from "../middleware/Auth"
 
 let loaded = false;
@@ -116,12 +117,22 @@ class UploaderCompoment extends Component {
         }
     }
 
-    // componentDidMount() {
-    //     // const { isScriptLoaded, isScriptLoadSucceed } = this.props
-    //     // if (isScriptLoaded && isScriptLoadSucceed) {
-    //     // }
+    componentDidMount() {
+        this.prev = window.scrollY;
+        window.addEventListener('scroll', e => this.handleNavigation(e));
 
-    // }
+    }
+
+    handleNavigation = (e) => {
+        const window = e.currentTarget;
+    
+        if (this.prev > window.scrollY) {
+            console.log("scrolling up");
+        } else if (this.prev < window.scrollY) {
+            console.log("scrolling down");
+        }
+        this.prev = window.scrollY;
+    };
 
     onError() {}
 
@@ -136,6 +147,7 @@ class UploaderCompoment extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
+                <UploadButton/>
             </div>
         );
     }
