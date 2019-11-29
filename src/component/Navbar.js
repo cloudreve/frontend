@@ -268,7 +268,6 @@ class NavbarCompoment extends Component {
         super(props);
         this.state = {
             mobileOpen: false,
-            queued: 0,
         };
         this.UploaderRef = React.createRef();
     }
@@ -296,13 +295,9 @@ class NavbarCompoment extends Component {
         }
     }
 
-    updateQueueStatus = (queued) => {
-        this.setState({ queued: queued });
-    }
-
     loadUploader() {
         if (pathHelper.isHomePage(this.props.location.pathname)) {
-            return (<Uploader queueChange={queued => this.updateQueueStatus(queued)} ref={this.UploaderRef} />)
+            return (<Uploader/>)
         }
     }
 

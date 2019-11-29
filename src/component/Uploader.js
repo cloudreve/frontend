@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { refreshFileList, refreshStorage } from "../actions/index";
 import FileList from "./Upload/FileList.js";
 import Auth from "../middleware/Auth"
+import UploadButton from "./Upload/Fab.js"
 
 let loaded = false;
 
@@ -38,12 +39,6 @@ class UploaderCompoment extends Component {
 
     cancelUpload(file) {
         this.uploader.removeFile(file);
-    }
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextState.queued !== this.state.queued) {
-            this.props.queueChange(nextState.queued);
-        }
-        return false;
     }
 
     componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
@@ -146,6 +141,7 @@ class UploaderCompoment extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
+                <UploadButton Queued={this.state.queued} openFileList={this.openFileList} />
             </div>
         );
     }
