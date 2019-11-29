@@ -3,7 +3,6 @@ import scriptLoader from "../loader/index.js";
 import { connect } from "react-redux";
 import { refreshFileList, refreshStorage } from "../actions/index";
 import FileList from "./Upload/FileList.js";
-import UploadButton from "./Upload/Fab.js";
 import Auth from "../middleware/Auth"
 
 let loaded = false;
@@ -13,7 +12,7 @@ const mapStateToProps = state => {
         path: state.navigator.path
     };
 };
-
+ 
 const mapDispatchToProps = dispatch => {
     return {
         refreshFileList: () => {
@@ -147,7 +146,6 @@ class UploaderCompoment extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
-                <UploadButton/>
             </div>
         );
     }

@@ -7,7 +7,7 @@ import Modals from "./Modals"
 import {decode} from "../../untils/index"
 import { withStyles } from '@material-ui/core';
 const styles = theme => ({
-
+ 
 })
 
 class FileManager extends Component {
