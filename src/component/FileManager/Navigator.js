@@ -234,14 +234,17 @@ class NavigatorCompoment extends Component {
     }
 
     checkOverFlow = ()=>{
-        const hasOverflowingChildren = this.element.current.offsetHeight < this.element.current.scrollHeight ||
-        this.element.current.offsetWidth < this.element.current.scrollWidth;
-        if(hasOverflowingChildren && !this.state.hiddenMode){
-            this.setState({hiddenMode:true});
+        if (this.element.current !== null){
+            const hasOverflowingChildren = this.element.current.offsetHeight < this.element.current.scrollHeight ||
+            this.element.current.offsetWidth < this.element.current.scrollWidth;
+            if(hasOverflowingChildren && !this.state.hiddenMode){
+                this.setState({hiddenMode:true});
+            }
+            if(!hasOverflowingChildren && this.state.hiddenMode){
+                this.setState({hiddenMode:false}); 
+            }
         }
-        if(!hasOverflowingChildren && this.state.hiddenMode){
-            this.setState({hiddenMode:false}); 
-        }
+        
     }
     
     navigateTo=(event,id)=> {

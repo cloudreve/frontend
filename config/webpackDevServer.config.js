@@ -83,6 +83,12 @@ module.exports = function(proxy, allowedHost) {
     },
     public: allowedHost,
     proxy,
+    proxy: {
+      '/api': {
+          target: 'http://localhost:5000',
+          secure: false
+      }
+  },
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons

@@ -30,7 +30,7 @@ import LinkIcon from '@material-ui/icons/InsertLink'
 import DeleteIcon from '@material-ui/icons/Delete'
 import OpenIcon from '@material-ui/icons/OpenInNew'
 import {MagnetOn} from 'mdi-material-ui'
-
+import {baseURL} from "../../middleware/Api"
 import { withStyles, Popover, Typography, MenuList, MenuItem, Divider, ListItemIcon } from '@material-ui/core';
 
 const styles = theme => ({
@@ -124,7 +124,7 @@ class ContextMenuCompoment extends Component {
         }
         this.props.changeContextMenu("file",false);
         let downloadPath = this.props.selected[0].path === "/" ? this.props.selected[0].path+this.props.selected[0].name:this.props.selected[0].path+"/"+this.props.selected[0].name;
-        window.open(window.apiURL.download+"?action=download&path="+encodeURIComponent(downloadPath));
+        window.open(baseURL+"/file"+(downloadPath));
 
     }
 

@@ -56,7 +56,6 @@ class UploaderCompoment extends Component {
                 loaded = true;
                 var user = Auth.GetUser();
                 window.uploadConfig = user.policy;
-                console.log(window.uploadConfig);
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
                     browse_button: "pickfiles",
@@ -84,7 +83,6 @@ class UploaderCompoment extends Component {
                                 window.pathCache[files.id] = this.props.path;
                                 this.fileList["enQueue"](files);
                             });
-                            console.log(window.pathCache);
                         },
 
                         BeforeUpload: function(up, file) {},
