@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Navigator from "./Navigator"
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-
+import DragLayer from "./DnD/DragLayer"
 import Explorer from "./Explorer"
 import Modals from "./Modals"
 import {decode} from "../../untils/index"
@@ -42,10 +42,10 @@ class FileManager extends Component {
     render() {
         return (
             <DndProvider backend={HTML5Backend}>
-       
                 <Modals/> 
                 <Navigator/>
                 <Explorer/>
+                <DragLayer/>
                 <img src='/static/img/sign.png' style={{display:"none"}}
                 //  onError={()=>window.location.href="/FixComplete"}
                  ref={this.image} onLoad={this.handleImageLoaded} />
