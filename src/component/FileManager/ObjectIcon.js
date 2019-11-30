@@ -11,7 +11,7 @@ import {
     openMusicDialog,
     toggleSnackbar
 } from "../../actions/index";
-import Folder from "./Folder";
+import statusHelper from "../../untils/page"
 import FileIcon from "./FileIcon";
 import SmallIcon from "./SmallIcon";
 import TableItem from "./TableRow";
@@ -22,6 +22,9 @@ import { makeStyles } from "@material-ui/core";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import DropWarpper from "./DnD/DropWarpper"
+import {
+    useLocation
+  } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -41,6 +44,7 @@ export default function ObjectIcon(props) {
     const viewMethod = useSelector(
         state => state.viewUpdate.explorerViewMethod
     );
+    let location = useLocation();
 
     const dispatch = useDispatch();
     const ContextMenu = useCallback(
@@ -207,6 +211,9 @@ export default function ObjectIcon(props) {
                 alert(`drop`);
                 console.log(item.object,dropResult.folder);
             }
+        },
+        canDrag: () =>{
+            return !statusHelper.isMobile() && statusHelper.isHomePage(location.pathname);
         },
         collect: monitor => ({
             isDragging: monitor.isDragging()
