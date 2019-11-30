@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import Navigator from "./Navigator"
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 import Explorer from "./Explorer"
 import Modals from "./Modals"
@@ -39,14 +41,15 @@ class FileManager extends Component {
     
     render() {
         return (
-             <div>
+            <DndProvider backend={HTML5Backend}>
+       
                 <Modals/> 
                 <Navigator/>
                 <Explorer/>
                 <img src='/static/img/sign.png' style={{display:"none"}}
                 //  onError={()=>window.location.href="/FixComplete"}
                  ref={this.image} onLoad={this.handleImageLoaded} />
-             </div>
+             </DndProvider>
         );
     }
 

@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
+import React, { useCallback } from 'react'
+import { useDispatch,useSelector  } from 'react-redux'
 import {
     changeContextMenu,
     setSelectedTarget,
@@ -19,118 +18,120 @@ import TableItem from "./TableRow"
 import classNames from 'classnames';
 import {isPreviewable} from "../../config"
 import {allowSharePreview} from "../../untils/index"
-import { withStyles } from '@material-ui/core';
-const styles = theme => ({
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
     container: {
         padding: "7px",
     },
     fixFlex:{
         minWidth:0,
     }
-})
+}))
 
-const mapStateToProps = state => {
-    return {
-        path: state.navigator.path,
-        selected: state.explorer.selected,
-        viewMethod:state.viewUpdate.explorerViewMethod,
-    }
-}
+export default function ObjectIcon(props) {
 
-const mapDispatchToProps = dispatch => {
-    return {
-        ContextMenu: (type, open) => {
-            dispatch(changeContextMenu(type, open))
-        },
-        setSelectedTarget: targets => {
-            dispatch(setSelectedTarget(targets))
-        },
-        addSelectedTarget: targets => {
-            dispatch(addSelectedTarget(targets))
-        },
-        removeSelectedTarget: id => {
-            dispatch(removeSelectedTarget(id));
-        },
-        setNavigatorLoadingStatus: status => {
-            dispatch(setNavigatorLoadingStatus(status));
-        },
-        navitateTo:path => {
-            dispatch(navitateTo(path))
-        },
-        showImgPreivew:(first)=>{
-            dispatch(showImgPreivew(first))
-        },
-        openMusicDialog:()=>{
-            dispatch(openMusicDialog())
-        },
-        toggleSnackbar:(vertical,horizontal,msg,color)=>{
-            dispatch(toggleSnackbar(vertical,horizontal,msg,color))
-        },
-    }
-}
+    const path = useSelector(state => state.navigator.path)
+    const selected=  useSelector(state => state.explorer.selected)
+    const viewMethod=  useSelector(state => state.viewUpdate.explorerViewMethod)
 
-class ObjectCompoment extends Component {
+    const dispatch = useDispatch()
+    const ContextMenu = useCallback(
+        (type, open) => dispatch(changeContextMenu(type, open)),
+        [dispatch]
+    )
+    const SetSelectedTarget = useCallback(
+        (targets) => dispatch(setSelectedTarget(targets)),
+        [dispatch]
+    )
+    const AddSelectedTarget = useCallback(
+        (targets) => dispatch(addSelectedTarget(targets)),
+        [dispatch]
+    )
+    const RemoveSelectedTarget = useCallback(
+        (id) => dispatch(removeSelectedTarget(id)),
+        [dispatch]
+    )
+    const SetNavigatorLoadingStatus = useCallback(
+        (status) => dispatch(setNavigatorLoadingStatus(status)),
+        [dispatch]
+    )
+    const NavitateTo = useCallback(
+        (targets) => dispatch(navitateTo(targets)),
+        [dispatch]
+    )
+    const ShowImgPreivew = useCallback(
+        (targets) => dispatch(showImgPreivew(targets)),
+        [dispatch]
+    )
+    const OpenMusicDialog = useCallback(
+        () => dispatch(openMusicDialog()),
+        [dispatch]
+    )
+    const ToggleSnackbar = useCallback(
+        (vertical,horizontal,msg,color) => dispatch(toggleSnackbar(vertical,horizontal,msg,color)),
+        [dispatch]
+    )
 
-    state = {
-    }
+    const classes = useStyles();
 
-    contextMenu = (e) => {
+    const contextMenu = (e) => {
         e.preventDefault();
-        if ((this.props.selected.findIndex((value) => {
-            return value === this.props.file;
+        if ((selected.findIndex((value) => {
+            return value === props.file;
         })) === -1) {
-            this.props.setSelectedTarget([this.props.file]);
+            SetSelectedTarget([props.file]);
         }
-        this.props.ContextMenu("file", true);
+        ContextMenu("file", true);
     } 
 
-    selectFile = (e) => {
-        let presentIndex = this.props.selected.findIndex((value) => {
-            return value === this.props.file;
+    const selectFile = (e) => {
+        let presentIndex = selected.findIndex((value) => {
+            return value === props.file;
         });
         if (presentIndex !== -1 && e.ctrlKey) {
-            this.props.removeSelectedTarget(presentIndex);
+            RemoveSelectedTarget(presentIndex);
         } else {
             if (e.ctrlKey) {
-                this.props.addSelectedTarget(this.props.file);
+                AddSelectedTarget(props.file);
             } else {
-                this.props.setSelectedTarget([this.props.file]);
+                SetSelectedTarget([props.file]);
             }
         }
     } 
 
-    handleClick=(e)=> {
+    const handleClick=(e)=> {
         if(window.isMobile){
-            this.selectFile(e);
-            if(this.props.file.type==="dir"){
-                this.enterFolder();
+           selectFile(e);
+            if(props.file.type==="dir"){
+               enterFolder();
                 return;
             }
         }else{
-            this.selectFile(e);
+            selectFile(e);
         }
         
     }
 
-    handleDoubleClick() {
-        if(this.props.file.type==="dir"){
-            this.enterFolder();
+    const handleDoubleClick = () =>{
+        if(props.file.type==="dir"){
+            enterFolder();
             return;
         }
         if(!allowSharePreview()){
-            this.props.toggleSnackbar("top","right","未登录用户无法预览","warning");
+            ToggleSnackbar("top","right","未登录用户无法预览","warning");
             return;
         }
-        let previewPath = this.props.selected[0].path === "/" ? this.props.selected[0].path+this.props.selected[0].name:this.props.selected[0].path+"/"+this.props.selected[0].name;
-        switch(isPreviewable(this.props.selected[0].name)){
+        let previewPath =selected[0].path === "/" ? selected[0].path+selected[0].name:selected[0].path+"/"+selected[0].name;
+        switch(isPreviewable(selected[0].name)){
             case 'img':
-                this.props.showImgPreivew(this.props.selected[0]);
+                ShowImgPreivew(selected[0]);
                 return;
             case 'msDoc':
                 window.open(window.apiURL.docPreiview+"/?path="+encodeURIComponent(previewPath));  
                 return;
             case 'audio':
-                this.props.openMusicDialog();
+               OpenMusicDialog();
                 return;
             case 'open':
                 window.open(window.apiURL.preview+"/?action=preview&path="+encodeURIComponent(previewPath));  
@@ -156,60 +157,43 @@ class ObjectCompoment extends Component {
         
     }
 
-    enterFolder = ()=>{ 
-        this.props.navitateTo(this.props.path==="/"?this.props.path+this.props.file.name:this.props.path+"/"+this.props.file.name );
+    const enterFolder = ()=>{ 
+        NavitateTo(path==="/"?path+props.file.name:path+"/"+props.file.name );
     }
 
-    render() {
 
-        const { classes } = this.props;
-
-        if(this.props.viewMethod === "list"){
+        if(viewMethod === "list"){
             return (
                 <TableItem
-                    contextMenu={this.contextMenu}
-                    handleClick={this.handleClick} 
-                    handleDoubleClick = {this.handleDoubleClick.bind(this)}
-                file={this.props.file}/>
+                    contextMenu={contextMenu}
+                    handleClick={handleClick} 
+                    handleDoubleClick = {handleDoubleClick.bind(this)}
+                file={props.file}/>
             );
         }
 
         return (
             <div 
             className={classNames({
-                [classes.container]: this.props.viewMethod!=="list",
+                [classes.container]: viewMethod!=="list",
             })}
             >
                 <div
                     className={classes.fixFlex}
-                    onContextMenu={this.contextMenu}
-                    onClick={this.handleClick} 
-                    onDoubleClick = {this.handleDoubleClick.bind(this)}
+                    onContextMenu={contextMenu}
+                    onClick={handleClick} 
+                    onDoubleClick = {handleDoubleClick.bind(this)}
                 >
-                    {(this.props.file.type==="dir" &&this.props.viewMethod !== "list") &&
-                        <Folder folder={this.props.file}/>
+                    {(props.file.type==="dir" &&viewMethod !== "list") &&
+                        <Folder folder={props.file}/>
                     }
-                    {((this.props.file.type==="file") && this.props.viewMethod === "icon") &&
-                        <FileIcon file={this.props.file}/>
+                    {((props.file.type==="file") && viewMethod === "icon") &&
+                        <FileIcon file={props.file}/>
                     }
-                    {((this.props.file.type==="file") && this.props.viewMethod === "smallIcon") &&
-                        <SmallIcon file={this.props.file}/>
+                    {((props.file.type==="file") && viewMethod === "smallIcon") &&
+                        <SmallIcon file={props.file}/>
                     }
                 </div>
             </div>
         );
     }
-}
-
-ObjectCompoment.propTypes = {
-    classes: PropTypes.object.isRequired,
-    file: PropTypes.object.isRequired,
-};
-
-
-const ObjectIcon = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(ObjectCompoment))
-
-export default ObjectIcon
