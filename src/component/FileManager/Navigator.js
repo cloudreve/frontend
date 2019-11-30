@@ -184,11 +184,7 @@ class NavigatorCompoment extends Component {
         var newPath = path!==null?path:this.props.path;
         var apiURL = this.keywords===null?'/directory':'/File/SearchFile';
         newPath = this.keywords===null?newPath:this.keywords;
-        API.get(apiURL, {
-            params: { 
-                path: newPath,
-            } 
-        })
+        API.get(apiURL+newPath,)
         .then( (response)=> {
             this.props.updateFileList(response.data);
             this.props.setNavigatorLoadingStatus(false);

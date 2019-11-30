@@ -10,7 +10,7 @@ import {
 } from "../../actions/index"
 import PathSelector from "./PathSelector"
 import axios from 'axios'
-
+import API from "../../middleware/Api"
 import {
     withStyles,
     Button,
@@ -169,14 +169,12 @@ class ModalsCompoment extends Component {
                 items.push(value.path === "/" ? value.path+value.name:value.path+"/"+value.name);
             }
         });
-        axios.post('/File/Delete', {
-            action: 'delete',
+        API.delete('/object', { data: {
             items: items,
             dirs:dirs, 
-            newPath:this.state.selectedPath === "//"?"/":this.state.selectedPath,
-        })
+        }})
         .then( (response)=> {
-            if(response.data.result.success){
+            if(response.rawData.code == 0){
                 this.onClose();
                 this.props.refreshFileList(); 
             }else{
@@ -290,17 +288,12 @@ class ModalsCompoment extends Component {
             this.props.toggleSnackbar("top","right","文件夹名称重复","warning");
             this.props.setModalsLoading(false); 
         }else{
-            axios.post('/File/createFolder', {
-                action: '"createFolder"',
-                newPath: (this.props.path === "/"?"":this.props.path)+"/"+this.state.newFolderName,
+            API.put('/directory', {
+                path: (this.props.path === "/"?"":this.props.path)+"/"+this.state.newFolderName,
             })
             .then( (response)=> {
-                if(response.data.result.success){
-                    this.onClose();
-                    this.props.refreshFileList(); 
-                }else{
-                    this.props.toggleSnackbar("top","right",response.data.result.error,"warning");
-                }
+                this.onClose();
+                this.props.refreshFileList(); 
                 this.props.setModalsLoading(false);
 
             })
