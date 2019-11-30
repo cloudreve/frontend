@@ -7,6 +7,7 @@ import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import PublishIcon from "@material-ui/icons/Publish";
 import { toggleSnackbar } from "../../actions/index";
 import { useDispatch } from "react-redux";
+import Zoom from '@material-ui/core/Zoom';
 
 const useStyles = makeStyles(theme => ({
     fab: {
@@ -42,6 +43,32 @@ export default function UploadButton(props) {
         [dispatch]
     );
 
+    let prev = window.scrollY;
+    let lastUpdate = window.scrollY;
+    const show = 50;
+
+    useEffect(() => {
+        window.addEventListener('scroll', e => handleNavigation(e));
+    }, [])
+
+    const handleNavigation = (e) => {
+        const window = e.currentTarget;
+    
+        if (prev > window.scrollY) {
+            if (lastUpdate - window.scrollY > show){
+                lastUpdate = window.scrollY;
+                setHidden(false);
+            }
+        } else if (prev < window.scrollY) {
+            if (window.scrollY - lastUpdate > show){
+                lastUpdate = window.scrollY;
+                setHidden(true);
+            }
+        }
+        prev = window.scrollY;
+    };
+
+
     useEffect(() => {
         setQueued(props.Queued);
     }, [props.Queued]);
@@ -76,6 +103,7 @@ export default function UploadButton(props) {
     };
 
     return (
+        <Zoom in={!hidden}>
         <Badge 
         badgeContent={queued} 
         classes={{
@@ -86,7 +114,7 @@ export default function UploadButton(props) {
         color="secondary">
             <SpeedDial
                 ariaLabel="SpeedDial openIcon example"
-                hidden={hidden}
+                hidden={false}
                 tooltipTitle="上传文件"
                 icon={<SpeedDialIcon openIcon={<PublishIcon />} />}
                 onClose={handleClose}
@@ -102,5 +130,6 @@ export default function UploadButton(props) {
                 />
             </SpeedDial>
         </Badge>
+        </Zoom>
     );
 }
