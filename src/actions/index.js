@@ -18,6 +18,14 @@ export const drawerToggleAction = open => {
     };
 };
 
+export const dragAndDrop = (source,target) => {
+    return {
+        type: "DRAG_AND_DROP",
+        source: source,
+        target: target,
+    };
+};
+
 export const changeViewMethod = method => {
     return {
         type: "CHANGE_VIEW_METHOD",

@@ -64,6 +64,14 @@ const cloudreveApp = (state = [], action) => {
                 contextType:action.menuType,
                 }),
             });
+        case 'DRAG_AND_DROP':
+                return Object.assign({}, state, {
+                    explorer: Object.assign({}, state.explorer, {
+                        dndSignal: !state.explorer.dndSignal,
+                        dndTarget:action.target,
+                        dndSource:action.source,
+                    }),
+                });
         case 'SET_NAVIGATOR_LOADING_STATUE':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {

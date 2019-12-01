@@ -92,6 +92,9 @@ const defaultStatus = InitSiteConfig({
         }
     },
     explorer: {
+        dndSignal:false,
+        dndTarget:null,
+        dndSource:null,
         fileList: [],
         dirList: [],
         selected: [],

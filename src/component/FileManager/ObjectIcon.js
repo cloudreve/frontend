@@ -9,7 +9,8 @@ import {
     navitateTo,
     showImgPreivew,
     openMusicDialog,
-    toggleSnackbar
+    toggleSnackbar,
+    dragAndDrop
 } from "../../actions/index";
 import statusHelper from "../../untils/page"
 import FileIcon from "./FileIcon";
@@ -80,6 +81,11 @@ export default function ObjectIcon(props) {
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
+    const DragAndDrop = useCallback(
+        (source, target) =>
+            dispatch(dragAndDrop(source, target)),
         [dispatch]
     );
 
@@ -208,8 +214,9 @@ export default function ObjectIcon(props) {
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult();
             if (item && dropResult) {
-                alert(`drop`);
-                console.log(item.object,dropResult.folder);
+                if (item.object.id != dropResult.folder.id){
+                    DragAndDrop(item.object,dropResult.folder);
+                }
             }
         },
         canDrag: () =>{

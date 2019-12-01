@@ -32,6 +32,9 @@ import OpenIcon from '@material-ui/icons/OpenInNew'
 import {MagnetOn} from 'mdi-material-ui'
 import {baseURL} from "../../middleware/Api"
 import { withStyles, Popover, Typography, MenuList, MenuItem, Divider, ListItemIcon } from '@material-ui/core';
+import pathHelper from "../../untils/page"
+import {withRouter} from  'react-router-dom'
+import Auth from "../../middleware/Auth"
 
 const styles = theme => ({
     propover:{
@@ -164,14 +167,14 @@ class ContextMenuCompoment extends Component {
                 window.open(window.apiURL.preview+"/?action=preview&path="+encodeURIComponent(previewPath));  
                 return;
             case 'video':
-                if(window.isSharePage){
+                if(pathHelper.isSharePage(this.props.location.pathname)){
                     window.location.href=("/Viewer/Video?share=true&shareKey="+window.shareInfo.shareId+"&path="+encodeURIComponent(previewPath));  
                     return;
                 }
                 window.location.href=("/Viewer/Video?&path="+encodeURIComponent(previewPath));  
                 return;
             case 'edit':
-                if(window.isSharePage){
+                if(pathHelper.isSharePage(this.props.location.pathname)){
                     window.location.href=("/Viewer/Markdown?share=true&shareKey="+window.shareInfo.shareId+"&path="+encodeURIComponent(previewPath));  
                     return;
                 }
@@ -211,7 +214,7 @@ class ContextMenuCompoment extends Component {
                             </ListItemIcon>
                             <Typography variant="inherit">上传文件</Typography>
                         </MenuItem>
-                        {window.uploadConfig.allowRemoteDownload==="1"&&
+                        {Auth.GetUser().group.allowRemoteDownload&&
                             <MenuItem onClick={()=>this.props.openRemoteDownloadDialog()}>
                                 <ListItemIcon>
                                     <DownloadIcon/>
@@ -261,7 +264,7 @@ class ContextMenuCompoment extends Component {
                             </MenuItem>
                         }
 
-                        {(!this.props.isMultiple&&this.props.withFile&&(window.uploadConfig.allowSource==="1"))&&
+                        {(!this.props.isMultiple&&this.props.withFile&&(Auth.GetUser().policy.allowSource))&&
                             <MenuItem onClick={()=>this.props.openGetSourceDialog()}>
                                 <ListItemIcon>
                                     <LinkIcon/>
@@ -270,7 +273,7 @@ class ContextMenuCompoment extends Component {
                             </MenuItem>
                         }
 
-                        {(!this.props.isMultiple&&window.isHomePage&&(window.uploadConfig.allowTorrentDownload==="1")&&this.props.withFile&&isTorrent(this.props.selected[0].name))&&
+                        {(!this.props.isMultiple&&pathHelper.isHomePage(this.props.location.pathname)&&(Auth.GetUser().group.allowTorrentDownload)&&this.props.withFile&&isTorrent(this.props.selected[0].name))&&
                             <MenuItem onClick={()=>this.props.openTorrentDownloadDialog()}>
                                 <ListItemIcon>
                                     <MagnetOn/>
@@ -279,7 +282,7 @@ class ContextMenuCompoment extends Component {
                             </MenuItem>
                         }
 
-                        {(!this.props.isMultiple &&window.isHomePage)&&
+                        {(!this.props.isMultiple && pathHelper.isHomePage(this.props.location.pathname))&&
                             <MenuItem onClick={()=>this.props.openShareDialog()}>
                                 <ListItemIcon>
                                     <ShareIcon/>
@@ -288,7 +291,7 @@ class ContextMenuCompoment extends Component {
                             </MenuItem>
                         }
                         
-                        {(!this.props.isMultiple&&window.isHomePage)&&
+                        {(!this.props.isMultiple&&pathHelper.isHomePage(this.props.location.pathname))&&
                             <MenuItem onClick={()=>this.props.openRenameDialog() }>
                                 <ListItemIcon>
                                     <RenameIcon/>
@@ -296,7 +299,7 @@ class ContextMenuCompoment extends Component {
                                 <Typography variant="inherit">重命名</Typography>
                             </MenuItem>
                         }
-                        {window.isHomePage&&<div>
+                        {pathHelper.isHomePage(this.props.location.pathname)&&<div>
                             <MenuItem onClick={()=>this.props.openMoveDialog() }>
                                 <ListItemIcon>
                                     <MoveIcon/>
@@ -331,6 +334,6 @@ ContextMenuCompoment.propTypes = {
 const ContextMenu = connect(
     mapStateToProps,
     mapDispatchToProps
-)( withStyles(styles)(ContextMenuCompoment))
+)( withStyles(styles)(withRouter(ContextMenuCompoment)))
 
 export default ContextMenu

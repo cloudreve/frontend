@@ -19,6 +19,8 @@ import {
     withStyles,
     ListItemSecondaryAction,
 } from '@material-ui/core';
+import API from '../../middleware/Api'
+import { Api } from 'mdi-material-ui';
 
 const mapStateToProps = state => {
     return {
@@ -78,12 +80,9 @@ class PathSelectorCompoment extends Component {
     }
 
     enterFolder = (toBeLoad)=>{
-        axios.post('/File/ListFile', {
-            action: 'list',
-            path: toBeLoad,
-        })
+        API.get('/directory'+toBeLoad,)
         .then( (response)=> {
-            var dirList =  response.data.result.filter( (x)=> {
+            var dirList =  response.data.filter( (x)=> {
                 return (x.type === "dir" && (this.props.selected.findIndex((value)=>{
                     return (value.name === x.name )&&(value.path === x.path);
                 }))===-1);
@@ -130,13 +129,13 @@ class PathSelectorCompoment extends Component {
                             <FolderIcon />
                         </ListItemIcon>
                         <ListItemText classes={{ primary: classes.primary }}  primary={value.name} />
-                        <ListItemSecondaryAction className={classes.buttonIcon}>
+                        {value.name!=="/"&&<ListItemSecondaryAction className={classes.buttonIcon}>
                             <IconButton className={classNames({
                                 [classes.iconWhite]:this.state.selectedTarget === index,
                             })} onClick={()=>this.enterFolder(value.path === "/"?value.path+value.name:value.path+"/"+value.name)}>
                                 <RightIcon  />
                             </IconButton>
-                        </ListItemSecondaryAction>
+                        </ListItemSecondaryAction>}
                     </MenuItem>
                 ))}
                 

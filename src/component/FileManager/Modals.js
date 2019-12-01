@@ -25,6 +25,7 @@ import {
     FormControl,
     FormControlLabel,
 } from '@material-ui/core';
+import Loading from "../Modals/Loading"
 
 const styles = theme => ({
     wrapper: {
@@ -58,6 +59,9 @@ const mapStateToProps = state => {
         modalsLoading:state.viewUpdate.modalsLoading,
         dirList:state.explorer.dirList,
         fileList:state.explorer.fileList,
+        dndSignale:state.explorer.dndSignal,
+        dndTarget:state.explorer.dndTarget,
+        dndSource:state.explorer.dndSource,
     }
 }
 
@@ -95,7 +99,9 @@ class ModalsCompoment extends Component {
         downloadURL:"",
         remoteDownloadPathSelect:false,
         source:"",
+        dialogLoading:false,
     } 
+    
 
     handleInputChange = (e)=>{
         this.setState({
@@ -106,6 +112,9 @@ class ModalsCompoment extends Component {
     newNameSuffix = "";
 
     componentWillReceiveProps = (nextProps)=>{
+        if(this.props.dndSignale!==nextProps.dndSignale){
+            this.dragMove(nextProps.dndSource,nextProps.dndTarget);
+        }
         if(this.props.modalsStatus.rename!==nextProps.modalsStatus.rename){
             let name = nextProps.selected[0].name.split(".");
             if(name.length>1){
@@ -178,7 +187,7 @@ class ModalsCompoment extends Component {
                 this.onClose();
                 this.props.refreshFileList(); 
             }else{
-                this.props.toggleSnackbar("top","right",response.data.result.error,"warning");
+                this.props.toggleSnackbar("top","right",response.rawData.msg,"warning");
             }
             this.props.setModalsLoading(false);
             this.props.refreshStorage();
@@ -186,7 +195,6 @@ class ModalsCompoment extends Component {
         .catch((error) =>{
             this.props.toggleSnackbar("top","right",error.message ,"error");
             this.props.setModalsLoading(false);
-
         });
     }
 
@@ -212,36 +220,61 @@ class ModalsCompoment extends Component {
     }
 
     submitMove = e =>{
-        e.preventDefault();
+        if (e!=null){
+            e.preventDefault();
+        }
         this.props.setModalsLoading(true);
         let dirs=[],items = [];
         // eslint-disable-next-line
         this.props.selected.map((value)=>{
             if(value.type==="dir"){
-                dirs.push(value.path === "/" ? value.path+value.name:value.path+"/"+value.name);
+                dirs.push(value.name);
             }else{
-                items.push(value.path === "/" ? value.path+value.name:value.path+"/"+value.name);
+                items.push(value.name);
             }
         });
-        axios.post('/File/Move', {
+        API.patch('/object', {
             action: 'move',
-            items: items,
-            dirs:dirs, 
-            newPath:this.state.selectedPath === "//"?"/":this.state.selectedPath,
+            src_dir:this.props.selected[0].path,
+            src:{
+                dirs:dirs,
+                items: items,
+            },
+            dst:this.DragSelectedPath?this.DragSelectedPath:(this.state.selectedPath === "//"?"/":this.state.selectedPath),
         })
         .then( (response)=> {
-            if(response.data.result.success){
-                this.onClose();
-                this.props.refreshFileList(); 
-            }else{
-                this.props.toggleSnackbar("top","right",response.data.result.error,"warning");
-            }
+            this.onClose();
+            this.props.refreshFileList(); 
             this.props.setModalsLoading(false);
         })
         .catch((error) =>{
             this.props.toggleSnackbar("top","right",error.message ,"error");
             this.props.setModalsLoading(false);
+        }).finally(()=>{
+            this.setState({
+                dialogLoading:false,
+            });
         });
+    }
+
+    dragMove = (source,target) =>{
+        if (this.props.selected.length==0){
+            this.props.selected[0] = source
+        }
+        let doMove = true;
+        this.props.selected.map((value)=>{
+            if(value.id===target.id && value.type==target.type){
+                doMove = false;
+            }
+        });
+        if (doMove){
+            this.DragSelectedPath = target.path=="/"?(target.path+target.name):(target.path+"/"+target.name);
+            this.setState({
+                dialogLoading:true,
+            });
+            this.submitMove();
+        }
+        
     }
 
     submitRename = e =>{
@@ -396,6 +429,7 @@ class ModalsCompoment extends Component {
 
         return (
             <div>
+                <Loading open={this.state.dialogLoading} />
                 <Dialog
                 open={this.props.modalsStatus.getSource}
                 onClose={this.onClose}
