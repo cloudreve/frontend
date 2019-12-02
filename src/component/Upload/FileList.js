@@ -7,6 +7,7 @@ import AddIcon from '@material-ui/icons/AddCircleOutline';
 import MusicIcon from '@material-ui/icons/MusicNote';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { isWidthDown } from '@material-ui/core/withWidth';
+import update from 'react-addons-update';
 import {
     withStyles,
     Dialog,
@@ -69,17 +70,15 @@ class FileList extends Component {
     enQueue(files) {
         var filesNow = this.state.files;
         if (filesNow.findIndex((file) => { return file.id === files.id }) === -1) {
-            filesNow.push(files);
             this.setState({
-                files: filesNow,
+                files: [...filesNow,files],
             });
         }
-        console.log(this.state);
 
     }
 
     deQueue(file){
-        var filesNow = this.state.files;
+        var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex((f) => { return f.id === file.id });
         if (fileID !== -1) {
             filesNow.splice(fileID, 1);
@@ -90,7 +89,7 @@ class FileList extends Component {
     }
 
     updateStatus(file){
-        var filesNow = this.state.files;
+        var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex((f) => { return f.id === file.id });
         if (!file.errMsg) {
             if(filesNow[fileID].status!==4){
@@ -104,7 +103,7 @@ class FileList extends Component {
     }
 
     setComplete(file){
-        var filesNow = this.state.files;
+        var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex((f) => { return f.id === file.id });
         if (fileID !== -1) {
             if(filesNow[fileID].status!==4){
@@ -118,7 +117,7 @@ class FileList extends Component {
     }
 
     setError(file,errMsg){
-        var filesNow = this.state.files;
+        var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex((f) => { return f.id === file.id });
         if (fileID !== -1) {
             filesNow[fileID].status = 4;

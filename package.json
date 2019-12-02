@@ -11,6 +11,7 @@
     "http-proxy-middleware": "^0.20.0",
     "mdi-material-ui": "^6.9.0",
     "react": "^16.12.0",
+    "react-addons-update": "^15.6.2",
     "react-content-loader": "^4.3.2",
     "react-dnd": "^9.5.1",
     "react-dnd-html5-backend": "^9.5.1",

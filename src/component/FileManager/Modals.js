@@ -263,8 +263,15 @@ class ModalsCompoment extends Component {
         }
         let doMove = true;
         this.props.selected.map((value)=>{
+            // 根据ID过滤
             if(value.id===target.id && value.type==target.type){
                 doMove = false;
+                return
+            }
+            // 根据路径过滤
+            if(value.path==target.path + (target.path == "/" ? "" : "/") + target.name){
+                doMove = false;
+                return
             }
         });
         if (doMove){

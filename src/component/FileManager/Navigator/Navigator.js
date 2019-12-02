@@ -26,9 +26,9 @@ import {
     openCreateFolderDialog,
     openShareDialog,
     drawerToggleAction,
-} from "../../actions/index"
-import API from '../../middleware/Api'
-import {setCookie,setGetParameter,fixUrlHash} from "../../untils/index"
+} from "../../../actions/index"
+import API from '../../../middleware/Api'
+import {setCookie,setGetParameter,fixUrlHash} from "../../../untils/index"
 import {
     withStyles,
     Divider,
@@ -39,6 +39,7 @@ import {
     ListItemText,
     IconButton,
 } from '@material-ui/core';
+import PathButton from "./PathButton"
 
 const mapStateToProps = state => {
     return {
@@ -359,10 +360,8 @@ class NavigatorCompoment extends Component {
              <div className={classes.container}>
                 <div className={classes.navigatorContainer}>
                     <div className={classes.nav} ref={this.element}>
-                        <span>           
-                            <Button component="span" onClick={(e)=>this.navigateTo(e,-1)}>
-                                /
-                            </Button>
+                        <span>
+                            <PathButton folder="/" path="/" onClick={(e)=>this.navigateTo(e,-1)} />
                             <RightIcon className={classes.rightIcon}/>
                         </span>
                         {this.state.hiddenMode && 
@@ -397,13 +396,13 @@ class NavigatorCompoment extends Component {
                         {!this.state.hiddenMode && this.state.folders.map((folder,id,folders)=>(
                             <span key={id}> 
                                 {folder !=="" &&  
-                                <span> 
-                                    <Button component="span" onClick={(e)=>this.navigateTo(e,id)}>
-                                        {folder === ""?"":folder}
-                                        {(id === folders.length-1) &&
-                                            <ExpandMore className={classes.expandMore}/>
-                                        }
-                                    </Button>
+                                <span>
+                                    <PathButton 
+                                        folder={folder} 
+                                        path={"/"+folders.slice(0,id).join("/")}
+                                        last={id === folders.length-1}
+                                        onClick={(e)=>this.navigateTo(e,id)} 
+                                    />
                                         {(id === folders.length-1) &&
                                         presentFolderMenu
                                         }

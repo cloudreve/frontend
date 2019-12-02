@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import Navigator from "./Navigator"
+import Navigator from "./Navigator/Navigator"
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import DragLayer from "./DnD/DragLayer"
