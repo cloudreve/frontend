@@ -1,41 +1,61 @@
-import React,{useEffect} from "react";
+import React, { useEffect,useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import ShareIcon from '@material-ui/icons/Share'
-import NewFolderIcon from '@material-ui/icons/CreateNewFolder'
-import RefreshIcon from '@material-ui/icons/Refresh'
-import {
-    Divider,
-    MenuItem,
-    ListItemIcon,
-} from '@material-ui/core';
+import { useDrop } from "react-dnd";
+import DropDownItem from "./DropDownItem";
 
 const useStyles = makeStyles(theme => ({
+    active: {
+        border: "2px solid " + theme.palette.primary.light
+    }
 }));
 
-
-export default function DropDown(props){
+export default function DropDown(props) {
     const classes = useStyles();
+
+    let timer;
+    let first = props.folders.length;
+    let status = [];
+    for (let index = 0; index < props.folders.length; index++) {
+        status[index] = false;
+        
+    }
+
+    const setActiveStatus = (id,value)=>{
+        status[id] = value;
+        if (value){
+            clearTimeout(timer);
+        }else{
+            let shouldClose = true;
+            status.forEach(element => {
+                if (element){
+                    shouldClose = false;
+                }
+            });
+            if (shouldClose){
+                if (first<=0){
+                    timer = setTimeout(()=>{
+                        props.onClose();
+                    },100)
+                }else{
+                    first--;
+                }
+            
+            }
+        }
+        console.log(status);
+    }
+
     return (
         <>
-        <MenuItem onClick={()=>props.performAction("refresh")}>
-        <ListItemIcon><RefreshIcon/></ListItemIcon>
-            刷新
-        </MenuItem>
-        {(props.keywords===null&&window.isHomePage)&&
-            <div>
-                <Divider/>
-                <MenuItem onClick={()=>props.performAction("share")}>
-                    <ListItemIcon><ShareIcon/></ListItemIcon>
-                    分享
-                </MenuItem>
-
-                <MenuItem onClick={()=>props.performAction("newfolder")}>
-                    <ListItemIcon><NewFolderIcon/></ListItemIcon>
-                    创建文件夹
-                </MenuItem>
-                
-            </div>
-        }
+            {props.folders.map((folder, id) => (
+                <DropDownItem
+                    path={"/" + props.folders.slice(0, id).join("/")}
+                    navigateTo={props.navigateTo}
+                    id={id}
+                    setActiveStatus = {setActiveStatus}
+                    folder={folder}
+                />
+            ))}
         </>
     );
 }
