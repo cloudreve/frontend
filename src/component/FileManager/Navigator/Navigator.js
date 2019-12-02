@@ -3,16 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import {withRouter} from  'react-router-dom'
 import RightIcon from '@material-ui/icons/KeyboardArrowRight'
-import MoreIcon from '@material-ui/icons/MoreHoriz'
 import ViewListIcon from '@material-ui/icons/ViewList'
 import ViewModuleIcon from '@material-ui/icons/ViewModule'
 import ViewSmallIcon from '@material-ui/icons/ViewComfy'
 import TextTotateVerticalIcon from '@material-ui/icons/TextRotateVertical'
 import FolderIcon from '@material-ui/icons/Folder'
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ShareIcon from '@material-ui/icons/Share'
-import NewFolderIcon from '@material-ui/icons/CreateNewFolder'
-import RefreshIcon from '@material-ui/icons/Refresh'
 import {
     navitateTo,
     navitateUp,
@@ -32,7 +27,6 @@ import {setCookie,setGetParameter,fixUrlHash} from "../../../untils/index"
 import {
     withStyles,
     Divider,
-    Button,
     Menu,
     MenuItem,
     ListItemIcon,
@@ -40,6 +34,7 @@ import {
     IconButton,
 } from '@material-ui/core';
 import PathButton from "./PathButton"
+import DropDown from "./DropDown"
 
 const mapStateToProps = state => {
     return {
@@ -198,7 +193,7 @@ class NavigatorCompoment extends Component {
         .catch((error) =>{
             this.props.setNavigatorError(true,error); 
         });
-        this.checkOverFlow(); 
+        this.checkOverFlow(true); 
     }
 
     redresh = (path) => {
@@ -222,7 +217,7 @@ class NavigatorCompoment extends Component {
 
     componentDidUpdate = (prevProps,prevStates)=>{
         if(this.state.folders !== prevStates.folders){
-            this.checkOverFlow();
+            this.checkOverFlow(true);
         }
         if(this.props.drawerDesktopOpen !== prevProps.drawerDesktopOpen){
             delay(500).then(() => this.checkOverFlow());
@@ -230,11 +225,15 @@ class NavigatorCompoment extends Component {
         }
     }
 
-    checkOverFlow = ()=>{
+    checkOverFlow = (force)=>{
+        if (this.overflowInitLock && !force){
+            return;
+        }
         if (this.element.current !== null){
             const hasOverflowingChildren = this.element.current.offsetHeight < this.element.current.scrollHeight ||
             this.element.current.offsetWidth < this.element.current.scrollWidth;
-            if(hasOverflowingChildren && !this.state.hiddenMode){
+            if(hasOverflowingChildren){
+                this.overflowInitLock = true;
                 this.setState({hiddenMode:true});
             }
             if(!hasOverflowingChildren && this.state.hiddenMode){
@@ -334,25 +333,8 @@ class NavigatorCompoment extends Component {
             onClose={this.handleClose}
             disableAutoFocusItem={true}
             >
-                <MenuItem onClick={()=>this.performAction("refresh")}>
-                <ListItemIcon><RefreshIcon/></ListItemIcon>
-                    刷新
-                </MenuItem>
-                {(this.props.keywords===null&&window.isHomePage)&&
-                    <div>
-                        <Divider/>
-                        <MenuItem onClick={()=>this.performAction("share")}>
-                            <ListItemIcon><ShareIcon/></ListItemIcon>
-                            分享
-                        </MenuItem>
-
-                        <MenuItem onClick={()=>this.performAction("newfolder")}>
-                            <ListItemIcon><NewFolderIcon/></ListItemIcon>
-                            创建文件夹
-                        </MenuItem>
-                        
-                    </div>
-                }
+                <DropDown keywords={this.props.keywords} performAction = {this.performAction}/>
+               
                 
             </Menu>);
 
@@ -366,9 +348,11 @@ class NavigatorCompoment extends Component {
                         </span>
                         {this.state.hiddenMode && 
                             <span>
-                                <Button title="显示路径" component="span" onClick={this.showHiddenPath}>
-                                    <MoreIcon/>     
-                                </Button>
+                                <PathButton 
+                                    more
+                                    title="显示路径"
+                                    onClick={this.showHiddenPath}
+                                />
                                 <Menu
                                     id="hiddenPathMenu"
                                     anchorEl={this.state.anchorHidden}
@@ -381,15 +365,21 @@ class NavigatorCompoment extends Component {
                                             <ListItemIcon>
                                                 <FolderIcon />
                                             </ListItemIcon>
-                                            <ListItemText inset primary={folder} />
+                                            <ListItemText primary={folder} />
                                         </MenuItem>
                                     ))}
                                 </Menu>
                                 <RightIcon className={classes.rightIcon}/>
-                                <Button component="span" onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)}>
+                                {/* <Button component="span" onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)}>
                                     {this.state.folders.slice(-1)}  
                                     <ExpandMore className={classes.expandMore}/>
-                                </Button>
+                                </Button> */}
+                                <PathButton 
+                                    folder={this.state.folders.slice(-1)} 
+                                    path={"/"+this.state.folders.slice(0,-1).join("/")}
+                                    last={true}
+                                    onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)} 
+                                />
                                 {presentFolderMenu}           
                             </span>
                         }

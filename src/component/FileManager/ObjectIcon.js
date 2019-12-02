@@ -214,9 +214,12 @@ export default function ObjectIcon(props) {
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult();
             if (item && dropResult) {
-                if (item.object.id != dropResult.folder.id){
-                    DragAndDrop(item.object,dropResult.folder);
+                if (dropResult.folder){
+                    if (item.object.id != dropResult.folder.id){
+                        DragAndDrop(item.object,dropResult.folder);
+                    }
                 }
+               
             }
         },
         canDrag: () =>{
