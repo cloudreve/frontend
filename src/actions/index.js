@@ -165,6 +165,12 @@ export const openGetSourceDialog = () => {
     };
 };
 
+export const openCopyDialog = () => {
+    return {
+        type: "OPEN_COPY_DIALOG"
+    };
+};
+
 export const closeAllModals = () => {
     return {
         type: "CLOSE_ALL_MODALS"

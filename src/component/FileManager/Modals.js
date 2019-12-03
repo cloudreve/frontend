@@ -26,6 +26,7 @@ import {
     FormControlLabel,
 } from '@material-ui/core';
 import Loading from "../Modals/Loading"
+import CopyDialog from "../Modals/Copy"
 
 const styles = theme => ({
     wrapper: {
@@ -537,6 +538,14 @@ class ModalsCompoment extends Component {
                     </DialogActions>
                 
                 </Dialog>
+                <CopyDialog 
+                open={this.props.modalsStatus.copy}
+                onClose={this.onClose}
+                presentPath={this.props.path}
+                selected={this.props.selected} 
+                modalsLoading={this.props.modalsLoading}
+                 />
+                
                 <Dialog
                 open={this.props.modalsStatus.move}
                 onClose={this.onClose}

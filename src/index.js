@@ -81,7 +81,8 @@ const defaultStatus = InitSiteConfig({
             remoteDownload: false,
             torrentDownload: false,
             getSource: false,
-            resave: false
+            copy:false,
+            resave: false,
         },
         snackbar: {
             toggle: false,

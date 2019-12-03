@@ -322,6 +322,15 @@ const cloudreveApp = (state = [], action) => {
                     contextOpen:false,
                 }),
             });
+         case 'OPEN_COPY_DIALOG':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    modals: Object.assign({}, state.viewUpdate.modals, {
+                        copy:true,
+                    }),
+                    contextOpen:false,
+                }),
+            });
         case 'CLOSE_ALL_MODALS': 
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
@@ -336,6 +345,7 @@ const cloudreveApp = (state = [], action) => {
                         torrentDownload:false,
                         getSource:false,
                         resave:false,
+                        copy:false,
                     }),
                 }),
             });

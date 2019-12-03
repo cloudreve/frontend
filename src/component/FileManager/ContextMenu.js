@@ -16,6 +16,7 @@ import {
     openRemoteDownloadDialog,
     openTorrentDownloadDialog,
     openGetSourceDialog,
+    openCopyDialog
  } from "../../actions/index"
 import {isPreviewable,isTorrent} from "../../config"
 import {allowSharePreview} from "../../untils/index"
@@ -23,6 +24,7 @@ import UploadIcon from '@material-ui/icons/CloudUpload'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
 import NewFolderIcon from '@material-ui/icons/CreateNewFolder'
 import OpenFolderIcon from '@material-ui/icons/FolderOpen'
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import ShareIcon from '@material-ui/icons/Share'
 import RenameIcon from '@material-ui/icons/BorderColor'
 import MoveIcon from '@material-ui/icons/Input'
@@ -97,6 +99,9 @@ const mapDispatchToProps = dispatch => {
         },
         openGetSourceDialog:()=>{
             dispatch(openGetSourceDialog())
+        },
+        openCopyDialog:()=>{
+            dispatch(openCopyDialog())
         }
     }
 }
@@ -236,15 +241,18 @@ class ContextMenuCompoment extends Component {
                 {this.props.menuType!=="empty"&&
                     <MenuList>
                         {(!this.props.isMultiple && this.props.withFolder)&&
+                        <>
                             <MenuItem onClick={this.enterFolder}>
                                 <ListItemIcon>
                                     <OpenFolderIcon/>
                                 </ListItemIcon>
                                 <Typography variant="inherit">进入</Typography>
                             </MenuItem>
+                            <Divider/>
+                            </>
                         }
                         {(!this.props.isMultiple&&this.props.withFile&&isPreviewable(this.props.selected[0].name))&&
-                            <div>
+                            <>
                                 <MenuItem onClick={()=>this.openPreview()}>
                                     <ListItemIcon>
                                         <OpenIcon/>
@@ -252,8 +260,9 @@ class ContextMenuCompoment extends Component {
                                     <Typography variant="inherit">打开</Typography>
                                 </MenuItem>
                                 <Divider/>
-                             </div>
+                             </>
                         }
+        
 
                         {(!this.props.isMultiple&&this.props.withFile)&&
                             <MenuItem onClick={()=>this.openDownload()}>
@@ -292,12 +301,20 @@ class ContextMenuCompoment extends Component {
                         }
                         
                         {(!this.props.isMultiple&&pathHelper.isHomePage(this.props.location.pathname))&&
+                            <>
                             <MenuItem onClick={()=>this.props.openRenameDialog() }>
                                 <ListItemIcon>
                                     <RenameIcon/>
                                 </ListItemIcon>
                                 <Typography variant="inherit">重命名</Typography>
                             </MenuItem>
+                            <MenuItem onClick={()=>this.props.openCopyDialog() }>
+                                <ListItemIcon>
+                                    <FileCopyIcon/>
+                                </ListItemIcon>
+                                <Typography variant="inherit">复制</Typography>
+                            </MenuItem>
+                            </>
                         }
                         {pathHelper.isHomePage(this.props.location.pathname)&&<div>
                             <MenuItem onClick={()=>this.props.openMoveDialog() }>
