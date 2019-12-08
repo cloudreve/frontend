@@ -174,9 +174,9 @@ class ModalsCompoment extends Component {
         // eslint-disable-next-line
         this.props.selected.map((value)=>{
             if(value.type==="dir"){
-                dirs.push(value.path === "/" ? value.path+value.name:value.path+"/"+value.name);
+                dirs.push(value.id);
             }else{
-                items.push(value.path === "/" ? value.path+value.name:value.path+"/"+value.name);
+                items.push(value.id);
             }
         });
         API.delete('/object', { data: {
@@ -229,9 +229,9 @@ class ModalsCompoment extends Component {
         // eslint-disable-next-line
         this.props.selected.map((value)=>{
             if(value.type==="dir"){
-                dirs.push(value.name);
+                dirs.push(value.id);
             }else{
-                items.push(value.name);
+                items.push(value.id);
             }
         });
         API.patch('/object', {

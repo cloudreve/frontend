@@ -176,6 +176,9 @@ const styles = theme => ({
     drawerPaper:{
         width:drawerWidthMobile,
     },
+    upDrawer:{
+        marginBottom: 90,
+    },
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create('width', {
@@ -357,27 +360,12 @@ class NavbarCompoment extends Component {
         const { classes } = this.props;
 
         const drawer = (
-            <div id="container">
+            <div 
+            id="container"
+            className={classes.upDrawer}
+            >
                 {pathHelper.isMobile()&&
                     <UserInfo/>
-                }
-                {pathHelper.isHomePage(this.props.location.pathname)&&
-                     <div className={classes.addButton}>
-                     <Badge badgeContent={this.state.queued} classes={{ badge: classes.badgeFix }} invisible={this.state.queued === 0} color="secondary">
-                         <Button
-                          disabled={this.props.keywords!==null}
-                          variant="outlined"
-                          size="large"
-                          color="primary" 
-                          onClick = {this.clickUpload}
-                          className={classes.fabButton}
-                          >
-                             <AddIcon className={classes.extendedIcon} /> 新建项目
-                             
-                                  
-                         </Button>
-                           </Badge>
-                           </div>
                 }
                 {(!pathHelper.isHomePage(this.props.location.pathname)&&Auth.Check())&&
                 <div>

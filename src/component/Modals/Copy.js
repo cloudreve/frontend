@@ -76,9 +76,9 @@ export default function CopyDialog(props) {
         // eslint-disable-next-line
 
         if (props.selected[0].type === "dir") {
-            dirs.push(props.selected[0].name);
+            dirs.push(props.selected[0].id);
         } else {
-            items.push(props.selected[0].name);
+            items.push(props.selected[0].id);
         }
 
         API.post("/object/copy", {

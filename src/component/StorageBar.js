@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import StorageIcon from '@material-ui/icons/Storage'
 import { connect } from 'react-redux'
-import axios from 'axios'
+import API from "../middleware/Api"
+import {sizeToString} from "../untils/index"
 import {
     toggleSnackbar,
 }from "../actions/index"
@@ -26,7 +27,7 @@ const mapDispatchToProps = dispatch => {
 const styles = theme => ({
     iconFix:{
         marginLeft: "32px",
-        marginRight: "32px",
+        marginRight: "17px",
         color: theme.palette.text.secondary,
         marginTop: "2px",
     },
@@ -41,7 +42,7 @@ const styles = theme => ({
     },
     detail:{
         width: "100%",
-        marginRight: "20px",
+        marginRight: "35px",
     },
     info:{
         width:"131px",
@@ -52,7 +53,7 @@ const styles = theme => ({
     },
     stickFooter:{
         bottom: "0px",
-        position: "absolute",
+        position: "fixed",
         backgroundColor:theme.palette.background.paper,
     },
 })
@@ -83,18 +84,18 @@ class StorageBarCompoment extends Component {
 
     updateStatus = ()=>{
         let percent = 0;
-        axios.get('/Member/Memory')
+        API.get('/user/storage')
         .then( (response)=> {
-            if(response.data.rate>=100){
+            if((response.data.used / response.data.total)>=100){
                 percent = 100;
                 this.props.toggleSnackbar("top","right","您的已用容量已超过容量配额，请尽快删除多余文件或购买容量","warning");
             }else{
-                percent = response.data.rate;
+                percent = (response.data.used / response.data.total);
             }
             this.setState({
                 percent:percent,
-                used:response.data.used,
-                total:response.data.total,
+                used:sizeToString(response.data.used),
+                total:sizeToString(response.data.total),
             });
         })
         .catch((error) =>{

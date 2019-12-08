@@ -1,130 +1,124 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { baseURL } from "../../middleware/Api";
+import { showImgPreivew } from "../../actions/index";
+import { imgPreviewSuffix } from "../../config";
+import { withStyles } from "@material-ui/core";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 
-import { 
-    showImgPreivew,
-}from "../../actions/index"
-import {imgPreviewSuffix} from "../../config"
-import PhotoSwipe from'react-photoswipe';
-import { withStyles } from '@material-ui/core';
-import('react-photoswipe/lib/photoswipe.css')
-
-const styles = theme => ({
-})
+const styles = theme => ({});
 
 const mapStateToProps = state => {
     return {
-        first:state.explorer.imgPreview.first,
-        other:state.explorer.imgPreview.other,
-    }
-}
+        first: state.explorer.imgPreview.first,
+        other: state.explorer.imgPreview.other
+    };
+};
 
 const mapDispatchToProps = dispatch => {
     return {
-        showImgPreivew:(first)=>{
-            dispatch(showImgPreivew(first))
+        showImgPreivew: first => {
+            dispatch(showImgPreivew(first));
         }
-    }
-}
+    };
+};
 
 class ImgPreviewCompoment extends Component {
-
     state = {
-        first:[],
-        items:[],
-        open:false,
-        loaded:false,
-    }
-
-    options={
-        history: false,
-				focus: false,
-				showAnimationDuration: 5,
-				hideAnimationDuration: 0,
-				bgOpacity: 0.8,
-				closeOnScroll: 0,
+        items: [],
+        photoIndex: 0,
+        isOpen: false
     };
 
-    componentWillReceiveProps = (nextProps)=>{
+    componentWillReceiveProps = nextProps => {
         let items = [];
-        if(nextProps.first!==null){
-            if(!this.state.loaded){
-                this.setState({
-                    loaded:true,
-                })
-            }
+        if (nextProps.first !== null) {
             var firstOne;
             // eslint-disable-next-line
-            nextProps.other.map((value)=>{
-                let fileType =value.name.split(".").pop().toLowerCase();
-                
-                if(imgPreviewSuffix.indexOf(fileType)!==-1){
+            nextProps.other.map(value => {
+                let fileType = value.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+                if (imgPreviewSuffix.indexOf(fileType) !== -1) {
                     let newImg = {
-                        h:0,
-                        w:0,
-                        title:value.name,
-                        src:window.apiURL.preview+"?action=preview&path="+encodeURIComponent(value.path==="/"?value.path+value.name:value.path+"/"+value.name),
+                        title: value.name,
+                        src:
+                            baseURL +
+                            "/file" +
+                            (value.path === "/"
+                                ? value.path + value.name
+                                : value.path + "/" + value.name)
                     };
-                    if((value.path===nextProps.first.path)&&(value.name===nextProps.first.name)){
+                    if (
+                        value.path === nextProps.first.path &&
+                        value.name === nextProps.first.name
+                    ) {
                         firstOne = newImg;
-                    }else{
+                    } else {
                         items.push(newImg);
                     }
                 }
             });
             items.unshift(firstOne);
             this.setState({
-                items:items,
-                open:true,
+                items: items,
+                isOpen: true
             });
-           
         }
-    }
+    };
 
-    handleClose=()=>{
+    handleClose = () => {
         this.props.showImgPreivew(null);
         this.setState({
-            loaded:true,
-            open:false,
+            isOpen: false
         });
-    }
-
-    setSize = (ps,index,item)=>{
-        if (item.h < 1 || item.w < 1) {
-            let img = new Image()
-            img.onload = () => {
-                item.w = img.width
-                item.h = img.height
-                ps.invalidateCurrItems()
-                ps.updateSize(true)
-            }
-            img.src = item.src
-        }
-    }
+    };
 
     render() {
-        if(this.state.loaded){
-            return (
-               <div>
-                  <PhotoSwipe isOpen={this.state.open} items={this.state.items} options={this.options} onClose={this.handleClose} imageLoadComplete={this.setSize}/>
-               </div>
-            );
-        }else{
-            return (<div></div>);
-        }
-        
+        const { photoIndex, isOpen,items } = this.state;
+
+        return (
+            <div>
+                 {isOpen && (<Lightbox
+                    mainSrc={items[photoIndex].src}
+                    nextSrc={items[(photoIndex + 1) % items.length].src}
+                    prevSrc={items[(photoIndex + items.length - 1) % items.length].src}
+                    onCloseRequest={() => this.handleClose()}
+                    imageLoadErrorMessage = "无法加载此图像"
+                    imageCrossOrigin = "use-credentials"
+                    imageTitle = {items[photoIndex].title}
+                    onMovePrevRequest={() =>
+                      this.setState({
+                        photoIndex: (photoIndex + items.length - 1) % items.length,
+                      })
+                    }
+                    reactModalStyle={{
+                        overlay:{
+                            zIndex:10000
+                        },
+                    }}
+                    onMoveNextRequest={() =>
+                      this.setState({
+                        photoIndex: (photoIndex + 1) % items.length,
+                      })
+                    }
+                />)}
+            </div>
+        );
     }
 }
 
 ImgPreviewCompoment.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
-
 
 const ImgPreivew = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(ImgPreviewCompoment))
+)(withStyles(styles)(ImgPreviewCompoment));
 
-export default ImgPreivew
+export default ImgPreivew;

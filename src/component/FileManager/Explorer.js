@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-
 import { navitateTo, changeContextMenu, navitateUp } from "../../actions/index";
 import ObjectIcon from "./ObjectIcon";
 import ContextMenu from "./ContextMenu";
@@ -138,6 +137,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 class ExplorerCompoment extends Component {
+
     contextMenu = e => {
         e.preventDefault();
         if (this.props.keywords === null && !pathHelper.isSharePage(this.props.location.pathname)) {
@@ -151,6 +151,7 @@ class ExplorerCompoment extends Component {
         const { classes } = this.props;
 
         return (
+            
             <div
                 onContextMenu={this.contextMenu}
                 className={classNames(
@@ -229,6 +230,7 @@ class ExplorerCompoment extends Component {
                         </div>
                     </div>
                 )}
+             
                 {this.props.viewMethod !== "list" &&
                     (this.props.dirList.length !== 0 ||
                         this.props.fileList.length !== 0) &&
@@ -300,7 +302,7 @@ class ExplorerCompoment extends Component {
                                 )}
                         </div>
                     )}
-
+            
                 {this.props.viewMethod === "list" &&
                     (this.props.dirList.length !== 0 ||
                         this.props.fileList.length !== 0) &&
@@ -328,6 +330,7 @@ class ExplorerCompoment extends Component {
                         </Table>
                     )}
             </div>
+
         );
     }
 }
