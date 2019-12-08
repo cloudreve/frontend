@@ -117,12 +117,9 @@ class ModalsCompoment extends Component {
             this.dragMove(nextProps.dndSource,nextProps.dndTarget);
         }
         if(this.props.modalsStatus.rename!==nextProps.modalsStatus.rename){
-            let name = nextProps.selected[0].name.split(".");
-            if(name.length>1){
-                 this.newNameSuffix = name.pop();
-            }
+            let name = nextProps.selected[0].name;
             this.setState({
-                newName:name.join("."),
+                newName:name,
             });
             return; 
         }
@@ -288,7 +285,20 @@ class ModalsCompoment extends Component {
     submitRename = e =>{
         e.preventDefault();
         this.props.setModalsLoading(true); 
-        let newName = this.state.newName+(this.newNameSuffix===""?"":"."+this.newNameSuffix);
+        let newName = this.state.newName;
+
+        let src = {
+            dirs:[],
+            items:[],
+        }
+
+        if (this.props.selected[0].type=="dir"){
+            src.dirs[0] = this.props.selected[0].id;
+        }else{
+            src.items[0] = this.props.selected[0].id;
+        }
+
+        // 检查重名
         if(this.props.dirList.findIndex((value,index)=>{
             return value.name === newName;
         })!==-1 || this.props.fileList.findIndex((value,index)=>{
@@ -297,25 +307,20 @@ class ModalsCompoment extends Component {
             this.props.toggleSnackbar("top","right","新名称与已有文件重复","warning");
             this.props.setModalsLoading(false); 
         }else{
-            axios.post('/File/Rename', {
+            API.post('/object/rename', {
                 action: 'rename',
-                item: (this.props.selected[0].path === "/"?"":this.props.path)+"/"+this.props.selected[0].name,
-                newItemPath:(this.props.selected[0].path === "/"?"":this.props.path)+"/"+newName, 
+                src:src,
+                new_name:newName, 
             })
             .then( (response)=> {
-                if(response.data.result.success){
-                    this.onClose();
-                    this.props.refreshFileList(); 
-                }else{
-                    this.props.toggleSnackbar("top","right",response.data.result.error,"warning");
-                }
+                this.onClose();
+                this.props.refreshFileList(); 
                 this.props.setModalsLoading(false);
 
             })
             .catch((error) =>{
                 this.props.toggleSnackbar("top","right",error.message ,"error");
-            this.props.setModalsLoading(false);
-
+                this.props.setModalsLoading(false);
             });
         }
     }
