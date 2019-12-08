@@ -72,6 +72,7 @@ import {
     Tooltip,
 } from '@material-ui/core';
 import Auth from "../middleware/Auth"
+import {baseURL} from "../middleware/Api"
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -353,7 +354,7 @@ class NavbarCompoment extends Component {
             return;
         }
         let downloadPath = this.props.selected[0].path === "/" ? this.props.selected[0].path+this.props.selected[0].name:this.props.selected[0].path+"/"+this.props.selected[0].name;
-        window.open(window.apiURL.download+"?action=download&path="+encodeURIComponent(downloadPath));
+        window.open(baseURL+"/file/download"+downloadPath);
     }
 
     render() {

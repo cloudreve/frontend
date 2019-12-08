@@ -132,7 +132,7 @@ class ContextMenuCompoment extends Component {
         }
         this.props.changeContextMenu("file",false);
         let downloadPath = this.props.selected[0].path === "/" ? this.props.selected[0].path+this.props.selected[0].name:this.props.selected[0].path+"/"+this.props.selected[0].name;
-        window.open(baseURL+"/file"+(downloadPath));
+        window.open(baseURL+"/file/download"+(downloadPath));
 
     }
 

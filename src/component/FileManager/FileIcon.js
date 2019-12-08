@@ -12,7 +12,7 @@ import {FileWordBox,FilePowerpointBox,FileExcelBox,ScriptText,MagnetOn,ZipBox,Wi
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ContentLoader from 'react-content-loader'
 import {mediaType} from "../../config"
-
+import {baseURL} from "../../middleware/Api"
 import { withStyles, ButtonBase, Typography, Divider, Tooltip } from '@material-ui/core';
 
 const styles = theme => ({
@@ -64,6 +64,7 @@ const styles = theme => ({
         height:"150px",
         width:"100%",
         borderRadius: "6px 6px 0 0",  
+        backgroundColor: theme.palette.background.default,
     },
     previewIcon:{
         overflow: "hidden",
@@ -74,8 +75,9 @@ const styles = theme => ({
         paddingTop:"50px",
     },
     picPreview:{
-        "height": "auto",
-        "width": "100%",
+        "height": "100%",
+        "width": "auto",
+        flex: "none", 
     },
     fileInfo:{
         height:"50px", 
@@ -186,6 +188,8 @@ const styles = theme => ({
     },
     loadingAnimation:{
         borderRadius: "6px 6px 0 0",
+        height: "100%",
+    width: "100%",
     },
     shareFix:{
         marginLeft: "20px",
@@ -283,7 +287,7 @@ class FileIconCompoment extends Component {
                             [classes.hide]:this.state.loading,
                             [classes.picPreview]:!this.state.loading,
                         })}
-                        src={window.apiURL.imgThumb+"?isImg=true&path="+encodeURIComponent(this.props.file.path==="/"?this.props.file.path+this.props.file.name:this.props.file.path+"/"+this.props.file.name)}
+                        src={baseURL+"/file/thumb/"+this.props.file.id}
                         afterLoad = {()=>this.setState({loading:false})}
                         beforeLoad = {()=>this.setState({loading:true})}
                         onError={()=>this.setState({showPicIcon:true})}

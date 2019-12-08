@@ -48,7 +48,7 @@ class ImgPreviewCompoment extends Component {
                         title: value.name,
                         src:
                             baseURL +
-                            "/file" +
+                            "/file/download" +
                             (value.path === "/"
                                 ? value.path + value.name
                                 : value.path + "/" + value.name)
