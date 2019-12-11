@@ -34,15 +34,14 @@ class ImgPreviewCompoment extends Component {
 
     componentWillReceiveProps = nextProps => {
         let items = [];
+        let firstOne = 0;
         if (nextProps.first !== null) {
-            var firstOne;
             // eslint-disable-next-line
             nextProps.other.map(value => {
                 let fileType = value.name
                     .split(".")
                     .pop()
                     .toLowerCase();
-
                 if (imgPreviewSuffix.indexOf(fileType) !== -1) {
                     let newImg = {
                         title: value.name,
@@ -57,14 +56,13 @@ class ImgPreviewCompoment extends Component {
                         value.path === nextProps.first.path &&
                         value.name === nextProps.first.name
                     ) {
-                        firstOne = newImg;
-                    } else {
-                        items.push(newImg);
+                        firstOne = items.length;
                     }
+                    items.push(newImg);
                 }
             });
-            items.unshift(firstOne);
             this.setState({
+                photoIndex:firstOne,
                 items: items,
                 isOpen: true
             });

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { navitateTo, changeContextMenu, navitateUp } from "../../actions/index";
+import {navitateTo, changeContextMenu, navitateUp, setSelectedTarget} from "../../actions/index";
 import ObjectIcon from "./ObjectIcon";
 import ContextMenu from "./ContextMenu";
 import EmptyIcon from "@material-ui/icons/Unarchive";
@@ -103,7 +103,11 @@ const styles = theme => ({
         marginLeft: "20px",
         marginTop: "10px",
         marginBottom: "10px"
-    }
+    },
+    clickAway:{
+        height: "100%",
+        width: "100%",
+    },
 });
 
 const mapStateToProps = state => {
@@ -117,7 +121,8 @@ const mapStateToProps = state => {
         loading: state.viewUpdate.navigatorLoading,
         navigatorError: state.viewUpdate.navigatorError,
         navigatorErrorMsg: state.viewUpdate.navigatorErrorMsg,
-        keywords: state.explorer.keywords
+        keywords: state.explorer.keywords,
+        selected: state.explorer.selected,
     };
 };
 
@@ -132,7 +137,10 @@ const mapDispatchToProps = dispatch => {
         },
         navitateUp: () => {
             dispatch(navitateUp());
-        }
+        },
+        setSelectedTarget: targets => {
+            dispatch(setSelectedTarget(targets));
+        },
     };
 };
 
@@ -147,6 +155,17 @@ class ExplorerCompoment extends Component {
         }
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.away = 0;
+    }
+
+    ClickAway = e =>{
+        let element = e.target;
+        if (element.dataset.clickaway){
+            this.props.setSelectedTarget([]);
+        }
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -154,6 +173,8 @@ class ExplorerCompoment extends Component {
             
             <div
                 onContextMenu={this.contextMenu}
+                onClick={this.ClickAway}
+                data-clickAway={"true"}
                 className={classNames(
                     {
                         [classes.root]: this.props.viewMethod !== "list",
@@ -240,12 +261,14 @@ class ExplorerCompoment extends Component {
                                 !this.props.loading && (
                                     <div>
                                         <Typography
+                                            data-clickAway={"true"}
                                             variant="body2"
                                             className={classes.typeHeader}
                                         >
                                             文件夹
                                         </Typography>
                                         <Grid
+                                            data-clickAway={"true"}
                                             container
                                             spacing={0}
                                             alignItems="flex-start"
@@ -272,12 +295,14 @@ class ExplorerCompoment extends Component {
                                 !this.props.loading && (
                                     <div>
                                         <Typography
+                                            data-clickAway={"true"}
                                             variant="body2"
                                             className={classes.typeHeader}
                                         >
                                             文件
                                         </Typography>
                                         <Grid
+                                            data-clickAway={"true"}
                                             container
                                             spacing={0}
                                             alignItems="flex-start"

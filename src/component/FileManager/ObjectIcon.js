@@ -26,6 +26,7 @@ import DropWarpper from "./DnD/DropWarpper"
 import {
     useLocation
   } from "react-router-dom";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -215,7 +216,7 @@ export default function ObjectIcon(props) {
             const dropResult = monitor.getDropResult();
             if (item && dropResult) {
                 if (dropResult.folder){
-                    if (item.object.id != dropResult.folder.id || item.object.type != dropResult.folder.type){
+                    if (item.object.id !== dropResult.folder.id || item.object.type !== dropResult.folder.type){
                         DragAndDrop(item.object,dropResult.folder);
                     }
                 }
