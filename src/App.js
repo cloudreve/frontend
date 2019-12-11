@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import AuthRoute from "./middleware/AuthRoute";
-import Navbar from "./component/Navbar.js";
+import Navbar from "./component/Navbar/Navbar.js";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AlertBar from "./component/Snackbar";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
@@ -10,7 +11,7 @@ import {
     Switch,
     useRouteMatch
 } from "react-router-dom";
-
+import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 
 // Lazy loads
@@ -19,7 +20,20 @@ const FileManager = React.lazy(() => import ("./component/FileManager/FileManage
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
-    let theme = createMuiTheme(themeConfig);
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = React.useMemo(
+        () =>{
+            themeConfig.palette.type =  prefersDarkMode ? 'dark' : 'light';
+            let prefer = Auth.GetPreference("theme_mode");
+            if (prefer){
+                themeConfig.palette.type = prefer;
+            }
+            return createMuiTheme(themeConfig);
+        },
+        [prefersDarkMode,themeConfig],
+    );
+
     const useStyles = makeStyles(theme => ({
         root: {
             display: "flex"

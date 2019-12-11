@@ -75,9 +75,9 @@ const styles = theme => ({
         paddingTop:"50px",
     },
     picPreview:{
-        "height": "100%",
-        "width": "auto",
-        flex: "none", 
+        objectFit: "cover",
+        width: "100%",
+        height: "100%",
     },
     fileInfo:{
         height:"50px", 

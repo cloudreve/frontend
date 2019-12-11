@@ -10,8 +10,10 @@ import {
 } from 'mdi-material-ui'
 import {
     setUserPopover
-}from "../actions/index"
-
+}from "../../actions"
+import {withRouter} from  'react-router-dom'
+import pathHelper from "../../untils/page"
+import Auth from "../../middleware/Auth"
 import {
     withStyles,
     Avatar,
@@ -76,6 +78,7 @@ class UserAvatarPopoverCompoment extends Component {
 
     render() {
         const { classes} = this.props;
+        const user = Auth.GetUser();
         return (
                 <Popover 
                 open = {this.props.anchorEl!==null}
@@ -90,7 +93,7 @@ class UserAvatarPopoverCompoment extends Component {
                     horizontal: 'right',
                 }}
                 >
-                {window.userInfo.uid===-1&&
+                {!Auth.Check()&&
                      <div className={classes.visitorMenu}>
                      <Divider/>
                      <MenuItem onClick={()=>this.openURL("/Login")}>
@@ -103,29 +106,29 @@ class UserAvatarPopoverCompoment extends Component {
                      </MenuItem>
                    </div>
                 }
-                {window.userInfo.uid!==-1&&
+                {Auth.Check()&&
                 <div>
                     <div className={classes.header}>
                         <div className={classes.largeAvatarContainer}>
-                            <Avatar className={classes.largeAvatar} src={"/Member/Avatar/"+window.userInfo.uid+"/l"} />
+                            <Avatar className={classes.largeAvatar} src={"/Member/Avatar/"+user.id+"/l"} />
                         </div>
                         <div className={classes.info}>
-                            <Typography noWrap>{window.userInfo.nick}</Typography>
-                            <Typography color="textSecondary" noWrap>{window.userInfo.email}</Typography>
+                            <Typography noWrap>{user.nickname}</Typography>
+                            <Typography color="textSecondary" noWrap>{user.user_name}</Typography>
                             <Chip
                                 className={classes.badge}
-                                color={window.userInfo.groupId === 1?"secondary":"default"}
-                                label={window.userInfo.group}
+                                color={user.group.id === 1?"secondary":"default"}
+                                label={user.group.name}
                             />
                         </div>
                     </div>
                     <div>
                         <Divider/>
-                        <MenuItem onClick={()=>this.openURL("/Profile/"+window.userInfo.uid)}>
+                        <MenuItem onClick={()=>this.openURL("/Profile/"+user.id)}>
                                 <ListItemIcon><HomeAccount/></ListItemIcon>
                                     个人主页
                             </MenuItem>
-                        {(window.userInfo.groupId === 1)&&
+                        {(user.group.id === 1)&&
                             <MenuItem onClick={()=>this.openURL("/Admin")}>
                                 <ListItemIcon><DesktopMacDashboard/></ListItemIcon>
                                     管理面板

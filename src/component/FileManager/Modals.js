@@ -124,10 +124,7 @@ class ModalsCompoment extends Component {
             return; 
         }
         if((this.props.modalsStatus.getSource!==nextProps.modalsStatus.getSource)&&nextProps.modalsStatus.getSource===true){
-            axios.post('/File/gerSource', {
-                action: 'source',
-                path:(this.props.selected[0].path === "/"?"":this.props.path)+"/"+this.props.selected[0].name,
-            })
+            API.get('/file/source/'+this.props.selected[0].id)
             .then( (response)=> {
                 this.setState({
                     source:response.data.url,

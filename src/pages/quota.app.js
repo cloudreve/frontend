@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Navbar from "../component/Navbar.js"
+import Navbar from "../component/Navbar/Navbar.js"
 import AlertBar from "../component/Snackbar"
 import Quota from "../component/Quota"
 import BuyQuota from "../component/BuyQuota"

@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import StorageIcon from '@material-ui/icons/Storage'
 import { connect } from 'react-redux'
-import API from "../middleware/Api"
-import {sizeToString} from "../untils/index"
+import API from "../../middleware/Api"
+import {sizeToString} from "../../untils"
 import {
     toggleSnackbar,
-}from "../actions/index"
+}from "../../actions"
 
 import { withStyles, LinearProgress, Typography, Divider, Tooltip } from '@material-ui/core';
 

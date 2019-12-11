@@ -33,6 +33,12 @@ export const changeViewMethod = method => {
     };
 };
 
+export const toggleDaylightMode = ()=>{
+    return {
+        type: "TOGGLE_DAYLIGHT_MODE",
+    };
+};
+
 export const changeSortMethod = method => {
     return {
         type: "CHANGE_SORT_METHOD",
