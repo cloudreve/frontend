@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core";
 import { toggleSnackbar, applyThemes } from "../../actions/index";
-import Placeholder from "../placeholder/captcha";
+import Placeholder from "../Placeholder/captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";

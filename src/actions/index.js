@@ -177,6 +177,13 @@ export const openCopyDialog = () => {
     };
 };
 
+export const openLoadingDialog = (text) => {
+    return {
+        type: "OPEN_LOADING_DIALOG",
+        text: text,
+    }
+};
+
 export const closeAllModals = () => {
     return {
         type: "CLOSE_ALL_MODALS"

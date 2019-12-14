@@ -35,7 +35,7 @@ import {
     openMoveDialog,
     openRemoveDialog,
     openShareDialog,
-    openRenameDialog
+    openRenameDialog, openLoadingDialog
 } from "../../actions";
 import {
     allowSharePreview,
@@ -134,6 +134,9 @@ const mapDispatchToProps = dispatch => {
         },
         openShareDialog: () => {
             dispatch(openShareDialog());
+        },
+        openLoadingDialog:(text) => {
+            dispatch(openLoadingDialog(text))
         }
     };
 };
@@ -398,17 +401,16 @@ class NavbarCompoment extends Component {
             );
             return;
         }
-        let downloadPath =
-            this.props.selected[0].path === "/"
-                ? this.props.selected[0].path + this.props.selected[0].name
-                : this.props.selected[0].path +
-                  "/" +
-                  this.props.selected[0].name;
-        window.open(baseURL + "/file/download" + downloadPath);
+        this.props.openLoadingDialog("获取下载地址...");
     };
+
+    archiveDownload = () =>{
+        this.props.openLoadingDialog("打包中...");
+    }
 
     render() {
         const { classes } = this.props;
+        const user  =Auth.GetUser();
 
         const drawer = (
             <div id="container" className={classes.upDrawer}>
@@ -818,6 +820,27 @@ class NavbarCompoment extends Component {
                                                 </Tooltip>
                                             </Grow>
                                         )}
+                                    {(this.props.isMultiple || this.props.withFolder) &&
+                                    user.group.allowArchiveDownload && (
+                                        <Grow
+                                            in={
+                                                (this.props.isMultiple || this.props.withFolder) &&
+                                                user.group.allowArchiveDownload
+                                            }
+                                        >
+                                            <Tooltip title="打包下载">
+                                                <IconButton
+                                                    color="inherit"
+                                                    onClick={() =>
+                                                        this.archiveDownload()
+                                                    }
+                                                >
+                                                    <DownloadIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grow>
+                                    )}
+
                                     {!this.props.isMultiple &&
                                         this.props.withFolder && (
                                             <Grow

@@ -190,11 +190,7 @@ export default function ObjectIcon(props) {
                     "/Viewer/Markdown?path=" + encodeURIComponent(previewPath);
                 return;
             default:
-                window.open(
-                    window.apiURL.download +
-                        "?action=download&path=" +
-                        encodeURIComponent(previewPath)
-                );
+                this.props.openLoadingDialog("获取下载地址...");
                 return;
         }
     };

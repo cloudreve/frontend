@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {navitateTo, changeContextMenu, navitateUp, setSelectedTarget} from "../../actions/index";
+import {navitateTo, changeContextMenu, navitateUp, setSelectedTarget, openRemoveDialog} from "../../actions/index";
 import ObjectIcon from "./ObjectIcon";
 import ContextMenu from "./ContextMenu";
 import EmptyIcon from "@material-ui/icons/Unarchive";
@@ -24,6 +24,7 @@ import {
     Paper,
     Button
 } from "@material-ui/core";
+import { GlobalHotKeys } from "react-hotkeys";
 
 const styles = theme => ({
     paper: {
@@ -141,10 +142,39 @@ const mapDispatchToProps = dispatch => {
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
+        openRemoveDialog:()=>{
+            dispatch(openRemoveDialog())
+        },
     };
 };
 
 class ExplorerCompoment extends Component {
+
+   constructor() {
+       super();
+       this.keyMap = {
+           DELETE_FILE: "del",
+           SELECT_ALL:"ctrl+a",
+       };
+
+       this.handlers = {
+           DELETE_FILE: ()=>{
+               if (this.props.selected.length > 0){
+                   this.props.openRemoveDialog();
+               }
+           },
+           SELECT_ALL:(e)=>{
+               e.preventDefault();
+               if(this.props.selected.length >= this.props.dirList.length + this.props.fileList.length){
+                   this.props.setSelectedTarget([]);
+               }else{
+                   this.props.setSelectedTarget([...this.props.dirList,...this.props.fileList]);
+               }
+
+           },
+       };
+   }
+
 
     contextMenu = e => {
         e.preventDefault();
@@ -170,7 +200,7 @@ class ExplorerCompoment extends Component {
         const { classes } = this.props;
 
         return (
-            
+
             <div
                 onContextMenu={this.contextMenu}
                 onClick={this.ClickAway}
@@ -183,6 +213,7 @@ class ExplorerCompoment extends Component {
                     classes.button
                 )}
             >
+                <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap}/>
                 <ContextMenu />
                 <ImgPreivew />
                 {this.props.navigatorError && (

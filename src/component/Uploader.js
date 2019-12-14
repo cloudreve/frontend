@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-class UploaderCompoment extends Component {
+class UploaderComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -139,7 +139,7 @@ const Uploader = connect(mapStateToProps, mapDispatchToProps, null, {
         ["/static/js/uploader/i18n/zh_CN.js"],
         ["/static/js/uploader/ui.js"],
         ["/static/js/uploader/uploader.js"]
-    )(UploaderCompoment)
+    )(UploaderComponent)
 );
 
 export default Uploader;

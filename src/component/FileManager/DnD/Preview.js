@@ -1,7 +1,6 @@
 import React from "react";
 import SmallIcon from "../SmallIcon";
 import FileIcon from "../FileIcon";
-import Folder from "../Folder";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 
@@ -46,7 +45,7 @@ const Preview = props => {
     const classes = useStyles();
     return (
         <>
-            {selected.length == 0 && diliverIcon(props.object,viewMethod,classes)}
+            {selected.length === 0 && diliverIcon(props.object,viewMethod,classes)}
             {selected.length>0&&<>
                 {selected.slice(0, 3).map((card, i) => (
                     <div
@@ -57,7 +56,7 @@ const Preview = props => {
                       transform: `rotateZ(${-i * 2.5}deg)`,
                     }}
                   >
-                    {diliverIcon(props.object,viewMethod,classes)}
+                    {diliverIcon(card,viewMethod,classes)}
                   </div>
                 ))}
                 </>
