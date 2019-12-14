@@ -60,7 +60,7 @@ class UploaderComponent extends Component {
                     dragdrop: true,
                     chunk_size: user.policy.saveType == "qiniu" ? 4*1024*1024 : 0,
                     filters: {
-                        mime_types: user.policy.allowedType
+                        mime_types: user.policy.allowedType === null ? [] : user.policy.allowedType,
                     },
                     // iOS不能多选？
                     multi_selection: true,

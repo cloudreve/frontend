@@ -10,7 +10,7 @@ import {
     showImgPreivew,
     openMusicDialog,
     toggleSnackbar,
-    dragAndDrop
+    dragAndDrop, openLoadingDialog
 } from "../../actions/index";
 import statusHelper from "../../untils/page"
 import FileIcon from "./FileIcon";
@@ -87,6 +87,11 @@ export default function ObjectIcon(props) {
     const DragAndDrop = useCallback(
         (source, target) =>
             dispatch(dragAndDrop(source, target)),
+        [dispatch]
+    );
+    const OpenLoadingDialog = useCallback(
+        text =>
+            dispatch(openLoadingDialog(text)),
         [dispatch]
     );
 
@@ -190,7 +195,7 @@ export default function ObjectIcon(props) {
                     "/Viewer/Markdown?path=" + encodeURIComponent(previewPath);
                 return;
             default:
-                this.props.openLoadingDialog("获取下载地址...");
+                OpenLoadingDialog("获取下载地址...");
                 return;
         }
     };
