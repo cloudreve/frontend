@@ -33,6 +33,13 @@ export const changeViewMethod = method => {
     };
 };
 
+export const changeSubTitle = title =>{
+    return {
+        type: "CHANGE_SUB_TITLE",
+        title: title
+    };
+};
+
 export const toggleDaylightMode = ()=>{
     return {
         type: "TOGGLE_DAYLIGHT_MODE",

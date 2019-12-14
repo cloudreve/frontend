@@ -87,7 +87,8 @@ const mapStateToProps = state => {
         withFile: state.explorer.selectProps.withFile,
         path: state.navigator.path,
         keywords: state.explorer.keywords,
-        title: state.siteConfig.title
+        title: state.siteConfig.title,
+        subTitle:state.viewUpdate.subTitle,
     };
 };
 
@@ -303,15 +304,6 @@ class NavbarCompoment extends Component {
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-    };
-
-    clickUpload = () => {
-        if (this.state.queued === 0) {
-            //document.getElementsByClassName("uploadForm")[0].click();
-            this.props.changeContextMenu("empty", true);
-        } else {
-            this.UploaderRef.current.getWrappedInstance().openFileList();
-        }
     };
 
     loadUploader() {
@@ -702,7 +694,7 @@ class NavbarCompoment extends Component {
                                                 }
                                             />
                                         )}
-                                    {this.props.title}
+                                    {this.props.subTitle?this.props.subTitle : this.props.title}
                                 </Typography>
                             )}
 

@@ -8,15 +8,36 @@ import Explorer from "./Explorer"
 import Modals from "./Modals"
 import {decode} from "../../untils/index"
 import { withStyles } from '@material-ui/core';
+import {connect} from "react-redux";
+import {
+    changeSubTitle,
+} from "../../actions";
 const styles = theme => ({
  
 })
+
+const mapStateToProps = ()=>{
+
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        changeSubTitle: text => {
+            dispatch(changeSubTitle(text));
+        },
+
+    };
+};
 
 class FileManager extends Component {
 
     constructor(props){
         super(props);
         this.image = React.createRef();
+    }
+
+    componentDidMount() {
+        this.props.changeSubTitle(null);
     }
 
     handleImageLoaded = ()=>{
@@ -37,7 +58,7 @@ class FileManager extends Component {
         if(window.upload_load===""){
             window.location.href="/FixComplete";
         }
-    }
+    };
     
     render() {
         return (
@@ -58,4 +79,7 @@ class FileManager extends Component {
 FileManager.propTypes = {
 };
 
-export default withStyles(styles)(FileManager);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(FileManager));

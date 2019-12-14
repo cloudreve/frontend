@@ -360,6 +360,12 @@ const cloudreveApp = (state = [], action) => {
                     }),
                 }),
             });
+        case 'CHANGE_SUB_TITLE':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    subTitle: action.title,
+                }),
+            });
         case 'TOGGLE_SNACKBAR':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {

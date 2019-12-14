@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useCallback, useEffect} from "react";
 import DPlayer from "react-dplayer";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
-import Typography from "@material-ui/core/Typography";
+import {useDispatch} from "react-redux";
+import {changeSubTitle} from "../../actions";
 
 const useStyles = makeStyles(theme => ({
     layout: {
@@ -26,7 +27,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function VideoViewer(props) {
     const math = useRouteMatch();
-
+    const dispatch = useDispatch();
+    const SetSubTitle = useCallback(
+        title=>dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
+    useEffect(()=>{
+        let path = math.params[0].split("/");
+        SetSubTitle(path[path.length - 1]);
+    },[math.params[0]]);
 
     const classes = useStyles();
     return (

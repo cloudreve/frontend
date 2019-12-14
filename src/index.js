@@ -63,6 +63,7 @@ const defaultStatus = InitSiteConfig({
         open: false,
         explorerViewMethod: "icon",
         sortMethod: "timePos",
+        subTitle:null,
         contextType: "none",
         menuOpen: false,
         navigatorLoading: true,

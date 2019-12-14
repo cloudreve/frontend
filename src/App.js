@@ -74,6 +74,11 @@ export default function App() {
                                     <VideoPreview />
                                 </Suspense>
                             </Route>
+                            <Route path={`${path}login`}>
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <LoginForm />
+                                </Suspense>
+                            </Route>
                         </Switch>
                     </main>
                 </div>
