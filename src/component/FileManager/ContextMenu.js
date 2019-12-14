@@ -17,7 +17,7 @@ import {
     openTorrentDownloadDialog,
     openGetSourceDialog,
     openCopyDialog,
-    openLoadingDialog
+    openLoadingDialog, setSelectedTarget
 } from "../../actions/index";
 import { isPreviewable, isTorrent } from "../../config";
 import { allowSharePreview } from "../../untils/index";
@@ -72,6 +72,9 @@ const mapDispatchToProps = dispatch => {
         },
         setNavigatorLoadingStatus: status => {
             dispatch(setNavigatorLoadingStatus(status));
+        },
+        setSelectedTarget: targets => {
+            dispatch(setSelectedTarget(targets));
         },
         navitateTo: path => {
             dispatch(navitateTo(path));
@@ -216,6 +219,7 @@ class ContextMenuCompoment extends Component {
                 );
                 return;
             case "video":
+                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
                     window.location.href =
                         "/Viewer/Video?share=true&shareKey=" +
@@ -224,8 +228,7 @@ class ContextMenuCompoment extends Component {
                         encodeURIComponent(previewPath);
                     return;
                 }
-                window.location.href =
-                    "/Viewer/Video?&path=" + encodeURIComponent(previewPath);
+                this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
                 if (pathHelper.isSharePage(this.props.location.pathname)) {

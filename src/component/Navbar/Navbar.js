@@ -363,16 +363,11 @@ class NavbarCompoment extends Component {
                 );
                 return;
             case "video":
+                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
-                    window.location.href =
-                        "/Viewer/Video?share=true&shareKey=" +
-                        window.shareInfo.shareId +
-                        "&path=" +
-                        encodeURIComponent(previewPath);
                     return;
                 }
-                window.location.href =
-                    "/Viewer/Video?path=" + encodeURIComponent(previewPath);
+                this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
                 if (pathHelper.isSharePage(this.props.location.pathname)) {

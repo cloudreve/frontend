@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Navbar from "../component/Navbar/Navbar.js"
 import AlertBar from "../component/Snackbar"
-import VideoViewer from "../component/Viewer/video"
+import VideoViewer from "../component/Viewer/Video"
 import { createMuiTheme } from '@material-ui/core/styles';
 
 import { CssBaseline, withStyles, MuiThemeProvider } from '@material-ui/core';

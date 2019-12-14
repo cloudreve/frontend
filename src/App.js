@@ -13,10 +13,12 @@ import {
 } from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
+import PageLoading from "./component/Placeholder/PageLoading.js"
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
 const FileManager = React.lazy(() => import ("./component/FileManager/FileManager.js" ));
+const VideoPreview = React.lazy(() => import ("./component/Viewer/Video.js" ));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -63,13 +65,13 @@ export default function App() {
                                 我是私有页面
                             </AuthRoute>
 							<AuthRoute path={`${path}home`}>
-								<Suspense fallback={<div>Loading...</div>}>
+								<Suspense fallback={<PageLoading/>}>
                                		<FileManager/>
 								</Suspense>
                             </AuthRoute>
-                            <Route path={`${path}login`}>
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <LoginForm />
+                            <Route path={`${path}video/*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <VideoPreview />
                                 </Suspense>
                             </Route>
                         </Switch>

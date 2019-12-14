@@ -11,7 +11,7 @@ import {
 } from "../../actions/index";
 import PathSelector from "./PathSelector";
 import axios from "axios";
-import API from "../../middleware/Api";
+import API, {baseURL} from "../../middleware/Api";
 import {
     withStyles,
     Button,
@@ -990,16 +990,13 @@ class ModalsCompoment extends Component {
                                 <audio
                                     controls
                                     src={
-                                        previewApi +
-                                        "?action=preview&path=" +
+                                        baseURL +
+                                        "/file/preview" +
                                         (this.props.selected[0].path === "/"
-                                            ? this.props.selected[0].path +
-                                              this.props.selected[0].name
-                                            : this.props.selected[0].path +
-                                              "/" +
-                                              this.props.selected[0].name)
+                                            ? this.props.selected[0].path + this.props.selected[0].name
+                                            : this.props.selected[0].path + "/" + this.props.selected[0].name)
                                     }
-                                ></audio>
+                                />
                             )}
                         </DialogContentText>
                     </DialogContent>

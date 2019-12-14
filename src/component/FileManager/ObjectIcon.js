@@ -24,8 +24,9 @@ import { useDrag } from "react-dnd";
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import DropWarpper from "./DnD/DropWarpper"
 import {
+    useHistory,
     useLocation
-  } from "react-router-dom";
+} from "react-router-dom";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 const useStyles = makeStyles(theme => ({
@@ -47,6 +48,7 @@ export default function ObjectIcon(props) {
         state => state.viewUpdate.explorerViewMethod
     );
     let location = useLocation();
+    let history = useHistory();
 
     const dispatch = useDispatch();
     const ContextMenu = useCallback(
@@ -171,16 +173,11 @@ export default function ObjectIcon(props) {
                 );
                 return;
             case "video":
-                if (window.isSharePage) {
-                    window.location.href =
-                        "/Viewer/Video?share=true&shareKey=" +
-                        window.shareInfo.shareId +
-                        "&path=" +
-                        encodeURIComponent(previewPath);
+                SetSelectedTarget([]);
+                if (statusHelper.isSharePage(location.pathname)) {
                     return;
                 }
-                window.location.href =
-                    "/Viewer/Video?path=" + encodeURIComponent(previewPath);
+                history.push("/video" + previewPath);
                 return;
             case "edit":
                 if (window.isSharePage) {

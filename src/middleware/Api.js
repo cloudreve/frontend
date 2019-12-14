@@ -1,10 +1,14 @@
 import axios from "axios";
 import Auth from "./Auth"
 
-export const baseURL = "/api/v3";
+export let baseURL = "/api/v3";
+
+export const getBaseURL = ()=>{
+    return baseURL;
+};
 
 const instance = axios.create({
-    baseURL: baseURL,
+    baseURL: getBaseURL(),
     withCredentials: true,
     crossDomain: true,
 });
