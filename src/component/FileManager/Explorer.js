@@ -37,10 +37,10 @@ const styles = theme => ({
         flexGrow: 1,
         padding: "10px",
         overflowY: "auto",
-        height: "calc(100vh - 112px)",
+        height: "calc(100vh - 113px)",
         [theme.breakpoints.up("sm")]: {
             overflowY: "auto",
-            height: "calc(100vh - 112px)"
+            height: "calc(100vh - 113px)"
         },
         [theme.breakpoints.down("sm")]: {
             height: "100%"
@@ -51,7 +51,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper.white,
         [theme.breakpoints.up("sm")]: {
             overflowY: "auto",
-            height: "calc(100vh - 112px)"
+            height: "calc(100vh - 113px)"
         },
         [theme.breakpoints.down("sm")]: {
             height: "100%"

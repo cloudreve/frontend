@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import scriptLoader from "../loader/index.js";
+import scriptLoader from "../../loader";
 import { connect } from "react-redux";
-import { refreshFileList, refreshStorage } from "../actions/index";
-import FileList from "./Upload/FileList.js";
-import Auth from "../middleware/Auth"
-import UploadButton from "./Upload/Fab.js"
+import { refreshFileList, refreshStorage } from "../../actions";
+import FileList from "./FileList.js";
+import Auth from "../../middleware/Auth"
+import UploadButton from "../Dial/Create.js"
 
 let loaded = false;
 

@@ -231,6 +231,7 @@ class ContextMenuCompoment extends Component {
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
+                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
                     window.location.href =
                         "/Viewer/Markdown?share=true&shareKey=" +
@@ -239,8 +240,7 @@ class ContextMenuCompoment extends Component {
                         encodeURIComponent(previewPath);
                     return;
                 }
-                window.location.href =
-                    "/Viewer/Markdown?path=" + encodeURIComponent(previewPath);
+                this.props.history.push("/text" + previewPath);
                 return;
             default:
                 return;

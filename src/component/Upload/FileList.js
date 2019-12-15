@@ -92,7 +92,7 @@ class FileList extends Component {
         var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex((f) => { return f.id === file.id });
         if (!file.errMsg) {
-            if(filesNow[fileID].status!==4){
+            if(filesNow[fileID] && filesNow[fileID].status!==4){
                 filesNow[fileID] = file;
                 this.setState({
                     files: filesNow,

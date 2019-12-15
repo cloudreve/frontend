@@ -136,11 +136,11 @@ class MarkdownViewerCompoment extends Component {
              <div className={classes.layout}>
                 <Paper className={classes.root} elevation={1}>
                 <div id="editormd">
-                    <textarea 
-                    id="val"
-                    value={this.state.val}
-                    onChange={this.handleChange}
-                    ></textarea>
+                    <textarea
+    id="val"
+    value={this.state.val}
+    onChange={this.handleChange}
+    />
                 </div>
                 
                 </Paper>

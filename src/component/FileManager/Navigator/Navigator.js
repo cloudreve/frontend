@@ -107,7 +107,7 @@ const styles = theme => ({
         [theme.breakpoints.down("xs")]: {
             display: "none"
         },
-        height: "48px",
+        height: "49px",
         overflow: "hidden",
         backgroundColor: theme.palette.background.paper
     },
@@ -116,7 +116,7 @@ const styles = theme => ({
         justifyContent: "space-between"
     },
     nav: {
-        height: "47px",
+        height: "48px",
         padding: "5px 15px",
         display: "flex"
     },

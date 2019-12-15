@@ -180,16 +180,11 @@ export default function ObjectIcon(props) {
                 history.push("/video" + previewPath);
                 return;
             case "edit":
-                if (window.isSharePage) {
-                    window.location.href =
-                        "/Viewer/Markdown?share=true&shareKey=" +
-                        window.shareInfo.shareId +
-                        "&path=" +
-                        encodeURIComponent(previewPath);
+                SetSelectedTarget([]);
+                if (statusHelper.isSharePage(location.pathname)) {
                     return;
                 }
-                window.location.href =
-                    "/Viewer/Markdown?path=" + encodeURIComponent(previewPath);
+                history.push("/text" + previewPath);
                 return;
             default:
                 OpenLoadingDialog("获取下载地址...");

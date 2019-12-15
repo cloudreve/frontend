@@ -42,7 +42,7 @@ import {
     checkGetParameters,
     changeThemeColor
 } from "../../untils";
-import Uploader from "../Uploader.js";
+import Uploader from "../Upload/Uploader.js";
 import { sizeToString } from "../../untils";
 import pathHelper from "../../untils/page";
 import SezrchBar from "./SearchBar";
@@ -362,16 +362,11 @@ class NavbarCompoment extends Component {
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
+                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
-                    window.location.href =
-                        "/Viewer/Markdown?share=true&shareKey=" +
-                        window.shareInfo.shareId +
-                        "&path=" +
-                        encodeURIComponent(previewPath);
                     return;
                 }
-                window.location.href =
-                    "/Viewer/Markdown?path=" + encodeURIComponent(previewPath);
+                this.props.history.push("/text" + previewPath);
                 return;
             default:
                 return;
@@ -402,26 +397,24 @@ class NavbarCompoment extends Component {
         const drawer = (
             <div id="container" className={classes.upDrawer}>
                 {pathHelper.isMobile() && <UserInfo />}
-                {!pathHelper.isHomePage(this.props.location.pathname) &&
-                    Auth.Check() && (
+                {Auth.Check() && (
                         <div>
                             <ListItem
                                 button
                                 key="我的文件"
-                                onClick={() => (window.location.href = "/")}
+                                onClick={() => (this.props.history.push("/home?path=%2F"))}
                             >
                                 <ListItemIcon>
                                     <FolderShared className={classes.iconFix} />
                                 </ListItemIcon>
                                 <ListItemText primary="我的文件" />
-                            </ListItem>
+                            </ListItem><Divider />
                         </div>
                     )}
 
                 {pathHelper.isHomePage(this.props.location.pathname) && (
                     <div>
-                        <List>
-                            <Divider />
+
                             <ListItem
                                 button
                                 id="pickfiles"
@@ -432,7 +425,6 @@ class NavbarCompoment extends Component {
                                 </ListItemIcon>
                                 <ListItemText />
                             </ListItem>
-                        </List>
                         <ListItem
                             button
                             key="视频"
@@ -493,7 +485,7 @@ class NavbarCompoment extends Component {
                             </ListItemIcon>
                             <ListItemText primary="文档" />
                         </ListItem>{" "}
-                        <Divider className={classes.dividerFix} />
+                        <Divider />
                     </div>
                 )}
 
