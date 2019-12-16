@@ -202,11 +202,10 @@ class ContextMenuCompoment extends Component {
                 this.props.showImgPreivew(this.props.selected[0]);
                 return;
             case "msDoc":
-                window.open(
-                    window.apiURL.docPreiview +
-                        "/?path=" +
-                        encodeURIComponent(previewPath)
-                );
+                if (pathHelper.isSharePage(this.props.location.pathname)) {
+                    return;
+                }
+                this.props.history.push("/text" + previewPath);
                 return;
             case "audio":
                 this.props.openMusicDialog();
@@ -219,7 +218,6 @@ class ContextMenuCompoment extends Component {
                 );
                 return;
             case "video":
-                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
                     window.location.href =
                         "/Viewer/Video?share=true&shareKey=" +
@@ -231,7 +229,6 @@ class ContextMenuCompoment extends Component {
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
-                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
                     window.location.href =
                         "/Viewer/Markdown?share=true&shareKey=" +

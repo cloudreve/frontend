@@ -15,6 +15,7 @@ import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import PageLoading from "./component/Placeholder/PageLoading.js"
 import TextViewer from "./component/Viewer/Text";
+import DocViewer from "./component/Viewer/Doc";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -78,6 +79,11 @@ export default function App() {
                             <Route path={`${path}text/*`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <TextViewer />
+                                </Suspense>
+                            </Route>
+                            <Route path={`${path}doc/*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <DocViewer />
                                 </Suspense>
                             </Route>
                             <Route path={`${path}login`}>

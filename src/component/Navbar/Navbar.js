@@ -338,11 +338,10 @@ class NavbarCompoment extends Component {
                 this.props.showImgPreivew(this.props.selected[0]);
                 return;
             case "msDoc":
-                window.open(
-                    window.apiURL.docPreiview +
-                        "/?path=" +
-                        encodeURIComponent(previewPath)
-                );
+                if (pathHelper.isSharePage(this.props.location.pathname)) {
+                    return;
+                }
+                this.props.history.push("/doc" + previewPath);
                 return;
             case "audio":
                 this.props.openMusicDialog();
@@ -355,14 +354,12 @@ class NavbarCompoment extends Component {
                 );
                 return;
             case "video":
-                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
                     return;
                 }
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
-                this.props.setSelectedTarget([]);
                 if (pathHelper.isSharePage(this.props.location.pathname)) {
                     return;
                 }

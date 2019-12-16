@@ -156,11 +156,10 @@ export default function ObjectIcon(props) {
                 ShowImgPreivew(selected[0]);
                 return;
             case "msDoc":
-                window.open(
-                    window.apiURL.docPreiview +
-                        "/?path=" +
-                        encodeURIComponent(previewPath)
-                );
+                if (statusHelper.isSharePage(location.pathname)) {
+                    return;
+                }
+                history.push("/doc" + previewPath);
                 return;
             case "audio":
                 OpenMusicDialog();
@@ -173,14 +172,12 @@ export default function ObjectIcon(props) {
                 );
                 return;
             case "video":
-                SetSelectedTarget([]);
                 if (statusHelper.isSharePage(location.pathname)) {
                     return;
                 }
                 history.push("/video" + previewPath);
                 return;
             case "edit":
-                SetSelectedTarget([]);
                 if (statusHelper.isSharePage(location.pathname)) {
                     return;
                 }
