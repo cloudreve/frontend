@@ -12,16 +12,6 @@
     siteInfo = {
         mainTitle: "Cloudreve演示站",
     };
-    uploadConfig = {
-		saveType: "local",
-		maxSize: "10mb",
-		allowedType: [],
-		allowSource: "0",
-		upUrl: "/Upload",
-		allowShare: "1",
-		allowRemoteDownload: "0",
-		allowTorrentDownload: "0",
-	};
 	if(uploadConfig.saveType == "oss" || uploadConfig.saveType == "upyun" || uploadConfig.saveType == "s3"){
 		ChunkSize = "0";
 	}else if(uploadConfig.saveType == "qiniu" ){

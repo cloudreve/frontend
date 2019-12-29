@@ -10,7 +10,7 @@ import {decode} from "../../untils/index"
 import { withStyles } from '@material-ui/core';
 import {connect} from "react-redux";
 import {
-    changeSubTitle, setSelectedTarget,
+    changeSubTitle, setSelectedTarget, toggleSnackbar,
 } from "../../actions";
 import {withRouter} from "react-router-dom";
 const styles = theme => ({
@@ -28,6 +28,9 @@ const mapDispatchToProps = dispatch => {
         },
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
+        },
+        toggleSnackbar: (vertical, horizontal, msg, color) => {
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
 
     };

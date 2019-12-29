@@ -7,14 +7,15 @@ const Auth = {
     GetUser(){
         return JSON.parse(localStorage.getItem("user"))
     },
+    /**
+     * @return {boolean}
+     */
     Check() {
         if (Auth.isAuthenticated) {
             return true;
         }
-        if (localStorage.getItem("user") !== null) {
-            return true;
-        }
-        return false;
+        return localStorage.getItem("user") !== null;
+
     },
     signout() {
         localStorage.removeItem("user");

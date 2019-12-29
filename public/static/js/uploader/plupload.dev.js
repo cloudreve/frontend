@@ -1503,7 +1503,8 @@ plupload.Uploader = function(options) {
 
 			xhr = new o.xhr.XMLHttpRequest();
 
-			xhr.withCredentials = true;
+			// todo 自动变换此项设置
+			//xhr.withCredentials = true;
 
 			// Do we have upload progress support
 			if (xhr.upload) {
@@ -1524,8 +1525,8 @@ plupload.Uploader = function(options) {
 					return;
 				}
 
-				// 本地策略需要读取错误代码以出发错误
-				if(uploadConfig.saveType == "local"){
+				// 本地策略/远程需要读取错误代码以出发错误
+				if(uploadConfig.saveType === "local" || uploadConfig.saveType === "remote"){
 					var res = JSON.parse(xhr.responseText);
 					if(res.code !== 0){
 						handleError(res.msg);

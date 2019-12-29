@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import scriptLoader from "../../loader";
 import { connect } from "react-redux";
-import { refreshFileList, refreshStorage } from "../../actions";
+import {refreshFileList, refreshStorage, toggleSnackbar} from "../../actions";
 import FileList from "./FileList.js";
 import Auth from "../../middleware/Auth"
 import UploadButton from "../Dial/Create.js"
 
 let loaded = false;
+let user = Auth.GetUser();
+const policyType = user!==null?user.policy.saveType : "local";
+window.uploadConfig = user.policy;
+window.pathCache = [];
 
 const mapStateToProps = state => {
     return {
@@ -21,7 +25,10 @@ const mapDispatchToProps = dispatch => {
         },
         refreshStorage: () => {
             dispatch(refreshStorage());
-        }
+        },
+        toggleSnackbar: (vertical, horizontal, msg, color) => {
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color));
+        },
     };
 };
 
@@ -50,7 +57,6 @@ class UploaderComponent extends Component {
                 }
                 loaded = true;
                 var user = Auth.GetUser();
-                window.uploadConfig = user.policy;
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
                     browse_button: "pickfiles",
@@ -58,21 +64,30 @@ class UploaderComponent extends Component {
                     drop_element: "container",
                     max_file_size: user.policy.maxSize,
                     dragdrop: true,
-                    chunk_size: user.policy.saveType == "qiniu" ? 4*1024*1024 : 0,
+                    chunk_size: user.policy.saveType === "qiniu" ? 4*1024*1024 : 0,
                     filters: {
                         mime_types: user.policy.allowedType === null ? [] : user.policy.allowedType,
                     },
                     // iOS不能多选？
                     multi_selection: true,
-                    uptoken_url: "/api/v3/file/token",
-                    uptoken:user.policy.saveType == "local" ? "token" : null,
+                    uptoken_url: "/api/v3/file/upload/credential",
+                    uptoken:user.policy.saveType === "local" ? "token" : null,
                     domain: "s",
                     max_retries:0,
                     get_new_uptoken: true,
                     auto_start: true,
                     log_level: 5,
                     init: {
-                        FilesAdded: ({ up, files }) => {
+                        FilesAdded: ( up, files ) => {
+                            if(policyType !== user.policy.saveType){
+                                up.stop();
+                                this.props.toggleSnackbar(
+                                    "top",
+                                    "right",
+                                    "存储策略已变更，请刷新页面",
+                                    "warning"
+                                )
+                            }
                             this.fileList["openFileList"]();
                             window.plupload.each(files, files => {
                                 window.pathCache[files.id] = this.props.path;
@@ -138,7 +153,7 @@ const Uploader = connect(mapStateToProps, mapDispatchToProps, null, {
         ["/static/js/uploader/plupload.dev.js"],
         ["/static/js/uploader/i18n/zh_CN.js"],
         ["/static/js/uploader/ui.js"],
-        ["/static/js/uploader/uploader.js"]
+        ["/static/js/uploader/uploader_"+policyType+".js"]
     )(UploaderComponent)
 );
 
