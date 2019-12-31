@@ -87,7 +87,7 @@ class ImgPreviewCompoment extends Component {
                     prevSrc={items[(photoIndex + items.length - 1) % items.length].src}
                     onCloseRequest={() => this.handleClose()}
                     imageLoadErrorMessage = "无法加载此图像"
-                    imageCrossOrigin = "use-credentials"
+                    imageCrossOrigin = "anonymous"
                     imageTitle = {items[photoIndex].title}
                     onMovePrevRequest={() =>
                       this.setState({
