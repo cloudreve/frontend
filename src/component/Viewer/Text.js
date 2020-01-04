@@ -51,9 +51,9 @@ export default function TextViewer(props) {
     }, [math.params[0]]);
 
     useEffect(() => {
-        API.get("/file/preview/" + math.params[0])
+        API.get("/file/content/" + math.params[0])
             .then(response => {
-                setContent(response.rawData)
+                setContent(response.rawData.toString());
             })
             .catch(error => {
                 ToggleSnackbar(
