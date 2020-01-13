@@ -1,4 +1,4 @@
-import { setSiteConfig, toggleSnackbar } from "../actions/index"
+import { setSiteConfig, toggleSnackbar,enableLoadUploader } from "../actions/index"
 import { fixUrlHash } from "../untils/index"
 import API from "./Api"
 import Auth from "./Auth"
@@ -43,5 +43,12 @@ export async function UpdateSiteConfig(store) {
         localStorage.setItem('siteConfigCache', JSON.stringify(response.data));
     }).catch(function(error) {
         store.dispatch(toggleSnackbar("top", "right", "无法加载站点配置：" + error.message, "error"));
+    }).finally(function () {
+        // 开启上传组件加载
+        let user = Auth.GetUser();
+        window.policyType = user!==null?user.policy.saveType : "local";
+        window.uploadConfig = user.policy;
+        window.pathCache = [];
+        store.dispatch(enableLoadUploader())
     });
 }

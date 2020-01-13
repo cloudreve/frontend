@@ -207,6 +207,12 @@ export const toggleSnackbar = (vertical, horizontal, msg, color) => {
     };
 };
 
+export const enableLoadUploader = () => {
+    return {
+        type: "ENABLE_LOAD_UPLOADER"
+    };
+};
+
 export const setModalsLoading = status => {
     return {
         type: "SET_MODALS_LOADING",

@@ -89,6 +89,7 @@ const mapStateToProps = state => {
         keywords: state.explorer.keywords,
         title: state.siteConfig.title,
         subTitle:state.viewUpdate.subTitle,
+        loadUploader:state.viewUpdate.loadUploader,
     };
 };
 
@@ -306,9 +307,9 @@ class NavbarCompoment extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-    loadUploader() {
+    loadUploader = ()=> {
         if (pathHelper.isHomePage(this.props.location.pathname)) {
-            return <Uploader />;
+            return <>{this.props.loadUploader && <Uploader />}</>;
         }
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import scriptLoader from "../../loader";
+import uploaderLoader from "../../loader";
 import { connect } from "react-redux";
 import {refreshFileList, refreshStorage, toggleSnackbar} from "../../actions";
 import FileList from "./FileList.js";
@@ -7,10 +7,6 @@ import Auth from "../../middleware/Auth"
 import UploadButton from "../Dial/Create.js"
 
 let loaded = false;
-let user = Auth.GetUser();
-const policyType = user!==null?user.policy.saveType : "local";
-window.uploadConfig = user.policy;
-window.pathCache = [];
 
 const mapStateToProps = state => {
     return {
@@ -79,7 +75,7 @@ class UploaderComponent extends Component {
                     log_level: 5,
                     init: {
                         FilesAdded: ( up, files ) => {
-                            if(policyType !== user.policy.saveType){
+                            if(window.policyType !== user.policy.saveType){
                                 up.stop();
                                 this.props.toggleSnackbar(
                                     "top",
@@ -148,13 +144,7 @@ class UploaderComponent extends Component {
 const Uploader = connect(mapStateToProps, mapDispatchToProps, null, {
     forwardRef: true
 })(
-    scriptLoader(
-        ["/static/js/uploader/moxie.js"],
-        ["/static/js/uploader/plupload.dev.js"],
-        ["/static/js/uploader/i18n/zh_CN.js"],
-        ["/static/js/uploader/ui.js"],
-        ["/static/js/uploader/uploader_"+policyType+".js"]
-    )(UploaderComponent)
+    uploaderLoader()(UploaderComponent)
 );
 
 export default Uploader;

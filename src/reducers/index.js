@@ -384,6 +384,12 @@ const cloudreveApp = (state = [], action) => {
                     modalsLoading:action.status,
                 }),
             });
+        case 'ENABLE_LOAD_UPLOADER':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    loadUploader:true,
+                }),
+            });
         case 'REFRESH_FILE_LIST':
             return Object.assign({}, state, {
                 navigator: Object.assign({}, state.navigator, {

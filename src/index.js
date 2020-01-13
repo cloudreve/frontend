@@ -60,6 +60,7 @@ const defaultStatus = InitSiteConfig({
         refresh: true
     },
     viewUpdate: {
+        loadUploader:false,
         open: false,
         explorerViewMethod: "icon",
         sortMethod: "timePos",

@@ -70,7 +70,7 @@ const styles = theme => ({
         overflow: "hidden",
         height:"149px",
         width:"100%",
-        borderRadius: "6px 6px 0 0",  
+        borderRadius: "5px 5px 0 0",
         backgroundColor:theme.palette.background.paper,
         paddingTop:"50px",
     },
