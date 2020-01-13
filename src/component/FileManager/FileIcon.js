@@ -14,6 +14,7 @@ import ContentLoader from 'react-content-loader'
 import {mediaType} from "../../config"
 import {baseURL} from "../../middleware/Api"
 import { withStyles, ButtonBase, Typography, Divider, Tooltip } from '@material-ui/core';
+import TypeIcon from "./TypeIcon";
 
 const styles = theme => ({
     container: {
@@ -74,6 +75,9 @@ const styles = theme => ({
         backgroundColor:theme.palette.background.paper,
         paddingTop:"50px",
     },
+    iconBig:{
+        fontSize:50,
+    },
     picPreview:{
         objectFit: "cover",
         width: "100%",
@@ -91,97 +95,6 @@ const styles = theme => ({
         borderRadius: "90%",
         paddingTop: "2px",
         color: theme.palette.explorer.icon,
-    }, 
-    iconImg :  {
-        color:"#d32f2f",
-    },
-    iconImgBig:{    
-        color:"#d32f2f",
-        fontSize: "50px",
-    },
-    iconVideo :  {
-        color:"#d50000",
-    },
-    iconVideoBig:{    
-        color:"#d50000",
-        fontSize: "50px",
-    },
-    iconAudio :  {
-        color:"#651fff",
-    },
-    iconAudioBig:{    
-        color:"#651fff",
-        fontSize: "50px",
-    },
-    iconPdf :  {
-        color:"#f44336",
-    },
-    iconPdfBig:{    
-        color:"#f44336",
-        fontSize: "50px",
-    },
-    iconWord :  {
-        color:"#538ce5",
-    },
-    iconWordBig:{    
-        color:"#538ce5",
-        fontSize: "50px",
-    },
-    iconPpt :  {
-        color:"rgb(239, 99, 63)",
-    },
-    iconPptBig:{    
-        color:"rgb(239, 99, 63)",
-        fontSize: "50px",
-    },
-    iconExcel :  {
-        color:"#4caf50",
-    },
-    iconExcelBig:{    
-        color:"#4caf50",
-        fontSize: "50px",
-    },
-    iconText :  {
-        color:"#607d8b",
-    },
-    iconTextBig:{    
-        color:"#607d8b",
-        fontSize: "50px",
-    },
-    iconFile :  {
-        color:"#424242",
-    },
-    iconFileBig:{    
-        color:"#424242",
-        fontSize: "50px",
-    },
-    iconTorrent :  {
-        color:"#5c6bc0",
-    },
-    iconTorrentBig:{    
-        color:"#5c6bc0",
-        fontSize: "50px",
-    },
-    iconZip :  {
-        color:"#f9a825",
-    },
-    iconZipBig:{    
-        color:"#f9a825",
-        fontSize: "50px",
-    },
-    iconAndroid :  {
-        color:"#8bc34a",
-    },
-    iconAndroidBig:{    
-        color:"#8bc34a",
-        fontSize: "50px",
-    },
-    iconExe :  {
-        color:"#1a237e",
-    },
-    iconExeBig:{    
-        color:"#1a237e",
-        fontSize: "50px",
     },
     hide:{
         display:"none",
@@ -228,49 +141,6 @@ class FileIconCompoment extends Component {
             return value === this.props.file;
         })) !== -1;
 
-        let icon,iconBig;
-        let fileType =this.props.file.name.split(".").pop().toLowerCase();
-        if (mediaType["image"].indexOf(fileType)!==-1){
-            icon = (<ImageIcon className={classes.iconImg}/>);
-            iconBig = (<ImageIcon className={classes.iconImgBig}/>);
-        }else if(mediaType["video"].indexOf(fileType)!==-1){
-            icon = (<VideoIcon className={classes.iconVideo}/>);
-            iconBig = (<VideoIcon className={classes.iconVideoBig}/>); 
-        }else if(mediaType["audio"].indexOf(fileType)!==-1){
-            icon = (<AudioIcon className={classes.iconAudio}/>);
-            iconBig = (<AudioIcon className={classes.iconAudioBig}/>); 
-        }else if(mediaType["pdf"].indexOf(fileType)!==-1){
-            icon = (<PdfIcon className={classes.iconPdf}/>);
-            iconBig = (<PdfIcon className={classes.iconPdfBig}/>); 
-        }else if(mediaType["word"].indexOf(fileType)!==-1){
-            icon = (<FileWordBox className={classes.iconWord}/>);
-            iconBig = (<FileWordBox className={classes.iconWordBig}/>); 
-        }else if(mediaType["ppt"].indexOf(fileType)!==-1){
-            icon = (<FilePowerpointBox className={classes.iconPpt}/>);
-            iconBig = (<FilePowerpointBox className={classes.iconPptBig}/>); 
-        }else if(mediaType["excel"].indexOf(fileType)!==-1){
-            icon = (<FileExcelBox className={classes.iconExcel}/>);
-            iconBig = (<FileExcelBox className={classes.iconExcelBig}/>);  
-        }else if(mediaType["text"].indexOf(fileType)!==-1){
-            icon = (<ScriptText className={classes.iconText}/>);
-            iconBig = (<ScriptText className={classes.iconTextBig}/>);  
-        }else if(mediaType["torrent"].indexOf(fileType)!==-1){
-            icon = (<MagnetOn className={classes.iconTorrent}/>);
-            iconBig = (<MagnetOn className={classes.iconTorrentBig}/>);  
-        }else if(mediaType["zip"].indexOf(fileType)!==-1){
-            icon = (<ZipBox className={classes.iconZip}/>);
-            iconBig = (<ZipBox className={classes.iconZipBig}/>);  
-        }else if(mediaType["excute"].indexOf(fileType)!==-1){
-            icon = (<WindowRestore className={classes.iconExe}/>);
-            iconBig = (<WindowRestore className={classes.iconExeBig}/>);  
-        }else if(mediaType["android"].indexOf(fileType)!==-1){
-            icon = (<Android className={classes.iconAndroid}/>);
-            iconBig = (<Android className={classes.iconAndroidBig}/>);  
-        }else{
-            icon = (<FileShowIcon className={classes.iconText}/>);
-            iconBig = (<FileShowIcon className={classes.iconTextBig}/>);  
-        }
-
         return (
             <div className={classes.container}>
                 <ButtonBase
@@ -308,7 +178,7 @@ class FileIconCompoment extends Component {
                 }
                 {(this.props.file.pic===""||this.state.showPicIcon|| this.props.file.pic===" "||this.props.file.pic==="null,null"||!allowSharePreview())&&
                     <div className={classes.previewIcon}>
-                        {iconBig}
+                        <TypeIcon className={classes.iconBig} fileName={this.props.file.name}/>
                     </div>
                    
             } 
@@ -317,7 +187,7 @@ class FileIconCompoment extends Component {
                         {!this.props.share&&<div className={classNames(classes.icon, {
                             [classes.iconSelected]: isSelected,
                             [classes.iconNotSelected]: !isSelected,
-                        })}>{icon}</div>}
+                        })}><TypeIcon fileName={this.props.file.name}/></div>}
                         <Tooltip title={this.props.file.name} aria-label={this.props.file.name}>
                             <Typography 
                             variant="body2"

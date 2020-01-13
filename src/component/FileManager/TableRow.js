@@ -23,6 +23,7 @@ import { sizeToString } from "../../untils/index";
 import { mediaType } from "../../config";
 
 import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import TypeIcon from "./TypeIcon";
 
 const styles = theme => ({
     selected: {
@@ -40,70 +41,9 @@ const styles = theme => ({
         marginRight: "20px",
         color: theme.palette.explorer.icon
     },
-    iconImg: {
-        verticalAlign: "middle",
-        color: "#d32f2f",
-        marginRight: "20px"
-    },
-    iconVideo: {
-        verticalAlign: "middle",
-        color: "#d50000",
-        marginRight: "20px"
-    },
-    iconAudio: {
-        color: "#651fff",
+    tableIcon:{
         marginRight: "20px",
-        verticalAlign: "middle"
-    },
-    iconPdf: {
         verticalAlign: "middle",
-        color: "#f44336",
-        marginRight: "20px"
-    },
-    iconWord: {
-        verticalAlign: "middle",
-        color: "#538ce5",
-        marginRight: "20px"
-    },
-    iconPpt: {
-        verticalAlign: "middle",
-        color: "rgb(239, 99, 63)",
-        marginRight: "20px"
-    },
-    iconExcel: {
-        verticalAlign: "middle",
-        color: "#4caf50",
-        marginRight: "20px"
-    },
-    iconText: {
-        verticalAlign: "middle",
-        color: "#607d8b",
-        marginRight: "20px"
-    },
-    iconFile: {
-        verticalAlign: "middle",
-        color: "#424242",
-        marginRight: "20px"
-    },
-    iconTorrent: {
-        color: "#5c6bc0",
-        marginRight: "20px",
-        verticalAlign: "middle"
-    },
-    iconZip: {
-        color: "#f9a825",
-        marginRight: "20px",
-        verticalAlign: "middle"
-    },
-    iconAndroid: {
-        color: "#8bc34a",
-        marginRight: "20px",
-        verticalAlign: "middle"
-    },
-    iconExe: {
-        color: "#1a237e",
-        marginRight: "20px",
-        verticalAlign: "middle"
     },
     folderNameSelected: {
         color: theme.palette.type == "dark" ? "#fff" : theme.palette.primary.dark,
@@ -151,33 +91,7 @@ class TableRowCompoment extends Component {
         if (this.props.file.type === "dir") {
             icon = <FolderIcon className={classes.icon} />;
         } else {
-            if (mediaType["image"].indexOf(fileType) !== -1) {
-                icon = <ImageIcon className={classes.iconImg} />;
-            } else if (mediaType["video"].indexOf(fileType) !== -1) {
-                icon = <VideoIcon className={classes.iconVideo} />;
-            } else if (mediaType["audio"].indexOf(fileType) !== -1) {
-                icon = <AudioIcon className={classes.iconAudio} />;
-            } else if (mediaType["pdf"].indexOf(fileType) !== -1) {
-                icon = <PdfIcon className={classes.iconPdf} />;
-            } else if (mediaType["word"].indexOf(fileType) !== -1) {
-                icon = <FileWordBox className={classes.iconWord} />;
-            } else if (mediaType["ppt"].indexOf(fileType) !== -1) {
-                icon = <FilePowerpointBox className={classes.iconPpt} />;
-            } else if (mediaType["excel"].indexOf(fileType) !== -1) {
-                icon = <FileExcelBox className={classes.iconExcel} />;
-            } else if (mediaType["text"].indexOf(fileType) !== -1) {
-                icon = <ScriptText className={classes.iconText} />;
-            } else if (mediaType["torrent"].indexOf(fileType) !== -1) {
-                icon = <MagnetOn className={classes.iconTorrent} />;
-            } else if (mediaType["zip"].indexOf(fileType) !== -1) {
-                icon = <ZipBox className={classes.iconZip} />;
-            } else if (mediaType["excute"].indexOf(fileType) !== -1) {
-                icon = <WindowRestore className={classes.iconExe} />;
-            } else if (mediaType["android"].indexOf(fileType) !== -1) {
-                icon = <Android className={classes.iconAndroid} />;
-            } else {
-                icon = <FileShowIcon className={classes.iconText} />;
-            }
+           icon = <TypeIcon className={classes.tableIcon} fileName={this.props.file.name}/>
         }
 
         const isSelected =

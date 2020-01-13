@@ -765,7 +765,6 @@ function getCookieByString(cookieName) {
                     that.token = op.uptoken;
                 } else if (op.uptoken_url) {
                     logger.debug("get uptoken from: ", that.uptoken_url);
-                    // TODO: use mOxie
                     var ajax = that.createAjax();
                     ajax.open(
                         "GET",
@@ -778,15 +777,6 @@ function getCookieByString(cookieName) {
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    // var ajax = new Promise(function(resolve, reject) {
-                    // 	var xhr = new XMLHttpRequest();
-                    // 	xhr.onload = function() {
-                    // 		resolve(xhr);
-                    // 	};
-                    // 	xhr.onerror = reject;
-                    // 	xhr.open('GET', that.uptoken_url+"?path="+encodeURIComponent(window.pathCache[file.id]));
-                    // 	xhr.send();
-                    // });
                     if (ajax.status === 200) {
                         var res = that.parseJSON(ajax.responseText);
                         that.token = res.data.token;
