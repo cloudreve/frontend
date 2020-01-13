@@ -96,7 +96,6 @@ class UploaderComponent extends Component {
                             this.setState({ queued: up.total.queued });
                         },
                         UploadProgress: (up, file) => {
-                            console.log("UploadProgress",file);
                             this.fileList["updateStatus"](file);
                         },
                         UploadComplete: (up, file) => {

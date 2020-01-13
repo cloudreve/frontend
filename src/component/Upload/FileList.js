@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import CloseIcon from "@material-ui/icons/Close";
-import FileIcon from "@material-ui/icons/InsertDriveFile";
-import PhotoIcon from "@material-ui/icons/MusicNote";
-import VideoIcon from "@material-ui/icons/Videocam";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
-import MusicIcon from "@material-ui/icons/MusicNote";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { isWidthDown } from "@material-ui/core/withWidth";
-import update from "react-addons-update";
+import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import {
     withStyles,
     Dialog,
@@ -26,6 +22,8 @@ import {
     withWidth,
     DialogContent
 } from "@material-ui/core";
+import TypeIcon from "../FileManager/TypeIcon";
+import { withTheme } from "@material-ui/core/styles";
 
 const styles = theme => ({
     appBar: {
@@ -40,25 +38,39 @@ const styles = theme => ({
     minHight: {
         [theme.breakpoints.up("sm")]: {
             minWidth: 500
-        }
+        },
+        padding: 0
     },
     dialogContent: {
         padding: 0
     },
     successStatus: {
-        marginBottom: 10,
         color: "#4caf50"
     },
     errorStatus: {
-        marginBottom: 10,
         color: "#ff5722"
-    },
-    status: {
-        marginBottom: 10
     },
     listAction: {
         marginLeft: 20,
         marginRight: 20
+    },
+    delete: {
+        zIndex: 9
+    },
+    progressContainer: {
+        position: "relative"
+    },
+    progressContent: {
+        position: "relative",
+        zIndex: 9
+    },
+    progress: {
+        transition: "width .4s linear",
+        zIndex: 1,
+        height: "100%",
+        position: "absolute",
+        left: 0,
+        top: 0
     }
 });
 class FileList extends Component {
@@ -99,6 +111,7 @@ class FileList extends Component {
         var fileID = filesNow.findIndex(f => {
             return f.id === file.id;
         });
+        console.log(file.status);
         if (!file.errMsg) {
             if (filesNow[fileID] && filesNow[fileID].status !== 4) {
                 filesNow[fileID] = file;
@@ -110,6 +123,7 @@ class FileList extends Component {
     }
 
     setComplete(file) {
+        console.log("complete");
         var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex(f => {
             return f.id === file.id;
@@ -164,15 +178,15 @@ class FileList extends Component {
         document.getElementsByClassName("uploadForm")[0].click();
     };
 
+    getProgressBackground = () => {
+        return this.props.theme.palette.type === "light"
+            ? lighten(this.props.theme.palette.primary.main, 0.8)
+            : darken(this.props.theme.palette.background.paper, 0.2);
+    };
+
     render() {
         const { classes } = this.props;
         const { width } = this.props;
-
-        const fileIcon = {
-            image: ["jpg", "bpm", "png", "gif", "jpeg", "webp", "svg"],
-            video: ["mp4", "rmvb", "flv", "avi"],
-            audio: ["mp3", "ogg", "flac", "aac"]
-        };
 
         this.props.inRef({
             openFileList: this.openFileList.bind(this),
@@ -181,43 +195,6 @@ class FileList extends Component {
             setComplete: this.setComplete.bind(this),
             setError: this.setError.bind(this)
         });
-
-        var listContent = this.state.files.map(function(item, i) {
-            var progressItem;
-            var queueIcon;
-
-            if (fileIcon["image"].indexOf(item.name.split(".").pop()) !== -1) {
-                queueIcon = <PhotoIcon></PhotoIcon>;
-            } else if (
-                fileIcon["video"].indexOf(item.name.split(".").pop()) !== -1
-            ) {
-                queueIcon = <VideoIcon></VideoIcon>;
-            } else if (
-                fileIcon["audio"].indexOf(item.name.split(".").pop()) !== -1
-            ) {
-                queueIcon = <MusicIcon></MusicIcon>;
-            } else {
-                queueIcon = <FileIcon></FileIcon>;
-            }
-
-            return (
-                <div key={i}>
-                    <ListItem button>
-                        <Avatar>{queueIcon}</Avatar>
-
-                        <ListItemSecondaryAction>
-                            <IconButton
-                                aria-label="Delete"
-                                onClick={() => this.cancelUpload(item)}
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider />
-                </div>
-            );
-        }, this);
 
         return (
             <Dialog
@@ -250,24 +227,26 @@ class FileList extends Component {
                 <DialogContent className={classes.dialogContent}>
                     <List className={classes.minHight}>
                         {this.state.files.map((item, i) => (
-                            <div key={i}>
-                                <ListItem button>
-                                    <Avatar>s</Avatar>
+                            <div key={i} className={classes.progressContainer}>
+                                {item.status === 2 && (
+                                    <div
+                                        style={{
+                                            backgroundColor: this.getProgressBackground(),
+                                            width: item.percent + "%"
+                                        }}
+                                        className={classes.progress}
+                                    />
+                                )}
+                                <ListItem
+                                    className={classes.progressContent}
+                                    button
+                                >
+                                   <TypeIcon fileName={item.name} isUpload />
                                     {item.status === 1 && (
                                         <ListItemText
                                             className={classes.listAction}
                                             primary={item.name}
-                                            secondary={
-                                                <div>
-                                                    排队中
-                                                    <br />
-                                                    <LinearProgress
-                                                        className={
-                                                            classes.progressBar
-                                                        }
-                                                    />
-                                                </div>
-                                            }
+                                            secondary={<div>排队中...</div>}
                                         />
                                     )}
                                     {item.status === 2 && (
@@ -276,7 +255,7 @@ class FileList extends Component {
                                             primary={item.name}
                                             secondary={
                                                 <div>
-                                                    {item.percent < 99 && (
+                                                    {item.percent <= 99 && (
                                                         <>
                                                             {window.plupload
                                                                 .formatSize(
@@ -296,26 +275,10 @@ class FileList extends Component {
                                                                 )
                                                                 .toUpperCase()}{" "}
                                                             - {item.percent}%{" "}
-                                                            <br />
-                                                            <LinearProgress
-                                                                variant="determinate"
-                                                                value={
-                                                                    item.percent
-                                                                }
-                                                                className={
-                                                                    classes.progressBar
-                                                                }
-                                                            />
                                                         </>
                                                     )}
                                                     {item.percent > 99 && (
-                                                        <div
-                                                            className={
-                                                                classes.status
-                                                            }
-                                                        >
-                                                            处理中...
-                                                        </div>
+                                                        <div>处理中...</div>
                                                     )}
                                                 </div>
                                             }
@@ -360,7 +323,9 @@ class FileList extends Component {
                                             }
                                         />
                                     )}
-                                    <ListItemSecondaryAction>
+                                    <ListItemSecondaryAction
+                                        className={classes.delete}
+                                    >
                                         <IconButton
                                             aria-label="Delete"
                                             onClick={() =>
@@ -382,4 +347,4 @@ class FileList extends Component {
 }
 FileList.propTypes = {};
 
-export default withStyles(styles)(withWidth()(FileList));
+export default withStyles(styles)(withWidth()(withTheme(FileList)));

@@ -92,7 +92,7 @@ export default function UploadButton(props) {
                 }}
                 className={classes.fab}
                 invisible={queued === 0}
-                color="secondary"
+                color="primary"
             >
                 <Backdrop open={open && statusHelper.isMobile()} />
                 <SpeedDial
@@ -103,6 +103,7 @@ export default function UploadButton(props) {
                     onClose={handleClose}
                     FabProps={{
                          onClick: () => uploadClicked(),
+                        color: "secondary",
                     }}
                     onOpen={handleOpen}
                     open={open}

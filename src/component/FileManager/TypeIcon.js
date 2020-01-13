@@ -1,5 +1,5 @@
-import React from 'react'
-import {mediaType} from "../../config";
+import React from "react";
+import { mediaType } from "../../config";
 import ImageIcon from "@material-ui/icons/PhotoSizeSelectActual";
 import VideoIcon from "@material-ui/icons/Videocam";
 import AudioIcon from "@material-ui/icons/Audiotrack";
@@ -15,84 +15,115 @@ import {
     ZipBox
 } from "mdi-material-ui";
 import FileShowIcon from "@material-ui/icons/InsertDriveFile";
-import {makeStyles} from "@material-ui/core";
-import classNames from "classnames";
+import { lighten } from "@material-ui/core/styles";
+import useTheme from "@material-ui/core/styles/useTheme";
+import { Avatar } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
-    iconImg :  {
-        color:"#d32f2f",
+const icons = {
+    audio: {
+        color: "#651fff",
+        icon: AudioIcon
     },
-    iconVideo :  {
-        color:"#d50000",
+    video: {
+        color: "#d50000",
+        icon: VideoIcon
     },
-    iconAudio :  {
-        color:"#651fff",
+    image: {
+        color: "#d32f2f",
+        icon: ImageIcon
     },
-    iconPdf :  {
-        color:"#f44336",
+    pdf: {
+        color: "#f44336",
+        icon: PdfIcon
     },
-    iconWord :  {
-        color:"#538ce5",
+    word: {
+        color: "#538ce5",
+        icon: FileWordBox
     },
-    iconPpt :  {
-        color:"rgb(239, 99, 63)",
+    ppt: {
+        color: "rgb(239, 99, 63)",
+        icon: FilePowerpointBox
     },
-    iconExcel :  {
-        color:"#4caf50",
+    excel: {
+        color: "#4caf50",
+        icon: FileExcelBox
     },
-    iconText :  {
-        color:"#607d8b",
+    text: {
+        color: "#607d8b",
+        icon: ScriptText
     },
-    iconFile :  {
-        color:"#424242",
+    torrent: {
+        color: "#5c6bc0",
+        icon: MagnetOn
     },
-    iconTorrent :  {
-        color:"#5c6bc0",
+    zip: {
+        color: "#f9a825",
+        icon: ZipBox
     },
-    iconZip :  {
-        color:"#f9a825",
+    excute: {
+        color: "#1a237e",
+        icon: WindowRestore
     },
-    iconAndroid :  {
-        color:"#8bc34a",
+    android: {
+        color: "#8bc34a",
+        icon: Android
     },
-    iconExe :  {
-        color:"#1a237e",
-    },
-}));
+    file: {
+        color: "#607d8b",
+        icon: FileShowIcon
+    }
+};
+
+const getColor = (theme, color) =>
+    theme.palette.type === "light" ? color : lighten(color, 0.2);
+
+let color;
 
 const TypeIcon = props => {
-    const classes = useStyles();
+    const theme = useTheme();
 
-    let icon;
-    let fileType =props.fileName.split(".").pop().toLowerCase();
-    if (mediaType["image"].indexOf(fileType)!==-1){
-        icon = (<ImageIcon className={classNames(classes.iconImg, props.className)}/>);
-    }else if(mediaType["video"].indexOf(fileType)!==-1){
-        icon = (<VideoIcon className={classNames(classes.iconVideo, props.className)}/>);
-    }else if(mediaType["audio"].indexOf(fileType)!==-1){
-        icon = (<AudioIcon className={classNames(classes.iconAudio, props.className)}/>);
-    }else if(mediaType["pdf"].indexOf(fileType)!==-1){
-        icon = (<PdfIcon className={classNames(classes.iconPdf, props.className)}/>);
-    }else if(mediaType["word"].indexOf(fileType)!==-1){
-        icon = (<FileWordBox className={classNames(classes.iconWord, props.className)}/>);
-    }else if(mediaType["ppt"].indexOf(fileType)!==-1){
-        icon = (<FilePowerpointBox className={classNames(classes.iconPpt, props.className)}/>);
-    }else if(mediaType["excel"].indexOf(fileType)!==-1){
-        icon = (<FileExcelBox className={classNames(classes.iconExcel, props.className)}/>);
-    }else if(mediaType["text"].indexOf(fileType)!==-1){
-        icon = (<ScriptText className={classNames(classes.iconText, props.className)}/>);
-    }else if(mediaType["torrent"].indexOf(fileType)!==-1){
-        icon = (<MagnetOn className={classNames(classes.iconTorrent, props.className)}/>);
-    }else if(mediaType["zip"].indexOf(fileType)!==-1){
-        icon = (<ZipBox className={classNames(classes.iconZip, props.className)}/>);
-    }else if(mediaType["excute"].indexOf(fileType)!==-1){
-        icon = (<WindowRestore className={classNames(classes.iconExe, props.className)}/>);
-    }else if(mediaType["android"].indexOf(fileType)!==-1){
-        icon = (<Android className={classes.iconAndroid} className={classNames(classes.iconAndroid, props.className)}/>);
-    }else{
-        icon = (<FileShowIcon className={classNames(classes.iconText, props.className)}/>);
+    let fileSuffix = props.fileName
+        .split(".")
+        .pop()
+        .toLowerCase();
+    let fileType = "file";
+    Object.keys(mediaType).forEach(k => {
+        if (mediaType[k].indexOf(fileSuffix) !== -1) {
+            fileType = k;
+        }
+    });
+    let IconComponent = icons[fileType].icon;
+    color = getColor(theme, icons[fileType].color);
+    if (props.getColorValue) {
+        props.getColorValue(color);
     }
-    return (<>{icon}</>)
-}
 
-export default TypeIcon
+    return (
+        <>
+            {props.isUpload && (
+                <Avatar
+                    style={{
+                        backgroundColor: color
+                    }}
+                >
+                    <IconComponent
+                        className={props.className}
+                        style={{
+                            color: theme.palette.background.paper,
+                        }}
+                    />
+                </Avatar>
+            )}
+            {!props.isUpload && (
+                <IconComponent
+                    className={props.className}
+                    style={{
+                        color: color
+                    }}
+                />
+            )}
+        </>
+    );
+};
+
+export default TypeIcon;
