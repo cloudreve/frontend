@@ -101,7 +101,8 @@ class FileList extends Component {
         if (fileID !== -1) {
             filesNow.splice(fileID, 1);
             this.setState({
-                files: filesNow
+                files: filesNow,
+                open: filesNow.length !== 0,
             });
         }
     }

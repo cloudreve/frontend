@@ -749,7 +749,7 @@ function getCookieByString(cookieName) {
                     !that.token ||
                     (op.uptoken_url && that.tokenInfo.isExpired())
                 ) {
-                    return getNewUpToken(file);
+                    return getNewUpToken(file,function(){});
                 } else {
                     return that.token;
                 }
@@ -760,7 +760,7 @@ function getCookieByString(cookieName) {
             // if op.uptoken has value, set uptoken with op.uptoken
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
-            var getNewUpToken = function(file) {
+            var getNewUpToken = function(file,callback) {
                 if (op.uptoken) {
                     that.token = op.uptoken;
                 } else if (op.uptoken_url) {
@@ -773,40 +773,36 @@ function getCookieByString(cookieName) {
                             encodeURIComponent(window.pathCache[file.id]) +
                             "&size=" +
                             file.size,
-                        false
+                        true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    if (ajax.status === 200) {
-                        var res = that.parseJSON(ajax.responseText);
-                        that.token = res.data.token;
-                        that.putPolicy = res.data.policy;
-                        logger.debug("get new uptoken: ", that.token);
-                        logger.debug("get new policy: ", that.putPolicy);
+                    ajax.onload = function (e){
+                    	if (ajax.status === 200) {
+                            var res = that.parseJSON(ajax.responseText);
+                            that.token = res.data.token;
+                            that.putPolicy = res.data.policy;
+                            logger.debug("get new uptoken: ", that.token);
+                            logger.debug("get new policy: ", that.putPolicy);
+                    	} else {
+                    		logger.error("get uptoken error: ", ajax.responseText);
+                    	}
+                        callback();
                     }
-                    // ajax.onload = function (e){
-                    // 	if (ajax.status === 200) {
-
-                    // 		logger.debug("get new uptoken: ", that.token);
-
-                    // 	} else {
-                    // 		logger.error("get uptoken error: ", ajax.responseText);
-                    // 	}
-                    // }
-                    // ajax.onerror = function (e){
-                    // 	logger.error("get uptoken error: ", ajax.responseText);
-                    // }
+                    ajax.onerror = function (e){
+                        callback();
+                    	logger.error("get uptoken error: ", ajax.responseText);
+                    }
                 } else if (op.uptoken_func) {
                     logger.debug("get uptoken from uptoken_func");
                     that.token = op.uptoken_func(file);
                     logger.debug("get new uptoken: ", that.token);
+                    callback();
                 } else {
                     logger.error(
                         "one of [uptoken, uptoken_url, uptoken_func] settings in options is required!"
                     );
-                }
-                if (that.token) {
-                    getUpHosts(that.token);
+                    callback();
                 }
                 return that.token;
             };
@@ -928,7 +924,7 @@ function getCookieByString(cookieName) {
                 // else
                 //      getNewUptoken everytime before a new file upload
                 if (!op.get_new_uptoken) {
-                    getNewUpToken(null);
+                    getNewUpToken(null,function(){});
                 }
                 //getNewUpToken(null);
             });
@@ -995,7 +991,6 @@ function getCookieByString(cookieName) {
             // - resume upload with the last breakpoint of file
             uploader.bind("BeforeUpload", function(up, file) {
                 logger.debug("BeforeUpload event activated");
-                getNewUpToken(file);
                 // add a key named speed for file object
                 file.speed = file.speed || 0;
                 ctx = "";
@@ -1082,117 +1077,127 @@ function getCookieByString(cookieName) {
                 logger.debug("uploader.runtime: ", uploader.runtime);
                 logger.debug("chunk_size: ", chunk_size);
 
-                // TODO: flash support chunk upload
-                if (
-                    (uploader.runtime === "html5" ||
-                        uploader.runtime === "flash") &&
-                    chunk_size
-                ) {
-                    if (file.size < chunk_size || is_android_weixin_or_qq()) {
-                        logger.debug(
-                            "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
-                        );
-                        // direct upload if file size is less then the chunk size
-                        directUpload(up, file, that.key_handler);
-                    } else {
-                        // TODO: need a polifill to make it work in IE 9-
-                        // ISSUE: if file.name is existed in localStorage
-                        // but not the same file maybe cause error
-                        var localFileInfo = localStorage.getItem(file.name);
-                        var blockSize = chunk_size;
-                        if (localFileInfo) {
-                            // TODO: although only the html5 runtime will enter this statement
-                            // but need uniform way to make convertion between string and json
-                            localFileInfo = that.parseJSON(localFileInfo);
-                            var now = new Date().getTime();
-                            var before = localFileInfo.time || 0;
-                            var aDay = 24 * 60 * 60 * 1000; //  milliseconds of one day
-                            // if the last upload time is within one day
-                            //      will upload continuously follow the last breakpoint
-                            // else
-                            //      will reupload entire file
-                            if (now - before < aDay) {
-                                if (localFileInfo.percent !== 100) {
-                                    if (file.size === localFileInfo.total) {
-                                        // TODO: if file.name and file.size is the same
-                                        // but not the same file will cause error
-                                        file.percent = localFileInfo.percent;
-                                        file.loaded = localFileInfo.offset;
-                                        ctx = localFileInfo.ctx;
+                getNewUpToken(file,()=>{
+                    if (that.token) {
+                        getUpHosts(that.token);
+                    }
 
-                                        // set speed info
-                                        speedCalInfo.isResumeUpload = true;
-                                        speedCalInfo.resumeFilesize =
-                                            localFileInfo.offset;
+                    if (
+                        (uploader.runtime === "html5" ||
+                            uploader.runtime === "flash") &&
+                        chunk_size
+                    ) {
+                        if (file.size < chunk_size || is_android_weixin_or_qq()) {
+                            logger.debug(
+                                "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
+                            );
+                            // direct upload if file size is less then the chunk size
+                            directUpload(up, file, that.key_handler);
+                        } else {
+                            // TODO: need a polifill to make it work in IE 9-
+                            // ISSUE: if file.name is existed in localStorage
+                            // but not the same file maybe cause error
+                            var localFileInfo = localStorage.getItem(file.name);
+                            var blockSize = chunk_size;
+                            if (localFileInfo) {
+                                // TODO: although only the html5 runtime will enter this statement
+                                // but need uniform way to make convertion between string and json
+                                localFileInfo = that.parseJSON(localFileInfo);
+                                var now = new Date().getTime();
+                                var before = localFileInfo.time || 0;
+                                var aDay = 24 * 60 * 60 * 1000; //  milliseconds of one day
+                                // if the last upload time is within one day
+                                //      will upload continuously follow the last breakpoint
+                                // else
+                                //      will reupload entire file
+                                if (now - before < aDay) {
+                                    if (localFileInfo.percent !== 100) {
+                                        if (file.size === localFileInfo.total) {
+                                            // TODO: if file.name and file.size is the same
+                                            // but not the same file will cause error
+                                            file.percent = localFileInfo.percent;
+                                            file.loaded = localFileInfo.offset;
+                                            ctx = localFileInfo.ctx;
 
-                                        // set block size
-                                        if (
-                                            localFileInfo.offset + blockSize >
-                                            file.size
-                                        ) {
-                                            blockSize =
-                                                file.size -
+                                            // set speed info
+                                            speedCalInfo.isResumeUpload = true;
+                                            speedCalInfo.resumeFilesize =
                                                 localFileInfo.offset;
+
+                                            // set block size
+                                            if (
+                                                localFileInfo.offset + blockSize >
+                                                file.size
+                                            ) {
+                                                blockSize =
+                                                    file.size -
+                                                    localFileInfo.offset;
+                                            }
+                                        } else {
+                                            // remove file info when file.size is conflict with file info
+                                            localStorage.removeItem(file.name);
                                         }
                                     } else {
-                                        // remove file info when file.size is conflict with file info
+                                        // remove file info when upload percent is 100%
+                                        // avoid 499 bug
                                         localStorage.removeItem(file.name);
                                     }
                                 } else {
-                                    // remove file info when upload percent is 100%
-                                    // avoid 499 bug
+                                    // remove file info when last upload time is over one day
                                     localStorage.removeItem(file.name);
                                 }
+                            }
+                            speedCalInfo.startTime = new Date().getTime();
+                            var multipart_params_obj = {};
+                            var ie = that.detectIEVersion();
+                            // case IE 9-
+                            // add accept in multipart params
+                            if (ie && ie <= 9) {
+                                multipart_params_obj.accept =
+                                    "text/plain; charset=utf-8";
+                                logger.debug(
+                                    "add accept text/plain in multipart params"
+                                );
+                            }
+                            // TODO: to support bput
+                            // http://developer.qiniu.com/docs/v6/api/reference/up/bput.html
+                            if (uploadConfig.saveType == "remote") {
+                                up.setOption({
+                                    url: qiniuUploadUrl + "chunk.php",
+                                    multipart: false,
+                                    chunk_size: chunk_size,
+                                    required_features: "chunks",
+                                    headers: {
+                                        Authorization: getUptoken(file)
+                                    },
+                                    multipart_params: multipart_params_obj
+                                });
                             } else {
-                                // remove file info when last upload time is over one day
-                                localStorage.removeItem(file.name);
+                                up.setOption({
+                                    url: qiniuUploadUrl + "/mkblk/" + blockSize,
+                                    multipart: false,
+                                    chunk_size: chunk_size,
+                                    required_features: "chunks",
+                                    headers: {
+                                        Authorization: "UpToken " + getUptoken(file)
+                                    },
+                                    multipart_params: multipart_params_obj
+                                });
                             }
                         }
-                        speedCalInfo.startTime = new Date().getTime();
-                        var multipart_params_obj = {};
-                        var ie = that.detectIEVersion();
-                        // case IE 9-
-                        // add accept in multipart params
-                        if (ie && ie <= 9) {
-                            multipart_params_obj.accept =
-                                "text/plain; charset=utf-8";
-                            logger.debug(
-                                "add accept text/plain in multipart params"
-                            );
-                        }
-                        // TODO: to support bput
-                        // http://developer.qiniu.com/docs/v6/api/reference/up/bput.html
-                        if (uploadConfig.saveType == "remote") {
-                            up.setOption({
-                                url: qiniuUploadUrl + "chunk.php",
-                                multipart: false,
-                                chunk_size: chunk_size,
-                                required_features: "chunks",
-                                headers: {
-                                    Authorization: getUptoken(file)
-                                },
-                                multipart_params: multipart_params_obj
-                            });
-                        } else {
-                            up.setOption({
-                                url: qiniuUploadUrl + "/mkblk/" + blockSize,
-                                multipart: false,
-                                chunk_size: chunk_size,
-                                required_features: "chunks",
-                                headers: {
-                                    Authorization: "UpToken " + getUptoken(file)
-                                },
-                                multipart_params: multipart_params_obj
-                            });
-                        }
+                    } else {
+                        logger.debug(
+                            "directUpload because uploader.runtime !== 'html5' || uploader.runtime !== 'flash' || !chunk_size"
+                        );
+                        // direct upload if runtime is not html5
+                        directUpload(up, file, that.key_handler);
                     }
-                } else {
-                    logger.debug(
-                        "directUpload because uploader.runtime !== 'html5' || uploader.runtime !== 'flash' || !chunk_size"
-                    );
-                    // direct upload if runtime is not html5
-                    directUpload(up, file, that.key_handler);
-                }
+
+                    file.status = plupload.UPLOADING;
+                    up.trigger('UploadFile', file);
+                });
+
+                return false
             });
 
             logger.debug("bind BeforeUpload event");

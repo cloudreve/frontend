@@ -1,18 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
-
 import classNames from 'classnames';
-import ImageIcon from '@material-ui/icons/PhotoSizeSelectActual'
-import VideoIcon from '@material-ui/icons/Videocam'
-import AudioIcon from '@material-ui/icons/Audiotrack'
-import PdfIcon from "@material-ui/icons/PictureAsPdf"
-import {FileWordBox,FilePowerpointBox,FileExcelBox,ScriptText,MagnetOn,ZipBox,WindowRestore,Android} from 'mdi-material-ui'
-import FileShowIcon from "@material-ui/icons/InsertDriveFile"
-import {mediaType} from "../../config"
-
 import { withStyles, ButtonBase, Typography, Tooltip } from '@material-ui/core';
 import TypeIcon from "./TypeIcon";
+import {lighten} from "@material-ui/core/styles";
 
 const styles = theme => ({
     container: {
@@ -23,9 +15,11 @@ const styles = theme => ({
         "&:hover": {
             border: "1px solid #d0d0d0",
         },
-        backgroundColor: theme.palette.type == "dark" ? "#fff" : theme.palette.explorer.bgSelected,
+        backgroundColor:
+            theme.palette.type == "dark"
+                ? "#fff"
+                : lighten(theme.palette.primary.main,0.8),
     },
-
     notSelected: {
         "&:hover": {
             backgroundColor: theme.palette.background.default,

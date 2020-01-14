@@ -4,31 +4,18 @@ import { connect } from "react-redux";
 
 import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
-import ImageIcon from "@material-ui/icons/PhotoSizeSelectActual";
-import VideoIcon from "@material-ui/icons/Videocam";
-import AudioIcon from "@material-ui/icons/Audiotrack";
-import PdfIcon from "@material-ui/icons/PictureAsPdf";
-import {
-    FileWordBox,
-    FilePowerpointBox,
-    FileExcelBox,
-    ScriptText,
-    MagnetOn,
-    ZipBox,
-    WindowRestore,
-    Android
-} from "mdi-material-ui";
-import FileShowIcon from "@material-ui/icons/InsertDriveFile";
 import { sizeToString } from "../../untils/index";
-import { mediaType } from "../../config";
-
 import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
+import {lighten} from "@material-ui/core/styles";
 
 const styles = theme => ({
     selected: {
         "&:hover": {},
-        backgroundColor: theme.palette.type == "dark" ? theme.palette.background.paper : theme.palette.explorer.bgSelected,
+        backgroundColor:
+            theme.palette.type == "dark"
+                ? "#fff"
+                : lighten(theme.palette.primary.main,0.8),
     },
 
     notSelected: {
