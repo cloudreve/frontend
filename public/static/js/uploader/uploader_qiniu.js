@@ -790,7 +790,7 @@ function getCookieByString(cookieName) {
             // if op.uptoken has value, set uptoken with op.uptoken
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
-            var getNewUpToken = function(file,callback) {
+            var getNewUpToken = function(file, callback) {
                 if (op.uptoken) {
                     that.token = op.uptoken;
                     callback();
@@ -809,7 +809,7 @@ function getCookieByString(cookieName) {
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    ajax.onload = function (e) {
+                    ajax.onload = function(e) {
                         if (ajax.status === 200) {
                             var res = that.parseJSON(ajax.responseText);
                             if (res.code != 0) {
@@ -819,60 +819,37 @@ function getCookieByString(cookieName) {
                                     file: file,
                                     code: 402
                                 });
-                                callback();
-                                return;
+                                callback()
+                                return
                             }
                             that.token = res.uptoken;
-                            if (uploadConfig.saveType == "oss") {
-                                var putPolicy = that.token;
-                                that.sign = res.sign;
-                                that.access = res.id;
-                                that.file_name = res.key;
-                                that.callback = res.callback;
-                            } else if (uploadConfig.saveType == "s3") {
-                                var putPolicy = that.token;
-                                that.sign = res.sign;
-                                that.policy = res.policy;
-                                that.file_name = res.key;
-                                that.credential = res.credential;
-                                that.x_amz_date = res.x_amz_date;
-                                that.surl = res.siteUrl;
-                                that.callbackKey = res.callBackKey;
-                            } else if (uploadConfig.saveType == "upyun") {
-                                var putPolicy = that.token;
-                                that.token = res.token;
-                                that.policy = res.policy;
-                            } else if (uploadConfig.saveType == "remote") {
-                                var putPolicy = that.token;
-                                that.policy = res.uptoken;
-                            } else {
-                                var segments = that.token.split(":");
-                                var putPolicy = that.parseJSON(
-                                    that.URLSafeBase64Decode(segments[2])
-                                );
-                                if (!that.tokenMap) {
-                                    that.tokenMap = {};
-                                }
-                                var getTimestamp = function (time) {
-                                    return Math.ceil(time.getTime() / 1000);
-                                };
-                                var serverTime = getTimestamp(
-                                    new Date(ajax.getResponseHeader("date"))
-                                );
-                                var clientTime = getTimestamp(new Date());
-                                that.tokenInfo = {
-                                    serverDelay: clientTime - serverTime,
-                                    deadline: putPolicy.deadline,
-                                    isExpired: function () {
-                                        var leftTime =
-                                            this.deadline -
-                                            getTimestamp(new Date()) +
-                                            this.serverDelay;
-                                        return leftTime < 600;
-                                    }
-                                };
-                                logger.debug("get token info: ", that.tokenInfo);
+
+                            var segments = that.token.split(":");
+                            var putPolicy = that.parseJSON(
+                                that.URLSafeBase64Decode(segments[2])
+                            );
+                            if (!that.tokenMap) {
+                                that.tokenMap = {};
                             }
+                            var getTimestamp = function(time) {
+                                return Math.ceil(time.getTime() / 1000);
+                            };
+                            var serverTime = getTimestamp(
+                                new Date(ajax.getResponseHeader("date"))
+                            );
+                            var clientTime = getTimestamp(new Date());
+                            that.tokenInfo = {
+                                serverDelay: clientTime - serverTime,
+                                deadline: putPolicy.deadline,
+                                isExpired: function() {
+                                    var leftTime =
+                                        this.deadline -
+                                        getTimestamp(new Date()) +
+                                        this.serverDelay;
+                                    return leftTime < 600;
+                                }
+                            };
+                            logger.debug("get token info: ", that.tokenInfo);
                         }else{
                             uploader.trigger("Error", {
                                 status: 402,
@@ -882,9 +859,9 @@ function getCookieByString(cookieName) {
                             });
                         }
                         callback();
-                    }
+                    };
 
-                    ajax.onerror = function (e){
+                    ajax.onerror = function(e) {
                         uploader.trigger("Error", {
                             status: 402,
                             response: ajax.responseText,
@@ -892,8 +869,8 @@ function getCookieByString(cookieName) {
                             code: 402
                         });
                         callback();
-                    	logger.error("get uptoken error: ", ajax.responseText);
-                    }
+                        logger.error("get uptoken error: ", ajax.responseText);
+                    };
                 } else if (op.uptoken_func) {
                     logger.debug("get uptoken from uptoken_func");
                     that.token = op.uptoken_func(file);
@@ -1241,13 +1218,16 @@ function getCookieByString(cookieName) {
                 logger.debug("uploader.runtime: ", uploader.runtime);
                 logger.debug("chunk_size: ", chunk_size);
 
-                getNewUpToken(file,()=> {
+                getNewUpToken(file, () => {
                     if (
                         (uploader.runtime === "html5" ||
                             uploader.runtime === "flash") &&
                         chunk_size
                     ) {
-                        if (file.size < chunk_size || is_android_weixin_or_qq()) {
+                        if (
+                            file.size < chunk_size ||
+                            is_android_weixin_or_qq()
+                        ) {
                             logger.debug(
                                 "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
                             );
@@ -1275,7 +1255,8 @@ function getCookieByString(cookieName) {
                                         if (file.size === localFileInfo.total) {
                                             // TODO: if file.name and file.size is the same
                                             // but not the same file will cause error
-                                            file.percent = localFileInfo.percent;
+                                            file.percent =
+                                                localFileInfo.percent;
                                             file.loaded = localFileInfo.offset;
                                             ctx = localFileInfo.ctx;
 
@@ -1286,7 +1267,8 @@ function getCookieByString(cookieName) {
 
                                             // set block size
                                             if (
-                                                localFileInfo.offset + blockSize >
+                                                localFileInfo.offset +
+                                                    blockSize >
                                                 file.size
                                             ) {
                                                 blockSize =
@@ -1339,7 +1321,8 @@ function getCookieByString(cookieName) {
                                     chunk_size: chunk_size,
                                     required_features: "chunks",
                                     headers: {
-                                        Authorization: "UpToken " + getUptoken(file)
+                                        Authorization:
+                                            "UpToken " + getUptoken(file)
                                     },
                                     multipart_params: multipart_params_obj
                                 });
@@ -1358,8 +1341,9 @@ function getCookieByString(cookieName) {
                     }else{
                         up.stop();
                     }
-                })
-                return false
+
+                });
+                return false;
             });
 
             logger.debug("bind BeforeUpload event");
@@ -1494,113 +1478,83 @@ function getCookieByString(cookieName) {
                                         }
                                         break;
                                     }
-                                    if (uploadConfig.saveType == "oss") {
-                                        var str = err.response;
-                                        try {
-                                            parser = new DOMParser();
-                                            xmlDoc = parser.parseFromString(
-                                                str,
-                                                "text/xml"
-                                            );
-                                        } catch (e) {
-                                            errTip = "未知错误";
-                                            var errorText = "Error";
-                                        }
-                                        errTip = "回调失败";
-                                        var errorText = xmlDoc.getElementsByTagName(
-                                            "Message"
-                                        )[0].innerHTML;
-                                    } else if (
-                                        uploadConfig.saveType == "s3" &&
-                                        err.status != 401
-                                    ) {
-                                        var str = err.response;
-                                        parser = new DOMParser();
-                                        xmlDoc = parser.parseFromString(
-                                            str,
-                                            "text/xml"
-                                        );
-                                        errTip = xmlDoc.getElementsByTagName(
-                                            "Message"
-                                        )[0].childNodes[0].nodeValue;
-                                        var errorText = "Error";
-                                    } else {
-                                        var errorObj = that.parseJSON(
-                                            err.response
-                                        );
+                                    var errorObj = that.parseJSON(err.response);
+                                    if (errorObj.msg){
+                                        var errorText = errorObj.msg;
+                                    }else{
                                         var errorText = errorObj.error;
-                                        if (err.status == 579) {
-                                            var errorObj2 = that.parseJSON(
-                                                errorText
-                                            );
-                                            errorText = errorObj2.error;
-                                        }
-                                        switch (err.status) {
-                                            case 400:
-                                                errTip = "请求报文格式错误。";
-                                                break;
-                                            case 401:
-                                                errTip =
-                                                    "客户端认证授权失败。请重试或提交反馈。";
-                                                break;
-                                            case 405:
-                                                errTip =
-                                                    "客户端请求错误。请重试或提交反馈。";
-                                                break;
-                                            case 579:
-                                                errTip =
-                                                    "资源上传成功，但回调失败。";
-                                                break;
-                                            case 599:
-                                                errTip =
-                                                    "网络连接异常。请重试或提交反馈。";
-                                                if (!unknow_error_retry(file)) {
-                                                    return;
-                                                }
-                                                break;
-                                            case 614:
-                                                errTip = "文件已存在。";
-                                                try {
-                                                    errorObj = that.parseJSON(
-                                                        errorObj.error
-                                                    );
-                                                    errorText =
-                                                        errorObj.error ||
-                                                        "file exists";
-                                                } catch (e) {
-                                                    errorText =
-                                                        errorObj.error ||
-                                                        "file exists";
-                                                }
-                                                break;
-                                            case 631:
-                                                errTip = "指定空间不存在。";
-                                                break;
-                                            case 701:
-                                                errTip =
-                                                    "上传数据块校验出错。请重试或提交反馈。";
-                                                break;
-                                            default:
-                                                if (err.message) {
-                                                    errTip = err.message;
-                                                } else {
-                                                    errTip = "未知错误";
-                                                }
-                                                if (!unknow_error_retry(file)) {
-                                                    return;
-                                                }
-                                                break;
-                                        }
                                     }
-                                    if (uploadConfig.saveType != "local") {
-                                        errTip =
-                                            errTip +
-                                            "(" +
-                                            err.status +
-                                            "：" +
-                                            errorText +
-                                            ")";
+                                    if (err.status == 579) {
+                                        var errorObj2 = that.parseJSON(
+                                            errorText
+                                        );
+                                        errorText = errorObj2.error;
                                     }
+                                    switch (err.status) {
+                                        case 400:
+                                            errTip = "请求报文格式错误。";
+                                            break;
+                                        case 402:
+                                            errTip =
+                                                "";
+                                            break;
+                                        case 401:
+                                            errTip =
+                                                "客户端认证授权失败。请重试或提交反馈。";
+                                            break;
+                                        case 405:
+                                            errTip =
+                                                "客户端请求错误。请重试或提交反馈。";
+                                            break;
+                                        case 579:
+                                            errTip =
+                                                "资源上传成功，但回调失败。";
+                                            break;
+                                        case 599:
+                                            errTip =
+                                                "网络连接异常。请重试或提交反馈。";
+                                            if (!unknow_error_retry(file)) {
+                                                return;
+                                            }
+                                            break;
+                                        case 614:
+                                            errTip = "文件已存在。";
+                                            try {
+                                                errorObj = that.parseJSON(
+                                                    errorObj.error
+                                                );
+                                                errorText =
+                                                    errorObj.error ||
+                                                    "file exists";
+                                            } catch (e) {
+                                                errorText =
+                                                    errorObj.error ||
+                                                    "file exists";
+                                            }
+                                            break;
+                                        case 631:
+                                            errTip = "指定空间不存在。";
+                                            break;
+                                        case 701:
+                                            errTip =
+                                                "上传数据块校验出错。请重试或提交反馈。";
+                                            break;
+                                        default:
+                                            if (err.message) {
+                                                errTip = err.message;
+                                            } else {
+                                                errTip = "未知错误";
+                                            }
+                                            break;
+                                    }
+                                    errTip =
+                                        errTip +
+                                        "(" +
+                                        err.status +
+                                        "：" +
+                                        errorText +
+                                        ")";
+
                                     break;
                                 case plupload.SECURITY_ERROR:
                                     errTip = "安全配置错误。请联系网站管理员。";

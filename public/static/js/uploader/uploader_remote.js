@@ -780,16 +780,38 @@ function getCookieByString(cookieName) {
                     ajax.onload = function (e){
                     	if (ajax.status === 200) {
                             var res = that.parseJSON(ajax.responseText);
+                            if (res.code != 0) {
+                                uploader.trigger("Error", {
+                                    status: 402,
+                                    response: ajax.responseText,
+                                    file: file,
+                                    code: 402
+                                });
+                                callback();
+                                return;
+                            }
                             that.token = res.data.token;
                             that.putPolicy = res.data.policy;
                             logger.debug("get new uptoken: ", that.token);
                             logger.debug("get new policy: ", that.putPolicy);
                     	} else {
+                            uploader.trigger("Error", {
+                                status: 402,
+                                response: ajax.responseText,
+                                file: file,
+                                code: 402
+                            });
                     		logger.error("get uptoken error: ", ajax.responseText);
                     	}
                         callback();
                     }
                     ajax.onerror = function (e){
+                        uploader.trigger("Error", {
+                            status: 402,
+                            response: ajax.responseText,
+                            file: file,
+                            code: 402
+                        });
                         callback();
                     	logger.error("get uptoken error: ", ajax.responseText);
                     }
@@ -1192,9 +1214,12 @@ function getCookieByString(cookieName) {
                         // direct upload if runtime is not html5
                         directUpload(up, file, that.key_handler);
                     }
-
-                    file.status = plupload.UPLOADING;
-                    up.trigger('UploadFile', file);
+                    if (file.status != plupload.FAILED){
+                        file.status = plupload.UPLOADING;
+                        up.trigger("UploadFile", file);
+                    }else{
+                        up.stop();
+                    }
                 });
 
                 return false
@@ -1351,6 +1376,9 @@ function getCookieByString(cookieName) {
                                 case plupload.INIT_ERROR:
                                     errTip = "网站配置错误。请联系网站管理员。";
                                     uploader.destroy();
+                                    break;
+                                case 402:
+                                    errTip = "无法获取上传凭证";
                                     break;
                                 default:
                                     errTip = err.message + err.details;
