@@ -905,9 +905,6 @@ function getCookieByString(cookieName) {
                     );
                     callback();
                 }
-                if (that.token) {
-                    getUpHosts(that.token);
-                }
                 return that.token;
             };
 
@@ -1242,6 +1239,9 @@ function getCookieByString(cookieName) {
                 logger.debug("chunk_size: ", chunk_size);
 
                 getNewUpToken(file,()=> {
+                    if (that.token) {
+                        getUpHosts(that.token);
+                    }
                     if (
                         (uploader.runtime === "html5" ||
                             uploader.runtime === "flash") &&

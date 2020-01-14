@@ -48,7 +48,8 @@ const styles = theme => ({
         color: "#4caf50"
     },
     errorStatus: {
-        color: "#ff5722"
+        color: "#ff5722",
+        wordBreak:"break-all",
     },
     listAction: {
         marginLeft: 20,

@@ -822,7 +822,7 @@ function getCookieByString(cookieName) {
                                 callback()
                                 return
                             }
-                            that.token = res.uptoken;
+                            that.token = res.data.token;
 
                             var segments = that.token.split(":");
                             var putPolicy = that.parseJSON(
@@ -881,9 +881,6 @@ function getCookieByString(cookieName) {
                         "one of [uptoken, uptoken_url, uptoken_func] settings in options is required!"
                     );
                     callback();
-                }
-                if (that.token) {
-                    getUpHosts(that.token);
                 }
                 return that.token;
             };
@@ -1219,6 +1216,9 @@ function getCookieByString(cookieName) {
                 logger.debug("chunk_size: ", chunk_size);
 
                 getNewUpToken(file, () => {
+                    if (that.token) {
+                        getUpHosts(that.token);
+                    }
                     if (
                         (uploader.runtime === "html5" ||
                             uploader.runtime === "flash") &&

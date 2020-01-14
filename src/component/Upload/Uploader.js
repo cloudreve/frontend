@@ -37,7 +37,7 @@ class UploaderComponent extends Component {
     }
 
     setRef(val) {
-        this.fileList = val;
+        window.fileList = val;
     }
 
     cancelUpload(file) {
@@ -84,10 +84,10 @@ class UploaderComponent extends Component {
                                     "warning"
                                 )
                             }
-                            this.fileList["openFileList"]();
+                            window.fileList["openFileList"]();
                             window.plupload.each(files, files => {
                                 window.pathCache[files.id] = this.props.path;
-                                this.fileList["enQueue"](files);
+                                window.fileList["enQueue"](files);
                             });
                         },
 
@@ -96,22 +96,22 @@ class UploaderComponent extends Component {
                             this.setState({ queued: up.total.queued });
                         },
                         UploadProgress: (up, file) => {
-                            this.fileList["updateStatus"](file);
+                            window.fileList["updateStatus"](file);
                         },
                         UploadComplete: (up, file) => {
                             if (file.length === 0) {
                                 return;
                             }
                             if (file[0].status === 5) {
-                                this.fileList["setComplete"](file[0]);
+                                window.fileList["setComplete"](file[0]);
                                 this.props.refreshFileList();
                                 this.props.refreshStorage();
                             }
                         },
                         FileUploaded: function(up, file, info) {},
                         Error: (up, err, errTip) => {
-                            this.fileList["openFileList"]();
-                            this.fileList["setError"](err.file, errTip);
+                            window.fileList["openFileList"]();
+                            window.fileList["setError"](err.file, errTip);
                         },
                         FilesRemoved: (up, files) => {}
                     }
@@ -124,7 +124,7 @@ class UploaderComponent extends Component {
     onError() {}
 
     openFileList = () => {
-        this.fileList["openFileList"]();
+        window.fileList["openFileList"]();
     };
 
     render() {
