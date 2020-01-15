@@ -1303,18 +1303,7 @@ function getCookieByString(cookieName) {
                             }
                             // TODO: to support bput
                             // http://developer.qiniu.com/docs/v6/api/reference/up/bput.html
-                            if (uploadConfig.saveType == "remote") {
-                                up.setOption({
-                                    url: qiniuUploadUrl + "chunk.php",
-                                    multipart: false,
-                                    chunk_size: chunk_size,
-                                    required_features: "chunks",
-                                    headers: {
-                                        Authorization: getUptoken(file)
-                                    },
-                                    multipart_params: multipart_params_obj
-                                });
-                            } else {
+
                                 up.setOption({
                                     url: qiniuUploadUrl + "/mkblk/" + blockSize,
                                     multipart: false,
@@ -1327,7 +1316,7 @@ function getCookieByString(cookieName) {
                                     multipart_params: multipart_params_obj
                                 });
                             }
-                        }
+
                     } else {
                         logger.debug(
                             "directUpload because uploader.runtime !== 'html5' || uploader.runtime !== 'flash' || !chunk_size"
@@ -1756,20 +1745,7 @@ function getCookieByString(cookieName) {
                                     "/path/" +
                                     that.URLSafeBase64Encode(pathTmp);
                             }
-                            if (uploadConfig.saveType == "remote") {
-                                pathTmp = file.path;
-                                local_path = that.URLSafeBase64Encode(pathTmp);
-                                var url =
-                                    qiniuUploadUrl +
-                                    "mkfile.php?size=" +
-                                    file.size +
-                                    "&key=" +
-                                    key +
-                                    "&fname=" +
-                                    fname +
-                                    "&path=" +
-                                    local_path;
-                            } else {
+
                                 var url =
                                     qiniuUploadUrl +
                                     "/mkfile/" +
@@ -1778,7 +1754,7 @@ function getCookieByString(cookieName) {
                                     fname +
                                     x_vars_url +
                                     local_path;
-                            }
+
                             var ie = that.detectIEVersion();
                             var ajax;
                             if (ie && ie <= 9) {
@@ -1817,6 +1793,7 @@ function getCookieByString(cookieName) {
                                             "mkfile is success: ",
                                             info
                                         );
+                                        uploader.trigger("Fresh");
                                         last_step(up, file, info);
                                     } else {
                                         info = {

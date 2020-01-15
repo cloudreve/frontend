@@ -1214,6 +1214,12 @@ function getCookieByString(cookieName) {
                         // direct upload if runtime is not html5
                         directUpload(up, file, that.key_handler);
                     }
+                    if (file.status != plupload.FAILED){
+                        file.status = plupload.UPLOADING;
+                        up.trigger("UploadFile", file);
+                    }else{
+                        up.stop();
+                    }
                 });
 
                 return false

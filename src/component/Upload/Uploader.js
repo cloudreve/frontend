@@ -108,6 +108,10 @@ class UploaderComponent extends Component {
                                 this.props.refreshStorage();
                             }
                         },
+                        Fresh:()=>{
+                            this.props.refreshFileList();
+                            this.props.refreshStorage();
+                        },
                         FileUploaded: function(up, file, info) {},
                         Error: (up, err, errTip) => {
                             window.fileList["openFileList"]();
