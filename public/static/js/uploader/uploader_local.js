@@ -798,6 +798,9 @@ function getCookieByString(cookieName) {
                     logger.debug("get uptoken from: ", that.uptoken_url);
                     // TODO: use mOxie
                     var ajax = that.createAjax();
+                    if (file.size === undefined){
+                        file.size = 0;
+                    }
                     ajax.open(
                         "GET",
                         that.uptoken_url +

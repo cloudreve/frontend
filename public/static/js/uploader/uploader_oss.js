@@ -144,12 +144,42 @@ function getCookieByString(cookieName) {
 
         var qiniuUploadUrl;
 
-        qiniuUploadUrl = uploadConfig.upUrl;
-        var qiniuUploadUrls = [uploadConfig.upUrl];
-        var qiniuUpHosts = {
-            http: [uploadConfig.upUrl],
-            https: [uploadConfig.upUrl]
-        };
+        /**
+         * qiniu upload urls
+         * 'qiniuUploadUrls' is used to change target when current url is not avaliable
+         * @type {Array}
+         */
+        if (uploadConfig.saveType == "qiniu") {
+            if (window.location.protocol === "https:") {
+                qiniuUploadUrl = "https://up.qbox.me";
+            } else {
+                qiniuUploadUrl = "http://upload.qiniu.com";
+            }
+            var qiniuUploadUrls = [
+                "http://upload.qiniu.com",
+                "http://up.qiniu.com"
+            ];
+
+            var qiniuUpHosts = {
+                http: ["http://upload.qiniu.com", "http://up.qiniu.com"],
+                https: ["https://up.qbox.me"]
+            };
+            //TODO 优化写法
+        } else if (
+            uploadConfig.saveType == "local" ||
+            uploadConfig.saveType == "oss" ||
+            uploadConfig.saveType == "upyun" ||
+            uploadConfig.saveType == "s3" ||
+            uploadConfig.saveType == "remote" ||
+            uploadConfig.saveType == "onedrive"
+        ) {
+            qiniuUploadUrl = uploadConfig.upUrl;
+            var qiniuUploadUrls = [uploadConfig.upUrl];
+            var qiniuUpHosts = {
+                http: [uploadConfig.upUrl],
+                https: [uploadConfig.upUrl]
+            };
+        }
 
         var changeUrlTimes = 0;
 
@@ -729,7 +759,7 @@ function getCookieByString(cookieName) {
                     !that.token ||
                     (op.uptoken_url && that.tokenInfo.isExpired())
                 ) {
-                    return getNewUpToken(file,function(){});
+                    return getNewUpToken(file);
                 } else {
                     return that.token;
                 }
@@ -740,11 +770,13 @@ function getCookieByString(cookieName) {
             // if op.uptoken has value, set uptoken with op.uptoken
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
-            var getNewUpToken = function(file,callback) {
+            var getNewUpToken = function(file, callback) {
                 if (op.uptoken) {
                     that.token = op.uptoken;
+                    callback();
                 } else if (op.uptoken_url) {
                     logger.debug("get uptoken from: ", that.uptoken_url);
+                    // TODO: use mOxie
                     var ajax = that.createAjax();
                     if (file.size === undefined){
                         file.size = 0;
@@ -760,8 +792,8 @@ function getCookieByString(cookieName) {
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    ajax.onload = function (e){
-                    	if (ajax.status === 200) {
+                    ajax.onload = function(e) {
+                        if (ajax.status === 200) {
                             var res = that.parseJSON(ajax.responseText);
                             if (res.code != 0) {
                                 uploader.trigger("Error", {
@@ -773,22 +805,25 @@ function getCookieByString(cookieName) {
                                 callback();
                                 return;
                             }
-                            that.token = res.data.token;
-                            that.putPolicy = res.data.policy;
-                            logger.debug("get new uptoken: ", that.token);
-                            logger.debug("get new policy: ", that.putPolicy);
-                    	} else {
+                            var segments = res.data.policy.split(":");
+                            that.token = segments[1];
+                            var putPolicy = that.token;
+                            that.sign = res.data.token;
+                            that.access = res.data.ak;
+                            that.file_name = res.data.path;
+                            that.callback = segments[0];
+                        } else {
                             uploader.trigger("Error", {
                                 status: 402,
                                 response: ajax.responseText,
                                 file: file,
                                 code: 402
                             });
-                    		logger.error("get uptoken error: ", ajax.responseText);
-                    	}
+                        }
                         callback();
-                    }
-                    ajax.onerror = function (e){
+                    };
+
+                    ajax.onerror = function(e) {
                         uploader.trigger("Error", {
                             status: 402,
                             response: ajax.responseText,
@@ -796,8 +831,8 @@ function getCookieByString(cookieName) {
                             code: 402
                         });
                         callback();
-                    	logger.error("get uptoken error: ", ajax.responseText);
-                    }
+                        logger.error("get uptoken error: ", ajax.responseText);
+                    };
                 } else if (op.uptoken_func) {
                     logger.debug("get uptoken from uptoken_func");
                     that.token = op.uptoken_func(file);
@@ -929,7 +964,7 @@ function getCookieByString(cookieName) {
                 // else
                 //      getNewUptoken everytime before a new file upload
                 if (!op.get_new_uptoken) {
-                    getNewUpToken(null,function(){});
+                    getNewUpToken(null);
                 }
                 //getNewUpToken(null);
             });
@@ -1009,8 +1044,16 @@ function getCookieByString(cookieName) {
                         };
                     } else {
                         multipart_params_obj = {
-                            key: getFileKey(up, file, func),
-                            token: that.token
+                            policy: that.token,
+                            "x:path": file.path,
+                            signature: that.sign,
+                            OSSAccessKeyId: that.access,
+                            "x:fname": file.name,
+                            key: that.file_name.replace(
+                                "${filename}",
+                                file.name
+                            ),
+                            callback: that.callback
                         };
                     }
                     var ie = that.detectIEVersion();
@@ -1045,19 +1088,29 @@ function getCookieByString(cookieName) {
                         }
                     }
 
-                    // 远程策略时不用multipart
-                    up.setOption({
-                        url: qiniuUploadUrl,
-                        multipart: false,
-                        send_file_name: false,
-                        headers: {
-							"X-Policy": that.putPolicy,
-							"Authorization": that.token,
-                            "X-FileName": encodeURIComponent(
-                                getFileKey(up, file, func)
-                            )
-                        }
-                    });
+                    // 本地策略时不用multipart
+                    if (uploadConfig.saveType == "local") {
+                        up.setOption({
+                            url: qiniuUploadUrl,
+                            multipart: false,
+                            send_file_name: false,
+                            headers: {
+                                "X-Path": encodeURIComponent(file.path),
+                                "X-FileName": encodeURIComponent(
+                                    getFileKey(up, file, func)
+                                )
+                            }
+                        });
+                    } else {
+                        up.setOption({
+                            url: qiniuUploadUrl,
+                            multipart: true,
+                            chunk_size: is_android_weixin_or_qq()
+                                ? op.max_file_size
+                                : undefined,
+                            multipart_params: multipart_params_obj
+                        });
+                    }
                 };
 
                 // detect is weixin or qq inner browser
@@ -1082,17 +1135,19 @@ function getCookieByString(cookieName) {
                 logger.debug("uploader.runtime: ", uploader.runtime);
                 logger.debug("chunk_size: ", chunk_size);
 
-                getNewUpToken(file,()=>{
+                getNewUpToken(file, () => {
                     if (that.token) {
                         getUpHosts(that.token);
                     }
-
                     if (
                         (uploader.runtime === "html5" ||
                             uploader.runtime === "flash") &&
                         chunk_size
                     ) {
-                        if (file.size < chunk_size || is_android_weixin_or_qq()) {
+                        if (
+                            file.size < chunk_size ||
+                            is_android_weixin_or_qq()
+                        ) {
                             logger.debug(
                                 "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
                             );
@@ -1120,7 +1175,8 @@ function getCookieByString(cookieName) {
                                         if (file.size === localFileInfo.total) {
                                             // TODO: if file.name and file.size is the same
                                             // but not the same file will cause error
-                                            file.percent = localFileInfo.percent;
+                                            file.percent =
+                                                localFileInfo.percent;
                                             file.loaded = localFileInfo.offset;
                                             ctx = localFileInfo.ctx;
 
@@ -1131,7 +1187,8 @@ function getCookieByString(cookieName) {
 
                                             // set block size
                                             if (
-                                                localFileInfo.offset + blockSize >
+                                                localFileInfo.offset +
+                                                    blockSize >
                                                 file.size
                                             ) {
                                                 blockSize =
@@ -1184,7 +1241,8 @@ function getCookieByString(cookieName) {
                                     chunk_size: chunk_size,
                                     required_features: "chunks",
                                     headers: {
-                                        Authorization: "UpToken " + getUptoken(file)
+                                        Authorization:
+                                            "UpToken " + getUptoken(file)
                                     },
                                     multipart_params: multipart_params_obj
                                 });
@@ -1197,15 +1255,14 @@ function getCookieByString(cookieName) {
                         // direct upload if runtime is not html5
                         directUpload(up, file, that.key_handler);
                     }
-                    if (file.status != plupload.FAILED){
+                    if (file.status != plupload.FAILED) {
                         file.status = plupload.UPLOADING;
                         up.trigger("UploadFile", file);
-                    }else{
+                    } else {
                         up.stop();
                     }
                 });
-
-                return false
+                return false;
             });
 
             logger.debug("bind BeforeUpload event");
@@ -1225,6 +1282,61 @@ function getCookieByString(cookieName) {
             });
 
             logger.debug("bind UploadProgress event");
+
+            // bind 'ChunkUploaded' event
+            // store the chunk upload info and set next chunk upload url
+            uploader.bind("ChunkUploaded", function(up, file, info) {
+                logger.debug("ChunkUploaded event activated");
+                logger.debug("file: ", file);
+                logger.debug("info: ", info);
+                var res = that.parseJSON(info.response);
+                logger.debug("res: ", res);
+                // ctx should look like '[chunk01_ctx],[chunk02_ctx],[chunk03_ctx],...'
+                ctx = ctx ? ctx + "," + res.ctx : res.ctx;
+                var leftSize = info.total - info.offset;
+                var chunk_size = up.getOption && up.getOption("chunk_size");
+                chunk_size =
+                    chunk_size || (up.settings && up.settings.chunk_size);
+                if (leftSize < chunk_size) {
+                    up.setOption({
+                        url: qiniuUploadUrl + "/mkblk/" + leftSize
+                    });
+                    if (uploadConfig.saveType == "remote") {
+                        up.setOption({
+                            url: qiniuUploadUrl + "chunk.php"
+                        });
+                    }
+                    logger.debug(
+                        "up.setOption url: ",
+                        qiniuUploadUrl + "/mkblk/" + leftSize
+                    );
+                }
+                if (uploadConfig.saveType == "remote") {
+                    up.setOption({
+                        headers: {
+                            Authorization: getUptoken(file)
+                        }
+                    });
+                } else {
+                    up.setOption({
+                        headers: {
+                            Authorization: "UpToken " + getUptoken(file)
+                        }
+                    });
+                }
+                localStorage.setItem(
+                    file.name,
+                    that.stringifyJSON({
+                        ctx: ctx,
+                        percent: file.percent,
+                        total: info.total,
+                        offset: info.offset,
+                        time: new Date().getTime()
+                    })
+                );
+            });
+
+            logger.debug("bind ChunkUploaded event");
 
             var retries = qiniuUploadUrls.length;
 
@@ -1285,66 +1397,30 @@ function getCookieByString(cookieName) {
                                         }
                                         break;
                                     }
-                                    var errorObj = that.parseJSON(err.response);
-                                    var errorText = errorObj.error;
-                                    if (err.status == 579) {
-                                        var errorObj2 = that.parseJSON(
-                                            errorText
-                                        );
-                                        errorText = errorObj2.error;
-                                    }
-                                    switch (err.status) {
-                                        case 400:
-                                            errTip = "请求报文格式错误。";
-                                            break;
-                                        case 401:
+                                    if (uploadConfig.saveType == "oss") {
+                                        var str = err.response;
+                                        try {
+                                            parser = new DOMParser();
+                                            xmlDoc = parser.parseFromString(
+                                                str,
+                                                "text/xml"
+                                            );
+                                            var errorText = xmlDoc.getElementsByTagName(
+                                                "Message"
+                                            )[0].innerHTML;
+                                            errTip = "上传失败";
                                             errTip =
-                                                "客户端认证授权失败。请重试或提交反馈。";
-                                            break;
-                                        case 405:
-                                            errTip =
-                                                "客户端请求错误。请重试或提交反馈。";
-                                            break;
-                                        case 579:
-                                            errTip =
-                                                "资源上传成功，但回调失败。";
-                                            break;
-                                        case 599:
-                                            errTip =
-                                                "网络连接异常。请重试或提交反馈。";
-                                            if (!unknow_error_retry(file)) {
-                                                return;
-                                            }
-                                            break;
-                                        case 614:
-                                            errTip = "文件已存在。";
-                                            try {
-                                                errorObj = that.parseJSON(
-                                                    errorObj.error
-                                                );
-                                                errorText =
-                                                    errorObj.error ||
-                                                    "file exists";
-                                            } catch (e) {
-                                                errorText =
-                                                    errorObj.error ||
-                                                    "file exists";
-                                            }
-                                            break;
-                                        case 631:
-                                            errTip = "指定空间不存在。";
-                                            break;
-                                        case 701:
-                                            errTip =
-                                                "上传数据块校验出错。请重试或提交反馈。";
-                                            break;
-                                        default:
-                                            if (err.message) {
-                                                errTip = err.message;
-                                            } else {
-                                                errTip = "未知错误";
-                                            }
-                                            break;
+                                                errTip +
+                                                "(" +
+                                                err.status +
+                                                "：" +
+                                                errorText +
+                                                ")";
+
+                                        } catch (e) {
+                                            errTip = err.message;
+                                            errorText = "Error";
+                                        }
                                     }
                                     break;
                                 case plupload.SECURITY_ERROR:
@@ -1392,7 +1468,67 @@ function getCookieByString(cookieName) {
                         if (uploadConfig.saveType == "s3") {
                         }
                         var last_step = function(up, file, info) {
-                          if (_FileUploaded_Handler) {
+                            if (op.downtoken_url) {
+                                // if op.dowontoken_url is not empty
+                                // need get downtoken before invoke the _FileUploaded_Handler
+                                var ajax_downtoken = that.createAjax();
+                                ajax_downtoken.open(
+                                    "POST",
+                                    op.downtoken_url,
+                                    true
+                                );
+                                ajax_downtoken.setRequestHeader(
+                                    "Content-type",
+                                    "application/x-www-form-urlencoded"
+                                );
+                                ajax_downtoken.onreadystatechange = function() {
+                                    if (ajax_downtoken.readyState === 4) {
+                                        if (
+                                            ajax_downtoken.status === 200 ||
+                                            ajax_downtoken.status === 204 ||
+                                            ajax_downtoken.status === 303
+                                        ) {
+                                            var res_downtoken;
+                                            try {
+                                                res_downtoken = that.parseJSON(
+                                                    ajax_downtoken.responseText
+                                                );
+                                            } catch (e) {
+                                                throw "invalid json format";
+                                            }
+                                            var info_extended = {};
+                                            plupload.extend(
+                                                info_extended,
+                                                that.parseJSON(info),
+                                                res_downtoken
+                                            );
+                                            if (_FileUploaded_Handler) {
+                                                _FileUploaded_Handler(
+                                                    up,
+                                                    file,
+                                                    that.stringifyJSON(
+                                                        info_extended
+                                                    )
+                                                );
+                                            }
+                                        } else {
+                                            uploader.trigger("Error", {
+                                                status: ajax_downtoken.status,
+                                                response:
+                                                    ajax_downtoken.responseText,
+                                                file: file,
+                                                code: plupload.HTTP_ERROR
+                                            });
+                                        }
+                                    }
+                                };
+                                ajax_downtoken.send(
+                                    "key=" +
+                                        that.parseJSON(info).key +
+                                        "&domain=" +
+                                        op.domain
+                                );
+                            } else if (_FileUploaded_Handler) {
                                 _FileUploaded_Handler(up, file, info);
                             }
                         };
@@ -1412,7 +1548,169 @@ function getCookieByString(cookieName) {
                         // else
                         //      invalke the last_step
                         logger.debug("ctx: ", ctx);
-                        last_step(up, file, info.response);
+                        if (ctx) {
+                            var key = "";
+                            logger.debug("save_key: ", op.save_key);
+                            if (!op.save_key) {
+                                key = getFileKey(up, file, that.key_handler);
+                                key = key
+                                    ? "/key/" + that.URLSafeBase64Encode(key)
+                                    : "";
+                            }
+
+                            var fname =
+                                "/fname/" + that.URLSafeBase64Encode(file.name);
+                            if (uploadConfig.saveType == "remote") {
+                                if (!op.save_key) {
+                                    key = getFileKey(
+                                        up,
+                                        file,
+                                        that.key_handler
+                                    );
+                                    key = key
+                                        ? that.URLSafeBase64Encode(key)
+                                        : "";
+                                }
+                                fname =
+                                    "" + that.URLSafeBase64Encode(file.name);
+                                op.x_vars = {
+                                    path: file.path
+                                };
+                            }
+                            logger.debug("op.x_vars: ", op.x_vars);
+                            if (uploadConfig.saveType == "qiniu") {
+                                op.x_vars = {
+                                    path: file.path
+                                };
+                            }
+                            var x_vars = op.x_vars,
+                                x_val = "",
+                                x_vars_url = "";
+                            if (
+                                x_vars !== undefined &&
+                                typeof x_vars === "object"
+                            ) {
+                                for (var x_key in x_vars) {
+                                    if (x_vars.hasOwnProperty(x_key)) {
+                                        if (
+                                            typeof x_vars[x_key] === "function"
+                                        ) {
+                                            x_val = that.URLSafeBase64Encode(
+                                                x_vars[x_key](up, file)
+                                            );
+                                        } else if (
+                                            typeof x_vars[x_key] !== "object"
+                                        ) {
+                                            x_val = that.URLSafeBase64Encode(
+                                                x_vars[x_key]
+                                            );
+                                        }
+                                        x_vars_url +=
+                                            "/x:" + x_key + "/" + x_val;
+                                    }
+                                }
+                            }
+                            local_path = "";
+                            if (
+                                uploadConfig.saveType == "local" ||
+                                uploadConfig.saveType == "onedrive"
+                            ) {
+                                pathTmp = file.path;
+                                if (file.path == "") {
+                                    pathTmp = "ROOTDIR";
+                                }
+                                local_path =
+                                    "/path/" +
+                                    that.URLSafeBase64Encode(pathTmp);
+                            }
+                            if (uploadConfig.saveType == "remote") {
+                                pathTmp = file.path;
+                                local_path = that.URLSafeBase64Encode(pathTmp);
+                                var url =
+                                    qiniuUploadUrl +
+                                    "mkfile.php?size=" +
+                                    file.size +
+                                    "&key=" +
+                                    key +
+                                    "&fname=" +
+                                    fname +
+                                    "&path=" +
+                                    local_path;
+                            } else {
+                                var url =
+                                    qiniuUploadUrl +
+                                    "/mkfile/" +
+                                    file.size +
+                                    key +
+                                    fname +
+                                    x_vars_url +
+                                    local_path;
+                            }
+                            var ie = that.detectIEVersion();
+                            var ajax;
+                            if (ie && ie <= 9) {
+                                ajax = new moxie.xhr.XMLHttpRequest();
+                                moxie.core.utils.Env.swf_url = op.flash_swf_url;
+                            } else {
+                                ajax = that.createAjax();
+                            }
+                            ajax.open("POST", url, true);
+                            ajax.setRequestHeader(
+                                "Content-Type",
+                                "text/plain;charset=UTF-8"
+                            );
+                            if (uploadConfig.saveType == "remote") {
+                                ajax.setRequestHeader(
+                                    "Authorization",
+                                    that.token
+                                );
+                            } else {
+                                ajax.setRequestHeader(
+                                    "Authorization",
+                                    "UpToken " + that.token
+                                );
+                            }
+                            var onreadystatechange = function() {
+                                logger.debug(
+                                    "ajax.readyState: ",
+                                    ajax.readyState
+                                );
+                                if (ajax.readyState === 4) {
+                                    localStorage.removeItem(file.name);
+                                    var info;
+                                    if (ajax.status === 200) {
+                                        info = ajax.responseText;
+                                        logger.debug(
+                                            "mkfile is success: ",
+                                            info
+                                        );
+                                        last_step(up, file, info);
+                                    } else {
+                                        info = {
+                                            status: ajax.status,
+                                            response: ajax.responseText,
+                                            file: file,
+                                            code: -200,
+                                            responseHeaders: ajax.getAllResponseHeaders()
+                                        };
+                                        logger.debug("mkfile is error: ", info);
+                                        uploader.trigger("Error", info);
+                                    }
+                                }
+                            };
+                            if (ie && ie <= 9) {
+                                ajax.bind(
+                                    "readystatechange",
+                                    onreadystatechange
+                                );
+                            } else {
+                                ajax.onreadystatechange = onreadystatechange;
+                            }
+                            ajax.send(ctx);
+                            logger.debug("mkfile: ", url);
+                        } else {
+                            last_step(up, file, info.response);
+                        }
                     };
                 })(_FileUploaded_Handler)
             );
@@ -1427,6 +1725,267 @@ function getCookieByString(cookieName) {
             logger.debug("init uploader end");
 
             return uploader;
+        };
+
+        /**
+         * get url by key
+         * @param  {String} key of file
+         * @return {String} url of file
+         */
+        this.getUrl = function(key) {
+            if (!key) {
+                return false;
+            }
+            key = encodeURI(key);
+            var domain = this.domain;
+            if (domain.slice(domain.length - 1) !== "/") {
+                domain = domain + "/";
+            }
+            return domain + key;
+        };
+
+        /**
+         * invoke the imageView2 api of Qiniu
+         * @param  {Object} api params
+         * @param  {String} key of file
+         * @return {String} url of processed image
+         */
+        this.imageView2 = function(op, key) {
+            if (!/^\d$/.test(op.mode)) {
+                return false;
+            }
+
+            var mode = op.mode,
+                w = op.w || "",
+                h = op.h || "",
+                q = op.q || "",
+                format = op.format || "";
+
+            if (!w && !h) {
+                return false;
+            }
+
+            var imageUrl = "imageView2/" + mode;
+            imageUrl += w ? "/w/" + w : "";
+            imageUrl += h ? "/h/" + h : "";
+            imageUrl += q ? "/q/" + q : "";
+            imageUrl += format ? "/format/" + format : "";
+            if (key) {
+                imageUrl = this.getUrl(key) + "?" + imageUrl;
+            }
+            return imageUrl;
+        };
+
+        /**
+         * invoke the imageMogr2 api of Qiniu
+         * @param  {Object} api params
+         * @param  {String} key of file
+         * @return {String} url of processed image
+         */
+        this.imageMogr2 = function(op, key) {
+            var auto_orient = op["auto-orient"] || "",
+                thumbnail = op.thumbnail || "",
+                strip = op.strip || "",
+                gravity = op.gravity || "",
+                crop = op.crop || "",
+                quality = op.quality || "",
+                rotate = op.rotate || "",
+                format = op.format || "",
+                blur = op.blur || "";
+            //Todo check option
+
+            var imageUrl = "imageMogr2";
+
+            imageUrl += auto_orient ? "/auto-orient" : "";
+            imageUrl += thumbnail ? "/thumbnail/" + thumbnail : "";
+            imageUrl += strip ? "/strip" : "";
+            imageUrl += gravity ? "/gravity/" + gravity : "";
+            imageUrl += quality ? "/quality/" + quality : "";
+            imageUrl += crop ? "/crop/" + crop : "";
+            imageUrl += rotate ? "/rotate/" + rotate : "";
+            imageUrl += format ? "/format/" + format : "";
+            imageUrl += blur ? "/blur/" + blur : "";
+
+            if (key) {
+                imageUrl = this.getUrl(key) + "?" + imageUrl;
+            }
+            return imageUrl;
+        };
+
+        /**
+         * invoke the watermark api of Qiniu
+         * @param  {Object} api params
+         * @param  {String} key of file
+         * @return {String} url of processed image
+         */
+        this.watermark = function(op, key) {
+            var mode = op.mode;
+            if (!mode) {
+                return false;
+            }
+
+            var imageUrl = "watermark/" + mode;
+
+            if (mode === 1) {
+                var image = op.image || "";
+                if (!image) {
+                    return false;
+                }
+                imageUrl += image
+                    ? "/image/" + this.URLSafeBase64Encode(image)
+                    : "";
+            } else if (mode === 2) {
+                var text = op.text ? op.text : "",
+                    font = op.font ? op.font : "",
+                    fontsize = op.fontsize ? op.fontsize : "",
+                    fill = op.fill ? op.fill : "";
+                if (!text) {
+                    return false;
+                }
+                imageUrl += text
+                    ? "/text/" + this.URLSafeBase64Encode(text)
+                    : "";
+                imageUrl += font
+                    ? "/font/" + this.URLSafeBase64Encode(font)
+                    : "";
+                imageUrl += fontsize ? "/fontsize/" + fontsize : "";
+                imageUrl += fill
+                    ? "/fill/" + this.URLSafeBase64Encode(fill)
+                    : "";
+            } else {
+                // Todo mode3
+                return false;
+            }
+
+            var dissolve = op.dissolve || "",
+                gravity = op.gravity || "",
+                dx = op.dx || "",
+                dy = op.dy || "";
+
+            imageUrl += dissolve ? "/dissolve/" + dissolve : "";
+            imageUrl += gravity ? "/gravity/" + gravity : "";
+            imageUrl += dx ? "/dx/" + dx : "";
+            imageUrl += dy ? "/dy/" + dy : "";
+
+            if (key) {
+                imageUrl = this.getUrl(key) + "?" + imageUrl;
+            }
+            return imageUrl;
+        };
+
+        /**
+         * invoke the imageInfo api of Qiniu
+         * @param  {String} key of file
+         * @return {Object} image info
+         */
+        this.imageInfo = function(key) {
+            if (!key) {
+                return false;
+            }
+            var url = this.getUrl(key) + "?imageInfo";
+            var xhr = this.createAjax();
+            var info;
+            var that = this;
+            xhr.open("GET", url, false);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    info = that.parseJSON(xhr.responseText);
+                }
+            };
+            xhr.send();
+            return info;
+        };
+
+        /**
+         * invoke the exif api of Qiniu
+         * @param  {String} key of file
+         * @return {Object} image exif
+         */
+        this.exif = function(key) {
+            if (!key) {
+                return false;
+            }
+            var url = this.getUrl(key) + "?exif";
+            var xhr = this.createAjax();
+            var info;
+            var that = this;
+            xhr.open("GET", url, false);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    info = that.parseJSON(xhr.responseText);
+                }
+            };
+            xhr.send();
+            return info;
+        };
+
+        /**
+         * invoke the exif or imageInfo api of Qiniu
+         * according with type param
+         * @param  {String} ['exif'|'imageInfo']type of info
+         * @param  {String} key of file
+         * @return {Object} image exif or info
+         */
+        this.get = function(type, key) {
+            if (!key || !type) {
+                return false;
+            }
+            if (type === "exif") {
+                return this.exif(key);
+            } else if (type === "imageInfo") {
+                return this.imageInfo(key);
+            }
+            return false;
+        };
+
+        /**
+         * invoke api of Qiniu like a pipeline
+         * @param  {Array of Object} params of a series api call
+         * each object in array is options of api which name is set as 'fop' property
+         * each api's output will be next api's input
+         * @param  {String} key of file
+         * @return {String|Boolean} url of processed image
+         */
+        this.pipeline = function(arr, key) {
+            var isArray =
+                Object.prototype.toString.call(arr) === "[object Array]";
+            var option,
+                errOp,
+                imageUrl = "";
+            if (isArray) {
+                for (var i = 0, len = arr.length; i < len; i++) {
+                    option = arr[i];
+                    if (!option.fop) {
+                        return false;
+                    }
+                    switch (option.fop) {
+                        case "watermark":
+                            imageUrl += this.watermark(option) + "|";
+                            break;
+                        case "imageView2":
+                            imageUrl += this.imageView2(option) + "|";
+                            break;
+                        case "imageMogr2":
+                            imageUrl += this.imageMogr2(option) + "|";
+                            break;
+                        default:
+                            errOp = true;
+                            break;
+                    }
+                    if (errOp) {
+                        return false;
+                    }
+                }
+                if (key) {
+                    imageUrl = this.getUrl(key) + "?" + imageUrl;
+                    var length = imageUrl.length;
+                    if (imageUrl.slice(length - 1) === "|") {
+                        imageUrl = imageUrl.slice(0, length - 1);
+                    }
+                }
+                return imageUrl;
+            }
+            return false;
         };
     }
 

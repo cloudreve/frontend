@@ -34,6 +34,14 @@ const initUserConfig = (siteConfig) => {
     return siteConfig
 }
 
+export function enableUploaderLoad(){
+    // 开启上传组件加载
+    let user = Auth.GetUser();
+    window.policyType = user!==null?user.policy.saveType : "local";
+    window.uploadConfig = user!==null?user.policy:{};
+    window.pathCache = [];
+}
+
 export async function UpdateSiteConfig(store) {
     API.get("/site/config").then(function(response) {
         let themes = JSON.parse(response.data.themes);
@@ -44,11 +52,7 @@ export async function UpdateSiteConfig(store) {
     }).catch(function(error) {
         store.dispatch(toggleSnackbar("top", "right", "无法加载站点配置：" + error.message, "error"));
     }).finally(function () {
-        // 开启上传组件加载
-        let user = Auth.GetUser();
-        window.policyType = user!==null?user.policy.saveType : "local";
-        window.uploadConfig = user.policy;
-        window.pathCache = [];
+        enableUploaderLoad(store);
         store.dispatch(enableLoadUploader())
     });
 }

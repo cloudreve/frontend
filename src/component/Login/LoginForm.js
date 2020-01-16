@@ -19,6 +19,7 @@ import {
     Typography
 } from "@material-ui/core";
 import { bufferDecode, bufferEncode } from "../../untils/index";
+import {enableUploaderLoad} from "../../middleware/Init";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -271,6 +272,7 @@ function LoginForm() {
                 if (response.data["preferred_theme"] !== "") {
                     ApplyThemes(response.data["preferred_theme"]);
                 }
+                enableUploaderLoad();
 
                 history.push("/home");
                 ToggleSnackbar("top", "right", "登录成功", "success");

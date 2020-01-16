@@ -1525,8 +1525,8 @@ plupload.Uploader = function(options) {
 					return;
 				}
 
-				// 本地策略/远程需要读取错误代码以出发错误
-				if(uploadConfig.saveType === "local" || uploadConfig.saveType === "remote"){
+				// 本地策略/远程/OSS需要读取错误代码以出发错误
+				if(uploadConfig.saveType === "local" || uploadConfig.saveType === "remote"|| uploadConfig.saveType === "oss"){
 					var res = JSON.parse(xhr.responseText);
 					if(res.code !== 0){
 						handleError(res.msg);

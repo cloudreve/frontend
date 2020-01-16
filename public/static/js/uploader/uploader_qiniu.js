@@ -1,23 +1,3 @@
-/*!
- * qiniu-js-sdk v@VERSION
- *
- * Copyright 2015 by Qiniu
- * Released under GPL V2 License.
- *
- * GitHub: http://github.com/qiniu/js-sdk
- *
- * Date: @DATE
- */
-/*!
- *
- * Rebuild By Aaron@2018
- *
- */
-/*global plupload ,mOxie*/
-/*global ActiveXObject */
-/*exported Qiniu */
-/*exported QiniuJsSDK */
-
 function getCookieByString(cookieName) {
     var start = document.cookie.indexOf(cookieName + "=");
     if (start == -1) return false;
@@ -798,6 +778,9 @@ function getCookieByString(cookieName) {
                     logger.debug("get uptoken from: ", that.uptoken_url);
                     // TODO: use mOxie
                     var ajax = that.createAjax();
+                    if (file.size === undefined){
+                        file.size = 0;
+                    }
                     ajax.open(
                         "GET",
                         that.uptoken_url +
