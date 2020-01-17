@@ -125,7 +125,7 @@ class FileList extends Component {
     }
 
     setComplete(file) {
-        console.log("complete");
+        console.log("setComplete");
         var filesNow = [...this.state.files];
         var fileID = filesNow.findIndex(f => {
             return f.id === file.id;

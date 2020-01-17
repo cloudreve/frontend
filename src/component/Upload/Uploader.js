@@ -102,6 +102,7 @@ class UploaderComponent extends Component {
                             if (file.length === 0) {
                                 return;
                             }
+                            console.log("UploadComplete",file[0].status);
                             if (file[0].status === 5) {
                                 window.fileList["setComplete"](file[0]);
                                 this.props.refreshFileList();

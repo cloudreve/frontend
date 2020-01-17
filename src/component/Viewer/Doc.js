@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
     container:{
         border:"none",
         width:"100%",
-        height: "calc(100vh - 21px)",
+        height: "calc(100vh - 18px)",
+        marginBottom: -3,
     }
 }));
 

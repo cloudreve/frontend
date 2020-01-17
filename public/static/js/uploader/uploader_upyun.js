@@ -1,3 +1,23 @@
+/*!
+ * qiniu-js-sdk v@VERSION
+ *
+ * Copyright 2015 by Qiniu
+ * Released under GPL V2 License.
+ *
+ * GitHub: http://github.com/qiniu/js-sdk
+ *
+ * Date: @DATE
+ */
+/*!
+ *
+ * Rebuild By Aaron@2018
+ *
+ */
+/*global plupload ,mOxie*/
+/*global ActiveXObject */
+/*exported Qiniu */
+/*exported QiniuJsSDK */
+
 function getCookieByString(cookieName) {
     var start = document.cookie.indexOf(cookieName + "=");
     if (start == -1) return false;
@@ -149,37 +169,14 @@ function getCookieByString(cookieName) {
          * 'qiniuUploadUrls' is used to change target when current url is not avaliable
          * @type {Array}
          */
-        if (uploadConfig.saveType == "qiniu") {
-            if (window.location.protocol === "https:") {
-                qiniuUploadUrl = "https://up.qbox.me";
-            } else {
-                qiniuUploadUrl = "http://upload.qiniu.com";
-            }
-            var qiniuUploadUrls = [
-                "http://upload.qiniu.com",
-                "http://up.qiniu.com"
-            ];
 
-            var qiniuUpHosts = {
-                http: ["http://upload.qiniu.com", "http://up.qiniu.com"],
-                https: ["https://up.qbox.me"]
-            };
-            //TODO 优化写法
-        } else if (
-            uploadConfig.saveType == "local" ||
-            uploadConfig.saveType == "oss" ||
-            uploadConfig.saveType == "upyun" ||
-            uploadConfig.saveType == "s3" ||
-            uploadConfig.saveType == "remote" ||
-            uploadConfig.saveType == "onedrive"
-        ) {
-            qiniuUploadUrl = uploadConfig.upUrl;
-            var qiniuUploadUrls = [uploadConfig.upUrl];
-            var qiniuUpHosts = {
-                http: [uploadConfig.upUrl],
-                https: [uploadConfig.upUrl]
-            };
-        }
+        qiniuUploadUrl = uploadConfig.upUrl;
+        var qiniuUploadUrls = [uploadConfig.upUrl];
+        var qiniuUpHosts = {
+            http: [uploadConfig.upUrl],
+            https: [uploadConfig.upUrl]
+        };
+
 
         var changeUrlTimes = 0;
 
@@ -662,29 +659,7 @@ function getCookieByString(cookieName) {
             };
 
             var getPutPolicy = function(uptoken) {
-                if (
-                    uploadConfig.saveType == "local" ||
-                    uploadConfig.saveType == "oss" ||
-                    uploadConfig.saveType == "upyun" ||
-                    uploadConfig.saveType == "s3" ||
-                    uploadConfig.saveType == "remote"
-                ) {
-                    return "oss";
-                } else {
-                    var segments = uptoken.split(":");
-                    var ak = segments[0];
-                    var putPolicy = that.parseJSON(
-                        that.URLSafeBase64Decode(segments[2])
-                    );
-                    putPolicy.ak = ak;
-                    if (putPolicy.scope.indexOf(":") >= 0) {
-                        putPolicy.bucket = putPolicy.scope.split(":")[0];
-                        putPolicy.key = putPolicy.scope.split(":")[1];
-                    } else {
-                        putPolicy.bucket = putPolicy.scope;
-                    }
-                    return putPolicy;
-                }
+                return "";
             };
 
             var getUpHosts = function(uptoken) {
@@ -711,50 +686,11 @@ function getCookieByString(cookieName) {
                     qiniuUpHosts.http = [uploadConfig.upUrl];
                     qiniuUpHosts.http = [uploadConfig.upUrl];
                     that.resetUploadUrl();
-                } else {
-                    ajax.open("GET", uphosts_url, false);
-                    var onreadystatechange = function() {
-                        logger.debug("ajax.readyState: ", ajax.readyState);
-                        if (ajax.readyState === 4) {
-                            logger.debug("ajax.status: ", ajax.status);
-                            if (ajax.status < 400) {
-                                var res = that.parseJSON(ajax.responseText);
-                                qiniuUpHosts.http = getHosts(res.http.up);
-                                qiniuUpHosts.https = getHosts(res.https.up);
-                                logger.debug("get new uphosts: ", qiniuUpHosts);
-                                that.resetUploadUrl();
-                            } else {
-                                logger.error(
-                                    "get uphosts error: ",
-                                    ajax.responseText
-                                );
-                            }
-                        }
-                    };
-                    if (ie && ie <= 9) {
-                        ajax.bind("readystatechange", onreadystatechange);
-                    } else {
-                        ajax.onreadystatechange = onreadystatechange;
-                    }
-                    ajax.send();
-                    // ajax.send();
-                    // if (ajax.status < 400) {
-                    //     var res = that.parseJSON(ajax.responseText);
-                    //     qiniuUpHosts.http = getHosts(res.http.up);
-                    //     qiniuUpHosts.https = getHosts(res.https.up);
-                    //     logger.debug("get new uphosts: ", qiniuUpHosts);
-                    //     that.resetUploadUrl();
-                    // } else {
-                    //     logger.error("get uphosts error: ", ajax.responseText);
-                    // }
                 }
                 return;
             };
 
             var getUptoken = function(file) {
-                if (uploadConfig.saveType == "remote") {
-                    return that.token;
-                }
                 if (
                     !that.token ||
                     (op.uptoken_url && that.tokenInfo.isExpired())
@@ -770,7 +706,7 @@ function getCookieByString(cookieName) {
             // if op.uptoken has value, set uptoken with op.uptoken
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
-            var getNewUpToken = function(file, callback) {
+            var getNewUpToken = function(file,callback) {
                 if (op.uptoken) {
                     that.token = op.uptoken;
                     callback();
@@ -792,7 +728,7 @@ function getCookieByString(cookieName) {
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    ajax.onload = function(e) {
+                    ajax.onload = function (e) {
                         if (ajax.status === 200) {
                             var res = that.parseJSON(ajax.responseText);
                             if (res.code != 0) {
@@ -805,14 +741,9 @@ function getCookieByString(cookieName) {
                                 callback();
                                 return;
                             }
-                            var segments = res.data.policy.split(":");
-                            that.token = segments[1];
-                            var putPolicy = that.token;
-                            that.sign = res.data.token;
-                            that.access = res.data.ak;
-                            that.file_name = res.data.path;
-                            that.callback = segments[0];
-                        } else {
+                            that.token = res.data.token;
+                            that.policy = res.data.policy;
+                        }else{
                             uploader.trigger("Error", {
                                 status: 402,
                                 response: ajax.responseText,
@@ -821,9 +752,9 @@ function getCookieByString(cookieName) {
                             });
                         }
                         callback();
-                    };
+                    }
 
-                    ajax.onerror = function(e) {
+                    ajax.onerror = function (e){
                         uploader.trigger("Error", {
                             status: 402,
                             response: ajax.responseText,
@@ -831,8 +762,8 @@ function getCookieByString(cookieName) {
                             code: 402
                         });
                         callback();
-                        logger.error("get uptoken error: ", ajax.responseText);
-                    };
+                    	logger.error("get uptoken error: ", ajax.responseText);
+                    }
                 } else if (op.uptoken_func) {
                     logger.debug("get uptoken from uptoken_func");
                     that.token = op.uptoken_func(file);
@@ -1044,16 +975,8 @@ function getCookieByString(cookieName) {
                         };
                     } else {
                         multipart_params_obj = {
-                            policy: that.token,
-                            "x:path": file.path,
-                            signature: that.sign,
-                            OSSAccessKeyId: that.access,
-                            "x:fname": file.name,
-                            key: that.file_name.replace(
-                                "${filename}",
-                                file.name
-                            ),
-                            callback: that.callback
+                            authorization: that.token,
+                            policy: that.policy
                         };
                     }
                     var ie = that.detectIEVersion();
@@ -1087,19 +1010,14 @@ function getCookieByString(cookieName) {
                             }
                         }
                     }
-
-
-                        up.setOption({
-                            url: qiniuUploadUrl,
-                            multipart: true,
-                            chunk_size: is_android_weixin_or_qq()
-                                ? op.max_file_size
-                                : undefined,
-                            multipart_params: multipart_params_obj,
-                            headers:{
-                                "X-Oss-Forbid-Overwrite":true,
-                            }
-                        });
+                    up.setOption({
+                        url: qiniuUploadUrl,
+                        multipart: true,
+                        chunk_size: is_android_weixin_or_qq()
+                            ? op.max_file_size
+                            : undefined,
+                        multipart_params: multipart_params_obj
+                    });
 
                 };
 
@@ -1125,7 +1043,7 @@ function getCookieByString(cookieName) {
                 logger.debug("uploader.runtime: ", uploader.runtime);
                 logger.debug("chunk_size: ", chunk_size);
 
-                getNewUpToken(file, () => {
+                getNewUpToken(file,()=> {
                     if (that.token) {
                         getUpHosts(that.token);
                     }
@@ -1134,10 +1052,7 @@ function getCookieByString(cookieName) {
                             uploader.runtime === "flash") &&
                         chunk_size
                     ) {
-                        if (
-                            file.size < chunk_size ||
-                            is_android_weixin_or_qq()
-                        ) {
+                        if (file.size < chunk_size || is_android_weixin_or_qq()) {
                             logger.debug(
                                 "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
                             );
@@ -1165,8 +1080,7 @@ function getCookieByString(cookieName) {
                                         if (file.size === localFileInfo.total) {
                                             // TODO: if file.name and file.size is the same
                                             // but not the same file will cause error
-                                            file.percent =
-                                                localFileInfo.percent;
+                                            file.percent = localFileInfo.percent;
                                             file.loaded = localFileInfo.offset;
                                             ctx = localFileInfo.ctx;
 
@@ -1177,8 +1091,7 @@ function getCookieByString(cookieName) {
 
                                             // set block size
                                             if (
-                                                localFileInfo.offset +
-                                                    blockSize >
+                                                localFileInfo.offset + blockSize >
                                                 file.size
                                             ) {
                                                 blockSize =
@@ -1231,8 +1144,7 @@ function getCookieByString(cookieName) {
                                     chunk_size: chunk_size,
                                     required_features: "chunks",
                                     headers: {
-                                        Authorization:
-                                            "UpToken " + getUptoken(file)
+                                        Authorization: "UpToken " + getUptoken(file)
                                     },
                                     multipart_params: multipart_params_obj
                                 });
@@ -1245,14 +1157,14 @@ function getCookieByString(cookieName) {
                         // direct upload if runtime is not html5
                         directUpload(up, file, that.key_handler);
                     }
-                    if (file.status != plupload.FAILED) {
+                    if (file.status != plupload.FAILED){
                         file.status = plupload.UPLOADING;
                         up.trigger("UploadFile", file);
-                    } else {
+                    }else{
                         up.stop();
                     }
-                });
-                return false;
+                })
+                return false
             });
 
             logger.debug("bind BeforeUpload event");
@@ -1387,31 +1299,75 @@ function getCookieByString(cookieName) {
                                         }
                                         break;
                                     }
-                                    if (uploadConfig.saveType == "oss") {
-                                        var str = err.response;
-                                        try {
-                                            parser = new DOMParser();
-                                            xmlDoc = parser.parseFromString(
-                                                str,
-                                                "text/xml"
-                                            );
-                                            var errorText = xmlDoc.getElementsByTagName(
-                                                "Message"
-                                            )[0].innerHTML;
-                                            errTip = "上传失败";
-                                            errTip =
-                                                errTip +
-                                                "(" +
-                                                err.status +
-                                                "：" +
-                                                errorText +
-                                                ")";
 
-                                        } catch (e) {
-                                            errTip = err.message;
-                                            errorText = "Error";
+                                        var errorObj = that.parseJSON(
+                                            err.response
+                                        );
+                                        var errorText = errorObj.message;
+                                        switch (err.status) {
+                                            case 400:
+                                                errTip = "请求报文格式错误。";
+                                                break;
+                                            case 401:
+                                                errTip =
+                                                    "客户端认证授权失败。请重试或提交反馈。";
+                                                break;
+                                            case 405:
+                                                errTip =
+                                                    "客户端请求错误。请重试或提交反馈。";
+                                                break;
+                                            case 579:
+                                                errTip =
+                                                    "资源上传成功，但回调失败。";
+                                                break;
+                                            case 599:
+                                                errTip =
+                                                    "网络连接异常。请重试或提交反馈。";
+                                                if (!unknow_error_retry(file)) {
+                                                    return;
+                                                }
+                                                break;
+                                            case 614:
+                                                errTip = "文件已存在。";
+                                                try {
+                                                    errorObj = that.parseJSON(
+                                                        errorObj.error
+                                                    );
+                                                    errorText =
+                                                        errorObj.error ||
+                                                        "file exists";
+                                                } catch (e) {
+                                                    errorText =
+                                                        errorObj.error ||
+                                                        "file exists";
+                                                }
+                                                break;
+                                            case 631:
+                                                errTip = "指定空间不存在。";
+                                                break;
+                                            case 701:
+                                                errTip =
+                                                    "上传数据块校验出错。请重试或提交反馈。";
+                                                break;
+                                            default:
+                                                if (err.message) {
+                                                    errTip = err.message;
+                                                } else {
+                                                    errTip = "未知错误";
+                                                }
+                                                if (!unknow_error_retry(file)) {
+                                                    return;
+                                                }
+                                                break;
                                         }
-                                    }
+                                        errTip =
+                                            errTip +
+                                            "(" +
+                                            err.status +
+                                            "：" +
+                                            errorText +
+                                            ")";
+
                                     break;
                                 case plupload.SECURITY_ERROR:
                                     errTip = "安全配置错误。请联系网站管理员。";
