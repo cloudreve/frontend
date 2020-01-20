@@ -790,7 +790,7 @@ function getCookieByString(cookieName) {
             // if op.uptoken has value, set uptoken with op.uptoken
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
-            var getNewUpToken = function(file,callback) {
+            var getNewUpToken = function(file, callback) {
                 if (op.uptoken) {
                     that.token = op.uptoken;
                     callback();
@@ -798,7 +798,7 @@ function getCookieByString(cookieName) {
                     logger.debug("get uptoken from: ", that.uptoken_url);
                     // TODO: use mOxie
                     var ajax = that.createAjax();
-                    if (file.size === undefined){
+                    if (file.size === undefined) {
                         file.size = 0;
                     }
                     ajax.open(
@@ -807,12 +807,14 @@ function getCookieByString(cookieName) {
                             "?path=" +
                             encodeURIComponent(window.pathCache[file.id]) +
                             "&size=" +
-                            file.size,
+                            file.size +
+                            "&name=" +
+                            encodeURIComponent(file.name),
                         true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    ajax.onload = function (e) {
+                    ajax.onload = function(e) {
                         if (ajax.status === 200) {
                             var res = that.parseJSON(ajax.responseText);
                             if (res.code != 0) {
@@ -856,7 +858,7 @@ function getCookieByString(cookieName) {
                                 if (!that.tokenMap) {
                                     that.tokenMap = {};
                                 }
-                                var getTimestamp = function (time) {
+                                var getTimestamp = function(time) {
                                     return Math.ceil(time.getTime() / 1000);
                                 };
                                 var serverTime = getTimestamp(
@@ -866,7 +868,7 @@ function getCookieByString(cookieName) {
                                 that.tokenInfo = {
                                     serverDelay: clientTime - serverTime,
                                     deadline: putPolicy.deadline,
-                                    isExpired: function () {
+                                    isExpired: function() {
                                         var leftTime =
                                             this.deadline -
                                             getTimestamp(new Date()) +
@@ -874,9 +876,12 @@ function getCookieByString(cookieName) {
                                         return leftTime < 600;
                                     }
                                 };
-                                logger.debug("get token info: ", that.tokenInfo);
+                                logger.debug(
+                                    "get token info: ",
+                                    that.tokenInfo
+                                );
                             }
-                        }else{
+                        } else {
                             uploader.trigger("Error", {
                                 status: 402,
                                 response: ajax.responseText,
@@ -885,9 +890,9 @@ function getCookieByString(cookieName) {
                             });
                         }
                         callback();
-                    }
+                    };
 
-                    ajax.onerror = function (e){
+                    ajax.onerror = function(e) {
                         uploader.trigger("Error", {
                             status: 402,
                             response: ajax.responseText,
@@ -895,8 +900,8 @@ function getCookieByString(cookieName) {
                             code: 402
                         });
                         callback();
-                    	logger.error("get uptoken error: ", ajax.responseText);
-                    }
+                        logger.error("get uptoken error: ", ajax.responseText);
+                    };
                 } else if (op.uptoken_func) {
                     logger.debug("get uptoken from uptoken_func");
                     that.token = op.uptoken_func(file);
@@ -1241,7 +1246,7 @@ function getCookieByString(cookieName) {
                 logger.debug("uploader.runtime: ", uploader.runtime);
                 logger.debug("chunk_size: ", chunk_size);
 
-                getNewUpToken(file,()=> {
+                getNewUpToken(file, () => {
                     if (that.token) {
                         getUpHosts(that.token);
                     }
@@ -1250,7 +1255,10 @@ function getCookieByString(cookieName) {
                             uploader.runtime === "flash") &&
                         chunk_size
                     ) {
-                        if (file.size < chunk_size || is_android_weixin_or_qq()) {
+                        if (
+                            file.size < chunk_size ||
+                            is_android_weixin_or_qq()
+                        ) {
                             logger.debug(
                                 "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
                             );
@@ -1278,7 +1286,8 @@ function getCookieByString(cookieName) {
                                         if (file.size === localFileInfo.total) {
                                             // TODO: if file.name and file.size is the same
                                             // but not the same file will cause error
-                                            file.percent = localFileInfo.percent;
+                                            file.percent =
+                                                localFileInfo.percent;
                                             file.loaded = localFileInfo.offset;
                                             ctx = localFileInfo.ctx;
 
@@ -1289,7 +1298,8 @@ function getCookieByString(cookieName) {
 
                                             // set block size
                                             if (
-                                                localFileInfo.offset + blockSize >
+                                                localFileInfo.offset +
+                                                    blockSize >
                                                 file.size
                                             ) {
                                                 blockSize =
@@ -1342,7 +1352,8 @@ function getCookieByString(cookieName) {
                                     chunk_size: chunk_size,
                                     required_features: "chunks",
                                     headers: {
-                                        Authorization: "UpToken " + getUptoken(file)
+                                        Authorization:
+                                            "UpToken " + getUptoken(file)
                                     },
                                     multipart_params: multipart_params_obj
                                 });
@@ -1355,14 +1366,14 @@ function getCookieByString(cookieName) {
                         // direct upload if runtime is not html5
                         directUpload(up, file, that.key_handler);
                     }
-                    if (file.status != plupload.FAILED){
+                    if (file.status != plupload.FAILED) {
                         file.status = plupload.UPLOADING;
                         up.trigger("UploadFile", file);
-                    }else{
+                    } else {
                         up.stop();
                     }
-                })
-                return false
+                });
+                return false;
             });
 
             logger.debug("bind BeforeUpload event");

@@ -752,10 +752,12 @@ function getCookieByString(cookieName) {
                     ajax.open(
                         "GET",
                         that.uptoken_url +
-                            "?path=" +
-                            encodeURIComponent(window.pathCache[file.id]) +
-                            "&size=" +
-                            file.size,
+                        "?path=" +
+                        encodeURIComponent(window.pathCache[file.id]) +
+                        "&size=" +
+                        file.size +
+                        "&name=" +
+                        encodeURIComponent(file.name),
                         true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");

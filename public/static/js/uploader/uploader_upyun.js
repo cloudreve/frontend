@@ -723,7 +723,9 @@ function getCookieByString(cookieName) {
                             "?path=" +
                             encodeURIComponent(window.pathCache[file.id]) +
                             "&size=" +
-                            file.size,
+                            file.size +
+                            "&name=" +
+                            encodeURIComponent(file.name),
                         true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
