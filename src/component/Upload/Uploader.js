@@ -44,6 +44,16 @@ class UploaderComponent extends Component {
         this.uploader.removeFile(file);
     }
 
+    getChunkSize(policyType){
+        if(policyType === "qiniu"){
+            return 4*1024*1024
+        }
+        if(policyType === "onedrive"){
+            return 10*1024*1024
+        }
+        return 0
+    }
+
     componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
         if (isScriptLoaded && !this.props.isScriptLoaded) {
             // load finished
@@ -60,7 +70,7 @@ class UploaderComponent extends Component {
                     drop_element: "container",
                     max_file_size: user.policy.maxSize,
                     dragdrop: true,
-                    chunk_size: user.policy.saveType === "qiniu" ? 4*1024*1024 : 0,
+                    chunk_size: this.getChunkSize(user.policy.saveType),
                     filters: {
                         mime_types: user.policy.allowedType === null ? [] : user.policy.allowedType,
                     },
@@ -102,11 +112,14 @@ class UploaderComponent extends Component {
                             if (file.length === 0) {
                                 return;
                             }
-                            console.log("UploadComplete",file[0].status);
+                            console.log("UploadComplete",file[0].status,file[0]);
                             if (file[0].status === 5) {
                                 window.fileList["setComplete"](file[0]);
-                                this.props.refreshFileList();
-                                this.props.refreshStorage();
+                                // 无异步操作的策略，直接刷新
+                                if (user.policy.saveType !== "onedrive"){
+                                    this.props.refreshFileList();
+                                    this.props.refreshStorage();
+                                }
                             }
                         },
                         Fresh:()=>{
