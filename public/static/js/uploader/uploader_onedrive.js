@@ -745,6 +745,12 @@ function getCookieByString(cookieName) {
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
             var getNewUpToken = function(file, callback) {
+                if (file.qiniuUpHosts){
+                    file.qiniuUpHosts = qiniuUpHosts;
+                    that.resetUploadUrl();
+                    callback();
+                    return
+                }
                 if (op.uptoken) {
                     that.token = op.uptoken;
                     callback();
@@ -785,6 +791,8 @@ function getCookieByString(cookieName) {
                                 qiniuUpHosts.http = [res.data.policy];
                                 qiniuUpHosts.https = [res.data.policy];
                                 file.callbackURL = res.data.token;
+                                file.qiniuUpHosts = qiniuUpHosts;
+                                file.offset = 0;
                                 that.resetUploadUrl();
                             }else{
                                 qiniuUpHosts.http = [uploadConfig.upUrl];
@@ -1112,8 +1120,9 @@ function getCookieByString(cookieName) {
                             // TODO: need a polifill to make it work in IE 9-
                             // ISSUE: if file.name is existed in localStorage
                             // but not the same file maybe cause error
-                            var localFileInfo = false;
+                            var localFileInfo = localStorage.getItem(file.name);
                             var blockSize = chunk_size;
+                            var offsetNow = 0;
                             if (localFileInfo) {
                                 // TODO: although only the html5 runtime will enter this statement
                                 // but need uniform way to make convertion between string and json
@@ -1134,11 +1143,14 @@ function getCookieByString(cookieName) {
                                                 localFileInfo.percent;
                                             file.loaded = localFileInfo.offset;
                                             ctx = localFileInfo.ctx;
-
+                                            offsetNow = localFileInfo.offset;
                                             // set speed info
                                             speedCalInfo.isResumeUpload = true;
                                             speedCalInfo.resumeFilesize =
                                                 localFileInfo.offset;
+
+                                            qiniuUpHosts = localFileInfo.url;
+                                            that.resetUploadUrl();
 
                                             // set block size
                                             if (
@@ -1152,13 +1164,16 @@ function getCookieByString(cookieName) {
                                             }
                                         } else {
                                             // remove file info when file.size is conflict with file info
+                                            localStorage.removeItem(file.name);
                                         }
                                     } else {
                                         // remove file info when upload percent is 100%
                                         // avoid 499 bug
+                                        localStorage.removeItem(file.name);
                                     }
                                 } else {
                                     // remove file info when last upload time is over one day
+                                    localStorage.removeItem(file.name);
                                 }
                             }
                             speedCalInfo.startTime = new Date().getTime();
@@ -1175,6 +1190,10 @@ function getCookieByString(cookieName) {
                             }
                             // TODO: to support bput
                             // http://developer.qiniu.com/docs/v6/api/reference/up/bput.html
+                            var left = file.loaded + blockSize - 1;
+                            if (file.size - file.loaded < chunk_size){
+                                left = file.size - 1;
+                            }
                             up.setOption({
                                 http_method: "put",
                                 url: qiniuUploadUrl,
@@ -1183,8 +1202,8 @@ function getCookieByString(cookieName) {
                                 required_features: "chunks",
                                 headers: {
                                     "Content-Range":
-                                        "bytes 0-" +
-                                        (chunk_size - 1) +
+                                        "bytes "+file.loaded+"-" +
+                                        left +
                                         "/" +
                                         file.size
                                 }
@@ -1272,18 +1291,57 @@ function getCookieByString(cookieName) {
 
             // if error is unkown switch upload url and retry
             var unknow_error_retry = function(file) {
-                if (retries-- > 0) {
-                    setTimeout(function() {
-                        that.resetUploadUrl();
-                        file.status = plupload.QUEUED;
-                        uploader.stop();
-                        uploader.start();
-                    }, 0);
-                    return true;
-                } else {
-                    retries = qiniuUploadUrls.length;
+                console.log("重试");
+                if (!file.qiniuUpHosts){
                     return false;
                 }
+
+                    setTimeout(function() {
+                        // 查询文件上传状态
+                        // 是分片上传
+                        ajax = that.createAjax();
+                        ajax.open("GET", file.qiniuUpHosts.http, true);
+                        var onreadystatechange = function() {
+                            logger.debug("ajax.readyState: ", ajax.readyState);
+                            if (ajax.readyState === 4) {
+                                var info;
+                                if (ajax.status === 200) {
+                                    info = ajax.responseText;
+                                    var res = that.parseJSON(info);
+                                    if (res.nextExpectedRanges){
+                                        file.status = plupload.QUEUED;
+                                        file.loaded = parseInt(res.nextExpectedRanges[0].split("-")[0],10);
+                                        uploader.stop();
+                                        uploader.start();
+                                    }else{
+                                        info = {
+                                            status: ajax.status,
+                                            response: ajax.responseText,
+                                            file: file,
+                                            code: plupload.HTTP_ERROR,
+                                            responseHeaders: ajax.getAllResponseHeaders()
+                                        };
+                                        uploader.trigger("Error", info);
+                                    }
+
+                                } else {
+                                    info = {
+                                        status: ajax.status,
+                                        response: ajax.responseText,
+                                        file: file,
+                                        code: plupload.HTTP_ERROR,
+                                        responseHeaders: ajax.getAllResponseHeaders()
+                                    };
+                                    uploader.trigger("Error", info);
+                                }
+                            }
+                        };
+                        ajax.onreadystatechange = onreadystatechange;
+                        ajax.send();
+
+                    }, 3000);
+                    return true;
+
             };
 
             // bind 'Error' event
@@ -1321,7 +1379,10 @@ function getCookieByString(cookieName) {
                                     if (err.response === "") {
                                         // Fix parseJSON error ,when http error is like net::ERR_ADDRESS_UNREACHABLE
                                         errTip =
-                                            err.message || "未知网络错误。";
+                                            err.message+"3秒钟后会进行重试。" || "未知网络错误，3秒钟后会进行重试。";
+                                        if (!unknow_error_retry(file)) {
+                                            return;
+                                        }
                                         break;
                                     }
                                     try {
@@ -1361,7 +1422,10 @@ function getCookieByString(cookieName) {
                                     errTip = errorText;
                                     break;
                                 default:
-                                    errTip = err.message + err.details;
+                                    errTip = err.message + err.details + "(3秒钟后会进行重试)";
+                                    if (!unknow_error_retry(file)) {
+                                        return;
+                                    }
                                     break;
                             }
                             if (_Error_Handler) {
@@ -1405,6 +1469,7 @@ function getCookieByString(cookieName) {
                                         info = ajax.responseText;
                                         var res = that.parseJSON(info);
                                         if (res.code == 0){
+                                            localStorage.removeItem(file.name);
                                             up.trigger("Fresh");
                                             last_step(up, file, info);
                                         }else{
@@ -1455,266 +1520,6 @@ function getCookieByString(cookieName) {
             return uploader;
         };
 
-        /**
-         * get url by key
-         * @param  {String} key of file
-         * @return {String} url of file
-         */
-        this.getUrl = function(key) {
-            if (!key) {
-                return false;
-            }
-            key = encodeURI(key);
-            var domain = this.domain;
-            if (domain.slice(domain.length - 1) !== "/") {
-                domain = domain + "/";
-            }
-            return domain + key;
-        };
-
-        /**
-         * invoke the imageView2 api of Qiniu
-         * @param  {Object} api params
-         * @param  {String} key of file
-         * @return {String} url of processed image
-         */
-        this.imageView2 = function(op, key) {
-            if (!/^\d$/.test(op.mode)) {
-                return false;
-            }
-
-            var mode = op.mode,
-                w = op.w || "",
-                h = op.h || "",
-                q = op.q || "",
-                format = op.format || "";
-
-            if (!w && !h) {
-                return false;
-            }
-
-            var imageUrl = "imageView2/" + mode;
-            imageUrl += w ? "/w/" + w : "";
-            imageUrl += h ? "/h/" + h : "";
-            imageUrl += q ? "/q/" + q : "";
-            imageUrl += format ? "/format/" + format : "";
-            if (key) {
-                imageUrl = this.getUrl(key) + "?" + imageUrl;
-            }
-            return imageUrl;
-        };
-
-        /**
-         * invoke the imageMogr2 api of Qiniu
-         * @param  {Object} api params
-         * @param  {String} key of file
-         * @return {String} url of processed image
-         */
-        this.imageMogr2 = function(op, key) {
-            var auto_orient = op["auto-orient"] || "",
-                thumbnail = op.thumbnail || "",
-                strip = op.strip || "",
-                gravity = op.gravity || "",
-                crop = op.crop || "",
-                quality = op.quality || "",
-                rotate = op.rotate || "",
-                format = op.format || "",
-                blur = op.blur || "";
-            //Todo check option
-
-            var imageUrl = "imageMogr2";
-
-            imageUrl += auto_orient ? "/auto-orient" : "";
-            imageUrl += thumbnail ? "/thumbnail/" + thumbnail : "";
-            imageUrl += strip ? "/strip" : "";
-            imageUrl += gravity ? "/gravity/" + gravity : "";
-            imageUrl += quality ? "/quality/" + quality : "";
-            imageUrl += crop ? "/crop/" + crop : "";
-            imageUrl += rotate ? "/rotate/" + rotate : "";
-            imageUrl += format ? "/format/" + format : "";
-            imageUrl += blur ? "/blur/" + blur : "";
-
-            if (key) {
-                imageUrl = this.getUrl(key) + "?" + imageUrl;
-            }
-            return imageUrl;
-        };
-
-        /**
-         * invoke the watermark api of Qiniu
-         * @param  {Object} api params
-         * @param  {String} key of file
-         * @return {String} url of processed image
-         */
-        this.watermark = function(op, key) {
-            var mode = op.mode;
-            if (!mode) {
-                return false;
-            }
-
-            var imageUrl = "watermark/" + mode;
-
-            if (mode === 1) {
-                var image = op.image || "";
-                if (!image) {
-                    return false;
-                }
-                imageUrl += image
-                    ? "/image/" + this.URLSafeBase64Encode(image)
-                    : "";
-            } else if (mode === 2) {
-                var text = op.text ? op.text : "",
-                    font = op.font ? op.font : "",
-                    fontsize = op.fontsize ? op.fontsize : "",
-                    fill = op.fill ? op.fill : "";
-                if (!text) {
-                    return false;
-                }
-                imageUrl += text
-                    ? "/text/" + this.URLSafeBase64Encode(text)
-                    : "";
-                imageUrl += font
-                    ? "/font/" + this.URLSafeBase64Encode(font)
-                    : "";
-                imageUrl += fontsize ? "/fontsize/" + fontsize : "";
-                imageUrl += fill
-                    ? "/fill/" + this.URLSafeBase64Encode(fill)
-                    : "";
-            } else {
-                // Todo mode3
-                return false;
-            }
-
-            var dissolve = op.dissolve || "",
-                gravity = op.gravity || "",
-                dx = op.dx || "",
-                dy = op.dy || "";
-
-            imageUrl += dissolve ? "/dissolve/" + dissolve : "";
-            imageUrl += gravity ? "/gravity/" + gravity : "";
-            imageUrl += dx ? "/dx/" + dx : "";
-            imageUrl += dy ? "/dy/" + dy : "";
-
-            if (key) {
-                imageUrl = this.getUrl(key) + "?" + imageUrl;
-            }
-            return imageUrl;
-        };
-
-        /**
-         * invoke the imageInfo api of Qiniu
-         * @param  {String} key of file
-         * @return {Object} image info
-         */
-        this.imageInfo = function(key) {
-            if (!key) {
-                return false;
-            }
-            var url = this.getUrl(key) + "?imageInfo";
-            var xhr = this.createAjax();
-            var info;
-            var that = this;
-            xhr.open("GET", url, false);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    info = that.parseJSON(xhr.responseText);
-                }
-            };
-            xhr.send();
-            return info;
-        };
-
-        /**
-         * invoke the exif api of Qiniu
-         * @param  {String} key of file
-         * @return {Object} image exif
-         */
-        this.exif = function(key) {
-            if (!key) {
-                return false;
-            }
-            var url = this.getUrl(key) + "?exif";
-            var xhr = this.createAjax();
-            var info;
-            var that = this;
-            xhr.open("GET", url, false);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    info = that.parseJSON(xhr.responseText);
-                }
-            };
-            xhr.send();
-            return info;
-        };
-
-        /**
-         * invoke the exif or imageInfo api of Qiniu
-         * according with type param
-         * @param  {String} ['exif'|'imageInfo']type of info
-         * @param  {String} key of file
-         * @return {Object} image exif or info
-         */
-        this.get = function(type, key) {
-            if (!key || !type) {
-                return false;
-            }
-            if (type === "exif") {
-                return this.exif(key);
-            } else if (type === "imageInfo") {
-                return this.imageInfo(key);
-            }
-            return false;
-        };
-
-        /**
-         * invoke api of Qiniu like a pipeline
-         * @param  {Array of Object} params of a series api call
-         * each object in array is options of api which name is set as 'fop' property
-         * each api's output will be next api's input
-         * @param  {String} key of file
-         * @return {String|Boolean} url of processed image
-         */
-        this.pipeline = function(arr, key) {
-            var isArray =
-                Object.prototype.toString.call(arr) === "[object Array]";
-            var option,
-                errOp,
-                imageUrl = "";
-            if (isArray) {
-                for (var i = 0, len = arr.length; i < len; i++) {
-                    option = arr[i];
-                    if (!option.fop) {
-                        return false;
-                    }
-                    switch (option.fop) {
-                        case "watermark":
-                            imageUrl += this.watermark(option) + "|";
-                            break;
-                        case "imageView2":
-                            imageUrl += this.imageView2(option) + "|";
-                            break;
-                        case "imageMogr2":
-                            imageUrl += this.imageMogr2(option) + "|";
-                            break;
-                        default:
-                            errOp = true;
-                            break;
-                    }
-                    if (errOp) {
-                        return false;
-                    }
-                }
-                if (key) {
-                    imageUrl = this.getUrl(key) + "?" + imageUrl;
-                    var length = imageUrl.length;
-                    if (imageUrl.slice(length - 1) === "|") {
-                        imageUrl = imageUrl.slice(0, length - 1);
-                    }
-                }
-                return imageUrl;
-            }
-            return false;
-        };
     }
 
     var Qiniu = new QiniuJsSDK();

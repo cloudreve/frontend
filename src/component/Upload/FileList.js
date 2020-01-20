@@ -113,14 +113,15 @@ class FileList extends Component {
         var fileID = filesNow.findIndex(f => {
             return f.id === file.id;
         });
-        console.log(file.status);
-        if (!file.errMsg) {
+        if (!file.errMsg || file.ignoreMsg) {
             if (filesNow[fileID] && filesNow[fileID].status !== 4) {
                 filesNow[fileID] = file;
                 this.setState({
                     files: filesNow
                 });
             }
+        }else{
+            file.ignoreMsg = true;
         }
     }
 
