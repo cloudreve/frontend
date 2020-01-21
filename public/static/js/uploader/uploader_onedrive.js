@@ -1068,12 +1068,29 @@ function getCookieByString(cookieName) {
                         }
                     }
 
-                    up.setOption({
-                        url: qiniuUploadUrl,
-                        multipart: false,
-                        send_file_name: false,
-                        chunk_size: op.max_file_size
-                    });
+                    if (file.size > 4*1024*1024){
+                        up.setOption({
+                            url: qiniuUploadUrl,
+                            multipart: false,
+                            send_file_name: false,
+                            chunk_size: op.max_file_size,
+
+                        });
+                    }else{
+                        up.setOption({
+                            http_method: "post",
+                            url: qiniuUploadUrl,
+                            multipart: false,
+                            send_file_name: false,
+                            headers: {
+                                "X-Path": encodeURIComponent(file.path),
+                                "X-FileName": encodeURIComponent(
+                                    getFileKey(up, file, func)
+                                )
+                            },
+                        });
+                    }
+
                 };
 
                 // detect is weixin or qq inner browser
@@ -1108,7 +1125,7 @@ function getCookieByString(cookieName) {
                         chunk_size
                     ) {
                         if (
-                            file.size < chunk_size ||
+                            file.size < 4*1024*1024 ||
                             is_android_weixin_or_qq()
                         ) {
                             logger.debug(

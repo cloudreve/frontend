@@ -1682,7 +1682,7 @@
                             uploadConfig.saveType === "local" ||
                             uploadConfig.saveType === "remote" ||
                             uploadConfig.saveType === "oss" ||
-							(uploadConfig.saveType === "onedrive" && file.size <= up.settings.chunk_size)
+							(uploadConfig.saveType === "onedrive" && file.size <= 4*1024*1024)
                         ) {
                             var res = JSON.parse(xhr.responseText);
                             if (res.code !== 0) {

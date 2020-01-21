@@ -114,8 +114,8 @@ class UploaderComponent extends Component {
                             }
                             console.log("UploadComplete",file[0].status,file[0]);
                             for (var i = 0; i < file.length; i++) {
-                                if (file[0].status === 5) {
-                                    window.fileList["setComplete"](file[0]);
+                                if (file[i].status === 5) {
+                                    window.fileList["setComplete"](file[i]);
                                 }
                             }
                             // 无异步操作的策略，直接刷新
