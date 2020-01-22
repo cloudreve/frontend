@@ -2,22 +2,22 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { connect } from "react-redux";
-import VideoIcon from "@material-ui/icons/VideoLibrary";
-import MusicIcon from "@material-ui/icons/LibraryMusic";
-import ImageIcon from "@material-ui/icons/Collections";
+import VideoIcon from "@material-ui/icons/VideoLibraryOutlined";
+import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
+import ImageIcon from "@material-ui/icons/CollectionsOutlined";
 import AddIcon from "@material-ui/icons/Add";
-import DocIcon from "@material-ui/icons/FileCopy";
-import ShareIcon from "@material-ui/icons/Share";
+import DocIcon from "@material-ui/icons/FileCopyOutlined";
+import ShareIcon from "@material-ui/icons/ShareOutlined";
 import BackIcon from "@material-ui/icons/ArrowBack";
-import SdStorage from "@material-ui/icons/SdStorage";
+import SdStorage from "@material-ui/icons/SdStorageOutlined";
 import OpenIcon from "@material-ui/icons/OpenInNew";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
+import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
 import OpenFolderIcon from "@material-ui/icons/FolderOpen";
 import RenameIcon from "@material-ui/icons/BorderColor";
 import MoveIcon from "@material-ui/icons/Input";
 import DeleteIcon from "@material-ui/icons/Delete";
 import UploadIcon from "@material-ui/icons/CloudUpload";
-import FolderShared from "@material-ui/icons/FolderShared";
+import FolderShared from "@material-ui/icons/FolderSharedOutlined";
 import SaveIcon from "@material-ui/icons/Save";
 import MenuIcon from "@material-ui/icons/Menu";
 import { isPreviewable } from "../../config";
@@ -892,7 +892,7 @@ class NavbarCompoment extends Component {
                                     {!pathHelper.isSharePage(
                                         this.props.location.pathname
                                     ) && (
-                                        <div>
+                                        <div style={{display:"flex"}}>
                                             {!pathHelper.isMobile() && (
                                                 <Grow
                                                     in={

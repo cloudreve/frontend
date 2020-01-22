@@ -14,7 +14,7 @@ const styles = theme => ({
         "&:hover": {},
         backgroundColor:
             theme.palette.type == "dark"
-                ? "#fff"
+                ? theme.palette.background.paper
                 : lighten(theme.palette.primary.main,0.8),
     },
 
@@ -33,7 +33,7 @@ const styles = theme => ({
         verticalAlign: "middle",
     },
     folderNameSelected: {
-        color: theme.palette.type == "dark" ? "#fff" : theme.palette.primary.dark,
+        color: theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
         fontWeight: "500",
         userSelect: "none"
     },
@@ -42,7 +42,8 @@ const styles = theme => ({
         userSelect: "none"
     },
     folderName: {
-        marginRight: "20px"
+        marginRight: "20px",
+        display: "flex",
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
