@@ -6,7 +6,6 @@ import AlertBar from "./component/Snackbar";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import {
-    BrowserRouter as Router,
     Route,
     Switch,
     useRouteMatch
@@ -16,6 +15,7 @@ import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import PageLoading from "./component/Placeholder/PageLoading.js"
 import TextViewer from "./component/Viewer/Text";
 import DocViewer from "./component/Viewer/Doc";
+import SharePreload from "./component/Share/SharePreload";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -71,24 +71,29 @@ export default function App() {
                                		<FileManager/>
 								</Suspense>
                             </AuthRoute>
-                            <Route path={`${path}video/*`}>
+                            <AuthRoute path={`${path}video/*`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <VideoPreview />
                                 </Suspense>
-                            </Route>
-                            <Route path={`${path}text/*`}>
+                            </AuthRoute>
+                            <AuthRoute path={`${path}text/*`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <TextViewer />
                                 </Suspense>
-                            </Route>
-                            <Route path={`${path}doc/*`}>
+                            </AuthRoute>
+                            <AuthRoute path={`${path}doc/*`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <DocViewer />
                                 </Suspense>
-                            </Route>
+                            </AuthRoute>
                             <Route path={`${path}login`}>
-                                <Suspense fallback={<div>Loading...</div>}>
+                                <Suspense fallback={<PageLoading/>}>
                                     <LoginForm />
+                                </Suspense>
+                            </Route>
+                            <Route path={`${path}s/:id`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <SharePreload />
                                 </Suspense>
                             </Route>
                         </Switch>

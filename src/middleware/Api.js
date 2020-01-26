@@ -13,21 +13,29 @@ const instance = axios.create({
     crossDomain: true
 });
 
+function AppError(message,code) {
+    this.code = code;
+    this.message = message || '未知错误';
+    this.stack = (new Error()).stack;
+}
+AppError.prototype = Object.create(Error.prototype);
+AppError.prototype.constructor = AppError;
+
 instance.interceptors.response.use(
     function(response) {
         response.rawData = response.data;
         response.data = response.data.data;
         if (
             response.rawData.code !== undefined &&
-            response.rawData.code != 0 &&
-            response.rawData.code != 203
+            response.rawData.code !== 0 &&
+            response.rawData.code !== 203
         ) {
             // 登录过期
-            if (response.rawData.code == 401) {
+            if (response.rawData.code === 401) {
                 Auth.signout();
                 window.location.href = "#/Login";
             }
-            throw new Error(response.rawData.msg);
+            throw new AppError(response.rawData.msg,response.rawData.code);
         }
         return response;
     },

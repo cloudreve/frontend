@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import FileIcon from "../component/FileManager/FileIcon"
+import FileIcon from "../FileManager/FileIcon"
 import PreviewIcon from "@material-ui/icons/RemoveRedEye"
 import InfoIcon from "@material-ui/icons/Info"
 import DownloadIcon from "@material-ui/icons/CloudDownload"
-import {allowSharePreview,sizeToString} from "../untils/index"
-import { toggleSnackbar,}from "../actions/index"
-import { isPreviewable,}from "../config"
-import Modals from "./FileManager/Modals"
+import {allowSharePreview,sizeToString} from "../../untils"
+import { toggleSnackbar,}from "../../actions"
+import { isPreviewable,}from "../../config"
+import Modals from "../FileManager/Modals"
 import axios from 'axios'
 import { withStyles, Button, Popper, Typography, Fade, Paper } from '@material-ui/core';
 const styles = theme => ({

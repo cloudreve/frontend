@@ -558,36 +558,36 @@ class NavbarCompoment extends Component {
                         </ListItem>
                     </div>
                 )}
-                {pathHelper.isSharePage(this.props.location.pathname) && (
-                    <div className={classes.stickFooter}>
-                        <Divider />
-                        <a
-                            className={classes.shareInfoContainer}
-                            href={"/Profile/" + window.shareInfo.ownerUid}
-                        >
-                            <Avatar
-                                src={
-                                    "/Member/Avatar/" +
-                                    window.shareInfo.ownerUid +
-                                    "/l"
-                                }
-                                className={classes.shareAvatar}
-                            />
-                            <div className={classes.ownerInfo}>
-                                <Typography noWrap>
-                                    {window.shareInfo.ownerNick}
-                                </Typography>
-                                <Typography
-                                    noWrap
-                                    variant="caption"
-                                    color="textSecondary"
-                                >
-                                    分享于{window.shareInfo.shareDate}
-                                </Typography>
-                            </div>
-                        </a>
-                    </div>
-                )}
+                {/*{pathHelper.isSharePage(this.props.location.pathname) && (*/}
+                {/*    <div className={classes.stickFooter}>*/}
+                {/*        <Divider />*/}
+                {/*        <a*/}
+                {/*            className={classes.shareInfoContainer}*/}
+                {/*            href={"/Profile/" + window.shareInfo.ownerUid}*/}
+                {/*        >*/}
+                {/*            <Avatar*/}
+                {/*                src={*/}
+                {/*                    "/Member/Avatar/" +*/}
+                {/*                    window.shareInfo.ownerUid +*/}
+                {/*                    "/l"*/}
+                {/*                }*/}
+                {/*                className={classes.shareAvatar}*/}
+                {/*            />*/}
+                {/*            <div className={classes.ownerInfo}>*/}
+                {/*                <Typography noWrap>*/}
+                {/*                    {window.shareInfo.ownerNick}*/}
+                {/*                </Typography>*/}
+                {/*                <Typography*/}
+                {/*                    noWrap*/}
+                {/*                    variant="caption"*/}
+                {/*                    color="textSecondary"*/}
+                {/*                >*/}
+                {/*                    分享于{window.shareInfo.shareDate}*/}
+                {/*                </Typography>*/}
+                {/*            </div>*/}
+                {/*        </a>*/}
+                {/*    </div>*/}
+                {/*)}*/}
             </div>
         );
         const iOS =
@@ -609,10 +609,7 @@ class NavbarCompoment extends Component {
                             !(!this.props.isMultiple && this.props.withFile)) ||
                             !pathHelper.isHomePage(
                                 this.props.location.pathname
-                            )) &&
-                            !pathHelper.isSharePage(
-                                this.props.location.pathname
-                            ) && (
+                            ))&& (
                                 <IconButton
                                     color="inherit"
                                     aria-label="Open drawer"
@@ -626,10 +623,7 @@ class NavbarCompoment extends Component {
                             !(!this.props.isMultiple && this.props.withFile)) ||
                             !pathHelper.isHomePage(
                                 this.props.location.pathname
-                            )) &&
-                            !pathHelper.isSharePage(
-                                this.props.location.pathname
-                            ) && (
+                            )) && (
                                 <IconButton
                                     color="inherit"
                                     aria-label="Open drawer"
