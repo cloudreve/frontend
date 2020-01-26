@@ -119,7 +119,7 @@ class UploaderComponent extends Component {
                                 }
                             }
                             // 无异步操作的策略，直接刷新
-                            if (user.policy.saveType !== "onedrive"){
+                            if (user.policy.saveType !== "onedrive" && user.policy.saveType !== "cos"){
                                 this.props.refreshFileList();
                                 this.props.refreshStorage();
                             }

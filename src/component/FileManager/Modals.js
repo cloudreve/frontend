@@ -28,6 +28,7 @@ import {
 } from "@material-ui/core";
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
+import CreatShare from "../Modals/CreateShare";
 
 const styles = theme => ({
     wrapper: {
@@ -45,10 +46,6 @@ const styles = theme => ({
     contentFix: {
         padding: "10px 24px 0px 24px"
     },
-    shareUrl: {
-        minWidth: "400px"
-    },
-    widthAnimation: {}
 });
 
 const mapStateToProps = state => {
@@ -894,89 +891,15 @@ class ModalsCompoment extends Component {
                         </div>
                     </DialogActions>
                 </Dialog>
-                <Dialog
+
+                <CreatShare
                     open={this.props.modalsStatus.share}
                     onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                    className={classes.widthAnimation}
-                >
-                    <DialogTitle id="form-dialog-title">
-                        创建分享链接
-                    </DialogTitle>
+                    modalsLoading={this.props.modalsLoading}
+                    setModalsLoading = {this.props.setModalsLoading}
+                    selected={this.props.selected}
+                />
 
-                    <DialogContent>
-                        <DialogContentText>
-                            获取用于共享的链接
-                        </DialogContentText>
-                        {this.state.shareUrl === "" && (
-                            <form onSubmit={this.submitShare}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={this.state.secretShare}
-                                            onChange={this.handleChange(
-                                                "secretShare"
-                                            )}
-                                            name="secretShare"
-                                            value="false"
-                                        />
-                                    }
-                                    label="使用密码保护链接"
-                                />
-                                {this.state.secretShare && (
-                                    <FormControl margin="nonw" fullWidth>
-                                        <TextField
-                                            id="sharePwd"
-                                            onChange={this.handleInputChange}
-                                            label="分享密码"
-                                            type="password"
-                                            margin="none"
-                                            autoFocus
-                                            value={this.state.sharePwd}
-                                            required
-                                        />
-                                    </FormControl>
-                                )}
-                            </form>
-                        )}
-                        {this.state.shareUrl !== "" && (
-                            <TextField
-                                id="shareUrl"
-                                label="分享链接"
-                                autoFocus
-                                fullWidth
-                                className={classes.shareUrl}
-                                value={this.state.shareUrl}
-                            />
-                        )}
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.onClose}>
-                            {this.state.shareUrl === "" ? "取消" : "关闭"}
-                        </Button>
-                        {this.state.shareUrl === "" && (
-                            <div className={classes.wrapper}>
-                                <Button
-                                    onClick={this.submitShare}
-                                    color="primary"
-                                    disabled={
-                                        this.props.modalsLoading ||
-                                        (this.state.secretShare &&
-                                            this.state.sharePwd === "")
-                                    }
-                                >
-                                    确定
-                                    {this.props.modalsLoading && (
-                                        <CircularProgress
-                                            size={24}
-                                            className={classes.buttonProgress}
-                                        />
-                                    )}
-                                </Button>
-                            </div>
-                        )}
-                    </DialogActions>
-                </Dialog>
                 <Dialog
                     open={this.props.modalsStatus.music}
                     onClose={this.onClose}
@@ -1023,7 +946,7 @@ class ModalsCompoment extends Component {
                                 id="downloadURL"
                                 onChange={this.handleInputChange}
                                 placeholder="输入文件下载地址，支持 HTTP(s)/FTP/磁力链"
-                            ></TextField>
+                            />
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
