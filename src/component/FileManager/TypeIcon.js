@@ -102,12 +102,12 @@ const TypeIcon = props => {
         <>
             {props.isUpload && (
                 <Avatar
+                    className={props.className}
                     style={{
                         backgroundColor: color
                     }}
                 >
                     <IconComponent
-                        className={props.className}
                         style={{
                             color: theme.palette.background.paper,
                         }}
