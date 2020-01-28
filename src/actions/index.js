@@ -152,7 +152,15 @@ export const applyThemes = (theme)=>{
         type:'APPLY_THEME',
         theme:theme,
     };
-}
+};
+
+export const setSessionStatus = (status)=>{
+    return {
+        type:'SET_SESSION_STATUS',
+        theme:status,
+    };
+};
+
 
 export const openMusicDialog = () => {
     return {

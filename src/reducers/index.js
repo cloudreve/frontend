@@ -384,6 +384,12 @@ const cloudreveApp = (state = [], action) => {
                     modalsLoading:action.status,
                 }),
             });
+        case 'SET_SESSION_STATUS':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    isLogin:action.status,
+                }),
+            });
         case 'ENABLE_LOAD_UPLOADER':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {

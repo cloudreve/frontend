@@ -44,7 +44,8 @@ export default function SharePreload() {
         } else {
             SetSubTitle();
         }
-    }, [share]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [share,SetSubTitle,ToggleSnackbar]);
 
     useEffect(() => {
         setLoading(true);
@@ -65,7 +66,7 @@ export default function SharePreload() {
                     ToggleSnackbar("top", "right", error.message, "error");
                 }
             });
-    }, [id, password]);
+    }, [id, password,ToggleSnackbar]);
 
     return (
         <Suspense fallback={<PageLoading />}>

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core";
-import { toggleSnackbar, applyThemes } from "../../actions/index";
+import {toggleSnackbar, applyThemes, setSessionStatus} from "../../actions/index";
 import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
@@ -88,6 +88,9 @@ function LoginForm() {
         [dispatch]
     );
     const ApplyThemes = useCallback(theme => dispatch(applyThemes(theme)), [
+        dispatch
+    ]);
+    const SetSessionStatus = useCallback(status => dispatch(setSessionStatus(status)), [
         dispatch
     ]);
 
@@ -273,6 +276,9 @@ function LoginForm() {
                     ApplyThemes(response.data["preferred_theme"]);
                 }
                 enableUploaderLoad();
+
+                // 设置登录状态
+                SetSessionStatus(true);
 
                 history.push("/home");
                 ToggleSnackbar("top", "right", "登录成功", "success");

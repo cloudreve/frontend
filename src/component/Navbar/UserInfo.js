@@ -9,7 +9,9 @@ import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher"
 
 const mapStateToProps = state => {
-    return {};
+    return {
+        isLogin:state.viewUpdate.isLogin,
+    };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -93,8 +95,8 @@ class UserInfoCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-        const isLogin = Auth.Check();
-        const user = Auth.GetUser();
+        const isLogin = Auth.Check(this.props.isLogin);
+        const user = Auth.GetUser(this.props.isLogin);
 
         return (
             <div className={classes.userNav}>
@@ -127,7 +129,7 @@ class UserInfoCompoment extends Component {
                         component="h2"
                         noWrap
                     >
-                        {user.nickname}
+                        {isLogin?user.nickname:"未登录"}
                     </Typography>
                     <Typography
                         className={classes.groupName}
@@ -135,7 +137,7 @@ class UserInfoCompoment extends Component {
                         color="textSecondary"
                         noWrap
                     >
-                        {user.group.name}
+                        {isLogin?user.group.name:"游客"}
                     </Typography>
                 </div>
             </div>

@@ -60,6 +60,7 @@ const defaultStatus = InitSiteConfig({
         refresh: true
     },
     viewUpdate: {
+        isLogin:false,
         loadUploader:false,
         open: false,
         explorerViewMethod: "icon",

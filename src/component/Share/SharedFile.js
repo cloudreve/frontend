@@ -20,6 +20,9 @@ import {
 } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TypeIcon from "../FileManager/TypeIcon";
+import Auth from "../../middleware/Auth";
+import PurchaseShareDialog from "../Modals/PurchaseShare";
+import API from "../../middleware/Api";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -35,7 +38,7 @@ const styles = theme => ({
         [theme.breakpoints.down("sm")]: {
             marginTop: 0,
             marginLeft: 0,
-            marginRight: 0,
+            marginRight: 0
         },
         justifyContent: "center",
         display: "flex"
@@ -58,7 +61,7 @@ const styles = theme => ({
     },
     icon: {
         borderRadius: "10%",
-        marginTop:2,
+        marginTop: 2
     },
 
     box: {
@@ -70,10 +73,10 @@ const styles = theme => ({
         [theme.breakpoints.down("sm")]: {
             height: "calc(100vh - 56px)",
             borderRadius: 0,
-            maxWidth: 1000,
+            maxWidth: 1000
         },
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "column"
     },
     boxHeader: {
         textAlign: "center",
@@ -95,23 +98,23 @@ const styles = theme => ({
     boxContent: {
         padding: 24,
         display: "flex",
-        flex: "1",
+        flex: "1"
     },
     fileName: {
-        marginLeft: 20,
+        marginLeft: 20
     },
-    fileSize:{
+    fileSize: {
         color: theme.palette.text.disabled,
         fontSize: 14
     },
-    boxFooter:{
-        display:"flex",
+    boxFooter: {
+        display: "flex",
         padding: "20px 16px",
-        justifyContent: "space-between",
+        justifyContent: "space-between"
     },
-    downloadButton:{
-        marginLeft:8,
-    },
+    downloadButton: {
+        marginLeft: 8
+    }
 });
 const mapStateToProps = state => {
     return {};
@@ -125,24 +128,17 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-const allowDownload = allowSharePreview();
-
 class SharedFileCompoment extends Component {
     state = {
         anchorEl: null,
-        open: false
+        open: false,
+        purchaseCallback: null,
+        loading:false,
     };
 
+    downloaded = false;
+
     preview = () => {
-        if (!allowDownload) {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "未登录用户无法下载",
-                "warning"
-            );
-            return;
-        }
         switch (isPreviewable(this.props.share.source.name)) {
             case "img":
                 window.open(window.apiURL.preview);
@@ -181,40 +177,49 @@ class SharedFileCompoment extends Component {
         }
     };
 
-    download = () => {
-        if (!allowDownload) {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "未登录用户无法下载",
-                "warning"
-            );
-            return;
+    scoreHandle = callback => event => {
+        if (this.props.share.score > 0) {
+            if (!Auth.Check()) {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "登录后才能继续操作",
+                    "warning"
+                );
+                return;
+            }
+            if (!Auth.GetUser().group.shareFree && !this.downloaded) {
+                this.setState({
+                    purchaseCallback:()=>{
+                        this.setState({
+                            purchaseCallback:null,
+                        });
+                        callback(event);
+                    },
+                });
+                return;
+            }
         }
-        axios
-            .post("/Share/getDownloadUrl", {
-                key: window.shareInfo.shareId
-            })
+        callback(event);
+    };
+
+    download = e => {
+        this.setState({loading:true});
+        API.post("/share/download/" + this.props.share.key)
             .then(response => {
-                if (response.data.error !== 0) {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "warning"
-                    );
-                } else {
-                    window.location.href = response.data.result;
-                }
+                this.downloaded = true;
+                window.location.assign(response.data);
             })
             .catch(error => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
                     error.message,
-                    "error"
+                    "warning"
                 );
-            });
+            }).finally(()=>{
+                this.setState({loading:false});
+        });
     };
 
     handleOpen = event => {
@@ -240,6 +245,8 @@ class SharedFileCompoment extends Component {
 
     render() {
         const { classes } = this.props;
+        const user = Auth.GetUser();
+        const isLogin = Auth.Check();
         const file = {
             name: this.props.share.source.name,
             path: "/",
@@ -251,6 +258,11 @@ class SharedFileCompoment extends Component {
         return (
             <div className={classes.layout}>
                 <Modals />
+                <PurchaseShareDialog
+                    callback={this.state.purchaseCallback}
+                    score={this.props.share.score}
+                    onClose={() => this.setState({purchaseCallback:null})}
+                />
                 <div className={classes.box}>
                     <div className={classes.boxHeader}>
                         <Avatar
@@ -265,8 +277,8 @@ class SharedFileCompoment extends Component {
                             {this.props.share.creator.nick} 向您分享了 1 个文件
                         </Typography>
                         <Typography className={classes.shareInfo}>
-                            {this.props.share.views} 次浏览 • {this.props.share.downloads} 次下载
-                           •{" "}
+                            {this.props.share.views} 次浏览 •{" "}
+                            {this.props.share.downloads} 次下载 •{" "}
                             {this.getSecondDes()}
                         </Typography>
                     </div>
@@ -286,7 +298,7 @@ class SharedFileCompoment extends Component {
                             </Typography>
                         </div>
                     </div>
-                    <Divider/>
+                    <Divider />
                     <div className={classes.boxFooter}>
                         <div className={classes.actionLeft}>
                             <Button color="secondary">保存到我的文件</Button>
@@ -296,6 +308,7 @@ class SharedFileCompoment extends Component {
                                 variant="outlined"
                                 color="secondary"
                                 onClick={this.download}
+                                disabled={this.state.loading}
                             >
                                 预览
                             </Button>
@@ -303,9 +316,17 @@ class SharedFileCompoment extends Component {
                                 variant="contained"
                                 color="secondary"
                                 className={classes.downloadButton}
-                                onClick={this.download}
+                                onClick={this.scoreHandle(this.download)}
+                                disabled={this.state.loading}
                             >
-                              下载
+                                下载
+                                {this.props.share.score > 0 &&
+                                    (!isLogin || !user.group.shareFree) &&
+                                    " (" + this.props.share.score + "积分)"}
+                                {this.props.share.score > 0 &&
+                                    isLogin &&
+                                    user.group.shareFree &&
+                                    " (免积分)"}
                             </Button>
                         </div>
                     </div>

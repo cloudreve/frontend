@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import {
     Checkbox,
     FormControl,
-    FormControlLabel,
     makeStyles,
     TextField
 } from "@material-ui/core";
@@ -12,15 +11,11 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    DialogContentText,
     CircularProgress
 } from "@material-ui/core";
 import {
     toggleSnackbar,
-    setModalsLoading,
-    refreshFileList
 } from "../../actions/index";
-import PathSelector from "../FileManager/PathSelector";
 import { useDispatch, useSelector } from "react-redux";
 import API from "../../middleware/Api";
 import List from "@material-ui/core/List";
