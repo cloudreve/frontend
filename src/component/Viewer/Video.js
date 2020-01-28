@@ -1,11 +1,12 @@
-import React, {useCallback, useEffect} from "react";
+import React, { useCallback, useEffect } from "react";
 import DPlayer from "react-dplayer";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router";
+import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
-import {useDispatch} from "react-redux";
-import {changeSubTitle} from "../../actions";
+import { useDispatch } from "react-redux";
+import { changeSubTitle } from "../../actions";
+import pathHelper from "../../untils/page";
 
 const useStyles = makeStyles(theme => ({
     layout: {
@@ -18,24 +19,34 @@ const useStyles = makeStyles(theme => ({
             marginLeft: "auto",
             marginRight: "auto"
         },
-        marginBottom:50,
+        marginBottom: 50
     },
     player: {
         borderRadius: "4px"
     }
 }));
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 export default function VideoViewer(props) {
     const math = useRouteMatch();
+    let location = useLocation();
+    let query = useQuery();
+    let { id } = useParams();
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(
-        title=>dispatch(changeSubTitle(title)),
-        [dispatch]
-    );
-    useEffect(()=>{
-        let path = math.params[0].split("/");
-        SetSubTitle(path[path.length - 1]);
-    },[math.params[0]]);
+    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
+        dispatch
+    ]);
+    useEffect(() => {
+        if (!pathHelper.isSharePage(location.pathname)) {
+            let path = math.params[0].split("/");
+            SetSubTitle(path[path.length - 1]);
+        } else {
+            SetSubTitle(query.get("name"));
+        }
+    }, [math.params[0], location]);
 
     const classes = useStyles();
     return (
@@ -44,7 +55,13 @@ export default function VideoViewer(props) {
                 <DPlayer
                     className={classes.player}
                     options={{
-                        video: {url: getBaseURL() + "/file/preview/" + math.params[0]},
+                        video: {
+                            url:
+                                getBaseURL() +
+                                (pathHelper.isSharePage(location.pathname)
+                                    ? "/share/preview/" + id
+                                    : "/file/preview/" + math.params[0])
+                        }
                     }}
                 />
             </Paper>

@@ -29,6 +29,8 @@ import {
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
+import {withRouter} from "react-router-dom";
+import pathHelper from "../../untils/page";
 
 const styles = theme => ({
     wrapper: {
@@ -913,6 +915,10 @@ class ModalsCompoment extends Component {
                                 <audio
                                     controls
                                     src={
+                                        pathHelper.isSharePage(this.props.location.pathname)?
+                                            baseURL +
+                                            "/share/preview/" + this.props.selected[0].key
+                                            :
                                         baseURL +
                                         "/file/preview" +
                                         (this.props.selected[0].path === "/"
@@ -1063,6 +1069,6 @@ ModalsCompoment.propTypes = {
 const Modals = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(ModalsCompoment));
+)(withStyles(styles)(withRouter(ModalsCompoment)));
 
 export default Modals;

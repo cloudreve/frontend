@@ -53,7 +53,7 @@ export default function SharePreload() {
         if (password !== "") {
             withPassword = "?password=" + password;
         }
-        API.get("/share/" + id + withPassword)
+        API.get("/share/info/" + id + withPassword)
             .then(response => {
                 setShare(response.data);
                 setLoading(false);

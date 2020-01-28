@@ -24,6 +24,7 @@ const VideoPreview = React.lazy(() => import ("./component/Viewer/Video.js" ));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
+    const isLogin = useSelector(state => state.viewUpdate.isLogin);
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
     const theme = React.useMemo(
@@ -63,25 +64,25 @@ export default function App() {
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                         <Switch>
-                            <AuthRoute exact path={path}>
+                            <AuthRoute exact path={path} isLogin={isLogin}>
                                 我是私有页面
                             </AuthRoute>
-							<AuthRoute path={`${path}home`}>
+							<AuthRoute path={`${path}home`} isLogin={isLogin}>
 								<Suspense fallback={<PageLoading/>}>
                                		<FileManager/>
 								</Suspense>
                             </AuthRoute>
-                            <AuthRoute path={`${path}video/*`}>
+                            <AuthRoute path={`${path}video/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <VideoPreview />
                                 </Suspense>
                             </AuthRoute>
-                            <AuthRoute path={`${path}text/*`}>
+                            <AuthRoute path={`${path}text/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <TextViewer />
                                 </Suspense>
                             </AuthRoute>
-                            <AuthRoute path={`${path}doc/*`}>
+                            <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <DocViewer />
                                 </Suspense>
@@ -91,9 +92,14 @@ export default function App() {
                                     <LoginForm />
                                 </Suspense>
                             </Route>
-                            <Route path={`${path}s/:id`}>
+                            <Route exact path={`${path}s/:id`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <SharePreload />
+                                </Suspense>
+                            </Route>
+                            <Route path={`${path}s/:id/video(/)*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <VideoPreview />
                                 </Suspense>
                             </Route>
                         </Switch>

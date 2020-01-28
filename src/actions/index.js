@@ -157,7 +157,7 @@ export const applyThemes = (theme)=>{
 export const setSessionStatus = (status)=>{
     return {
         type:'SET_SESSION_STATUS',
-        theme:status,
+        status:status,
     };
 };
 

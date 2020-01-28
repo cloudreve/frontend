@@ -80,6 +80,12 @@ class UserAvatarPopoverCompoment extends Component {
     sigOut = e => {
         API.delete("/user/session/")
             .then(response => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "您已退出登录",
+                    "success"
+                );
                 Auth.signout();
                 this.props.setSessionStatus(false);
             })

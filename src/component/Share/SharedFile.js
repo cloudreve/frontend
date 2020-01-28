@@ -5,17 +5,12 @@ import PreviewIcon from "@material-ui/icons/RemoveRedEye";
 import InfoIcon from "@material-ui/icons/Info";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { allowSharePreview, sizeToString } from "../../untils";
-import { toggleSnackbar } from "../../actions";
+import {openMusicDialog, setSelectedTarget, toggleSnackbar} from "../../actions";
 import { isPreviewable } from "../../config";
-import Modals from "../FileManager/Modals";
-import axios from "axios";
 import {
     withStyles,
     Button,
-    Popper,
     Typography,
-    Fade,
-    Paper,
     Avatar
 } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
@@ -23,6 +18,7 @@ import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
 import PurchaseShareDialog from "../Modals/PurchaseShare";
 import API from "../../middleware/Api";
+import {withRouter} from "react-router-dom";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -124,9 +120,18 @@ const mapDispatchToProps = dispatch => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
+        openMusicDialog:()=>{
+            dispatch(openMusicDialog());
+        },
+        setSelectedTarget: targets => {
+            dispatch(setSelectedTarget(targets));
+        },
     };
 };
+
+const Modals = React.lazy(() => import("../FileManager/Modals"));
+
 
 class SharedFileCompoment extends Component {
     state = {
@@ -147,17 +152,17 @@ class SharedFileCompoment extends Component {
                 window.open(window.apiURL.docPreiview);
                 return;
             case "audio":
-                //this.props.openMusicDialog();
+                this.props.setSelectedTarget([{
+                    key:this.props.share.key,
+                    type:"share",
+                }]);
+                this.props.openMusicDialog();
                 return;
             case "open":
                 window.open(window.apiURL.preview);
                 return;
             case "video":
-                window.location.href =
-                    "/Viewer/Video?single=true&shareKey=" +
-                    window.shareInfo.shareId +
-                    "&path=/" +
-                    window.shareInfo.fileName;
+                this.props.history.push(this.props.share.key + "/video?name="+encodeURIComponent(this.props.share.source.name));
                 return;
             case "edit":
                 window.location.href =
@@ -176,6 +181,10 @@ class SharedFileCompoment extends Component {
                 return;
         }
     };
+
+    componentWillUnmount() {
+        this.props.setSelectedTarget([]);
+    }
 
     scoreHandle = callback => event => {
         if (this.props.share.score > 0) {
@@ -307,7 +316,7 @@ class SharedFileCompoment extends Component {
                             <Button
                                 variant="outlined"
                                 color="secondary"
-                                onClick={this.download}
+                                onClick={this.scoreHandle(this.preview)}
                                 disabled={this.state.loading}
                             >
                                 预览
@@ -375,6 +384,6 @@ class SharedFileCompoment extends Component {
 const SharedFile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(SharedFileCompoment));
+)(withStyles(styles)(withRouter(SharedFileCompoment)));
 
 export default SharedFile;

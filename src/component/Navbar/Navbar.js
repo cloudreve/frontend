@@ -90,6 +90,7 @@ const mapStateToProps = state => {
         title: state.siteConfig.title,
         subTitle:state.viewUpdate.subTitle,
         loadUploader:state.viewUpdate.loadUploader,
+        isLogin:state.viewUpdate.isLogin,
     };
 };
 
@@ -390,12 +391,12 @@ class NavbarCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-        const user  =Auth.GetUser();
+        const user  =Auth.GetUser(this.props.isLogin);
 
         const drawer = (
             <div id="container" className={classes.upDrawer}>
                 {pathHelper.isMobile() && <UserInfo />}
-                {Auth.Check() && (
+                {Auth.Check(this.props.isLogin) && (
                         <div>
                             <ListItem
                                 button
@@ -487,7 +488,7 @@ class NavbarCompoment extends Component {
                     </div>
                 )}
 
-                {Auth.Check() && (
+                {Auth.Check(this.props.isLogin) && (
                     <div>
                         <ListItem
                             button
@@ -532,7 +533,7 @@ class NavbarCompoment extends Component {
                         )}
                     </div>
                 )}
-                {!Auth.Check() && (
+                {!Auth.Check(this.props.isLogin) && (
                     <div>
                         <ListItem
                             button
@@ -720,7 +721,7 @@ class NavbarCompoment extends Component {
                             !pathHelper.isSharePage(
                                 this.props.location.pathname
                             ) &&
-                            Auth.Check() &&
+                            Auth.Check(this.props.isLogin) &&
                             !checkGetParameters("share") && (
                                 <div className={classes.sectionForFile}>
                                     <Tooltip title="保存">
