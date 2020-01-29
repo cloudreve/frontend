@@ -123,9 +123,10 @@ export const openRenameDialog = () => {
     };
 };
 
-export const openResaveDialog = () => {
+export const openResaveDialog = (key) => {
     return {
-        type: "OPEN_RESAVE_DIALOG"
+        type: "OPEN_RESAVE_DIALOG",
+        key:key,
     };
 };
 

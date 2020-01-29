@@ -29,9 +29,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        openResave: () => {
-            dispatch(openResaveDialog());
-        },
         setUserPopover: anchor => {
             dispatch(setUserPopover(anchor));
         }
@@ -98,19 +95,6 @@ class UserAvatarCompoment extends Component {
                     }
                 >
                     <div>
-                        {Auth.Check() &&
-                            pathHelper.isSharePage(
-                                this.props.location.pathname
-                            ) && (
-                                <Tooltip title="保存到我的网盘">
-                                    <IconButton
-                                        onClick={() => this.props.openResave()}
-                                        color="inherit"
-                                    >
-                                        <SaveIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
                         {Auth.Check() && (
                             <>
                             <DarkModeSwitcher position="top"/>

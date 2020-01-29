@@ -259,6 +259,7 @@ const cloudreveApp = (state = [], action) => {
                 }),
             });
         case 'OPEN_RESAVE_DIALOG':
+            window.shareKey = action.key;
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
                     modals: Object.assign({}, state.viewUpdate.modals, {

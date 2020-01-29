@@ -7,6 +7,7 @@ import { changeSubTitle, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
 import ShareNotFound from "./NotFound";
 import Grow from "@material-ui/core/Grow";
+import SharedFolder from "./SharedFolder";
 const useStyles = makeStyles({});
 
 const LockedFile = React.lazy(() => import("./LockedFile"));
@@ -86,6 +87,7 @@ export default function SharePreload() {
                 />
             )}
             {share&&!share.locked&&!share.is_dir&&<SharedFile share={share}/>}
+            {share&&!share.locked&&share.is_dir&&<SharedFolder share={share}/>}
         </Suspense>
     );
 }

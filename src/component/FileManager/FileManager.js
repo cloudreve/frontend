@@ -80,8 +80,8 @@ class FileManager extends Component {
     render() {
         return (
             <DndProvider backend={HTML5Backend}>
-                <Modals/> 
-                <Navigator/>
+                <Modals/>
+                <Navigator isShare={this.props.isShare}/>
                 <Explorer/>
                 <DragLayer/>
                 <img src='/static/img/sign.png' style={{display:"none"}}

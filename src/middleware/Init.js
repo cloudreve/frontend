@@ -2,6 +2,7 @@ import { setSiteConfig, toggleSnackbar,enableLoadUploader } from "../actions/ind
 import { fixUrlHash } from "../untils/index"
 import API from "./Api"
 import Auth from "./Auth"
+import pathHelper from "../untils/page";
 export var InitSiteConfig = (rawStore) => {
     // 从缓存获取默认配置
     let configCache = JSON.parse(localStorage.getItem('siteConfigCache'));
@@ -13,9 +14,21 @@ export var InitSiteConfig = (rawStore) => {
     var c = url.searchParams.get("path");
     rawStore.navigator.path = c===null?"/":c;
     // 初始化用户个性配置
-    rawStore.siteConfig = initUserConfig(rawStore.siteConfig)
+    rawStore.siteConfig = initUserConfig(rawStore.siteConfig);
     // 是否登录
     rawStore.viewUpdate.isLogin = Auth.Check();
+    // 偏爱的列表样式
+    let preferListMethod = Auth.GetPreference("view_method");
+    if(preferListMethod){
+        rawStore.viewUpdate.explorerViewMethod = preferListMethod;
+    }else{
+        let path = window.location.hash.split("#");
+        if(path.length >=1 && pathHelper.isSharePage(path[1])){
+            rawStore.viewUpdate.explorerViewMethod = rawStore.siteConfig.share_view_method
+        }else{
+            rawStore.viewUpdate.explorerViewMethod = rawStore.siteConfig.home_view_method
+        }
+    }
     return rawStore
 }
 

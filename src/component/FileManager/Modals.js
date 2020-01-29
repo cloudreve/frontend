@@ -309,25 +309,22 @@ class ModalsCompoment extends Component {
     submitResave = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        axios
-            .post("/Share/ReSave/" + window.shareInfo.shareId, {
+        API
+            .post("/share/save/" + window.shareKey, {
                 path:
                     this.state.selectedPath === "//"
                         ? "/"
                         : this.state.selectedPath
             })
             .then(response => {
-                if (response.data.result.success) {
-                    this.onClose();
-                    this.props.refreshFileList();
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.result.error,
-                        "warning"
-                    );
-                }
+                this.onClose();
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "文件已保存",
+                    "success"
+                );
+                this.props.refreshFileList();
                 this.props.setModalsLoading(false);
             })
             .catch(error => {

@@ -6,7 +6,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { allowSharePreview, sizeToString } from "../../untils";
 import {
-    openMusicDialog,
+    openMusicDialog, openResaveDialog,
     setSelectedTarget,
     showImgPreivew,
     toggleSnackbar
@@ -129,7 +129,10 @@ const mapDispatchToProps = dispatch => {
         },
         showImgPreivew: first => {
             dispatch(showImgPreivew(first));
-        }
+        },
+        openResave: (key) => {
+            dispatch(openResaveDialog(key));
+        },
     };
 };
 
@@ -326,7 +329,10 @@ class SharedFileCompoment extends Component {
                     <Divider />
                     <div className={classes.boxFooter}>
                         <div className={classes.actionLeft}>
-                            <Button color="secondary">保存到我的文件</Button>
+                            <Button
+                                onClick={()=>this.props.openResave(this.props.share.key)}
+                                color="secondary"
+                            >保存到我的文件</Button>
                         </div>
                         <div className={classes.actions}>
                             {this.props.share.preview && (

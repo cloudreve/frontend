@@ -38,6 +38,8 @@ import {
 import PathButton from "./PathButton";
 import DropDown from "./DropDown";
 import pathHelper from "../../../untils/page"
+import classNames from "classnames";
+import Auth from "../../../middleware/Auth";
 
 const mapStateToProps = state => {
     return {
@@ -135,6 +137,9 @@ const styles = theme => ({
     sideButton: {
         padding: "8px",
         marginRight: "5px"
+    },
+    roundBorder:{
+        borderRadius:4,
     }
 });
 
@@ -159,8 +164,11 @@ class NavigatorCompoment extends Component {
 
     componentDidMount = () => {
         this.renderPath();
-        // 如果是在个人文件管理页，首次加载时打开侧边栏
-        this.props.handleDesktopToggle(true);
+        if(!this.props.isShare){
+            // 如果是在个人文件管理页，首次加载时打开侧边栏
+            this.props.handleDesktopToggle(true);
+        }
+
         // 后退操作时重新导航
         window.onpopstate = event => {
             var url = new URL(fixUrlHash(window.location.href));
@@ -314,13 +322,14 @@ class NavigatorCompoment extends Component {
     };
 
     toggleViewMethod = () => {
-        this.props.changeView(
+        let newMethod =
             this.props.viewMethod === "icon"
                 ? "list"
                 : this.props.viewMethod === "list"
                 ? "smallIcon"
-                : "icon"
-        );
+                : "icon";
+        Auth.SetPreference("view_method",newMethod)
+        this.props.changeView(newMethod);
     };
 
     handleMenuItemClick = (e, index) => {
@@ -379,7 +388,14 @@ class NavigatorCompoment extends Component {
         );
 
         return (
-            <div className={classes.container}>
+            <div
+                className={classNames(
+                    {
+                        [classes.roundBorder]: this.props.isShare,
+                    },
+                    classes.container
+                )}
+            >
                 <div className={classes.navigatorContainer}>
                     <div className={classes.nav} ref={this.element}>
                         <span>
