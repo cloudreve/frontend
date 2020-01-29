@@ -48,6 +48,12 @@ export default function SharePreload() {
     }, [share,SetSubTitle,ToggleSnackbar]);
 
     useEffect(() => {
+        return () => {
+            SetSubTitle();
+        }
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
         let withPassword = "";
         if (password !== "") {

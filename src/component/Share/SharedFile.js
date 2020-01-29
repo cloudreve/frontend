@@ -299,7 +299,7 @@ class SharedFileCompoment extends Component {
                             fileName={this.props.share.source.name}
                         />
                         <div className={classes.fileName}>
-                            <Typography>
+                            <Typography style={{    wordBreak: "break-all",}}>
                                 {this.props.share.source.name}
                             </Typography>
                             <Typography className={classes.fileSize}>
@@ -313,14 +313,14 @@ class SharedFileCompoment extends Component {
                             <Button color="secondary">保存到我的文件</Button>
                         </div>
                         <div className={classes.actions}>
-                            <Button
+                            {this.props.share.preview && <Button
                                 variant="outlined"
                                 color="secondary"
                                 onClick={this.scoreHandle(this.preview)}
                                 disabled={this.state.loading}
                             >
                                 预览
-                            </Button>
+                            </Button>}
                             <Button
                                 variant="contained"
                                 color="secondary"

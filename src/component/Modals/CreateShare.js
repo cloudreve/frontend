@@ -13,9 +13,7 @@ import {
     DialogTitle,
     CircularProgress
 } from "@material-ui/core";
-import {
-    toggleSnackbar,
-} from "../../actions/index";
+import { toggleSnackbar } from "../../actions/index";
 import { useDispatch, useSelector } from "react-redux";
 import API from "../../middleware/Api";
 import List from "@material-ui/core/List";
@@ -127,12 +125,13 @@ export default function CreatShare(props) {
         downloads: 1,
         expires: 24 * 3600,
         showPassword: false,
-        score: 0
+        score: 0,
     });
     const [shareOption, setShareOption] = React.useState({
         password: false,
         expire: false,
-        score: false
+        score: false,
+        preview:true,
     });
 
     const handleChange = prop => event => {
@@ -182,39 +181,40 @@ export default function CreatShare(props) {
     };
 
     const handleCheck = prop => event => {
-        if(!shareOption[prop]){
-            handleExpand(prop)(null,true);
+        if (!shareOption[prop]) {
+            handleExpand(prop)(null, true);
         }
-        if(prop==="password" && shareOption[prop]){
+        if (prop === "password" && shareOption[prop]) {
             setValues({
                 ...values,
-                password: "",
+                password: ""
             });
         }
-        if(prop==="score" && shareOption[prop]){
+        if (prop === "score" && shareOption[prop]) {
             setValues({
                 ...values,
-                score: 0,
+                score: 0
             });
         }
         setShareOption({ ...shareOption, [prop]: !shareOption[prop] });
     };
 
-    const onClose = ()=>{
+    const onClose = () => {
         props.onClose();
         setShareURL("");
-    }
+    };
 
     const submitShare = e => {
         e.preventDefault();
         props.setModalsLoading(true);
         let submitFormBody = {
-            id:props.selected[0].id,
-            is_dir:props.selected[0].type === "dir",
-            password:values.password,
-            downloads:shareOption.expire?values.downloads:-1,
-            expire:values.expires,
-            score:parseInt(values.score),
+            id: props.selected[0].id,
+            is_dir: props.selected[0].type === "dir",
+            password: values.password,
+            downloads: shareOption.expire ? values.downloads : -1,
+            expire: values.expires,
+            score: parseInt(values.score),
+            preview:shareOption.preview,
         };
 
         API.post("/share", submitFormBody)
@@ -240,7 +240,7 @@ export default function CreatShare(props) {
             });
     };
 
-    const handleFocus = (event) => event.target.select();
+    const handleFocus = event => event.target.select();
 
     return (
         <Dialog
@@ -253,151 +253,13 @@ export default function CreatShare(props) {
         >
             <DialogTitle id="form-dialog-title">创建分享链接</DialogTitle>
 
-
-            {shareURL === "" &&
+            {shareURL === "" && (
                 <>
                     <Divider />
-                        <List>
-                    <ExpansionPanel
-                        expanded={expanded === "password"}
-                        onChange={handleExpand("password")}
-                    >
-                        <ExpansionPanelSummary
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <LockIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="使用密码保护" />
-                                <ListItemSecondaryAction>
-                                    <Checkbox
-                                        checked={shareOption.password}
-                                        onChange={handleCheck("password")}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <FormControl
-                                variant="outlined"
-                                color="secondary"
-                                fullWidth
-                            >
-                                <InputLabel htmlFor="filled-adornment-password">
-                                    分享密码
-                                </InputLabel>
-                                <OutlinedInput
-                                    fullWidth
-                                    id="outlined-adornment-password"
-                                    type={values.showPassword ? "text" : "password"}
-                                    value={values.password}
-                                    onChange={handleChange("password")}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Tooltip title="随机生成">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={randomPassword}
-                                                    edge="end"
-                                                >
-                                                    <CasinoIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={
-                                                    handleMouseDownPassword
-                                                }
-                                                edge="end"
-                                            >
-                                                {values.showPassword ? (
-                                                    <Visibility />
-                                                ) : (
-                                                    <VisibilityOff />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={70}
-                                />
-                            </FormControl>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    <ExpansionPanel
-                        expanded={expanded === "expire"}
-                        onChange={handleExpand("expire")}
-                    >
-                        <ExpansionPanelSummary
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <TimerIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="自动过期" />
-                                <ListItemSecondaryAction>
-                                    <Checkbox
-                                        checked={shareOption.expire}
-                                        onChange={handleCheck("expire")}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails className={classes.flexCenter}>
-                            <FormControl
-                                style={{
-                                    marginRight: 10
-                                }}
-                            >
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={values.downloads}
-                                    onChange={handleChange("downloads")}
-                                >
-                                    <MenuItem value={1}>1 次下载</MenuItem>
-                                    <MenuItem value={2}>2 次下载</MenuItem>
-                                    <MenuItem value={3}>3 次下载</MenuItem>
-                                    <MenuItem value={4}>4 次下载</MenuItem>
-                                    <MenuItem value={5}>5 次下载</MenuItem>
-                                    <MenuItem value={20}>20 次下载</MenuItem>
-                                    <MenuItem value={50}>50 次下载</MenuItem>
-                                    <MenuItem value={100}>100 次下载</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <Typography>或者</Typography>
-                            <FormControl
-                                style={{
-                                    marginRight: 10,
-                                    marginLeft: 10
-                                }}
-                            >
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={values.expires}
-                                    onChange={handleChange("expires")}
-                                >
-                                    <MenuItem value={300}>5 分钟</MenuItem>
-                                    <MenuItem value={3600}>1 小时</MenuItem>
-                                    <MenuItem value={24 * 3600}>1 天</MenuItem>
-                                    <MenuItem value={7 * 24 * 3600}>7 天</MenuItem>
-                                    <MenuItem value={30 * 24 * 3600}>
-                                        30 天
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                            <Typography>后过期</Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    {scoreEnabled && (
+                    <List>
                         <ExpansionPanel
-                            expanded={expanded === "score"}
-                            onChange={handleExpand("score")}
+                            expanded={expanded === "password"}
+                            onChange={handleExpand("password")}
                         >
                             <ExpansionPanelSummary
                                 aria-controls="panel1a-content"
@@ -405,82 +267,273 @@ export default function CreatShare(props) {
                             >
                                 <ListItem button>
                                     <ListItemIcon>
-                                        <AccountBalanceWalletIcon />
+                                        <LockIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary="付积分下载" />
+                                    <ListItemText primary="使用密码保护" />
                                     <ListItemSecondaryAction>
                                         <Checkbox
-                                            checked={shareOption.score}
-                                            onChange={handleCheck("score")}
+                                            checked={shareOption.password}
+                                            onChange={handleCheck("password")}
                                         />
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             </ExpansionPanelSummary>
-
-                            <ExpansionPanelDetails className={classes.noFlex}>
+                            <ExpansionPanelDetails>
                                 <FormControl
                                     variant="outlined"
                                     color="secondary"
                                     fullWidth
                                 >
                                     <InputLabel htmlFor="filled-adornment-password">
-                                        每人次下载需支付的积分
+                                        分享密码
                                     </InputLabel>
                                     <OutlinedInput
                                         fullWidth
                                         id="outlined-adornment-password"
-                                        type="number"
-                                        inputProps={{"min":0,}}
-                                        value={values.score}
-                                        onChange={handleChange("score")}
-                                        labelWidth={180}
+                                        type={
+                                            values.showPassword
+                                                ? "text"
+                                                : "password"
+                                        }
+                                        value={values.password}
+                                        onChange={handleChange("password")}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Tooltip title="随机生成">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={randomPassword}
+                                                        edge="end"
+                                                    >
+                                                        <CasinoIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={
+                                                        handleClickShowPassword
+                                                    }
+                                                    onMouseDown={
+                                                        handleMouseDownPassword
+                                                    }
+                                                    edge="end"
+                                                >
+                                                    {values.showPassword ? (
+                                                        <Visibility />
+                                                    ) : (
+                                                        <VisibilityOff />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={70}
                                     />
                                 </FormControl>
-                                {values.score !== 0 && scoreRate !== "100" && (
-                                    <Typography
-                                        variant="body2"
-                                        className={classes.scoreCalc}
-                                    >
-                                        {"预计每人次下载可到账 " +
-                                        Math.ceil(
-                                            (values.score * scoreRate) / 100
-                                        ) +
-                                        " 积分"}
-                                    </Typography>
-                                )}
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
-                    )}
-                </List>
+                        <ExpansionPanel
+                            expanded={expanded === "expire"}
+                            onChange={handleExpand("expire")}
+                        >
+                            <ExpansionPanelSummary
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <TimerIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="自动过期" />
+                                    <ListItemSecondaryAction>
+                                        <Checkbox
+                                            checked={shareOption.expire}
+                                            onChange={handleCheck("expire")}
+                                        />
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails
+                                className={classes.flexCenter}
+                            >
+                                <FormControl
+                                    style={{
+                                        marginRight: 10
+                                    }}
+                                >
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={values.downloads}
+                                        onChange={handleChange("downloads")}
+                                    >
+                                        <MenuItem value={1}>1 次下载</MenuItem>
+                                        <MenuItem value={2}>2 次下载</MenuItem>
+                                        <MenuItem value={3}>3 次下载</MenuItem>
+                                        <MenuItem value={4}>4 次下载</MenuItem>
+                                        <MenuItem value={5}>5 次下载</MenuItem>
+                                        <MenuItem value={20}>
+                                            20 次下载
+                                        </MenuItem>
+                                        <MenuItem value={50}>
+                                            50 次下载
+                                        </MenuItem>
+                                        <MenuItem value={100}>
+                                            100 次下载
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <Typography>或者</Typography>
+                                <FormControl
+                                    style={{
+                                        marginRight: 10,
+                                        marginLeft: 10
+                                    }}
+                                >
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={values.expires}
+                                        onChange={handleChange("expires")}
+                                    >
+                                        <MenuItem value={300}>5 分钟</MenuItem>
+                                        <MenuItem value={3600}>1 小时</MenuItem>
+                                        <MenuItem value={24 * 3600}>
+                                            1 天
+                                        </MenuItem>
+                                        <MenuItem value={7 * 24 * 3600}>
+                                            7 天
+                                        </MenuItem>
+                                        <MenuItem value={30 * 24 * 3600}>
+                                            30 天
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <Typography>后过期</Typography>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                        {scoreEnabled && (
+                            <ExpansionPanel
+                                expanded={expanded === "score"}
+                                onChange={handleExpand("score")}
+                            >
+                                <ExpansionPanelSummary
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <ListItem button>
+                                        <ListItemIcon>
+                                            <AccountBalanceWalletIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="付积分下载" />
+                                        <ListItemSecondaryAction>
+                                            <Checkbox
+                                                checked={shareOption.score}
+                                                onChange={handleCheck("score")}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                </ExpansionPanelSummary>
+
+                                <ExpansionPanelDetails
+                                    className={classes.noFlex}
+                                >
+                                    <FormControl
+                                        variant="outlined"
+                                        color="secondary"
+                                        fullWidth
+                                    >
+                                        <InputLabel htmlFor="filled-adornment-password">
+                                            每人次下载需支付的积分
+                                        </InputLabel>
+                                        <OutlinedInput
+                                            fullWidth
+                                            id="outlined-adornment-password"
+                                            type="number"
+                                            inputProps={{ min: 0 }}
+                                            value={values.score}
+                                            onChange={handleChange("score")}
+                                            labelWidth={180}
+                                        />
+                                    </FormControl>
+                                    {values.score !== 0 && scoreRate !== "100" && (
+                                        <Typography
+                                            variant="body2"
+                                            className={classes.scoreCalc}
+                                        >
+                                            {"预计每人次下载可到账 " +
+                                                Math.ceil(
+                                                    (values.score * scoreRate) /
+                                                        100
+                                                ) +
+                                                " 积分"}
+                                        </Typography>
+                                    )}
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )}
+                        <ExpansionPanel
+                            expanded={expanded === "preview"}
+                            onChange={handleExpand("preview")}
+                        >
+                            <ExpansionPanelSummary
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <LockIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="允许预览" />
+                                    <ListItemSecondaryAction>
+                                        <Checkbox
+                                            checked={shareOption.preview}
+                                            onChange={handleCheck("preview")}
+                                        />
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Typography>是否允许在分享页面预览文件内容</Typography>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                    </List>
                     <Divider />
                 </>
-            }
-            {shareURL !== "" &&
+            )}
+            {shareURL !== "" && (
                 <DialogContent>
-                    <TextField onFocus={handleFocus} autoFocus inputProps={{readonly:true}} label="分享链接" value={shareURL} variant="outlined" fullWidth/>
+                    <TextField
+                        onFocus={handleFocus}
+                        autoFocus
+                        inputProps={{ readonly: true }}
+                        label="分享链接"
+                        value={shareURL}
+                        variant="outlined"
+                        fullWidth
+                    />
                 </DialogContent>
-
-            }
+            )}
 
             <DialogActions>
                 <Button onClick={onClose}>关闭</Button>
 
-                {shareURL === "" && <div className={classes.wrapper}>
-                    <Button
-                        onClick={submitShare}
-                        color="secondary"
-                        disabled={props.modalsLoading}
-                    >
-                        创建分享链接
-                        {props.modalsLoading && (
-                            <CircularProgress
-                                size={24}
-                                className={classes.buttonProgress}
-                            />
-                        )}
-                    </Button>
-                </div>}
-
+                {shareURL === "" && (
+                    <div className={classes.wrapper}>
+                        <Button
+                            onClick={submitShare}
+                            color="secondary"
+                            disabled={props.modalsLoading}
+                        >
+                            创建分享链接
+                            {props.modalsLoading && (
+                                <CircularProgress
+                                    size={24}
+                                    className={classes.buttonProgress}
+                                />
+                            )}
+                        </Button>
+                    </div>
+                )}
             </DialogActions>
         </Dialog>
     );
