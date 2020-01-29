@@ -180,16 +180,6 @@ class ContextMenuCompoment extends Component {
     };
 
     openPreview = () => {
-        if (!allowSharePreview()) {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "未登录用户无法预览",
-                "warning"
-            );
-            this.props.changeContextMenu("file", false);
-            return;
-        }
         this.props.changeContextMenu("file", false);
         let previewPath =
             this.props.selected[0].path === "/"
@@ -212,31 +202,13 @@ class ContextMenuCompoment extends Component {
                 return;
             case "open":
                 window.open(
-                    window.apiURL.preview +
-                        "/?action=preview&path=" +
-                        encodeURIComponent(previewPath)
+                    baseURL + "/share/preview/" + this.props.share.key
                 );
                 return;
             case "video":
-                if (pathHelper.isSharePage(this.props.location.pathname)) {
-                    window.location.href =
-                        "/Viewer/Video?share=true&shareKey=" +
-                        window.shareInfo.shareId +
-                        "&path=" +
-                        encodeURIComponent(previewPath);
-                    return;
-                }
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
-                if (pathHelper.isSharePage(this.props.location.pathname)) {
-                    window.location.href =
-                        "/Viewer/Markdown?share=true&shareKey=" +
-                        window.shareInfo.shareId +
-                        "&path=" +
-                        encodeURIComponent(previewPath);
-                    return;
-                }
                 this.props.history.push("/text" + previewPath);
                 return;
             default:

@@ -5,20 +5,20 @@ import PreviewIcon from "@material-ui/icons/RemoveRedEye";
 import InfoIcon from "@material-ui/icons/Info";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { allowSharePreview, sizeToString } from "../../untils";
-import {openMusicDialog, setSelectedTarget, toggleSnackbar} from "../../actions";
-import { isPreviewable } from "../../config";
 import {
-    withStyles,
-    Button,
-    Typography,
-    Avatar
-} from "@material-ui/core";
+    openMusicDialog,
+    setSelectedTarget,
+    showImgPreivew,
+    toggleSnackbar
+} from "../../actions";
+import { isPreviewable } from "../../config";
+import { withStyles, Button, Typography, Avatar } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
 import PurchaseShareDialog from "../Modals/PurchaseShare";
 import API from "../../middleware/Api";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -121,24 +121,27 @@ const mapDispatchToProps = dispatch => {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        openMusicDialog:()=>{
+        openMusicDialog: () => {
             dispatch(openMusicDialog());
         },
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
+        showImgPreivew: first => {
+            dispatch(showImgPreivew(first));
+        }
     };
 };
 
 const Modals = React.lazy(() => import("../FileManager/Modals"));
-
+const ImgPreview = React.lazy(() => import("../FileManager/ImgPreview"));
 
 class SharedFileCompoment extends Component {
     state = {
         anchorEl: null,
         open: false,
         purchaseCallback: null,
-        loading:false,
+        loading: false
     };
 
     downloaded = false;
@@ -146,31 +149,42 @@ class SharedFileCompoment extends Component {
     preview = () => {
         switch (isPreviewable(this.props.share.source.name)) {
             case "img":
-                window.open(window.apiURL.preview);
+                this.props.showImgPreivew({
+                    key: this.props.share.key,
+                    name: this.props.share.source.name
+                });
                 return;
             case "msDoc":
-                window.open(window.apiURL.docPreiview);
+                this.props.history.push(
+                    this.props.share.key +
+                    "/doc?name=" +
+                    encodeURIComponent(this.props.share.source.name)
+                );
                 return;
             case "audio":
-                this.props.setSelectedTarget([{
-                    key:this.props.share.key,
-                    type:"share",
-                }]);
+                this.props.setSelectedTarget([
+                    {
+                        key: this.props.share.key,
+                        type: "share"
+                    }
+                ]);
                 this.props.openMusicDialog();
                 return;
             case "open":
                 window.open(window.apiURL.preview);
                 return;
             case "video":
-                this.props.history.push(this.props.share.key + "/video?name="+encodeURIComponent(this.props.share.source.name));
+                this.props.history.push(
+                    this.props.share.key +
+                        "/video?name=" +
+                        encodeURIComponent(this.props.share.source.name)
+                );
                 return;
             case "edit":
-                window.location.href =
-                    "/Viewer/Markdown?single=true&shareKey=" +
-                    window.shareInfo.shareId +
-                    "&path=/" +
-                    window.shareInfo.fileName;
-                return;
+                this.props.history.push(this.props.share.key +
+                    "/text?name=" +
+                    encodeURIComponent(this.props.share.source.name));
+                return
             default:
                 this.props.toggleSnackbar(
                     "top",
@@ -199,12 +213,12 @@ class SharedFileCompoment extends Component {
             }
             if (!Auth.GetUser().group.shareFree && !this.downloaded) {
                 this.setState({
-                    purchaseCallback:()=>{
+                    purchaseCallback: () => {
                         this.setState({
-                            purchaseCallback:null,
+                            purchaseCallback: null
                         });
                         callback(event);
-                    },
+                    }
                 });
                 return;
             }
@@ -213,7 +227,7 @@ class SharedFileCompoment extends Component {
     };
 
     download = e => {
-        this.setState({loading:true});
+        this.setState({ loading: true });
         API.post("/share/download/" + this.props.share.key)
             .then(response => {
                 this.downloaded = true;
@@ -226,9 +240,10 @@ class SharedFileCompoment extends Component {
                     error.message,
                     "warning"
                 );
-            }).finally(()=>{
-                this.setState({loading:false});
-        });
+            })
+            .finally(() => {
+                this.setState({ loading: false });
+            });
     };
 
     handleOpen = event => {
@@ -267,10 +282,11 @@ class SharedFileCompoment extends Component {
         return (
             <div className={classes.layout}>
                 <Modals />
+                <ImgPreview />
                 <PurchaseShareDialog
                     callback={this.state.purchaseCallback}
                     score={this.props.share.score}
-                    onClose={() => this.setState({purchaseCallback:null})}
+                    onClose={() => this.setState({ purchaseCallback: null })}
                 />
                 <div className={classes.box}>
                     <div className={classes.boxHeader}>
@@ -299,7 +315,7 @@ class SharedFileCompoment extends Component {
                             fileName={this.props.share.source.name}
                         />
                         <div className={classes.fileName}>
-                            <Typography style={{    wordBreak: "break-all",}}>
+                            <Typography style={{ wordBreak: "break-all" }}>
                                 {this.props.share.source.name}
                             </Typography>
                             <Typography className={classes.fileSize}>
@@ -313,14 +329,16 @@ class SharedFileCompoment extends Component {
                             <Button color="secondary">保存到我的文件</Button>
                         </div>
                         <div className={classes.actions}>
-                            {this.props.share.preview && <Button
-                                variant="outlined"
-                                color="secondary"
-                                onClick={this.scoreHandle(this.preview)}
-                                disabled={this.state.loading}
-                            >
-                                预览
-                            </Button>}
+                            {this.props.share.preview && (
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={this.scoreHandle(this.preview)}
+                                    disabled={this.state.loading}
+                                >
+                                    预览
+                                </Button>
+                            )}
                             <Button
                                 variant="contained"
                                 color="secondary"

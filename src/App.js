@@ -64,44 +64,65 @@ export default function App() {
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                         <Switch>
+
                             <AuthRoute exact path={path} isLogin={isLogin}>
                                 我是私有页面
                             </AuthRoute>
+
 							<AuthRoute path={`${path}home`} isLogin={isLogin}>
 								<Suspense fallback={<PageLoading/>}>
                                		<FileManager/>
 								</Suspense>
                             </AuthRoute>
+
                             <AuthRoute path={`${path}video/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <VideoPreview />
                                 </Suspense>
                             </AuthRoute>
+
                             <AuthRoute path={`${path}text/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <TextViewer />
                                 </Suspense>
                             </AuthRoute>
+
                             <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <DocViewer />
                                 </Suspense>
                             </AuthRoute>
+
                             <Route path={`${path}login`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <LoginForm />
                                 </Suspense>
                             </Route>
+
                             <Route exact path={`${path}s/:id`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <SharePreload />
                                 </Suspense>
                             </Route>
+
                             <Route path={`${path}s/:id/video(/)*`}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <VideoPreview />
                                 </Suspense>
                             </Route>
+
+                            <Route path={`${path}s/:id/doc(/)*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <DocViewer />
+                                </Suspense>
+                            </Route>
+
+                            <Route path={`${path}s/:id/text(/)*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <TextViewer />
+                                </Suspense>
+                            </Route>
+
                         </Switch>
                     </main>
                 </div>

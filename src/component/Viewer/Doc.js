@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useState} from "react";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router";
+import {useLocation, useParams, useRouteMatch} from "react-router";
 import API from "../../middleware/Api";
 import {useDispatch} from "react-redux";
 import {changeSubTitle, toggleSnackbar} from "../../actions";
+import pathHelper from "../../untils/page";
 
 const useStyles = makeStyles(theme => ({
     layout: {
@@ -21,28 +22,45 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 export default function DocViewer(props) {
     let [url,setURL] = useState("");
     const math = useRouteMatch();
+    let location = useLocation();
+    let query = useQuery();
+    let { id } = useParams();
 
     const dispatch = useDispatch();
+
     const SetSubTitle = useCallback(
         title=>dispatch(changeSubTitle(title)),
         [dispatch]
     );
+
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
 
-    useEffect(()=>{
-        let path = math.params[0].split("/");
-        SetSubTitle(path[path.length - 1]);
-    },[math.params[0]]);
+    useEffect(() => {
+        if (!pathHelper.isSharePage(location.pathname)) {
+            let path = math.params[0].split("/");
+            SetSubTitle(path[path.length - 1]);
+        } else {
+            SetSubTitle(query.get("name"));
+        }
+    }, [math.params[0], location]);
 
     useEffect(()=>{
-        API.get("/file/doc/" + math.params[0])
+        let requestURL = "/file/doc/" + math.params[0];
+        if (pathHelper.isSharePage(location.pathname)){
+            requestURL = "/share/doc/" + id;
+        }
+        API.get(requestURL)
             .then(response => {
                 setURL(response.data)
             })
@@ -54,7 +72,7 @@ export default function DocViewer(props) {
                     "error"
                 )
             });
-    },[math.params[0]]);
+    },[math.params[0],location]);
 
     const classes = useStyles();
     return (

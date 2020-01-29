@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router";
+import {useLocation, useParams, useRouteMatch} from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { changeSubTitle, toggleSnackbar } from "../../actions";
 import Editor from 'for-editor'
 import SaveButton from "../Dial/Save";
+import pathHelper from "../../untils/page";
+import TextLoading from "../Placeholder/TextLoading";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -29,11 +31,20 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
+
 export default function TextViewer(props) {
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
+    const [loading, setLoading] = useState(true);
     const math = useRouteMatch();
     let $vm = React.createRef();
+    let location = useLocation();
+    let query = useQuery();
+    let { id } = useParams();
 
     const dispatch = useDispatch();
     const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
@@ -46,12 +57,22 @@ export default function TextViewer(props) {
     );
 
     useEffect(() => {
-        let path = math.params[0].split("/");
-        SetSubTitle(path[path.length - 1]);
-    }, [math.params[0]]);
+        if (!pathHelper.isSharePage(location.pathname)) {
+            let path = math.params[0].split("/");
+            SetSubTitle(path[path.length - 1]);
+        } else {
+            SetSubTitle(query.get("name"));
+        }
+    }, [math.params[0], location]);
 
     useEffect(() => {
-        API.get("/file/content/" + math.params[0])
+        let requestURL = "/file/content/" + math.params[0];
+        if (pathHelper.isSharePage(location.pathname)){
+            requestURL = "/share/content/" + id;
+        }
+
+        setLoading(true);
+        API.get(requestURL)
             .then(response => {
                 setContent(response.rawData.toString());
             })
@@ -62,7 +83,9 @@ export default function TextViewer(props) {
                     "无法读取文件内容，" + error.message,
                     "error"
                 )
-            });
+            }).finally(()=>{
+            setLoading(false);
+        });
     }, [math.params[0]]);
 
     const toBase64 = file => new Promise((resolve, reject) => {
@@ -98,8 +121,10 @@ export default function TextViewer(props) {
     const classes = useStyles();
     return (
         <div className={classes.layout}>
+
             <Paper className={classes.root} elevation={1}>
-                <Editor
+                {loading && <TextLoading/>}
+                {!loading && <Editor
                     ref={$vm}
                     value={content}
                     onSave = {()=>save()}
@@ -122,9 +147,9 @@ export default function TextViewer(props) {
                         /* v0.2.3 */
                         subfield: true, // 单双栏模式
                     }}
-                />
+                />}
             </Paper>
-            <SaveButton onClick={save} status={status}/>
+            {!pathHelper.isSharePage(location.pathname) && <SaveButton onClick={save} status={status}/>}
         </div>
     );
 }

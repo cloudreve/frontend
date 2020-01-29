@@ -7,6 +7,8 @@ import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
+import pathHelper from "../../untils/page";
+import {withRouter} from "react-router";
 
 const styles = theme => ({});
 
@@ -36,6 +38,22 @@ class ImgPreviewCompoment extends Component {
         let items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {
+            if (pathHelper.isSharePage(this.props.location.pathname)){
+                let newImg = {
+                    title: nextProps.first.name,
+                    src:
+                        baseURL +
+                        "/share/preview/" +nextProps.first.key
+                };
+                firstOne = 0;
+                items.push(newImg);
+                this.setState({
+                    photoIndex:firstOne,
+                    items: items,
+                    isOpen: true
+                });
+                return
+            }
             // eslint-disable-next-line
             nextProps.other.map(value => {
                 let fileType = value.name
@@ -117,6 +135,6 @@ ImgPreviewCompoment.propTypes = {
 const ImgPreivew = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(ImgPreviewCompoment));
+)(withStyles(styles)(withRouter(ImgPreviewCompoment)));
 
 export default ImgPreivew;
