@@ -28,6 +28,7 @@ import {
     useLocation
 } from "react-router-dom";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Auth from "../../middleware/Auth";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -127,7 +128,7 @@ export default function ObjectIcon(props) {
     };
 
     const handleClick = e => {
-        if (window.isMobile) {
+        if (statusHelper.isMobile() || statusHelper.isSharePage(location.pathname)) {
             selectFile(e);
             if (props.file.type === "dir") {
                 enterFolder();
@@ -143,8 +144,21 @@ export default function ObjectIcon(props) {
             enterFolder();
             return;
         }
-        if (!allowSharePreview()) {
-            ToggleSnackbar("top", "right", "未登录用户无法预览", "warning");
+        let isShare = statusHelper.isSharePage(location.pathname);
+        if (isShare) {
+            let user = Auth.GetUser();
+            if (!Auth.Check() && user && !user.group.shareDownload) {
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "请先登录",
+                    "warning"
+                );
+                return;
+            }
+        }
+        if (window.shareInfo && !window.shareInfo.preview){
+            OpenLoadingDialog("获取下载地址...");
             return;
         }
         let previewPath =
@@ -156,7 +170,12 @@ export default function ObjectIcon(props) {
                 ShowImgPreivew(selected[0]);
                 return;
             case "msDoc":
-                if (statusHelper.isSharePage(location.pathname)) {
+                if (isShare) {
+                    history.push(selected[0].key +
+                        "/doc?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath));
                     return;
                 }
                 history.push("/doc" + previewPath);

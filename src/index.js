@@ -7,6 +7,7 @@ import { createStore } from "redux";
 import App from "./App";
 import cloureveApp from "./reducers";
 import { InitSiteConfig, UpdateSiteConfig } from "./middleware/Init";
+import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
 serviceWorker.register();
 
 const defaultStatus = InitSiteConfig({
@@ -74,6 +75,7 @@ const defaultStatus = InitSiteConfig({
         modalsLoading: false,
         storageRefresh: false,
         userPopoverAnchorEl: null,
+        shareUserPopoverAnchorEl: null,
         modals: {
             createNewFolder: false,
             rename: false,
@@ -119,6 +121,7 @@ let store = createStore(cloureveApp, defaultStatus,window.__REDUX_DEVTOOLS_EXTEN
 UpdateSiteConfig(store);
 
 ReactDOM.render(
+    <ErrorBoundary>
     <Provider store={store}>
         <Router>
             <Switch>
@@ -127,6 +130,6 @@ ReactDOM.render(
                 </Route>
             </Switch>
         </Router>
-    </Provider>,
+    </Provider></ErrorBoundary>,
     document.getElementById("root")
 );

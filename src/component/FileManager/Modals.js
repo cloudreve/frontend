@@ -11,7 +11,7 @@ import {
 } from "../../actions/index";
 import PathSelector from "./PathSelector";
 import axios from "axios";
-import API, {baseURL} from "../../middleware/Api";
+import API, { baseURL } from "../../middleware/Api";
 import {
     withStyles,
     Button,
@@ -29,7 +29,7 @@ import {
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import pathHelper from "../../untils/page";
 
 const styles = theme => ({
@@ -47,7 +47,7 @@ const styles = theme => ({
     },
     contentFix: {
         padding: "10px 24px 0px 24px"
-    },
+    }
 });
 
 const mapStateToProps = state => {
@@ -157,13 +157,24 @@ class ModalsCompoment extends Component {
     };
 
     Download = () => {
+        let reqURL = "";
         let downloadPath =
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +
                   "/" +
                   this.props.selected[0].name;
-        API.put("/file/download" + downloadPath)
+        if (this.props.selected[0].key) {
+            reqURL =
+                "/share/download/" +
+                this.props.selected[0].key +
+                "?path=" +
+                encodeURIComponent(downloadPath);
+        } else {
+            reqURL = "/file/download" + downloadPath;
+        }
+
+        API.put(reqURL)
             .then(response => {
                 window.location.assign(response.data);
                 this.onClose();
@@ -309,13 +320,10 @@ class ModalsCompoment extends Component {
     submitResave = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        API
-            .post("/share/save/" + window.shareKey, {
-                path:
-                    this.state.selectedPath === "//"
-                        ? "/"
-                        : this.state.selectedPath
-            })
+        API.post("/share/save/" + window.shareKey, {
+            path:
+                this.state.selectedPath === "//" ? "/" : this.state.selectedPath
+        })
             .then(response => {
                 this.onClose();
                 this.props.toggleSnackbar(
@@ -895,7 +903,7 @@ class ModalsCompoment extends Component {
                     open={this.props.modalsStatus.share}
                     onClose={this.onClose}
                     modalsLoading={this.props.modalsLoading}
-                    setModalsLoading = {this.props.setModalsLoading}
+                    setModalsLoading={this.props.setModalsLoading}
                     selected={this.props.selected}
                 />
 
@@ -912,15 +920,23 @@ class ModalsCompoment extends Component {
                                 <audio
                                     controls
                                     src={
-                                        pathHelper.isSharePage(this.props.location.pathname)?
-                                            baseURL +
-                                            "/share/preview/" + this.props.selected[0].key
-                                            :
-                                        baseURL +
-                                        "/file/preview" +
-                                        (this.props.selected[0].path === "/"
-                                            ? this.props.selected[0].path + this.props.selected[0].name
-                                            : this.props.selected[0].path + "/" + this.props.selected[0].name)
+                                        pathHelper.isSharePage(
+                                            this.props.location.pathname
+                                        )
+                                            ? baseURL +
+                                              "/share/preview/" +
+                                              this.props.selected[0].key
+                                            : baseURL +
+                                              "/file/preview" +
+                                              (this.props.selected[0].path ===
+                                              "/"
+                                                  ? this.props.selected[0]
+                                                        .path +
+                                                    this.props.selected[0].name
+                                                  : this.props.selected[0]
+                                                        .path +
+                                                    "/" +
+                                                    this.props.selected[0].name)
                                     }
                                 />
                             )}

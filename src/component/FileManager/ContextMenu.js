@@ -17,7 +17,8 @@ import {
     openTorrentDownloadDialog,
     openGetSourceDialog,
     openCopyDialog,
-    openLoadingDialog, setSelectedTarget
+    openLoadingDialog,
+    setSelectedTarget
 } from "../../actions/index";
 import { isPreviewable, isTorrent } from "../../config";
 import { allowSharePreview } from "../../untils/index";
@@ -180,6 +181,20 @@ class ContextMenuCompoment extends Component {
     };
 
     openPreview = () => {
+        let isShare = pathHelper.isSharePage(this.props.location.pathname);
+        if (isShare) {
+            let user = Auth.GetUser();
+            if (!Auth.Check() && user && !user.group.shareDownload) {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "请先登录",
+                    "warning"
+                );
+                this.props.changeContextMenu("file", false);
+                return;
+            }
+        }
         this.props.changeContextMenu("file", false);
         let previewPath =
             this.props.selected[0].path === "/"
@@ -192,7 +207,14 @@ class ContextMenuCompoment extends Component {
                 this.props.showImgPreivew(this.props.selected[0]);
                 return;
             case "msDoc":
-                if (pathHelper.isSharePage(this.props.location.pathname)) {
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                            "/doc?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
+                    );
                     return;
                 }
                 this.props.history.push("/text" + previewPath);
@@ -201,9 +223,7 @@ class ContextMenuCompoment extends Component {
                 this.props.openMusicDialog();
                 return;
             case "open":
-                window.open(
-                    baseURL + "/share/preview/" + this.props.share.key
-                );
+                window.open(baseURL + "/share/preview/" + this.props.share.key);
                 return;
             case "video":
                 this.props.history.push("/video" + previewPath);
@@ -219,6 +239,7 @@ class ContextMenuCompoment extends Component {
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
+        const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
             <div>
@@ -296,6 +317,8 @@ class ContextMenuCompoment extends Component {
                             )}
                             {!this.props.isMultiple &&
                                 this.props.withFile &&
+                                (!this.props.share ||
+                                    this.props.share.preview) &&
                                 isPreviewable(this.props.selected[0].name) && (
                                     <>
                                         <MenuItem
@@ -341,6 +364,7 @@ class ContextMenuCompoment extends Component {
 
                             {!this.props.isMultiple &&
                                 this.props.withFile &&
+                                isHomePage &&
                                 user.policy.allowSource && (
                                     <MenuItem
                                         onClick={() =>
@@ -357,9 +381,7 @@ class ContextMenuCompoment extends Component {
                                 )}
 
                             {!this.props.isMultiple &&
-                                pathHelper.isHomePage(
-                                    this.props.location.pathname
-                                ) &&
+                                isHomePage &&
                                 user.group.allowTorrentDownload &&
                                 this.props.withFile &&
                                 isTorrent(this.props.selected[0].name) && (
@@ -377,58 +399,48 @@ class ContextMenuCompoment extends Component {
                                     </MenuItem>
                                 )}
 
-                            {!this.props.isMultiple &&
-                                pathHelper.isHomePage(
-                                    this.props.location.pathname
-                                ) && (
+                            {!this.props.isMultiple && isHomePage && (
+                                <MenuItem
+                                    onClick={() => this.props.openShareDialog()}
+                                >
+                                    <ListItemIcon>
+                                        <ShareIcon />
+                                    </ListItemIcon>
+                                    <Typography variant="inherit">
+                                        分享
+                                    </Typography>
+                                </MenuItem>
+                            )}
+
+                            {!this.props.isMultiple && isHomePage && (
+                                <>
                                     <MenuItem
                                         onClick={() =>
-                                            this.props.openShareDialog()
+                                            this.props.openRenameDialog()
                                         }
                                     >
                                         <ListItemIcon>
-                                            <ShareIcon />
+                                            <RenameIcon />
                                         </ListItemIcon>
                                         <Typography variant="inherit">
-                                            分享
+                                            重命名
                                         </Typography>
                                     </MenuItem>
-                                )}
-
-                            {!this.props.isMultiple &&
-                                pathHelper.isHomePage(
-                                    this.props.location.pathname
-                                ) && (
-                                    <>
-                                        <MenuItem
-                                            onClick={() =>
-                                                this.props.openRenameDialog()
-                                            }
-                                        >
-                                            <ListItemIcon>
-                                                <RenameIcon />
-                                            </ListItemIcon>
-                                            <Typography variant="inherit">
-                                                重命名
-                                            </Typography>
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={() =>
-                                                this.props.openCopyDialog()
-                                            }
-                                        >
-                                            <ListItemIcon>
-                                                <FileCopyIcon />
-                                            </ListItemIcon>
-                                            <Typography variant="inherit">
-                                                复制
-                                            </Typography>
-                                        </MenuItem>
-                                    </>
-                                )}
-                            {pathHelper.isHomePage(
-                                this.props.location.pathname
-                            ) && (
+                                    <MenuItem
+                                        onClick={() =>
+                                            this.props.openCopyDialog()
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <FileCopyIcon />
+                                        </ListItemIcon>
+                                        <Typography variant="inherit">
+                                            复制
+                                        </Typography>
+                                    </MenuItem>
+                                </>
+                            )}
+                            {isHomePage && (
                                 <div>
                                     <MenuItem
                                         onClick={() =>

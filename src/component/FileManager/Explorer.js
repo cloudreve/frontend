@@ -109,6 +109,10 @@ const styles = theme => ({
         height: "100%",
         width: "100%",
     },
+    rootShare: {
+        height: "100%",
+        minHeight: 500,
+    },
 });
 
 const mapStateToProps = state => {
@@ -159,7 +163,7 @@ class ExplorerCompoment extends Component {
 
        this.handlers = {
            DELETE_FILE: ()=>{
-               if (this.props.selected.length > 0){
+               if (this.props.selected.length > 0 && !this.props.share){
                    this.props.openRemoveDialog();
                }
            },
@@ -208,13 +212,14 @@ class ExplorerCompoment extends Component {
                 className={classNames(
                     {
                         [classes.root]: this.props.viewMethod !== "list",
-                        [classes.rootTable]: this.props.viewMethod === "list"
+                        [classes.rootTable]: this.props.viewMethod === "list",
+                        [classes.rootShare]: this.props.share,
                     },
                     classes.button
                 )}
             >
                 <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap}/>
-                <ContextMenu />
+                <ContextMenu share={this.props.share}/>
                 <ImgPreivew />
                 {this.props.navigatorError && (
                     <Paper elevation={1} className={classes.errorBox}>
@@ -236,18 +241,6 @@ class ExplorerCompoment extends Component {
                     </div>
                 )}
 
-                {pathHelper.isMobile() &&
-                    this.props.path !== "/" &&
-                    !this.props.loading && (
-                        <Button
-                            variant="outlined"
-                            className={classes.upButton}
-                            onClick={() => this.props.navitateUp()}
-                        >
-                            <UpIcon />
-                            回到上级目录
-                        </Button>
-                    )}
 
                 {this.props.keywords === null &&
                     pathHelper.isHomePage(this.props.location.pathname) &&

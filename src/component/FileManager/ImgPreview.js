@@ -38,7 +38,7 @@ class ImgPreviewCompoment extends Component {
         let items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {
-            if (pathHelper.isSharePage(this.props.location.pathname)){
+            if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
                 let newImg = {
                     title: nextProps.first.name,
                     src:
@@ -61,14 +61,24 @@ class ImgPreviewCompoment extends Component {
                     .pop()
                     .toLowerCase();
                 if (imgPreviewSuffix.indexOf(fileType) !== -1) {
-                    let newImg = {
-                        title: value.name,
-                        src:
-                            baseURL +
+                    let src = "";
+                    if (pathHelper.isSharePage(this.props.location.pathname)){
+                        src = baseURL +
+                            "/share/preview/" + value.key
+                        src = src + "?path=" + encodeURIComponent( (value.path === "/"
+                                ? value.path + value.name
+                                : value.path + "/" + value.name))
+
+                    }else{
+                        src = baseURL +
                             "/file/preview" +
                             (value.path === "/"
                                 ? value.path + value.name
                                 : value.path + "/" + value.name)
+                    }
+                    let newImg = {
+                        title: value.name,
+                        src:src,
                     };
                     if (
                         value.path === nextProps.first.path &&

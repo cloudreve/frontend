@@ -8,6 +8,8 @@ import { sizeToString } from "../../untils/index";
 import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import {lighten} from "@material-ui/core/styles";
+import pathHelper from "../../untils/page";
+import {withRouter} from "react-router";
 
 const styles = theme => ({
     selected: {
@@ -15,6 +17,14 @@ const styles = theme => ({
         backgroundColor:
             theme.palette.type == "dark"
                 ? theme.palette.background.paper
+                : lighten(theme.palette.primary.main,0.8),
+    },
+
+    selectedShared: {
+        "&:hover": {},
+        backgroundColor:
+            theme.palette.type == "dark"
+                ? lighten(theme.palette.background.paper,0.15)
                 : lighten(theme.palette.primary.main,0.8),
     },
 
@@ -70,6 +80,7 @@ class TableRowCompoment extends Component {
 
     render() {
         const { classes } = this.props;
+        const isShare = pathHelper.isSharePage(this.props.location.pathname);
 
         let icon;
         let fileType = this.props.file.name
@@ -94,7 +105,8 @@ class TableRowCompoment extends Component {
                 onDoubleClick={this.props.handleDoubleClick.bind(this)}
                 className={classNames(
                     {
-                        [classes.selected]: isSelected,
+                        [classes.selected]: isSelected&&!isShare,
+                        [classes.selectedShared]: isSelected&&isShare,
                         [classes.notSelected]: !isSelected
                     }
                 )}
@@ -149,6 +161,6 @@ TableRowCompoment.propTypes = {
 const TableItem = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(TableRowCompoment));
+)(withStyles(styles)(withRouter(TableRowCompoment)));
 
 export default TableItem;

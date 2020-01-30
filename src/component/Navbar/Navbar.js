@@ -319,14 +319,19 @@ class NavbarCompoment extends Component {
     };
 
     openPreview = () => {
-        if (!allowSharePreview()) {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "未登录用户无法预览",
-                "warning"
-            );
-            return;
+        let isShare = pathHelper.isSharePage(this.props.location.pathname);
+        if (isShare) {
+            let user = Auth.GetUser();
+            if (!Auth.Check() && user && !user.group.shareDownload) {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "请先登录",
+                    "warning"
+                );
+                this.props.changeContextMenu("file", false);
+                return;
+            }
         }
         this.props.changeContextMenu("file", false);
         let previewPath =
@@ -340,7 +345,14 @@ class NavbarCompoment extends Component {
                 this.props.showImgPreivew(this.props.selected[0]);
                 return;
             case "msDoc":
-                if (pathHelper.isSharePage(this.props.location.pathname)) {
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/doc?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
                     return;
                 }
                 this.props.history.push("/doc" + previewPath);
@@ -392,6 +404,12 @@ class NavbarCompoment extends Component {
     render() {
         const { classes } = this.props;
         const user  =Auth.GetUser(this.props.isLogin);
+        const isHomePage = pathHelper.isHomePage(
+            this.props.location.pathname
+        );
+        const isSharePage = pathHelper.isSharePage(
+            this.props.location.pathname
+        );
 
         const drawer = (
             <div id="container" className={classes.upDrawer}>
@@ -411,7 +429,7 @@ class NavbarCompoment extends Component {
                         </div>
                     )}
 
-                {pathHelper.isHomePage(this.props.location.pathname) && (
+                {isHomePage && (
                     <div>
 
                             <ListItem
@@ -607,10 +625,7 @@ class NavbarCompoment extends Component {
                 >
                     <Toolbar>
                         {((this.props.selected.length <= 1 &&
-                            !(!this.props.isMultiple && this.props.withFile)) ||
-                            !pathHelper.isHomePage(
-                                this.props.location.pathname
-                            ))&& (
+                            !(!this.props.isMultiple && this.props.withFile)))&& (
                                 <IconButton
                                     color="inherit"
                                     aria-label="Open drawer"
@@ -621,10 +636,7 @@ class NavbarCompoment extends Component {
                                 </IconButton>
                             )}
                         {((this.props.selected.length <= 1 &&
-                            !(!this.props.isMultiple && this.props.withFile)) ||
-                            !pathHelper.isHomePage(
-                                this.props.location.pathname
-                            )) && (
+                            !(!this.props.isMultiple && this.props.withFile)) ) && (
                                 <IconButton
                                     color="inherit"
                                     aria-label="Open drawer"
@@ -640,9 +652,7 @@ class NavbarCompoment extends Component {
                             )}
                         {(this.props.selected.length > 1 ||
                             (!this.props.isMultiple && this.props.withFile)) &&
-                            (pathHelper.isHomePage(
-                                this.props.location.pathname
-                            ) ||
+                            (isHomePage ||
                                 pathHelper.isSharePage(
                                     this.props.location.pathname
                                 )) && (
@@ -688,9 +698,7 @@ class NavbarCompoment extends Component {
                             !pathHelper.isMobile() && (
                                 <Typography variant="h6" color="inherit" noWrap>
                                     {this.props.selected[0].name}{" "}
-                                    {(pathHelper.isHomePage(
-                                        this.props.location.pathname
-                                    ) ||
+                                    {(isHomePage ||
                                         pathHelper.isSharePage(
                                             this.props.location.pathname
                                         )) &&
@@ -715,9 +723,7 @@ class NavbarCompoment extends Component {
                         <div className={classes.grow} />
                         {(this.props.selected.length > 1 ||
                             (!this.props.isMultiple && this.props.withFile)) &&
-                            !pathHelper.isHomePage(
-                                this.props.location.pathname
-                            ) &&
+                            !isHomePage &&
                             !pathHelper.isSharePage(
                                 this.props.location.pathname
                             ) &&
@@ -738,15 +744,12 @@ class NavbarCompoment extends Component {
                             )}
                         {(this.props.selected.length > 1 ||
                             (!this.props.isMultiple && this.props.withFile)) &&
-                            (pathHelper.isHomePage(
-                                this.props.location.pathname
-                            ) ||
-                                pathHelper.isSharePage(
-                                    this.props.location.pathname
-                                )) && (
+                            (isHomePage ||
+                                isSharePage) && (
                                 <div className={classes.sectionForFile}>
                                     {!this.props.isMultiple &&
                                         this.props.withFile &&
+                                    (!isSharePage || (window.shareInfo && window.shareInfo.preview))&&
                                         isPreviewable(
                                             this.props.selected[0].name
                                         ) && (
@@ -851,9 +854,7 @@ class NavbarCompoment extends Component {
                                             </Grow>
                                         )}
                                     {!this.props.isMultiple &&
-                                        !pathHelper.isSharePage(
-                                            this.props.location.pathname
-                                        ) && (
+                                        !isSharePage && (
                                             <Grow in={!this.props.isMultiple}>
                                                 <Tooltip title="分享">
                                                     <IconButton
@@ -868,9 +869,7 @@ class NavbarCompoment extends Component {
                                             </Grow>
                                         )}
                                     {!this.props.isMultiple &&
-                                        !pathHelper.isSharePage(
-                                            this.props.location.pathname
-                                        ) && (
+                                        !isSharePage && (
                                             <Grow in={!this.props.isMultiple}>
                                                 <Tooltip title="重命名">
                                                     <IconButton
@@ -884,9 +883,7 @@ class NavbarCompoment extends Component {
                                                 </Tooltip>
                                             </Grow>
                                         )}
-                                    {!pathHelper.isSharePage(
-                                        this.props.location.pathname
-                                    ) && (
+                                    {!isSharePage && (
                                         <div style={{display:"flex"}}>
                                             {!pathHelper.isMobile() && (
                                                 <Grow

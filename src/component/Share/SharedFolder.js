@@ -1,36 +1,31 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FileIcon from "../FileManager/FileIcon";
-import PreviewIcon from "@material-ui/icons/RemoveRedEye";
-import InfoIcon from "@material-ui/icons/Info";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
-import { allowSharePreview, sizeToString } from "../../untils";
 import {
-    openMusicDialog, openResaveDialog,
+    openMusicDialog,
+    openResaveDialog,
     setSelectedTarget,
+    setShareUserPopover,
     showImgPreivew,
     toggleSnackbar
 } from "../../actions";
-import { isPreviewable } from "../../config";
 import { withStyles, Button, Typography, Avatar } from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
-import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
 import PurchaseShareDialog from "../Modals/PurchaseShare";
 import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import FileManager from "../FileManager/FileManager";
 import Paper from "@material-ui/core/Paper";
+import Popover from "@material-ui/core/Popover";
+import Creator from "./Creator";
 const styles = theme => ({
     layout: {
         width: "auto",
-        marginTop:30,
-        marginBottom:30,
+        marginTop: 30,
+        marginBottom: 30,
         marginLeft: theme.spacing(3),
         marginRight: theme.spacing(3),
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
-            marginTop: "90px",
             marginLeft: "auto",
             marginRight: "auto"
         },
@@ -38,18 +33,19 @@ const styles = theme => ({
             marginTop: 0,
             marginLeft: 0,
             marginRight: 0
-        },
-
+        }
     },
-    managerContainer:{
+    managerContainer: {
         flexGrow: 1,
         padding: theme.spacing(0),
         minWidth: 0,
+        overflowY: "auto"
     },
-
 });
 const mapStateToProps = state => {
-    return {};
+    return {
+        anchorEl: state.viewUpdate.shareUserPopoverAnchorEl
+    };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -66,17 +62,25 @@ const mapDispatchToProps = dispatch => {
         showImgPreivew: first => {
             dispatch(showImgPreivew(first));
         },
-        openResave: (key) => {
+        openResave: key => {
             dispatch(openResaveDialog(key));
         },
+        setShareUserPopover: e => {
+            dispatch(setShareUserPopover(e));
+        }
     };
 };
 
 class SharedFolderComponent extends Component {
-    state = {
-    };
+    state = {};
+
+    componentWillMount() {
+        window.shareInfo = this.props.share;
+    }
+
 
     componentWillUnmount() {
+        window.shareInfo = null;
         this.props.setSelectedTarget([]);
     }
 
@@ -106,17 +110,36 @@ class SharedFolderComponent extends Component {
         callback(event);
     };
 
-
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
         const isLogin = Auth.Check();
 
+        const id = this.props.anchorEl !== null ? "simple-popover" : undefined;
+
         return (
             <div className={classes.layout}>
                 <Paper className={classes.managerContainer}>
-                    <FileManager isShare/>
+                    <FileManager isShare share={this.props.share} />
                 </Paper>
+                <Popover
+                    id={id}
+                    open={this.props.anchorEl !== null}
+                    anchorEl={this.props.anchorEl}
+                    onClose={() => this.props.setShareUserPopover(null)}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center"
+                    }}
+                >
+                    <Typography>
+                        <Creator isFolder share={this.props.share}/>
+                    </Typography>
+                </Popover>
             </div>
         );
     }

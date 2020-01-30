@@ -7,11 +7,11 @@ import { changeSubTitle, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
 import ShareNotFound from "./NotFound";
 import Grow from "@material-ui/core/Grow";
-import SharedFolder from "./SharedFolder";
 const useStyles = makeStyles({});
 
 const LockedFile = React.lazy(() => import("./LockedFile"));
 const SharedFile = React.lazy(() => import("./SharedFile"));
+const SharedFolder = React.lazy(() => import("./SharedFolder"));
 
 export default function SharePreload() {
     const classes = useStyles();

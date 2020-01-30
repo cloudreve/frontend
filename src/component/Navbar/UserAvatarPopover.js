@@ -87,6 +87,7 @@ class UserAvatarPopoverCompoment extends Component {
                     "success"
                 );
                 Auth.signout();
+                window.location.reload();
                 this.props.setSessionStatus(false);
             })
             .catch(error => {

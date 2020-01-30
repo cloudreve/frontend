@@ -59,6 +59,9 @@ export default function DocViewer(props) {
         let requestURL = "/file/doc/" + math.params[0];
         if (pathHelper.isSharePage(location.pathname)){
             requestURL = "/share/doc/" + id;
+            if(query.get("share_path") !== ""){
+                requestURL +=("?path=" +encodeURIComponent(query.get("share_path")))
+            }
         }
         API.get(requestURL)
             .then(response => {

@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FileIcon from "../FileManager/FileIcon";
-import PreviewIcon from "@material-ui/icons/RemoveRedEye";
-import InfoIcon from "@material-ui/icons/Info";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
 import { allowSharePreview, sizeToString } from "../../untils";
 import {
     openMusicDialog, openResaveDialog,
@@ -19,6 +15,8 @@ import Auth from "../../middleware/Auth";
 import PurchaseShareDialog from "../Modals/PurchaseShare";
 import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
+import Creator from "./Creator";
+import pathHelper from "../../untils/page";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -73,23 +71,6 @@ const styles = theme => ({
         },
         display: "flex",
         flexDirection: "column"
-    },
-    boxHeader: {
-        textAlign: "center",
-        padding: 24
-    },
-    avatar: {
-        backgroundColor: theme.palette.secondary.main,
-        margin: "0 auto",
-        width: 50,
-        height: 50
-    },
-    shareDes: {
-        marginTop: 12
-    },
-    shareInfo: {
-        color: theme.palette.text.disabled,
-        fontSize: 14
     },
     boxContent: {
         padding: 24,
@@ -150,6 +131,19 @@ class SharedFileCompoment extends Component {
     downloaded = false;
 
     preview = () => {
+        if (pathHelper.isSharePage(this.props.location.pathname)) {
+            let user = Auth.GetUser();
+            if (!Auth.Check() && user && !user.group.shareDownload) {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "请先登录",
+                    "warning"
+                );
+                return;
+            }
+        }
+
         switch (isPreviewable(this.props.share.source.name)) {
             case "img":
                 this.props.showImgPreivew({
@@ -231,7 +225,7 @@ class SharedFileCompoment extends Component {
 
     download = e => {
         this.setState({ loading: true });
-        API.post("/share/download/" + this.props.share.key)
+        API.put("/share/download/" + this.props.share.key)
             .then(response => {
                 this.downloaded = true;
                 window.location.assign(response.data);
@@ -247,27 +241,6 @@ class SharedFileCompoment extends Component {
             .finally(() => {
                 this.setState({ loading: false });
             });
-    };
-
-    handleOpen = event => {
-        const { currentTarget } = event;
-        this.setState(state => ({
-            anchorEl: currentTarget,
-            open: !state.open
-        }));
-    };
-
-    getSecondDes = () => {
-        if (this.props.share.expire > 0) {
-            if (this.props.share.expire >= 24 * 3600) {
-                return (
-                    Math.round(this.props.share.expire / (24 * 3600)) +
-                    " 天后到期"
-                );
-            }
-            return Math.round(this.props.share.expire / 3600) + " 小时后到期";
-        }
-        return this.props.share.create_date;
     };
 
     render() {
@@ -292,24 +265,7 @@ class SharedFileCompoment extends Component {
                     onClose={() => this.setState({ purchaseCallback: null })}
                 />
                 <div className={classes.box}>
-                    <div className={classes.boxHeader}>
-                        <Avatar
-                            className={classes.avatar}
-                            alt={this.props.share.creator.nick}
-                            src={
-                                "/Member/Avatar/1/" +
-                                this.props.share.creator.key
-                            }
-                        />
-                        <Typography variant="h6" className={classes.shareDes}>
-                            {this.props.share.creator.nick} 向您分享了 1 个文件
-                        </Typography>
-                        <Typography className={classes.shareInfo}>
-                            {this.props.share.views} 次浏览 •{" "}
-                            {this.props.share.downloads} 次下载 •{" "}
-                            {this.getSecondDes()}
-                        </Typography>
-                    </div>
+                   <Creator share={this.props.share}/>
                     <Divider />
                     <div className={classes.boxContent}>
                         <TypeIcon

@@ -1,11 +1,14 @@
 const Auth = {
     isAuthenticated: false,
     authenticate(cb) {
-        localStorage.setItem("user", JSON.stringify(cb));
+        Auth.SetUser(cb);
         Auth.isAuthenticated = true;
     },
     GetUser(){
         return JSON.parse(localStorage.getItem("user"))
+    },
+    SetUser(newUser){
+        localStorage.setItem("user", JSON.stringify(newUser));
     },
     /**
      * @return {boolean}
@@ -14,12 +17,17 @@ const Auth = {
         if (Auth.isAuthenticated) {
             return true;
         }
-        return localStorage.getItem("user") !== null;
+        if (localStorage.getItem("user") !== null){
+            return Auth.GetUser().id !== 0;
+        }
+        return false
 
     },
     signout() {
-        localStorage.removeItem("user");
         Auth.isAuthenticated = false;
+        let oldUser = Auth.GetUser();
+        oldUser.id = 0;
+        localStorage.setItem("user", JSON.stringify(oldUser));
     },
     SetPreference(key,value){
         let preference = JSON.parse(localStorage.getItem("user_preference"));

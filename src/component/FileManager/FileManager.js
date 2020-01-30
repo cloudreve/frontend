@@ -81,8 +81,8 @@ class FileManager extends Component {
         return (
             <DndProvider backend={HTML5Backend}>
                 <Modals/>
-                <Navigator isShare={this.props.isShare}/>
-                <Explorer/>
+                <Navigator isShare={this.props.isShare} share={this.props.share}/>
+                <Explorer share={this.props.share}/>
                 <DragLayer/>
                 <img src='/static/img/sign.png' style={{display:"none"}}
                 //  onError={()=>window.location.href="/FixComplete"}

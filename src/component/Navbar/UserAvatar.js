@@ -23,7 +23,8 @@ const mapStateToProps = state => {
         selected: state.explorer.selected,
         isMultiple: state.explorer.selectProps.isMultiple,
         withFolder: state.explorer.selectProps.withFolder,
-        withFile: state.explorer.selectProps.withFile
+        withFile: state.explorer.selectProps.withFile,
+        isLogin:state.viewUpdate.isLogin,
     };
 };
 
@@ -39,7 +40,8 @@ const styles = theme => ({
     mobileHidden: {
         [theme.breakpoints.down("xs")]: {
             display: "none"
-        }
+        },
+        whiteSpace: "nowrap",
     },
     avatar: {
         width: "30px",
@@ -86,6 +88,9 @@ class UserAvatarCompoment extends Component {
 
     render() {
         const { classes } = this.props;
+        const loginCheck = Auth.Check(this.props.isLogin);
+        const user = Auth.GetUser(this.props.isLogin);
+
         return (
             <div className={classes.mobileHidden}>
                 <Grow
@@ -95,7 +100,7 @@ class UserAvatarCompoment extends Component {
                     }
                 >
                     <div>
-                        {Auth.Check() && (
+                        {loginCheck && (
                             <>
                             <DarkModeSwitcher position="top"/>
                             <Tooltip title={"设置"} placement="bottom">
@@ -111,12 +116,12 @@ class UserAvatarCompoment extends Component {
                             </>
                         )}
                         <IconButton color="inherit" onClick={this.showUserInfo}>
-                            {!Auth.Check() && <AccountCircle />}
-                            {Auth.Check() && (
+                            {!loginCheck && <AccountCircle />}
+                            {loginCheck && (
                                 <Avatar
                                     src={
                                         "/Member/Avatar/" +
-                                        Auth.GetUser().id +
+                                        user.id +
                                         "/s"
                                     }
                                     className={classes.avatar}

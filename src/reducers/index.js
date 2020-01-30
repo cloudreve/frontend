@@ -274,6 +274,12 @@ const cloudreveApp = (state = [], action) => {
                     userPopoverAnchorEl:action.anchor,
                 }),
             });
+        case 'SET_SHARE_USER_POPOVER':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    shareUserPopoverAnchorEl:action.anchor,
+                }),
+            });
         case 'OPEN_SHARE_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {

@@ -117,6 +117,13 @@ export const setUserPopover = anchor => {
     };
 };
 
+export const setShareUserPopover = anchor => {
+    return {
+        type: "SET_SHARE_USER_POPOVER",
+        anchor: anchor
+    };
+};
+
 export const openRenameDialog = () => {
     return {
         type: "OPEN_RENAME_DIALOG"

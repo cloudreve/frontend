@@ -46,6 +46,9 @@ const initUserConfig = (siteConfig) => {
         // 更新登录态
         Auth.authenticate(user);
     }
+    if (siteConfig.user!==undefined &&siteConfig.user.id == 0){
+        Auth.SetUser(siteConfig.user);
+    }
     return siteConfig
 }
 

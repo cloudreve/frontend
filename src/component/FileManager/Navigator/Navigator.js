@@ -22,7 +22,8 @@ import {
     setSelectedTarget,
     openCreateFolderDialog,
     openShareDialog,
-    drawerToggleAction
+    drawerToggleAction,
+    setShareUserPopover
 } from "../../../actions/index";
 import API from "../../../middleware/Api";
 import { setCookie, setGetParameter, fixUrlHash } from "../../../untils/index";
@@ -37,9 +38,10 @@ import {
 } from "@material-ui/core";
 import PathButton from "./PathButton";
 import DropDown from "./DropDown";
-import pathHelper from "../../../untils/page"
+import pathHelper from "../../../untils/page";
 import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
+import Avatar from "@material-ui/core/Avatar";
 
 const mapStateToProps = state => {
     return {
@@ -89,6 +91,9 @@ const mapDispatchToProps = dispatch => {
         },
         handleDesktopToggle: open => {
             dispatch(drawerToggleAction(open));
+        },
+        setShareUserPopover: e => {
+            dispatch(setShareUserPopover(e));
         }
     };
 };
@@ -138,8 +143,8 @@ const styles = theme => ({
         padding: "8px",
         marginRight: "5px"
     },
-    roundBorder:{
-        borderRadius:4,
+    roundBorder: {
+        borderRadius: "4px 4px 0 0"
     }
 });
 
@@ -164,7 +169,7 @@ class NavigatorCompoment extends Component {
 
     componentDidMount = () => {
         this.renderPath();
-        if(!this.props.isShare){
+        if (!this.props.isShare) {
             // 如果是在个人文件管理页，首次加载时打开侧边栏
             this.props.handleDesktopToggle(true);
         }
@@ -188,8 +193,13 @@ class NavigatorCompoment extends Component {
                     : this.props.path.substr(1).split("/")
         });
         var newPath = path !== null ? path : this.props.path;
-        var apiURL = this.keywords === null ? "/directory" : "/File/SearchFile";
+        var apiURL = this.props.share
+            ? "/share/list/" + this.props.share.key
+            : this.keywords === null
+            ? "/directory"
+            : "/File/SearchFile";
         newPath = this.keywords === null ? newPath : this.keywords;
+
         API.get(apiURL + newPath)
             .then(response => {
                 this.props.updateFileList(response.data);
@@ -206,6 +216,7 @@ class NavigatorCompoment extends Component {
             .catch(error => {
                 this.props.setNavigatorError(true, error);
             });
+
         this.checkOverFlow(true);
     };
 
@@ -226,6 +237,10 @@ class NavigatorCompoment extends Component {
             this.redresh(nextProps.path);
         }
     };
+
+    componentWillUnmount() {
+        this.props.updateFileList([]);
+    }
 
     componentDidUpdate = (prevProps, prevStates) => {
         if (this.state.folders !== prevStates.folders) {
@@ -328,7 +343,7 @@ class NavigatorCompoment extends Component {
                 : this.props.viewMethod === "list"
                 ? "smallIcon"
                 : "icon";
-        Auth.SetPreference("view_method",newMethod)
+        Auth.SetPreference("view_method", newMethod);
         this.props.changeView(newMethod);
     };
 
@@ -364,26 +379,29 @@ class NavigatorCompoment extends Component {
                     </ListItemIcon>
                     刷新
                 </MenuItem>
-                {this.props.keywords === null && pathHelper.isHomePage(this.props.location.pathname) && (
-                    <div>
-                        <Divider />
-                        <MenuItem onClick={() => this.performAction("share")}>
-                            <ListItemIcon>
-                                <ShareIcon />
-                            </ListItemIcon>
-                            分享
-                        </MenuItem>
+                {this.props.keywords === null &&
+                    pathHelper.isHomePage(this.props.location.pathname) && (
+                        <div>
+                            <Divider />
+                            <MenuItem
+                                onClick={() => this.performAction("share")}
+                            >
+                                <ListItemIcon>
+                                    <ShareIcon />
+                                </ListItemIcon>
+                                分享
+                            </MenuItem>
 
-                        <MenuItem
-                            onClick={() => this.performAction("newfolder")}
-                        >
-                            <ListItemIcon>
-                                <NewFolderIcon />
-                            </ListItemIcon>
-                            创建文件夹
-                        </MenuItem>
-                    </div>
-                )}
+                            <MenuItem
+                                onClick={() => this.performAction("newfolder")}
+                            >
+                                <ListItemIcon>
+                                    <NewFolderIcon />
+                                </ListItemIcon>
+                                创建文件夹
+                            </MenuItem>
+                        </div>
+                    )}
             </Menu>
         );
 
@@ -391,7 +409,7 @@ class NavigatorCompoment extends Component {
             <div
                 className={classNames(
                     {
-                        [classes.roundBorder]: this.props.isShare,
+                        [classes.roundBorder]: this.props.isShare
                     },
                     classes.container
                 )}
@@ -420,8 +438,14 @@ class NavigatorCompoment extends Component {
                                     onClose={this.handleClose}
                                     disableAutoFocusItem={true}
                                 >
-                                    <DropDown onClose={this.handleClose} folders={this.state.folders.slice(0, -1)} navigateTo = {this.navigateTo}/>
-                                    
+                                    <DropDown
+                                        onClose={this.handleClose}
+                                        folders={this.state.folders.slice(
+                                            0,
+                                            -1
+                                        )}
+                                        navigateTo={this.navigateTo}
+                                    />
                                 </Menu>
                                 <RightIcon className={classes.rightIcon} />
                                 {/* <Button component="span" onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)}>
@@ -536,6 +560,27 @@ class NavigatorCompoment extends Component {
                                 </MenuItem>
                             ))}
                         </Menu>
+                        {this.props.share && (
+                            <IconButton
+                                title={
+                                    "由 " +
+                                    this.props.share.creator.nick +
+                                    " 创建"
+                                }
+                                className={classes.sideButton}
+                                onClick={e =>
+                                    this.props.setShareUserPopover(
+                                        e.currentTarget
+                                    )
+                                }
+                                style={{ padding: 5 }}
+                            >
+                                <Avatar
+                                    style={{ height: 23, width: 23 }}
+                                    src="/static/images/avatar/1.jpg"
+                                />
+                            </IconButton>
+                        )}
                     </div>
                 </div>
                 <Divider />
