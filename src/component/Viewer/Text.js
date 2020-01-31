@@ -69,6 +69,9 @@ export default function TextViewer(props) {
         let requestURL = "/file/content/" + math.params[0];
         if (pathHelper.isSharePage(location.pathname)){
             requestURL = "/share/content/" + id;
+            if(query.get("share_path") !== ""){
+                requestURL +=("?path=" +encodeURIComponent(query.get("share_path")))
+            }
         }
 
         setLoading(true);

@@ -26,8 +26,6 @@ export const isPreviewable = name=>{
         return "msDoc";
     }else if(audioPreviewSuffix.indexOf(suffix)!==-1){
         return "audio";
-    }else if(directOpenPreviewSuffix.indexOf(suffix)!==-1){
-        return "open";
     }else if(videoPreviewSuffix.indexOf(suffix)!==-1){
         return "video";
     }else if(editSuffix.indexOf(suffix)!==-1){

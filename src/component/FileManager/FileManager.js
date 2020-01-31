@@ -80,7 +80,7 @@ class FileManager extends Component {
     render() {
         return (
             <DndProvider backend={HTML5Backend}>
-                <Modals/>
+                <Modals share={this.props.share}/>
                 <Navigator isShare={this.props.isShare} share={this.props.share}/>
                 <Explorer share={this.props.share}/>
                 <DragLayer/>

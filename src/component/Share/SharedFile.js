@@ -167,9 +167,6 @@ class SharedFileCompoment extends Component {
                 ]);
                 this.props.openMusicDialog();
                 return;
-            case "open":
-                window.open(window.apiURL.preview);
-                return;
             case "video":
                 this.props.history.push(
                     this.props.share.key +

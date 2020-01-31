@@ -360,21 +360,28 @@ class NavbarCompoment extends Component {
             case "audio":
                 this.props.openMusicDialog();
                 return;
-            case "open":
-                window.open(
-                    window.apiURL.preview +
-                        "/?action=preview&path=" +
-                        encodeURIComponent(previewPath)
-                );
-                return;
             case "video":
-                if (pathHelper.isSharePage(this.props.location.pathname)) {
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/video?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
                     return;
                 }
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
-                if (pathHelper.isSharePage(this.props.location.pathname)) {
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/text?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
                     return;
                 }
                 this.props.history.push("/text" + previewPath);

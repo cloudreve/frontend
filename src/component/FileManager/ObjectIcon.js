@@ -183,21 +183,24 @@ export default function ObjectIcon(props) {
             case "audio":
                 OpenMusicDialog();
                 return;
-            case "open":
-                window.open(
-                    window.apiURL.preview +
-                        "/?action=preview&path=" +
-                        encodeURIComponent(previewPath)
-                );
-                return;
             case "video":
-                if (statusHelper.isSharePage(location.pathname)) {
+                if (isShare) {
+                    history.push(selected[0].key +
+                        "/video?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath));
                     return;
                 }
                 history.push("/video" + previewPath);
                 return;
             case "edit":
-                if (statusHelper.isSharePage(location.pathname)) {
+                if (isShare) {
+                    history.push(selected[0].key +
+                        "/text?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath));
                     return;
                 }
                 history.push("/text" + previewPath);

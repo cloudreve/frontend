@@ -59,7 +59,14 @@ export default function VideoViewer(props) {
                             url:
                                 getBaseURL() +
                                 (pathHelper.isSharePage(location.pathname)
-                                    ? "/share/preview/" + id
+                                    ? "/share/preview/" +
+                                      id +
+                                      (query.get("share_path") !== ""
+                                          ? "?path=" +
+                                            encodeURIComponent(
+                                                query.get("share_path")
+                                            )
+                                          : "")
                                     : "/file/preview/" + math.params[0])
                         }
                     }}

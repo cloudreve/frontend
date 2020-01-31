@@ -23,7 +23,7 @@ import {
     openCreateFolderDialog,
     openShareDialog,
     drawerToggleAction,
-    setShareUserPopover
+    setShareUserPopover, openResaveDialog
 } from "../../../actions/index";
 import API from "../../../middleware/Api";
 import { setCookie, setGetParameter, fixUrlHash } from "../../../untils/index";
@@ -37,6 +37,7 @@ import {
     IconButton
 } from "@material-ui/core";
 import PathButton from "./PathButton";
+import SaveIcon from '@material-ui/icons/Save';
 import DropDown from "./DropDown";
 import pathHelper from "../../../untils/page";
 import classNames from "classnames";
@@ -94,7 +95,10 @@ const mapDispatchToProps = dispatch => {
         },
         setShareUserPopover: e => {
             dispatch(setShareUserPopover(e));
-        }
+        },
+        openResave: (key) => {
+            dispatch(openResaveDialog(key));
+        },
     };
 };
 
@@ -560,6 +564,17 @@ class NavigatorCompoment extends Component {
                                 </MenuItem>
                             ))}
                         </Menu>
+                        {this.props.share && (
+                            <IconButton
+                                title={"保存到我的文件"}
+                                className={classes.sideButton}
+                                onClick={e =>
+                                    this.props.openResave(this.props.share.key)
+                                }
+                            >
+                                <SaveIcon fontSize="small"/>
+                            </IconButton>
+                        )}
                         {this.props.share && (
                             <IconButton
                                 title={

@@ -217,18 +217,35 @@ class ContextMenuCompoment extends Component {
                     );
                     return;
                 }
-                this.props.history.push("/text" + previewPath);
+                this.props.history.push("/doc" + previewPath);
                 return;
             case "audio":
                 this.props.openMusicDialog();
                 return;
-            case "open":
-                window.open(baseURL + "/share/preview/" + this.props.share.key);
-                return;
             case "video":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/video?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
                 this.props.history.push("/video" + previewPath);
                 return;
             case "edit":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/text?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
                 this.props.history.push("/text" + previewPath);
                 return;
             default:

@@ -31,6 +31,8 @@ import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../untils/page";
+import PurchaseShareDialog from "../Modals/PurchaseShare";
+import Auth from "../../middleware/Auth";
 
 const styles = theme => ({
     wrapper: {
@@ -100,7 +102,8 @@ class ModalsCompoment extends Component {
         shareUrl: "",
         downloadURL: "",
         remoteDownloadPathSelect: false,
-        source: ""
+        source: "",
+        purchaseCallback:null,
     };
 
     handleInputChange = e => {
@@ -110,6 +113,7 @@ class ModalsCompoment extends Component {
     };
 
     newNameSuffix = "";
+    downloaded = false;
 
     componentWillReceiveProps = nextProps => {
         if (this.props.dndSignale !== nextProps.dndSignale) {
@@ -122,7 +126,30 @@ class ModalsCompoment extends Component {
                 if (nextProps.loadingText === "打包中...") {
                     this.archiveDownload();
                 } else if (nextProps.loadingText === "获取下载地址...") {
-                    this.Download();
+                    if (pathHelper.isSharePage(this.props.location.pathname) && this.props.share && this.props.share.score > 0){
+                        // 分享页面需要积分下载
+                        if (!Auth.Check()) {
+                            this.props.toggleSnackbar(
+                                "top",
+                                "right",
+                                "登录后才能继续操作",
+                                "warning"
+                            );
+                            return;
+                        }
+                        if (!Auth.GetUser().group.shareFree && !this.downloaded) {
+                            this.setState({
+                                purchaseCallback: () => {
+                                    this.setState({
+                                        purchaseCallback: null
+                                    });
+                                    this.Download();
+                                }
+                            });
+                            return;
+                        }
+                    }
+                        this.Download();
                 }
             }
             return;
@@ -178,6 +205,7 @@ class ModalsCompoment extends Component {
             .then(response => {
                 window.location.assign(response.data);
                 this.onClose();
+                this.downloaded = true;
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -644,6 +672,14 @@ class ModalsCompoment extends Component {
         return (
             <div>
                 <Loading />
+                <PurchaseShareDialog
+                    callback={this.state.purchaseCallback}
+                    score={this.props.share?this.props.share.score:0}
+                    onClose={() => {
+                        this.setState({ purchaseCallback: null });
+                        this.onClose();
+                    }}
+                />
                 <Dialog
                     open={this.props.modalsStatus.getSource}
                     onClose={this.onClose}
@@ -925,7 +961,27 @@ class ModalsCompoment extends Component {
                                         )
                                             ? baseURL +
                                               "/share/preview/" +
-                                              this.props.selected[0].key
+                                              this.props.selected[0].key +
+                                              (this.props.selected[0].key
+                                                  ? "?path=" +
+                                                    encodeURIComponent(
+                                                        this.props.selected[0]
+                                                            .path === "/"
+                                                            ? this.props
+                                                                  .selected[0]
+                                                                  .path +
+                                                                  this.props
+                                                                      .selected[0]
+                                                                      .name
+                                                            : this.props
+                                                                  .selected[0]
+                                                                  .path +
+                                                                  "/" +
+                                                                  this.props
+                                                                      .selected[0]
+                                                                      .name
+                                                    )
+                                                  : "")
                                             : baseURL +
                                               "/file/preview" +
                                               (this.props.selected[0].path ===
