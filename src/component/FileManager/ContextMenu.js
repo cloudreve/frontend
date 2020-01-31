@@ -364,7 +364,7 @@ class ContextMenuCompoment extends Component {
                             )}
 
                             {(this.props.isMultiple || this.props.withFolder) &&
-                                user.group.allowArchiveDownload && (
+                            (user.group.allowArchiveDownload||!isHomePage) && (
                                     <MenuItem
                                         onClick={() =>
                                             this.openArchiveDownload()

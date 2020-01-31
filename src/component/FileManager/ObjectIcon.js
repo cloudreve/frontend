@@ -130,7 +130,7 @@ export default function ObjectIcon(props) {
     const handleClick = e => {
         if (statusHelper.isMobile() || statusHelper.isSharePage(location.pathname)) {
             selectFile(e);
-            if (props.file.type === "dir") {
+            if (props.file.type === "dir" && !e.ctrlKey) {
                 enterFolder();
                 return;
             }

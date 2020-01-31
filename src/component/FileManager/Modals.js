@@ -124,30 +124,15 @@ class ModalsCompoment extends Component {
             // 打包下载
             if (nextProps.loading === true) {
                 if (nextProps.loadingText === "打包中...") {
+                    if (pathHelper.isSharePage(this.props.location.pathname) && this.props.share && this.props.share.score > 0){
+                        this.scoreHandler(this.archiveDownload);
+                        return
+                    }
                     this.archiveDownload();
                 } else if (nextProps.loadingText === "获取下载地址...") {
                     if (pathHelper.isSharePage(this.props.location.pathname) && this.props.share && this.props.share.score > 0){
-                        // 分享页面需要积分下载
-                        if (!Auth.Check()) {
-                            this.props.toggleSnackbar(
-                                "top",
-                                "right",
-                                "登录后才能继续操作",
-                                "warning"
-                            );
-                            return;
-                        }
-                        if (!Auth.GetUser().group.shareFree && !this.downloaded) {
-                            this.setState({
-                                purchaseCallback: () => {
-                                    this.setState({
-                                        purchaseCallback: null
-                                    });
-                                    this.Download();
-                                }
-                            });
-                            return;
-                        }
+                        this.scoreHandler(this.Download);
+                        return
                     }
                         this.Download();
                 }
@@ -182,6 +167,32 @@ class ModalsCompoment extends Component {
                 });
         }
     };
+
+    scoreHandler = callback =>{
+        // 分享页面需要积分下载
+        if (!Auth.Check()) {
+            this.props.toggleSnackbar(
+                "top",
+                "right",
+                "登录后才能继续操作",
+                "warning"
+            );
+            this.onClose();
+            return;
+        }
+        if (!Auth.GetUser().group.shareFree && !this.downloaded) {
+            this.setState({
+                purchaseCallback: () => {
+                    this.setState({
+                        purchaseCallback: null
+                    });
+                    callback();
+                }
+            });
+        }else{
+            callback();
+        }
+    }
 
     Download = () => {
         let reqURL = "";
@@ -228,10 +239,22 @@ class ModalsCompoment extends Component {
                 items.push(value.id);
             }
         });
-        API.post("/file/archive", {
+
+        let reqURL = "/file/archive";
+        let postBody = {
             items: items,
             dirs: dirs
-        })
+        };
+        if (pathHelper.isSharePage(
+            this.props.location.pathname
+        )) {
+            reqURL =
+                "/share/archive/" +
+                window.shareInfo.key;
+            postBody["path"] = this.props.selected[0].path
+        }
+
+        API.post(reqURL, postBody)
             .then(response => {
                 if (response.rawData.code === 0) {
                     this.onClose();

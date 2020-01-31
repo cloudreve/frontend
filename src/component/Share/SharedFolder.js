@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import { connect } from "react-redux";
 import {
     openMusicDialog,
@@ -17,6 +17,8 @@ import FileManager from "../FileManager/FileManager";
 import Paper from "@material-ui/core/Paper";
 import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import PageLoading from "../Placeholder/PageLoading";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -34,17 +36,15 @@ const styles = theme => ({
             marginLeft: 0,
             marginRight: 0
         }
-    },
-    managerContainer: {
-        flexGrow: 1,
-        padding: theme.spacing(0),
-        minWidth: 0,
-        overflowY: "auto"
-    },
+    }
 });
+
+const ReadMe = React.lazy(() => import("./ReadMe"));
+
 const mapStateToProps = state => {
     return {
-        anchorEl: state.viewUpdate.shareUserPopoverAnchorEl
+        anchorEl: state.viewUpdate.shareUserPopoverAnchorEl,
+        fileList: state.explorer.fileList
     };
 };
 
@@ -78,50 +78,39 @@ class SharedFolderComponent extends Component {
         window.shareInfo = this.props.share;
     }
 
-
     componentWillUnmount() {
         window.shareInfo = null;
         this.props.setSelectedTarget([]);
     }
 
-    scoreHandle = callback => event => {
-        if (this.props.share.score > 0) {
-            if (!Auth.Check()) {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    "登录后才能继续操作",
-                    "warning"
-                );
-                return;
-            }
-            if (!Auth.GetUser().group.shareFree && !this.downloaded) {
-                this.setState({
-                    purchaseCallback: () => {
-                        this.setState({
-                            purchaseCallback: null
-                        });
-                        callback(event);
-                    }
-                });
-                return;
-            }
-        }
-        callback(event);
+    handleClickAway = () => {
+        this.props.setSelectedTarget([]);
     };
 
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
         const isLogin = Auth.Check();
-
+        let readmeShowed = false;
         const id = this.props.anchorEl !== null ? "simple-popover" : undefined;
 
         return (
             <div className={classes.layout}>
-                <Paper className={classes.managerContainer}>
-                    <FileManager isShare share={this.props.share} />
-                </Paper>
+                <ClickAwayListener onClickAway={this.handleClickAway}>
+                    <Paper className={classes.managerContainer}>
+                        <FileManager isShare share={this.props.share} />
+                    </Paper>
+                </ClickAwayListener>
+                {this.props.fileList.map(value => {
+                    if (
+                        (value.name.toLowerCase() === "readme.md" ||
+                            value.name.toLowerCase() === "readme.txt") &&
+                        !readmeShowed
+                    ) {
+                        readmeShowed = true;
+                        return <ReadMe share={this.props.share} file={value} />;
+                    }
+                })}
                 <Popover
                     id={id}
                     open={this.props.anchorEl !== null}
@@ -137,7 +126,7 @@ class SharedFolderComponent extends Component {
                     }}
                 >
                     <Typography>
-                        <Creator isFolder share={this.props.share}/>
+                        <Creator isFolder share={this.props.share} />
                     </Typography>
                 </Popover>
             </div>
