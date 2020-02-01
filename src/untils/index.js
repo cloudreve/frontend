@@ -117,3 +117,10 @@ export function bufferEncode(value) {
         .replace(/\//g, "_")
         .replace(/=/g, "");
 }
+
+export  function pathBack(path){
+    let folders = path !== null
+        ? path.substr(1).split("/")
+        : this.props.path.substr(1).split("/");
+    return  "/" + folders.slice(0, folders.length-1).join("/")
+}

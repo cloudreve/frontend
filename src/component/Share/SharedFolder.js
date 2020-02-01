@@ -32,11 +32,14 @@ const styles = theme => ({
             marginRight: "auto"
         },
         [theme.breakpoints.down("sm")]: {
-            marginTop: 0,
-            marginLeft: 0,
-            marginRight: 0
+            marginTop: theme.spacing(2),
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
         }
-    }
+    },
+    managerContainer:{
+        overflowY: "auto",
+    },
 });
 
 const ReadMe = React.lazy(() => import("./ReadMe"));

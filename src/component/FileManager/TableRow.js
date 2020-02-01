@@ -10,6 +10,7 @@ import TypeIcon from "./TypeIcon";
 import {lighten} from "@material-ui/core/styles";
 import pathHelper from "../../untils/page";
 import {withRouter} from "react-router";
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 
 const styles = theme => ({
     selected: {
@@ -89,6 +90,8 @@ class TableRowCompoment extends Component {
             .toLowerCase();
         if (this.props.file.type === "dir") {
             icon = <FolderIcon className={classes.icon} />;
+        }else if (this.props.file.type === "up"){
+            icon = <KeyboardReturnIcon className={classes.icon}/>
         } else {
            icon = <TypeIcon className={classes.tableIcon} fileName={this.props.file.name}/>
         }
@@ -132,7 +135,7 @@ class TableRowCompoment extends Component {
                         })}
                     >
                         {" "}
-                        {this.props.file.type !== "dir" &&
+                        {this.props.file.type !== "dir" &&this.props.file.type !== "up"&&
                             sizeToString(this.props.file.size)}
                     </Typography>
                 </TableCell>

@@ -29,6 +29,7 @@ import {
 } from "react-router-dom";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Auth from "../../middleware/Auth";
+import {pathBack} from "../../untils";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -47,6 +48,9 @@ export default function ObjectIcon(props) {
     const selected = useSelector(state => state.explorer.selected);
     const viewMethod = useSelector(
         state => state.viewUpdate.explorerViewMethod
+    );
+    const navigatorPath = useSelector(
+        state => state.navigator.path,
     );
     let location = useLocation();
     let history = useHistory();
@@ -101,6 +105,9 @@ export default function ObjectIcon(props) {
     const classes = useStyles();
 
     const contextMenu = e => {
+        if(props.file.type === "up"){
+            return
+        }
         e.preventDefault();
         if (
             selected.findIndex(value => {
@@ -128,6 +135,9 @@ export default function ObjectIcon(props) {
     };
 
     const handleClick = e => {
+        if(props.file.type === "up"){
+            NavitateTo(pathBack(navigatorPath));
+        }
         if (statusHelper.isMobile() || statusHelper.isSharePage(location.pathname)) {
             selectFile(e);
             if (props.file.type === "dir" && !e.ctrlKey) {
@@ -140,6 +150,9 @@ export default function ObjectIcon(props) {
     };
 
     const handleDoubleClick = () => {
+        if(props.file.type === "up"){
+            return
+        }
         if (props.file.type === "dir") {
             enterFolder();
             return;

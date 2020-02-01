@@ -15,6 +15,8 @@ import {
 } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
+import { withRouter } from "react-router";
+import pathHelper from "../../untils/page";
 
 const styles = theme => ({
     container: {
@@ -28,7 +30,7 @@ const styles = theme => ({
         backgroundColor:
             theme.palette.type == "dark"
                 ? "#fff"
-                : lighten(theme.palette.primary.main,0.8),
+                : lighten(theme.palette.primary.main, 0.8)
     },
 
     notSelected: {
@@ -144,6 +146,10 @@ class FileIconCompoment extends Component {
                 return value === this.props.file;
             }) !== -1;
 
+        const isSharePage = pathHelper.isSharePage(
+            this.props.location.pathname
+        );
+
         return (
             <div className={classes.container}>
                 <ButtonBase
@@ -159,8 +165,7 @@ class FileIconCompoment extends Component {
                     {this.props.file.pic !== "" &&
                         !this.state.showPicIcon &&
                         this.props.file.pic !== " " &&
-                        this.props.file.pic !== "null,null" &&
-                        allowSharePreview() && (
+                        this.props.file.pic !== "null,null" && (
                             <div className={classes.preview}>
                                 <LazyLoadImage
                                     className={classNames({
@@ -170,8 +175,17 @@ class FileIconCompoment extends Component {
                                     })}
                                     src={
                                         baseURL +
-                                        "/file/thumb/" +
-                                        this.props.file.id
+                                        (isSharePage
+                                            ? "/share/thumb/" +
+                                              window.shareInfo.key +
+                                              "/" +
+                                              this.props.file.id +
+                                              "?path=" +
+                                              encodeURIComponent(
+                                                  this.props.file.path
+                                              )
+                                            : "/file/thumb/" +
+                                              this.props.file.id)
                                     }
                                     afterLoad={() =>
                                         this.setState({ loading: false })
@@ -205,8 +219,7 @@ class FileIconCompoment extends Component {
                     {(this.props.file.pic === "" ||
                         this.state.showPicIcon ||
                         this.props.file.pic === " " ||
-                        this.props.file.pic === "null,null" ||
-                        !allowSharePreview()) && (
+                        this.props.file.pic === "null,null") && (
                         <div className={classes.previewIcon}>
                             <TypeIcon
                                 className={classes.iconBig}
@@ -217,8 +230,7 @@ class FileIconCompoment extends Component {
                     {(this.props.file.pic === "" ||
                         this.state.showPicIcon ||
                         this.props.file.pic === " " ||
-                        this.props.file.pic === "null,null" ||
-                        !allowSharePreview()) && <Divider />}
+                        this.props.file.pic === "null,null") && <Divider />}
                     <div className={classes.fileInfo}>
                         {!this.props.share && (
                             <div
@@ -260,6 +272,6 @@ FileIconCompoment.propTypes = {
 const FileIcon = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(FileIconCompoment));
+)(withStyles(styles)(withRouter(FileIconCompoment)));
 
 export default FileIcon;

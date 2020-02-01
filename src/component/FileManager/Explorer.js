@@ -202,6 +202,7 @@ class ExplorerCompoment extends Component {
 
     render() {
         const { classes } = this.props;
+        const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
 
@@ -243,7 +244,7 @@ class ExplorerCompoment extends Component {
 
 
                 {this.props.keywords === null &&
-                    pathHelper.isHomePage(this.props.location.pathname) &&
+                isHomePage &&
                     this.props.dirList.length === 0 &&
                     this.props.fileList.length === 0 &&
                     !this.props.loading &&
@@ -267,7 +268,7 @@ class ExplorerCompoment extends Component {
                         this.props.fileList.length === 0 &&
                         !this.props.loading &&
                         !this.props.navigatorError &&
-                        pathHelper.isSharePage(this.props.location.pathname))) && (
+                        !isHomePage)) && (
                     <div className={classes.emptyContainer}>
                         <SadIcon className={classes.emptyIcon} />
                         <div className={classes.emptyInfoBig}>
@@ -369,6 +370,10 @@ class ExplorerCompoment extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+                                {pathHelper.isMobile() && this.props.path!=="/" &&<ObjectIcon file={{
+                                    type:"up",
+                                    name:"上级目录",
+                                }} />}
                                 {this.props.dirList.map((value, index) => (
                                     <ObjectIcon file={value} />
                                 ))}

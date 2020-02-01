@@ -279,7 +279,6 @@ class NavigatorCompoment extends Component {
         if (id === this.state.folders.length - 1) {
             //最后一个路径
             this.setState({ anchorEl: event.currentTarget });
-            return;
         } else if (
             id === -1 &&
             this.state.folders.length === 1 &&
@@ -287,11 +286,9 @@ class NavigatorCompoment extends Component {
         ) {
             this.props.refreshFileList();
             this.handleClose();
-            return;
         } else if (id === -1) {
             this.props.navigateToPath("/");
             this.handleClose();
-            return;
         } else {
             this.props.navigateToPath(
                 "/" + this.state.folders.slice(0, id + 1).join("/")

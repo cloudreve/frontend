@@ -13,7 +13,10 @@ import Editor from "for-editor";
 
 const useStyles = makeStyles(theme => ({
     readMeContainer: {
-        marginTop: 30
+        marginTop: 30,
+        [theme.breakpoints.down("sm")]: {
+            marginTop: theme.spacing(2),
+        },
     },
     readMeHeader: {
         padding: "10px 16px",

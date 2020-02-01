@@ -100,9 +100,9 @@ class UserAvatarCompoment extends Component {
                     }
                 >
                     <div>
+                        <DarkModeSwitcher position="top"/>
                         {loginCheck && (
                             <>
-                            <DarkModeSwitcher position="top"/>
                             <Tooltip title={"设置"} placement="bottom">
                             <IconButton
                                 onClick={() =>
