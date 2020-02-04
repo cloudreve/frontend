@@ -5,6 +5,8 @@ import {refreshFileList, refreshStorage, toggleSnackbar} from "../../actions";
 import FileList from "./FileList.js";
 import Auth from "../../middleware/Auth"
 import UploadButton from "../Dial/Create.js"
+import {withRouter} from "react-router";
+import pathHelper from "../../untils/page";
 
 let loaded = false;
 
@@ -54,6 +56,20 @@ class UploaderComponent extends Component {
         return 0
     }
 
+    fileAdd = (up,files)=>{
+        if(window.location.href.split("#")[1].toLowerCase().startsWith("/home")){
+            window.fileList["openFileList"]();
+            window.plupload.each(files, files => {
+                window.pathCache[files.id] = this.props.path;
+                window.fileList["enQueue"](files);
+            });
+        }else{
+            window.plupload.each(files, files => {
+                up.removeFile(files);
+            });
+        }
+    };
+
     componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
         if (isScriptLoaded && !this.props.isScriptLoaded) {
             // load finished
@@ -84,22 +100,7 @@ class UploaderComponent extends Component {
                     auto_start: true,
                     log_level: 5,
                     init: {
-                        FilesAdded: ( up, files ) => {
-                            if(window.policyType !== user.policy.saveType){
-                                up.stop();
-                                this.props.toggleSnackbar(
-                                    "top",
-                                    "right",
-                                    "存储策略已变更，请刷新页面",
-                                    "warning"
-                                )
-                            }
-                            window.fileList["openFileList"]();
-                            window.plupload.each(files, files => {
-                                window.pathCache[files.id] = this.props.path;
-                                window.fileList["enQueue"](files);
-                            });
-                        },
+                        FilesAdded: this.fileAdd,
 
                         BeforeUpload: function(up, file) {},
                         QueueChanged: up => {
