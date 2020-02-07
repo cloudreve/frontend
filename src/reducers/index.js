@@ -49,9 +49,40 @@ const cloudreveApp = (state = [], action) => {
                 }),
             });
         case 'CHANGE_SORT_METHOD':
+            let list = [...state.explorer.fileList,...state.explorer.dirList];
+            // eslint-disable-next-line
+            list.sort((a,b)=>{
+                switch (action.method) {
+                    case "sizePos":
+                        return a.size-b.size;
+                    case "sizeRes":
+                        return b.size-a.size;
+                    case 'namePos':
+                        return a.name.localeCompare(b.name);
+                    case 'nameRev':
+                        return b.name.localeCompare(a.name);
+                    case 'timePos':
+                        return Date.parse(a.date)-Date.parse(b.date);
+                    case 'timeRev':
+                        return Date.parse(b.date)-Date.parse(a.date);
+                    default:
+                        break;
+                }
+            })
+            var dirList =  list.filter(function (x) {
+                return x.type === "dir";
+            });
+            var fileList =  list.filter(function (x) {
+                return x.type === "file";
+            });
+
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
                     sortMethod:action.method,
+                }),
+                explorer: Object.assign({}, state.explorer, {
+                    fileList: fileList,
+                    dirList: dirList,
                 }),
             });
         case 'CHANGE_CONTEXT_MENU':

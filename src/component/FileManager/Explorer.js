@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {navitateTo, changeContextMenu, navitateUp, setSelectedTarget, openRemoveDialog} from "../../actions/index";
+import {
+    navitateTo,
+    changeContextMenu,
+    navitateUp,
+    setSelectedTarget,
+    openRemoveDialog,
+    changeSortMethod, refreshFileList
+} from "../../actions/index";
 import ObjectIcon from "./ObjectIcon";
 import ContextMenu from "./ContextMenu";
 import EmptyIcon from "@material-ui/icons/Unarchive";
@@ -25,6 +32,7 @@ import {
     Button
 } from "@material-ui/core";
 import { GlobalHotKeys } from "react-hotkeys";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
 
 const styles = theme => ({
     paper: {
@@ -105,14 +113,25 @@ const styles = theme => ({
         marginTop: "10px",
         marginBottom: "10px"
     },
-    clickAway:{
+    clickAway: {
         height: "100%",
-        width: "100%",
+        width: "100%"
     },
     rootShare: {
         height: "100%",
-        minHeight: 500,
+        minHeight: 500
     },
+    visuallyHidden: {
+        border: 0,
+        clip: "rect(0 0 0 0)",
+        height: 1,
+        margin: -1,
+        overflow: "hidden",
+        padding: 0,
+        position: "absolute",
+        top: 20,
+        width: 1
+    }
 });
 
 const mapStateToProps = state => {
@@ -127,7 +146,7 @@ const mapStateToProps = state => {
         navigatorError: state.viewUpdate.navigatorError,
         navigatorErrorMsg: state.viewUpdate.navigatorErrorMsg,
         keywords: state.explorer.keywords,
-        selected: state.explorer.selected,
+        selected: state.explorer.selected
     };
 };
 
@@ -146,43 +165,52 @@ const mapDispatchToProps = dispatch => {
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
-        openRemoveDialog:()=>{
-            dispatch(openRemoveDialog())
+        openRemoveDialog: () => {
+            dispatch(openRemoveDialog());
         },
+        changeSort: method => {
+            dispatch(changeSortMethod(method));
+        }
     };
 };
 
 class ExplorerCompoment extends Component {
+    constructor() {
+        super();
+        this.keyMap = {
+            DELETE_FILE: "del",
+            SELECT_ALL: "ctrl+a"
+        };
 
-   constructor() {
-       super();
-       this.keyMap = {
-           DELETE_FILE: "del",
-           SELECT_ALL:"ctrl+a",
-       };
-
-       this.handlers = {
-           DELETE_FILE: ()=>{
-               if (this.props.selected.length > 0 && !this.props.share){
-                   this.props.openRemoveDialog();
-               }
-           },
-           SELECT_ALL:(e)=>{
-               e.preventDefault();
-               if(this.props.selected.length >= this.props.dirList.length + this.props.fileList.length){
-                   this.props.setSelectedTarget([]);
-               }else{
-                   this.props.setSelectedTarget([...this.props.dirList,...this.props.fileList]);
-               }
-
-           },
-       };
-   }
-
+        this.handlers = {
+            DELETE_FILE: () => {
+                if (this.props.selected.length > 0 && !this.props.share) {
+                    this.props.openRemoveDialog();
+                }
+            },
+            SELECT_ALL: e => {
+                e.preventDefault();
+                if (
+                    this.props.selected.length >=
+                    this.props.dirList.length + this.props.fileList.length
+                ) {
+                    this.props.setSelectedTarget([]);
+                } else {
+                    this.props.setSelectedTarget([
+                        ...this.props.dirList,
+                        ...this.props.fileList
+                    ]);
+                }
+            }
+        };
+    }
 
     contextMenu = e => {
         e.preventDefault();
-        if (this.props.keywords === null && !pathHelper.isSharePage(this.props.location.pathname)) {
+        if (
+            this.props.keywords === null &&
+            !pathHelper.isSharePage(this.props.location.pathname)
+        ) {
             if (!this.props.loading) {
                 this.props.changeContextMenu("empty", true);
             }
@@ -193,9 +221,9 @@ class ExplorerCompoment extends Component {
         this.away = 0;
     }
 
-    ClickAway = e =>{
+    ClickAway = e => {
         let element = e.target;
-        if (element.dataset.clickaway){
+        if (element.dataset.clickaway) {
             this.props.setSelectedTarget([]);
         }
     };
@@ -205,7 +233,6 @@ class ExplorerCompoment extends Component {
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
-
             <div
                 onContextMenu={this.contextMenu}
                 onClick={this.ClickAway}
@@ -214,13 +241,13 @@ class ExplorerCompoment extends Component {
                     {
                         [classes.root]: this.props.viewMethod !== "list",
                         [classes.rootTable]: this.props.viewMethod === "list",
-                        [classes.rootShare]: this.props.share,
+                        [classes.rootShare]: this.props.share
                     },
                     classes.button
                 )}
             >
-                <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap}/>
-                <ContextMenu share={this.props.share}/>
+                <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap} />
+                <ContextMenu share={this.props.share} />
                 <ImgPreivew />
                 {this.props.navigatorError && (
                     <Paper elevation={1} className={classes.errorBox}>
@@ -242,9 +269,8 @@ class ExplorerCompoment extends Component {
                     </div>
                 )}
 
-
                 {this.props.keywords === null &&
-                isHomePage &&
+                    isHomePage &&
                     this.props.dirList.length === 0 &&
                     this.props.fileList.length === 0 &&
                     !this.props.loading &&
@@ -276,7 +302,7 @@ class ExplorerCompoment extends Component {
                         </div>
                     </div>
                 )}
-             
+
                 {this.props.viewMethod !== "list" &&
                     (this.props.dirList.length !== 0 ||
                         this.props.fileList.length !== 0) &&
@@ -352,7 +378,7 @@ class ExplorerCompoment extends Component {
                                 )}
                         </div>
                     )}
-            
+
                 {this.props.viewMethod === "list" &&
                     (this.props.dirList.length !== 0 ||
                         this.props.fileList.length !== 0) &&
@@ -360,20 +386,141 @@ class ExplorerCompoment extends Component {
                         <Table className={classes.table}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>名称</TableCell>
-                                    <TableCell className={classes.hideAuto}>
-                                        大小
+                                    <TableCell>
+                                        <TableSortLabel
+                                            active={
+                                                this.props.sortMethod ===
+                                                    "namePos" ||
+                                                this.props.sortMethod ===
+                                                    "nameRev"
+                                            }
+                                            direction={
+                                                this.props.sortMethod ===
+                                                "namePos"
+                                                    ? "asc"
+                                                    : "des"
+                                            }
+                                            onClick={() => {
+                                                this.props.changeSort(
+                                                    this.props.sortMethod ===
+                                                        "namePos"
+                                                        ? "nameRev"
+                                                        : "namePos"
+                                                );
+                                            }}
+                                        >
+                                            名称
+                                            {this.props.sortMethod ===
+                                                "namePos" ||
+                                            this.props.sortMethod ===
+                                                "nameRev" ? (
+                                                <span
+                                                    className={
+                                                        classes.visuallyHidden
+                                                    }
+                                                >
+                                                    {this.props.sortMethod ===
+                                                    "nameRev"
+                                                        ? "sorted descending"
+                                                        : "sorted ascending"}
+                                                </span>
+                                            ) : null}
+                                        </TableSortLabel>
                                     </TableCell>
                                     <TableCell className={classes.hideAuto}>
-                                        日期
+                                        <TableSortLabel
+                                            active={
+                                                this.props.sortMethod ===
+                                                "sizePos" ||
+                                                this.props.sortMethod ===
+                                                "sizeRes"
+                                            }
+                                            direction={
+                                                this.props.sortMethod ===
+                                                "sizePos"
+                                                    ? "asc"
+                                                    : "des"
+                                            }
+                                            onClick={() => {
+                                                this.props.changeSort(
+                                                    this.props.sortMethod ===
+                                                    "sizePos"
+                                                        ? "sizeRes"
+                                                        : "sizePos"
+                                                );
+                                            }}
+                                        >
+                                            大小
+                                            {this.props.sortMethod ===
+                                            "sizePos" ||
+                                            this.props.sortMethod ===
+                                            "sizeRes" ? (
+                                                <span
+                                                    className={
+                                                        classes.visuallyHidden
+                                                    }
+                                                >
+                                                    {this.props.sortMethod ===
+                                                    "sizeRes"
+                                                        ? "sorted descending"
+                                                        : "sorted ascending"}
+                                                </span>
+                                            ) : null}
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell className={classes.hideAuto}>
+                                        <TableSortLabel
+                                            active={
+                                                this.props.sortMethod ===
+                                                "timePos" ||
+                                                this.props.sortMethod ===
+                                                "timeRev"
+                                            }
+                                            direction={
+                                                this.props.sortMethod ===
+                                                "timePos"
+                                                    ? "asc"
+                                                    : "des"
+                                            }
+                                            onClick={() => {
+                                                this.props.changeSort(
+                                                    this.props.sortMethod ===
+                                                    "timePos"
+                                                        ? "timeRev"
+                                                        : "timePos"
+                                                );
+                                            }}
+                                        >
+                                            日期
+                                            {this.props.sortMethod ===
+                                            "timePos" ||
+                                            this.props.sortMethod ===
+                                            "timeRev" ? (
+                                                <span
+                                                    className={
+                                                        classes.visuallyHidden
+                                                    }
+                                                >
+                                                    {this.props.sortMethod ===
+                                                    "sizeRes"
+                                                        ? "sorted descending"
+                                                        : "sorted ascending"}
+                                                </span>
+                                            ) : null}
+                                        </TableSortLabel>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {pathHelper.isMobile() && this.props.path!=="/" &&<ObjectIcon file={{
-                                    type:"up",
-                                    name:"上级目录",
-                                }} />}
+                                {pathHelper.isMobile() &&
+                                    this.props.path !== "/" && (
+                                        <ObjectIcon
+                                            file={{
+                                                type: "up",
+                                                name: "上级目录"
+                                            }}
+                                        />
+                                    )}
                                 {this.props.dirList.map((value, index) => (
                                     <ObjectIcon file={value} />
                                 ))}
@@ -384,7 +531,6 @@ class ExplorerCompoment extends Component {
                         </Table>
                     )}
             </div>
-
         );
     }
 }

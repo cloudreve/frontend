@@ -363,7 +363,6 @@ class NavigatorComponent extends Component {
         };
         this.props.changeSort(optionsTable[index]);
         this.handleClose();
-        this.props.refreshFileList();
     };
 
     render() {

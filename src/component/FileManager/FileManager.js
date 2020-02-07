@@ -10,7 +10,7 @@ import {decode} from "../../untils/index"
 import { withStyles } from '@material-ui/core';
 import {connect} from "react-redux";
 import {
-    changeSubTitle, closeAllModals, setSelectedTarget, toggleSnackbar,
+    changeSubTitle, closeAllModals, navitateTo, setSelectedTarget, toggleSnackbar,
 } from "../../actions";
 import {withRouter} from "react-router-dom";
 const styles = theme => ({
@@ -35,6 +35,9 @@ const mapDispatchToProps = dispatch => {
         closeAllModals: () => {
             dispatch(closeAllModals());
         },
+        navitateTo:path=>{
+            dispatch(navitateTo(path));
+        },
     };
 };
 
@@ -50,6 +53,7 @@ class FileManager extends Component {
 
     componentWillUnmount() {
         this.props.setSelectedTarget([]);
+        this.props.navitateTo("/");
         this.props.closeAllModals();
     }
 
