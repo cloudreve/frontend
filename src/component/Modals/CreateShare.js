@@ -201,7 +201,10 @@ export default function CreatShare(props) {
 
     const onClose = () => {
         props.onClose();
-        setShareURL("");
+        setTimeout(()=>{
+            setShareURL("");
+        },500)
+
     };
 
     const submitShare = e => {

@@ -34,6 +34,7 @@ import pathHelper from "../../untils/page";
 import PurchaseShareDialog from "../Modals/PurchaseShare";
 import Auth from "../../middleware/Auth";
 import DecompressDialog from "../Modals/Decompress";
+import CompressDialog from "../Modals/Compress";
 
 const styles = theme => ({
     wrapper: {
@@ -1153,6 +1154,13 @@ class ModalsCompoment extends Component {
 
                 <DecompressDialog
                     open={this.props.modalsStatus.decompress}
+                    onClose={this.onClose}
+                    presentPath={this.props.path}
+                    selected={this.props.selected}
+                    modalsLoading={this.props.modalsLoading}
+                />
+                <CompressDialog
+                    open={this.props.modalsStatus.compress}
                     onClose={this.onClose}
                     presentPath={this.props.path}
                     selected={this.props.selected}

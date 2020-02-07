@@ -152,8 +152,9 @@ const styles = theme => ({
     }
 });
 
-class NavigatorCompoment extends Component {
+class NavigatorComponent extends Component {
     keywords = null;
+    currentID = 0;
 
     state = {
         hidden: false,
@@ -206,6 +207,7 @@ class NavigatorCompoment extends Component {
 
         API.get(apiURL + newPath)
             .then(response => {
+                this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
                 let pathTemp = (path !== null
@@ -318,6 +320,7 @@ class NavigatorCompoment extends Component {
         let presentPath = this.props.path.split("/");
         let newTarget = [
             {
+                id:this.currentID,
                 type: "dir",
                 name: presentPath.pop(),
                 path: presentPath.length === 1 ? "/" : presentPath.join("/")
@@ -601,7 +604,7 @@ class NavigatorCompoment extends Component {
     }
 }
 
-NavigatorCompoment.propTypes = {
+NavigatorComponent.propTypes = {
     classes: PropTypes.object.isRequired,
     path: PropTypes.string.isRequired
 };
@@ -609,6 +612,6 @@ NavigatorCompoment.propTypes = {
 const Navigator = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(NavigatorCompoment)));
+)(withStyles(styles)(withRouter(NavigatorComponent)));
 
 export default Navigator;

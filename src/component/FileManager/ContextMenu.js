@@ -47,7 +47,7 @@ import {
 import pathHelper from "../../untils/page";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
-import {Unarchive} from "@material-ui/icons";
+import {Archive, Unarchive} from "@material-ui/icons";
 import {openCompressDialog} from "../../actions";
 import Menu from "@material-ui/core/Menu";
 
@@ -450,11 +450,11 @@ class ContextMenuCompoment extends Component {
                             user.group.compress && (
                                 <MenuItem
                                     onClick={() =>
-                                        this.openCompressDialog()
+                                        this.props.openCompressDialog()
                                     }
                                 >
                                     <ListItemIcon>
-                                        <DownloadIcon />
+                                        <Archive />
                                     </ListItemIcon>
                                     <Typography variant="inherit">
                                         压缩

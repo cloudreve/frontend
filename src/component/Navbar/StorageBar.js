@@ -50,6 +50,11 @@ const styles = theme => ({
     },
     info: {
         width: "131px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        [theme.breakpoints.down("xs")]:{
+            width: "162px",
+        },
         marginTop: "5px"
     },
     bar: {
