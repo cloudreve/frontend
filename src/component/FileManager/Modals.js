@@ -33,6 +33,7 @@ import { withRouter } from "react-router-dom";
 import pathHelper from "../../untils/page";
 import PurchaseShareDialog from "../Modals/PurchaseShare";
 import Auth from "../../middleware/Auth";
+import DecompressDialog from "../Modals/Decompress";
 
 const styles = theme => ({
     wrapper: {
@@ -677,7 +678,7 @@ class ModalsCompoment extends Component {
             downloadURL: "",
             shareUrl: "",
             remoteDownloadPathSelect: false,
-            source: ""
+            source: "",
         });
         this.newNameSuffix = "";
         this.props.closeAllModals();
@@ -1149,6 +1150,14 @@ class ModalsCompoment extends Component {
                         </div>
                     </DialogActions>
                 </Dialog>
+
+                <DecompressDialog
+                    open={this.props.modalsStatus.decompress}
+                    onClose={this.onClose}
+                    presentPath={this.props.path}
+                    selected={this.props.selected}
+                    modalsLoading={this.props.modalsLoading}
+                />
             </div>
         );
     }

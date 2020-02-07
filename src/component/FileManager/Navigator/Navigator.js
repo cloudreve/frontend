@@ -206,7 +206,7 @@ class NavigatorCompoment extends Component {
 
         API.get(apiURL + newPath)
             .then(response => {
-                this.props.updateFileList(response.data);
+                this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
                 let pathTemp = (path !== null
                     ? path.substr(1).split("/")

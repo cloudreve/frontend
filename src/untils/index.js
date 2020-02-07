@@ -118,9 +118,16 @@ export function bufferEncode(value) {
         .replace(/=/g, "");
 }
 
-export  function pathBack(path){
-    let folders = path !== null
-        ? path.substr(1).split("/")
-        : this.props.path.substr(1).split("/");
-    return  "/" + folders.slice(0, folders.length-1).join("/")
+export function pathBack(path) {
+    let folders =
+        path !== null
+            ? path.substr(1).split("/")
+            : this.props.path.substr(1).split("/");
+    return "/" + folders.slice(0, folders.length - 1).join("/");
+}
+
+export function filePath(file) {
+    return file.path === "/"
+        ? file.path + file.name
+        : file.path + "/" + file.name;
 }

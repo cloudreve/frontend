@@ -320,6 +320,24 @@ const cloudreveApp = (state = [], action) => {
                     contextOpen:false,
                 }),
             });
+        case 'OPEN_DECOMPRESS_DIALOG':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    modals: Object.assign({}, state.viewUpdate.modals, {
+                        decompress:true,
+                    }),
+                    contextOpen:false,
+                }),
+            });
+        case 'OPEN_COMPRESS_DIALOG':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    modals: Object.assign({}, state.viewUpdate.modals, {
+                        compress:true,
+                    }),
+                    contextOpen:false,
+                }),
+            });
         case 'OPEN_GET_SOURCE_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
@@ -364,6 +382,8 @@ const cloudreveApp = (state = [], action) => {
                         resave:false,
                         copy:false,
                         loading:false,
+                        compress:false,
+                        decompress:false,
                     }),
                 }),
             });

@@ -88,6 +88,8 @@ const defaultStatus = InitSiteConfig({
             getSource: false,
             copy:false,
             resave: false,
+            compress:false,
+            decompress:false,
         },
         snackbar: {
             toggle: false,

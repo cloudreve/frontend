@@ -188,6 +188,18 @@ export const openTorrentDownloadDialog = () => {
     };
 };
 
+export const openDecompressDialog = () => {
+    return {
+        type: "OPEN_DECOMPRESS_DIALOG"
+    };
+};
+
+export const openCompressDialog = () => {
+    return {
+        type: "OPEN_COMPRESS_DIALOG"
+    };
+};
+
 export const openGetSourceDialog = () => {
     return {
         type: "OPEN_GET_SOURCE_DIALOG"

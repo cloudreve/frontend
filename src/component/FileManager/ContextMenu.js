@@ -18,9 +18,9 @@ import {
     openGetSourceDialog,
     openCopyDialog,
     openLoadingDialog,
-    setSelectedTarget
+    setSelectedTarget, openDecompressDialog
 } from "../../actions/index";
-import { isPreviewable, isTorrent } from "../../config";
+import {isCompressFile, isPreviewable, isTorrent} from "../../config";
 import { allowSharePreview } from "../../untils/index";
 import UploadIcon from "@material-ui/icons/CloudUpload";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
@@ -47,6 +47,9 @@ import {
 import pathHelper from "../../untils/page";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
+import {Unarchive} from "@material-ui/icons";
+import {openCompressDialog} from "../../actions";
+import Menu from "@material-ui/core/Menu";
 
 const styles = theme => ({
     propover: {
@@ -118,7 +121,13 @@ const mapDispatchToProps = dispatch => {
         },
         openLoadingDialog: text => {
             dispatch(openLoadingDialog(text));
-        }
+        },
+        openDecompressDialog: ()=>{
+            dispatch(openDecompressDialog())
+        },
+        openCompressDialog: ()=>{
+            dispatch(openCompressDialog())
+        },
     };
 };
 
@@ -260,14 +269,14 @@ class ContextMenuCompoment extends Component {
 
         return (
             <div>
-                <Popover
-                    id="simple-popper"
+                <Menu
+                    keepMounted
                     open={this.props.menuOpen}
-                    anchorReference="anchorPosition"
-                    anchorPosition={{ top: this.Y, left: this.X }}
                     onClose={() =>
                         this.props.changeContextMenu(this.props.menuType, false)
                     }
+                    anchorReference="anchorPosition"
+                    anchorPosition={{ top: this.Y, left: this.X }}
                     anchorOrigin={{
                         vertical: "top",
                         horizontal: "left"
@@ -278,7 +287,7 @@ class ContextMenuCompoment extends Component {
                     }}
                 >
                     {this.props.menuType === "empty" && (
-                        <MenuList>
+                        <>
                             <MenuItem onClick={this.clickUpload}>
                                 <ListItemIcon>
                                     <UploadIcon />
@@ -315,10 +324,10 @@ class ContextMenuCompoment extends Component {
                                     创建文件夹
                                 </Typography>
                             </MenuItem>
-                        </MenuList>
+                        </>
                     )}
                     {this.props.menuType !== "empty" && (
-                        <MenuList>
+                        <>
                             {!this.props.isMultiple && this.props.withFolder && (
                                 <>
                                     <MenuItem onClick={this.enterFolder}>
@@ -329,7 +338,7 @@ class ContextMenuCompoment extends Component {
                                             进入
                                         </Typography>
                                     </MenuItem>
-                                    <Divider />
+                                    {isHomePage && <Divider />}
                                 </>
                             )}
                             {!this.props.isMultiple &&
@@ -348,11 +357,12 @@ class ContextMenuCompoment extends Component {
                                                 打开
                                             </Typography>
                                         </MenuItem>
-                                        <Divider />
+
                                     </>
                                 )}
 
                             {!this.props.isMultiple && this.props.withFile && (
+                                <>
                                 <MenuItem onClick={() => this.openDownload()}>
                                     <ListItemIcon>
                                         <DownloadIcon />
@@ -361,6 +371,8 @@ class ContextMenuCompoment extends Component {
                                         下载
                                     </Typography>
                                 </MenuItem>
+                                    {isHomePage && <Divider />}
+                                    </>
                             )}
 
                             {(this.props.isMultiple || this.props.withFolder) &&
@@ -415,6 +427,40 @@ class ContextMenuCompoment extends Component {
                                         </Typography>
                                     </MenuItem>
                                 )}
+                            {!this.props.isMultiple &&
+                            isHomePage &&
+                            user.group.compress &&
+                            this.props.withFile &&
+                            isCompressFile(this.props.selected[0].name) && (
+                                <MenuItem
+                                    onClick={() =>
+                                        this.props.openDecompressDialog()
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <Unarchive />
+                                    </ListItemIcon>
+                                    <Typography variant="inherit">
+                                        解压缩
+                                    </Typography>
+                                </MenuItem>
+                            )}
+
+                            {isHomePage &&
+                            user.group.compress && (
+                                <MenuItem
+                                    onClick={() =>
+                                        this.openCompressDialog()
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <DownloadIcon />
+                                    </ListItemIcon>
+                                    <Typography variant="inherit">
+                                        压缩
+                                    </Typography>
+                                </MenuItem>
+                            )}
 
                             {!this.props.isMultiple && isHomePage && (
                                 <MenuItem
@@ -487,9 +533,9 @@ class ContextMenuCompoment extends Component {
                                     </MenuItem>
                                 </div>
                             )}
-                        </MenuList>
+                        </>
                     )}
-                </Popover>
+                </Menu>
             </div>
         );
     }

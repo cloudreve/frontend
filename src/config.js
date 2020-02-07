@@ -40,3 +40,8 @@ export const isTorrent = name=>{
     }
     return false;
 }
+
+export const isCompressFile = name=>{
+    let suffix = name.split(".").pop().toLowerCase();
+    return suffix === "zip"
+}
