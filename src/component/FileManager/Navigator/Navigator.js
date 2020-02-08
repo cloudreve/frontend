@@ -23,7 +23,7 @@ import {
     openCreateFolderDialog,
     openShareDialog,
     drawerToggleAction,
-    setShareUserPopover, openResaveDialog
+    setShareUserPopover, openResaveDialog, openCompressDialog
 } from "../../../actions/index";
 import API from "../../../middleware/Api";
 import { setCookie, setGetParameter, fixUrlHash } from "../../../untils/index";
@@ -43,6 +43,7 @@ import pathHelper from "../../../untils/page";
 import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
 import Avatar from "@material-ui/core/Avatar";
+import {Archive} from "@material-ui/icons";
 
 const mapStateToProps = state => {
     return {
@@ -98,6 +99,9 @@ const mapDispatchToProps = dispatch => {
         },
         openResave: (key) => {
             dispatch(openResaveDialog(key));
+        },
+        openCompressDialog: ()=>{
+            dispatch(openCompressDialog())
         },
     };
 };
@@ -335,6 +339,10 @@ class NavigatorComponent extends Component {
             case "newfolder":
                 this.props.openCreateFolderDialog();
                 break;
+            case "compress":
+                this.props.setSelectedTarget(newTarget);
+                this.props.openCompressDialog();
+                break;
             default:
                 break;
         }
@@ -367,6 +375,8 @@ class NavigatorComponent extends Component {
 
     render() {
         const { classes } = this.props;
+        const isHomePage =  pathHelper.isHomePage(this.props.location.pathname);
+        const user = Auth.GetUser();
 
         let presentFolderMenu = (
             <Menu
@@ -383,7 +393,7 @@ class NavigatorComponent extends Component {
                     刷新
                 </MenuItem>
                 {this.props.keywords === null &&
-                    pathHelper.isHomePage(this.props.location.pathname) && (
+                isHomePage && (
                         <div>
                             <Divider />
                             <MenuItem
@@ -394,6 +404,14 @@ class NavigatorComponent extends Component {
                                 </ListItemIcon>
                                 分享
                             </MenuItem>
+                            {user.group.compress && <MenuItem
+                                onClick={() => this.performAction("compress")}
+                            >
+                                <ListItemIcon>
+                                    <Archive />
+                                </ListItemIcon>
+                                压缩
+                            </MenuItem>}
 
                             <MenuItem
                                 onClick={() => this.performAction("newfolder")}

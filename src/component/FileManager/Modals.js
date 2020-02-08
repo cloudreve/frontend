@@ -345,9 +345,9 @@ class ModalsCompoment extends Component {
             }
         })
             .then(response => {
-                if (response.rawData.code == 0) {
+                if (response.rawData.code === 0) {
                     this.onClose();
-                    this.props.refreshFileList();
+                    setTimeout(this.props.refreshFileList,500);
                 } else {
                     this.props.toggleSnackbar(
                         "top",
