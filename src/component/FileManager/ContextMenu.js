@@ -411,9 +411,8 @@ class ContextMenuCompoment extends Component {
 
                             {!this.props.isMultiple &&
                                 isHomePage &&
-                                user.group.allowTorrentDownload &&
-                                this.props.withFile &&
-                                isTorrent(this.props.selected[0].name) && (
+                                user.group.allowRemoteDownload &&
+                                this.props.withFile&& (
                                     <MenuItem
                                         onClick={() =>
                                             this.props.openTorrentDownloadDialog()

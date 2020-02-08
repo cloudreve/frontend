@@ -10,7 +10,6 @@ import {
     openLoadingDialog
 } from "../../actions/index";
 import PathSelector from "./PathSelector";
-import axios from "axios";
 import API, { baseURL } from "../../middleware/Api";
 import {
     withStyles,
@@ -22,9 +21,6 @@ import {
     DialogTitle,
     DialogContentText,
     CircularProgress,
-    Checkbox,
-    FormControl,
-    FormControlLabel
 } from "@material-ui/core";
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
@@ -35,6 +31,7 @@ import PurchaseShareDialog from "../Modals/PurchaseShare";
 import Auth from "../../middleware/Auth";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
+import {filePath} from "../../untils";
 
 const styles = theme => ({
     wrapper: {
@@ -280,48 +277,6 @@ class ModalsCompoment extends Component {
                     "error"
                 );
                 this.onClose();
-            });
-    };
-
-    submitShare = e => {
-        e.preventDefault();
-        this.props.setModalsLoading(true);
-        axios
-            .post("/File/Share", {
-                action: "share",
-                item:
-                    this.props.selected[0].path === "/"
-                        ? this.props.selected[0].path +
-                          this.props.selected[0].name
-                        : this.props.selected[0].path +
-                          "/" +
-                          this.props.selected[0].name,
-                shareType: this.state.secretShare ? "private" : "public",
-                pwd: this.state.sharePwd
-            })
-            .then(response => {
-                if (response.data.result !== "") {
-                    this.setState({
-                        shareUrl: response.data.result
-                    });
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.result.error,
-                        "warning"
-                    );
-                }
-                this.props.setModalsLoading(false);
-            })
-            .catch(error => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.props.setModalsLoading(false);
             });
     };
 
@@ -575,14 +530,11 @@ class ModalsCompoment extends Component {
     submitTorrentDownload = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        axios
-            .post("/RemoteDownload/AddTorrent", {
-                action: "torrentDownload",
-                id: this.props.selected[0].id,
-                savePath: this.state.selectedPath
+        API
+            .post("/aria2/torrent" + filePath(this.props.selected[0]), {
+                dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
             .then(response => {
-                if (response.data.result.success) {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -590,14 +542,6 @@ class ModalsCompoment extends Component {
                         "success"
                     );
                     this.onClose();
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.result.error,
-                        "warning"
-                    );
-                }
                 this.props.setModalsLoading(false);
             })
             .catch(error => {
@@ -614,14 +558,12 @@ class ModalsCompoment extends Component {
     submitDownload = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        axios
-            .post("/RemoteDownload/addUrl", {
-                action: "remoteDownload",
+        API
+            .post("/aria2/url", {
                 url: this.state.downloadURL,
-                path: this.state.selectedPath
+                dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
             .then(response => {
-                if (response.data.result.success) {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -629,14 +571,6 @@ class ModalsCompoment extends Component {
                         "success"
                     );
                     this.onClose();
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.result.error,
-                        "warning"
-                    );
-                }
                 this.props.setModalsLoading(false);
             })
             .catch(error => {

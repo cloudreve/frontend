@@ -17,11 +17,11 @@ import {
     WindowRestore,
     Android
 } from "mdi-material-ui";
-import { toggleSnackbar } from "../actions/index";
+import { toggleSnackbar } from "../../actions";
 import axios from "axios";
-import { sizeToString } from "../untils/index";
-import { mediaType } from "../config";
-
+import { sizeToString } from "../../untils";
+import { mediaType } from "../../config";
+import API, { baseURL } from "../../middleware/Api";
 import {
     withStyles,
     Card,
@@ -31,13 +31,9 @@ import {
     Button,
     IconButton
 } from "@material-ui/core";
+import DownloadingCard from "./DownloadingCard";
 
 const styles = theme => ({
-    card: {
-        marginTop: "20px",
-        display: "flex",
-        justifyContent: "space-between"
-    },
     actions: {
         display: "flex"
     },
@@ -66,28 +62,6 @@ const styles = theme => ({
     },
     gird: {
         marginTop: "30px"
-    },
-    iconContainer: {
-        width: "90px",
-        height: "90px",
-        padding: "29px",
-        marginTop: "6px",
-        paddingLeft: "35px",
-        [theme.breakpoints.down("md")]: {
-            display: "none"
-        }
-    },
-    content: {
-        width: "100%",
-        minWidth: 0
-    },
-    contentSide: {
-        minWidth: 0,
-        paddingTop: "24px",
-        paddingRight: "28px",
-        [theme.breakpoints.down("md")]: {
-            display: "none"
-        }
     },
     iconImgBig: {
         color: "#d32f2f",
@@ -204,7 +178,7 @@ const getIcon = (classes, name) => {
     return iconBig;
 };
 
-class DownloadCompoment extends Component {
+class DownloadComponent extends Component {
     page = 0;
 
     state = {
@@ -222,21 +196,20 @@ class DownloadCompoment extends Component {
         this.setState({
             loading: true
         });
-        axios
-            .get("/RemoteDownload/FlushUser")
+        API.get("/aria2/downloading")
             .then(response => {
-                axios.post("/RemoteDownload/ListDownloading").then(response => {
-                    this.setState({
-                        downloading: response.data,
-                        loading: false
-                    });
+                this.setState({
+                    downloading: response.data,
+                    loading: false
                 });
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", "加载失败", "error");
-                this.setState({
-                    loading: false
-                });
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
             });
     };
 
@@ -316,70 +289,9 @@ class DownloadCompoment extends Component {
                         <RefreshIcon />
                     </IconButton>
                 </Typography>
-                {this.state.downloading.map(value => {
-                    value.percent = !value.hasOwnProperty("completedLength")
-                        ? 0
-                        : value.completedLength / value.totalLength;
-                    return (
-                        <Card className={classes.card} key={value.id}>
-                            <div className={classes.iconContainer}>
-                                {getIcon(classes, value.fileName)}
-                            </div>
-                            <CardContent className={classes.content}>
-                                <Typography color="primary" variant="h6" noWrap>
-                                    {value.fileName}
-                                </Typography>
-                                <LinearProgress
-                                    color="secondary"
-                                    variant="determinate"
-                                    value={value.percent * 100}
-                                />
-                                <Typography
-                                    variant="subtitle1"
-                                    color="textSecondary"
-                                    noWrap
-                                >
-                                    {value.hasOwnProperty(
-                                        "completedLength"
-                                    ) && (
-                                        <span>
-                                            {(value.percent * 100).toFixed(2)}%
-                                            -{" "}
-                                            {value.completedLength === "0"
-                                                ? "0Bytes"
-                                                : sizeToString(
-                                                      value.completedLength
-                                                  )}
-                                            /
-                                            {value.totalLength === "0"
-                                                ? "0Bytes"
-                                                : sizeToString(
-                                                      value.totalLength
-                                                  )}{" "}
-                                            -{" "}
-                                            {value.downloadSpeed === "0"
-                                                ? "0B/s"
-                                                : sizeToString(
-                                                      value.downloadSpeed
-                                                  ) + "/s"}
-                                        </span>
-                                    )}
-                                    {!value.hasOwnProperty(
-                                        "completedLength"
-                                    ) && <span> - </span>}
-                                </Typography>
-                            </CardContent>
-                            <CardContent
-                                className={classes.contentSide}
-                                onClick={() => this.cancelDownload(value.id)}
-                            >
-                                <IconButton>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </CardContent>
-                        </Card>
-                    );
-                })}
+                {this.state.downloading.map((value, k) => (
+                    <DownloadingCard key={ k } task={value} />
+                ))}
                 <Typography
                     color="textSecondary"
                     variant="h4"
@@ -450,6 +362,6 @@ class DownloadCompoment extends Component {
 const Download = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(DownloadCompoment));
+)(withStyles(styles)(DownloadComponent));
 
 export default Download;

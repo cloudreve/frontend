@@ -528,9 +528,7 @@ class NavbarCompoment extends Component {
                         <ListItem
                             button
                             key="离线下载"
-                            onClick={() =>
-                                (window.location.href = "/Home/Download")
-                            }
+                            onClick={() => (this.props.history.push("/aria2?"))}
                         >
                             <ListItemIcon>
                                 <DownloadIcon className={classes.iconFix} />

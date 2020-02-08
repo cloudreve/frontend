@@ -16,6 +16,7 @@ import PageLoading from "./component/Placeholder/PageLoading.js"
 import TextViewer from "./component/Viewer/Text";
 import DocViewer from "./component/Viewer/Doc";
 import SharePreload from "./component/Share/SharePreload";
+import Download from "./component/Download/Download";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -90,6 +91,12 @@ export default function App() {
                             <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <DocViewer />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <Download />
                                 </Suspense>
                             </AuthRoute>
 

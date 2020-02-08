@@ -13,9 +13,10 @@ const instance = axios.create({
     crossDomain: true
 });
 
-function AppError(message,code) {
+function AppError(message,code,error) {
     this.code = code;
     this.message = message || '未知错误';
+    this.message += error?(" "+error) : "";
     this.stack = (new Error()).stack;
 }
 AppError.prototype = Object.create(Error.prototype);
@@ -35,7 +36,7 @@ instance.interceptors.response.use(
                 Auth.signout();
                 window.location.href = "#/Login";
             }
-            throw new AppError(response.rawData.msg,response.rawData.code);
+            throw new AppError(response.rawData.msg,response.rawData.code,response.rawData.error);
         }
         return response;
     },

@@ -1,5 +1,5 @@
 export const sizeToString = bytes => {
-    if (bytes === 0) return "0 B";
+    if (bytes === 0 || bytes==="0") return "0 B";
     var k = 1024;
     var sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     var i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -130,4 +130,8 @@ export function filePath(file) {
     return file.path === "/"
         ? file.path + file.name
         : file.path + "/" + file.name;
+}
+
+export function hex2bin(hex){
+    return (parseInt(hex, 16).toString(2)).padStart(8, '0');
 }
