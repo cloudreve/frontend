@@ -32,6 +32,7 @@ import {
     IconButton
 } from "@material-ui/core";
 import DownloadingCard from "./DownloadingCard";
+import FinishedCard from "./FinishedCard";
 
 const styles = theme => ({
     actions: {
@@ -63,58 +64,6 @@ const styles = theme => ({
     gird: {
         marginTop: "30px"
     },
-    iconImgBig: {
-        color: "#d32f2f",
-        fontSize: "30px"
-    },
-    iconVideoBig: {
-        color: "#d50000",
-        fontSize: "30px"
-    },
-    iconAudioBig: {
-        color: "#651fff",
-        fontSize: "30px"
-    },
-    iconPdfBig: {
-        color: "#f44336",
-        fontSize: "30px"
-    },
-    iconWordBig: {
-        color: "#538ce5",
-        fontSize: "30px"
-    },
-    iconPptBig: {
-        color: "rgb(239, 99, 63)",
-        fontSize: "30px"
-    },
-    iconExcelBig: {
-        color: "#4caf50",
-        fontSize: "30px"
-    },
-    iconTextBig: {
-        color: "#607d8b",
-        fontSize: "30px"
-    },
-    iconFileBig: {
-        color: "#424242",
-        fontSize: "30px"
-    },
-    iconTorrentBig: {
-        color: "#5c6bc0",
-        fontSize: "30px"
-    },
-    iconZipBig: {
-        color: "#f9a825",
-        fontSize: "30px"
-    },
-    iconAndroidBig: {
-        color: "#8bc34a",
-        fontSize: "30px"
-    },
-    iconExeBig: {
-        color: "#1a237e",
-        fontSize: "30px"
-    },
     hide: {
         display: "none"
     },
@@ -128,6 +77,9 @@ const styles = theme => ({
         textAlign: "center",
         marginTop: "20px",
         marginBottom: "20px"
+    },
+    margin:{
+        marginTop:theme.spacing(2),
     }
 });
 const mapStateToProps = state => {
@@ -180,6 +132,7 @@ const getIcon = (classes, name) => {
 
 class DownloadComponent extends Component {
     page = 0;
+    interval = 0;
 
     state = {
         downloading: [],
@@ -190,7 +143,12 @@ class DownloadComponent extends Component {
 
     componentDidMount = () => {
         this.loadDownloading();
+        this.loadMore();
     };
+
+    componentWillUnmount() {
+        clearTimeout(this.interval);
+    }
 
     loadDownloading = () => {
         this.setState({
@@ -202,6 +160,11 @@ class DownloadComponent extends Component {
                     downloading: response.data,
                     loading: false
                 });
+                // 设定自动更新
+                clearTimeout(this.interval);
+                if(response.data.length > 0){
+                    this.interval = setTimeout(this.loadDownloading,1000 * response.data[0].interval);
+                }
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -217,13 +180,13 @@ class DownloadComponent extends Component {
         this.setState({
             loading: true
         });
-        axios
-            .get("/RemoteDownload/ListFinished?page=" + ++this.page)
+        API
+            .get("/aria2/finished?page=" + ++this.page)
             .then(response => {
                 this.setState({
-                    finishedList: response.data,
+                    finishedList: [...this.state.finishedList,...response.data],
                     loading: false,
-                    continue: response.data.length < 10 ? false : true
+                    continue: response.data.length >= 10
                 });
             })
             .catch(error => {
@@ -231,43 +194,6 @@ class DownloadComponent extends Component {
                 this.setState({
                     loading: false
                 });
-            });
-    };
-
-    cancelDownload = id => {
-        axios
-            .post("/RemoteDownload/Cancel", {
-                id: id
-            })
-            .then(response => {
-                if (response.data.error !== 0) {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.message,
-                        "error"
-                    );
-                } else {
-                    this.setState({
-                        downloading: this.state.downloading.filter(value => {
-                            return value.id !== id;
-                        })
-                    });
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "取消成功",
-                        "success"
-                    );
-                }
-            })
-            .catch(error => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
             });
     };
 
@@ -300,50 +226,13 @@ class DownloadComponent extends Component {
                     已完成
                 </Typography>
                 <div className={classes.loadMore}>
-                    {this.state.finishedList.map(value => {
-                        return (
-                            <Card className={classes.card} key={value.id}>
-                                {JSON.stringify(value.fileName) !== "[]" && (
-                                    <div className={classes.iconContainer}>
-                                        {getIcon(classes, value.fileName)}
-                                    </div>
-                                )}
+                    {this.state.finishedList.map((value, k) => {
+                        if (value.files) {
+                            return (
+                                <FinishedCard key={k} task={value}/>
+                            )
+                        }
 
-                                <CardContent className={classes.content}>
-                                    <Typography
-                                        color="primary"
-                                        variant="h6"
-                                        style={{ textAlign: "left" }}
-                                        noWrap
-                                    >
-                                        {value.fileName}
-                                    </Typography>
-                                    <Typography
-                                        variant="subtitle1"
-                                        color="textSecondary"
-                                        noWrap
-                                        style={{ textAlign: "left" }}
-                                    >
-                                        {(() => {
-                                            switch (value.status) {
-                                                case "canceled":
-                                                    return <div>已取消</div>;
-                                                case "error":
-                                                    return (
-                                                        <div>
-                                                            错误：{value.msg}
-                                                        </div>
-                                                    );
-                                                case "success":
-                                                    return <div>成功</div>;
-                                                default:
-                                                    break;
-                                            }
-                                        })()}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        );
                     })}
                     <Button
                         size="large"

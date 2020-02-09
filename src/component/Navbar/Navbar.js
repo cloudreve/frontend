@@ -622,7 +622,7 @@ class NavbarCompoment extends Component {
                     position="fixed"
                     className={classes.appBar}
                     color={
-                        this.props.selected.length <= 1 &&
+                        this.props.theme.palette.type !== "dark" && this.props.selected.length <= 1 &&
                         !(!this.props.isMultiple && this.props.withFile)
                             ? "primary"
                             : "default"

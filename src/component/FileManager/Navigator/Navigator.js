@@ -177,7 +177,10 @@ class NavigatorComponent extends Component {
     }
 
     componentDidMount = () => {
-        this.renderPath();
+        var url = new URL(fixUrlHash(window.location.href));
+        var c = url.searchParams.get("path");
+        this.renderPath(c === null ? "/":c);
+
         if (!this.props.isShare) {
             // 如果是在个人文件管理页，首次加载时打开侧边栏
             this.props.handleDesktopToggle(true);

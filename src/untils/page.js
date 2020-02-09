@@ -4,7 +4,7 @@ const statusHelper = {
         return path == "/home"
     },
     isSharePage(path){
-        return path.startsWith("/s/")
+        return path && path.startsWith("/s/")
     },
     isMobile(){
         return window.innerWidth < 600;
