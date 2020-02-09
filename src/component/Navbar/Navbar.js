@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import VideoIcon from "@material-ui/icons/VideoLibraryOutlined";
 import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
 import ImageIcon from "@material-ui/icons/CollectionsOutlined";
-import AddIcon from "@material-ui/icons/Add";
 import DocIcon from "@material-ui/icons/FileCopyOutlined";
 import ShareIcon from "@material-ui/icons/ShareOutlined";
 import BackIcon from "@material-ui/icons/ArrowBack";
@@ -35,7 +34,8 @@ import {
     openMoveDialog,
     openRemoveDialog,
     openShareDialog,
-    openRenameDialog, openLoadingDialog
+    openRenameDialog,
+    openLoadingDialog
 } from "../../actions";
 import {
     allowSharePreview,
@@ -57,23 +57,65 @@ import {
     Typography,
     withStyles,
     withTheme,
-    Button,
     Drawer,
     SwipeableDrawer,
     IconButton,
     Hidden,
-    Avatar,
     Divider,
     ListItem,
     ListItemIcon,
     ListItemText,
     List,
-    Badge,
     Grow,
-    Tooltip
+    Tooltip, Card
 } from "@material-ui/core";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Auth from "../../middleware/Auth";
-import { baseURL } from "../../middleware/Api";
+
+const ExpansionPanel = withStyles({
+    root: {
+        maxWidth: "100%",
+        boxShadow: "none",
+        "&:not(:last-child)": {
+            borderBottom: 0
+        },
+        "&:before": {
+            display: "none"
+        },
+        "&$expanded": {margin:0,}
+    },
+    expanded: {
+    }
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+    root: {
+        minHeight: 0,
+        padding: 0,
+
+        "&$expanded": {
+            minHeight: 0
+        }
+    },
+    content: {
+        maxWidth: "100%",
+        margin: 0,
+        display: "block",
+        "&$expanded": {
+            margin: "0"
+        }
+    },
+    expanded: {}
+})(MuiExpansionPanelSummary);
+
+const ExpansionPanelDetails = withStyles(theme => ({
+    root: {
+        display: "block",
+        padding: theme.spacing(0)
+    }
+}))(MuiExpansionPanelDetails);
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -88,9 +130,9 @@ const mapStateToProps = state => {
         path: state.navigator.path,
         keywords: state.explorer.keywords,
         title: state.siteConfig.title,
-        subTitle:state.viewUpdate.subTitle,
-        loadUploader:state.viewUpdate.loadUploader,
-        isLogin:state.viewUpdate.isLogin,
+        subTitle: state.viewUpdate.subTitle,
+        loadUploader: state.viewUpdate.loadUploader,
+        isLogin: state.viewUpdate.isLogin
     };
 };
 
@@ -138,8 +180,8 @@ const mapDispatchToProps = dispatch => {
         openShareDialog: () => {
             dispatch(openShareDialog());
         },
-        openLoadingDialog:(text) => {
-            dispatch(openLoadingDialog(text))
+        openLoadingDialog: text => {
+            dispatch(openLoadingDialog(text));
         }
     };
 };
@@ -272,7 +314,8 @@ class NavbarCompoment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mobileOpen: false
+            mobileOpen: false,
+            tagOpen:true,
         };
         this.UploaderRef = React.createRef();
     }
@@ -308,11 +351,11 @@ class NavbarCompoment extends Component {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
 
-    loadUploader = ()=> {
+    loadUploader = () => {
         if (pathHelper.isHomePage(this.props.location.pathname)) {
             return <>{this.props.loadUploader && <Uploader />}</>;
         }
-    }
+    };
 
     filterFile = type => {
         this.props.searchMyFile("{filterType:" + type + "}");
@@ -348,10 +391,10 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/doc?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/doc?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
@@ -364,10 +407,10 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/video?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/video?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
@@ -377,10 +420,10 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/text?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/text?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
@@ -404,16 +447,14 @@ class NavbarCompoment extends Component {
         this.props.openLoadingDialog("获取下载地址...");
     };
 
-    archiveDownload = () =>{
+    archiveDownload = () => {
         this.props.openLoadingDialog("打包中...");
-    }
+    };
 
     render() {
         const { classes } = this.props;
-        const user  =Auth.GetUser(this.props.isLogin);
-        const isHomePage = pathHelper.isHomePage(
-            this.props.location.pathname
-        );
+        const user = Auth.GetUser(this.props.isLogin);
+        const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
         const isSharePage = pathHelper.isSharePage(
             this.props.location.pathname
         );
@@ -421,100 +462,117 @@ class NavbarCompoment extends Component {
         const drawer = (
             <div id="container" className={classes.upDrawer}>
                 {pathHelper.isMobile() && <UserInfo />}
+
                 {Auth.Check(this.props.isLogin) && (
-                        <div>
+                    <ExpansionPanel
+                        square
+                        expanded={this.state.tagOpen && isHomePage}
+                        onChange={()=>this.setState({tagOpen:!this.state.tagOpen})}
+                    >
+                        <ExpansionPanelSummary
+                            aria-controls="panel1d-content"
+                            id="panel1d-header"
+                        >
                             <ListItem
                                 button
                                 key="我的文件"
-                                onClick={() => (this.props.history.push("/home?path=%2F"))}
+                                onClick={() =>
+                                    this.props.history.push("/home?path=%2F")
+                                }
                             >
                                 <ListItemIcon>
                                     <FolderShared className={classes.iconFix} />
                                 </ListItemIcon>
                                 <ListItemText primary="我的文件" />
-                            </ListItem><Divider />
-                        </div>
-                    )}
-
-                {isHomePage && (
-                    <div>
-
-                            <ListItem
-                                button
-                                id="pickfiles"
-                                className={classes.hiddenButton}
-                            >
-                                <ListItemIcon>
-                                    <UploadIcon />
-                                </ListItemIcon>
-                                <ListItemText />
                             </ListItem>
-                        <ListItem
-                            button
-                            key="视频"
-                            onClick={() => this.filterFile("video")}
-                        >
-                            <ListItemIcon>
-                                <VideoIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconVideo
-                                    ]}
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary="视频" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            key="图片"
-                            onClick={() => this.filterFile("image")}
-                        >
-                            <ListItemIcon>
-                                <ImageIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconImg
-                                    ]}
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary="图片" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            key="音频"
-                            onClick={() => this.filterFile("audio")}
-                        >
-                            <ListItemIcon>
-                                <MusicIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconAudio
-                                    ]}
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary="音频" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            key="文档"
-                            onClick={() => this.filterFile("doc")}
-                        >
-                            <ListItemIcon>
-                                <DocIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconDoc
-                                    ]}
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary="文档" />
-                        </ListItem>{" "}
-                        <Divider />
-                    </div>
+                            <Divider />
+                        </ExpansionPanelSummary>
+
+
+                        <ExpansionPanelDetails>
+                                <List>
+                                    <ListItem
+                                        button
+                                        id="pickfiles"
+                                        className={classes.hiddenButton}
+                                    >
+                                        <ListItemIcon>
+                                            <UploadIcon />
+                                        </ListItemIcon>
+                                        <ListItemText />
+                                    </ListItem>
+                                    {[
+                                        {
+                                            key: "视频",
+                                            id: "video",
+                                            icon: (
+                                                <VideoIcon
+                                                    className={[
+                                                        classes.iconFix,
+                                                        classes.iconVideo
+                                                    ]}
+                                                />
+                                            )
+                                        },
+                                        {
+                                            key: "图片",
+                                            id: "image",
+                                            icon: (
+                                                <ImageIcon
+                                                    className={[
+                                                        classes.iconFix,
+                                                        classes.iconImg
+                                                    ]}
+                                                />
+                                            )
+                                        },
+                                        {
+                                            key: "音频",
+                                            id: "audio",
+                                            icon: (
+                                                <MusicIcon
+                                                    className={[
+                                                        classes.iconFix,
+                                                        classes.iconAudio
+                                                    ]}
+                                                />
+                                            )
+                                        },
+                                        {
+                                            key: "文档",
+                                            id: "doc",
+                                            icon: (
+                                                <DocIcon
+                                                    className={[
+                                                        classes.iconFix,
+                                                        classes.iconDoc
+                                                    ]}
+                                                />
+                                            )
+                                        }
+                                    ].map(v => (
+                                        <ListItem
+                                            button
+                                            key={v.key}
+                                            onClick={() =>
+                                                this.filterFile(v.id)
+                                            }
+                                        >
+                                            <ListItemIcon>
+                                                {v.icon}
+                                            </ListItemIcon>
+                                            <ListItemText primary={v.key} />
+                                        </ListItem>
+                                    ))}{" "}
+                                </List>{" "}
+                                <Divider />
+                            </ExpansionPanelDetails>
+
+                    </ExpansionPanel>
                 )}
 
                 {Auth.Check(this.props.isLogin) && (
-                    <div>
+                    <List>
                         <ListItem
                             button
                             key="我的分享"
@@ -528,7 +586,7 @@ class NavbarCompoment extends Component {
                         <ListItem
                             button
                             key="离线下载"
-                            onClick={() => (this.props.history.push("/aria2?"))}
+                            onClick={() => this.props.history.push("/aria2?")}
                         >
                             <ListItemIcon>
                                 <DownloadIcon className={classes.iconFix} />
@@ -554,7 +612,7 @@ class NavbarCompoment extends Component {
                                 <StorageBar></StorageBar>
                             </div>
                         )}
-                    </div>
+                    </List>
                 )}
                 {!Auth.Check(this.props.isLogin) && (
                     <div>
@@ -622,15 +680,18 @@ class NavbarCompoment extends Component {
                     position="fixed"
                     className={classes.appBar}
                     color={
-                        this.props.theme.palette.type !== "dark" && this.props.selected.length <= 1 &&
+                        this.props.theme.palette.type !== "dark" &&
+                        this.props.selected.length <= 1 &&
                         !(!this.props.isMultiple && this.props.withFile)
                             ? "primary"
                             : "default"
                     }
                 >
                     <Toolbar>
-                        {((this.props.selected.length <= 1 &&
-                            !(!this.props.isMultiple && this.props.withFile)))&& (
+                        {this.props.selected.length <= 1 &&
+                            !(
+                                !this.props.isMultiple && this.props.withFile
+                            ) && (
                                 <IconButton
                                     color="inherit"
                                     aria-label="Open drawer"
@@ -640,8 +701,10 @@ class NavbarCompoment extends Component {
                                     <MenuIcon />
                                 </IconButton>
                             )}
-                        {((this.props.selected.length <= 1 &&
-                            !(!this.props.isMultiple && this.props.withFile)) ) && (
+                        {this.props.selected.length <= 1 &&
+                            !(
+                                !this.props.isMultiple && this.props.withFile
+                            ) && (
                                 <IconButton
                                     color="inherit"
                                     aria-label="Open drawer"
@@ -694,7 +757,9 @@ class NavbarCompoment extends Component {
                                                 }
                                             />
                                         )}
-                                    {this.props.subTitle?this.props.subTitle : this.props.title}
+                                    {this.props.subTitle
+                                        ? this.props.subTitle
+                                        : this.props.title}
                                 </Typography>
                             )}
 
@@ -749,12 +814,13 @@ class NavbarCompoment extends Component {
                             )}
                         {(this.props.selected.length > 1 ||
                             (!this.props.isMultiple && this.props.withFile)) &&
-                            (isHomePage ||
-                                isSharePage) && (
+                            (isHomePage || isSharePage) && (
                                 <div className={classes.sectionForFile}>
                                     {!this.props.isMultiple &&
                                         this.props.withFile &&
-                                    (!isSharePage || (window.shareInfo && window.shareInfo.preview))&&
+                                        (!isSharePage ||
+                                            (window.shareInfo &&
+                                                window.shareInfo.preview)) &&
                                         isPreviewable(
                                             this.props.selected[0].name
                                         ) && (
@@ -800,26 +866,30 @@ class NavbarCompoment extends Component {
                                                 </Tooltip>
                                             </Grow>
                                         )}
-                                    {(this.props.isMultiple || this.props.withFolder) &&
-                                    user.group.allowArchiveDownload && (
-                                        <Grow
-                                            in={
-                                                (this.props.isMultiple || this.props.withFolder) &&
-                                                user.group.allowArchiveDownload
-                                            }
-                                        >
-                                            <Tooltip title="打包下载">
-                                                <IconButton
-                                                    color="inherit"
-                                                    onClick={() =>
-                                                        this.archiveDownload()
-                                                    }
-                                                >
-                                                    <DownloadIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Grow>
-                                    )}
+                                    {(this.props.isMultiple ||
+                                        this.props.withFolder) &&
+                                        user.group.allowArchiveDownload && (
+                                            <Grow
+                                                in={
+                                                    (this.props.isMultiple ||
+                                                        this.props
+                                                            .withFolder) &&
+                                                    user.group
+                                                        .allowArchiveDownload
+                                                }
+                                            >
+                                                <Tooltip title="打包下载">
+                                                    <IconButton
+                                                        color="inherit"
+                                                        onClick={() =>
+                                                            this.archiveDownload()
+                                                        }
+                                                    >
+                                                        <DownloadIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Grow>
+                                        )}
 
                                     {!this.props.isMultiple &&
                                         this.props.withFolder && (
@@ -858,38 +928,36 @@ class NavbarCompoment extends Component {
                                                 </Tooltip>
                                             </Grow>
                                         )}
-                                    {!this.props.isMultiple &&
-                                        !isSharePage && (
-                                            <Grow in={!this.props.isMultiple}>
-                                                <Tooltip title="分享">
-                                                    <IconButton
-                                                        color="inherit"
-                                                        onClick={() =>
-                                                            this.props.openShareDialog()
-                                                        }
-                                                    >
-                                                        <ShareIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Grow>
-                                        )}
-                                    {!this.props.isMultiple &&
-                                        !isSharePage && (
-                                            <Grow in={!this.props.isMultiple}>
-                                                <Tooltip title="重命名">
-                                                    <IconButton
-                                                        color="inherit"
-                                                        onClick={() =>
-                                                            this.props.openRenameDialog()
-                                                        }
-                                                    >
-                                                        <RenameIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Grow>
-                                        )}
+                                    {!this.props.isMultiple && !isSharePage && (
+                                        <Grow in={!this.props.isMultiple}>
+                                            <Tooltip title="分享">
+                                                <IconButton
+                                                    color="inherit"
+                                                    onClick={() =>
+                                                        this.props.openShareDialog()
+                                                    }
+                                                >
+                                                    <ShareIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grow>
+                                    )}
+                                    {!this.props.isMultiple && !isSharePage && (
+                                        <Grow in={!this.props.isMultiple}>
+                                            <Tooltip title="重命名">
+                                                <IconButton
+                                                    color="inherit"
+                                                    onClick={() =>
+                                                        this.props.openRenameDialog()
+                                                    }
+                                                >
+                                                    <RenameIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grow>
+                                    )}
                                     {!isSharePage && (
-                                        <div style={{display:"flex"}}>
+                                        <div style={{ display: "flex" }}>
                                             {!pathHelper.isMobile() && (
                                                 <Grow
                                                     in={

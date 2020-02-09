@@ -94,42 +94,6 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-const getIcon = (classes, name) => {
-    let iconBig;
-    let fileType = name
-        .split(".")
-        .pop()
-        .toLowerCase();
-    if (mediaType["image"].indexOf(fileType) !== -1) {
-        iconBig = <ImageIcon className={classes.iconImgBig} />;
-    } else if (mediaType["video"].indexOf(fileType) !== -1) {
-        iconBig = <VideoIcon className={classes.iconVideoBig} />;
-    } else if (mediaType["audio"].indexOf(fileType) !== -1) {
-        iconBig = <AudioIcon className={classes.iconAudioBig} />;
-    } else if (mediaType["pdf"].indexOf(fileType) !== -1) {
-        iconBig = <PdfIcon className={classes.iconPdfBig} />;
-    } else if (mediaType["word"].indexOf(fileType) !== -1) {
-        iconBig = <FileWordBox className={classes.iconWordBig} />;
-    } else if (mediaType["ppt"].indexOf(fileType) !== -1) {
-        iconBig = <FilePowerpointBox className={classes.iconPptBig} />;
-    } else if (mediaType["excel"].indexOf(fileType) !== -1) {
-        iconBig = <FileExcelBox className={classes.iconExcelBig} />;
-    } else if (mediaType["text"].indexOf(fileType) !== -1) {
-        iconBig = <ScriptText className={classes.iconTextBig} />;
-    } else if (mediaType["torrent"].indexOf(fileType) !== -1) {
-        iconBig = <MagnetOn className={classes.iconTorrentBig} />;
-    } else if (mediaType["zip"].indexOf(fileType) !== -1) {
-        iconBig = <ZipBox className={classes.iconZipBig} />;
-    } else if (mediaType["excute"].indexOf(fileType) !== -1) {
-        iconBig = <WindowRestore className={classes.iconExeBig} />;
-    } else if (mediaType["android"].indexOf(fileType) !== -1) {
-        iconBig = <Android className={classes.iconAndroidBig} />;
-    } else {
-        iconBig = <FileShowIcon className={classes.iconTextBig} />;
-    }
-    return iconBig;
-};
-
 class DownloadComponent extends Component {
     page = 0;
     interval = 0;

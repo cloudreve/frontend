@@ -5,11 +5,13 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import PublishIcon from "@material-ui/icons/Publish";
-import {openCreateFolderDialog, toggleSnackbar} from "../../actions";
+import {openCreateFolderDialog, openRemoteDownloadDialog, toggleSnackbar} from "../../actions";
 import { useDispatch } from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../untils/page"
 import Backdrop from "@material-ui/core/Backdrop";
+import {CloudDownload} from "@material-ui/icons";
+import Auth from "../../middleware/Auth";
 
 const useStyles = makeStyles(theme => ({
     fab: {
@@ -48,6 +50,11 @@ export default function UploadButton(props) {
             dispatch(openCreateFolderDialog()),
         [dispatch]
     );
+    const OpenRemoteDownloadDialog = useCallback(
+        () =>
+            dispatch(openRemoteDownloadDialog()),
+        [dispatch]
+    );
 
     useEffect(() => {
         setQueued(props.Queued);
@@ -83,6 +90,8 @@ export default function UploadButton(props) {
         setOpen(false);
     };
 
+    const user = Auth.GetUser();
+
     return (
         <AutoHidden enable>
             <Badge
@@ -114,6 +123,15 @@ export default function UploadButton(props) {
                         tooltipTitle="新目录"
                         onClick= {() => OpenNewFolderDialog()}
                      title={"新目录"}/>
+                    {user.group.allowRemoteDownload&&
+                    <SpeedDialAction
+                        key="NewDownload"
+                        icon={<CloudDownload />}
+                        tooltipTitle="离线下载"
+                        onClick= {() => OpenRemoteDownloadDialog()}
+                        title={"离线下载"}/>
+                    }
+
                 </SpeedDial>
             </Badge>
         </AutoHidden>
