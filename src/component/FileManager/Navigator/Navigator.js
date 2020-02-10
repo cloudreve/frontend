@@ -209,7 +209,7 @@ class NavigatorComponent extends Component {
             ? "/share/list/" + this.props.share.key
             : this.keywords === null
             ? "/directory"
-            : "/File/SearchFile";
+            : "/file/search/";
         newPath = this.keywords === null ? newPath : this.keywords;
 
         API.get(apiURL + newPath)

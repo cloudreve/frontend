@@ -6,17 +6,17 @@ import VideoIcon from "@material-ui/icons/VideoLibraryOutlined";
 import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
 import ImageIcon from "@material-ui/icons/CollectionsOutlined";
 import DocIcon from "@material-ui/icons/FileCopyOutlined";
-import ShareIcon from "@material-ui/icons/ShareOutlined";
+import ShareIcon from "@material-ui/icons/Share";
 import BackIcon from "@material-ui/icons/ArrowBack";
-import SdStorage from "@material-ui/icons/SdStorageOutlined";
+import SdStorage from "@material-ui/icons/SdStorage";
 import OpenIcon from "@material-ui/icons/OpenInNew";
-import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
 import OpenFolderIcon from "@material-ui/icons/FolderOpen";
 import RenameIcon from "@material-ui/icons/BorderColor";
 import MoveIcon from "@material-ui/icons/Input";
 import DeleteIcon from "@material-ui/icons/Delete";
 import UploadIcon from "@material-ui/icons/CloudUpload";
-import FolderShared from "@material-ui/icons/FolderSharedOutlined";
+import FolderShared from "@material-ui/icons/FolderShared";
 import SaveIcon from "@material-ui/icons/Save";
 import MenuIcon from "@material-ui/icons/Menu";
 import { isPreviewable } from "../../config";
@@ -73,6 +73,7 @@ import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Auth from "../../middleware/Auth";
+import {ExpandMore, KeyboardArrowRight} from "@material-ui/icons";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -308,7 +309,18 @@ const styles = theme => ({
     ownerInfo: {
         marginLeft: "10px",
         width: "150px"
-    }
+    },
+    subMenu:{
+        marginLeft:theme.spacing(2),
+    },
+    expand: {
+        display:"none",
+        transition: ".15s all ease-in-out"
+    },
+    expanded: {
+        display:"block",
+        transform: "rotate(90deg)"
+    },
 });
 class NavbarCompoment extends Component {
     constructor(props) {
@@ -398,7 +410,9 @@ class NavbarCompoment extends Component {
                     );
                     return;
                 }
-                this.props.history.push("/doc" + previewPath);
+                this.props.history.push(
+                    "/doc" + previewPath + "?id=" + this.props.selected[0].id
+                );
                 return;
             case "audio":
                 this.props.openMusicDialog();
@@ -414,7 +428,9 @@ class NavbarCompoment extends Component {
                     );
                     return;
                 }
-                this.props.history.push("/video" + previewPath);
+                this.props.history.push(
+                    "/video" + previewPath + "?id=" + this.props.selected[0].id
+                );
                 return;
             case "edit":
                 if (isShare) {
@@ -427,7 +443,9 @@ class NavbarCompoment extends Component {
                     );
                     return;
                 }
-                this.props.history.push("/text" + previewPath);
+                this.props.history.push(
+                    "/text" +previewPath + "?id=" + this.props.selected[0].id
+                );
                 return;
             default:
                 return;
@@ -467,7 +485,7 @@ class NavbarCompoment extends Component {
                     <ExpansionPanel
                         square
                         expanded={this.state.tagOpen && isHomePage}
-                        onChange={()=>this.setState({tagOpen:!this.state.tagOpen})}
+                        onChange={()=>isHomePage&&this.setState({tagOpen:!this.state.tagOpen})}
                     >
                         <ExpansionPanelSummary
                             aria-controls="panel1d-content"
@@ -477,11 +495,23 @@ class NavbarCompoment extends Component {
                                 button
                                 key="我的文件"
                                 onClick={() =>
-                                    this.props.history.push("/home?path=%2F")
+                                    !isHomePage&&this.props.history.push("/home?path=%2F")
                                 }
                             >
                                 <ListItemIcon>
-                                    <FolderShared className={classes.iconFix} />
+                                        <KeyboardArrowRight
+                                            className={classNames(
+                                                {
+                                                    [classes.expanded]:
+                                                    this.state.tagOpen && isHomePage,
+                                                    [classes.iconFix]:true,
+                                                },
+                                                classes.expand
+                                            )}
+                                        />
+                                    {!(this.state.tagOpen && isHomePage)&&<FolderShared className={classes.iconFix} />}
+
+
                                 </ListItemIcon>
                                 <ListItemText primary="我的文件" />
                             </ListItem>
@@ -558,7 +588,7 @@ class NavbarCompoment extends Component {
                                                 this.filterFile(v.id)
                                             }
                                         >
-                                            <ListItemIcon>
+                                            <ListItemIcon className={classes.subMenu}>
                                                 {v.icon}
                                             </ListItemIcon>
                                             <ListItemText primary={v.key} />

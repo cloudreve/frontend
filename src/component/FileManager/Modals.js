@@ -195,20 +195,14 @@ class ModalsCompoment extends Component {
 
     Download = () => {
         let reqURL = "";
-        let downloadPath =
-            this.props.selected[0].path === "/"
-                ? this.props.selected[0].path + this.props.selected[0].name
-                : this.props.selected[0].path +
-                  "/" +
-                  this.props.selected[0].name;
         if (this.props.selected[0].key) {
             reqURL =
                 "/share/download/" +
                 this.props.selected[0].key +
-                "?path=" +
-                encodeURIComponent(downloadPath);
+                "/" +
+                this.props.selected[0].id;
         } else {
-            reqURL = "/file/download" + downloadPath;
+            reqURL = "/file/download/" + this.props.selected[0].id;
         }
 
         API.put(reqURL)
@@ -531,7 +525,7 @@ class ModalsCompoment extends Component {
         e.preventDefault();
         this.props.setModalsLoading(true);
         API
-            .post("/aria2/torrent" + filePath(this.props.selected[0]), {
+            .post("/aria2/torrent/" + this.props.selected[0].id, {
                 dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
             .then(response => {

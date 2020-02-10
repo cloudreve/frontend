@@ -71,10 +71,8 @@ class ImgPreviewCompoment extends Component {
 
                     }else{
                         src = baseURL +
-                            "/file/preview" +
-                            (value.path === "/"
-                                ? value.path + value.name
-                                : value.path + "/" + value.name)
+                            "/file/preview/" +
+                            value.id
                     }
                     let newImg = {
                         title: value.name,

@@ -67,7 +67,7 @@ export default function VideoViewer(props) {
                                                 query.get("share_path")
                                             )
                                           : "")
-                                    : "/file/preview/" + math.params[0])
+                                    : "/file/preview/" + query.get("id"))
                         }
                     }}
                 />

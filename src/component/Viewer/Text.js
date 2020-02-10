@@ -66,7 +66,7 @@ export default function TextViewer(props) {
     }, [math.params[0], location]);
 
     useEffect(() => {
-        let requestURL = "/file/content/" + math.params[0];
+        let requestURL = "/file/content/" + query.get("id");
         if (pathHelper.isSharePage(location.pathname)){
             requestURL = "/share/content/" + id;
             if(query.get("share_path") !== ""){
@@ -100,7 +100,7 @@ export default function TextViewer(props) {
 
     const save = ()=>{
         setStatus("loading");
-        API.put("/file/update/" + math.params[0],content)
+        API.put("/file/update/" + query.get("id"),content)
             .then(response => {
                 setStatus("success");
                 setTimeout(()=>setStatus(""),2000);

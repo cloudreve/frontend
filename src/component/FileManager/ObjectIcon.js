@@ -1,4 +1,4 @@
-import React, { useCallback,useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     changeContextMenu,
@@ -10,9 +10,10 @@ import {
     showImgPreivew,
     openMusicDialog,
     toggleSnackbar,
-    dragAndDrop, openLoadingDialog
+    dragAndDrop,
+    openLoadingDialog
 } from "../../actions/index";
-import statusHelper from "../../untils/page"
+import statusHelper from "../../untils/page";
 import FileIcon from "./FileIcon";
 import SmallIcon from "./SmallIcon";
 import TableItem from "./TableRow";
@@ -21,15 +22,12 @@ import { isPreviewable } from "../../config";
 import { allowSharePreview } from "../../untils/index";
 import { makeStyles } from "@material-ui/core";
 import { useDrag } from "react-dnd";
-import { getEmptyImage } from 'react-dnd-html5-backend'
-import DropWarpper from "./DnD/DropWarpper"
-import {
-    useHistory,
-    useLocation
-} from "react-router-dom";
+import { getEmptyImage } from "react-dnd-html5-backend";
+import DropWarpper from "./DnD/DropWarpper";
+import { useHistory, useLocation } from "react-router-dom";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Auth from "../../middleware/Auth";
-import {pathBack} from "../../untils";
+import { pathBack } from "../../untils";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -38,8 +36,8 @@ const useStyles = makeStyles(theme => ({
     fixFlex: {
         minWidth: 0
     },
-    dragging:{
-        opacity:0.4,
+    dragging: {
+        opacity: 0.4
     }
 }));
 
@@ -49,9 +47,7 @@ export default function ObjectIcon(props) {
     const viewMethod = useSelector(
         state => state.viewUpdate.explorerViewMethod
     );
-    const navigatorPath = useSelector(
-        state => state.navigator.path,
-    );
+    const navigatorPath = useSelector(state => state.navigator.path);
     let location = useLocation();
     let history = useHistory();
 
@@ -92,21 +88,19 @@ export default function ObjectIcon(props) {
         [dispatch]
     );
     const DragAndDrop = useCallback(
-        (source, target) =>
-            dispatch(dragAndDrop(source, target)),
+        (source, target) => dispatch(dragAndDrop(source, target)),
         [dispatch]
     );
     const OpenLoadingDialog = useCallback(
-        text =>
-            dispatch(openLoadingDialog(text)),
+        text => dispatch(openLoadingDialog(text)),
         [dispatch]
     );
 
     const classes = useStyles();
 
     const contextMenu = e => {
-        if(props.file.type === "up"){
-            return
+        if (props.file.type === "up") {
+            return;
         }
         e.preventDefault();
         if (
@@ -135,10 +129,13 @@ export default function ObjectIcon(props) {
     };
 
     const handleClick = e => {
-        if(props.file.type === "up"){
+        if (props.file.type === "up") {
             NavitateTo(pathBack(navigatorPath));
         }
-        if (statusHelper.isMobile() || statusHelper.isSharePage(location.pathname)) {
+        if (
+            statusHelper.isMobile() ||
+            statusHelper.isSharePage(location.pathname)
+        ) {
             selectFile(e);
             if (props.file.type === "dir" && !e.ctrlKey) {
                 enterFolder();
@@ -150,8 +147,8 @@ export default function ObjectIcon(props) {
     };
 
     const handleDoubleClick = () => {
-        if(props.file.type === "up"){
-            return
+        if (props.file.type === "up") {
+            return;
         }
         if (props.file.type === "dir") {
             enterFolder();
@@ -161,16 +158,11 @@ export default function ObjectIcon(props) {
         if (isShare) {
             let user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    "请先登录",
-                    "warning"
-                );
+                ToggleSnackbar("top", "right", "请先登录", "warning");
                 return;
             }
         }
-        if (window.shareInfo && !window.shareInfo.preview){
+        if (window.shareInfo && !window.shareInfo.preview) {
             OpenLoadingDialog("获取下载地址...");
             return;
         }
@@ -184,39 +176,55 @@ export default function ObjectIcon(props) {
                 return;
             case "msDoc":
                 if (isShare) {
-                    history.push(selected[0].key +
-                        "/doc?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath));
+                    history.push(
+                        selected[0].key +
+                            "/doc?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
+                    );
                     return;
                 }
-                history.push("/doc" + previewPath);
+                history.push(
+                    "/doc" +
+                    previewPath +
+                        "?id=" +
+                        selected[0].id
+                );
                 return;
             case "audio":
                 OpenMusicDialog();
                 return;
             case "video":
                 if (isShare) {
-                    history.push(selected[0].key +
-                        "/video?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath));
+                    history.push(
+                        selected[0].key +
+                            "/video?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
+                    );
                     return;
                 }
-                history.push("/video" + previewPath);
+                history.push(
+                    "/video" +
+                    previewPath +
+                    "?id=" +
+                    selected[0].id
+                );
                 return;
             case "edit":
                 if (isShare) {
-                    history.push(selected[0].key +
-                        "/text?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath));
+                    history.push(
+                        selected[0].key +
+                            "/text?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
+                    );
                     return;
                 }
-                history.push("/text" + previewPath);
+                history.push("/text" + previewPath + "?id=" + selected[0].id);
                 return;
             default:
                 OpenLoadingDialog("获取下载地址...");
@@ -230,26 +238,31 @@ export default function ObjectIcon(props) {
         );
     };
 
-    const [{ isDragging }, drag,preview] = useDrag({
+    const [{ isDragging }, drag, preview] = useDrag({
         item: {
-            object:props.file,
+            object: props.file,
             type: "object",
-            selected:[...selected],
-            viewMethod:viewMethod,
-            },
+            selected: [...selected],
+            viewMethod: viewMethod
+        },
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult();
             if (item && dropResult) {
-                if (dropResult.folder){
-                    if (item.object.id !== dropResult.folder.id || item.object.type !== dropResult.folder.type){
-                        DragAndDrop(item.object,dropResult.folder);
+                if (dropResult.folder) {
+                    if (
+                        item.object.id !== dropResult.folder.id ||
+                        item.object.type !== dropResult.folder.type
+                    ) {
+                        DragAndDrop(item.object, dropResult.folder);
                     }
                 }
-               
             }
         },
-        canDrag: () =>{
-            return !statusHelper.isMobile() && statusHelper.isHomePage(location.pathname);
+        canDrag: () => {
+            return (
+                !statusHelper.isMobile() &&
+                statusHelper.isHomePage(location.pathname)
+            );
         },
         collect: monitor => ({
             isDragging: monitor.isDragging()
@@ -257,9 +270,8 @@ export default function ObjectIcon(props) {
     });
 
     useEffect(() => {
-        preview(getEmptyImage(), { captureDraggingState: true })
-    }, [])
-
+        preview(getEmptyImage(), { captureDraggingState: true });
+    }, []);
 
     if (viewMethod === "list") {
         return (
@@ -277,7 +289,7 @@ export default function ObjectIcon(props) {
             ref={drag}
             className={classNames({
                 [classes.container]: viewMethod !== "list",
-                [classes.dragging]: isDragging,
+                [classes.dragging]: isDragging
             })}
         >
             <div
@@ -287,8 +299,7 @@ export default function ObjectIcon(props) {
                 onDoubleClick={handleDoubleClick.bind(this)}
             >
                 {props.file.type === "dir" && viewMethod !== "list" && (
-                    <DropWarpper folder={props.file}/>
-                       
+                    <DropWarpper folder={props.file} />
                 )}
                 {props.file.type === "file" && viewMethod === "icon" && (
                     <FileIcon ref={drag} file={props.file} />

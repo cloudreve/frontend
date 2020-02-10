@@ -56,7 +56,7 @@ export default function DocViewer(props) {
     }, [math.params[0], location]);
 
     useEffect(()=>{
-        let requestURL = "/file/doc/" + math.params[0];
+        let requestURL = "/file/doc/" + query.get("id");
         if (pathHelper.isSharePage(location.pathname)){
             requestURL = "/share/doc/" + id;
             if(query.get("share_path") !== ""){

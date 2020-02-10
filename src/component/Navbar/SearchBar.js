@@ -18,6 +18,8 @@ import {
     ListItemText,
     Typography
 } from "@material-ui/core";
+import {withRouter} from "react-router";
+import pathHelper from "../../untils/page";
 
 const mapStateToProps = state => {
     return {};
@@ -105,7 +107,7 @@ class SearchBarCompoment extends Component {
     };
 
     searchMyFile = () => {
-        this.props.searchMyFile(this.input);
+        this.props.searchMyFile("keywords/"+this.input);
     };
 
     searchShare = () => {
@@ -116,6 +118,7 @@ class SearchBarCompoment extends Component {
         const { classes } = this.props;
         const { anchorEl } = this.state;
         const id = this.state.input !== "" ? "simple-popper" : null;
+        const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
             <div className={classes.search}>
@@ -142,7 +145,7 @@ class SearchBarCompoment extends Component {
                     {({ TransitionProps }) => (
                         <Fade {...TransitionProps} timeout={350}>
                             <Paper square={true}>
-                                {window.isHomePage && (
+                                {isHomePage && (
                                     <MenuItem onClick={this.searchMyFile}>
                                         <ListItemIcon className={classes.icon}>
                                             <FileIcon />
@@ -195,6 +198,6 @@ SearchBarCompoment.propTypes = {
 const SearchBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(SearchBarCompoment));
+)(withStyles(styles)(withRouter(SearchBarCompoment)));
 
 export default SearchBar;

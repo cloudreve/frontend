@@ -18,9 +18,10 @@ import {
     openGetSourceDialog,
     openCopyDialog,
     openLoadingDialog,
-    setSelectedTarget, openDecompressDialog
+    setSelectedTarget,
+    openDecompressDialog
 } from "../../actions/index";
-import {isCompressFile, isPreviewable, isTorrent} from "../../config";
+import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import { allowSharePreview } from "../../untils/index";
 import UploadIcon from "@material-ui/icons/CloudUpload";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
@@ -47,8 +48,8 @@ import {
 import pathHelper from "../../untils/page";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
-import {Archive, Unarchive} from "@material-ui/icons";
-import {openCompressDialog} from "../../actions";
+import { Archive, Unarchive } from "@material-ui/icons";
+import { openCompressDialog } from "../../actions";
 import Menu from "@material-ui/core/Menu";
 
 const styles = theme => ({
@@ -122,12 +123,12 @@ const mapDispatchToProps = dispatch => {
         openLoadingDialog: text => {
             dispatch(openLoadingDialog(text));
         },
-        openDecompressDialog: ()=>{
-            dispatch(openDecompressDialog())
+        openDecompressDialog: () => {
+            dispatch(openDecompressDialog());
         },
-        openCompressDialog: ()=>{
-            dispatch(openCompressDialog())
-        },
+        openCompressDialog: () => {
+            dispatch(openCompressDialog());
+        }
     };
 };
 
@@ -226,7 +227,9 @@ class ContextMenuCompoment extends Component {
                     );
                     return;
                 }
-                this.props.history.push("/doc" + previewPath);
+                this.props.history.push(
+                    "/doc" + previewPath + "?id=" + this.props.selected[0].id
+                );
                 return;
             case "audio":
                 this.props.openMusicDialog();
@@ -235,27 +238,31 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/video?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/video?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                this.props.history.push("/video" + previewPath);
+                this.props.history.push(
+                    "/video" + previewPath + "?id=" + this.props.selected[0].id
+                );
                 return;
             case "edit":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/text?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/text?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                this.props.history.push("/text" + previewPath);
+                this.props.history.push(
+                    "/text" + previewPath + "?id=" + this.props.selected[0].id
+                );
                 return;
             default:
                 return;
@@ -357,26 +364,28 @@ class ContextMenuCompoment extends Component {
                                                 打开
                                             </Typography>
                                         </MenuItem>
-
                                     </>
                                 )}
 
                             {!this.props.isMultiple && this.props.withFile && (
                                 <>
-                                <MenuItem onClick={() => this.openDownload()}>
-                                    <ListItemIcon>
-                                        <DownloadIcon />
-                                    </ListItemIcon>
-                                    <Typography variant="inherit">
-                                        下载
-                                    </Typography>
-                                </MenuItem>
+                                    <MenuItem
+                                        onClick={() => this.openDownload()}
+                                    >
+                                        <ListItemIcon>
+                                            <DownloadIcon />
+                                        </ListItemIcon>
+                                        <Typography variant="inherit">
+                                            下载
+                                        </Typography>
+                                    </MenuItem>
                                     {isHomePage && <Divider />}
-                                    </>
+                                </>
                             )}
 
                             {(this.props.isMultiple || this.props.withFolder) &&
-                            (user.group.allowArchiveDownload||!isHomePage) && (
+                                (user.group.allowArchiveDownload ||
+                                    !isHomePage) && (
                                     <MenuItem
                                         onClick={() =>
                                             this.openArchiveDownload()
@@ -412,7 +421,8 @@ class ContextMenuCompoment extends Component {
                             {!this.props.isMultiple &&
                                 isHomePage &&
                                 user.group.allowRemoteDownload &&
-                                this.props.withFile&& (
+                                this.props.withFile &&
+                                isTorrent(this.props.selected[0].name) && (
                                     <MenuItem
                                         onClick={() =>
                                             this.props.openTorrentDownloadDialog()
@@ -427,26 +437,25 @@ class ContextMenuCompoment extends Component {
                                     </MenuItem>
                                 )}
                             {!this.props.isMultiple &&
-                            isHomePage &&
-                            user.group.compress &&
-                            this.props.withFile &&
-                            isCompressFile(this.props.selected[0].name) && (
-                                <MenuItem
-                                    onClick={() =>
-                                        this.props.openDecompressDialog()
-                                    }
-                                >
-                                    <ListItemIcon>
-                                        <Unarchive />
-                                    </ListItemIcon>
-                                    <Typography variant="inherit">
-                                        解压缩
-                                    </Typography>
-                                </MenuItem>
-                            )}
+                                isHomePage &&
+                                user.group.compress &&
+                                this.props.withFile &&
+                                isCompressFile(this.props.selected[0].name) && (
+                                    <MenuItem
+                                        onClick={() =>
+                                            this.props.openDecompressDialog()
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <Unarchive />
+                                        </ListItemIcon>
+                                        <Typography variant="inherit">
+                                            解压缩
+                                        </Typography>
+                                    </MenuItem>
+                                )}
 
-                            {isHomePage &&
-                            user.group.compress && (
+                            {isHomePage && user.group.compress && (
                                 <MenuItem
                                     onClick={() =>
                                         this.props.openCompressDialog()
