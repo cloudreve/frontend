@@ -474,7 +474,7 @@ const cloudreveApp = (state = [], action) => {
             return Object.assign({}, state, {
                 navigator: Object.assign({}, state.navigator, {
                     path: "/搜索结果",
-                    refresh:!state.navigator.refresh,
+                    refresh:state.explorer.keywords === null? state.navigator.refresh:!state.navigator.refresh,
                 }),
                 viewUpdate:Object.assign({}, state.viewUpdate, {
                     contextOpen:false,

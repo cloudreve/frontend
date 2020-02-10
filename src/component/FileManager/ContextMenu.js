@@ -66,7 +66,8 @@ const mapStateToProps = state => {
         withFolder: state.explorer.selectProps.withFolder,
         withFile: state.explorer.selectProps.withFile,
         path: state.navigator.path,
-        selected: state.explorer.selected
+        selected: state.explorer.selected,
+        keywords: state.explorer.keywords,
     };
 };
 
@@ -497,34 +498,40 @@ class ContextMenuCompoment extends Component {
                                             重命名
                                         </Typography>
                                     </MenuItem>
-                                    <MenuItem
-                                        onClick={() =>
-                                            this.props.openCopyDialog()
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            <FileCopyIcon />
-                                        </ListItemIcon>
-                                        <Typography variant="inherit">
-                                            复制
-                                        </Typography>
-                                    </MenuItem>
+                                    {this.props.keywords === null &&
+                                        <MenuItem
+                                            onClick={() =>
+                                                this.props.openCopyDialog()
+                                            }
+                                        >
+                                            <ListItemIcon>
+                                                <FileCopyIcon />
+                                            </ListItemIcon>
+                                            <Typography variant="inherit">
+                                                复制
+                                            </Typography>
+                                        </MenuItem>
+                                    }
+
                                 </>
                             )}
                             {isHomePage && (
                                 <div>
-                                    <MenuItem
-                                        onClick={() =>
-                                            this.props.openMoveDialog()
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            <MoveIcon />
-                                        </ListItemIcon>
-                                        <Typography variant="inherit">
-                                            移动
-                                        </Typography>
-                                    </MenuItem>
+                                    {this.props.keywords === null &&
+                                        <MenuItem
+                                            onClick={() =>
+                                                this.props.openMoveDialog()
+                                            }
+                                        >
+                                            <ListItemIcon>
+                                                <MoveIcon />
+                                            </ListItemIcon>
+                                            <Typography variant="inherit">
+                                                移动
+                                            </Typography>
+                                        </MenuItem>
+                                    }
+
                                     <Divider />
                                     <MenuItem
                                         className={classes.propover}

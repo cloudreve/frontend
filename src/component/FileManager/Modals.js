@@ -196,11 +196,17 @@ class ModalsCompoment extends Component {
     Download = () => {
         let reqURL = "";
         if (this.props.selected[0].key) {
+            let downloadPath =
+                this.props.selected[0].path === "/"
+                    ? this.props.selected[0].path + this.props.selected[0].name
+                    : this.props.selected[0].path +
+                    "/" +
+                    this.props.selected[0].name;
             reqURL =
                 "/share/download/" +
                 this.props.selected[0].key +
-                "/" +
-                this.props.selected[0].id;
+                "?path=" +
+                encodeURIComponent(downloadPath);
         } else {
             reqURL = "/file/download/" + this.props.selected[0].id;
         }
@@ -936,16 +942,8 @@ class ModalsCompoment extends Component {
                                                     )
                                                   : "")
                                             : baseURL +
-                                              "/file/preview" +
-                                              (this.props.selected[0].path ===
-                                              "/"
-                                                  ? this.props.selected[0]
-                                                        .path +
-                                                    this.props.selected[0].name
-                                                  : this.props.selected[0]
-                                                        .path +
-                                                    "/" +
-                                                    this.props.selected[0].name)
+                                              "/file/preview/" +
+                                                    this.props.selected[0].id
                                     }
                                 />
                             )}

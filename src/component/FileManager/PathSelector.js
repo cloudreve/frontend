@@ -24,6 +24,7 @@ import { Api } from 'mdi-material-ui';
 
 const mapStateToProps = state => {
     return {
+        keywords: state.explorer.keywords,
     }
 }
 
@@ -69,7 +70,7 @@ class PathSelectorCompoment extends Component {
 
     componentDidMount= ()=>{
         let toBeLoad = this.props.presentPath;
-        this.enterFolder(toBeLoad);
+        this.enterFolder(this.props.keywords === null ? toBeLoad : "/");
     }
 
     back = ()=>{

@@ -5,11 +5,10 @@ import { baseURL } from "../../middleware/Api";
 import { showImgPreivew } from "../../actions/index";
 import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
+import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import pathHelper from "../../untils/page";
 import {withRouter} from "react-router";
-import {PhotoSlider} from "react-photo-view";
-import 'react-photo-view/dist/index.css';
 
 const styles = theme => ({});
 
@@ -28,7 +27,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-class ImagPreviewComponent extends Component {
+class ImgPreviewCompoment extends Component {
     state = {
         items: [],
         photoIndex: 0,
@@ -41,7 +40,7 @@ class ImagPreviewComponent extends Component {
         if (nextProps.first !== null) {
             if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
                 let newImg = {
-                    intro: nextProps.first.name,
+                    title: nextProps.first.name,
                     src:
                         baseURL +
                         "/share/preview/" +nextProps.first.key
@@ -76,7 +75,7 @@ class ImagPreviewComponent extends Component {
                             value.id
                     }
                     let newImg = {
-                        intro: value.name,
+                        title: value.name,
                         src:src,
                     };
                     if (
@@ -108,30 +107,42 @@ class ImagPreviewComponent extends Component {
 
         return (
             <div>
-                 {isOpen && (<PhotoSlider
-                     images={items}
-                     visible={isOpen}
-                     onClose={() => this.handleClose()}
-                     index={photoIndex}
-                     onIndexChange={(n) =>
-                         this.setState({
-                             photoIndex: n,
-                         })
-                     }
-
+                 {isOpen && (<Lightbox
+                    mainSrc={items[photoIndex].src}
+                    nextSrc={items[(photoIndex + 1) % items.length].src}
+                    prevSrc={items[(photoIndex + items.length - 1) % items.length].src}
+                    onCloseRequest={() => this.handleClose()}
+                    imageLoadErrorMessage = "无法加载此图像"
+                    imageCrossOrigin = "anonymous"
+                    imageTitle = {items[photoIndex].title}
+                    onMovePrevRequest={() =>
+                      this.setState({
+                        photoIndex: (photoIndex + items.length - 1) % items.length,
+                      })
+                    }
+                    reactModalStyle={{
+                        overlay:{
+                            zIndex:10000
+                        },
+                    }}
+                    onMoveNextRequest={() =>
+                      this.setState({
+                        photoIndex: (photoIndex + 1) % items.length,
+                      })
+                    }
                 />)}
             </div>
         );
     }
 }
 
-ImagPreviewComponent.propTypes = {
+ImgPreviewCompoment.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
 const ImgPreivew = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ImagPreviewComponent)));
+)(withStyles(styles)(withRouter(ImgPreviewCompoment)));
 
 export default ImgPreivew;
