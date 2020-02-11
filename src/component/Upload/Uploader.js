@@ -1,21 +1,22 @@
 import React, { Component } from "react";
 import uploaderLoader from "../../loader";
 import { connect } from "react-redux";
-import {refreshFileList, refreshStorage, toggleSnackbar} from "../../actions";
+import { refreshFileList, refreshStorage, toggleSnackbar } from "../../actions";
 import FileList from "./FileList.js";
-import Auth from "../../middleware/Auth"
-import UploadButton from "../Dial/Create.js"
-import {withRouter} from "react-router";
+import Auth from "../../middleware/Auth";
+import UploadButton from "../Dial/Create.js";
+import { withRouter } from "react-router";
 import pathHelper from "../../untils/page";
 
 let loaded = false;
 
 const mapStateToProps = state => {
     return {
-        path: state.navigator.path
+        path: state.navigator.path,
+        keywords: state.explorer.keywords
     };
 };
- 
+
 const mapDispatchToProps = dispatch => {
     return {
         refreshFileList: () => {
@@ -26,7 +27,7 @@ const mapDispatchToProps = dispatch => {
         },
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        },
+        }
     };
 };
 
@@ -46,24 +47,30 @@ class UploaderComponent extends Component {
         this.uploader.removeFile(file);
     }
 
-    getChunkSize(policyType){
-        if(policyType === "qiniu"){
-            return 4*1024*1024
+    getChunkSize(policyType) {
+        if (policyType === "qiniu") {
+            return 4 * 1024 * 1024;
         }
-        if(policyType === "onedrive"){
-            return 10*1024*1024
+        if (policyType === "onedrive") {
+            return 10 * 1024 * 1024;
         }
-        return 0
+        return 0;
     }
 
-    fileAdd = (up,files)=>{
-        if(window.location.href.split("#")[1].toLowerCase().startsWith("/home")){
+    fileAdd = (up, files) => {
+        if (
+            this.props.keywords === null &&
+            window.location.href
+                .split("#")[1]
+                .toLowerCase()
+                .startsWith("/home")
+        ) {
             window.fileList["openFileList"]();
             window.plupload.each(files, files => {
                 window.pathCache[files.id] = this.props.path;
                 window.fileList["enQueue"](files);
             });
-        }else{
+        } else {
             window.plupload.each(files, files => {
                 up.removeFile(files);
             });
@@ -88,14 +95,17 @@ class UploaderComponent extends Component {
                     dragdrop: true,
                     chunk_size: this.getChunkSize(user.policy.saveType),
                     filters: {
-                        mime_types: user.policy.allowedType === null ? [] : user.policy.allowedType,
+                        mime_types:
+                            user.policy.allowedType === null
+                                ? []
+                                : user.policy.allowedType
                     },
                     // iOS不能多选？
                     multi_selection: true,
                     uptoken_url: "/api/v3/file/upload/credential",
-                    uptoken:user.policy.saveType === "local" ? "token" : null,
+                    uptoken: user.policy.saveType === "local" ? "token" : null,
                     domain: "s",
-                    max_retries:0,
+                    max_retries: 0,
                     get_new_uptoken: true,
                     auto_start: true,
                     log_level: 5,
@@ -113,20 +123,26 @@ class UploaderComponent extends Component {
                             if (file.length === 0) {
                                 return;
                             }
-                            console.log("UploadComplete",file[0].status,file[0]);
+                            console.log(
+                                "UploadComplete",
+                                file[0].status,
+                                file[0]
+                            );
                             for (var i = 0; i < file.length; i++) {
                                 if (file[i].status === 5) {
                                     window.fileList["setComplete"](file[i]);
                                 }
                             }
                             // 无异步操作的策略，直接刷新
-                            if (user.policy.saveType !== "onedrive" && user.policy.saveType !== "cos"){
+                            if (
+                                user.policy.saveType !== "onedrive" &&
+                                user.policy.saveType !== "cos"
+                            ) {
                                 this.props.refreshFileList();
                                 this.props.refreshStorage();
                             }
-
                         },
-                        Fresh:()=>{
+                        Fresh: () => {
                             this.props.refreshFileList();
                             this.props.refreshStorage();
                         },
@@ -156,7 +172,10 @@ class UploaderComponent extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
-                <UploadButton Queued={this.state.queued} openFileList={this.openFileList} />
+                {this.props.keywords === null &&<UploadButton
+                    Queued={this.state.queued}
+                    openFileList={this.openFileList}
+                />}
             </div>
         );
     }
@@ -164,8 +183,6 @@ class UploaderComponent extends Component {
 
 const Uploader = connect(mapStateToProps, mapDispatchToProps, null, {
     forwardRef: true
-})(
-    uploaderLoader()(UploaderComponent)
-);
+})(uploaderLoader()(UploaderComponent));
 
 export default Uploader;

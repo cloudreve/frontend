@@ -370,7 +370,7 @@ class NavbarCompoment extends Component {
     };
 
     filterFile = type => {
-        this.props.searchMyFile("{filterType:" + type + "}");
+        this.props.searchMyFile(type+"/internal");
     };
 
     openPreview = () => {

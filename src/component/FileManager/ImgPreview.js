@@ -5,7 +5,6 @@ import { baseURL } from "../../middleware/Api";
 import { showImgPreivew } from "../../actions/index";
 import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
-import "react-image-lightbox/style.css";
 import pathHelper from "../../untils/page";
 import {withRouter} from "react-router";
 import {PhotoSlider} from "react-photo-view";

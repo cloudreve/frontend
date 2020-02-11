@@ -6,7 +6,7 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import PublishIcon from "@material-ui/icons/Publish";
 import {openCreateFolderDialog, openRemoteDownloadDialog, toggleSnackbar} from "../../actions";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../untils/page"
 import Backdrop from "@material-ui/core/Backdrop";

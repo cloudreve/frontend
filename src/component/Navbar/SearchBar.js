@@ -20,6 +20,11 @@ import {
 } from "@material-ui/core";
 import {withRouter} from "react-router";
 import pathHelper from "../../untils/page";
+import {HotKeys,configure} from "react-hotkeys";
+
+configure({
+    ignoreTags:[],
+});
 
 const mapStateToProps = state => {
     return {};
@@ -85,10 +90,29 @@ const styles = theme => ({
     }
 });
 
+const keyMap = {
+    SEARCH: "enter",
+};
+
 class SearchBarCompoment extends Component {
-    state = {
-        anchorEl: null,
-        input: ""
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            anchorEl: null,
+            input: ""
+        };
+    }
+
+    handlers={
+        SEARCH:(e)=>{
+            if(pathHelper.isHomePage(this.props.location.pathname)){
+                this.searchMyFile();
+            }else{
+                this.searchShare();
+            }
+            e.target.blur();
+        },
     };
 
     handleChange = event => {
@@ -114,6 +138,7 @@ class SearchBarCompoment extends Component {
         window.location.href = "/Explore/Search/" + this.input;
     };
 
+
     render() {
         const { classes } = this.props;
         const { anchorEl } = this.state;
@@ -121,20 +146,22 @@ class SearchBarCompoment extends Component {
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
-            <div className={classes.search}>
+                <div className={classes.search}>
                 <div className={classes.searchIcon}>
                     <SearchIcon />
                 </div>
-                <InputBase
-                    placeholder="搜索..."
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput
-                    }}
-                    onChange={this.handleChange}
-                    onBlur={this.cancelSuggest}
-                    value={this.state.input}
-                />
+                    <HotKeys keyMap={keyMap} handlers={this.handlers}>
+                        <InputBase
+                            placeholder="搜索..."
+                            classes={{
+                                root: classes.inputRoot,
+                                input: classes.inputInput
+                            }}
+                            onChange={this.handleChange}
+                            onBlur={this.cancelSuggest}
+                            value={this.state.input}
+                        />
+                    </HotKeys>
                 <Popper
                     id={id}
                     open={this.state.input !== ""}
