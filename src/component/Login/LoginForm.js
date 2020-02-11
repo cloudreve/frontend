@@ -282,6 +282,8 @@ function LoginForm() {
 
                 history.push("/home");
                 ToggleSnackbar("top", "right", "登录成功", "success");
+
+                localStorage.removeItem('siteConfigCache');
                 // }
             })
             .catch(error => {

@@ -1,4 +1,4 @@
-import { setSiteConfig, toggleSnackbar,enableLoadUploader } from "../actions/index"
+import {setSiteConfig, toggleSnackbar, enableLoadUploader, changeViewMethod} from "../actions/index"
 import { fixUrlHash } from "../untils/index"
 import API from "./Api"
 import Auth from "./Auth"
@@ -17,18 +17,6 @@ export var InitSiteConfig = (rawStore) => {
     rawStore.siteConfig = initUserConfig(rawStore.siteConfig);
     // 是否登录
     rawStore.viewUpdate.isLogin = Auth.Check();
-    // 偏爱的列表样式
-    let preferListMethod = Auth.GetPreference("view_method");
-    if(preferListMethod){
-        rawStore.viewUpdate.explorerViewMethod = preferListMethod;
-    }else{
-        let path = window.location.hash.split("#");
-        if(path.length >=1 && pathHelper.isSharePage(path[1])){
-            rawStore.viewUpdate.explorerViewMethod = rawStore.siteConfig.share_view_method
-        }else{
-            rawStore.viewUpdate.explorerViewMethod = rawStore.siteConfig.home_view_method
-        }
-    }
     return rawStore
 }
 
@@ -67,6 +55,20 @@ export async function UpdateSiteConfig(store) {
         response.data = initUserConfig(response.data)
         store.dispatch(setSiteConfig(response.data));
         localStorage.setItem('siteConfigCache', JSON.stringify(response.data));
+
+        // 偏爱的列表样式
+        let preferListMethod = Auth.GetPreference("view_method");
+        if(preferListMethod){
+            store.dispatch(changeViewMethod(preferListMethod));
+        }else{
+            let path = window.location.hash.split("#");
+            if(path.length >=1 && pathHelper.isSharePage(path[1])){
+                store.dispatch(changeViewMethod(response.data.share_view_method));
+            }else{
+                store.dispatch(changeViewMethod(response.data.home_view_method));
+            }
+        }
+
     }).catch(function(error) {
         store.dispatch(toggleSnackbar("top", "right", "无法加载站点配置：" + error.message, "error"));
     }).finally(function () {

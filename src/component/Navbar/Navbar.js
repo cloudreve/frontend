@@ -67,56 +67,11 @@ import {
     ListItemText,
     List,
     Grow,
-    Tooltip, Card
+    Tooltip,
+    Card
 } from "@material-ui/core";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Auth from "../../middleware/Auth";
-import {ExpandMore, KeyboardArrowRight} from "@material-ui/icons";
-
-const ExpansionPanel = withStyles({
-    root: {
-        maxWidth: "100%",
-        boxShadow: "none",
-        "&:not(:last-child)": {
-            borderBottom: 0
-        },
-        "&:before": {
-            display: "none"
-        },
-        "&$expanded": {margin:0,}
-    },
-    expanded: {
-    }
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-    root: {
-        minHeight: 0,
-        padding: 0,
-
-        "&$expanded": {
-            minHeight: 0
-        }
-    },
-    content: {
-        maxWidth: "100%",
-        margin: 0,
-        display: "block",
-        "&$expanded": {
-            margin: "0"
-        }
-    },
-    expanded: {}
-})(MuiExpansionPanelSummary);
-
-const ExpansionPanelDetails = withStyles(theme => ({
-    root: {
-        display: "block",
-        padding: theme.spacing(0)
-    }
-}))(MuiExpansionPanelDetails);
+import FileTag from "./FileTags";
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -228,7 +183,6 @@ const styles = theme => ({
         width: drawerWidthMobile
     },
     upDrawer: {
-        marginBottom: 90
     },
     drawerOpen: {
         width: drawerWidth,
@@ -248,9 +202,6 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3)
-    },
-    hiddenButton: {
-        display: "none"
     },
     grow: {
         flexGrow: 1
@@ -310,24 +261,18 @@ const styles = theme => ({
         marginLeft: "10px",
         width: "150px"
     },
-    subMenu:{
-        marginLeft:theme.spacing(2),
-    },
-    expand: {
-        display:"none",
-        transition: ".15s all ease-in-out"
-    },
-    expanded: {
-        display:"block",
-        transform: "rotate(90deg)"
-    },
+    minStickDrawer:{
+        minHeight: "calc(100vh - 155px)",
+        [theme.breakpoints.down("sm")]: {
+            minHeight: "calc(100vh - 261px)",
+        },
+    }
 });
 class NavbarCompoment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mobileOpen: false,
-            tagOpen:true,
+            mobileOpen: false
         };
         this.UploaderRef = React.createRef();
     }
@@ -367,10 +312,6 @@ class NavbarCompoment extends Component {
         if (pathHelper.isHomePage(this.props.location.pathname)) {
             return <>{this.props.loadUploader && <Uploader />}</>;
         }
-    };
-
-    filterFile = type => {
-        this.props.searchMyFile(type+"/internal");
     };
 
     openPreview = () => {
@@ -444,7 +385,7 @@ class NavbarCompoment extends Component {
                     return;
                 }
                 this.props.history.push(
-                    "/text" +previewPath + "?id=" + this.props.selected[0].id
+                    "/text" + previewPath + "?id=" + this.props.selected[0].id
                 );
                 return;
             default:
@@ -482,159 +423,55 @@ class NavbarCompoment extends Component {
                 {pathHelper.isMobile() && <UserInfo />}
 
                 {Auth.Check(this.props.isLogin) && (
-                    <ExpansionPanel
-                        square
-                        expanded={this.state.tagOpen && isHomePage}
-                        onChange={()=>isHomePage&&this.setState({tagOpen:!this.state.tagOpen})}
-                    >
-                        <ExpansionPanelSummary
-                            aria-controls="panel1d-content"
-                            id="panel1d-header"
-                        >
-                            <ListItem
-                                button
-                                key="我的文件"
-                                onClick={() =>
-                                    !isHomePage&&this.props.history.push("/home?path=%2F")
-                                }
-                            >
-                                <ListItemIcon>
-                                        <KeyboardArrowRight
-                                            className={classNames(
-                                                {
-                                                    [classes.expanded]:
-                                                    this.state.tagOpen && isHomePage,
-                                                    [classes.iconFix]:true,
-                                                },
-                                                classes.expand
-                                            )}
+                    <>
+                        <div className={classes.minStickDrawer}>
+                            <FileTag />
+                            <List>
+                                <ListItem
+                                    button
+                                    key="我的分享"
+                                    onClick={() =>
+                                        (window.location.href = "/Share/My")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <ShareIcon
+                                            className={classes.iconFix}
                                         />
-                                    {!(this.state.tagOpen && isHomePage)&&<FolderShared className={classes.iconFix} />}
+                                    </ListItemIcon>
+                                    <ListItemText primary="我的分享" />
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key="离线下载"
+                                    onClick={() =>
+                                        this.props.history.push("/aria2?")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <DownloadIcon
+                                            className={classes.iconFix}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary="离线下载" />
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key="容量配额"
+                                    onClick={() =>
+                                        (window.location.href = "/Home/Quota")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <SdStorage
+                                            className={classes.iconFix}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary="容量配额" />
+                                </ListItem>
+                            </List>
+                        </div>
 
-
-                                </ListItemIcon>
-                                <ListItemText primary="我的文件" />
-                            </ListItem>
-                            <Divider />
-                        </ExpansionPanelSummary>
-
-
-                        <ExpansionPanelDetails>
-                                <List>
-                                    <ListItem
-                                        button
-                                        id="pickfiles"
-                                        className={classes.hiddenButton}
-                                    >
-                                        <ListItemIcon>
-                                            <UploadIcon />
-                                        </ListItemIcon>
-                                        <ListItemText />
-                                    </ListItem>
-                                    {[
-                                        {
-                                            key: "视频",
-                                            id: "video",
-                                            icon: (
-                                                <VideoIcon
-                                                    className={[
-                                                        classes.iconFix,
-                                                        classes.iconVideo
-                                                    ]}
-                                                />
-                                            )
-                                        },
-                                        {
-                                            key: "图片",
-                                            id: "image",
-                                            icon: (
-                                                <ImageIcon
-                                                    className={[
-                                                        classes.iconFix,
-                                                        classes.iconImg
-                                                    ]}
-                                                />
-                                            )
-                                        },
-                                        {
-                                            key: "音频",
-                                            id: "audio",
-                                            icon: (
-                                                <MusicIcon
-                                                    className={[
-                                                        classes.iconFix,
-                                                        classes.iconAudio
-                                                    ]}
-                                                />
-                                            )
-                                        },
-                                        {
-                                            key: "文档",
-                                            id: "doc",
-                                            icon: (
-                                                <DocIcon
-                                                    className={[
-                                                        classes.iconFix,
-                                                        classes.iconDoc
-                                                    ]}
-                                                />
-                                            )
-                                        }
-                                    ].map(v => (
-                                        <ListItem
-                                            button
-                                            key={v.key}
-                                            onClick={() =>
-                                                this.filterFile(v.id)
-                                            }
-                                        >
-                                            <ListItemIcon className={classes.subMenu}>
-                                                {v.icon}
-                                            </ListItemIcon>
-                                            <ListItemText primary={v.key} />
-                                        </ListItem>
-                                    ))}{" "}
-                                </List>{" "}
-                                <Divider />
-                            </ExpansionPanelDetails>
-
-                    </ExpansionPanel>
-                )}
-
-                {Auth.Check(this.props.isLogin) && (
-                    <List>
-                        <ListItem
-                            button
-                            key="我的分享"
-                            onClick={() => (window.location.href = "/Share/My")}
-                        >
-                            <ListItemIcon>
-                                <ShareIcon className={classes.iconFix} />
-                            </ListItemIcon>
-                            <ListItemText primary="我的分享" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            key="离线下载"
-                            onClick={() => this.props.history.push("/aria2?")}
-                        >
-                            <ListItemIcon>
-                                <DownloadIcon className={classes.iconFix} />
-                            </ListItemIcon>
-                            <ListItemText primary="离线下载" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            key="容量配额"
-                            onClick={() =>
-                                (window.location.href = "/Home/Quota")
-                            }
-                        >
-                            <ListItemIcon>
-                                <SdStorage className={classes.iconFix} />
-                            </ListItemIcon>
-                            <ListItemText primary="容量配额" />
-                        </ListItem>
                         {!pathHelper.isSharePage(
                             this.props.location.pathname
                         ) && (
@@ -642,8 +479,9 @@ class NavbarCompoment extends Component {
                                 <StorageBar></StorageBar>
                             </div>
                         )}
-                    </List>
+                    </>
                 )}
+
                 {!Auth.Check(this.props.isLogin) && (
                     <div>
                         <ListItem

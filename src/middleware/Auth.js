@@ -35,6 +35,9 @@ const Auth = {
         preference[key] = value;
         localStorage.setItem("user_preference", JSON.stringify(preference));
     },
+    /**
+     * @return {null}
+     */
     GetPreference(key){
         let preference = JSON.parse(localStorage.getItem("user_preference"));
         if (preference && preference[key]){

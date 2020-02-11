@@ -61,8 +61,7 @@ const styles = theme => ({
         marginTop: "5px"
     },
     stickFooter: {
-        bottom: "0px",
-        position: "fixed",
+
         backgroundColor: theme.palette.background.paper
     }
 });
