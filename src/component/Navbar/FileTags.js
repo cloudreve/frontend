@@ -1,6 +1,14 @@
-import React, { useCallback, useState, useEffect } from "react";
-import {Divider, List, ListItem, ListItemIcon, ListItemText, makeStyles, withStyles} from "@material-ui/core";
-import {KeyboardArrowRight} from "@material-ui/icons";
+import React, {useCallback, useState, useEffect, Suspense} from "react";
+import {
+    Divider,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    makeStyles,
+    withStyles
+} from "@material-ui/core";
+import { KeyboardArrowRight } from "@material-ui/icons";
 import classNames from "classnames";
 import FolderShared from "@material-ui/icons/FolderShared";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -8,14 +16,34 @@ import VideoIcon from "@material-ui/icons/VideoLibraryOutlined";
 import ImageIcon from "@material-ui/icons/CollectionsOutlined";
 import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
 import DocIcon from "@material-ui/icons/FileCopyOutlined";
-import {useHistory, useLocation} from "react-router";
+import { useHistory, useLocation } from "react-router";
 import pathHelper from "../../untils/page";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import {searchMyFile, toggleSnackbar} from "../../actions";
-import {useDispatch, useSelector} from "react-redux";
+import { navitateTo, searchMyFile, toggleSnackbar } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../middleware/Auth";
+import {
+    Circle,
+    CircleOutline,
+    Decagram,
+    Heart,
+    HeartOutline,
+    Hexagon,
+    HexagonOutline,
+    Hexagram,
+    HexagramOutline,
+    Rhombus,
+    RhombusOutline,
+    Square,
+    SquareOutline,
+    Triangle,
+    TriangleOutline,
+    FolderHeartOutline,
+    TagPlus
+} from "mdi-material-ui";
+import PageLoading from "../Placeholder/PageLoading";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -27,10 +55,9 @@ const ExpansionPanel = withStyles({
         "&:before": {
             display: "none"
         },
-        "&$expanded": {margin:0,}
+        "&$expanded": { margin: 0 }
     },
-    expanded: {
-    }
+    expanded: {}
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
@@ -62,11 +89,11 @@ const ExpansionPanelDetails = withStyles(theme => ({
 
 const useStyles = makeStyles(theme => ({
     expand: {
-        display:"none",
+        display: "none",
         transition: ".15s all ease-in-out"
     },
     expanded: {
-        display:"block",
+        display: "block",
         transform: "rotate(90deg)"
     },
     iconFix: {
@@ -75,13 +102,32 @@ const useStyles = makeStyles(theme => ({
     hiddenButton: {
         display: "none"
     },
-    subMenu:{
-        marginLeft:theme.spacing(2),
-    },
+    subMenu: {
+        marginLeft: theme.spacing(2)
+    }
 }));
 
+const icons = {
+    Circle: Circle,
+    CircleOutline: CircleOutline,
+    Heart: Heart,
+    HeartOutline: HeartOutline,
+    Hexagon: Hexagon,
+    HexagonOutline: HexagonOutline,
+    Hexagram: Hexagram,
+    HexagramOutline: HexagramOutline,
+    Rhombus: Rhombus,
+    RhombusOutline: RhombusOutline,
+    Square: Square,
+    SquareOutline: SquareOutline,
+    Triangle: Triangle,
+    TriangleOutline: TriangleOutline,
+    FolderHeartOutline: FolderHeartOutline
+};
 
-export default function FileTag(props){
+const AddTag = React.lazy(() => import ("../Modals/AddTag" ));
+
+export default function FileTag(props) {
     const classes = useStyles();
 
     let location = useLocation();
@@ -89,24 +135,47 @@ export default function FileTag(props){
 
     const isHomePage = pathHelper.isHomePage(location.pathname);
 
-    const [tagOpen,setTagOpen] = useState(true);
+    const [tagOpen, setTagOpen] = useState(true);
+    const [addTagModal,setAddTagModal] = useState(false);
 
     const dispatch = useDispatch();
-    const SearchMyFile = useCallback(k =>
-            dispatch(searchMyFile(k)),
-        [dispatch]
-    );
+    const SearchMyFile = useCallback(k => dispatch(searchMyFile(k)), [
+        dispatch
+    ]);
+    const NavigateTo = useCallback(k => dispatch(navitateTo(k)), [dispatch]);
     const isLogin = useSelector(state => state.viewUpdate.isLogin);
-    const user = useCallback(()=>{
+    const user = useCallback(() => {
         return Auth.GetUser();
-    },[isLogin]);
+    }, [isLogin]);
+
+    const getIcon = (icon, color) => {
+        if (icons[icon]) {
+            let IconComponent = icons[icon];
+            return (
+                <IconComponent
+                    className={[classes.iconFix]}
+                    style={
+                        color
+                            ? {
+                                  color: color
+                              }
+                            : {}
+                    }
+                />
+            );
+        }
+        return <Circle className={[classes.iconFix]} />;
+    };
 
     return (
         <ExpansionPanel
             square
             expanded={tagOpen && isHomePage}
-            onChange={()=>isHomePage&&setTagOpen(!tagOpen)}
+            onChange={() => isHomePage && setTagOpen(!tagOpen)}
         >
+            <Suspense fallback={""}>
+                <AddTag open={addTagModal} onClose={()=>setAddTagModal(false)}/>
+            </Suspense>
             <ExpansionPanelSummary
                 aria-controls="panel1d-content"
                 id="panel1d-header"
@@ -115,29 +184,27 @@ export default function FileTag(props){
                     button
                     key="我的文件"
                     onClick={() =>
-                        !isHomePage&&history.push("/home?path=%2F")
+                        !isHomePage && history.push("/home?path=%2F")
                     }
                 >
                     <ListItemIcon>
                         <KeyboardArrowRight
                             className={classNames(
                                 {
-                                    [classes.expanded]:
-                                    tagOpen && isHomePage,
-                                    [classes.iconFix]:true,
+                                    [classes.expanded]: tagOpen && isHomePage,
+                                    [classes.iconFix]: true
                                 },
                                 classes.expand
                             )}
                         />
-                        {!(tagOpen && isHomePage)&&<FolderShared className={classes.iconFix} />}
-
-
+                        {!(tagOpen && isHomePage) && (
+                            <FolderShared className={classes.iconFix} />
+                        )}
                     </ListItemIcon>
                     <ListItemText primary="我的文件" />
                 </ListItem>
                 <Divider />
             </ExpansionPanelSummary>
-
 
             <ExpansionPanelDetails>
                 <List>
@@ -204,9 +271,7 @@ export default function FileTag(props){
                         <ListItem
                             button
                             key={v.key}
-                            onClick={() =>
-                                SearchMyFile(v.id +"/internal")
-                            }
+                            onClick={() => SearchMyFile(v.id + "/internal")}
                         >
                             <ListItemIcon className={classes.subMenu}>
                                 {v.icon}
@@ -214,24 +279,40 @@ export default function FileTag(props){
                             <ListItemText primary={v.key} />
                         </ListItem>
                     ))}
-                    {user().tags && user().tags.map(v=>(
-                        <ListItem
-                            button
-                            key={v.id}
-                            onClick={() =>
-                                v.type === 0 ? SearchMyFile("tag/"+v.id):alert("folder")
-                            }
-                        >
-                            <ListItemIcon className={classes.subMenu}>
-                                {v.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={v.name} />
-                        </ListItem>
-                    ))}
+                    {user().tags &&
+                        user().tags.map(v => (
+                            <ListItem
+                                button
+                                key={v.id}
+                                onClick={() => {
+                                    if (v.type === 0) {
+                                        SearchMyFile("tag/" + v.id);
+                                    } else {
+                                        NavigateTo(v.expression);
+                                    }
+                                }}
+                            >
+                                <ListItemIcon className={classes.subMenu}>
+                                    {getIcon(
+                                        v.type === 0
+                                            ? v.icon
+                                            : "FolderHeartOutline",
+                                        v.type === 0 ? v.color : null
+                                    )}
+                                </ListItemIcon>
+                                <ListItemText primary={v.name} />
+                            </ListItem>
+                        ))}
+
+                    <ListItem button onClick={()=>setAddTagModal(true)}>
+                        <ListItemIcon className={classes.subMenu}>
+                            <TagPlus className={classes.iconFix} />
+                        </ListItemIcon>
+                        <ListItemText primary={"添加标签..."} />
+                    </ListItem>
                 </List>{" "}
                 <Divider />
             </ExpansionPanelDetails>
-
         </ExpansionPanel>
-    )
+    );
 }

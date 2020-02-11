@@ -20,7 +20,7 @@ const doNavigate = (path,state)=>{
         viewUpdate:Object.assign({}, state.viewUpdate, {
             contextOpen:false,
             navigatorError:false,
-            navigatorLoading:true,
+            navigatorLoading:path !== state.navigator.path,
         }),
         explorer:Object.assign({}, state.explorer, {
             selected:[],
