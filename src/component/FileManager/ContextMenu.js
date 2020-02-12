@@ -178,7 +178,7 @@ class ContextMenuCompoment extends Component {
 
     clickUpload = () => {
         this.props.changeContextMenu("empty", false);
-        let uploadButton = document.getElementsByClassName("uploadForm")[0];
+        let uploadButton = document.getElementsByClassName("uploadFileForm")[0];
         if (document.body.contains(uploadButton)) {
             uploadButton.click();
         } else {

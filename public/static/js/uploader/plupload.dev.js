@@ -1185,19 +1185,35 @@
                     }
                 });
 
+                let buttonIndex = 0;
                 // initialize file pickers - there can be many
                 if (settings.browse_button) {
                     plupload.each(settings.browse_button, function(el) {
                         queue.push(function(cb) {
-                            var fileInput = new o.file.FileInput(
-                                plupload.extend({}, options, {
-                                    accept: settings.filters.mime_types,
-                                    name: settings.file_data_name,
-                                    multiple: settings.multi_selection,
-                                    container: settings.container,
-                                    browse_button: el
-                                })
-                            );
+                            buttonIndex++;
+                            if(buttonIndex === 1){
+                                var fileInput = new o.file.FileInput(
+                                    plupload.extend({}, options, {
+                                        accept: settings.filters.mime_types,
+                                        name: settings.file_data_name,
+                                        multiple: false,
+                                        directory: true,
+                                        container: settings.container,
+                                        browse_button: el
+                                    })
+                                );
+                            }else{
+                                var fileInput = new o.file.FileInput(
+                                    plupload.extend({}, options, {
+                                        accept: settings.filters.mime_types,
+                                        name: settings.file_data_name,
+                                        multiple: settings.multi_selection,
+                                        container: settings.container,
+                                        browse_button: el
+                                    })
+                                );
+                            }
+
 
                             fileInput.onready = function() {
                                 var info = Runtime.getInfo(this.ruid);
@@ -1268,6 +1284,7 @@
                         });
                     });
                 }
+
 
                 // initialize drop zones
                 if (settings.drop_element) {

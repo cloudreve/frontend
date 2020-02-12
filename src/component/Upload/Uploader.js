@@ -96,7 +96,7 @@ class UploaderComponent extends Component {
                 var user = Auth.GetUser();
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
-                    browse_button: "pickfiles",
+                    browse_button: ["pickfiles","pickfolder"],
                     container: "container",
                     drop_element: "container",
                     max_file_size: user.policy.maxSize,

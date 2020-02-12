@@ -257,6 +257,16 @@ export default function FileTag(props) {
                         </ListItemIcon>
                         <ListItemText />
                     </ListItem>
+                    <ListItem
+                        button
+                        id="pickfolder"
+                        className={classes.hiddenButton}
+                    >
+                        <ListItemIcon>
+                            <UploadIcon />
+                        </ListItemIcon>
+                        <ListItemText />
+                    </ListItem>
                     {[
                         {
                             key: "视频",

@@ -12,6 +12,7 @@ import statusHelper from "../../untils/page"
 import Backdrop from "@material-ui/core/Backdrop";
 import {CloudDownload} from "@material-ui/icons";
 import Auth from "../../middleware/Auth";
+import {FolderUpload} from "mdi-material-ui";
 
 const useStyles = makeStyles(theme => ({
     fab: {
@@ -65,20 +66,24 @@ export default function UploadButton(props) {
             if (queued !== 0) {
                 props.openFileList();
             } else {
-                let uploadButton = document.getElementsByClassName(
-                    "uploadForm"
-                )[0];
-                if (document.body.contains(uploadButton)) {
-                    uploadButton.click();
-                } else {
-                    ToggleSnackbar(
-                        "top",
-                        "right",
-                        "上传组件还未加载完成",
-                        "warning"
-                    );
-                }
+                openUpload("uploadFileForm");
             }
+        }
+    };
+
+    const openUpload = id =>{
+        let uploadButton = document.getElementsByClassName(
+            id
+        )[0];
+        if (document.body.contains(uploadButton)) {
+            uploadButton.click();
+        } else {
+            ToggleSnackbar(
+                "top",
+                "right",
+                "上传组件还未加载完成",
+                "warning"
+            );
         }
     };
 
@@ -117,6 +122,12 @@ export default function UploadButton(props) {
                     onOpen={handleOpen}
                     open={open}
                 >
+                    <SpeedDialAction
+                        key="NewFolder"
+                        icon={<FolderUpload />}
+                        tooltipTitle="上传目录"
+                        onClick= {() => openUpload("uploadFolderForm")}
+                        title={"上传目录"}/>
                     <SpeedDialAction
                         key="NewFolder"
                         icon={<CreateNewFolderIcon />}

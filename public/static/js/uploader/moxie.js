@@ -6985,7 +6985,7 @@ define("moxie/runtime/html5/file/FileInput", [
 
 				shimContainer = I.getShimContainer();
 
-				shimContainer.innerHTML = '<input id="' + I.uid +'" type="file" class="uploadForm" style="font-size:999px;opacity:0;"' +
+				shimContainer.innerHTML = '<input id="' + I.uid +'" type="file" class="'+(_options.directory?"uploadFolderForm":"uploadFileForm")+'" style="font-size:999px;opacity:0;"' +
 					(_options.multiple && I.can('select_multiple') ? 'multiple' : '') + 
 					(_options.directory && I.can('select_folder') ? 'webkitdirectory directory' : '') + // Chrome 11+
 					(mimes ? ' accept="' + mimes.join(',') + '"' : '') + ' />';

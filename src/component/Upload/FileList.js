@@ -172,7 +172,7 @@ class FileList extends Component {
     };
 
     addNewFile = () => {
-        document.getElementsByClassName("uploadForm")[0].click();
+        document.getElementsByClassName("uploadFileForm")[0].click();
     };
 
     getProgressBackground = () => {
