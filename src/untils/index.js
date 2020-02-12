@@ -135,3 +135,23 @@ export function filePath(file) {
 export function hex2bin(hex){
     return (parseInt(hex, 16).toString(2)).padStart(8, '0');
 }
+
+export function pathJoin(parts, sep){
+    const separator = sep || '/';
+    parts = parts.map((part, index)=>{
+        if (index) {
+            part = part.replace(new RegExp('^' + separator), '');
+        }
+        if (index !== parts.length - 1) {
+            part = part.replace(new RegExp(separator + '$'), '');
+        }
+        return part;
+    })
+    return parts.join(separator);
+}
+
+export function basename(path){
+    let pathList = path.split("/");
+    pathList.pop()
+    return pathList.join("/") === "" ? "/" : pathList.join("/")
+}

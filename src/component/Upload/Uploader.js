@@ -7,6 +7,7 @@ import Auth from "../../middleware/Auth";
 import UploadButton from "../Dial/Create.js";
 import { withRouter } from "react-router";
 import pathHelper from "../../untils/page";
+import {basename, pathJoin} from "../../untils";
 
 let loaded = false;
 
@@ -58,6 +59,7 @@ class UploaderComponent extends Component {
     }
 
     fileAdd = (up, files) => {
+        console.log(files);
         if (
             this.props.keywords === null &&
             window.location.href
@@ -67,9 +69,15 @@ class UploaderComponent extends Component {
         ) {
             window.fileList["openFileList"]();
             window.plupload.each(files, files => {
-                window.pathCache[files.id] = this.props.path;
-                window.fileList["enQueue"](files);
+                let source = files.getSource();
+                if(source.relativePath && source.relativePath !== ""){
+                    window.pathCache[files.id] = basename(pathJoin([this.props.path,source.relativePath]));
+                }else{
+                    window.pathCache[files.id] = this.props.path;
+                }
+
             });
+            window.fileList["enQueue"](files);
         } else {
             window.plupload.each(files, files => {
                 up.removeFile(files);

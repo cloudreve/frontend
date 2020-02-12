@@ -82,16 +82,10 @@ class FileList extends Component {
 
     //入队
     enQueue(files) {
-        var filesNow = this.state.files;
-        if (
-            filesNow.findIndex(file => {
-                return file.id === files.id;
-            }) === -1
-        ) {
-            this.setState({
-                files: [...filesNow, files]
-            });
-        }
+        this.setState({
+            files: [...this.state.files, ...files]
+        });
+
     }
 
     deQueue(file) {
