@@ -8,7 +8,7 @@ import {
     makeStyles,
     withStyles
 } from "@material-ui/core";
-import { KeyboardArrowRight } from "@material-ui/icons";
+import {Cancel, Clear, KeyboardArrowRight} from "@material-ui/icons";
 import classNames from "classnames";
 import FolderShared from "@material-ui/icons/FolderShared";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -44,6 +44,10 @@ import {
     TagPlus
 } from "mdi-material-ui";
 import PageLoading from "../Placeholder/PageLoading";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import Grow from "@material-ui/core/Grow";
+import API from "../../middleware/Api";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -104,7 +108,13 @@ const useStyles = makeStyles(theme => ({
     },
     subMenu: {
         marginLeft: theme.spacing(2)
+    },
+    overFlow:{
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
     }
+
 }));
 
 const icons = {
@@ -137,6 +147,8 @@ export default function FileTag(props) {
 
     const [tagOpen, setTagOpen] = useState(true);
     const [addTagModal,setAddTagModal] = useState(false);
+    const [tagHover,setTagHover] = useState(null);
+    const [tags,setTags] = useState(Auth.GetUser().tags?Auth.GetUser().tags:[]);
 
     const dispatch = useDispatch();
     const SearchMyFile = useCallback(k => dispatch(searchMyFile(k)), [
@@ -144,9 +156,13 @@ export default function FileTag(props) {
     ]);
     const NavigateTo = useCallback(k => dispatch(navitateTo(k)), [dispatch]);
     const isLogin = useSelector(state => state.viewUpdate.isLogin);
-    const user = useCallback(() => {
-        return Auth.GetUser();
-    }, [isLogin]);
+
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
+
 
     const getIcon = (icon, color) => {
         if (icons[icon]) {
@@ -167,15 +183,38 @@ export default function FileTag(props) {
         return <Circle className={[classes.iconFix]} />;
     };
 
+    const submitSuccess = tag =>{
+        let newTags = [...tags,tag];
+        setTags(newTags);
+        let user = Auth.GetUser();
+        user.tags = newTags;
+        Auth.SetUser(user);
+    };
+
+    const submitDelete = id =>{
+        API.delete("/tag/"+id)
+            .then(response => {
+                let newTags = tags.filter((v)=>{return v.id !== id});
+                setTags(newTags)
+                let user = Auth.GetUser();
+                user.tags = newTags;
+                Auth.SetUser(user);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
     return (
+        <>
+            <Suspense fallback={""}>
+                <AddTag onSuccess={submitSuccess} open={addTagModal} onClose={()=>setAddTagModal(false)}/>
+            </Suspense>
         <ExpansionPanel
             square
             expanded={tagOpen && isHomePage}
             onChange={() => isHomePage && setTagOpen(!tagOpen)}
         >
-            <Suspense fallback={""}>
-                <AddTag open={addTagModal} onClose={()=>setAddTagModal(false)}/>
-            </Suspense>
             <ExpansionPanelSummary
                 aria-controls="panel1d-content"
                 id="panel1d-header"
@@ -207,7 +246,7 @@ export default function FileTag(props) {
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails>
-                <List>
+                <List onMouseLeave={()=>setTagHover(null)}>
                     <ListItem
                         button
                         id="pickfiles"
@@ -279,11 +318,11 @@ export default function FileTag(props) {
                             <ListItemText primary={v.key} />
                         </ListItem>
                     ))}
-                    {user().tags &&
-                        user().tags.map(v => (
+                    {tags.map(v => (
                             <ListItem
                                 button
                                 key={v.id}
+                                onMouseEnter={()=>setTagHover(v.id)}
                                 onClick={() => {
                                     if (v.type === 0) {
                                         SearchMyFile("tag/" + v.id);
@@ -300,7 +339,13 @@ export default function FileTag(props) {
                                         v.type === 0 ? v.color : null
                                     )}
                                 </ListItemIcon>
-                                <ListItemText primary={v.name} />
+                                <ListItemText className={classes.overFlow} primary={v.name} />
+
+                                {tagHover === v.id && <ListItemSecondaryAction onClick={()=>submitDelete(v.id)}>
+                                        <IconButton size={"small"} edge="end" aria-label="delete">
+                                            <Clear />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>}
                             </ListItem>
                         ))}
 
@@ -314,5 +359,6 @@ export default function FileTag(props) {
                 <Divider />
             </ExpansionPanelDetails>
         </ExpansionPanel>
+            </>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core";
 import {
     Button,
     Dialog,
@@ -32,13 +32,20 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import {
     Circle,
     CircleOutline,
-    Decagram, FolderHeartOutline,
+    Decagram,
+    FolderHeartOutline,
     Heart,
     HeartOutline,
     Hexagon,
     HexagonOutline,
     Hexagram,
-    HexagramOutline, Rhombus, RhombusOutline, Square, SquareOutline, Triangle, TriangleOutline
+    HexagramOutline,
+    Rhombus,
+    RhombusOutline,
+    Square,
+    SquareOutline,
+    Triangle,
+    TriangleOutline
 } from "mdi-material-ui";
 
 const useStyles = makeStyles(theme => ({
@@ -67,6 +74,16 @@ const useStyles = makeStyles(theme => ({
     },
     textField: {
         marginTop: theme.spacing(1)
+    },
+    scroll: {
+        overflowX: "auto"
+    },
+    dialogContent: {
+        marginTop: theme.spacing(2)
+    },
+    pathSelect: {
+        marginTop: theme.spacing(2),
+        display: "flex"
     }
 }));
 
@@ -83,22 +100,47 @@ const icons = {
     RhombusOutline: <RhombusOutline />,
     Square: <Square />,
     SquareOutline: <SquareOutline />,
-    Triangle: <Triangle />,
+    Triangle: <Triangle />
 };
 
 export default function AddTag(props) {
+    const theme = useTheme();
+
     const [value, setValue] = React.useState(0);
-    const [alignment, setAlignment] = React.useState('Circle');
+    const [loading, setLoading] = React.useState(false);
+    const [alignment, setAlignment] = React.useState("Circle");
+    const [color, setColor] = React.useState(theme.palette.text.secondary);
     const [input, setInput] = React.useState({
-        filename: ""
+        filename: "",
+        tagName: "",
+        path: "/"
     });
+    const [pathSelectDialog, setPathSelectDialog] = React.useState(false);
+    const [selectedPath, setSelectedPath] = useState("");
+    const [selectedPathName, setSelectedPathName] = useState("");
+    const setMoveTarget = folder => {
+        let path =
+            folder.path === "/"
+                ? folder.path + folder.name
+                : folder.path + "/" + folder.name;
+        setSelectedPath(path);
+        setSelectedPathName(folder.name);
+    };
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     const handleIconChange = (event, newAlignment) => {
-        setAlignment(newAlignment);
+        if (newAlignment) {
+            setAlignment(newAlignment);
+        }
+    };
+
+    const handleColorChange = (event, newAlignment) => {
+        if (newAlignment) {
+            setColor(newAlignment);
+        }
     };
 
     const handleInputChange = name => event => {
@@ -115,6 +157,77 @@ export default function AddTag(props) {
         [dispatch]
     );
 
+    const submit = () => {
+        if (value === 0) {
+            submitNewTag();
+        }else{
+            submitNewLink();
+        }
+    };
+
+    const submitNewLink = ()=>{
+        setLoading(true);
+
+        API.post("/tag/link", {
+            path: input.path,
+            name:input.tagName
+        })
+            .then(response => {
+                setLoading(false);
+                props.onClose();
+                props.onSuccess({
+                    type: 1,
+                    name: input.tagName,
+                    expression:input.path,
+                    color: theme.palette.text.secondary,
+                    icon: "FolderHeartOutline",
+                    id: response.data
+                });
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+
+    const submitNewTag = () => {
+        setLoading(true);
+
+        API.post("/tag/filter", {
+            expression: input.filename,
+            name: input.tagName,
+            color: color,
+            icon: alignment
+        })
+            .then(response => {
+                setLoading(false);
+                props.onClose();
+                props.onSuccess({
+                    type: 0,
+                    name: input.tagName,
+                    color: color,
+                    icon: alignment,
+                    id: response.data
+                });
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+    const selectPath = ()=>{
+        setInput({
+            ...input,
+            path: selectedPath === "//" ? "/" : selectedPath
+        });
+        setPathSelectDialog(false);
+    }
+
     const classes = useStyles();
 
     return (
@@ -122,7 +235,26 @@ export default function AddTag(props) {
             open={props.open}
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
+            fullWidth
         >
+            <Dialog
+                open={pathSelectDialog}
+                onClose={() => setPathSelectDialog(false)}
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
+                <PathSelector presentPath="/" selected={[]} onSelect={setMoveTarget} />
+
+                <DialogActions>
+                    <Button onClick={() => setPathSelectDialog(false)}>
+                        取消
+                    </Button>
+                    <Button onClick={selectPath} color="primary" disabled={selectedPath === ""}>
+                        确定
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <AppBar position="static">
                 <Tabs
                     value={value}
@@ -135,8 +267,15 @@ export default function AddTag(props) {
                 </Tabs>
             </AppBar>
             {value === 0 && (
-                <DialogContent>
-                    <FormLabel>匹配规则：</FormLabel>
+                <DialogContent className={classes.dialogContent}>
+                    <TextField
+                        label="标签名"
+                        id="filled-name"
+                        value={input["tagName"]}
+                        onChange={handleInputChange("tagName")}
+                        fullWidth
+                        className={classes.textField}
+                    />
                     <TextField
                         id="filled-name"
                         label="文件名匹配规则"
@@ -154,28 +293,109 @@ export default function AddTag(props) {
                         表示匹配png格式图像。多行规则间会以“或”的关系进行运算。
                     </Typography>
                     <FormLabel className={classes.marginTop}>图标：</FormLabel>
-                    <ToggleButtonGroup
-                        size="small"
-                        value={alignment}
-                        exclusive
-                        onChange={handleIconChange}
-                        className={classes.textField}
-                    >
-                        {Object.keys(icons).map((key, index)=>(
-                            <ToggleButton key={index} value={key}>
-                                {icons[key]}
-                            </ToggleButton>
-                         ))}
-                    </ToggleButtonGroup>
+                    <div className={classes.scroll}>
+                        <ToggleButtonGroup
+                            size="small"
+                            value={alignment}
+                            exclusive
+                            onChange={handleIconChange}
+                            className={classes.textField}
+                        >
+                            {Object.keys(icons).map((key, index) => (
+                                <ToggleButton key={index} value={key}>
+                                    {icons[key]}
+                                </ToggleButton>
+                            ))}
+                        </ToggleButtonGroup>
+                    </div>
+                    <FormLabel className={classes.marginTop}>颜色：</FormLabel>
+                    <div className={classes.scroll}>
+                        <ToggleButtonGroup
+                            size="small"
+                            value={color}
+                            exclusive
+                            onChange={handleColorChange}
+                            className={classes.textField}
+                        >
+                            {[
+                                theme.palette.text.secondary,
+                                "#f44336",
+                                "#e91e63",
+                                "#9c27b0",
+                                "#673ab7",
+                                "#3f51b5",
+                                "#2196f3",
+                                "#03a9f4",
+                                "#00bcd4",
+                                "#009688",
+                                "#4caf50",
+                                "#cddc39",
+                                "#ffeb3b",
+                                "#ffc107",
+                                "#ff9800",
+                                "#ff5722",
+                                "#795548",
+                                "#9e9e9e",
+                                "#607d8b"
+                            ].map((key, index) => (
+                                <ToggleButton key={index} value={key}>
+                                    <Circle style={{ color: key }} />
+                                </ToggleButton>
+                            ))}
+                        </ToggleButtonGroup>
+                    </div>
                 </DialogContent>
             )}
-            {value === 1 && <div>1</div>}
+            {value === 1 && (
+                <DialogContent className={classes.dialogContent}>
+                    <TextField
+                        label="标签名"
+                        id="filled-name"
+                        value={input["tagName"]}
+                        onChange={handleInputChange("tagName")}
+                        fullWidth
+                        className={classes.textField}
+                    />
+                    <div className={classes.pathSelect}>
+                        <TextField
+                            label="目录路径"
+                            id="filled-name"
+                            value={input["path"]}
+                            onChange={handleInputChange("path")}
+                            fullWidth
+                            className={classes.textField}
+                        />
+                        <Button
+                            onClick={()=>setPathSelectDialog(true)}
+                            style={{
+                                marginLeft: theme.spacing(1),
+                                alignSelf: "flex-end"
+                            }}
+                            color="primary"
+                            variant="outlined"
+                        >
+                            选择
+                        </Button>
+                    </div>
+                </DialogContent>
+            )}
             <DialogActions>
                 <Button onClick={props.onClose}>取消</Button>
                 <div className={classes.wrapper}>
-                    <Button color="primary" disabled={props.modalsLoading}>
+                    <Button
+                        onClick={submit}
+                        color="primary"
+                        disabled={
+                            loading ||
+                            (value === 0 &&
+                                (input.filename === "" ||
+                                    input.tagName === "")) ||
+                            (value === 1 && (input.tagName === "" ||
+                                input.path === ""))
+                        }
+                    >
                         确定
-                        {props.modalsLoading && (
+                        {loading && (
                             <CircularProgress
                                 size={24}
                                 className={classes.buttonProgress}
