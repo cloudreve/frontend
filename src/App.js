@@ -17,6 +17,7 @@ import TextViewer from "./component/Viewer/Text";
 import DocViewer from "./component/Viewer/Doc";
 import SharePreload from "./component/Share/SharePreload";
 import Download from "./component/Download/Download";
+import MyShare from "./component/MyShare";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -97,6 +98,12 @@ export default function App() {
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <Download />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}shares`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <MyShare />
                                 </Suspense>
                             </AuthRoute>
 

@@ -431,7 +431,7 @@ class NavbarCompoment extends Component {
                                     button
                                     key="我的分享"
                                     onClick={() =>
-                                        (window.location.href = "/Share/My")
+                                        this.props.history.push("/shares?")
                                     }
                                 >
                                     <ListItemIcon>

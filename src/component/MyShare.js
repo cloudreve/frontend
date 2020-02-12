@@ -27,8 +27,15 @@ import {
     Button,
     TextField
 } from "@material-ui/core";
+import API from "../middleware/Api";
+import TypeIcon from "./FileManager/TypeIcon";
+import Chip from "@material-ui/core/Chip";
+import Divider from "@material-ui/core/Divider";
 
 const styles = theme => ({
+    cardContainer: {
+        padding: theme.spacing(1)
+    },
     card: {
         maxWidth: 400,
         margin: "0 auto"
@@ -63,6 +70,10 @@ const styles = theme => ({
         textAlign: "center",
         marginTop: "20px",
         marginBottom: "20px"
+    },
+    badge: {
+        marginLeft: theme.spacing(1),
+        height: 17,
     }
 });
 const mapStateToProps = state => {
@@ -154,12 +165,9 @@ class MyShareCompoment extends Component {
     };
 
     loadList = page => {
-        axios
-            .post("/Share/ListMyShare", {
-                page: page
-            })
+        API.get("/share?page=" + this.state.page)
             .then(response => {
-                if (response.data.length === 0) {
+                if (response.data.items.length === 0) {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -169,12 +177,16 @@ class MyShareCompoment extends Component {
                 }
                 this.setState({
                     page: page,
-                    shareList: this.state.shareList.concat(response.data)
+                    shareList: response.data.items
                 });
             })
             .catch(error => {
                 this.props.toggleSnackbar("top", "right", "加载失败", "error");
             });
+    };
+
+    isExpired = share => {
+        return share.expire === 0 || share.remain_downloads === 0;
     };
 
     render() {
@@ -187,25 +199,30 @@ class MyShareCompoment extends Component {
                     我的分享{" "}
                 </Typography>{" "}
                 <Grid container spacing={24} className={classes.gird}>
-                    {" "}
                     {this.state.shareList.map(value => (
-                        <Grid item xs={12} sm={4} key={value.id}>
+                        <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            key={value.id}
+                            className={classes.cardContainer}
+                        >
                             <Card className={classes.card}>
                                 <CardHeader
-                                    style={{ paddingBottom: "0px" }}
+
                                     avatar={
                                         <div>
-                                            {" "}
-                                            {value.source_type === "file" && (
-                                                <Avatar
-                                                    className={
-                                                        classes.avatarFile
+                                            {!value.is_dir && (
+                                                <TypeIcon
+                                                    fileName={
+                                                        value.source
+                                                            ? value.source.name
+                                                            : ""
                                                     }
-                                                >
-                                                    <FileIcon />
-                                                </Avatar>
+                                                    isUpload
+                                                />
                                             )}{" "}
-                                            {value.source_type === "dir" && (
+                                            {value.is_dir && (
                                                 <Avatar
                                                     className={
                                                         classes.avatarFolder
@@ -219,50 +236,64 @@ class MyShareCompoment extends Component {
                                     title={
                                         <Tooltip
                                             placement="top"
-                                            title={value.fileData}
+                                            title={
+                                                value.source
+                                                    ? value.source.name
+                                                    : "[原始对象不存在]"
+                                            }
                                         >
-                                            {" "}
                                             <Typography
                                                 noWrap
                                                 className={classes.shareTitle}
                                             >
-                                                {" "}
-                                                {value.fileData}{" "}
+                                                {value.source
+                                                    ? value.source.name
+                                                    : "[原始对象不存在]"}{" "}
                                             </Typography>
                                         </Tooltip>
                                     }
-                                    subheader={value.share_time}
+                                    subheader={
+                                        <span>
+                                            {value.create_date}
+                                            {this.isExpired(value) && (
+                                                <Chip
+                                                    size="small"
+                                                    className={classes.badge}
+                                                    label="已失效"
+                                                />
+                                            )}
+                                        </span>
+                                    }
                                 />
+                                <Divider/>
                                 <CardActions
                                     disableActionSpacing
-                                    style={{ textAlign: "right" }}
+                                    style={{ display:"block",textAlign: "right" }}
                                 >
                                     <Tooltip placement="top" title="打开">
                                         <IconButton
                                             onClick={() =>
-                                                window.open(
-                                                    "/s/" + value.share_key
-                                                )
+                                                window.open("/s/" + value.key)
                                             }
                                         >
                                             <OpenIcon />
-                                        </IconButton>{" "}
+                                        </IconButton>
                                     </Tooltip>{" "}
-                                    {value.type === "private" && (
-                                        <div>
+                                    {value.password !== "" && (
+                                        <>
                                             <Tooltip
                                                 placement="top"
                                                 title="变更为公开分享"
                                                 onClick={() =>
                                                     this.changePermission(
-                                                        value.share_key
+                                                        value.key
                                                     )
                                                 }
                                             >
                                                 <IconButton>
                                                     <LockIcon />
-                                                </IconButton>{" "}
-                                            </Tooltip>{" "}
+                                                </IconButton>
+                                            </Tooltip>
                                             <Tooltip
                                                 placement="top"
                                                 title="查看密码"
@@ -274,11 +305,11 @@ class MyShareCompoment extends Component {
                                             >
                                                 <IconButton>
                                                     <EyeIcon />
-                                                </IconButton>{" "}
-                                            </Tooltip>{" "}
-                                        </div>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </>
                                     )}{" "}
-                                    {value.type === "public" && (
+                                    {value.password === "" && (
                                         <Tooltip
                                             placement="top"
                                             title="变更为私密分享"
@@ -290,30 +321,30 @@ class MyShareCompoment extends Component {
                                         >
                                             <IconButton>
                                                 <UnlockIcon />
-                                            </IconButton>{" "}
+                                            </IconButton>
                                         </Tooltip>
                                     )}
                                     <Tooltip
                                         placement="top"
                                         title="取消分享"
                                         onClick={() =>
-                                            this.removeShare(value.share_key)
+                                            this.removeShare(value.key)
                                         }
                                     >
                                         <IconButton>
                                             <DeleteIcon />
-                                        </IconButton>{" "}
+                                        </IconButton>
                                     </Tooltip>
-                                </CardActions>{" "}
-                            </Card>{" "}
+                                </CardActions>
+                            </Card>
                         </Grid>
-                    ))}{" "}
-                </Grid>{" "}
+                    ))}
+                </Grid>
                 <div className={classes.loadMore}>
                     <Button
                         size="large"
                         className={classes.margin}
-                        disabled={this.state.shareList.length < 18}
+                        disabled={this.state.shareList.length < 10}
                         onClick={this.loadMore}
                     >
                         继续加载{" "}
