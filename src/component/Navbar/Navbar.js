@@ -615,16 +615,6 @@ class NavbarCompoment extends Component {
                                 !this.props.isMultiple && this.props.withFile
                             ) && (
                                 <Typography variant="h6" color="inherit" noWrap>
-                                    {pathHelper.isSharePage(
-                                        this.props.location.pathname
-                                    ) &&
-                                        window.pageId === "" && (
-                                            <FolderShared
-                                                className={
-                                                    classes.folderShareIcon
-                                                }
-                                            />
-                                        )}
                                     {this.props.subTitle
                                         ? this.props.subTitle
                                         : this.props.title}

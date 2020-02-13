@@ -419,6 +419,7 @@ const cloudreveApp = (state = [], action) => {
                 }),
             });
         case 'CHANGE_SUB_TITLE':
+            document.title = (action.title === null || action.title === undefined) ? state.siteConfig.title : (action.title + " - " +state.siteConfig.title);
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
                     subTitle: action.title,

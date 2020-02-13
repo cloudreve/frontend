@@ -13,6 +13,7 @@ import {
     changeSubTitle, closeAllModals, navitateTo, setSelectedTarget, toggleSnackbar,
 } from "../../actions";
 import {withRouter} from "react-router-dom";
+import pathHelper from "../../untils/page";
 const styles = theme => ({
  
 })
@@ -57,7 +58,10 @@ class FileManager extends Component {
     }
 
     componentDidMount() {
-        this.props.changeSubTitle(null);
+        if (pathHelper.isHomePage(this.props.location.pathname)){
+            this.props.changeSubTitle(null);
+        }
+
     }
 
     handleImageLoaded = ()=>{

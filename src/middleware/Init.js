@@ -17,6 +17,9 @@ export var InitSiteConfig = (rawStore) => {
     rawStore.siteConfig = initUserConfig(rawStore.siteConfig);
     // 是否登录
     rawStore.viewUpdate.isLogin = Auth.Check();
+
+    // 更改站点标题
+    document.title = rawStore.siteConfig.title;
     return rawStore
 }
 
