@@ -135,7 +135,7 @@ class SearchBarCompoment extends Component {
     };
 
     searchShare = () => {
-        window.location.href = "/Explore/Search/" + this.input;
+        this.props.history.push("/search?keywords="+encodeURIComponent(this.input));
     };
 
 
