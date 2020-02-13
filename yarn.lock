@@ -1123,15 +1123,16 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
-"@material-ui/lab@^4.0.0-alpha.33":
-  version "4.0.0-alpha.33"
-  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.33.tgz#3de96da1e813afcea5a07d56e54ec41cfa636e2c"
-  integrity sha512-+xttHUZLwH4+yfkB7B5A3pNDtQO27tGftuUxMRDMevNXwQtAB7mgYco34JwMr9kmvESYmacoZReOacJ6rxym/Q==
+"@material-ui/lab@^4.0.0-alpha.42":
+  version "4.0.0-alpha.42"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.42.tgz#f8789d3ba39a1e5a13f462d618c2eec53f87ae10"
+  integrity sha512-JbKEMIXSslh03u6HNU1Pp1VXd9ycJ1dqkI+iQK6yR+Sng2mvMKzJ80GCV5ROXAXwwNnD8zHOopLZNIpTsEAVgQ==
   dependencies:
     "@babel/runtime" "^7.4.4"
-    "@material-ui/utils" "^4.5.2"
+    "@material-ui/utils" "^4.7.1"
     clsx "^1.0.4"
     prop-types "^15.7.2"
+    react-is "^16.8.0"
 
 "@material-ui/styles@^4.9.0":
   version "4.9.0"
@@ -1168,15 +1169,6 @@
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@material-ui/types/-/types-5.0.0.tgz#26d6259dc6b39f4c2e1e9aceff7a11e031941741"
   integrity sha512-UeH2BuKkwDndtMSS0qgx1kCzSMw+ydtj0xx/XbFtxNSTlXydKwzs5gVW5ZKsFlAkwoOOQ9TIsyoCC8hq18tOwg==
-
-"@material-ui/utils@^4.5.2":
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-4.5.2.tgz#4c2fb531d357cf0da8cece53b588dff9b0bde934"
-  integrity sha512-zhbNfHd1gLa8At6RPDG7uMZubHxbY+LtM6IkSfeWi6Lo4Ax80l62YaN1QmUpO1IvGCkn/j62tQX3yObiQZrJsQ==
-  dependencies:
-    "@babel/runtime" "^7.4.4"
-    prop-types "^15.7.2"
-    react-is "^16.8.6"
 
 "@material-ui/utils@^4.7.1":
   version "4.7.1"
@@ -8640,7 +8632,7 @@ react-hotkeys@^2.0.0:
   dependencies:
     prop-types "^15.6.1"
 
-react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.8.6, react-is@^16.9.0:
+react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.9.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==

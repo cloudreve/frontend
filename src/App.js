@@ -13,16 +13,17 @@ import {
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import PageLoading from "./component/Placeholder/PageLoading.js"
-import TextViewer from "./component/Viewer/Text";
-import DocViewer from "./component/Viewer/Doc";
-import SharePreload from "./component/Share/SharePreload";
-import Download from "./component/Download/Download";
-import MyShare from "./component/MyShare";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
 const FileManager = React.lazy(() => import ("./component/FileManager/FileManager.js" ));
 const VideoPreview = React.lazy(() => import ("./component/Viewer/Video.js" ));
+const SearchResult = React.lazy(() => import ("./component/Share/SearchResult" ));
+const MyShare = React.lazy(() => import ("./component/Share/MyShare"));
+const Download = React.lazy(() => import ("./component/Download/Download"));
+const SharePreload = React.lazy(() => import ("./component/Share/SharePreload"));
+const DocViewer = React.lazy(() => import ("./component/Viewer/Doc"));
+const TextViewer = React.lazy(() => import ("./component/Viewer/Text"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -104,6 +105,12 @@ export default function App() {
                             <AuthRoute path={`${path}shares`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <MyShare />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}search`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <SearchResult />
                                 </Suspense>
                             </AuthRoute>
 

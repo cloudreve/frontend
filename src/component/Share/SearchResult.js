@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../actions/index";
+import { toggleSnackbar } from "../../actions";
 import axios from "axios";
 import OpenIcon from "@material-ui/icons/OpenInNew";
-import FileIcon from "@material-ui/icons/InsertDriveFile";
+import Pagination from "@material-ui/lab/Pagination";
 import FolderIcon from "@material-ui/icons/Folder";
 import LockIcon from "@material-ui/icons/Lock";
 import UnlockIcon from "@material-ui/icons/LockOpen";
@@ -27,10 +27,16 @@ import {
     Button,
     TextField
 } from "@material-ui/core";
-import API from "../middleware/Api";
-import TypeIcon from "./FileManager/TypeIcon";
+import API from "../../middleware/Api";
+import TypeIcon from "../FileManager/TypeIcon";
 import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
+import { VisibilityOff, VpnKey } from "@material-ui/icons";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import {withRouter} from "react-router-dom";
 
 const styles = theme => ({
     cardContainer: {
@@ -67,13 +73,17 @@ const styles = theme => ({
         marginTop: "30px"
     },
     loadMore: {
-        textAlign: "center",
+        textAlign: "right",
         marginTop: "20px",
-        marginBottom: "20px"
+        marginBottom: "40px"
     },
     badge: {
         marginLeft: theme.spacing(1),
-        height: 17,
+        height: 17
+    },
+    orderSelect:{
+        textAlign:"right",
+        marginTop: 5,
     }
 });
 const mapStateToProps = state => {
@@ -88,19 +98,17 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-class MyShareCompoment extends Component {
+class SearchComponent extends Component {
     state = {
         page: 1,
+        total: 0,
         shareList: [],
-        showPwd: null
+        showPwd: null,
+        orderBy:"created_at DESC",
     };
 
     componentDidMount = () => {
-        this.loadList(1);
-    };
-
-    loadMore = () => {
-        this.loadList(this.state.page + 1);
+        this.loadList(1,this.state.orderBy);
     };
 
     showPwd = pwd => {
@@ -111,19 +119,17 @@ class MyShareCompoment extends Component {
         this.setState({ showPwd: null });
     };
 
-    removeShare = id => {
-        axios
-            .post("/Share/Delete", {
-                id: id
-            })
+    removeShare = (id) => {
+        API
+            .delete("/share/"+id)
             .then(response => {
-                if (response.data.error !== 1) {
                     let oldList = this.state.shareList;
                     oldList = oldList.filter(value => {
-                        return value.share_key !== id;
+                        return value.key !== id;
                     });
                     this.setState({
-                        shareList: oldList
+                        shareList: oldList,
+                        total:this.state.total-1,
                     });
                     this.props.toggleSnackbar(
                         "top",
@@ -131,41 +137,65 @@ class MyShareCompoment extends Component {
                         "分享已取消",
                         "success"
                     );
-                }
+                    if (oldList.length === 0){
+                        this.loadList(1,this.state.orderBy);
+                    }
+
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", "请求失败", "error");
+                this.props.toggleSnackbar("top", "right", error.message, "error");
             });
     };
 
     changePermission = id => {
-        axios
-            .post("/Share/ChangePromission", {
-                id: id
+        let newPwd = Math.random()
+            .toString(36)
+            .substr(2)
+            .slice(2, 8);
+        let oldList = this.state.shareList;
+        let shareIndex = oldList.findIndex(value => {
+            return value.key === id;
+        });
+        API
+            .patch("/share/"+id, {
+                prop:"password",
+                value:oldList[shareIndex].password === "" ? newPwd : "",
             })
             .then(response => {
-                if (response.data.error !== 1) {
-                    let oldList = this.state.shareList;
-                    let shareIndex = oldList.findIndex(value => {
-                        return value.share_key === id;
-                    });
-                    oldList[shareIndex].type =
-                        oldList[shareIndex].type === "public"
-                            ? "private"
-                            : "public";
-                    oldList[shareIndex].share_pwd = response.data.newPwd;
-                    this.setState({
-                        shareList: oldList
-                    });
-                }
+                oldList[shareIndex].password = response.data;
+                this.setState({
+                    shareList: oldList
+                });
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", "请求失败", "error");
+                this.props.toggleSnackbar("top", "right", error.message, "error");
             });
     };
 
-    loadList = page => {
-        API.get("/share?page=" + this.state.page)
+    changePreviewOption = id => {
+        let oldList = this.state.shareList;
+        let shareIndex = oldList.findIndex(value => {
+            return value.key === id;
+        });
+        API
+            .patch("/share/"+id, {
+                prop:"preview_enabled",
+                value:oldList[shareIndex].preview?"false":"true",
+            })
+            .then(response => {
+                oldList[shareIndex].preview = response.data;
+                this.setState({
+                    shareList: oldList
+                });
+            })
+            .catch(error => {
+                this.props.toggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
+    loadList = (page,orderBy) => {
+        let order = orderBy.split(" ");
+        API.get("/share?page=" + page + "&order_by=" + order[0] + "&order=" + order[1])
             .then(response => {
                 if (response.data.items.length === 0) {
                     this.props.toggleSnackbar(
@@ -176,13 +206,27 @@ class MyShareCompoment extends Component {
                     );
                 }
                 this.setState({
-                    page: page,
+                    total: response.data.total,
                     shareList: response.data.items
                 });
             })
             .catch(error => {
                 this.props.toggleSnackbar("top", "right", "加载失败", "error");
             });
+    };
+
+    handlePageChange = (event, value) => {
+        this.setState({
+            page: value
+        });
+        this.loadList(value,this.state.orderBy);
+    };
+
+    handleOrderChange =  event => {
+        this.setState({
+            orderBy:event.target.value,
+        });
+        this.loadList(this.state.page,event.target.value);
     };
 
     isExpired = share => {
@@ -194,10 +238,26 @@ class MyShareCompoment extends Component {
 
         return (
             <div className={classes.layout}>
-                <Typography color="textSecondary" variant="h3">
-                    {" "}
-                    我的分享{" "}
-                </Typography>{" "}
+                <Grid container>
+                    <Grid sm={6} xs={6}>
+                        <Typography color="textSecondary" variant="h4">
+
+                            搜索结果
+                        </Typography>
+                        </Grid>
+                    <Grid sm={6} xs={6} className={classes.orderSelect}>
+                        <FormControl>
+                            <Select color={"secondary"}  onChange={this.handleOrderChange} value={this.state.orderBy}>
+                                <MenuItem value={"created_at DESC"}>创建日期由晚到早</MenuItem>
+                                <MenuItem value={"created_at ASC"}>创建日期由早到晚</MenuItem>
+                                <MenuItem value={"downloads DESC"}>下载次数由大到小</MenuItem>
+                                <MenuItem value={"downloads ASC"}>下载次数由小到大</MenuItem>
+                                <MenuItem value={"views DESC"}>浏览次数由大到小</MenuItem>
+                                <MenuItem value={"views ASC"}>浏览次数由小到大</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
                 <Grid container spacing={24} className={classes.gird}>
                     {this.state.shareList.map(value => (
                         <Grid
@@ -209,7 +269,6 @@ class MyShareCompoment extends Component {
                         >
                             <Card className={classes.card}>
                                 <CardHeader
-
                                     avatar={
                                         <div>
                                             {!value.is_dir && (
@@ -265,118 +324,25 @@ class MyShareCompoment extends Component {
                                         </span>
                                     }
                                 />
-                                <Divider/>
-                                <CardActions
-                                    disableActionSpacing
-                                    style={{ display:"block",textAlign: "right" }}
-                                >
-                                    <Tooltip placement="top" title="打开">
-                                        <IconButton
-                                            onClick={() =>
-                                                window.open("/s/" + value.key)
-                                            }
-                                        >
-                                            <OpenIcon />
-                                        </IconButton>
-                                    </Tooltip>{" "}
-                                    {value.password !== "" && (
-                                        <>
-                                            <Tooltip
-                                                placement="top"
-                                                title="变更为公开分享"
-                                                onClick={() =>
-                                                    this.changePermission(
-                                                        value.key
-                                                    )
-                                                }
-                                            >
-                                                <IconButton>
-                                                    <LockIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip
-                                                placement="top"
-                                                title="查看密码"
-                                                onClick={() =>
-                                                    this.showPwd(
-                                                        value.share_pwd
-                                                    )
-                                                }
-                                            >
-                                                <IconButton>
-                                                    <EyeIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </>
-                                    )}{" "}
-                                    {value.password === "" && (
-                                        <Tooltip
-                                            placement="top"
-                                            title="变更为私密分享"
-                                            onClick={() =>
-                                                this.changePermission(
-                                                    value.share_key
-                                                )
-                                            }
-                                        >
-                                            <IconButton>
-                                                <UnlockIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-                                    <Tooltip
-                                        placement="top"
-                                        title="取消分享"
-                                        onClick={() =>
-                                            this.removeShare(value.key)
-                                        }
-                                    >
-                                        <IconButton>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </CardActions>
                             </Card>
                         </Grid>
                     ))}
                 </Grid>
                 <div className={classes.loadMore}>
-                    <Button
-                        size="large"
-                        className={classes.margin}
-                        disabled={this.state.shareList.length < 10}
-                        onClick={this.loadMore}
-                    >
-                        继续加载{" "}
-                    </Button>{" "}
-                </div>{" "}
-                <Dialog
-                    open={this.state.showPwd !== null}
-                    onClose={this.handleClose}
-                >
-                    <DialogTitle> 分享密码 </DialogTitle>{" "}
-                    <DialogContent>
-                        <TextField
-                            id="standard-name"
-                            value={this.state.showPwd}
-                            margin="normal"
-                            autoFocus
+                    <Pagination
+                            count={Math.ceil(this.state.total / 18)}
+                            onChange={this.handlePageChange}
+                            color="secondary"
                         />
-                    </DialogContent>{" "}
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="default">
-                            关闭{" "}
-                        </Button>{" "}
-                    </DialogActions>{" "}
-                </Dialog>{" "}
+                </div>{" "}
             </div>
         );
     }
 }
 
-const MyShare = connect(
+const SearchResult = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(MyShareCompoment));
+)(withStyles(styles)(withRouter(SearchComponent)));
 
-export default MyShare;
+export default SearchResult;

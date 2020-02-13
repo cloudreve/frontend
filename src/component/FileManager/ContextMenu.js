@@ -51,10 +51,15 @@ import Auth from "../../middleware/Auth";
 import { Archive, Unarchive } from "@material-ui/icons";
 import { openCompressDialog } from "../../actions";
 import Menu from "@material-ui/core/Menu";
+import {FolderUpload} from "mdi-material-ui";
 
 const styles = theme => ({
     propover: {
         minWidth: "200px!important"
+    },
+    divider:{
+        marginTop:4,
+        marginBottom:4,
     }
 });
 
@@ -176,9 +181,9 @@ class ContextMenuCompoment extends Component {
         );
     };
 
-    clickUpload = () => {
+    clickUpload = id => {
         this.props.changeContextMenu("empty", false);
-        let uploadButton = document.getElementsByClassName("uploadFileForm")[0];
+        let uploadButton = document.getElementsByClassName(id)[0];
         if (document.body.contains(uploadButton)) {
             uploadButton.click();
         } else {
@@ -296,12 +301,20 @@ class ContextMenuCompoment extends Component {
                 >
                     {this.props.menuType === "empty" && (
                         <>
-                            <MenuItem onClick={this.clickUpload}>
+                            <MenuItem onClick={()=>this.clickUpload("uploadFileForm")}>
                                 <ListItemIcon>
                                     <UploadIcon />
                                 </ListItemIcon>
                                 <Typography variant="inherit">
                                     上传文件
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem onClick={()=>this.clickUpload("uploadFolderForm")}>
+                                <ListItemIcon>
+                                    <FolderUpload />
+                                </ListItemIcon>
+                                <Typography variant="inherit">
+                                    上传目录
                                 </Typography>
                             </MenuItem>
                             {user.group.allowRemoteDownload && (
@@ -319,7 +332,7 @@ class ContextMenuCompoment extends Component {
                                 </MenuItem>
                             )}
 
-                            <Divider />
+                            <Divider className={classes.divider}/>
                             <MenuItem
                                 onClick={() =>
                                     this.props.openCreateFolderDialog()
@@ -346,7 +359,7 @@ class ContextMenuCompoment extends Component {
                                             进入
                                         </Typography>
                                     </MenuItem>
-                                    {isHomePage && <Divider />}
+                                    {isHomePage && <Divider className={classes.divider} />}
                                 </>
                             )}
                             {!this.props.isMultiple &&
@@ -380,7 +393,7 @@ class ContextMenuCompoment extends Component {
                                             下载
                                         </Typography>
                                     </MenuItem>
-                                    {isHomePage && <Divider />}
+                                    {isHomePage && <Divider className={classes.divider} />}
                                 </>
                             )}
 
@@ -466,7 +479,7 @@ class ContextMenuCompoment extends Component {
                                         <Archive />
                                     </ListItemIcon>
                                     <Typography variant="inherit">
-                                        压缩
+                                        创建压缩文件
                                     </Typography>
                                 </MenuItem>
                             )}
@@ -479,7 +492,7 @@ class ContextMenuCompoment extends Component {
                                         <ShareIcon />
                                     </ListItemIcon>
                                     <Typography variant="inherit">
-                                        分享
+                                        创建分享链接
                                     </Typography>
                                 </MenuItem>
                             )}
@@ -532,7 +545,7 @@ class ContextMenuCompoment extends Component {
                                         </MenuItem>
                                     }
 
-                                    <Divider />
+                                    <Divider className={classes.divider} />
                                     <MenuItem
                                         className={classes.propover}
                                         onClick={() =>

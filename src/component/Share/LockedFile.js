@@ -14,6 +14,7 @@ import {
     TextField,
     Avatar
 } from "@material-ui/core";
+import {useLocation, withRouter} from "react-router";
 
 const styles = theme => ({
     card: {
@@ -53,9 +54,14 @@ const mapDispatchToProps = dispatch => {
 };
 
 class LockedFileCompoment extends Component {
-    state = {
-        pwd: ""
-    };
+    constructor(props) {
+        super(props);
+        let query = new URLSearchParams(this.props.location.search);
+        this.state = {
+            pwd: query.get("password"),
+        };
+
+    }
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
@@ -129,6 +135,6 @@ class LockedFileCompoment extends Component {
 const LockedFile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(LockedFileCompoment));
+)(withStyles(styles)(withRouter(LockedFileCompoment)));
 
 export default LockedFile;
