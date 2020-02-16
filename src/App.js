@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import AuthRoute from "./middleware/AuthRoute";
 import Navbar from "./component/Navbar/Navbar.js";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import AlertBar from "./component/Snackbar";
+import AlertBar from "./component/Common/Snackbar";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 import {
@@ -24,6 +24,8 @@ const Download = React.lazy(() => import ("./component/Download/Download"));
 const SharePreload = React.lazy(() => import ("./component/Share/SharePreload"));
 const DocViewer = React.lazy(() => import ("./component/Viewer/Doc"));
 const TextViewer = React.lazy(() => import ("./component/Viewer/Text"));
+const Quota = React.lazy(() => import ("./component/VAS/Quota"));
+const BuyQuota = React.lazy(() => import ("./component/VAS/BuyQuota"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -111,6 +113,18 @@ export default function App() {
                             <AuthRoute path={`${path}search`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading/>}>
                                     <SearchResult />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}quota`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <Quota />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}buy`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <BuyQuota />
                                 </Suspense>
                             </AuthRoute>
 

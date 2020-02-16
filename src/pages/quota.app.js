@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Navbar from "../component/Navbar/Navbar.js"
-import AlertBar from "../component/Snackbar"
-import Quota from "../component/Quota"
-import BuyQuota from "../component/BuyQuota"
+import AlertBar from "../component/Common/Snackbar"
+import Quota from "../component/VAS/Quota"
+import BuyQuota from "../component/VAS/BuyQuota"
 import { createMuiTheme } from '@material-ui/core/styles';
 import { checkGetParameters } from '../untils/index';
 

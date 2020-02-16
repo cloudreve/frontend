@@ -13,6 +13,9 @@ import {
     Divider,
     Tooltip
 } from "@material-ui/core";
+import ButtonBase from "@material-ui/core/ButtonBase";
+import Link from "@material-ui/core/Link";
+import {withRouter} from "react-router";
 
 const mapStateToProps = state => {
     return {
@@ -41,7 +44,7 @@ const styles = theme => ({
     storageContainer: {
         display: "flex",
         marginTop: "15px",
-
+        textAlign:"left",
         marginBottom: "20px"
     },
     detail: {
@@ -70,7 +73,8 @@ class StorageBarCompoment extends Component {
     state = {
         percent: 0,
         used: null,
-        total: null
+        total: null,
+        showExpand:false,
     };
 
     firstLoad = true;
@@ -92,7 +96,7 @@ class StorageBarCompoment extends Component {
         let percent = 0;
         API.get("/user/storage")
             .then(response => {
-                if (response.data.used / response.data.total >= 100) {
+                if (response.data.used / response.data.total >= 1) {
                     percent = 100;
                     this.props.toggleSnackbar(
                         "top",
@@ -114,100 +118,61 @@ class StorageBarCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-        if (!window.isMobile) {
             return (
-                <div className={classes.stickFooter}>
+                <div  onMouseEnter={()=>this.setState({showExpand:true})} onMouseLeave={()=>this.setState({showExpand:false})} className={classes.stickFooter}>
                     <Divider />
-                    <div className={classes.storageContainer}>
-                        <StorageIcon className={classes.iconFix} />
-                        <div className={classes.detail}>
-                            存储空间
-                            <LinearProgress
-                                className={classes.bar}
-                                color="secondary"
-                                variant="determinate"
-                                value={this.state.percent}
-                            />
-                            <div className={classes.info}>
-                                <Tooltip
-                                    title={
-                                        "已使用" +
-                                        (this.state.used === null
-                                            ? " -- "
-                                            : this.state.used) +
-                                        "，共" +
-                                        (this.state.total === null
-                                            ? " -- "
-                                            : this.state.total)
-                                    }
-                                    placement="top"
-                                >
-                                    <Typography
-                                        variant="caption"
-                                        noWrap
-                                        color="textSecondary"
+                    <ButtonBase onClick={() =>
+                        this.props.history.push("/quota?")
+                    }>
+                        <div className={classes.storageContainer}>
+                            <StorageIcon className={classes.iconFix} />
+                            <div className={classes.detail}>
+                                存储空间{"   "}{this.state.showExpand && <Link href={"/#/s"} color={"secondary"}>
+                                扩容
+                            </Link>}
+                                <LinearProgress
+                                    className={classes.bar}
+                                    color="secondary"
+                                    variant="determinate"
+                                    value={this.state.percent}
+                                />
+                                <div className={classes.info}>
+                                    <Tooltip
+                                        title={
+                                            "已使用" +
+                                            (this.state.used === null
+                                                ? " -- "
+                                                : this.state.used) +
+                                            "，共" +
+                                            (this.state.total === null
+                                                ? " -- "
+                                                : this.state.total)
+                                        }
+                                        placement="top"
                                     >
-                                        已使用
-                                        {this.state.used === null
-                                            ? " -- "
-                                            : this.state.used}
-                                        ，共
-                                        {this.state.total === null
-                                            ? " -- "
-                                            : this.state.total}
-                                    </Typography>
-                                </Tooltip>
+                                        <Typography
+                                            variant="caption"
+                                            noWrap
+                                            color="textSecondary"
+                                        >
+                                            已使用
+                                            {this.state.used === null
+                                                ? " -- "
+                                                : this.state.used}
+                                            ，共
+                                            {this.state.total === null
+                                                ? " -- "
+                                                : this.state.total}
+                                        </Typography>
+                                    </Tooltip>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </ButtonBase>
+
                 </div>
             );
-        } else {
-            return (
-                <div className={classes.storageContainer}>
-                    <StorageIcon className={classes.iconFix} />
-                    <div className={classes.detail}>
-                        存储空间
-                        <LinearProgress
-                            className={classes.bar}
-                            color="secondary"
-                            variant="determinate"
-                            value={this.state.percent}
-                        />
-                        <div className={classes.info}>
-                            <Tooltip
-                                title={
-                                    "已使用" +
-                                    (this.state.used === null
-                                        ? " -- "
-                                        : this.state.used) +
-                                    "，共" +
-                                    (this.state.total === null
-                                        ? " -- "
-                                        : this.state.total)
-                                }
-                                placement="top"
-                            >
-                                <Typography
-                                    variant="caption"
-                                    noWrap
-                                    color="textSecondary"
-                                >
-                                    已使用
-                                    {this.state.used === null
-                                        ? " -- "
-                                        : this.state.used}
-                                    ，共
-                                    {this.state.total === null
-                                        ? " -- "
-                                        : this.state.total}
-                                </Typography>
-                            </Tooltip>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+
     }
 }
 
@@ -218,6 +183,6 @@ StorageBarCompoment.propTypes = {
 const StorageBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(StorageBarCompoment));
+)(withStyles(styles)(withRouter(StorageBarCompoment)));
 
 export default StorageBar;

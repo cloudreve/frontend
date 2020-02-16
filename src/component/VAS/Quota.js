@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames';
-import { toggleSnackbar, } from "../actions/index"
-import axios from 'axios'
+import { toggleSnackbar, } from "../../actions"
+import API from "../../middleware/Api";
 
 import {
     withStyles,
@@ -16,6 +16,7 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core';
+import {sizeToString} from "../../untils";
 
 
 const styles = theme => ({
@@ -123,85 +124,97 @@ class QuotaCompoment extends Component {
             r2:0,
             r3:0,
         },
+        packs:[],
     };
 
     firstLoad = true;
 
-    componentDidMount(){
-        if(this.firstLoad){
+    componentDidMount() {
+        if (this.firstLoad) {
             this.firstLoad = !this.firstLoad;
-            axios.get("/Member/Memory")
-            .then( (response)=> {
-                this.setState({
-                    data:{
-                        used:response.data.used,
-                        pack:response.data.pack,
-                        total:response.data.total,
-                        basic:response.data.basic,
-                        r1:response.data.r1,
-                        r2:response.data.r2,
-                        r3:response.data.r3,
+            API.get("/vas/pack")
+                .then((response) => {
+                    let usedR, baseR, packR = 0;
+                    if (response.data.used > response.data.base) {
+                        usedR = response.data.used / response.data.total;
+                        baseR = 0;
+                        packR = 1 - usedR;
+                    } else {
+                        usedR = response.data.used / response.data.total;
+                        baseR = (response.data.base - response.data.used) / response.data.total;
+                        packR = 1 - usedR - baseR;
                     }
+
+                    this.setState({
+                        data: {
+                            used: response.data.used,
+                            pack: response.data.pack,
+                            total: response.data.total,
+                            basic: response.data.base,
+                            r1: usedR > 1 ? 100 : usedR * 100,
+                            r2: usedR > 1 ? 0 : baseR * 100,
+                            r3: usedR > 1 ? 0 : packR * 100,
+                        },
+                        packs:response.data.packs,
+                    });
+
+                })
+                .catch((error) => {
+                    this.setState({
+                        loading: false,
+                    });
+                    this.props.toggleSnackbar("top", "right", error.message, "error");
                 });
-                
-            })
-            .catch((error) =>{
-                this.setState({
-                    loading:false,
-                });
-                this.props.toggleSnackbar("top","right",error.message ,"error");
-            });
         }
     }
-
-    render() {
+        render() {
         const { classes } = this.props;
 
 
         return (
             <div className={classes.layout}>
-                <Typography color="textSecondary" variant="h3">容量配额</Typography>
-                <Grid container className={classes.gird} spacing={24}>
+                <Typography color="textSecondary" variant="h4">容量配额</Typography>
+                <Grid container className={classes.gird} spacing={2}>
                     <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
-                            <Typography className={classes.data}>{this.state.data.basic}</Typography>
+                            <Typography className={classes.data}>{sizeToString(this.state.data.basic)}</Typography>
                             <Typography>用户组基础容量</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
-                            <Typography className={classes.data}>{this.state.data.pack}</Typography>
+                            <Typography className={classes.data}>{sizeToString(this.state.data.pack)}</Typography>
                             <Typography>有效容量包附加附加容量</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
-                            <Typography className={classes.data}>{this.state.data.used}</Typography>
+                            <Typography className={classes.data}>{sizeToString(this.state.data.used)}</Typography>
                             <Typography>已使用容量</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={3}>
                         <Paper className={classes.paper}>
-                            <Typography className={classes.data}>{this.state.data.total}</Typography>
+                            <Typography className={classes.data}>{sizeToString(this.state.data.total)}</Typography>
                             <Typography>总容量</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
                             <div className={classes.proBar}>
-                                <div className={classes.r1} style={{"width":this.state.data.r1+"%"}}></div>
-                                <div className={classes.r2} style={{"width":this.state.data.r2+"%"}}></div>
-                                <div className={classes.r3} style={{"width":this.state.data.r3+"%"}}></div>
+                                <div className={classes.r1} style={{"width": this.state.data.r1 + "%"}}/>
+                                <div className={classes.r2} style={{"width": this.state.data.r2 + "%"}}/>
+                                <div className={classes.r3} style={{"width": this.state.data.r3 + "%"}}/>
                            </div>
                            <div style={{textAlign:"right"}} >
-                                <span className={classNames(classes.r1_block,classes.note_block)}></span>已用容量
-                                <span className={classNames(classes.r2_block,classes.note_block)}></span>用户组基础容量
-                                <span className={classNames(classes.r3_block,classes.note_block)}></span>有效容量包附加附加容量
+                                <span className={classNames(classes.r1_block, classes.note_block)}/>已用容量
+                                <span className={classNames(classes.r2_block, classes.note_block)}/>用户组基础容量
+                                <span className={classNames(classes.r3_block, classes.note_block)}/>有效容量包附加附加容量
                            </div>
                         </Paper>
                     </Grid>
                 </Grid>
-                <Typography color="textSecondary" variant="h3" className={classes.title}>可用容量包</Typography>
+                <Typography color="textSecondary" variant="h4" className={classes.title}>可用容量包</Typography>
                 <Paper className={classes.paper}>
                 <Button 
                 variant="contained" 
@@ -228,15 +241,15 @@ class QuotaCompoment extends Component {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                        {window.list.map(row => (
-                            <TableRow key={row.id}>
+                        {this.state.packs.map((row,id) => (
+                            <TableRow key={id}>
                                 <TableCell component="th" scope="row">
-                                    {row.p_name}
+                                    {row.name}
                                 </TableCell>
-                                <TableCell align="center">{row.pack_size}</TableCell>
-                                <TableCell align="center">{row.act_time}</TableCell>
-                                <TableCell align="center">{row.active_time}天</TableCell>
-                                <TableCell align="center">{row.dlay_time}</TableCell>
+                                <TableCell align="center">{sizeToString(row.size)}</TableCell>
+                                <TableCell align="center">{row.activate_date}</TableCell>
+                                <TableCell align="center">{Math.round(row.expiration/86400)}天</TableCell>
+                                <TableCell align="center">{row.expiration_date}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

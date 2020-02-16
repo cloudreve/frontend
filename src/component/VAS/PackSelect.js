@@ -25,6 +25,12 @@ const styles = theme => ({
         lineHeight: "40px",
         color:theme.palette.primary.main,
     },
+    priceWithScore:{
+        fontSize: "23px",
+        fontWeight: "500",
+        lineHeight: "40px",
+        color:theme.palette.primary.main,
+    },
     packName:{
         marginTop:"5px",
         marginBottom:"5px",
@@ -49,7 +55,8 @@ class PackSelect extends Component {
             >
                 <div className={classes.boxHead}>
                     <Typography variant="subtitle1" className={classes.packName}>{pack.name}</Typography>
-                    <Typography className={classes.price}>￥{pack.price}</Typography>
+                    {pack.score === 0 &&<Typography className={classes.price}>￥{(pack.price/100).toFixed(2)}</Typography>}
+                    {pack.score !== 0 &&<Typography className={classes.priceWithScore}>￥{(pack.price/100).toFixed(2)} / {pack.score} 积分</Typography>}
                 </div>
                 <div className={classes.boxBottom}>
                     <Typography>有效期：{Math.ceil(pack.time / 86400)}天</Typography>

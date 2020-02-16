@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { connect } from "react-redux";
-import VideoIcon from "@material-ui/icons/VideoLibraryOutlined";
-import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
-import ImageIcon from "@material-ui/icons/CollectionsOutlined";
-import DocIcon from "@material-ui/icons/FileCopyOutlined";
 import ShareIcon from "@material-ui/icons/Share";
 import BackIcon from "@material-ui/icons/ArrowBack";
 import SdStorage from "@material-ui/icons/SdStorage";
@@ -15,8 +11,6 @@ import OpenFolderIcon from "@material-ui/icons/FolderOpen";
 import RenameIcon from "@material-ui/icons/BorderColor";
 import MoveIcon from "@material-ui/icons/Input";
 import DeleteIcon from "@material-ui/icons/Delete";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import FolderShared from "@material-ui/icons/FolderShared";
 import SaveIcon from "@material-ui/icons/Save";
 import MenuIcon from "@material-ui/icons/Menu";
 import { isPreviewable } from "../../config";
@@ -61,14 +55,12 @@ import {
     SwipeableDrawer,
     IconButton,
     Hidden,
-    Divider,
     ListItem,
     ListItemIcon,
     ListItemText,
     List,
     Grow,
     Tooltip,
-    Card
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import FileTag from "./FileTags";
@@ -459,7 +451,7 @@ class NavbarCompoment extends Component {
                                     button
                                     key="容量配额"
                                     onClick={() =>
-                                        (window.location.href = "/Home/Quota")
+                                        this.props.history.push("/quota?")
                                     }
                                 >
                                     <ListItemIcon>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Navbar from "../component/Navbar/Navbar.js"
-import AlertBar from "../component/Snackbar"
+import AlertBar from "../component/Common/Snackbar"
 import { createMuiTheme } from '@material-ui/core/styles';
 import Search from '../component/Search'
 import { CssBaseline, withStyles, MuiThemeProvider } from '@material-ui/core';
