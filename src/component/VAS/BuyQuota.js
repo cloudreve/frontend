@@ -9,6 +9,7 @@ import SupervisedUserCircle from "@material-ui/icons/SupervisedUserCircle";
 import StarIcon from "@material-ui/icons/StarBorder";
 import LocalPlay from "@material-ui/icons/LocalPlay";
 import API from "../../middleware/Api";
+import QRCode from "qrcode-react";
 
 import {
     withStyles,
@@ -34,12 +35,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
-import Divider from "@material-ui/core/Divider";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import {AccountBalanceWallet} from "@material-ui/icons";
+import { AccountBalanceWallet } from "@material-ui/icons";
+import pathHelper from "../../untils/page";
 
 const styles = theme => ({
     layout: {
@@ -141,15 +138,15 @@ class BuyQuotaCompoment extends Component {
             selectedPack: -1,
             selectedGroup: -1,
             times: 1,
-            scoreNum:1,
+            scoreNum: 1,
             loading: false,
             redeemCode: "",
             dialog: null,
             payment: {
                 type: "",
-                img: "",
+                img: ""
             },
-            scorePrice:0,
+            scorePrice: 0,
             redeemInfo: null,
             packs: [],
             groups: [],
@@ -167,7 +164,7 @@ class BuyQuotaCompoment extends Component {
                     groups: response.data.groups,
                     alipay: response.data.alipay,
                     payjs: response.data.payjs,
-                    scorePrice:response.data.score_price,
+                    scorePrice: response.data.score_price
                 });
             })
             .catch(error => {
@@ -187,15 +184,12 @@ class BuyQuotaCompoment extends Component {
         this.setState({
             loading: true
         });
-        API
-            .post("/vas/redeem/" + this.state.redeemCode,)
+        API.post("/vas/redeem/" + this.state.redeemCode)
             .then(response => {
-
-                    this.setState({
-                        loading: false,
-                        dialog: "success"
-                    });
-
+                this.setState({
+                    loading: false,
+                    dialog: "success"
+                });
             })
             .catch(error => {
                 this.setState({
@@ -223,8 +217,7 @@ class BuyQuotaCompoment extends Component {
         this.setState({
             loading: true
         });
-        API
-            .get("/vas/redeem/" + this.state.redeemCode,)
+        API.get("/vas/redeem/" + this.state.redeemCode)
             .then(response => {
                 this.setState({
                     loading: false,
@@ -261,11 +254,16 @@ class BuyQuotaCompoment extends Component {
         API.post("/vas/order", {
             action: packType,
             method: this.state.packPayMethod,
-            id:packType === "score" ? 1 :(packType === "pack"
-                ? this.state.packs[this.state.selectedPack].id
-                : this.state.groups[this.state.selectedGroup].id)
-                ,
-            num: packType === "score" ?parseInt(this.state.scoreNum) :parseInt(this.state.times)
+            id:
+                packType === "score"
+                    ? 1
+                    : packType === "pack"
+                    ? this.state.packs[this.state.selectedPack].id
+                    : this.state.groups[this.state.selectedGroup].id,
+            num:
+                packType === "score"
+                    ? parseInt(this.state.scoreNum)
+                    : parseInt(this.state.times)
         })
             .then(response => {
                 if (!response.data.payment) {
@@ -275,6 +273,26 @@ class BuyQuotaCompoment extends Component {
                     });
                     return;
                 }
+                if (response.data.qr_code) {
+                    if (pathHelper.isMobile()) {
+                        window.open(response.data.qr_code);
+                        this.setState({ loading: false });
+                    } else {
+                        this.setState({
+                            loading: false,
+                            dialog: "qr",
+                            payment: {
+                                type: this.state.packPayMethod,
+                                img: response.data.qr_code
+                            }
+                        });
+                    }
+
+                    this.IntervalId = window.setInterval(() => {
+                        this.querryLoop(response.data.id);
+                    }, 3000);
+                }
+
                 // if (response.data.error === 1) {
                 //     this.setState({
                 //         loading: false
@@ -325,11 +343,10 @@ class BuyQuotaCompoment extends Component {
     };
 
     querryLoop = id => {
-        axios
-            .get("/Buy/querryStatus?id=" + id)
+        API
+            .get("/vas/order/" + id)
             .then(response => {
-                var data = eval("(" + response.data + ")");
-                if (data.status === 1) {
+                if (response.data === 1) {
                     this.setState({
                         dialog: "success"
                     });
@@ -353,7 +370,7 @@ class BuyQuotaCompoment extends Component {
                 this.state.packPayMethod === "score"
                     ? null
                     : this.state.packPayMethod
-            });
+        });
         this.setState({ value });
     };
 
@@ -401,101 +418,99 @@ class BuyQuotaCompoment extends Component {
     render() {
         const { classes } = this.props;
 
-        const methodSelect = (<div>
-            <FormLabel>选择支付方式：</FormLabel>
-            <RadioGroup
-                name="spacing"
-                aria-label="spacing"
-                value={this.state.packPayMethod}
-                onChange={this.selectPackPayMethod}
-                row
-            >
-                {!this.state.alipay &&
-                !this.state.payjs &&
-                (this.state.value === 0 && (this.state.selectedPack === -1 ||
-                    this.state.packs[
-                        this.state.selectedPack
-                        ].score === 0)) &&
-                (this.state.value === 1 && (this.state.selectedGroup === -1 ||
-                    this.state.groups[
-                        this.state.selectedGroup
-                        ].score === 0))
-                && (
-                    <Typography>
-                        无可用支付方式
-                    </Typography>
-                )}
-                {this.state.alipay && (
-                    <FormControlLabel
-                        value={"alipay"}
-                        control={<Radio />}
-                        label={"支付宝扫码"}
-                    />
-                )}
-                {this.state.payjs && (
-                    <FormControlLabel
-                        value={"payjs"}
-                        control={<Radio />}
-                        label={"微信扫码"}
-                    />
-                )}
-                {this.state.value === 0 && this.state.selectedPack !== -1 &&
-                this.state.packs[
-                    this.state.selectedPack
-                    ].score !== 0 && (
-                    <FormControlLabel
-                        value={"score"}
-                        control={<Radio />}
-                        label={"积分支付"}
-                    />
-                )}
-                {this.state.value === 1 && this.state.selectedGroup !== -1 &&
-                this.state.groups[
-                    this.state.selectedGroup
-                    ].score !== 0 && (
-                    <FormControlLabel
-                        value={"score"}
-                        control={<Radio />}
-                        label={"积分支付"}
-                    />
-                )}
-            </RadioGroup>
+        const methodSelect = (
             <div>
-                {this.state.value !== 2 &&<FormLabel>购买时长倍数：</FormLabel>}
-                {this.state.value === 2 &&<FormLabel>充值积分数量：</FormLabel>}
-            </div>
-            {this.state.value !== 2 &&
-                <TextField
-                    className={classes.textField}
-                    type="number"
-                    inputProps={{
-                        min: "1",
-                        max: "99",
-                        step: "1"
-                    }}
-                    value={this.state.times}
-                    onChange={this.handleTexyChange(
-                        "times"
+                <FormLabel>选择支付方式：</FormLabel>
+                <RadioGroup
+                    name="spacing"
+                    aria-label="spacing"
+                    value={this.state.packPayMethod}
+                    onChange={this.selectPackPayMethod}
+                    row
+                >
+                    {!this.state.alipay &&
+                        !this.state.payjs &&
+                        this.state.value === 0 &&
+                        (this.state.selectedPack === -1 ||
+                            this.state.packs[this.state.selectedPack].score ===
+                                0) &&
+                        this.state.value === 1 &&
+                        (this.state.selectedGroup === -1 ||
+                            this.state.groups[this.state.selectedGroup]
+                                .score === 0) && (
+                            <Typography>无可用支付方式</Typography>
+                        )}
+                    {this.state.alipay && (
+                        <FormControlLabel
+                            value={"alipay"}
+                            control={<Radio />}
+                            label={"支付宝扫码"}
+                        />
                     )}
-                />
-            }
-            {this.state.value === 2 &&
-            <TextField
-                className={classes.textField}
-                type="number"
-                inputProps={{
-                    min: "1",
-                    step: "1",
-                    max: "9999999",
-                }}
-                value={this.state.scoreNum}
-                onChange={this.handleTexyChange(
-                    "scoreNum"
+                    {this.state.payjs && (
+                        <FormControlLabel
+                            value={"payjs"}
+                            control={<Radio />}
+                            label={"微信扫码"}
+                        />
+                    )}
+                    {this.state.value === 0 &&
+                        this.state.selectedPack !== -1 &&
+                        this.state.packs[this.state.selectedPack].score !==
+                            0 && (
+                            <FormControlLabel
+                                value={"score"}
+                                control={<Radio />}
+                                label={"积分支付"}
+                            />
+                        )}
+                    {this.state.value === 1 &&
+                        this.state.selectedGroup !== -1 &&
+                        this.state.groups[this.state.selectedGroup].score !==
+                            0 && (
+                            <FormControlLabel
+                                value={"score"}
+                                control={<Radio />}
+                                label={"积分支付"}
+                            />
+                        )}
+                </RadioGroup>
+                <div>
+                    {this.state.value !== 2 && (
+                        <FormLabel>购买时长倍数：</FormLabel>
+                    )}
+                    {this.state.value === 2 && (
+                        <FormLabel>充值积分数量：</FormLabel>
+                    )}
+                </div>
+                {this.state.value !== 2 && (
+                    <TextField
+                        className={classes.textField}
+                        type="number"
+                        inputProps={{
+                            min: "1",
+                            max: "99",
+                            step: "1"
+                        }}
+                        value={this.state.times}
+                        onChange={this.handleTexyChange("times")}
+                    />
                 )}
-            />
-            }
-
-        </div>);
+                {this.state.value === 2 && (
+                    <TextField
+                        className={classes.textField}
+                        type="number"
+                        inputProps={{
+                            min: "1",
+                            step: "1",
+                            max: "9999999"
+                        }}
+                        value={this.state.scoreNum}
+                        onChange={this.handleTexyChange("scoreNum")}
+                    />
+                )}
+            </div>
+        );
 
         return (
             <div className={classes.layout}>
@@ -514,7 +529,12 @@ class BuyQuotaCompoment extends Component {
                     >
                         <Tab label="容量包" icon={<SdStorage />} />
                         <Tab label="会员" icon={<SupervisedUserCircle />} />
-                        {this.state.scorePrice >0 && <Tab label="积分充值" icon={<AccountBalanceWallet />} />}
+                        {this.state.scorePrice > 0 && (
+                            <Tab
+                                label="积分充值"
+                                icon={<AccountBalanceWallet />}
+                            />
+                        )}
                         <Tab label="使用激活码" icon={<LocalPlay />} />
                     </Tabs>
                 </AppBar>
@@ -707,17 +727,16 @@ class BuyQuotaCompoment extends Component {
                                     <div>
                                         当前费用：
                                         {this.state.packPayMethod !==
-                                        "score" && (
+                                            "score" && (
                                             <span className={classes.priceShow}>
                                                 ￥
-
-                                                    <span>
-                                                            {(
-                                                                this.state.scorePrice / 100 *
-                                                                this.state.scoreNum
-                                                            ).toFixed(2)}
-                                                        </span>
-
+                                                <span>
+                                                    {(
+                                                        (this.state.scorePrice /
+                                                            100) *
+                                                        this.state.scoreNum
+                                                    ).toFixed(2)}
+                                                </span>
                                             </span>
                                         )}
                                     </div>
@@ -730,9 +749,11 @@ class BuyQuotaCompoment extends Component {
                                             disabled={
                                                 this.state.loading ||
                                                 this.state.packPayMethod ===
-                                                null
+                                                    null
                                             }
-                                            onClick={() => this.buyPack("score")}
+                                            onClick={() =>
+                                                this.buyPack("score")
+                                            }
                                         >
                                             <ShopIcon /> 立即购买
                                         </Button>
@@ -785,16 +806,13 @@ class BuyQuotaCompoment extends Component {
                             {this.state.payment.type === "alipay" && (
                                 <span>支付宝</span>
                             )}
-                            {this.state.payment.type === "youzan" && (
-                                <span>支付宝或微信</span>
+                            {this.state.payment.type === "payjs" && (
+                                <span>微信</span>
                             )}
                             扫描下方二维码完成付款，付款完成后本页面会自动刷新。
                         </DialogContentText>
                         <div className={classes.codeContainer}>
-                            <img
-                                src={this.state.payment.img}
-                                className={classes.qrcode}
-                            />
+                            <QRCode value={this.state.payment.img} />,
                         </div>
                     </DialogContent>
                     <DialogActions>
@@ -840,15 +858,23 @@ class BuyQuotaCompoment extends Component {
                                     {this.state.redeemInfo.name}
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    {this.state.redeemInfo.type === 2?"数量：":"时长："}
+                                    {this.state.redeemInfo.type === 2
+                                        ? "数量："
+                                        : "时长："}
                                 </Typography>
                                 <Typography>
-                                    {this.state.redeemInfo.type === 2 && <>{this.state.redeemInfo.num}</>}
-                                    {this.state.redeemInfo.type !== 2 && <>{Math.ceil(
-                                            this.state.redeemInfo.time / 86400
-                                        ) * this.state.redeemInfo.num}
-                                        天</>}
-
+                                    {this.state.redeemInfo.type === 2 && (
+                                        <>{this.state.redeemInfo.num}</>
+                                    )}
+                                    {this.state.redeemInfo.type !== 2 && (
+                                        <>
+                                            {Math.ceil(
+                                                this.state.redeemInfo.time /
+                                                    86400
+                                            ) * this.state.redeemInfo.num}
+                                            天
+                                        </>
+                                    )}
                                 </Typography>
                             </DialogContentText>
                         )}
@@ -881,7 +907,7 @@ class BuyQuotaCompoment extends Component {
                                 this.state.groups[this.state.selectedGroup]
                                     .name}
                         </DialogContentText>
-                       {methodSelect}
+                        {methodSelect}
                         <div>
                             当前费用：
                             {this.state.packPayMethod !== "score" && (
@@ -932,8 +958,10 @@ class BuyQuotaCompoment extends Component {
                             取消
                         </Button>
                         <Button
-                            disabled={this.state.loading || this.state.packPayMethod ===
-                            null}
+                            disabled={
+                                this.state.loading ||
+                                this.state.packPayMethod === null
+                            }
                             onClick={() => this.buyPack("group")}
                             color="primary"
                         >
