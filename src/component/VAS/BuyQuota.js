@@ -39,6 +39,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import {AccountBalanceWallet} from "@material-ui/icons";
 
 const styles = theme => ({
     layout: {
@@ -140,13 +141,15 @@ class BuyQuotaCompoment extends Component {
             selectedPack: -1,
             selectedGroup: -1,
             times: 1,
+            scoreNum:1,
             loading: false,
             redeemCode: "",
             dialog: null,
             payment: {
                 type: "",
-                img: ""
+                img: "",
             },
+            scorePrice:0,
             redeemInfo: null,
             packs: [],
             groups: [],
@@ -163,7 +166,8 @@ class BuyQuotaCompoment extends Component {
                     packs: response.data.packs,
                     groups: response.data.groups,
                     alipay: response.data.alipay,
-                    payjs: response.data.payjs
+                    payjs: response.data.payjs,
+                    scorePrice:response.data.score_price,
                 });
             })
             .catch(error => {
@@ -183,27 +187,15 @@ class BuyQuotaCompoment extends Component {
         this.setState({
             loading: true
         });
-        axios
-            .post("/Member/doRedeem", {
-                id: this.state.redeemCode
-            })
+        API
+            .post("/vas/redeem/" + this.state.redeemCode,)
             .then(response => {
-                if (response.data.error === 1) {
-                    this.setState({
-                        loading: false
-                    });
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "warning"
-                    );
-                } else if (response.data.error === 200) {
+
                     this.setState({
                         loading: false,
                         dialog: "success"
                     });
-                }
+
             })
             .catch(error => {
                 this.setState({
@@ -231,28 +223,14 @@ class BuyQuotaCompoment extends Component {
         this.setState({
             loading: true
         });
-        axios
-            .post("/Member/checkRedeemCode", {
-                id: this.state.redeemCode
-            })
+        API
+            .get("/vas/redeem/" + this.state.redeemCode,)
             .then(response => {
-                if (response.data.error === 1) {
-                    this.setState({
-                        loading: false
-                    });
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "warning"
-                    );
-                } else if (response.data.error === 200) {
-                    this.setState({
-                        loading: false,
-                        dialog: "redeem",
-                        redeemInfo: response.data.result
-                    });
-                }
+                this.setState({
+                    loading: false,
+                    dialog: "redeem",
+                    redeemInfo: response.data
+                });
             })
             .catch(error => {
                 this.setState({
@@ -261,7 +239,7 @@ class BuyQuotaCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "错误：" + error.message,
+                    error.message,
                     "error"
                 );
             });
@@ -283,11 +261,11 @@ class BuyQuotaCompoment extends Component {
         API.post("/vas/order", {
             action: packType,
             method: this.state.packPayMethod,
-            id:
-                packType === "pack"
-                    ? this.state.packs[this.state.selectedPack].id
-                    : this.state.groups[this.state.selectedGroup].id,
-            num: parseInt(this.state.times)
+            id:packType === "score" ? 1 :(packType === "pack"
+                ? this.state.packs[this.state.selectedPack].id
+                : this.state.groups[this.state.selectedGroup].id)
+                ,
+            num: packType === "score" ?parseInt(this.state.scoreNum) :parseInt(this.state.times)
         })
             .then(response => {
                 if (!response.data.payment) {
@@ -483,21 +461,40 @@ class BuyQuotaCompoment extends Component {
                 )}
             </RadioGroup>
             <div>
-                <FormLabel>购买时长倍数：</FormLabel>
+                {this.state.value !== 2 &&<FormLabel>购买时长倍数：</FormLabel>}
+                {this.state.value === 2 &&<FormLabel>充值积分数量：</FormLabel>}
             </div>
+            {this.state.value !== 2 &&
+                <TextField
+                    className={classes.textField}
+                    type="number"
+                    inputProps={{
+                        min: "1",
+                        max: "99",
+                        step: "1"
+                    }}
+                    value={this.state.times}
+                    onChange={this.handleTexyChange(
+                        "times"
+                    )}
+                />
+            }
+            {this.state.value === 2 &&
             <TextField
                 className={classes.textField}
                 type="number"
                 inputProps={{
                     min: "1",
-                    max: "99",
-                    step: "1"
+                    step: "1",
+                    max: "9999999",
                 }}
-                value={this.state.times}
+                value={this.state.scoreNum}
                 onChange={this.handleTexyChange(
-                    "times"
+                    "scoreNum"
                 )}
             />
+            }
+
         </div>);
 
         return (
@@ -517,6 +514,7 @@ class BuyQuotaCompoment extends Component {
                     >
                         <Tab label="容量包" icon={<SdStorage />} />
                         <Tab label="会员" icon={<SupervisedUserCircle />} />
+                        {this.state.scorePrice >0 && <Tab label="积分充值" icon={<AccountBalanceWallet />} />}
                         <Tab label="使用激活码" icon={<LocalPlay />} />
                     </Tabs>
                 </AppBar>
@@ -612,7 +610,7 @@ class BuyQuotaCompoment extends Component {
                         </Grid>
                     </Paper>
                 )}
-                {this.state.value == 1 && (
+                {this.state.value === 1 && (
                     <Paper className={classes.paper} square={true}>
                         <Grid container spacing={5} alignItems="flex-end">
                             {this.state.groups.map((tier, id) => (
@@ -694,7 +692,58 @@ class BuyQuotaCompoment extends Component {
                     </Paper>
                 )}
 
-                {this.state.value == 2 && (
+                {this.state.value === 2 && (
+                    <Paper className={classes.paper} square={true}>
+                        <Grid
+                            container
+                            className={classes.payMethod}
+                            spacing={1}
+                        >
+                            <Grid sm={6} xs={12}>
+                                {methodSelect}
+                            </Grid>
+                            <Grid sm={6} xs={12}>
+                                <div className={classes.action}>
+                                    <div>
+                                        当前费用：
+                                        {this.state.packPayMethod !==
+                                        "score" && (
+                                            <span className={classes.priceShow}>
+                                                ￥
+
+                                                    <span>
+                                                            {(
+                                                                this.state.scorePrice / 100 *
+                                                                this.state.scoreNum
+                                                            ).toFixed(2)}
+                                                        </span>
+
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Button
+                                            size="large"
+                                            variant="contained"
+                                            color="secondary"
+                                            className={classes.button}
+                                            disabled={
+                                                this.state.loading ||
+                                                this.state.packPayMethod ===
+                                                null
+                                            }
+                                            onClick={() => this.buyPack("score")}
+                                        >
+                                            <ShopIcon /> 立即购买
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                )}
+
+                {this.state.value === 3 && (
                     <Paper className={classes.paper} square={true}>
                         <div className={classes.redeemContainer}>
                             <TextField
@@ -791,13 +840,15 @@ class BuyQuotaCompoment extends Component {
                                     {this.state.redeemInfo.name}
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    时长：
+                                    {this.state.redeemInfo.type === 2?"数量：":"时长："}
                                 </Typography>
                                 <Typography>
-                                    {Math.ceil(
-                                        this.state.redeemInfo.time / 86400
-                                    ) * this.state.redeemInfo.count}
-                                    天
+                                    {this.state.redeemInfo.type === 2 && <>{this.state.redeemInfo.num}</>}
+                                    {this.state.redeemInfo.type !== 2 && <>{Math.ceil(
+                                            this.state.redeemInfo.time / 86400
+                                        ) * this.state.redeemInfo.num}
+                                        天</>}
+
                                 </Typography>
                             </DialogContentText>
                         )}
