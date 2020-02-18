@@ -3,25 +3,14 @@ import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import Alert from "@material-ui/lab/Alert";
-import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
-import IconButton from "@material-ui/core/IconButton";
-import { Delete } from "@material-ui/icons";
-import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
-import CreateWebDAVMount from "../Modals/CreateWebDAVMount";
 import {getTaskProgress, getTaskStatus, getTaskType} from "../../config";
-import TableFooter from "@material-ui/core/TableFooter";
 import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles(theme => ({
