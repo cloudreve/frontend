@@ -64,6 +64,7 @@ import {
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import FileTag from "./FileTags";
+import {Devices} from "@material-ui/icons";
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -460,6 +461,20 @@ class NavbarCompoment extends Component {
                                         />
                                     </ListItemIcon>
                                     <ListItemText primary="容量配额" />
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key="WebDAV"
+                                    onClick={() =>
+                                        this.props.history.push("/webdav?")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <Devices
+                                            className={classes.iconFix}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary="WebDAV" />
                                 </ListItem>
                             </List>
                         </div>

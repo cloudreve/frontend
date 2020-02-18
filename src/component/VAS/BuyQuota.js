@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import SdStorage from "@material-ui/icons/SdStorage";
 import ShopIcon from "@material-ui/icons/ShoppingCart";
-import axios from "axios";
 import PackSelect from "./PackSelect";
 import SupervisedUserCircle from "@material-ui/icons/SupervisedUserCircle";
 import StarIcon from "@material-ui/icons/StarBorder";
@@ -37,6 +36,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import { AccountBalanceWallet } from "@material-ui/icons";
 import pathHelper from "../../untils/page";
+import {useLocation, withRouter} from "react-router";
 
 const styles = theme => ({
     layout: {
@@ -129,12 +129,14 @@ const mapDispatchToProps = dispatch => {
 
 class BuyQuotaCompoment extends Component {
     IntervalId = null;
-    firstLoad = true;
-
     constructor(props) {
         super(props);
+
+        let tab = new URLSearchParams(this.props.location.search);
+        let index = tab.get("tab");
+
         this.state = {
-            value: 0,
+            value: index ? parseInt(index) : 0,
             selectedPack: -1,
             selectedGroup: -1,
             times: 1,
@@ -292,42 +294,6 @@ class BuyQuotaCompoment extends Component {
                         this.querryLoop(response.data.id);
                     }, 3000);
                 }
-
-                // if (response.data.error === 1) {
-                //     this.setState({
-                //         loading: false
-                //     });
-                //     this.props.toggleSnackbar(
-                //         "top",
-                //         "right",
-                //         response.data.msg,
-                //         "warning"
-                //     );
-                // } else if (response.data.error === 200) {
-                //     this.setState({
-                //         loading: false,
-                //         dialog: "qr",
-                //         payment: {
-                //             type: "alipay",
-                //             img: response.data.qrcode
-                //         }
-                //     });
-                //     this.IntervalId = window.setInterval(() => {
-                //         this.querryLoop(response.data.id);
-                //     }, 3000);
-                // } else if (response.data.error === 201) {
-                //     this.setState({
-                //         loading: false,
-                //         dialog: "qr",
-                //         payment: {
-                //             type: "youzan",
-                //             img: response.data.qrcode
-                //         }
-                //     });
-                //     this.IntervalId = window.setInterval(() => {
-                //         this.querryLoop(response.data.id);
-                //     }, 3000);
-                // }
             })
             .catch(error => {
                 this.setState({
@@ -977,6 +943,6 @@ class BuyQuotaCompoment extends Component {
 const BuyQuota = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(BuyQuotaCompoment));
+)(withStyles(styles)(withRouter(BuyQuotaCompoment)));
 
 export default BuyQuota;

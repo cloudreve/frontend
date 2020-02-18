@@ -17,6 +17,7 @@ import {
     TableRow,
 } from '@material-ui/core';
 import {sizeToString} from "../../untils";
+import {withRouter} from "react-router";
 
 
 const styles = theme => ({
@@ -116,10 +117,10 @@ class QuotaCompoment extends Component {
 
     state = {
         data: {
-            basic: "--",
-            used: "--",
-            total: "--",
-            pack: "--",
+            basic: 0,
+            used: 0,
+            total:0,
+            pack: 0,
             r1:0,
             r2:0,
             r3:0,
@@ -220,12 +221,12 @@ class QuotaCompoment extends Component {
                 variant="contained" 
                 color="secondary" 
                 className={classes.button}
-                onClick={()=>window.location.href="/Home/Quota?buyPack=1"}
+                onClick={()=>this.props.history.push("/buy")}
                 >
                     购买容量包
                 </Button>
                 <Button variant="contained" className={classes.button}
-                 onClick={()=>window.location.href="/Home/Quota?redeem=1"}
+                        onClick={()=>this.props.history.push("/buy?tab=3")}
                 >
                     使用激活码兑换
                 </Button>
@@ -265,6 +266,6 @@ class QuotaCompoment extends Component {
 const Quota = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(QuotaCompoment))
+)(withStyles(styles)(withRouter(QuotaCompoment)))
 
 export default Quota

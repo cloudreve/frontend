@@ -6,21 +6,14 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    DialogContentText,
     CircularProgress
 } from "@material-ui/core";
 import {
     toggleSnackbar,
-    setModalsLoading,
-    refreshFileList
 } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import MenuItem from "@material-ui/core/MenuItem";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -32,8 +25,6 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import {
     Circle,
     CircleOutline,
-    Decagram,
-    FolderHeartOutline,
     Heart,
     HeartOutline,
     Hexagon,
@@ -45,7 +36,6 @@ import {
     Square,
     SquareOutline,
     Triangle,
-    TriangleOutline
 } from "mdi-material-ui";
 
 const useStyles = makeStyles(theme => ({

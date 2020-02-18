@@ -127,7 +127,7 @@ class StorageBarCompoment extends Component {
                         <div className={classes.storageContainer}>
                             <StorageIcon className={classes.iconFix} />
                             <div className={classes.detail}>
-                                存储空间{"   "}{this.state.showExpand && <Link href={"/#/s"} color={"secondary"}>
+                                存储空间{"   "}{this.state.showExpand && <Link href={"/#/buy"} color={"secondary"}>
                                 扩容
                             </Link>}
                                 <LinearProgress
