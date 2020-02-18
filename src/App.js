@@ -25,6 +25,7 @@ const TextViewer = React.lazy(() => import("./component/Viewer/Text"));
 const Quota = React.lazy(() => import("./component/VAS/Quota"));
 const BuyQuota = React.lazy(() => import("./component/VAS/BuyQuota"));
 const WebDAV = React.lazy(() => import("./component/Setting/WebDAV"));
+const Tasks = React.lazy(() => import("./component/Setting/Tasks"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -141,6 +142,12 @@ export default function App() {
                             <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading />}>
                                     <WebDAV />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading />}>
+                                    <Tasks />
                                 </Suspense>
                             </AuthRoute>
 

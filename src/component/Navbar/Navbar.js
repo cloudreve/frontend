@@ -64,7 +64,7 @@ import {
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import FileTag from "./FileTags";
-import {Devices} from "@material-ui/icons";
+import {Assignment, Devices} from "@material-ui/icons";
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -176,6 +176,7 @@ const styles = theme => ({
         width: drawerWidthMobile
     },
     upDrawer: {
+        overflowX:"hidden",
     },
     drawerOpen: {
         width: drawerWidth,
@@ -255,7 +256,11 @@ const styles = theme => ({
         width: "150px"
     },
     minStickDrawer:{
-        minHeight: "calc(100vh - 155px)",
+        overflowY:"auto",
+        [theme.breakpoints.up("sm")]:{
+            height: "calc(100vh - 155px)",
+        },
+
         [theme.breakpoints.down("sm")]: {
             minHeight: "calc(100vh - 261px)",
         },
@@ -475,6 +480,20 @@ class NavbarCompoment extends Component {
                                         />
                                     </ListItemIcon>
                                     <ListItemText primary="WebDAV" />
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key="任务队列"
+                                    onClick={() =>
+                                        this.props.history.push("/tasks?")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <Assignment
+                                            className={classes.iconFix}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText primary="任务队列" />
                                 </ListItem>
                             </List>
                         </div>

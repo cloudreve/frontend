@@ -45,3 +45,22 @@ export const isCompressFile = name=>{
     let suffix = name.split(".").pop().toLowerCase();
     return suffix === "zip"
 }
+
+const taskStatus = ["排队中","处理中","失败","取消","已完成"];
+const taskType = ["压缩","解压缩","文件中转"];
+const taskProgress = ["等待中","压缩中","解压缩中","下载中","转存中"];
+
+export const getTaskStatus = status =>{
+    return taskStatus[status];
+}
+
+export const getTaskType = status =>{
+    return taskType[status];
+}
+
+export const getTaskProgress = (type,status) =>{
+    if (type === 2){
+        return "已完成 " + (status+1) + " 个文件"
+    }
+    return taskProgress[status];
+}
