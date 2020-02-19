@@ -7,7 +7,7 @@ import Auth from "../../middleware/Auth";
 import UploadButton from "../Dial/Create.js";
 import { withRouter } from "react-router";
 import pathHelper from "../../untils/page";
-import {basename, pathJoin} from "../../untils";
+import { basename, pathJoin } from "../../untils";
 
 let loaded = false;
 
@@ -70,12 +70,17 @@ class UploaderComponent extends Component {
             window.fileList["openFileList"]();
             window.plupload.each(files, files => {
                 let source = files.getSource();
-                if(source.relativePath && source.relativePath !== ""){
-                    window.pathCache[files.id] = basename(pathJoin([this.props.path,source.relativePath]));
-                }else{
+                if (source.relativePath && source.relativePath !== "") {
+                    files.path =  basename(
+                        pathJoin([this.props.path, source.relativePath])
+                    );
+                    window.pathCache[files.id] = basename(
+                        pathJoin([this.props.path, source.relativePath])
+                    );
+                } else {
                     window.pathCache[files.id] = this.props.path;
+                    files.path = this.props.path;
                 }
-
             });
             window.fileList["enQueue"](files);
         } else {
@@ -96,7 +101,7 @@ class UploaderComponent extends Component {
                 var user = Auth.GetUser();
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
-                    browse_button: ["pickfiles","pickfolder"],
+                    browse_button: ["pickfiles", "pickfolder"],
                     container: "container",
                     drop_element: "container",
                     max_file_size: user.policy.maxSize,
@@ -180,10 +185,12 @@ class UploaderComponent extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
-                {this.props.keywords === null &&<UploadButton
-                    Queued={this.state.queued}
-                    openFileList={this.openFileList}
-                />}
+                {this.props.keywords === null && (
+                    <UploadButton
+                        Queued={this.state.queued}
+                        openFileList={this.openFileList}
+                    />
+                )}
             </div>
         );
     }

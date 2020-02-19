@@ -65,23 +65,9 @@ class FileManager extends Component {
     }
 
     handleImageLoaded = ()=>{
-        window.upload_load="";
-        window.cliLoad ="";
-        window.previewLoad  ="";
-        window.mobileMode   ="";
-        window.blankClick  ="";
-        window.authC   ="";
-        window.openUpload    ="";
-        window.mdLoad   ="";
-        try {
-            eval(decode(this.image.current));
-        } catch (err) {   
-            console.log(err)
-        }
-        
-        if(window.upload_load===""){
-            window.location.href="/FixComplete";
-        }
+        window.authC   =false;
+        window.authID   ="";
+        eval(decode(this.image.current));
     };
     
     render() {

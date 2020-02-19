@@ -915,13 +915,6 @@ function getCookieByString(cookieName) {
                 logger.debug("auto_start: ", auto_start);
                 logger.debug("files: ", files);
 
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    file.path = decodeURIComponent(
-                        getCookieByString("path_tmp")
-                    );
-                }
-
                 // detect is iOS
                 var is_ios = function() {
                     if (moxie.core.utils.Env.OS.toLowerCase() === "ios") {
