@@ -21,13 +21,13 @@ const useStyles = makeStyles(theme=>({
     },
 }));
 
-export default function ShareNotFound() {
+export default function Notice(props) {
     const classes = useStyles();
     return (
         <div className={classes.emptyContainer}>
             <SentimentVeryDissatisfiedIcon className={classes.icon}/>
             <div className={classes.emptyInfoBig}>
-                分享不存在或已过期
+                {props.msg}
             </div>
         </div>
 

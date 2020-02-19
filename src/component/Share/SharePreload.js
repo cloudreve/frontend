@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import API from "../../middleware/Api";
 import { changeSubTitle, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
-import ShareNotFound from "./NotFound";
+import Notice from "./NotFound";
 import Grow from "@material-ui/core/Grow";
 const useStyles = makeStyles({});
 
@@ -78,7 +78,7 @@ export default function SharePreload() {
     return (
         <Suspense fallback={<PageLoading />}>
             {share === undefined && <PageLoading />}
-            {share === null && <ShareNotFound />}
+            {share === null && <Notice msg={"分享不存在或已过期"}/>}
             {share && share.locked && (
                 <LockedFile
                     loading={loading}

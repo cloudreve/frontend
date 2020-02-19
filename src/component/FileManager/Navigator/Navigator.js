@@ -612,7 +612,7 @@ class NavigatorComponent extends Component {
                             >
                                 <Avatar
                                     style={{ height: 23, width: 23 }}
-                                    src="/static/images/avatar/1.jpg"
+                                    src={"/api/v3/user/avatar/"+this.props.share.creator.key + "/s"}
                                 />
                             </IconButton>
                         )}

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../actions/index";
-import API from "../middleware/Api";
+import { toggleSnackbar } from "../../actions";
+import API from "../../middleware/Api";
 import LeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import RighttIcon from "@material-ui/icons/KeyboardArrowRight";
 
@@ -194,7 +194,7 @@ class ProfileCompoment extends Component {
                                 <Avatar
                                     className={classes.avatarContainer}
                                     src={
-                                        ""
+                                        "/api/v3/user/avatar/"+this.state.user.id + "/l"
                                     }
                                 />
                             </div>

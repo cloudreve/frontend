@@ -44,8 +44,7 @@ export default function Creator(props) {
                 className={classes.avatar}
                 alt={props.share.creator.nick}
                 src={
-                    "/Member/Avatar/1/" +
-                    props.share.creator.key
+                    "/api/v3/user/avatar/"+props.share.creator.key + "/l"
                 }
             />
             <Typography

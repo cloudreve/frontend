@@ -7,6 +7,7 @@ import pathHelper from "../../untils/page";
 import { withStyles, Typography } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher"
+import Avatar from "@material-ui/core/Avatar";
 
 const mapStateToProps = state => {
     return {
@@ -103,20 +104,16 @@ class UserInfoCompoment extends Component {
                 <div className={classes.flexAvatar}>
                     <a onClick={this.showUserInfo} className={classes.avatar}>
                         {isLogin && (
-                            <img
-                                alt="avatar"
+                            <Avatar
                                 src={
-                                    "/Member/Avatar/" +
-                                    user.id +
-                                    "/l"
+                                    "/api/v3/user/avatar/"+user.id + "/l"
                                 }
                                 className={classes.avatarImg}
                             />
                         )}
                         {!isLogin && (
-                            <img
-                                alt="avatar"
-                                src={"/Member/Avatar/0/l"}
+                            <Avatar
+                                src={"/api/v3/user/avatar/0/l"}
                                 className={classes.avatarImg}
                             />
                         )}

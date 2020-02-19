@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Navbar from "../component/Navbar/Navbar.js"
 import AlertBar from "../component/Common/Snackbar"
 import { createMuiTheme } from '@material-ui/core/styles';
-import UserSetting from '../component/UserSetting'
+import UserSetting from '../component/Setting/UserSetting'
 import { CssBaseline, withStyles, MuiThemeProvider } from '@material-ui/core';
 const theme = createMuiTheme(window.colorTheme);
 const styles = theme => ({

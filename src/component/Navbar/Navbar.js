@@ -467,7 +467,7 @@ class NavbarCompoment extends Component {
                                     </ListItemIcon>
                                     <ListItemText primary="容量配额" />
                                 </ListItem>
-                                <ListItem
+                                {user.group.webdav && <ListItem
                                     button
                                     key="WebDAV"
                                     onClick={() =>
@@ -480,7 +480,8 @@ class NavbarCompoment extends Component {
                                         />
                                     </ListItemIcon>
                                     <ListItemText primary="WebDAV" />
-                                </ListItem>
+                                </ListItem>}
+
                                 <ListItem
                                     button
                                     key="任务队列"

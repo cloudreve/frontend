@@ -143,7 +143,7 @@ class UserAvatarPopoverCompoment extends Component {
                             <div className={classes.largeAvatarContainer}>
                                 <Avatar
                                     className={classes.largeAvatar}
-                                    src={"/Member/Avatar/" + user.id + "/l"}
+                                    src={"/api/v3/user/avatar/"+user.id + "/l"}
                                 />
                             </div>
                             <div className={classes.info}>
@@ -166,7 +166,7 @@ class UserAvatarPopoverCompoment extends Component {
                             <Divider />
                             <MenuItem
                                 onClick={() =>
-                                    this.openURL("/Profile/" + user.id)
+                                    this.props.history.push("/profile/"+user.id)
                                 }
                             >
                                 <ListItemIcon>
@@ -206,6 +206,6 @@ UserAvatarPopoverCompoment.propTypes = {
 const UserAvatarPopover = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(UserAvatarPopoverCompoment));
+)(withStyles(styles)(withRouter(UserAvatarPopoverCompoment)));
 
 export default UserAvatarPopover;

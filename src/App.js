@@ -26,7 +26,9 @@ const Quota = React.lazy(() => import("./component/VAS/Quota"));
 const BuyQuota = React.lazy(() => import("./component/VAS/BuyQuota"));
 const WebDAV = React.lazy(() => import("./component/Setting/WebDAV"));
 const Tasks = React.lazy(() => import("./component/Setting/Tasks"));
-const Profile = React.lazy(() => import("./component/Profile"));
+const Profile = React.lazy(() => import("./component/Setting/Profile"));
+const UserSetting = React.lazy(() => import("./component/Setting/UserSetting"));
+const QQCallback = React.lazy(() => import("./component/Login/QQ"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -140,6 +142,12 @@ export default function App() {
                                 </Suspense>
                             </AuthRoute>
 
+                            <AuthRoute path={`${path}setting`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading />}>
+                                    <UserSetting />
+                                </Suspense>
+                            </AuthRoute>
+
 
                             <AuthRoute path={`${path}profile/:id`} isLogin={isLogin}>
                                 <Suspense fallback={<PageLoading />}>
@@ -160,9 +168,15 @@ export default function App() {
                                 </Suspense>
                             </AuthRoute>
 
-                            <Route path={`${path}login`}>
+                            <Route path={`${path}login`} exact>
                                 <Suspense fallback={<PageLoading />}>
                                     <LoginForm />
+                                </Suspense>
+                            </Route>
+
+                            <Route path={`${path}login/qq`}>
+                                <Suspense fallback={<PageLoading />}>
+                                    <QQCallback />
                                 </Suspense>
                             </Route>
 
