@@ -17,6 +17,7 @@ import {
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../untils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher"
+import PolicySwitcher from "./PolicySwitcher";
 
 const mapStateToProps = state => {
     return {
@@ -103,6 +104,7 @@ class UserAvatarCompoment extends Component {
                         <DarkModeSwitcher position="top"/>
                         {loginCheck && (
                             <>
+                                <PolicySwitcher/>
                             <Tooltip title={"设置"} placement="bottom">
                             <IconButton
                                 onClick={() =>

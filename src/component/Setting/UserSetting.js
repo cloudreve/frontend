@@ -41,12 +41,14 @@ import {
 } from "@material-ui/core";
 import Backup from "@material-ui/icons/Backup";
 import SettingsInputHdmi from "@material-ui/icons/SettingsInputHdmi";
-import { blue, yellow } from "@material-ui/core/colors";
+import { blue, green, yellow } from "@material-ui/core/colors";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import TimeAgo from "timeago-react";
-import TableCell from "@material-ui/core/TableCell";
+import QRCode from "qrcode-react";
+import { Check } from "@material-ui/icons";
+import { transformTime } from "../../untils";
 
 const styles = theme => ({
     layout: {
@@ -75,6 +77,10 @@ const styles = theme => ({
     userGravatar: {
         backgroundColor: yellow[100],
         color: yellow[800]
+    },
+    policySelected: {
+        backgroundColor: green[100],
+        color: green[800]
     },
     infoText: {
         marginRight: "17px"
@@ -132,11 +138,18 @@ const styles = theme => ({
     },
     paddingText: {
         paddingRight: theme.spacing(2)
-    }
+    },
+    qrcode:{
+        width: 128,
+        marginTop: 16,
+        marginRight: 16,
+    },
 });
 
 const mapStateToProps = state => {
-    return {};
+    return {
+        title: state.siteConfig.title
+    };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -176,13 +189,15 @@ class UserSettingCompoment extends Component {
             group_expires: 0,
             policy: {
                 current: {
-                    name: "-"
+                    name: "-",
+                    id: ""
                 },
                 options: []
             },
             qq: "",
             homepage: true,
             two_factor: "",
+            two_fa_secret: "",
             prefer_theme: "",
             themes: {}
         }
@@ -276,24 +291,11 @@ class UserSettingCompoment extends Component {
     };
 
     changePolicy = id => {
-        axios
-            .post("/Member/ChangePolicy", {
-                id: id
-            })
+        API.patch("/user/setting/policy", {
+            id: id
+        })
             .then(response => {
-                if (response.data.error === "1") {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "error"
-                    );
-                } else {
-                    window.location.reload();
-                }
-                this.setState({
-                    loading: ""
-                });
+                window.location.reload();
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -356,8 +358,8 @@ class UserSettingCompoment extends Component {
                     this.setState({
                         settings: {
                             ...this.state.settings,
-                            qq:false,
-                        },
+                            qq: false
+                        }
                     });
                 } else {
                     window.location.href = response.data;
@@ -415,26 +417,22 @@ class UserSettingCompoment extends Component {
     };
 
     handleToggle = () => {
-        axios
-            .post("/Member/HomePage", {
-                status: this.state.homePage === "1" ? "false" : "true"
-            })
+        API.patch("/user/setting/homepage", {
+            status: !this.state.settings.homepage
+        })
             .then(response => {
-                if (response.data.error === "1") {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "error"
-                    );
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "设置已保存",
-                        "success"
-                    );
-                }
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "设置已保存",
+                    "success"
+                );
+                this.setState({
+                    settings: {
+                        ...this.state.settings,
+                        homepage: !this.state.settings.homepage
+                    }
+                });
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -444,9 +442,6 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
             });
-        this.setState({
-            homePage: this.state.homePage === "1" ? "0" : "1"
-        });
     };
 
     changhePwd = () => {
@@ -457,29 +452,26 @@ class UserSettingCompoment extends Component {
                 "两次密码输入不一致",
                 "warning"
             );
+            return;
         }
         this.setState({
             loading: "changePassword"
         });
-        axios
-            .post("/Member/ChangePwd", {
-                origin: this.state.oldPwd,
-                new: this.state.newPwd
-            })
+        API.patch("/user/setting/password", {
+            old: this.state.oldPwd,
+            new: this.state.newPwd
+        })
             .then(response => {
-                if (response.data.error === "1") {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "error"
-                    );
-                    this.setState({
-                        loading: ""
-                    });
-                } else {
-                    window.location.reload();
-                }
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "密码已更新",
+                    "success"
+                );
+                this.setState({
+                    loading: ""
+                });
+                this.handleClose();
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -575,28 +567,42 @@ class UserSettingCompoment extends Component {
             });
     };
 
+    init2FA = () => {
+        API.get("/user/setting/2fa")
+            .then(response => {
+                this.setState({
+                    two_fa_secret: response.data
+                });
+                this.setState({ twoFactor: true });
+            })
+            .catch(error => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
+            });
+    };
+
     twoFactor = () => {
         this.setState({
             loading: "twoFactor"
         });
-        axios
-            .post("/Member/TwoFactorConfirm", {
+        API.patch("/user/setting/2fa", {
                 code: this.state.authCode
             })
             .then(response => {
-                if (response.data.error === "1") {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "error"
-                    );
-                    this.setState({
-                        loading: ""
-                    });
-                } else {
-                    window.location.reload();
-                }
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "设定已保存",
+                    "success"
+                );
+                this.setState({
+                    loading: ""
+                });
+                this.handleClose();
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -776,10 +782,7 @@ class UserSettingCompoment extends Component {
                                 </div>
                             )}
                             <Divider />
-                            <ListItem
-                                button
-                                onClick={() => this.bindQQ()}
-                            >
+                            <ListItem button onClick={() => this.bindQQ()}>
                                 <ListItemIcon className={classes.iconFix}>
                                     <SettingsInputHdmi />
                                 </ListItemIcon>
@@ -811,7 +814,7 @@ class UserSettingCompoment extends Component {
                                 <ListItemIcon className={classes.iconFix}>
                                     <Backup />
                                 </ListItemIcon>
-                                <ListItemText primary="上传策略" />
+                                <ListItemText primary="存储策略" />
 
                                 <ListItemSecondaryAction
                                     className={classes.flexContainer}
@@ -842,7 +845,9 @@ class UserSettingCompoment extends Component {
                                         className={classes.infoText}
                                         color="textSecondary"
                                     >
-                                        {user.created_at}
+                                        {transformTime(
+                                            parseInt(user.created_at + "000")
+                                        )}
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -888,12 +893,7 @@ class UserSettingCompoment extends Component {
                                 </ListItemSecondaryAction>
                             </ListItem>
                             <Divider />
-                            <ListItem
-                                button
-                                onClick={() =>
-                                    this.setState({ twoFactor: true })
-                                }
-                            >
+                            <ListItem button onClick={() => this.init2FA()}>
                                 <ListItemIcon className={classes.iconFix}>
                                     <VerifyIcon />
                                 </ListItemIcon>
@@ -1037,7 +1037,7 @@ class UserSettingCompoment extends Component {
                     open={this.state.changePolicy}
                     onClose={this.handleClose}
                 >
-                    <DialogTitle>切换上传策略</DialogTitle>
+                    <DialogTitle>切换存储策略</DialogTitle>
                     <List>
                         {this.state.settings.policy.options.map(
                             (value, index) => (
@@ -1047,9 +1047,30 @@ class UserSettingCompoment extends Component {
                                     key={index}
                                     onClick={() => this.changePolicy(value.id)}
                                 >
-                                    <Avatar className={classes.uploadFromFile}>
-                                        <Backup />
-                                    </Avatar>
+                                    <ListItemAvatar>
+                                        {value.id ===
+                                            this.state.settings.policy.current
+                                                .id && (
+                                            <Avatar
+                                                className={
+                                                    classes.policySelected
+                                                }
+                                            >
+                                                <Check />
+                                            </Avatar>
+                                        )}
+                                        {value.id !==
+                                            this.state.settings.policy.current
+                                                .id && (
+                                            <Avatar
+                                                className={
+                                                    classes.uploadFromFile
+                                                }
+                                            >
+                                                <Backup />
+                                            </Avatar>
+                                        )}
+                                    </ListItemAvatar>
                                     <ListItemText primary={value.name} />
                                 </ListItem>
                             )
@@ -1212,7 +1233,16 @@ class UserSettingCompoment extends Component {
                     <DialogTitle>启用二步验证</DialogTitle>
                     <DialogContent>
                         <div className={classes.flexContainerResponse}>
-                            <img alt="qrcode" src="/Member/EnableTwoFactor" />
+                            <div className={classes.qrcode}>
+                                <QRCode
+                                    value={
+                                        "otpauth://totp/" +
+                                        this.props.title +
+                                        "?secret=" +
+                                        this.state.two_fa_secret
+                                    }
+                                />
+                            </div>
                             <div className={classes.desText}>
                                 <Typography>
                                     请使用任意二步验证APP或者支持二步验证的密码管理软件扫描左侧二维码添加本站。扫描完成后请填写二步验证APP给出的6位验证码以开启二步验证。
