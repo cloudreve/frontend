@@ -18,7 +18,7 @@ const Auth = {
             return true;
         }
         if (localStorage.getItem("user") !== null){
-            return Auth.GetUser().id !== 0;
+            return !Auth.GetUser().anonymous;
         }
         return false
 

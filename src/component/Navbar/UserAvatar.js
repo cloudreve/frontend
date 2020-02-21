@@ -108,7 +108,7 @@ class UserAvatarCompoment extends Component {
                             <Tooltip title={"设置"} placement="bottom">
                             <IconButton
                                 onClick={() =>
-                                    (window.location.href = "/Member/Setting")
+                                    this.props.history.push("/setting?")
                                 }
                                 color="inherit"
                             >

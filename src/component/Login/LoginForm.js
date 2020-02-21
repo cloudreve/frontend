@@ -25,13 +25,14 @@ import {
 import { bufferDecode, bufferEncode } from "../../untils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
+import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
         marginTop: "110px",
         marginLeft: theme.spacing(3),
         marginRight: theme.spacing(3),
-        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
+        [theme.breakpoints.up("sm")]: {
             width: 400,
             marginLeft: "auto",
             marginRight: "auto"
@@ -87,6 +88,8 @@ function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [useAuthn, setUseAuthn] = useState(false);
     const [captchaData, setCaptchaData] = useState(null);
+    const [twoFA,setTwoFA] = useState(false);
+    const [faCode,setFACode] = useState("");
 
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
     const title = useSelector(state => state.siteConfig.title);
@@ -224,7 +227,12 @@ function LoginForm() {
         })
             .then(response => {
                 setLoading(false);
-                afterLogin(response.data)
+                if (response.rawData.code === 203){
+                    setTwoFA(true);
+                }else{
+                    afterLogin(response.data)
+                }
+
             })
             .catch(error => {
                 setLoading(false);
@@ -233,9 +241,39 @@ function LoginForm() {
             });
     };
 
+    const initQQLogin = e =>{
+        setLoading(true);
+        API.post("/user/qq")
+            .then(response => {
+                window.location.href = response.data
+            })
+            .catch(error => {
+                setLoading(false);
+                ToggleSnackbar("top", "right", error.message, "warning");
+            });
+    };
+
+    const twoFALogin = e =>{
+        e.preventDefault();
+        setLoading(true);
+        API.post("/user/2fa",{
+            code:faCode,
+        })
+            .then(response => {
+                setLoading(false);
+                afterLogin(response.data)
+            })
+            .catch(error => {
+                setLoading(false);
+                ToggleSnackbar("top", "right", error.message, "warning");
+            });
+    };
+
     return (
         <div className={classes.layout}>
-            <Paper className={classes.paper}>
+            {!twoFA &&
+            <>
+                <Paper className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
@@ -321,10 +359,7 @@ function LoginForm() {
                                     style={{ marginLeft: "10px" }}
                                     disabled={loading}
                                     className={classes.submit}
-                                    onClick={() =>
-                                        (window.location.href =
-                                            "/Member/QQLogin")
-                                    }
+                                    onClick={initQQLogin}
                                 >
                                     使用QQ登录
                                 </Button>
@@ -382,30 +417,66 @@ function LoginForm() {
                 </div>
             </Paper>
 
-            <div className={classes.authnLink}>
-                <Button color="primary" onClick={() => setUseAuthn(!useAuthn)}>
-                    {!useAuthn && (
-                        <>
-                            <Fingerprint
-                                style={{
-                                    marginRight: 8
-                                }}
-                            />
-                            使用外部验证器登录
-                        </>
-                    )}
-                    {useAuthn && (
-                        <>
-                            <VpnKey
-                                style={{
-                                    marginRight: 8
-                                }}
-                            />
-                            使用密码登录
-                        </>
-                    )}
-                </Button>
-            </div>
+                <div className={classes.authnLink}>
+                    <Button color="primary" onClick={() => setUseAuthn(!useAuthn)}>
+                        {!useAuthn && (
+                            <>
+                                <Fingerprint
+                                    style={{
+                                        marginRight: 8
+                                    }}
+                                />
+                                使用外部验证器登录
+                            </>
+                        )}
+                        {useAuthn && (
+                            <>
+                                <VpnKey
+                                    style={{
+                                        marginRight: 8
+                                    }}
+                                />
+                                使用密码登录
+                            </>
+                        )}
+                    </Button>
+                </div>
+            </>
+            }
+            {twoFA &&
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <VpnIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    二步验证
+                </Typography>
+                <form className={classes.form} onSubmit={twoFALogin}>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="code">请输入六位二步验证代码</InputLabel>
+                        <Input
+                            id="code"
+                            type="number"
+                            name="code"
+                            onChange={(event)=>setFACode(event.target.value )}
+                            autoComplete
+                            value={faCode}
+                            autoFocus />
+                    </FormControl>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        disabled={loading}
+                        className={classes.submit}
+                    >
+                        继续登录
+                    </Button>  </form>                          <Divider/>
+
+            </Paper>
+            }
+
         </div>
     );
 }

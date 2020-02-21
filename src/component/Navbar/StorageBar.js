@@ -15,11 +15,12 @@ import {
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import Link from "@material-ui/core/Link";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
 
 const mapStateToProps = state => {
     return {
-        refresh: state.viewUpdate.storageRefresh
+        refresh: state.viewUpdate.storageRefresh,
+        isLogin: state.viewUpdate.isLogin
     };
 };
 
@@ -44,7 +45,7 @@ const styles = theme => ({
     storageContainer: {
         display: "flex",
         marginTop: "15px",
-        textAlign:"left",
+        textAlign: "left",
         marginBottom: "20px"
     },
     detail: {
@@ -55,8 +56,8 @@ const styles = theme => ({
         width: "131px",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        [theme.breakpoints.down("xs")]:{
-            width: "162px",
+        [theme.breakpoints.down("xs")]: {
+            width: "162px"
         },
         marginTop: "5px"
     },
@@ -64,7 +65,6 @@ const styles = theme => ({
         marginTop: "5px"
     },
     stickFooter: {
-
         backgroundColor: theme.palette.background.paper
     }
 });
@@ -74,20 +74,27 @@ class StorageBarCompoment extends Component {
         percent: 0,
         used: null,
         total: null,
-        showExpand:false,
+        showExpand: false
     };
 
     firstLoad = true;
 
     componentDidMount = () => {
-        if (this.firstLoad) {
+        if (this.firstLoad && this.props.isLogin) {
             this.firstLoad = !this.firstLoad;
             this.updateStatus();
         }
     };
 
+    componentWillUnmount() {
+        this.firstLoad = false;
+    }
+
     componentWillReceiveProps = nextProps => {
-        if (this.props.refresh !== nextProps.refresh) {
+        if (
+            (this.props.isLogin && this.props.refresh !== nextProps.refresh) ||
+            (this.props.isLogin !== nextProps.isLogin && nextProps.isLogin)
+        ) {
             this.updateStatus();
         }
     };
@@ -105,7 +112,7 @@ class StorageBarCompoment extends Component {
                         "warning"
                     );
                 } else {
-                    percent = response.data.used / response.data.total * 100;
+                    percent = (response.data.used / response.data.total) * 100;
                 }
                 this.setState({
                     percent: percent,
@@ -118,61 +125,64 @@ class StorageBarCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-            return (
-                <div  onMouseEnter={()=>this.setState({showExpand:true})} onMouseLeave={()=>this.setState({showExpand:false})} className={classes.stickFooter}>
-                    <Divider />
-                    <ButtonBase onClick={() =>
-                        this.props.history.push("/quota?")
-                    }>
-                        <div className={classes.storageContainer}>
-                            <StorageIcon className={classes.iconFix} />
-                            <div className={classes.detail}>
-                                存储空间{"   "}{this.state.showExpand && <Link href={"/#/buy"} color={"secondary"}>
-                                扩容
-                            </Link>}
-                                <LinearProgress
-                                    className={classes.bar}
-                                    color="secondary"
-                                    variant="determinate"
-                                    value={this.state.percent}
-                                />
-                                <div className={classes.info}>
-                                    <Tooltip
-                                        title={
-                                            "已使用" +
-                                            (this.state.used === null
-                                                ? " -- "
-                                                : this.state.used) +
-                                            "，共" +
-                                            (this.state.total === null
-                                                ? " -- "
-                                                : this.state.total)
-                                        }
-                                        placement="top"
+        return (
+            <div
+                onMouseEnter={() => this.setState({ showExpand: true })}
+                onMouseLeave={() => this.setState({ showExpand: false })}
+                className={classes.stickFooter}
+            >
+                <Divider />
+                <ButtonBase onClick={() => this.props.history.push("/quota?")}>
+                    <div className={classes.storageContainer}>
+                        <StorageIcon className={classes.iconFix} />
+                        <div className={classes.detail}>
+                            存储空间{"   "}
+                            {this.state.showExpand && (
+                                <Link href={"/#/buy"} color={"secondary"}>
+                                    扩容
+                                </Link>
+                            )}
+                            <LinearProgress
+                                className={classes.bar}
+                                color="secondary"
+                                variant="determinate"
+                                value={this.state.percent}
+                            />
+                            <div className={classes.info}>
+                                <Tooltip
+                                    title={
+                                        "已使用" +
+                                        (this.state.used === null
+                                            ? " -- "
+                                            : this.state.used) +
+                                        "，共" +
+                                        (this.state.total === null
+                                            ? " -- "
+                                            : this.state.total)
+                                    }
+                                    placement="top"
+                                >
+                                    <Typography
+                                        variant="caption"
+                                        noWrap
+                                        color="textSecondary"
                                     >
-                                        <Typography
-                                            variant="caption"
-                                            noWrap
-                                            color="textSecondary"
-                                        >
-                                            已使用
-                                            {this.state.used === null
-                                                ? " -- "
-                                                : this.state.used}
-                                            ，共
-                                            {this.state.total === null
-                                                ? " -- "
-                                                : this.state.total}
-                                        </Typography>
-                                    </Tooltip>
-                                </div>
+                                        已使用
+                                        {this.state.used === null
+                                            ? " -- "
+                                            : this.state.used}
+                                        ，共
+                                        {this.state.total === null
+                                            ? " -- "
+                                            : this.state.total}
+                                    </Typography>
+                                </Tooltip>
                             </div>
                         </div>
-                    </ButtonBase>
-
-                </div>
-            );
-
+                    </div>
+                </ButtonBase>
+            </div>
+        );
     }
 }
 

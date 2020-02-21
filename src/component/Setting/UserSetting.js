@@ -13,7 +13,7 @@ import NickIcon from "@material-ui/icons/PermContactCalendar";
 import LockIcon from "@material-ui/icons/Lock";
 import VerifyIcon from "@material-ui/icons/VpnKey";
 import ColorIcon from "@material-ui/icons/Palette";
-import {applyThemes, toggleSnackbar} from "../../actions";
+import {applyThemes, toggleDaylightMode, toggleSnackbar} from "../../actions";
 import axios from "axios";
 import FingerprintIcon from "@material-ui/icons/Fingerprint";
 import ToggleButton from "@material-ui/lab/ToggleButton";
@@ -47,7 +47,7 @@ import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import TimeAgo from "timeago-react";
 import QRCode from "qrcode-react";
-import {Check, PermContactCalendar} from "@material-ui/icons";
+import {Brightness3, Check, ConfirmationNumber, PermContactCalendar} from "@material-ui/icons";
 import { transformTime } from "../../untils";
 import Authn from "./Authn";
 
@@ -162,6 +162,9 @@ const mapDispatchToProps = dispatch => {
         applyThemes: (color) => {
             dispatch(applyThemes(color));
         },
+        toggleDaylightMode:()=>{
+            dispatch(toggleDaylightMode())
+        }
     };
 };
 
@@ -636,9 +639,17 @@ class UserSettingCompoment extends Component {
 
     handleAlignment = (event, chosenTheme) => this.setState({ chosenTheme });
 
+    toggleThemeMode = (current) => {
+        if (current !== null){
+            this.props.toggleDaylightMode();
+            Auth.SetPreference("theme_mode",null);
+        }
+    }
+
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
+        const dark = Auth.GetPreference("theme_mode")
 
         return (
             <div>
@@ -849,6 +860,22 @@ class UserSettingCompoment extends Component {
                             <Divider />
                             <ListItem button>
                                 <ListItemIcon className={classes.iconFix}>
+                                    <ConfirmationNumber />
+                                </ListItemIcon>
+                                <ListItemText primary="积分" />
+
+                                <ListItemSecondaryAction>
+                                    <Typography
+                                        className={classes.infoText}
+                                        color="textSecondary"
+                                    >
+                                        {user.score}
+                                    </Typography>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider />
+                            <ListItem button>
+                                <ListItemIcon className={classes.iconFix}>
                                     <DateIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="注册时间" />
@@ -985,6 +1012,30 @@ class UserSettingCompoment extends Component {
                                     <div className={classes.secondColor}></div>
                                 </ListItemSecondaryAction>
                             </ListItem>
+                            <Divider/>
+                            <ListItem button onClick={()=>this.toggleThemeMode(dark)}>
+                                <ListItemIcon className={classes.iconFix}>
+                                    <Brightness3 />
+                                </ListItemIcon>
+                                <ListItemText primary="黑暗模式" />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <Typography
+                                        className={classes.infoTextWithIcon}
+                                        color="textSecondary"
+                                    >
+                                        {dark&&(dark==="dark"
+                                            ? "偏好开启"
+                                            : "偏好关闭")}
+                                        {dark === null&&"跟随系统"}
+                                    </Typography>
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
                         </List>
                     </Paper>
                     {user.group.webdav && (
@@ -1048,9 +1099,7 @@ class UserSettingCompoment extends Component {
                                     <ListItem
                                         button
                                         onClick={() =>
-                                            this.setState({
-                                                changeWebDavPwd: true
-                                            })
+                                            this.props.history.push("/webdav?")
                                         }
                                     >
                                         <ListItemIcon
@@ -1058,7 +1107,7 @@ class UserSettingCompoment extends Component {
                                         >
                                             <SecurityIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="登录密码" />
+                                        <ListItemText primary="账号管理" />
 
                                         <ListItemSecondaryAction
                                             className={classes.flexContainer}
@@ -1357,6 +1406,49 @@ class UserSettingCompoment extends Component {
                             }
                         >
                             保存
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.showWebDavUrl}
+                    onClose={this.handleClose}
+                >
+                    <DialogTitle>WebDAV连接地址</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            id="standard-name"
+                            className={classes.textField}
+                            value={
+                                window.location.origin +
+                                "/dav"
+                            }
+                            margin="normal"
+                            autoFocus
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="default">
+                            关闭
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.showWebDavUserName}
+                    onClose={this.handleClose}
+                >
+                    <DialogTitle>WebDAV用户名</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            id="standard-name"
+                            className={classes.textField}
+                            value={user.user_name}
+                            margin="normal"
+                            autoFocus
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="default">
+                            关闭
                         </Button>
                     </DialogActions>
                 </Dialog>

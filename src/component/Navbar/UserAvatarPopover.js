@@ -148,7 +148,11 @@ class UserAvatarPopoverCompoment extends Component {
                             </div>
                             <div className={classes.info}>
                                 <Typography noWrap>{user.nickname}</Typography>
-                                <Typography color="textSecondary" noWrap>
+                                <Typography color="textSecondary"
+                                            style={{
+                                                fontSize: "0.875rem",
+                                            }}
+                                            noWrap>
                                     {user.user_name}
                                 </Typography>
                                 <Chip
@@ -165,6 +169,9 @@ class UserAvatarPopoverCompoment extends Component {
                         <div>
                             <Divider />
                             <MenuItem
+                                style={{
+                                    padding:" 11px 16px 11px 16px",
+                                }}
                                 onClick={() =>
                                     this.props.history.push("/profile/"+user.id)
                                 }
@@ -176,6 +183,9 @@ class UserAvatarPopoverCompoment extends Component {
                             </MenuItem>
                             {user.group.id === 1 && (
                                 <MenuItem
+                                    style={{
+                                        padding:" 11px 16px 11px 16px",
+                                    }}
                                     onClick={() => this.openURL("/Admin")}
                                 >
                                     <ListItemIcon>
@@ -185,7 +195,9 @@ class UserAvatarPopoverCompoment extends Component {
                                 </MenuItem>
                             )}
 
-                            <MenuItem onClick={this.sigOut}>
+                            <MenuItem  style={{
+                                padding:" 11px 16px 11px 16px",
+                            }} onClick={this.sigOut}>
                                 <ListItemIcon>
                                     <LogoutVariant />
                                 </ListItemIcon>

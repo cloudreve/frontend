@@ -275,6 +275,15 @@ class NavbarCompoment extends Component {
         this.UploaderRef = React.createRef();
     }
 
+    componentWillMount() {
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.setState(state => ({ mobileOpen: false }));
+        });
+    }
+    componentWillUnmount() {
+        this.unlisten();
+    }
+
     componentDidMount = () => {
         changeThemeColor(
             this.props.selected.length <= 1 &&
@@ -296,7 +305,7 @@ class NavbarCompoment extends Component {
                     this.props.selected.length <= 1 &&
                     !(!this.props.isMultiple && this.props.withFile)
                 )
-                    ? this.props.theme.palette.primary.main
+                    ? (this.props.theme.palette.type === "dark"?this.props.theme.palette.background.default:this.props.theme.palette.primary.main)
                     : this.props.theme.palette.background.default
             );
         }

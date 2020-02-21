@@ -24,7 +24,7 @@ export var InitSiteConfig = (rawStore) => {
 }
 
 const initUserConfig = (siteConfig) => {
-    if (siteConfig.user!==undefined && siteConfig.user.id !==0){
+    if (siteConfig.user!==undefined && !siteConfig.user.anonymous){
         let themes = JSON.parse(siteConfig.themes);
         let user = siteConfig.user;
         delete siteConfig.user
@@ -37,7 +37,7 @@ const initUserConfig = (siteConfig) => {
         // 更新登录态
         Auth.authenticate(user);
     }
-    if (siteConfig.user!==undefined &&siteConfig.user.id == 0){
+    if (siteConfig.user!==undefined &&siteConfig.user.anonymous){
         Auth.SetUser(siteConfig.user);
     }
     return siteConfig

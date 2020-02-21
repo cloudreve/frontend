@@ -1,3 +1,5 @@
+import {changeThemeColor} from "../untils";
+
 const checkSelectedProps = (state)=>{
     let isMultiple,withFolder,withFile=false;
     isMultiple = (state.selected.length>1);

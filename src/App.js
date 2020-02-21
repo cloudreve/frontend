@@ -5,10 +5,12 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AlertBar from "./component/Common/Snackbar";
 import { createMuiTheme, lighten } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import {Redirect, Route, Switch, useRouteMatch} from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import PageLoading from "./component/Placeholder/PageLoading.js";
+import {changeThemeColor} from "./untils";
+import NotFound from "./component/Share/NotFound";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -41,7 +43,7 @@ export default function App() {
         if (prefer) {
             themeConfig.palette.type = prefer;
         }
-        return createMuiTheme({
+        let theme = createMuiTheme({
             ...themeConfig,
             palette: {
                 ...themeConfig.palette,
@@ -54,6 +56,8 @@ export default function App() {
                 }
             }
         });
+        changeThemeColor(themeConfig.palette.type === "dark"?theme.palette.background.default:theme.palette.primary.main);
+        return theme;
     }, [prefersDarkMode, themeConfig]);
 
     const useStyles = makeStyles(theme => ({
@@ -82,7 +86,11 @@ export default function App() {
                         <div className={classes.toolbar} />
                         <Switch>
                             <AuthRoute exact path={path} isLogin={isLogin}>
-                                我是私有页面
+                                <Redirect
+                                    to={{
+                                        pathname: "/home",
+                                    }}
+                                />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}home`} isLogin={isLogin}>
@@ -203,6 +211,12 @@ export default function App() {
                                     <TextViewer />
                                 </Suspense>
                             </Route>
+
+                            <Route path="*">
+                                <NotFound msg={"页面不存在"} />
+                            </Route>
+
+
                         </Switch>
                     </main>
                 </div>
