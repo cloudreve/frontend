@@ -3,6 +3,7 @@ import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
 import { ButtonBase, Typography, Tooltip, makeStyles } from "@material-ui/core";
 import { useSelector } from "react-redux";
+import {lighten} from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
     container: {
         padding: "7px"
@@ -15,7 +16,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor:
             theme.palette.type == "dark"
                 ? "#fff"
-                : theme.palette.explorer.bgSelected
+                : lighten(theme.palette.primary.main, 0.8)
     },
 
     notSelected: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
         paddingTop: "2px",
-        color: theme.palette.explorer.icon
+        color: theme.palette.text.secondary,
     },
     folderNameSelected: {
         color:

@@ -46,7 +46,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
         paddingTop: "2px",
-        color: theme.palette.explorer.icon,
+        color: theme.palette.text.secondary,
     },
     folderNameSelected: {
         color: theme.palette.type == "dark" ? theme.palette.background.paper : theme.palette.primary.dark,

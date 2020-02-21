@@ -102,7 +102,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
         paddingTop: "2px",
-        color: theme.palette.explorer.icon
+        color: theme.palette.text.secondary,
     },
     hide: {
         display: "none"

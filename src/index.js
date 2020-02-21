@@ -19,6 +19,7 @@ const defaultStatus = InitSiteConfig({
         emailActive: false,
         QQLogin: false,
         themes:null,
+        authn:false,
         theme: {
             palette: {
                 common: { black: "#000", white: "#fff" },

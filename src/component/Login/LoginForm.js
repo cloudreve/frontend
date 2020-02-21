@@ -2,7 +2,11 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core";
-import {toggleSnackbar, applyThemes, setSessionStatus} from "../../actions/index";
+import {
+    toggleSnackbar,
+    applyThemes,
+    setSessionStatus
+} from "../../actions/index";
 import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
@@ -19,7 +23,8 @@ import {
     Typography
 } from "@material-ui/core";
 import { bufferDecode, bufferEncode } from "../../untils/index";
-import {enableUploaderLoad} from "../../middleware/Init";
+import { enableUploaderLoad } from "../../middleware/Init";
+import { Fingerprint, VpnKey } from "@material-ui/icons";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -30,7 +35,8 @@ const useStyles = makeStyles(theme => ({
             width: 400,
             marginLeft: "auto",
             marginRight: "auto"
-        }
+        },
+        marginBottom: 110
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -53,7 +59,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3)
     },
     link: {
-        marginTop: "10px",
+        marginTop: "20px",
         display: "flex",
         width: "100%",
         justifyContent: "space-between"
@@ -64,6 +70,13 @@ const useStyles = makeStyles(theme => ({
     },
     captchaPlaceholder: {
         width: 200
+    },
+    buttonContainer: {
+        display: "flex"
+    },
+    authnLink: {
+        textAlign: "center",
+        marginTop: 16
     }
 }));
 
@@ -72,6 +85,7 @@ function LoginForm() {
     const [pwd, setPwd] = useState("");
     const [captcha, setCaptcha] = useState("");
     const [loading, setLoading] = useState(false);
+    const [useAuthn, setUseAuthn] = useState(false);
     const [captchaData, setCaptchaData] = useState(null);
 
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
@@ -80,6 +94,7 @@ function LoginForm() {
     const forgetCaptcha = useSelector(state => state.siteConfig.forgetCaptcha);
     const emailActive = useSelector(state => state.siteConfig.emailActive);
     const QQLogin = useSelector(state => state.siteConfig.QQLogin);
+    const authn = useSelector(state => state.siteConfig.authn);
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -90,9 +105,10 @@ function LoginForm() {
     const ApplyThemes = useCallback(theme => dispatch(applyThemes(theme)), [
         dispatch
     ]);
-    const SetSessionStatus = useCallback(status => dispatch(setSessionStatus(status)), [
-        dispatch
-    ]);
+    const SetSessionStatus = useCallback(
+        status => dispatch(setSessionStatus(status)),
+        [dispatch]
+    );
 
     let history = useHistory();
 
@@ -119,69 +135,16 @@ function LoginForm() {
         }
     }, []);
 
-    const authRegTest = e => {
-        e.preventDefault();
-        API.put("/user/authn", {})
-            .then(response => {
-                let credentialCreationOptions = response.data;
-                console.log(credentialCreationOptions);
-                credentialCreationOptions.publicKey.challenge = bufferDecode(
-                    credentialCreationOptions.publicKey.challenge
-                );
-                credentialCreationOptions.publicKey.user.id = bufferDecode(
-                    credentialCreationOptions.publicKey.user.id
-                );
-                if (credentialCreationOptions.publicKey.excludeCredentials) {
-                    for (
-                        var i = 0;
-                        i <
-                        credentialCreationOptions.publicKey.excludeCredentials
-                            .length;
-                        i++
-                    ) {
-                        credentialCreationOptions.publicKey.excludeCredentials[
-                            i
-                        ].id = bufferDecode(
-                            credentialCreationOptions.publicKey
-                                .excludeCredentials[i].id
-                        );
-                    }
-                }
-
-                return navigator.credentials.create({
-                    publicKey: credentialCreationOptions.publicKey
-                });
-            })
-            .then(credential => {
-                console.log(credential);
-                let attestationObject = credential.response.attestationObject;
-                let clientDataJSON = credential.response.clientDataJSON;
-                let rawId = credential.rawId;
-                API.put(
-                    "/user/authn/finish",
-                    JSON.stringify({
-                        id: credential.id,
-                        rawId: bufferEncode(rawId),
-                        type: credential.type,
-                        response: {
-                            attestationObject: bufferEncode(attestationObject),
-                            clientDataJSON: bufferEncode(clientDataJSON)
-                        }
-                    })
-                );
-            })
-            .then(success => {
-                alert("successfully registered!");
-                return;
-            })
-            .catch(error => {
-                console.log(error);
-                alert("failed to register ");
-            });
-    };
-
     const authnLogin = e => {
         e.preventDefault();
+        if (!navigator.credentials) {
+            ToggleSnackbar("top", "right", "当前浏览器或环境不支持", "warning");
+
+            return;
+        }
+
+        setLoading(true);
+
         API.get("/user/authn/" + email)
             .then(response => {
                 let credentialRequestOptions = response.data;
@@ -200,14 +163,13 @@ function LoginForm() {
                 });
             })
             .then(assertion => {
-                console.log(assertion);
                 let authData = assertion.response.authenticatorData;
                 let clientDataJSON = assertion.response.clientDataJSON;
                 let rawId = assertion.rawId;
                 let sig = assertion.response.signature;
                 let userHandle = assertion.response.userHandle;
 
-                API.post(
+                return API.post(
                     "/user/authn/finish/" + email,
                     JSON.stringify({
                         id: assertion.id,
@@ -220,34 +182,39 @@ function LoginForm() {
                             userHandle: bufferEncode(userHandle)
                         }
                     })
-                ).then(response => {
-                    setLoading(false);
-                    Auth.authenticate(response.data);
-
-                    // 设置用户主题色
-                    if (response.data["preferred_theme"] !== "") {
-                        ApplyThemes(response.data["preferred_theme"]);
-                    }
-
-                    history.push("/home");
-                    ToggleSnackbar("top", "right", "登录成功", "success");
-                    return;
-                });
+                );
             })
-            .then(success => {
-
-                return;
+            .then(response => {
+                afterLogin(response.data)
             })
             .catch(error => {
                 console.log(error);
-                alert("failed to register ");
+                ToggleSnackbar("top", "right", error.message, "warning");
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
-    const login = e => {
-        // authnLogin(e);
-        // return;
+    const afterLogin = data =>{
+        Auth.authenticate(data);
 
+        // 设置用户主题色
+        if (data["preferred_theme"] !== "") {
+            ApplyThemes(data["preferred_theme"]);
+        }
+        enableUploaderLoad();
+
+        // 设置登录状态
+        SetSessionStatus(true);
+
+        history.push("/home");
+        ToggleSnackbar("top", "right", "登录成功", "success");
+
+        localStorage.removeItem("siteConfigCache");
+    }
+
+    const login = e => {
         e.preventDefault();
         setLoading(true);
         API.post("/user/session", {
@@ -256,35 +223,8 @@ function LoginForm() {
             captchaCode: captcha
         })
             .then(response => {
-                // console.log(response);
-                // if(response.data.code!=="200"){
-                //     this.setState({
-                //         loading:false,
-                //     });
-                //     if(response.data.message==="tsp"){
-                //         window.location.href="/Member/TwoStep";
-                //     }else{
-                //         this.props.toggleSnackbar("top","right",response.data.message,"warning");
-                //         this.refreshCaptcha();
-                //     }
-                // }else{
                 setLoading(false);
-                Auth.authenticate(response.data);
-
-                // 设置用户主题色
-                if (response.data["preferred_theme"] !== "") {
-                    ApplyThemes(response.data["preferred_theme"]);
-                }
-                enableUploaderLoad();
-
-                // 设置登录状态
-                SetSessionStatus(true);
-
-                history.push("/home");
-                ToggleSnackbar("top", "right", "登录成功", "success");
-
-                localStorage.removeItem('siteConfigCache');
-                // }
+                afterLogin(response.data)
             })
             .catch(error => {
                 setLoading(false);
@@ -300,67 +240,100 @@ function LoginForm() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    登录{title}
+                    登录 {title}
                 </Typography>
-                <form className={classes.form} onSubmit={login}>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">电子邮箱</InputLabel>
-                        <Input
-                            id="email"
-                            type="email"
-                            name="email"
-                            onChange={e => setEmail(e.target.value)}
-                            autoComplete
-                            value={email}
-                            autoFocus
-                        />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="password">密码</InputLabel>
-                        <Input
-                            name="password"
-                            onChange={e => setPwd(e.target.value)}
-                            type="password"
-                            id="password"
-                            value={pwd}
-                            autoComplete
-                        />
-                    </FormControl>
-                    {loginCaptcha && (
-                        <div className={classes.captchaContainer}>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="captcha">
-                                    验证码
-                                </InputLabel>
-                                <Input
-                                    name="captcha"
-                                    onChange={e => setCaptcha(e.target.value)}
-                                    type="text"
-                                    id="captcha"
-                                    value={captcha}
-                                    autoComplete
-                                />
-                            </FormControl>{" "}
-                            <div>
-                                {captchaData === null && (
-                                    <div className={classes.captchaPlaceholder}>
-                                        <Placeholder />
-                                    </div>
-                                )}
-                                {captchaData !== null && (
-                                    <img
-                                        src={captchaData}
-                                        alt="captcha"
-                                        onClick={refreshCaptcha}
-                                    ></img>
-                                )}
+                {!useAuthn && (
+                    <form className={classes.form} onSubmit={login}>
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel htmlFor="email">电子邮箱</InputLabel>
+                            <Input
+                                id="email"
+                                type="email"
+                                name="email"
+                                onChange={e => setEmail(e.target.value)}
+                                autoComplete
+                                value={email}
+                                autoFocus
+                            />
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel htmlFor="password">密码</InputLabel>
+                            <Input
+                                name="password"
+                                onChange={e => setPwd(e.target.value)}
+                                type="password"
+                                id="password"
+                                value={pwd}
+                                autoComplete
+                            />
+                        </FormControl>
+                        {loginCaptcha && (
+                            <div className={classes.captchaContainer}>
+                                <FormControl margin="normal" required fullWidth>
+                                    <InputLabel htmlFor="captcha">
+                                        验证码
+                                    </InputLabel>
+                                    <Input
+                                        name="captcha"
+                                        onChange={e =>
+                                            setCaptcha(e.target.value)
+                                        }
+                                        type="text"
+                                        id="captcha"
+                                        value={captcha}
+                                        autoComplete
+                                    />
+                                </FormControl>{" "}
+                                <div>
+                                    {captchaData === null && (
+                                        <div
+                                            className={
+                                                classes.captchaPlaceholder
+                                            }
+                                        >
+                                            <Placeholder />
+                                        </div>
+                                    )}
+                                    {captchaData !== null && (
+                                        <img
+                                            src={captchaData}
+                                            alt="captcha"
+                                            onClick={refreshCaptcha}
+                                        />
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    {QQLogin && (
-                        <div>
+                        )}
+                        {QQLogin && (
+                            <div className={classes.buttonContainer}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={loading}
+                                    className={classes.submit}
+                                >
+                                    登录
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    style={{ marginLeft: "10px" }}
+                                    disabled={loading}
+                                    className={classes.submit}
+                                    onClick={() =>
+                                        (window.location.href =
+                                            "/Member/QQLogin")
+                                    }
+                                >
+                                    使用QQ登录
+                                </Button>
+                            </div>
+                        )}
+                        {!QQLogin && (
                             <Button
                                 type="submit"
+                                fullWidth
                                 variant="contained"
                                 color="primary"
                                 disabled={loading}
@@ -368,33 +341,36 @@ function LoginForm() {
                             >
                                 登录
                             </Button>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                style={{ marginLeft: "10px" }}
-                                disabled={loading}
-                                className={classes.submit}
-                                onClick={() =>
-                                    (window.location.href = "/Member/QQLogin")
-                                }
-                            >
-                                使用QQ登录
-                            </Button>
-                        </div>
-                    )}
-                    {!QQLogin && (
+                        )}
+                    </form>
+                )}
+                {useAuthn && (
+                    <form className={classes.form}>
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel htmlFor="email">电子邮箱</InputLabel>
+                            <Input
+                                id="email"
+                                type="email"
+                                name="email"
+                                onChange={e => setEmail(e.target.value)}
+                                autoComplete
+                                value={email}
+                                autoFocus
+                            />
+                        </FormControl>
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             disabled={loading}
+                            onClick={authnLogin}
                             className={classes.submit}
                         >
-                            登录
+                            下一步
                         </Button>
-                    )}
-                </form>{" "}
+                    </form>
+                )}
                 <Divider />
                 <div className={classes.link}>
                     <div>
@@ -405,6 +381,31 @@ function LoginForm() {
                     </div>
                 </div>
             </Paper>
+
+            <div className={classes.authnLink}>
+                <Button color="primary" onClick={() => setUseAuthn(!useAuthn)}>
+                    {!useAuthn && (
+                        <>
+                            <Fingerprint
+                                style={{
+                                    marginRight: 8
+                                }}
+                            />
+                            使用外部验证器登录
+                        </>
+                    )}
+                    {useAuthn && (
+                        <>
+                            <VpnKey
+                                style={{
+                                    marginRight: 8
+                                }}
+                            />
+                            使用密码登录
+                        </>
+                    )}
+                </Button>
+            </div>
         </div>
     );
 }

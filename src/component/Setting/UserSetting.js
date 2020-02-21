@@ -13,7 +13,7 @@ import NickIcon from "@material-ui/icons/PermContactCalendar";
 import LockIcon from "@material-ui/icons/Lock";
 import VerifyIcon from "@material-ui/icons/VpnKey";
 import ColorIcon from "@material-ui/icons/Palette";
-import { toggleSnackbar } from "../../actions";
+import {applyThemes, toggleSnackbar} from "../../actions";
 import axios from "axios";
 import FingerprintIcon from "@material-ui/icons/Fingerprint";
 import ToggleButton from "@material-ui/lab/ToggleButton";
@@ -47,8 +47,9 @@ import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import TimeAgo from "timeago-react";
 import QRCode from "qrcode-react";
-import { Check } from "@material-ui/icons";
+import {Check, PermContactCalendar} from "@material-ui/icons";
 import { transformTime } from "../../untils";
+import Authn from "./Authn";
 
 const styles = theme => ({
     layout: {
@@ -148,7 +149,8 @@ const styles = theme => ({
 
 const mapStateToProps = state => {
     return {
-        title: state.siteConfig.title
+        title: state.siteConfig.title,
+        authn:state.siteConfig.authn,
     };
 };
 
@@ -156,7 +158,10 @@ const mapDispatchToProps = dispatch => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
+        applyThemes: (color) => {
+            dispatch(applyThemes(color));
+        },
     };
 };
 
@@ -199,7 +204,8 @@ class UserSettingCompoment extends Component {
             two_factor: "",
             two_fa_secret: "",
             prefer_theme: "",
-            themes: {}
+            themes: {},
+            authn:[],
         }
     };
 
@@ -226,6 +232,8 @@ class UserSettingCompoment extends Component {
     loadSetting = () => {
         API.get("/user/setting")
             .then(response => {
+                let theme = JSON.parse(response.data.themes);
+                response.data.themes = theme;
                 this.setState({
                     settings: response.data
                 });
@@ -490,24 +498,21 @@ class UserSettingCompoment extends Component {
         this.setState({
             loading: "changeTheme"
         });
-        axios
-            .post("/Member/ChangeThemeColor", {
+        API
+            .patch("/user/setting/theme", {
                 theme: this.state.chosenTheme
             })
             .then(response => {
-                if (response.data.error === "1") {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.data.msg,
-                        "error"
-                    );
-                    this.setState({
-                        loading: ""
-                    });
-                } else {
-                    window.location.reload();
-                }
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "主题配色已更换",
+                    "success"
+                );
+                this.props.applyThemes(this.state.chosenTheme);
+                this.setState({
+                    loading: ""
+                });
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -568,12 +573,16 @@ class UserSettingCompoment extends Component {
     };
 
     init2FA = () => {
+        if (this.state.settings.two_factor){
+            this.setState({ twoFactor: true });
+            return;
+        }
         API.get("/user/setting/2fa")
             .then(response => {
                 this.setState({
-                    two_fa_secret: response.data
+                    two_fa_secret: response.data,
+                    twoFactor: true,
                 });
-                this.setState({ twoFactor: true });
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -600,7 +609,11 @@ class UserSettingCompoment extends Component {
                     "success"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
+                    settings:{
+                        ...this.state.settings,
+                        two_factor:!this.state.settings.two_factor,
+                    }
                 });
                 this.handleClose();
             })
@@ -661,7 +674,7 @@ class UserSettingCompoment extends Component {
                             <Divider />
                             <ListItem button>
                                 <ListItemIcon className={classes.iconFix}>
-                                    <FingerprintIcon />
+                                    <PermContactCalendar />
                                 </ListItemIcon>
                                 <ListItemText primary="UID" />
 
@@ -917,6 +930,34 @@ class UserSettingCompoment extends Component {
                             </ListItem>
                         </List>
                     </Paper>
+
+                    <Authn
+                        list={this.state.settings.authn}
+                        add = {
+                            (credential)=>{
+                                this.setState({
+                                    settings:{
+                                        ...this.state.settings,
+                                        authn: [...this.state.settings.authn,credential],
+                                    }
+                                })
+                            }
+                        }
+                        remove={
+                            (id)=>{
+                                let credentials = [...this.state.settings.authn];
+                                credentials = credentials.filter((v)=>{
+                                    return v.id !== id
+                                })
+                                this.setState({
+                                    settings:{
+                                        ...this.state.settings,
+                                        authn: credentials,
+                                    }
+                                })
+                            }
+                        }
+                    />
 
                     <Typography
                         className={classes.sectionTitle}
@@ -1230,23 +1271,26 @@ class UserSettingCompoment extends Component {
                     </DialogActions>
                 </Dialog>
                 <Dialog open={this.state.twoFactor} onClose={this.handleClose}>
-                    <DialogTitle>启用二步验证</DialogTitle>
+                    <DialogTitle>{this.state.settings.two_factor?"关闭":"启用"}二步验证</DialogTitle>
                     <DialogContent>
                         <div className={classes.flexContainerResponse}>
-                            <div className={classes.qrcode}>
-                                <QRCode
+
+                                {!this.state.settings.two_factor && <div className={classes.qrcode}><QRCode
                                     value={
                                         "otpauth://totp/" +
                                         this.props.title +
                                         "?secret=" +
                                         this.state.two_fa_secret
                                     }
-                                />
-                            </div>
+                                /></div>}
+
                             <div className={classes.desText}>
-                                <Typography>
-                                    请使用任意二步验证APP或者支持二步验证的密码管理软件扫描左侧二维码添加本站。扫描完成后请填写二步验证APP给出的6位验证码以开启二步验证。
-                                </Typography>
+                                {!this.state.settings.two_factor && <Typography>
+                                请使用任意二步验证APP或者支持二步验证的密码管理软件扫描左侧二维码添加本站。扫描完成后请填写二步验证APP给出的6位验证码以开启二步验证。
+                            </Typography>}
+                                {this.state.settings.two_factor && <Typography>
+                                    请验证当前二步验证代码。
+                                </Typography>}
                                 <TextField
                                     id="standard-name"
                                     label="6位验证码"

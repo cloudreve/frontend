@@ -86,7 +86,7 @@ const styles = theme => ({
         height: "300px",
         margin: "50px auto",
         width: "300px",
-        color: theme.palette.explorer.emptyIcon,
+        color: theme.palette.text.disabled,
         textAlign: "center",
         paddingTop: "20px"
     },

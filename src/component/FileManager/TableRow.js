@@ -37,7 +37,7 @@ const styles = theme => ({
     icon: {
         verticalAlign: "middle",
         marginRight: "20px",
-        color: theme.palette.explorer.icon
+        color: theme.palette.text.secondary
     },
     tableIcon:{
         marginRight: "20px",
