@@ -11,6 +11,7 @@ import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import PageLoading from "./component/Placeholder/PageLoading.js";
 import {changeThemeColor} from "./untils";
 import NotFound from "./component/Share/NotFound";
+import NoAuthRoute from "./middleware/NoAuthRoute";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -31,6 +32,7 @@ const Tasks = React.lazy(() => import("./component/Setting/Tasks"));
 const Profile = React.lazy(() => import("./component/Setting/Profile"));
 const UserSetting = React.lazy(() => import("./component/Setting/UserSetting"));
 const QQCallback = React.lazy(() => import("./component/Login/QQ"));
+const Register = React.lazy(() => import("./component/Login/Register"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -176,11 +178,17 @@ export default function App() {
                                 </Suspense>
                             </AuthRoute>
 
-                            <Route path={`${path}login`} exact>
+                            <NoAuthRoute path={`${path}login`} exact>
                                 <Suspense fallback={<PageLoading />}>
                                     <LoginForm />
                                 </Suspense>
-                            </Route>
+                            </NoAuthRoute>
+
+                            <NoAuthRoute path={`${path}signup`} exact>
+                                <Suspense fallback={<PageLoading />}>
+                                    <Register />
+                                </Suspense>
+                            </NoAuthRoute>
 
                             <Route path={`${path}login/qq`}>
                                 <Suspense fallback={<PageLoading />}>

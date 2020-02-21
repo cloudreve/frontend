@@ -412,7 +412,7 @@ function LoginForm() {
                         <Link href={"/Member/FindPwd"}>忘记密码</Link>
                     </div>
                     <div>
-                        <Link href={"/SignUp"}>注册账号</Link>
+                        <Link href={"/#/signup"}>注册账号</Link>
                     </div>
                 </div>
             </Paper>

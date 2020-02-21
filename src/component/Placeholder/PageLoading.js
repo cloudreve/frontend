@@ -1,35 +1,36 @@
-import React from "react"
-import ContentLoader, { Facebook } from "react-content-loader"
-import {makeStyles} from "@material-ui/core/styles";
+import React from "react";
+import ContentLoader, { Facebook } from "react-content-loader";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
-    loader:{
-        width:"80%",
+    loader: {
+        width: "80%",
         [theme.breakpoints.up("md")]: {
-            width:" 50%",
+            width: " 50%"
         },
 
-        marginTop:30,
-    },
+        marginTop: 30
+    }
 }));
 
+const MyLoader = props => {
+    return (
+        <Facebook className={props.className} />
+    );
+};
 
-const MyLoader = (props) => (
-    <Facebook  className={props.className}/>
-)
-
-function PageLoading (){
-
+function PageLoading() {
     const classes = useStyles();
 
     return (
-        <div style={{
-            textAlign:"center",
-        }}>
-            <MyLoader className={classes.loader}/>
+        <div
+            style={{
+                textAlign: "center"
+            }}
+        >
+            <MyLoader className={classes.loader} />
         </div>
-
-    )
+    );
 }
 
-export default PageLoading
+export default PageLoading;
