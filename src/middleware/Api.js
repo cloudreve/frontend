@@ -34,7 +34,12 @@ instance.interceptors.response.use(
             // 登录过期
             if (response.rawData.code === 401) {
                 Auth.signout();
-                window.location.href = "#/Login";
+                window.location.href = "/#/login";
+            }
+
+            // 非管理员
+            if (response.rawData.code === 40008) {
+                window.location.href = "/#/home";
             }
             throw new AppError(response.rawData.msg,response.rawData.code,response.rawData.error);
         }
