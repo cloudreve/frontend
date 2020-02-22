@@ -13,7 +13,7 @@ import NickIcon from "@material-ui/icons/PermContactCalendar";
 import LockIcon from "@material-ui/icons/Lock";
 import VerifyIcon from "@material-ui/icons/VpnKey";
 import ColorIcon from "@material-ui/icons/Palette";
-import {applyThemes, toggleDaylightMode, toggleSnackbar} from "../../actions";
+import {applyThemes, changeViewMethod, toggleDaylightMode, toggleSnackbar} from "../../actions";
 import axios from "axios";
 import FingerprintIcon from "@material-ui/icons/Fingerprint";
 import ToggleButton from "@material-ui/lab/ToggleButton";
@@ -47,7 +47,7 @@ import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import TimeAgo from "timeago-react";
 import QRCode from "qrcode-react";
-import {Brightness3, Check, ConfirmationNumber, PermContactCalendar} from "@material-ui/icons";
+import {Brightness3, Check, ConfirmationNumber, ListAlt, PermContactCalendar} from "@material-ui/icons";
 import { transformTime } from "../../untils";
 import Authn from "./Authn";
 
@@ -151,6 +151,7 @@ const mapStateToProps = state => {
     return {
         title: state.siteConfig.title,
         authn:state.siteConfig.authn,
+        viewMethod: state.viewUpdate.explorerViewMethod,
     };
 };
 
@@ -164,7 +165,10 @@ const mapDispatchToProps = dispatch => {
         },
         toggleDaylightMode:()=>{
             dispatch(toggleDaylightMode())
-        }
+        },
+        changeView: method => {
+            dispatch(changeViewMethod(method));
+        },
     };
 };
 
@@ -231,6 +235,17 @@ class UserSettingCompoment extends Component {
     componentDidMount() {
         this.loadSetting();
     }
+
+    toggleViewMethod = () => {
+        let newMethod =
+            this.props.viewMethod === "icon"
+                ? "list"
+                : this.props.viewMethod === "list"
+                ? "smallIcon"
+                : "icon";
+        Auth.SetPreference("view_method", newMethod);
+        this.props.changeView(newMethod);
+    };
 
     loadSetting = () => {
         API.get("/user/setting")
@@ -1030,6 +1045,29 @@ class UserSettingCompoment extends Component {
                                             ? "偏好开启"
                                             : "偏好关闭")}
                                         {dark === null&&"跟随系统"}
+                                    </Typography>
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider/>
+                            <ListItem button onClick={()=>this.toggleViewMethod()}>
+                                <ListItemIcon className={classes.iconFix}>
+                                    <ListAlt />
+                                </ListItemIcon>
+                                <ListItemText primary="文件列表" />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <Typography
+                                        className={classes.infoTextWithIcon}
+                                        color="textSecondary"
+                                    >
+                                        {this.props.viewMethod === "icon" && "大图标"}
+                                        {this.props.viewMethod === "list" && "列表"}
+                                        {this.props.viewMethod === "smallIcon" && "小图标"}
                                     </Typography>
                                     <RightIcon
                                         className={classes.rightIconWithText}

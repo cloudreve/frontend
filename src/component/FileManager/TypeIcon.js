@@ -8,7 +8,7 @@ import {
     Android,
     FileExcelBox,
     FilePowerpointBox,
-    FileWordBox,
+    FileWordBox, LanguageC, LanguageCpp, LanguageGo, LanguageJavascript, LanguagePhp, LanguagePython,
     MagnetOn,
     ScriptText,
     WindowRestore,
@@ -71,7 +71,31 @@ const icons = {
     file: {
         color: "#607d8b",
         icon: FileShowIcon
-    }
+    },
+    php: {
+        color: "#777bb3",
+        icon: LanguagePhp
+    },
+    go: {
+        color: "#16b3da",
+        icon: LanguageGo
+    },
+    python:{
+        color: "#3776ab",
+        icon: LanguagePython
+    },
+    c:{
+        color: "#a8b9cc",
+        icon: LanguageC,
+    },
+    cpp:{
+        color: "#004482",
+        icon: LanguageCpp,
+    },
+    js:{
+        color: "#f4d003",
+        icon: LanguageJavascript,
+    },
 };
 
 const getColor = (theme, color) =>

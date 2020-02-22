@@ -60,11 +60,12 @@ import {
     ListItemText,
     List,
     Grow,
-    Tooltip,
+    Tooltip
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import FileTag from "./FileTags";
-import {Assignment, Devices} from "@material-ui/icons";
+import {Assignment, Devices, Settings} from "@material-ui/icons";
+import Divider from "@material-ui/core/Divider";
 
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
@@ -176,7 +177,7 @@ const styles = theme => ({
         width: drawerWidthMobile
     },
     upDrawer: {
-        overflowX:"hidden",
+        overflowX: "hidden"
     },
     drawerOpen: {
         width: drawerWidth,
@@ -255,15 +256,15 @@ const styles = theme => ({
         marginLeft: "10px",
         width: "150px"
     },
-    minStickDrawer:{
-        overflowY:"auto",
-        [theme.breakpoints.up("sm")]:{
-            height: "calc(100vh - 155px)",
+    minStickDrawer: {
+        overflowY: "auto",
+        [theme.breakpoints.up("sm")]: {
+            height: "calc(100vh - 155px)"
         },
 
         [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(100vh - 261px)",
-        },
+            minHeight: "calc(100vh - 261px)"
+        }
     }
 });
 class NavbarCompoment extends Component {
@@ -305,7 +306,9 @@ class NavbarCompoment extends Component {
                     this.props.selected.length <= 1 &&
                     !(!this.props.isMultiple && this.props.withFile)
                 )
-                    ? (this.props.theme.palette.type === "dark"?this.props.theme.palette.background.default:this.props.theme.palette.primary.main)
+                    ? this.props.theme.palette.type === "dark"
+                        ? this.props.theme.palette.background.default
+                        : this.props.theme.palette.primary.main
                     : this.props.theme.palette.background.default
             );
         }
@@ -317,7 +320,13 @@ class NavbarCompoment extends Component {
 
     loadUploader = () => {
         if (pathHelper.isHomePage(this.props.location.pathname)) {
-            return <>{this.props.loadUploader && this.props.isLogin && <Uploader />}</>;
+            return (
+                <>
+                    {this.props.loadUploader && this.props.isLogin && (
+                        <Uploader />
+                    )}
+                </>
+            );
         }
     };
 
@@ -476,20 +485,22 @@ class NavbarCompoment extends Component {
                                     </ListItemIcon>
                                     <ListItemText primary="容量配额" />
                                 </ListItem>
-                                {user.group.webdav && <ListItem
-                                    button
-                                    key="WebDAV"
-                                    onClick={() =>
-                                        this.props.history.push("/webdav?")
-                                    }
-                                >
-                                    <ListItemIcon>
-                                        <Devices
-                                            className={classes.iconFix}
-                                        />
-                                    </ListItemIcon>
-                                    <ListItemText primary="WebDAV" />
-                                </ListItem>}
+                                {user.group.webdav && (
+                                    <ListItem
+                                        button
+                                        key="WebDAV"
+                                        onClick={() =>
+                                            this.props.history.push("/webdav?")
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <Devices
+                                                className={classes.iconFix}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText primary="WebDAV" />
+                                    </ListItem>
+                                )}
 
                                 <ListItem
                                     button
@@ -508,6 +519,28 @@ class NavbarCompoment extends Component {
                             </List>
                         </div>
 
+                        {pathHelper.isMobile() && (
+                            <>
+                                <Divider/>
+                                <List>
+                                    <ListItem
+                                        button
+                                        key="个人设置"
+                                        onClick={() =>
+                                            this.props.history.push("/setting?")
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <Settings
+                                                className={classes.iconFix}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText primary="个人设置" />
+                                    </ListItem>
+                                </List>
+                            </>
+                        )}
+
                         {!pathHelper.isSharePage(
                             this.props.location.pathname
                         ) && (
@@ -523,7 +556,7 @@ class NavbarCompoment extends Component {
                         <ListItem
                             button
                             key="登录"
-                            onClick={() => (window.location.href = "/Login")}
+                            onClick={() => this.props.history.push("/login")}
                         >
                             <ListItemIcon>
                                 <AccountArrowRight
@@ -535,7 +568,7 @@ class NavbarCompoment extends Component {
                         <ListItem
                             button
                             key="注册"
-                            onClick={() => (window.location.href = "/Signup")}
+                            onClick={() => this.props.history.push("/signup")}
                         >
                             <ListItemIcon>
                                 <AccountPlus className={classes.iconFix} />
@@ -711,10 +744,8 @@ class NavbarCompoment extends Component {
                             (isHomePage || isSharePage) && (
                                 <div className={classes.sectionForFile}>
                                     {!this.props.isMultiple &&
-                                        this.props.withFile &&
-                                        (!isSharePage ||
-                                            (window.shareInfo &&
-                                                window.shareInfo.preview)) &&
+                                        this.props.withFile
+                                        &&
                                         isPreviewable(
                                             this.props.selected[0].name
                                         ) && (

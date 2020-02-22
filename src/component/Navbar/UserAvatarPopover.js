@@ -123,13 +123,17 @@ class UserAvatarPopoverCompoment extends Component {
                 {!Auth.Check() && (
                     <div className={classes.visitorMenu}>
                         <Divider />
-                        <MenuItem onClick={() => this.openURL("/Login")}>
+                        <MenuItem onClick={() =>
+                            this.props.history.push("/login")
+                        }>
                             <ListItemIcon>
                                 <AccountArrowRight />
                             </ListItemIcon>
                             登录
                         </MenuItem>
-                        <MenuItem onClick={() => this.openURL("/Signup")}>
+                        <MenuItem onClick={() =>
+                            this.props.history.push("/signup")
+                        }>
                             <ListItemIcon>
                                 <AccountPlus />
                             </ListItemIcon>

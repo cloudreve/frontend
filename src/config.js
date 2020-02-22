@@ -17,6 +17,12 @@ export const mediaType = {
     zip:["zip","gz","tar","rar","7z"],
     excute:["exe"],
     android:["apk"],
+    php:["php"],
+    go:["go"],
+    python:["py"],
+    cpp:["cpp"],
+    c:["c"],
+    js:["js","jsx"],
 };
 export const isPreviewable = name=>{
     let suffix = name.split(".").pop().toLowerCase();
