@@ -11,7 +11,6 @@ import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import PageLoading from "./component/Placeholder/PageLoading.js";
 import {changeThemeColor} from "./untils";
 import NotFound from "./component/Share/NotFound";
-import NoAuthRoute from "./middleware/NoAuthRoute";
 
 // Lazy loads
 const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
@@ -33,6 +32,7 @@ const Profile = React.lazy(() => import("./component/Setting/Profile"));
 const UserSetting = React.lazy(() => import("./component/Setting/UserSetting"));
 const QQCallback = React.lazy(() => import("./component/Login/QQ"));
 const Register = React.lazy(() => import("./component/Login/Register"));
+const Activation = React.lazy(() => import("./component/Login/Activication"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -178,17 +178,23 @@ export default function App() {
                                 </Suspense>
                             </AuthRoute>
 
-                            <NoAuthRoute path={`${path}login`} exact>
+                            <Route path={`${path}login`} exact>
                                 <Suspense fallback={<PageLoading />}>
                                     <LoginForm />
                                 </Suspense>
-                            </NoAuthRoute>
+                            </Route>
 
-                            <NoAuthRoute path={`${path}signup`} exact>
+                            <Route path={`${path}signup`} exact>
                                 <Suspense fallback={<PageLoading />}>
                                     <Register />
                                 </Suspense>
-                            </NoAuthRoute>
+                            </Route>
+
+                            <Route path={`${path}activate`} exact>
+                                <Suspense fallback={<PageLoading />}>
+                                    <Activation />
+                                </Suspense>
+                            </Route>
 
                             <Route path={`${path}login/qq`}>
                                 <Suspense fallback={<PageLoading />}>

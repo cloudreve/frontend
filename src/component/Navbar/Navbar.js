@@ -317,7 +317,7 @@ class NavbarCompoment extends Component {
 
     loadUploader = () => {
         if (pathHelper.isHomePage(this.props.location.pathname)) {
-            return <>{this.props.loadUploader && <Uploader />}</>;
+            return <>{this.props.loadUploader && this.props.isLogin && <Uploader />}</>;
         }
     };
 

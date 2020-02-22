@@ -26,6 +26,7 @@ import { bufferDecode, bufferEncode } from "../../untils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
+import {useLocation} from "react-router";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -81,6 +82,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 function LoginForm() {
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
@@ -114,6 +119,8 @@ function LoginForm() {
     );
 
     let history = useHistory();
+    let location = useLocation();
+    let query = useQuery();
 
     const classes = useStyles();
 
@@ -133,10 +140,11 @@ function LoginForm() {
     };
 
     useEffect(() => {
+        setEmail(query.get("username"));
         if (loginCaptcha) {
             refreshCaptcha();
         }
-    }, []);
+    }, [location]);
 
     const authnLogin = e => {
         e.preventDefault();
