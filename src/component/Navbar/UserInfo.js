@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setUserPopover } from "../../actions";
-import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
 import { withStyles, Typography } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher"
@@ -102,6 +100,7 @@ class UserInfoCompoment extends Component {
         return (
             <div className={classes.userNav}>
                 <div className={classes.flexAvatar}>
+                    { /* eslint-disable-next-line */}
                     <a onClick={this.showUserInfo} className={classes.avatar}>
                         {isLogin && (
                             <Avatar

@@ -36,7 +36,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import { AccountBalanceWallet } from "@material-ui/icons";
 import pathHelper from "../../untils/page";
-import {useLocation, withRouter} from "react-router";
+import {withRouter} from "react-router";
 
 const styles = theme => ({
     layout: {

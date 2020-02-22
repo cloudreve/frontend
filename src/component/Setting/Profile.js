@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import API from "../../middleware/Api";
-import LeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import RighttIcon from "@material-ui/icons/KeyboardArrowRight";
 
 import {
     withStyles,
@@ -17,7 +15,6 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    IconButton,
     Grid
 } from "@material-ui/core";
 import {withRouter} from "react-router";

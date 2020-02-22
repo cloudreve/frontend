@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
     Card,
     CardContent,
@@ -28,12 +28,11 @@ import TableBody from "@material-ui/core/TableBody";
 import Table from "@material-ui/core/Table";
 import Badge from "@material-ui/core/Badge";
 import Tooltip from "@material-ui/core/Tooltip";
-import API, { baseURL } from "../../middleware/Api";
+import API from "../../middleware/Api";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TimeAgo from "timeago-react";
 import SelectFileDialog from "../Modals/SelectFile";
-import {useHistory} from "react-router";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -159,7 +158,6 @@ export default function DownloadingCard(props) {
     let canvasRef = React.createRef();
     const classes = useStyles();
     const theme = useTheme();
-    let history = useHistory();
 
     const [expanded, setExpanded] = React.useState("");
     const [task, setTask] = React.useState(props.task);
@@ -204,10 +202,11 @@ export default function DownloadingCard(props) {
                 context.stroke();
             }
         }
+        // eslint-disable-next-line
     }, [task.info.bitfield,task.info.numPieces, theme]);
 
     const getPercent = (completed, total) => {
-        if (total == 0) {
+        if (total === 0) {
             return 0;
         }
         return (completed / total) * 100;
@@ -218,6 +217,7 @@ export default function DownloadingCard(props) {
         let current = activeFiles();
         let newIndex = [];
         let newFiles = [];
+        // eslint-disable-next-line
         current.map(v => {
             if (v.index !== index && v.selected) {
                 newIndex.push(parseInt(v.index));
@@ -279,6 +279,7 @@ export default function DownloadingCard(props) {
                 />
             );
         }
+        // eslint-disable-next-line
     }, [task, classes]);
 
     const cancel = e => {

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classNames from "classnames";
-import { allowSharePreview } from "../../untils/index";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import ContentLoader from "react-content-loader";
 import { baseURL } from "../../middleware/Api";
@@ -28,7 +27,7 @@ const styles = theme => ({
             border: "1px solid #d0d0d0"
         },
         backgroundColor:
-            theme.palette.type == "dark"
+            theme.palette.type === "dark"
                 ? "#fff"
                 : lighten(theme.palette.primary.main, 0.8)
     },
@@ -53,7 +52,7 @@ const styles = theme => ({
     },
     folderNameSelected: {
         color:
-            theme.palette.type == "dark"
+            theme.palette.type === "dark"
                 ? theme.palette.background.paper
                 : theme.palette.primary.dark,
         fontWeight: "500"

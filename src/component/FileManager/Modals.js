@@ -31,7 +31,6 @@ import PurchaseShareDialog from "../Modals/PurchaseShare";
 import Auth from "../../middleware/Auth";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
-import {filePath} from "../../untils";
 
 const styles = theme => ({
     wrapper: {
@@ -237,6 +236,7 @@ class ModalsCompoment extends Component {
             } else {
                 items.push(value.id);
             }
+            return null
         });
 
         let reqURL = "/file/archive";
@@ -406,10 +406,13 @@ class ModalsCompoment extends Component {
             this.props.selected[0] = source;
         }
         let doMove = true;
+
+        // eslint-disable-next-line
         this.props.selected.map(value => {
             // 根据ID过滤
             if (value.id === target.id && value.type === target.type) {
                 doMove = false;
+                // eslint-disable-next-line
                 return;
             }
             // 根据路径过滤
@@ -418,6 +421,7 @@ class ModalsCompoment extends Component {
                 target.path + (target.path === "/" ? "" : "/") + target.name
             ) {
                 doMove = false;
+                // eslint-disable-next-line
                 return;
             }
         });
@@ -441,7 +445,7 @@ class ModalsCompoment extends Component {
             items: []
         };
 
-        if (this.props.selected[0].type == "dir") {
+        if (this.props.selected[0].type === "dir") {
             src.dirs[0] = this.props.selected[0].id;
         } else {
             src.items[0] = this.props.selected[0].id;
@@ -625,8 +629,6 @@ class ModalsCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-
-        const previewApi = "window.apiURL.preview";
 
         return (
             <div>

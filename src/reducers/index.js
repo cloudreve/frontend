@@ -1,4 +1,3 @@
-import {changeThemeColor} from "../untils";
 
 const checkSelectedProps = (state)=>{
     let isMultiple,withFolder,withFile=false;
@@ -138,9 +137,11 @@ const cloudreveApp = (state = [], action) => {
                         break; 
                 }
             })
+            // eslint-disable-next-line
             var dirList =  action.list.filter(function (x) {
                 return x.type === "dir";
             });
+            // eslint-disable-next-line
             var fileList =  action.list.filter(function (x) {
                 return x.type === "file";
             });

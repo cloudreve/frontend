@@ -1,45 +1,27 @@
-import React, { Component, useCallback, useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
+import React, { useCallback, useEffect, useState } from "react";
+import {  useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import axios from "axios";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import Pagination from "@material-ui/lab/Pagination";
 import FolderIcon from "@material-ui/icons/Folder";
-import LockIcon from "@material-ui/icons/Lock";
-import UnlockIcon from "@material-ui/icons/LockOpen";
-import EyeIcon from "@material-ui/icons/RemoveRedEye";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 import {
-    withStyles,
     Tooltip,
     Card,
     Avatar,
     CardHeader,
-    CardActions,
     Typography,
     Grid,
     IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Button,
-    TextField
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import TypeIcon from "../FileManager/TypeIcon";
-import Chip from "@material-ui/core/Chip";
-import Divider from "@material-ui/core/Divider";
-import { VisibilityOff, VpnKey } from "@material-ui/icons";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-import {useHistory, withRouter} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router";
-import pathHelper from "../../untils/page";
 import TimeAgo from "timeago-react";
 
 const useStyles = makeStyles(theme => ({

@@ -1,18 +1,15 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import {
     Card,
     CardContent,
-    darken,
     IconButton,
-    lighten,
-    LinearProgress,
     makeStyles,
     Typography,
     useTheme
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import { hex2bin, sizeToString } from "../../untils";
+import { sizeToString } from "../../untils";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import TypeIcon from "../FileManager/TypeIcon";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -20,7 +17,7 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Divider from "@material-ui/core/Divider";
-import { ExpandMore, HighlightOff } from "@material-ui/icons";
+import { ExpandMore } from "@material-ui/icons";
 import classNames from "classnames";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -28,11 +25,9 @@ import TableBody from "@material-ui/core/TableBody";
 import Table from "@material-ui/core/Table";
 import Badge from "@material-ui/core/Badge";
 import Tooltip from "@material-ui/core/Tooltip";
-import API, { baseURL } from "../../middleware/Api";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import TimeAgo from "timeago-react";
-import SelectFileDialog from "../Modals/SelectFile";
+
 
 const ExpansionPanel = withStyles({
     root: {

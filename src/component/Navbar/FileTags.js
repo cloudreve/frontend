@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect, Suspense} from "react";
+import React, {useCallback, useState, Suspense} from "react";
 import {
     Divider,
     List,
@@ -8,7 +8,7 @@ import {
     makeStyles,
     withStyles
 } from "@material-ui/core";
-import {Cancel, Clear, KeyboardArrowRight} from "@material-ui/icons";
+import { Clear, KeyboardArrowRight} from "@material-ui/icons";
 import classNames from "classnames";
 import FolderShared from "@material-ui/icons/FolderShared";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -27,7 +27,6 @@ import Auth from "../../middleware/Auth";
 import {
     Circle,
     CircleOutline,
-    Decagram,
     Heart,
     HeartOutline,
     Hexagon,
@@ -43,10 +42,8 @@ import {
     FolderHeartOutline,
     TagPlus
 } from "mdi-material-ui";
-import PageLoading from "../Placeholder/PageLoading";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
-import Grow from "@material-ui/core/Grow";
 import API from "../../middleware/Api";
 
 const ExpansionPanel = withStyles({

@@ -35,12 +35,9 @@ import LinkIcon from "@material-ui/icons/InsertLink";
 import DeleteIcon from "@material-ui/icons/Delete";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import { MagnetOn } from "mdi-material-ui";
-import { baseURL } from "../../middleware/Api";
 import {
     withStyles,
-    Popover,
     Typography,
-    MenuList,
     MenuItem,
     Divider,
     ListItemIcon

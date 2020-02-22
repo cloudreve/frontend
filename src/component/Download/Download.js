@@ -1,32 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import ImageIcon from "@material-ui/icons/PhotoSizeSelectActual";
-import VideoIcon from "@material-ui/icons/Videocam";
-import AudioIcon from "@material-ui/icons/Audiotrack";
-import PdfIcon from "@material-ui/icons/PictureAsPdf";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FileShowIcon from "@material-ui/icons/InsertDriveFile";
-import {
-    FileWordBox,
-    FilePowerpointBox,
-    FileExcelBox,
-    ScriptText,
-    MagnetOn,
-    ZipBox,
-    WindowRestore,
-    Android
-} from "mdi-material-ui";
 import { toggleSnackbar } from "../../actions";
-import axios from "axios";
-import { sizeToString } from "../../untils";
-import { mediaType } from "../../config";
-import API, { baseURL } from "../../middleware/Api";
+import API from "../../middleware/Api";
 import {
     withStyles,
-    Card,
-    LinearProgress,
-    CardContent,
     Typography,
     Button,
     IconButton
@@ -196,6 +174,7 @@ class DownloadComponent extends Component {
                                 <FinishedCard key={k} task={value}/>
                             )
                         }
+                        return null
 
                     })}
                     <Button

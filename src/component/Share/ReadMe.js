@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
+import {  makeStyles, useTheme } from "@material-ui/core/styles";
 import { MenuBook } from "@material-ui/icons";
 import { Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
@@ -8,7 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import TextLoading from "../Placeholder/TextLoading";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle, toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../actions";
 import Editor from "for-editor";
 
 const useStyles = makeStyles(theme => ({
@@ -102,6 +101,7 @@ export default function ReadMe(props) {
             .finally(() => {
                 setLoading(false);
             });
+        // eslint-disable-next-line
     }, [props.share, props.file]);
 
     return (

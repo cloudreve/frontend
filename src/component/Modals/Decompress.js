@@ -53,9 +53,6 @@ export default function DecompressDialog(props) {
         },
         [dispatch]
     );
-    const RefreshFileList = useCallback(() => {
-        dispatch(refreshFileList());
-    }, [dispatch]);
 
     const setMoveTarget = folder => {
         let path =

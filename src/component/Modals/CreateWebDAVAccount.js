@@ -1,8 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core";
 import { Dialog } from "@material-ui/core";
-
-import { useDispatch } from "react-redux";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
@@ -40,9 +38,8 @@ export default function CreateWebDAVAccount(props) {
     });
     const [pathSelectDialog, setPathSelectDialog] = React.useState(false);
     const [selectedPath, setSelectedPath] = useState("");
+    // eslint-disable-next-line
     const [selectedPathName, setSelectedPathName] = useState("");
-
-    const dispatch = useDispatch();
     const classes = useStyles();
 
     const setMoveTarget = folder => {

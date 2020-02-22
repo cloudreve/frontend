@@ -1,20 +1,16 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import PageLoading from "../Placeholder/PageLoading";
 import { useParams } from "react-router";
 import API from "../../middleware/Api";
 import { changeSubTitle, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
 import Notice from "./NotFound";
-import Grow from "@material-ui/core/Grow";
-const useStyles = makeStyles({});
 
 const LockedFile = React.lazy(() => import("./LockedFile"));
 const SharedFile = React.lazy(() => import("./SharedFile"));
 const SharedFolder = React.lazy(() => import("./SharedFolder"));
 
 export default function SharePreload() {
-    const classes = useStyles();
     const dispatch = useDispatch();
     let { id } = useParams();
 
@@ -52,6 +48,7 @@ export default function SharePreload() {
         return () => {
             SetSubTitle();
         }
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {

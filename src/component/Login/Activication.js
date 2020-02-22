@@ -1,21 +1,13 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import RegIcon from '@material-ui/icons/AssignmentIndOutlined';
+import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import {
     toggleSnackbar,
 } from "../../actions/index";
-import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
-import Auth from "../../middleware/Auth";
 import {
     Button,
-    FormControl,
-    Divider,
-    Link,
-    Input,
-    InputLabel,
     Paper,
     Avatar,
     Typography
@@ -61,7 +53,6 @@ function Activation() {
     let query = useQuery();
     let location = useLocation();
 
-    const title = useSelector(state => state.siteConfig.title);
     const [success,setSuccess] = useState(false);
     const [email,setEmail] = useState("");
 
@@ -87,6 +78,7 @@ function Activation() {
                 ToggleSnackbar("top", "right", error.message, "warning");
                 history.push("/login");
             });
+        // eslint-disable-next-line
     }, [location]);
 
     return (

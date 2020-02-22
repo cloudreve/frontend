@@ -17,7 +17,6 @@ import {
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
-import {filePath} from "../../untils";
 import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({
@@ -42,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 export default function CompressDialog(props) {
     const [selectedPath, setSelectedPath] = useState("");
     const [fileName, setFileName] = useState("");
+    // eslint-disable-next-line
     const [selectedPathName, setSelectedPathName] = useState("");
 
     const dispatch = useDispatch();
@@ -58,10 +58,6 @@ export default function CompressDialog(props) {
         },
         [dispatch]
     );
-
-    const RefreshFileList = useCallback(() => {
-        dispatch(refreshFileList());
-    }, [dispatch]);
 
     const setMoveTarget = folder => {
         let path =
@@ -80,6 +76,7 @@ export default function CompressDialog(props) {
 
         let dirs = [],
             items = [];
+        // eslint-disable-next-line
         props.selected.map(value => {
             if (value.type === "dir") {
                 dirs.push(value.id);

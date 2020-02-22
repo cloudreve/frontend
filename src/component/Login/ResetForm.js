@@ -1,12 +1,9 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import RegIcon from "@material-ui/icons/AssignmentIndOutlined";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import { toggleSnackbar } from "../../actions/index";
-import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
-import Auth from "../../middleware/Auth";
 import {
     Button,
     FormControl,
@@ -18,7 +15,6 @@ import {
     Avatar,
     Typography
 } from "@material-ui/core";
-import EmailIcon from "@material-ui/icons/EmailOutlined";
 import { useLocation } from "react-router";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
 const useStyles = makeStyles(theme => ({
@@ -64,12 +60,10 @@ function useQuery() {
 
 function ResetForm() {
     let query = useQuery();
-    let location = useLocation();
     const [input, setInput] = useState({
         password: "",
         password_repeat: ""
     });
-    const title = useSelector(state => state.siteConfig.title);
     const [loading, setLoading] = useState(false);
     const handleInputChange = name => e => {
         setInput({

@@ -63,6 +63,7 @@ export default function TextViewer(props) {
         } else {
             SetSubTitle(query.get("name"));
         }
+        // eslint-disable-next-line
     }, [math.params[0], location]);
 
     useEffect(() => {
@@ -89,6 +90,7 @@ export default function TextViewer(props) {
             }).finally(()=>{
             setLoading(false);
         });
+        // eslint-disable-next-line
     }, [math.params[0]]);
 
     const toBase64 = file => new Promise((resolve, reject) => {

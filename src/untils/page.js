@@ -1,7 +1,7 @@
 const statusHelper = {
 
     isHomePage(path){
-        return path == "/home"
+        return path === "/home"
     },
     isSharePage(path){
         return path && path.startsWith("/s/")

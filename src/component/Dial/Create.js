@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { makeStyles, useTheme, Badge } from "@material-ui/core";
+import { makeStyles, Badge } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import PublishIcon from "@material-ui/icons/Publish";
 import {openCreateFolderDialog, openRemoteDownloadDialog, toggleSnackbar} from "../../actions";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../untils/page"
 import Backdrop from "@material-ui/core/Backdrop";
@@ -14,7 +14,7 @@ import {CloudDownload} from "@material-ui/icons";
 import Auth from "../../middleware/Auth";
 import {FolderUpload} from "mdi-material-ui";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     fab: {
         margin: 0,
         top: "auto",
@@ -37,7 +37,6 @@ export default function UploadButton(props) {
     const [open, setOpen] = useState(false);
     const [queued, setQueued] = useState(5);
 
-    const theme = useTheme();
     const classes = useStyles();
 
     const dispatch = useDispatch();

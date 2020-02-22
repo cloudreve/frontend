@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { makeStyles } from "@material-ui/core";
 import {
     Button,
@@ -6,17 +6,8 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    DialogContentText,
     CircularProgress
 } from "@material-ui/core";
-import {
-    toggleSnackbar,
-    setModalsLoading,
-    refreshFileList
-} from "../../actions/index";
-import PathSelector from "../FileManager/PathSelector";
-import { useDispatch } from "react-redux";
-import API from "../../middleware/Api";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -50,15 +41,10 @@ export default function SelectFileDialog(props) {
         setFiles(props.files);
     },[props.files]);
 
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     const handleChange = index => event =>{
         let filesCopy = [...files];
+        // eslint-disable-next-line
         filesCopy.map((v,k)=>{
             if (v.index === index){
                 filesCopy[k] = {...filesCopy[k],selected:event.target.checked ? "true" : "false"};
@@ -69,6 +55,7 @@ export default function SelectFileDialog(props) {
 
     const submit = e =>{
         let index = [];
+        // eslint-disable-next-line
         files.map(v=>{
             if(v.selected === "true"){
                 index.push(parseInt(v.index));

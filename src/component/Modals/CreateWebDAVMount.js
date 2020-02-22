@@ -46,6 +46,7 @@ export default function CreateWebDAVMount(props) {
     const [policies,setPolicies] = useState([]);
     const [pathSelectDialog, setPathSelectDialog] = React.useState(false);
     const [selectedPath, setSelectedPath] = useState("");
+    // eslint-disable-next-line
     const [selectedPathName, setSelectedPathName] = useState("");
 
     const classes = useStyles();
@@ -89,6 +90,7 @@ export default function CreateWebDAVMount(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
+        // eslint-disable-next-line
     }, []);
 
     return (

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import API from "../../middleware/Api";
 
 import {
     withStyles,
@@ -14,7 +13,7 @@ import {
     TextField,
     Avatar
 } from "@material-ui/core";
-import {useLocation, withRouter} from "react-router";
+import { withRouter} from "react-router";
 
 const styles = theme => ({
     card: {

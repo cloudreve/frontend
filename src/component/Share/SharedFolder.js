@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     openMusicDialog,
@@ -8,17 +8,14 @@ import {
     showImgPreivew,
     toggleSnackbar
 } from "../../actions";
-import { withStyles, Button, Typography, Avatar } from "@material-ui/core";
+import { withStyles, Typography } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
-import PurchaseShareDialog from "../Modals/PurchaseShare";
-import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import FileManager from "../FileManager/FileManager";
 import Paper from "@material-ui/core/Paper";
 import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import PageLoading from "../Placeholder/PageLoading";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -92,8 +89,6 @@ class SharedFolderComponent extends Component {
 
     render() {
         const { classes } = this.props;
-        const user = Auth.GetUser();
-        const isLogin = Auth.Check();
         let readmeShowed = false;
         const id = this.props.anchorEl !== null ? "simple-popover" : undefined;
 
@@ -104,6 +99,7 @@ class SharedFolderComponent extends Component {
                         <FileManager isShare share={this.props.share} />
                     </Paper>
                 </ClickAwayListener>
+                { /* eslint-disable-next-line */}
                 {this.props.fileList.map(value => {
                     if (
                         (value.name.toLowerCase() === "readme.md" ||

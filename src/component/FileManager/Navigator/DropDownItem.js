@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import FolderIcon from "@material-ui/icons/Folder";
 import {
-    Divider,
     MenuItem,
     ListItemIcon,
     ListItemText
@@ -24,7 +23,7 @@ export default function DropDownItem(props) {
                 folder: {
                     id: -1,
                     path: props.path,
-                    name: props.folder == "/" ? "" : props.folder
+                    name: props.folder === "/" ? "" : props.folder
                 }
             });
         },
@@ -35,10 +34,10 @@ export default function DropDownItem(props) {
     });
 
     const isActive = canDrop && isOver;
-    let first = true;
 
     useEffect(() => {
         props.setActiveStatus(props.id,isActive);
+        // eslint-disable-next-line
     }, [isActive])
 
     const classes = useStyles();

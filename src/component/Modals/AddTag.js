@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { makeStyles, useTheme } from "@material-ui/core";
 import {
     Button,
@@ -107,6 +107,7 @@ export default function AddTag(props) {
     });
     const [pathSelectDialog, setPathSelectDialog] = React.useState(false);
     const [selectedPath, setSelectedPath] = useState("");
+    // eslint-disable-next-line
     const [selectedPathName, setSelectedPathName] = useState("");
     const setMoveTarget = folder => {
         let path =

@@ -46,6 +46,7 @@ export default function VideoViewer(props) {
         } else {
             SetSubTitle(query.get("name"));
         }
+        // eslint-disable-next-line
     }, [math.params[0], location]);
 
     const classes = useStyles();

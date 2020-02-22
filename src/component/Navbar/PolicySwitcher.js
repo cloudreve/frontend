@@ -1,12 +1,10 @@
 import React, { useCallback } from "react";
 import {Avatar, IconButton, ListItem, ListItemAvatar, ListItemText, makeStyles} from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
-import Auth from "../../middleware/Auth";
 import {
     Nas
 } from "mdi-material-ui";
 import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
 import API from "../../middleware/Api";
 import {useDispatch} from "react-redux";
 import {toggleSnackbar} from "../../actions";

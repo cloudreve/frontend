@@ -70,6 +70,7 @@ export default function QQCallback(props){
             .catch(error => {
                 setMsg(error.message);
             });
+        // eslint-disable-next-line
     },[location]);
 
     return (

@@ -5,7 +5,6 @@ import {
     setSelectedTarget,
     addSelectedTarget,
     removeSelectedTarget,
-    setNavigatorLoadingStatus,
     navitateTo,
     showImgPreivew,
     openMusicDialog,
@@ -19,13 +18,11 @@ import SmallIcon from "./SmallIcon";
 import TableItem from "./TableRow";
 import classNames from "classnames";
 import { isPreviewable } from "../../config";
-import { allowSharePreview } from "../../untils/index";
 import { makeStyles } from "@material-ui/core";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import DropWarpper from "./DnD/DropWarpper";
 import { useHistory, useLocation } from "react-router-dom";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Auth from "../../middleware/Auth";
 import { pathBack } from "../../untils";
 
@@ -66,10 +63,6 @@ export default function ObjectIcon(props) {
     );
     const RemoveSelectedTarget = useCallback(
         id => dispatch(removeSelectedTarget(id)),
-        [dispatch]
-    );
-    const SetNavigatorLoadingStatus = useCallback(
-        status => dispatch(setNavigatorLoadingStatus(status)),
         [dispatch]
     );
     const NavitateTo = useCallback(targets => dispatch(navitateTo(targets)), [
@@ -271,6 +264,7 @@ export default function ObjectIcon(props) {
 
     useEffect(() => {
         preview(getEmptyImage(), { captureDraggingState: true });
+        // eslint-disable-next-line
     }, []);
 
     if (viewMethod === "list") {

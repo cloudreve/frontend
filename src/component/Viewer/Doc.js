@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react";
-import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {useLocation, useParams, useRouteMatch} from "react-router";
 import API from "../../middleware/Api";
@@ -53,6 +52,7 @@ export default function DocViewer(props) {
         } else {
             SetSubTitle(query.get("name"));
         }
+        // eslint-disable-next-line
     }, [math.params[0], location]);
 
     useEffect(()=>{
@@ -75,12 +75,13 @@ export default function DocViewer(props) {
                     "error"
                 )
             });
+        // eslint-disable-next-line
     },[math.params[0],location]);
 
     const classes = useStyles();
     return (
         <div className={classes.layout}>
-            {url !== "" && <iframe className={classes.container} src={url} />}
+            {url !== "" && <iframe title={"ms"} className={classes.container} src={url} />}
         </div>
     );
 }

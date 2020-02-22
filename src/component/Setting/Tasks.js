@@ -48,13 +48,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Tasks(props) {
-    const [accounts, setAccounts] = useState([]);
     const [tasks, setTasks] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
         loadList(page);
+        // eslint-disable-next-line
     }, [page]);
 
     const loadList = page => {

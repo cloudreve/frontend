@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import Zoom from "@material-ui/core/Zoom";
 
 
@@ -13,6 +13,7 @@ function AutoHidden  ({ children, enable }){
         if (enable){
             window.addEventListener('scroll', e => handleNavigation(e));
         }
+        // eslint-disable-next-line
     }, [enable])
 
     const handleNavigation = (e) => {

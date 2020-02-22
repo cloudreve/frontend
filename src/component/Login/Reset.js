@@ -1,12 +1,9 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import RegIcon from "@material-ui/icons/AssignmentIndOutlined";
 import { makeStyles } from "@material-ui/core";
 import { toggleSnackbar } from "../../actions/index";
 import Placeholder from "../Placeholder/Captcha";
-import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
-import Auth from "../../middleware/Auth";
 import {
     Button,
     FormControl,
@@ -18,8 +15,6 @@ import {
     Avatar,
     Typography
 } from "@material-ui/core";
-import EmailIcon from "@material-ui/icons/EmailOutlined";
-import { useLocation } from "react-router";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
 const useStyles = makeStyles(theme => ({
     layout: {
@@ -66,13 +61,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Reset() {
-    let location = useLocation();
-
     const [input, setInput] = useState({
         email: "",
         captcha: ""
     });
-    const title = useSelector(state => state.siteConfig.title);
     const [captchaData, setCaptchaData] = useState(null);
     const [loading, setLoading] = useState(false);
     const forgetCaptcha = useSelector(state => state.siteConfig.forgetCaptcha);
@@ -82,7 +74,6 @@ function Reset() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    const history = useHistory();
     const handleInputChange = name => e => {
         setInput({
             ...input,
@@ -109,6 +100,7 @@ function Reset() {
         if (forgetCaptcha) {
             refreshCaptcha();
         }
+        // eslint-disable-next-line
     }, []);
 
     const submit = e => {

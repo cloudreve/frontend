@@ -33,7 +33,6 @@ import {
     Menu,
     MenuItem,
     ListItemIcon,
-    ListItemText,
     IconButton
 } from "@material-ui/core";
 import PathButton from "./PathButton";

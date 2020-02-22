@@ -28,7 +28,7 @@ export default function PathButton(props) {
                     folder: {
                         id: -1,
                         path: props.path,
-                        name: props.folder == "/" ? "" : props.folder
+                        name: props.folder === "/" ? "" : props.folder
                     }
                 };
             }
@@ -45,6 +45,7 @@ export default function PathButton(props) {
         if(props.more && isActive){
             inputRef.current.click();
         }
+        // eslint-disable-next-line
     }, [isActive])
 
     const classes = useStyles();

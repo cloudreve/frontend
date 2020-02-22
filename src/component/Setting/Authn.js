@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
     Button, Dialog,
     DialogActions,
@@ -16,7 +16,6 @@ import {
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import LinkIcon from "@material-ui/icons/Phonelink";
 import RightIcon from "@material-ui/icons/KeyboardArrowRight";
 import {Add, Fingerprint, HighlightOff} from "@material-ui/icons";
 import API from "../../middleware/Api";

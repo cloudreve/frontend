@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { allowSharePreview, sizeToString } from "../../untils";
+import { sizeToString } from "../../untils";
 import {
     openMusicDialog, openResaveDialog,
     setSelectedTarget,
@@ -8,7 +8,7 @@ import {
     toggleSnackbar
 } from "../../actions";
 import { isPreviewable } from "../../config";
-import { withStyles, Button, Typography, Avatar } from "@material-ui/core";
+import { withStyles, Button, Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
@@ -244,13 +244,6 @@ class SharedFileCompoment extends Component {
         const { classes } = this.props;
         const user = Auth.GetUser();
         const isLogin = Auth.Check();
-        const file = {
-            name: this.props.share.source.name,
-            path: "/",
-            type: "file",
-            pic: ""
-        };
-        const id = this.state.open ? "simple-popper" : null;
 
         return (
             <div className={classes.layout}>

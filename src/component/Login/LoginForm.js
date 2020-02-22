@@ -98,9 +98,6 @@ function LoginForm() {
 
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
     const title = useSelector(state => state.siteConfig.title);
-    const regCaptcha = useSelector(state => state.siteConfig.regCaptcha);
-    const forgetCaptcha = useSelector(state => state.siteConfig.forgetCaptcha);
-    const emailActive = useSelector(state => state.siteConfig.emailActive);
     const QQLogin = useSelector(state => state.siteConfig.QQLogin);
     const authn = useSelector(state => state.siteConfig.authn);
 
@@ -425,7 +422,7 @@ function LoginForm() {
                 </div>
             </Paper>
 
-                <div className={classes.authnLink}>
+                {authn &&<div className={classes.authnLink}>
                     <Button color="primary" onClick={() => setUseAuthn(!useAuthn)}>
                         {!useAuthn && (
                             <>
@@ -448,7 +445,7 @@ function LoginForm() {
                             </>
                         )}
                     </Button>
-                </div>
+                </div>}
             </>
             }
             {twoFA &&

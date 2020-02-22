@@ -1,16 +1,8 @@
-import React, { useEffect,useState } from "react";
-import { makeStyles } from "@material-ui/core";
-import { useDrop } from "react-dnd";
+import React from "react";
 import DropDownItem from "./DropDownItem";
 
-const useStyles = makeStyles(theme => ({
-    active: {
-        border: "2px solid " + theme.palette.primary.light
-    }
-}));
 
 export default function DropDown(props) {
-    const classes = useStyles();
 
     let timer;
     let first = props.folders.length;

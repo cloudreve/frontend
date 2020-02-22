@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import axios from "axios";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import Pagination from "@material-ui/lab/Pagination";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -34,7 +33,6 @@ import Divider from "@material-ui/core/Divider";
 import { VisibilityOff, VpnKey } from "@material-ui/icons";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import {withRouter} from "react-router-dom";
 

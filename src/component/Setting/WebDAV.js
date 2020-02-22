@@ -57,6 +57,7 @@ export default function WebDAV(props) {
 
     useEffect(() => {
         loadList();
+        // eslint-disable-next-line
     }, []);
 
     const loadList = () =>{

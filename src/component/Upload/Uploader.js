@@ -5,8 +5,6 @@ import { refreshFileList, refreshStorage, toggleSnackbar } from "../../actions";
 import FileList from "./FileList.js";
 import Auth from "../../middleware/Auth";
 import UploadButton from "../Dial/Create.js";
-import { withRouter } from "react-router";
-import pathHelper from "../../untils/page";
 import { basename, pathJoin } from "../../untils";
 
 let loaded = false;

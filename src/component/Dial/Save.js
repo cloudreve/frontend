@@ -1,9 +1,7 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import { toggleSnackbar } from "../../actions";
 import CheckIcon from '@material-ui/icons/Check';
-import { useDispatch } from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../untils/page";
 import Fab from "@material-ui/core/Fab";
@@ -49,14 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SaveButton(props) {
-    const [open, setOpen] = useState(false);
     const classes = useStyles();
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
     const buttonClassname = clsx({
         [classes.buttonSuccess]: props.status==="success",
     });

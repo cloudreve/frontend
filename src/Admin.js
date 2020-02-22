@@ -4,7 +4,7 @@ import AlertBar from "./component/Common/Snackbar";
 import Dashboard from "./component/Admin/Dashboard";
 import {useHistory} from "react-router";
 import Auth from "./middleware/Auth";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import PageLoading from "./component/Placeholder/PageLoading";
 import {ThemeProvider} from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -44,6 +44,7 @@ export default function Admin() {
             return
         }
         history.push("/login")
+        // eslint-disable-next-line
     },[])
 
     return (

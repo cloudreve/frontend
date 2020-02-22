@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import SettingIcon from "@material-ui/icons/Settings";
-import SaveIcon from "@material-ui/icons/Save";
 import UserAvatarPopover from "./UserAvatarPopover";
 import { AccountCircle } from "mdi-material-ui";
-import { openResaveDialog, setUserPopover } from "../../actions";
+import { setUserPopover } from "../../actions";
 import Auth from "../../middleware/Auth";
 import {
     withStyles,

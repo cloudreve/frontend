@@ -16,7 +16,7 @@ const styles = theme => ({
     selected: {
         "&:hover": {},
         backgroundColor:
-            theme.palette.type == "dark"
+            theme.palette.type === "dark"
                 ? theme.palette.background.paper
                 : lighten(theme.palette.primary.main,0.8),
     },
@@ -24,7 +24,7 @@ const styles = theme => ({
     selectedShared: {
         "&:hover": {},
         backgroundColor:
-            theme.palette.type == "dark"
+            theme.palette.type === "dark"
                 ? lighten(theme.palette.background.paper,0.15)
                 : lighten(theme.palette.primary.main,0.8),
     },
@@ -84,10 +84,6 @@ class TableRowCompoment extends Component {
         const isShare = pathHelper.isSharePage(this.props.location.pathname);
 
         let icon;
-        let fileType = this.props.file.name
-            .split(".")
-            .pop()
-            .toLowerCase();
         if (this.props.file.type === "dir") {
             icon = <FolderIcon className={classes.icon} />;
         }else if (this.props.file.type === "up"){
