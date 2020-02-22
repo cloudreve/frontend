@@ -6,6 +6,9 @@ const statusHelper = {
     isSharePage(path){
         return path && path.startsWith("/s/")
     },
+    isAdminPage(path){
+        return path && path.startsWith("/admin")
+    },
     isMobile(){
         return window.innerWidth < 600;
     },

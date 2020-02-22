@@ -91,6 +91,7 @@ class UserAvatarCompoment extends Component {
         const { classes } = this.props;
         const loginCheck = Auth.Check(this.props.isLogin);
         const user = Auth.GetUser(this.props.isLogin);
+        const isAdminPage = pathHelper.isAdminPage(this.props.location.pathname);
 
         return (
             <div className={classes.mobileHidden}>
@@ -101,22 +102,25 @@ class UserAvatarCompoment extends Component {
                     }
                 >
                     <div>
-                        <DarkModeSwitcher position="top"/>
-                        {loginCheck && (
-                            <>
-                                <PolicySwitcher/>
-                            <Tooltip title={"设置"} placement="bottom">
-                            <IconButton
-                                onClick={() =>
-                                    this.props.history.push("/setting?")
-                                }
-                                color="inherit"
-                            >
-                                <SettingIcon />
-                            </IconButton>
-                            </Tooltip>
-                            </>
-                        )}
+                        {!isAdminPage && <>
+                            <DarkModeSwitcher position="top"/>
+                            {loginCheck && (
+                                <>
+                                    <PolicySwitcher/>
+                                    <Tooltip title={"设置"} placement="bottom">
+                                        <IconButton
+                                            onClick={() =>
+                                                this.props.history.push("/setting?")
+                                            }
+                                            color="inherit"
+                                        >
+                                            <SettingIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </>
+                            )}
+                        </>}
+
                         <IconButton color="inherit" onClick={this.showUserInfo}>
                             {!loginCheck && <AccountCircle />}
                             {loginCheck && (

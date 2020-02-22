@@ -27,7 +27,8 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
-    "timeago-react": "^3.0.0"
+    "timeago-react": "^3.0.0",
+    "clsx": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Suspense} from "react";
 import ReactDOM from 'react-dom';
 import * as serviceWorker from "./serviceWorker";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
@@ -8,6 +8,9 @@ import App from "./App";
 import cloureveApp from "./reducers";
 import { InitSiteConfig, UpdateSiteConfig } from "./middleware/Init";
 import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
+import PageLoading from "./component/Placeholder/PageLoading";
+const Admin = React.lazy(() => import("./Admin"));
+
 serviceWorker.register();
 
 const defaultStatus = InitSiteConfig({
@@ -128,6 +131,11 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Switch>
+                <Route path="/admin">
+                    <Suspense fallback={"Loading..."}>
+                        <Admin />
+                    </Suspense>
+                </Route>
                 <Route exact path="">
                     <App />
                 </Route>

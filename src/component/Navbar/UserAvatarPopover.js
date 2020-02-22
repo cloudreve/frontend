@@ -176,8 +176,11 @@ class UserAvatarPopoverCompoment extends Component {
                                 style={{
                                     padding:" 11px 16px 11px 16px",
                                 }}
-                                onClick={() =>
-                                    this.props.history.push("/profile/"+user.id)
+                                onClick={() =>{
+                                    this.handleClose();
+                                    this.props.history.push("/profile/"+user.id);
+                                }
+
                                 }
                             >
                                 <ListItemIcon>
@@ -190,7 +193,12 @@ class UserAvatarPopoverCompoment extends Component {
                                     style={{
                                         padding:" 11px 16px 11px 16px",
                                     }}
-                                    onClick={() => this.openURL("/Admin")}
+                                    onClick={() =>{
+                                        this.handleClose();
+                                        this.props.history.push("/admin");
+                                    }
+
+                                    }
                                 >
                                     <ListItemIcon>
                                         <DesktopMacDashboard />
