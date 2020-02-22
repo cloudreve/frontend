@@ -33,6 +33,8 @@ const UserSetting = React.lazy(() => import("./component/Setting/UserSetting"));
 const QQCallback = React.lazy(() => import("./component/Login/QQ"));
 const Register = React.lazy(() => import("./component/Login/Register"));
 const Activation = React.lazy(() => import("./component/Login/Activication"));
+const ResetForm = React.lazy(() => import("./component/Login/ResetForm"));
+const Reset = React.lazy(() => import("./component/Login/Reset"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -193,6 +195,18 @@ export default function App() {
                             <Route path={`${path}activate`} exact>
                                 <Suspense fallback={<PageLoading />}>
                                     <Activation />
+                                </Suspense>
+                            </Route>
+
+                            <Route path={`${path}reset`} exact>
+                                <Suspense fallback={<PageLoading />}>
+                                    <ResetForm />
+                                </Suspense>
+                            </Route>
+
+                            <Route path={`${path}forget`} exact>
+                                <Suspense fallback={<PageLoading />}>
+                                    <Reset />
                                 </Suspense>
                             </Route>
 

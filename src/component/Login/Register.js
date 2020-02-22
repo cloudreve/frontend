@@ -131,6 +131,7 @@ function Register() {
 
         if (input.password !== input.password_repeat){
             ToggleSnackbar("top", "right", "两次密码输入不一致", "warning");
+            return
         }
 
         setLoading(true);
@@ -261,7 +262,7 @@ function Register() {
                             <Link href={"/#/login"}>返回登录</Link>
                         </div>
                         <div>
-                            <Link href={"/SignUp"}>忘记密码</Link>
+                            <Link href={"/#/forget"}>忘记密码</Link>
                         </div>
                     </div>
                 </Paper>}

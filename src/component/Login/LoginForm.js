@@ -417,7 +417,7 @@ function LoginForm() {
                 <Divider />
                 <div className={classes.link}>
                     <div>
-                        <Link href={"/Member/FindPwd"}>忘记密码</Link>
+                        <Link href={"/#/forget"}>忘记密码</Link>
                     </div>
                     <div>
                         <Link href={"/#/signup"}>注册账号</Link>
