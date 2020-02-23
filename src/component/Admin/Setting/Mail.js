@@ -11,6 +11,12 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,22 +34,26 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("md")]: {
             padding: "0px 24px 0 24px"
         }
+    },
+    buttonMargin:{
+        marginLeft:8,
     }
 }));
 
-export default function SiteInformation() {
+export default function Mail() {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
+    const [test,setTest] = useState(false);
+    const [tesInput,setTestInput] = useState("");
     const [options, setOptions] = useState({
-        siteURL: "",
-        siteName: "",
-        siteTitle: "",
-        pwa_small_icon: "",
-        pwa_medium_icon: "",
-        pwa_large_icon: "",
-        pwa_display: "",
-        pwa_theme_color: "",
-        pwa_background_color: ""
+        fromName:"",
+        fromAdress:"",
+        smtpHost:"",
+        smtpPort:"",
+        replyTo:"",
+        smtpUser:"",
+        smtpPass:"",
+        mail_keepalive:"30",
     });
 
     const handleChange = name => event => {
@@ -73,16 +83,30 @@ export default function SiteInformation() {
         // eslint-disable-next-line
     }, []);
 
-    const reloadAuthn = () =>{
-        API.get("/admin/reload/authn")
+    const sendTestMail = () =>{
+        setLoading(true);
+        API.post("/admin/mailTest",{
+            to:tesInput,
+        })
+            .then(response => {
+                ToggleSnackbar("top", "right", "测试邮件已发送", "success");
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            }).finally(()=>{
+            setLoading(false);
+        });
+    }
+
+    const reload = (() =>{
+        API.get("/admin/reload/email")
             .then(response => {
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            })
-            .finally(() => {
-            });
-    }
+            }).finally(()=>{
+        });
+    })
 
     const submit = e => {
         e.preventDefault();
@@ -99,6 +123,7 @@ export default function SiteInformation() {
         })
             .then(response => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
+                reload();
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -109,169 +134,179 @@ export default function SiteInformation() {
 
     return (
         <div>
+
+            <Dialog open={test} onClose={()=>setTest(false)} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">发件测试</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <Typography>发送测试邮件前，请先保存已更改的邮件设置；</Typography>
+                        <Typography>邮件发送结果不会立即反馈，如果您长时间未收到测试邮件，请检查 Cloudreve 在终端输出的错误日志。</Typography>
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="收件人地址"
+                        value={tesInput}
+                        onChange={e=>setTestInput(e.target.value)}
+                        type="email"
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setTest(false)} color="default">
+                        取消
+                    </Button>
+                    <Button onClick={()=>sendTestMail()} disabled={loading} color="primary">
+                        发送
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        基本信息
+                        发信
                     </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    主标题
-                                </InputLabel>
-                                <Input
-                                    value={options.siteName}
-                                    onChange={handleChange("siteName")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    站点的主标题
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    副标题
-                                </InputLabel>
-                                <Input
-                                    value={options.siteTitle}
-                                    onChange={handleChange("siteTitle")}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    站点的副标题
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    站点URL
-                                </InputLabel>
-                                <Input
-                                    type={"url"}
-                                    value={options.siteURL}
-                                    onChange={handleChange("siteURL")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    非常重要，请确保与实际情况一致。使用云存储策略、支付平台时，请填入可以被外网访问的地址。
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        渐进式应用 (PWA)
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    小图标
-                                </InputLabel>
-                                <Input
-                                    value={options.pwa_small_icon}
-                                    onChange={handleChange("pwa_small_icon")}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    扩展名为 ico 的小图标地址
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    中图标
-                                </InputLabel>
-                                <Input
-                                    value={options.pwa_medium_icon}
-                                    onChange={handleChange("pwa_medium_icon")}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    192x192 的中等图标地址，png 格式
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    大图标
-                                </InputLabel>
-                                <Input
-                                    value={options.pwa_large_icon}
-                                    onChange={handleChange("pwa_large_icon")}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    512x512 的大图标地址，png 格式
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    展示模式
-                                </InputLabel>
-                                <Select
-                                    value={options.pwa_display}
-                                    onChange={handleChange("pwa_display")}
-                                >
 
-                                    <MenuItem value={"fullscreen"}>
-                                        fullscreen
-                                    </MenuItem>
-                                    <MenuItem value={"standalone"}>
-                                        standalone
-                                    </MenuItem>
-                                    <MenuItem value={"minimal-ui"}>
-                                        minimal-ui
-                                    </MenuItem>
-                                    <MenuItem value={"browser"}>
-                                        browser
-                                    </MenuItem>
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    PWA 应用添加后的展示模式
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    主题色
-                                </InputLabel>
-                                <Input
-                                    value={options.pwa_theme_color}
-                                    onChange={handleChange("pwa_theme_color")}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    CSS 色值，影响 PWA
-                                    启动画面上状态栏、内容页中状态栏、地址栏的颜色
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    背景色
+                                    发件人名
                                 </InputLabel>
                                 <Input
-                                    value={options.pwa_background_color}
-                                    onChange={handleChange(
-                                        "pwa_background_color"
-                                    )}
+                                    value={options.fromName}
+                                    onChange={handleChange("fromName")}
+                                    required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    CSS 色值
+                                    邮件中展示的发件人姓名
                                 </FormHelperText>
                             </FormControl>
                         </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    发件人邮箱
+                                </InputLabel>
+                                <Input
+                                    type={"email"}
+                                    required
+                                    value={options.fromAdress}
+                                    onChange={handleChange("fromAdress")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    发件邮箱的地址
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    SMTP 服务器
+                                </InputLabel>
+                                <Input
+                                    value={options.smtpHost}
+                                    onChange={handleChange("smtpHost")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    发件服务器地址，不含端口号
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    SMTP 端口
+                                </InputLabel>
+                                <Input
+                                    inputProps={{min:1}}
+                                    type={"number"}
+                                    value={options.smtpPort}
+                                    onChange={handleChange("smtpPort")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    发件服务器地址端口号
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    SMTP 用户名
+                                </InputLabel>
+                                <Input
+                                    value={options.smtpUser}
+                                    onChange={handleChange("smtpUser")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    发信邮箱用户名，一般与邮箱地址相同
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    SMTP 密码
+                                </InputLabel>
+                                <Input
+                                    type={"password"}
+                                    value={options.smtpPass}
+                                    onChange={handleChange("smtpPass")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    发信邮箱密码
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    回信邮箱
+                                </InputLabel>
+                                <Input
+                                    value={options.replyTo}
+                                    onChange={handleChange("replyTo")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    用户回复系统发送的邮件时，用于接收回信的邮箱
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    SMTP 连接有效期 (秒)
+                                </InputLabel>
+                                <Input
+                                    inputProps={{min:1}}
+                                    type={"number"}
+                                    value={options.mail_keepalive}
+                                    onChange={handleChange("mail_keepalive")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    有效期内建立的 SMTP 连接会被新邮件发送请求复用
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
                     </div>
                 </div>
+
                 <div className={classes.root}>
                     <Button
                         disabled={loading}
@@ -280,6 +315,14 @@ export default function SiteInformation() {
                         color={"primary"}
                     >
                         保存
+                    </Button>{"   "}
+                    <Button
+                        className={classes.buttonMargin}
+                        variant={"outlined"}
+                        color={"primary"}
+                        onClick={()=>setTest(true)}
+                    >
+                        发送测试邮件
                     </Button>
                 </div>
             </form>

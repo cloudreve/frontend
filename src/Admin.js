@@ -1,8 +1,8 @@
-import React, {Suspense, useEffect} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {CssBaseline, makeStyles} from "@material-ui/core";
 import AlertBar from "./component/Common/Snackbar";
 import Dashboard from "./component/Admin/Dashboard";
-import {useHistory, useLocation} from "react-router";
+import {useHistory} from "react-router";
 import Auth from "./middleware/Auth";
 import {Route, Switch} from "react-router-dom";
 import PageLoading from "./component/Placeholder/PageLoading";
@@ -12,6 +12,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 const Index = React.lazy(() => import("./component/Admin/Index"));
 const SiteInformation = React.lazy(() => import("./component/Admin/Setting/SiteInformation"));
 const Access = React.lazy(() => import("./component/Admin/Setting/Access"));
+const Mail = React.lazy(() => import("./component/Admin/Setting/Mail"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,6 +37,7 @@ const theme = createMuiTheme({
 export default function Admin() {
     const classes = useStyles();
     const history = useHistory();
+    const [show,setShow] = useState(false);
 
     useEffect(()=>{
         let user = Auth.GetUser();
@@ -44,6 +46,7 @@ export default function Admin() {
                 history.push("/home");
                 return
             }
+            setShow(true);
             return
         }
         history.push("/login")
@@ -57,30 +60,38 @@ export default function Admin() {
                 <div className={classes.root}>
                     <CssBaseline />
                     <AlertBar />
-                    <Dashboard content={
+                    {show&&<Dashboard content={
                         (path)=>(
 
-                                <Switch>
-                                    <Route path={`${path}`} exact>
-                                        <Suspense fallback={<PageLoading />}>
-                                            <Index/>
-                                        </Suspense>
-                                    </Route>
+                            <Switch>
+                                <Route path={`${path}`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <Index/>
+                                    </Suspense>
+                                </Route>
 
-                                        <Route path={`${path}/basic`}>
-                                            <Suspense fallback={<PageLoading />}>
-                                                <SiteInformation/>
-                                            </Suspense>
-                                        </Route>
+                                <Route path={`${path}/basic`}>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <SiteInformation/>
+                                    </Suspense>
+                                </Route>
 
-                                    <Route path={`${path}/access`}>
-                                        <Suspense fallback={<PageLoading />}>
-                                            <Access/>
-                                        </Suspense>
-                                    </Route>
-                                </Switch>
+                                <Route path={`${path}/access`}>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <Access/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/mail`}>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <Mail/>
+                                    </Suspense>
+                                </Route>
+
+                            </Switch>
                         )
-                    }/>
+                    }/>}
+
                 </div>
             </ThemeProvider>
         </React.Fragment>

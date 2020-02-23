@@ -15,7 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import UserAvatar from "../Navbar/UserAvatar";
-import {Contacts, Home, Language, Settings} from "@material-ui/icons";
+import {Contacts, Home, Language, Settings,Mail} from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -176,6 +176,11 @@ const items = [
                 title: "注册与登录",
                 path: "access",
                 icon: <Contacts />
+            },
+            {
+                title: "邮件",
+                path: "mail",
+                icon: <Mail />
             }
         ]
     }

@@ -68,10 +68,13 @@ const useStyles = makeStyles(theme => ({
     },
     captchaContainer: {
         display: "flex",
-        marginTop: "10px"
+        marginTop: "10px",
+        [theme.breakpoints.down("sm")]: {
+            display: "block",
+        },
     },
     captchaPlaceholder: {
-        width: 200
+        width: 200,
     },
     buttonContainer: {
         display: "flex"

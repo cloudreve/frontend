@@ -56,6 +56,9 @@ const styles = theme => ({
     captchaContainer:{
         display:"flex",
         marginTop: "10px",
+        [theme.breakpoints.down("sm")]: {
+            display: "block",
+        },
     }
 })
 const mapStateToProps = state => {

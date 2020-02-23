@@ -14,6 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import AlertDialog from "./Alert";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -319,6 +320,9 @@ export default function Access() {
                         QQ互联
                     </Typography>
                     <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <Alert severity="info">创建应用时，回调地址请填写：{siteURL.endsWith("/") ? (siteURL + "api/v3/callback/qq"):(siteURL + "/api/v3/callback/qq")}</Alert>
+                        </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <FormControlLabel
