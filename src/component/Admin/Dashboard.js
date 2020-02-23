@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -22,6 +22,8 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import {useHistory} from "react-router";
 import {useRouteMatch} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {changeSubTitle} from "../../actions";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -178,6 +180,22 @@ export default  function Dashboard({content}){
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const dispatch = useDispatch();
+    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
+        dispatch
+    ]);
+
+    useEffect(()=>{
+        SetSubTitle("仪表盘");
+    },[]);
+
+    useEffect(() => {
+        return () => {
+            SetSubTitle();
+        }
+    }, []);
+
 
     let { path } = useRouteMatch();
 
