@@ -11,6 +11,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 const Index = React.lazy(() => import("./component/Admin/Index"));
 const SiteInformation = React.lazy(() => import("./component/Admin/Setting/SiteInformation"));
+const Access = React.lazy(() => import("./component/Admin/Setting/Access"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -71,6 +72,12 @@ export default function Admin() {
                                                 <SiteInformation/>
                                             </Suspense>
                                         </Route>
+
+                                    <Route path={`${path}/access`}>
+                                        <Suspense fallback={<PageLoading />}>
+                                            <Access/>
+                                        </Suspense>
+                                    </Route>
                                 </Switch>
                         )
                     }/>

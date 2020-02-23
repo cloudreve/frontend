@@ -207,7 +207,7 @@ export default function SiteInformation() {
                                     value={options.pwa_display}
                                     onChange={handleChange("pwa_display")}
                                 >
-                                    >
+
                                     <MenuItem value={"fullscreen"}>
                                         fullscreen
                                     </MenuItem>

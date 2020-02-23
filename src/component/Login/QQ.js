@@ -55,6 +55,9 @@ export default function QQCallback(props){
             setMsg(query.get("error_description"));
             return
         }
+        if(query.get("code") === null){
+            return
+        }
         API.post("/callback/qq",{
             code:query.get("code"),
             state:query.get("state"),
