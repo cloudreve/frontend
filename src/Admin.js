@@ -2,7 +2,7 @@ import React, {Suspense, useEffect} from "react";
 import {CssBaseline, makeStyles} from "@material-ui/core";
 import AlertBar from "./component/Common/Snackbar";
 import Dashboard from "./component/Admin/Dashboard";
-import {useHistory} from "react-router";
+import {useHistory, useLocation} from "react-router";
 import Auth from "./middleware/Auth";
 import {Route, Switch} from "react-router-dom";
 import PageLoading from "./component/Placeholder/PageLoading";
@@ -10,6 +10,7 @@ import {ThemeProvider} from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 const Index = React.lazy(() => import("./component/Admin/Index"));
+const SiteInformation = React.lazy(() => import("./component/Admin/Setting/SiteInformation"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,6 +30,7 @@ const theme = createMuiTheme({
         }
     },
 });
+
 
 export default function Admin() {
     const classes = useStyles();
@@ -63,9 +65,12 @@ export default function Admin() {
                                             <Index/>
                                         </Suspense>
                                     </Route>
-                                    <Route path={`${path}/basic`}>
-                                        <h1>basic</h1>
-                                    </Route>
+
+                                        <Route path={`${path}/basic`}>
+                                            <Suspense fallback={<PageLoading />}>
+                                                <SiteInformation/>
+                                            </Suspense>
+                                        </Route>
                                 </Switch>
                         )
                     }/>
