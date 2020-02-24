@@ -23,8 +23,13 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import IconButton from "@material-ui/core/IconButton";
-import {Delete} from "@material-ui/icons";
-import {sizeToString} from "../../../untils";
+import { Delete } from "@material-ui/icons";
+import { sizeToString } from "../../../untils";
+import AddGroup from "../Dialogs/AddGroupk";
+import AddRedeem from "../Dialogs/AddRedeem";
+import AlertDialog from "../Dialogs/Alert";
+import Box from "@material-ui/core/Box";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,11 +54,16 @@ const useStyles = makeStyles(theme => ({
     content: {
         padding: theme.spacing(2)
     },
-    tableContainer:{
-        overflowX:"auto",
-        marginTop:theme.spacing(2),
+    tableContainer: {
+        overflowX: "auto",
+        marginTop: theme.spacing(2)
+    },
+    navigator:{
+        marginTop:10,
     }
 }));
+
+let product = {};
 
 export default function VAS() {
     const classes = useStyles();
@@ -71,20 +81,73 @@ export default function VAS() {
         share_score_rate: "0",
         score_price: "0",
         ban_time: "0",
-        group_sell_data:"[]",
-        pack_data:"[]",
+        group_sell_data: "[]",
+        pack_data: "[]"
     });
-    const [groups,setGroups] = useState([]);
-    const [packs,setPacks] = useState([]);
-    const [addPack,setAddPack] = useState(false);
+    const [groups, setGroups] = useState([]);
+    const [packs, setPacks] = useState([]);
+    const [addPack, setAddPack] = useState(false);
+    const [addGroup, setAddGroup] = useState(false);
+    const [addRedeem, setAddRedeem] = useState(false);
+    const [redeems, setRedeems] = useState([]);
+    const [redeemsRes, setRedeemsRes] = useState([]);
+    const [redeemsResOpen, setRedeemsResOpen] = useState(false);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
+    const [total, setTotal] = useState(0);
 
-    useEffect(()=>{
-        setGroups(JSON.parse(options.group_sell_data))
-    },[options.group_sell_data]);
+    useEffect(() => {
+        let res = JSON.parse(options.group_sell_data);
+        res.forEach(k => {
+            product[k.id] = k.name;
+        });
+        setGroups(res);
+    }, [options.group_sell_data]);
 
-    useEffect(()=>{
-        setPacks(JSON.parse(options.pack_data))
-    },[options.pack_data]);
+    useEffect(() => {
+        let res = JSON.parse(options.pack_data);
+        res.forEach(k => {
+            product[k.id] = k.name;
+        });
+        setPacks(res);
+    }, [options.pack_data]);
+
+    useEffect(() => {
+        if (tab === 3) {
+            loadRedeemList()
+        }
+    }, [tab,page,pageSize]);
+
+    const loadRedeemList = ()=>{
+        API.post("/admin/redeem/list", {
+            page: page,
+            page_size: pageSize,
+            order_by:"id desc",
+        })
+            .then(response => {
+                setRedeems(response.data.items);
+                setTotal(response.data.total);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    }
+
+    const deleteRedeem = id =>{
+        API.delete("/admin/redeem/"+id)
+            .then(response => {
+                loadRedeemList();
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    }
+
+    const redeemGenerated = codes => {
+        setRedeemsRes(codes);
+        setRedeemsResOpen(true);
+        loadRedeemList();
+    }
 
     const handleChange = name => event => {
         setOptions({
@@ -150,30 +213,39 @@ export default function VAS() {
             .finally(() => {
                 setLoading(false);
             });
-    }
+    };
 
     const handleAddPack = pack => {
         setAddPack(false);
-        let newPacks = [...packs,pack];
+        let newPacks = [...packs, pack];
         setPacks(newPacks);
-        let newPackData = JSON.stringify(newPacks)
-        setOptions({...options,pack_data:newPackData});
-        updatePackOption(newPackData);
-    }
+        let newPackData = JSON.stringify(newPacks);
+        setOptions({ ...options, pack_data: newPackData });
+        updatePackOption("pack_data", newPackData);
+    };
 
-    const updatePackOption = (pack) => {
+    const handleAddGroup = group => {
+        setAddGroup(false);
+        let newGroup = [...groups, group];
+        setGroups(newGroup);
+        let newGroupData = JSON.stringify(newGroup);
+        setOptions({ ...options, group_sell_data: newGroupData });
+        updatePackOption("group_sell_data", newGroupData);
+    };
+
+    const updatePackOption = (name, pack) => {
         let option = [];
         Object.keys(options).forEach(k => {
             option.push({
                 key: k,
-                value: k === "pack_data" ? pack:options[k]
+                value: k === name ? pack : options[k]
             });
         });
         API.patch("/admin/setting", {
             options: option
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", "设置已保存", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -181,18 +253,29 @@ export default function VAS() {
             .finally(() => {
                 setLoading(false);
             });
-    }
+    };
 
     const deletePack = id => {
         let newPacks = [...packs];
-        newPacks = newPacks.filter((v)=>{
-            return v.id !== id
-        })
+        newPacks = newPacks.filter(v => {
+            return v.id !== id;
+        });
         setPacks(newPacks);
-        let newPackData = JSON.stringify(newPacks)
-        setOptions({...options,pack_data:newPackData});
-        updatePackOption(newPackData);
-    }
+        let newPackData = JSON.stringify(newPacks);
+        setOptions({ ...options, pack_data: newPackData });
+        updatePackOption("pack_data", newPackData);
+    };
+
+    const deleteGroup = id => {
+        let newGroups = [...groups];
+        newGroups = newGroups.filter(v => {
+            return v.id !== id;
+        });
+        setGroups(newGroups);
+        let newPackData = JSON.stringify(newGroups);
+        setOptions({ ...options, group_sell_data: newPackData });
+        updatePackOption("group_sell_data", newPackData);
+    };
 
     return (
         <div>
@@ -207,7 +290,7 @@ export default function VAS() {
                     <Tab label="支付/杂项设置" />
                     <Tab label="容量包" />
                     <Tab label="可购用户组" />
-                    <Tab label="激活码" />
+                    <Tab label="兑换码" />
                 </Tabs>
                 <div className={classes.content}>
                     {tab === 0 && (
@@ -486,7 +569,7 @@ export default function VAS() {
                                                 type={"number"}
                                                 inputProps={{
                                                     step: 1,
-                                                    min: 1,
+                                                    min: 1
                                                 }}
                                                 value={options.score_price}
                                                 onChange={handleChange(
@@ -515,50 +598,231 @@ export default function VAS() {
                         </form>
                     )}
 
-                    {tab === 1 &&
+                    {tab === 1 && (
                         <div>
-                            <Button onClick={()=>setAddPack(true)} variant={"contained"} color={"secondary"}>添加</Button>
+                            <Button
+                                onClick={() => setAddPack(true)}
+                                variant={"contained"}
+                                color={"secondary"}
+                            >
+                                添加
+                            </Button>
                             <div className={classes.tableContainer}>
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>名称</TableCell>
-                                            <TableCell >单价</TableCell>
-                                            <TableCell >时长</TableCell>
-                                            <TableCell >大小</TableCell>
-                                            <TableCell >操作</TableCell>
+                                            <TableCell>单价</TableCell>
+                                            <TableCell>时长</TableCell>
+                                            <TableCell>大小</TableCell>
+                                            <TableCell>操作</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {packs.map((row)=>(
+                                        {packs.map(row => (
                                             <TableRow key={row.id}>
-                                                <TableCell component="th" scope="row">
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                >
                                                     {row.name}
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell>
                                                     ￥{row.price / 100}
-                                                    {row.score !== 0 && (" 或 "+row.score + " 积分")}
+                                                    {row.score !== 0 &&
+                                                        " 或 " +
+                                                            row.score +
+                                                            " 积分"}
                                                 </TableCell>
-                                                <TableCell >{Math.ceil(
-                                                    row.time / 86400
-                                                )}
-                                                    天</TableCell>
-                                                <TableCell >{sizeToString(row.size)}</TableCell>
-                                                <TableCell >
-                                                    <IconButton onClick={()=>deletePack(row.id)} size={"small"}>
-                                                        <Delete/>
+                                                <TableCell>
+                                                    {Math.ceil(
+                                                        row.time / 86400
+                                                    )}
+                                                    天
+                                                </TableCell>
+                                                <TableCell>
+                                                    {sizeToString(row.size)}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            deletePack(row.id)
+                                                        }
+                                                        size={"small"}
+                                                    >
+                                                        <Delete />
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
-
                                     </TableBody>
                                 </Table>
                             </div>
                         </div>
-                    }
+                    )}
 
-                    <AddPack onSubmit={handleAddPack} open={addPack} onClose={()=>setAddPack(false)}/>
+                    {tab === 2 && (
+                        <div>
+                            <Button
+                                onClick={() => setAddGroup(true)}
+                                variant={"contained"}
+                                color={"secondary"}
+                            >
+                                添加
+                            </Button>
+                            <div className={classes.tableContainer}>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>名称</TableCell>
+                                            <TableCell>单价</TableCell>
+                                            <TableCell>时长</TableCell>
+                                            <TableCell>高亮</TableCell>
+                                            <TableCell>操作</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {groups.map(row => (
+                                            <TableRow key={row.id}>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                >
+                                                    {row.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    ￥{row.price / 100}
+                                                    {row.score !== 0 &&
+                                                        " 或 " +
+                                                            row.score +
+                                                            " 积分"}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {Math.ceil(
+                                                        row.time / 86400
+                                                    )}
+                                                    天
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.highlight
+                                                        ? "是"
+                                                        : "否"}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            deleteGroup(row.id)
+                                                        }
+                                                        size={"small"}
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </div>
+                    )}
+
+                    {tab === 3 && (
+                        <div>
+                            <Button
+                                onClick={() => setAddRedeem(true)}
+                                variant={"contained"}
+                                color={"secondary"}
+                            >
+                                添加
+                            </Button>
+                            <div className={classes.tableContainer}>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>#</TableCell>
+                                            <TableCell>商品名</TableCell>
+                                            <TableCell>数量</TableCell>
+                                            <TableCell>兑换码</TableCell>
+                                            <TableCell>状态</TableCell>
+                                            <TableCell>操作</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {redeems.map(row => (
+                                            <TableRow key={row.ID}>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                >
+                                                    {row.ID}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.ProductID === 0 &&"积分"}
+                                                    {product[row.ProductID]!== undefined && <>{product[row.ProductID]}</>}
+                                                    {row.ProductID !== 0 && !product[row.ProductID] && "已失效商品"}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.Num}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.Code}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {!row.Used?
+                                                        <Box color="success.main">未使用</Box>:
+                                                        <Box color="warning.main">已使用</Box>
+                                                    }
+                                                </TableCell>
+                                                <TableCell>
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            deleteRedeem(row.ID)
+                                                        }
+                                                        size={"small"}
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <div className={classes.navigator}>
+                                <Pagination
+                                    count={Math.ceil(total / pageSize)}
+                                    onChange={(e,v)=>setPage(v)}
+                                    color="secondary"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <AddPack
+                        onSubmit={handleAddPack}
+                        open={addPack}
+                        onClose={() => setAddPack(false)}
+                    />
+                    <AddGroup
+                        onSubmit={handleAddGroup}
+                        open={addGroup}
+                        onClose={() => setAddGroup(false)}
+                    />
+                    <AddRedeem
+                        open={addRedeem}
+                        onSuccess={redeemGenerated}
+                        products = {[...groups,...packs]}
+                        onClose={() => setAddRedeem(false)}
+                    />
+                    <AlertDialog
+                        title={"生成结果"}
+                        open={redeemsResOpen}
+                        msg={redeemsRes.map(v=>(<div>{v}</div>))}
+                        onClose={()=>{
+                            setRedeemsResOpen(false);
+                            setRedeemsRes([]);
+                        }}
+                    />
                 </div>
             </Paper>
         </div>

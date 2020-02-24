@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -10,42 +10,67 @@ import Input from "@material-ui/core/Input";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import SizeInput from "../Common/SizeInput";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+import API from "../../../middleware/Api";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles(theme => ({
-
     formContainer: {
-        margin:"8px 0 8px 0",
+        margin: "8px 0 8px 0"
     }
 }));
 
-export default function AddPack({ open, onClose,onSubmit }) {
+export default function AddGroup({ open, onClose, onSubmit }) {
     const classes = useStyles();
-    const [pack, setPack] = useState({
+    const [groups, setGroups] = useState([]);
+    const [group, setGroup] = useState({
         name: "",
-        size: "1073741824",
+        group_id: 2,
         time: "",
         price: "",
-        score: ""
+        score: "",
+        des: "",
+        highlight: false
     });
 
+    useEffect(() => {
+        if (open && groups.length === 0) {
+            API.get("/admin/groups")
+                .then(response => {
+                    setGroups(response.data);
+                })
+                .catch(error => {});
+        }
+        // eslint-disable-next-line
+    }, [open]);
+
     const handleChange = name => event => {
-        setPack({
-            ...pack,
+        setGroup({
+            ...group,
             [name]: event.target.value
+        });
+    };
+
+    const handleCheckChange = name => event => {
+        setGroup({
+            ...group,
+            [name]: event.target.checked
         });
     };
 
     const submit = e => {
         e.preventDefault();
-        let packCopy = {...pack};
-        packCopy.size = parseInt(packCopy.size);
-        packCopy.time = parseInt(packCopy.time) * 86400;
-        packCopy.price = parseInt(packCopy.price) * 100;
-        packCopy.score = parseInt(packCopy.score);
-        packCopy.id = (new Date()).valueOf();
-        onSubmit(packCopy);
-    }
+        let groupCopy = {...group};
+        groupCopy.time = parseInt(groupCopy.time) * 86400;
+        groupCopy.price = parseInt(groupCopy.price) * 100;
+        groupCopy.score = parseInt(groupCopy.score);
+        groupCopy.id = (new Date()).valueOf();
+        groupCopy.des = groupCopy.des.split("\n");
+        onSubmit(groupCopy);
+    };
 
     return (
         <Dialog
@@ -54,9 +79,12 @@ export default function AddPack({ open, onClose,onSubmit }) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             maxWidth={"xs"}
+            scroll={"paper"}
         >
             <form onSubmit={submit}>
-                <DialogTitle id="alert-dialog-title">添加容量包</DialogTitle>
+                <DialogTitle id="alert-dialog-title">
+                    添加可购用户组
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <div className={classes.formContainer}>
@@ -65,7 +93,7 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                     名称
                                 </InputLabel>
                                 <Input
-                                    value={pack.name}
+                                    value={group.name}
                                     onChange={handleChange("name")}
                                     required
                                 />
@@ -77,16 +105,27 @@ export default function AddPack({ open, onClose,onSubmit }) {
 
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
-                                <SizeInput
-                                    value={pack.size}
-                                    onChange={handleChange("size")}
-                                    min={1}
-                                    label={"大小"}
-                                    max={9223372036854775807}
+                                <InputLabel htmlFor="component-helper">
+                                    用户组
+                                </InputLabel>
+                                <Select
+                                    value={group.group_id}
+                                    onChange={handleChange("group_id")}
                                     required
-                                />
+                                >
+                                    {groups.map(v => {
+                                        if (v.ID !== 3) {
+                                            return (
+                                                <MenuItem value={v.ID}>
+                                                    {v.Name}
+                                                </MenuItem>
+                                            );
+                                        }
+                                        return null;
+                                    })}
+                                </Select>
                                 <FormHelperText id="component-helper-text">
-                                    容量包的大小
+                                    购买后升级的用户组
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -99,15 +138,15 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1
+                                        min: 1,
+                                        step: 1
                                     }}
-                                    value={pack.time}
+                                    value={group.time}
                                     onChange={handleChange("time")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    每个容量包的有效期
+                                    单位购买时间的有效期
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -120,15 +159,15 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:0.01,
-                                        step:0.01
+                                        min: 0.01,
+                                        step: 0.01
                                     }}
-                                    value={pack.price}
+                                    value={group.price}
                                     onChange={handleChange("price")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    容量包的单价
+                                    用户组的单价
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -141,19 +180,54 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:0,
-                                        step:1
+                                        min: 0,
+                                        step: 1
                                     }}
-                                    value={pack.score}
+                                    value={group.score}
                                     onChange={handleChange("score")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    使用积分购买时的价格，填写为 0 表示不能使用积分购买
+                                    使用积分购买时的价格，填写为 0
+                                    表示不能使用积分购买
                                 </FormHelperText>
                             </FormControl>
                         </div>
 
+                        <div className={classes.formContainer}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    商品描述 (一行一个)
+                                </InputLabel>
+                                <Input
+                                    value={group.des}
+                                    onChange={handleChange("des")}
+                                    multiline
+                                    rowsMax={10}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    购买页面展示的商品描述
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.formContainer}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={group.highlight}
+                                            onChange={handleCheckChange("highlight")}
+                                        />
+                                    }
+                                    label="突出展示"
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    开启后，在商品选择页面会被突出展示
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
