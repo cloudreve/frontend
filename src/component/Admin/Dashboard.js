@@ -15,7 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import UserAvatar from "../Navbar/UserAvatar";
-import {Contacts, Home, Language, Settings,Mail} from "@material-ui/icons";
+import {Contacts, Home, Language, Settings, Mail, SettingsEthernet, AttachMoney} from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -181,7 +181,17 @@ const items = [
                 title: "邮件",
                 path: "mail",
                 icon: <Mail />
-            }
+            },
+            {
+                title: "上传与下载",
+                path: "upload",
+                icon: <SettingsEthernet />
+            },
+            {
+                title: "增值服务",
+                path: "vas",
+                icon: <AttachMoney />
+            },
         ]
     }
 ];

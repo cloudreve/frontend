@@ -13,6 +13,8 @@ const Index = React.lazy(() => import("./component/Admin/Index"));
 const SiteInformation = React.lazy(() => import("./component/Admin/Setting/SiteInformation"));
 const Access = React.lazy(() => import("./component/Admin/Setting/Access"));
 const Mail = React.lazy(() => import("./component/Admin/Setting/Mail"));
+const UploadDownload = React.lazy(() => import("./component/Admin/Setting/UploadDownload"));
+const VAS = React.lazy(() => import("./component/Admin/Setting/VAS"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -85,6 +87,18 @@ export default function Admin() {
                                 <Route path={`${path}/mail`}>
                                     <Suspense fallback={<PageLoading />}>
                                         <Mail/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/upload`}>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <UploadDownload/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/vas`}>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <VAS/>
                                     </Suspense>
                                 </Route>
 

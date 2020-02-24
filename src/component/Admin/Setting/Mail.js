@@ -35,25 +35,28 @@ const useStyles = makeStyles(theme => ({
             padding: "0px 24px 0 24px"
         }
     },
-    buttonMargin:{
-        marginLeft:8,
+    buttonMargin: {
+        marginLeft: 8
     }
 }));
 
 export default function Mail() {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
-    const [test,setTest] = useState(false);
-    const [tesInput,setTestInput] = useState("");
+    const [test, setTest] = useState(false);
+    const [tesInput, setTestInput] = useState("");
     const [options, setOptions] = useState({
-        fromName:"",
-        fromAdress:"",
-        smtpHost:"",
-        smtpPort:"",
-        replyTo:"",
-        smtpUser:"",
-        smtpPass:"",
-        mail_keepalive:"30",
+        fromName: "",
+        fromAdress: "",
+        smtpHost: "",
+        smtpPort: "",
+        replyTo: "",
+        smtpUser: "",
+        smtpPass: "",
+        mail_keepalive: "30",
+        over_used_template: "",
+        mail_activation_template: "",
+        mail_reset_pwd_template: ""
     });
 
     const handleChange = name => event => {
@@ -83,43 +86,43 @@ export default function Mail() {
         // eslint-disable-next-line
     }, []);
 
-    const sendTestMail = () =>{
+    const sendTestMail = () => {
         setLoading(true);
-        API.post("/admin/mailTest",{
-            to:tesInput,
+        API.post("/admin/mailTest", {
+            to: tesInput
         })
             .then(response => {
                 ToggleSnackbar("top", "right", "测试邮件已发送", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
-            setLoading(false);
-        });
-    }
-
-    const reload = (() =>{
-        API.get("/admin/reload/email")
-            .then(response => {
             })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+    const reload = () => {
+        API.get("/admin/reload/email")
+            .then(response => {})
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
-        });
-    })
+            })
+            .finally(() => {});
+    };
 
     const submit = e => {
         e.preventDefault();
         setLoading(true);
         let option = [];
-        Object.keys(options).forEach(k=>{
+        Object.keys(options).forEach(k => {
             option.push({
-                key:k,
-                value:options[k],
+                key: k,
+                value: options[k]
             });
-        })
-        API.patch("/admin/setting",{
-            options:option,
+        });
+        API.patch("/admin/setting", {
+            options: option
         })
             .then(response => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
@@ -127,20 +130,29 @@ export default function Mail() {
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
+            })
+            .finally(() => {
                 setLoading(false);
-        });
+            });
     };
 
     return (
         <div>
-
-            <Dialog open={test} onClose={()=>setTest(false)} aria-labelledby="form-dialog-title">
+            <Dialog
+                open={test}
+                onClose={() => setTest(false)}
+                aria-labelledby="form-dialog-title"
+            >
                 <DialogTitle id="form-dialog-title">发件测试</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <Typography>发送测试邮件前，请先保存已更改的邮件设置；</Typography>
-                        <Typography>邮件发送结果不会立即反馈，如果您长时间未收到测试邮件，请检查 Cloudreve 在终端输出的错误日志。</Typography>
+                        <Typography>
+                            发送测试邮件前，请先保存已更改的邮件设置；
+                        </Typography>
+                        <Typography>
+                            邮件发送结果不会立即反馈，如果您长时间未收到测试邮件，请检查
+                            Cloudreve 在终端输出的错误日志。
+                        </Typography>
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -148,16 +160,20 @@ export default function Mail() {
                         id="name"
                         label="收件人地址"
                         value={tesInput}
-                        onChange={e=>setTestInput(e.target.value)}
+                        onChange={e => setTestInput(e.target.value)}
                         type="email"
                         fullWidth
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={()=>setTest(false)} color="default">
+                    <Button onClick={() => setTest(false)} color="default">
                         取消
                     </Button>
-                    <Button onClick={()=>sendTestMail()} disabled={loading} color="primary">
+                    <Button
+                        onClick={() => sendTestMail()}
+                        disabled={loading}
+                        color="primary"
+                    >
                         发送
                     </Button>
                 </DialogActions>
@@ -225,7 +241,7 @@ export default function Mail() {
                                     SMTP 端口
                                 </InputLabel>
                                 <Input
-                                    inputProps={{min:1}}
+                                    inputProps={{ min: 1 ,step:1}}
                                     type={"number"}
                                     value={options.smtpPort}
                                     onChange={handleChange("smtpPort")}
@@ -292,14 +308,84 @@ export default function Mail() {
                                     SMTP 连接有效期 (秒)
                                 </InputLabel>
                                 <Input
-                                    inputProps={{min:1}}
+                                    inputProps={{ min: 1 ,step:1}}
                                     type={"number"}
                                     value={options.mail_keepalive}
                                     onChange={handleChange("mail_keepalive")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    有效期内建立的 SMTP 连接会被新邮件发送请求复用
+                                    有效期内建立的 SMTP
+                                    连接会被新邮件发送请求复用
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={classes.root}>
+                    <Typography variant="h6" gutterBottom>
+                        邮件模板
+                    </Typography>
+
+                    <div className={classes.formContainer}>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    新用户激活
+                                </InputLabel>
+                                <Input
+                                    value={options.mail_activation_template}
+                                    onChange={handleChange(
+                                        "mail_activation_template"
+                                    )}
+                                    multiline
+                                    rowsMax="10"
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    新用户注册后激活邮件的模板
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    超额提醒
+                                </InputLabel>
+                                <Input
+                                    value={options.over_used_template}
+                                    onChange={handleChange(
+                                        "over_used_template"
+                                    )}
+                                    multiline
+                                    rowsMax="10"
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    用户因增值服务过期，容量超出限制后发送的提醒邮件模板
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    重置密码
+                                </InputLabel>
+                                <Input
+                                    value={options.mail_reset_pwd_template}
+                                    onChange={handleChange(
+                                        "mail_reset_pwd_template"
+                                    )}
+                                    multiline
+                                    rowsMax="10"
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    密码重置邮件模板
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -315,12 +401,13 @@ export default function Mail() {
                         color={"primary"}
                     >
                         保存
-                    </Button>{"   "}
+                    </Button>
+                    {"   "}
                     <Button
                         className={classes.buttonMargin}
                         variant={"outlined"}
                         color={"primary"}
-                        onClick={()=>setTest(true)}
+                        onClick={() => setTest(true)}
                     >
                         发送测试邮件
                     </Button>

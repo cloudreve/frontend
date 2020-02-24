@@ -73,16 +73,6 @@ export default function SiteInformation() {
         // eslint-disable-next-line
     }, []);
 
-    const reloadAuthn = () =>{
-        API.get("/admin/reload/authn")
-            .then(response => {
-            })
-            .catch(error => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            })
-            .finally(() => {
-            });
-    }
 
     const submit = e => {
         e.preventDefault();

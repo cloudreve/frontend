@@ -13,7 +13,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import AlertDialog from "./Alert";
+import AlertDialog from "../Dialogs/Alert";
 import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
