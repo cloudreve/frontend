@@ -15,6 +15,7 @@
     "qrcode-react": "^0.1.16",
     "react": "^16.12.0",
     "react-addons-update": "^15.6.2",
+    "react-color": "^2.18.0",
     "react-content-loader": "^5.0.2",
     "react-dnd": "^9.5.1",
     "react-dnd-html5-backend": "^9.5.1",

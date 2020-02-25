@@ -15,7 +15,17 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import UserAvatar from "../Navbar/UserAvatar";
-import {Contacts, Home, Language, Settings, Mail, SettingsEthernet, AttachMoney} from "@material-ui/icons";
+import {
+    Contacts,
+    Home,
+    Language,
+    Settings,
+    Mail,
+    SettingsEthernet,
+    AttachMoney,
+    Palette,
+    CloudDownload
+} from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -191,6 +201,16 @@ const items = [
                 title: "增值服务",
                 path: "vas",
                 icon: <AttachMoney />
+            },
+            {
+                title: "外观",
+                path: "theme",
+                icon: <Palette />
+            },
+            {
+                title: "离线下载",
+                path: "aria2",
+                icon: <CloudDownload />
             },
         ]
     }
