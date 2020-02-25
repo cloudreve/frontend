@@ -17,6 +17,7 @@ const UploadDownload = React.lazy(() => import("./component/Admin/Setting/Upload
 const VAS = React.lazy(() => import("./component/Admin/Setting/VAS"));
 const Theme = React.lazy(() => import("./component/Admin/Setting/Theme"));
 const Aria2 = React.lazy(() => import("./component/Admin/Setting/Aria2"));
+const ImageSetting = React.lazy(() => import("./component/Admin/Setting/Image"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -113,6 +114,12 @@ export default function Admin() {
                                 <Route path={`${path}/aria2`}>
                                     <Suspense fallback={<PageLoading />}>
                                         <Aria2/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/image`}>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <ImageSetting/>
                                     </Suspense>
                                 </Route>
 

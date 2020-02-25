@@ -24,7 +24,7 @@ import {
     SettingsEthernet,
     AttachMoney,
     Palette,
-    CloudDownload
+    CloudDownload, Image
 } from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -211,6 +211,11 @@ const items = [
                 title: "离线下载",
                 path: "aria2",
                 icon: <CloudDownload />
+            },
+            {
+                title: "图像处理",
+                path: "image",
+                icon: <Image />
             },
         ]
     }
