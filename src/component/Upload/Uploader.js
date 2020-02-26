@@ -109,7 +109,7 @@ class UploaderComponent extends Component {
                         mime_types:
                             user.policy.allowedType === null
                                 ? []
-                                : user.policy.allowedType
+                                :  [{ title : "files", extensions : user.policy.allowedType.join(",") }],
                     },
                     // iOS不能多选？
                     multi_selection: true,

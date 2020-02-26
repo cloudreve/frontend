@@ -195,7 +195,7 @@ class UserAvatarPopoverCompoment extends Component {
                                     }}
                                     onClick={() =>{
                                         this.handleClose();
-                                        this.props.history.push("/admin");
+                                        this.props.history.push("/admin/home");
                                     }
 
                                     }

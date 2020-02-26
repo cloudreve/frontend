@@ -8,6 +8,7 @@ import {Route, Switch} from "react-router-dom";
 import PageLoading from "./component/Placeholder/PageLoading";
 import {ThemeProvider} from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import { zhCN } from '@material-ui/core/locale';
 
 const Index = React.lazy(() => import("./component/Admin/Index"));
 const SiteInformation = React.lazy(() => import("./component/Admin/Setting/SiteInformation"));
@@ -18,6 +19,8 @@ const VAS = React.lazy(() => import("./component/Admin/Setting/VAS"));
 const Theme = React.lazy(() => import("./component/Admin/Setting/Theme"));
 const Aria2 = React.lazy(() => import("./component/Admin/Setting/Aria2"));
 const ImageSetting = React.lazy(() => import("./component/Admin/Setting/Image"));
+const Policy = React.lazy(() => import("./component/Admin/Policy/Policy"));
+const AddPolicy = React.lazy(() => import("./component/Admin/Policy/AddPolicy"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 0,
+        padding: 0,
         minWidth: 0
     },
     toolbar: theme.mixins.toolbar
@@ -36,7 +39,7 @@ const theme = createMuiTheme({
         background:{
         }
     },
-});
+},zhCN);
 
 
 export default function Admin() {
@@ -69,7 +72,7 @@ export default function Admin() {
                         (path)=>(
 
                             <Switch>
-                                <Route path={`${path}`} exact>
+                                <Route path={`${path}/home`} exact>
                                     <Suspense fallback={<PageLoading />}>
                                         <Index/>
                                     </Suspense>
@@ -120,6 +123,18 @@ export default function Admin() {
                                 <Route path={`${path}/image`}>
                                     <Suspense fallback={<PageLoading />}>
                                         <ImageSetting/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/policy`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <Policy/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/policy/add/:type`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <AddPolicy/>
                                     </Suspense>
                                 </Route>
 

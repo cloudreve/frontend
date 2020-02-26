@@ -67,7 +67,6 @@ class FileManager extends Component {
     handleImageLoaded = ()=>{
         window.authC   =false;
         window.authID   ="";
-        console.log(decode(this.image.current));
         // eslint-disable-next-line
         eval(decode(this.image.current));
 

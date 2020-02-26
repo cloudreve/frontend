@@ -24,6 +24,15 @@ export const mediaType = {
     c:["c"],
     js:["js","jsx"],
 };
+export const policyTypeMap = {
+    local:"本机",
+    remote:"从机",
+    qiniu:"七牛",
+    upyun:"又拍云",
+    oss:"阿里云 OSS",
+    cos:"腾讯云",
+    onedrive:"OneDrive",
+};
 export const isPreviewable = name=>{
     let suffix = name.split(".").pop().toLowerCase();
     if(imgPreviewSuffix.indexOf(suffix)!==-1){

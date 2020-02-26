@@ -24,7 +24,7 @@ import {
     SettingsEthernet,
     AttachMoney,
     Palette,
-    CloudDownload, Image
+    CloudDownload, Image, Storage
 } from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -171,7 +171,7 @@ const items = [
     {
         title: "面板首页",
         icon: <Home />,
-        path: ""
+        path: "home"
     },
     {
         title: "参数设置",
@@ -218,7 +218,12 @@ const items = [
                 icon: <Image />
             },
         ]
-    }
+    },
+    {
+        title: "存储策略",
+        icon: <Storage />,
+        path: "policy"
+    },
 ];
 
 export default function Dashboard({ content }) {
@@ -314,20 +319,17 @@ export default function Dashboard({ content }) {
                                     button
                                     className={clsx({
                                         [classes.active]:
-                                        location.pathname ===
-                                        "/admin/" + item.path
+                                        location.pathname.startsWith("/admin/" + item.path)
                                     })}
                                     key={item.title}
                                 >
                                     <ListItemIcon  className={clsx({
                                         [classes.activeIcon]:
-                                        location.pathname ===
-                                        "/admin/" + item.path
+                                            location.pathname.startsWith("/admin/" + item.path)
                                     })}>{item.icon}</ListItemIcon>
                                     <ListItemText className={clsx({
                                         [classes.activeText]:
-                                        location.pathname ===
-                                        "/admin/" + item.path
+                                            location.pathname.startsWith("/admin/" + item.path)
                                     })} primary={item.title} />
                                 </ListItem>
                             );
@@ -361,13 +363,15 @@ export default function Dashboard({ content }) {
                                                 className={clsx({
                                                     [classes.sub]: open,
                                                     [classes.active]:
-                                                        location.pathname ===
-                                                        "/admin/" + sub.path
+                                                        location.pathname.startsWith("/admin/" + sub.path)
                                                 })}
                                                 button
                                                 key={sub.title}
                                             >
-                                                <ListItemIcon>
+                                                <ListItemIcon className={clsx({
+                                                    [classes.activeIcon]:
+                                                        location.pathname.startsWith("/admin/" + sub.path)
+                                                })}>
                                                     {sub.icon}
                                                 </ListItemIcon>
                                                 <ListItemText
