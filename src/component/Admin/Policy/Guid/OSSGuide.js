@@ -64,7 +64,18 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         marginRight: theme.spacing(1)
-    }
+    },
+    viewButtonLabel: { textTransform: "none" },
+    "@global":{
+        "code":{
+            color: "rgba(0, 0, 0, 0.87)",
+            display: "inline-block",
+            padding: "2px 6px",
+            fontFamily:" Consolas, \"Liberation Mono\", Menlo, Courier, monospace",
+            borderRadius: "2px",
+            backgroundColor: "rgba(255,229,100,0.1)",
+        },
+    },
 }));
 
 const steps = [
@@ -85,12 +96,16 @@ const steps = [
         optional: false
     },
     {
+        title: "跨域策略",
+        optional: true
+    },
+    {
         title: "完成",
         optional: false
     }
 ];
 
-export default function RemoteGuide() {
+export default function OSSGuide() {
     const classes = useStyles();
     const history = useHistory();
 
@@ -100,11 +115,12 @@ export default function RemoteGuide() {
     const [magicVar, setMagicVar] = useState("");
     const [useCDN, setUseCDN] = useState("false");
     const [policy, setPolicy] = useState({
-        Type: "qiniu",
+        Type: "oss",
         Name: "",
         SecretKey: "",
         AccessKey: "",
         BaseURL: "",
+        Server: "",
         IsPrivate: "true",
         DirNameRule: "uploads/{year}/{month}/{day}",
         AutoRename: "true",
@@ -113,9 +129,9 @@ export default function RemoteGuide() {
         MaxSize: "0",
         OptionsSerialized: {
             file_type: "",
-            mimetype:"",
         }
     });
+    const [policyID,setPolicyID] = useState(0);
 
     const handleChange = name => event => {
         setPolicy({
@@ -145,31 +161,16 @@ export default function RemoteGuide() {
         [dispatch]
     );
 
-    const testSlave = () => {
-        setLoading(true);
-
-        // 测试路径是否可用
-        API.post("/admin/policy/test/slave", {
-            server: policy.Server,
-            secret: policy.SecretKey
-        })
-            .then(response => {
-                ToggleSnackbar("top", "right", "通信正常", "success");
-            })
-            .catch(error => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    };
-
     const submitPolicy = e => {
         e.preventDefault();
         setLoading(true);
 
         let policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
+
+        if (useCDN === "false"){
+            policyCopy.BaseURL = ""
+        }
 
         // 类型转换
         policyCopy.AutoRename = policyCopy.AutoRename === "true";
@@ -192,7 +193,8 @@ export default function RemoteGuide() {
         })
             .then(response => {
                 ToggleSnackbar("top", "right", "存储策略已添加", "success");
-                setActiveStep(5);
+                setActiveStep(4);
+                setPolicyID(response.data);
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -204,9 +206,27 @@ export default function RemoteGuide() {
         setLoading(false);
     };
 
+    const createCORS = ()=>{
+        setLoading(true);
+        API.post("/admin/policy/cors", {
+            id: policyID
+        })
+            .then(response => {
+                ToggleSnackbar("top", "right", "跨域策略已添加", "success");
+                setActiveStep(5);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+
+    }
+
     return (
         <div>
-            <Typography variant={"h6"}>添加 七牛 存储策略</Typography>
+            <Typography variant={"h6"}>添加 阿里云 OSS 存储策略</Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -242,7 +262,7 @@ export default function RemoteGuide() {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用七牛存储策略前，请确保您在 参数设置 - 站点信息
+                                在使用 阿里云 OSS 储策略前，请确保您在 参数设置 - 站点信息
                                 - 站点URL 中填写的 地址与实际相符，并且
                                 <strong>能够被外网正常访问</strong>。
                             </Typography>
@@ -257,12 +277,13 @@ export default function RemoteGuide() {
                             <Typography variant={"body2"}>
                                 前往
                                 <Link
-                                    href={"https://portal.qiniu.com/create"}
+                                    href={"https://oss.console.aliyun.com/overview"}
                                     target={"_blank"}
                                 >
-                                    七牛控制面板
+                                    OSS 管理控制台
                                 </Link>
-                                创建对象存储资源。
+                                创建 Bucket。注意：创建空间类型只能选择<code>标准存储</code>或<code>低频访问</code>
+                                ，暂不支持<code>归档存储</code>
                             </Typography>
                         </div>
                     </div>
@@ -273,12 +294,12 @@ export default function RemoteGuide() {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方填写您在七牛创建存储空间时指定的“存储空间名称”：
+                                在下方填写您创建 Bucket 时指定的<code>Bucket 名称</code>：
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储空间名称
+                                        Bucket 名称
                                     </InputLabel>
                                     <Input
                                         required
@@ -296,7 +317,7 @@ export default function RemoteGuide() {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方选择您创建的空间类型，推荐选择“私有空间”以获得更高的安全性，私有空间无法开启“获取直链”功能。
+                                在下方选择您创建的空间的读写权限类型，推荐选择“私有”以获得更高的安全性，私有空间无法开启“获取直链”功能。
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -318,7 +339,7 @@ export default function RemoteGuide() {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="公有"
+                                            label="公共读"
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -332,15 +353,24 @@ export default function RemoteGuide() {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                填写您为存储空间绑定的 CDN 加速域名。
+                                转到所创建 Bucket 的概览页面，填写<code>访问域名</code>栏目下
+                                <code>外网访问</code> 一行中间的 <code>EndPoint（地域节点）</code>
                             </Typography>
                             <div className={classes.form}>
-                                <DomainInput
-                                    value={policy.BaseURL}
-                                    onChange={handleChange("BaseURL")}
-                                    required
-                                    label={"CDN 加速域名"}
-                                />
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        EndPoint
+                                    </InputLabel>
+                                    <Input
+                                        required
+                                        value={policy.Server}
+                                        onChange={handleChange("Server")}
+                                        inputProps={{
+                                            pattern:"(?:(?:(?<thld>[\\w\\-]*)(?:\\.))?(?<sld>[\\w\\-]*))\\.(?<tld>[\\w\\-]*)" ,
+                                            title:"格式不合法，只需输入域名部分即可"
+                                        }}
+                                    />
+                                </FormControl>
                             </div>
                         </div>
                     </div>
@@ -351,16 +381,89 @@ export default function RemoteGuide() {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在七牛控制面板进入 个人中心 -
-                                密钥管理，在下方填写获得到的 AK、SK。
+                                是否要使用配套的 阿里云CDN 加速 OSS 访问？
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl required component="fieldset">
+                                    <RadioGroup
+                                        required
+                                        value={useCDN}
+                                        onChange={e=>{
+                                            setUseCDN(e.target.value)
+                                        }}
+                                        row
+                                    >
+                                        <FormControlLabel
+                                            value={"true"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="使用"
+                                        />
+                                        <FormControlLabel
+                                            value={"false"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="不使用"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Collapse in={useCDN === "true"}>
+                        <div className={classes.subStepContainer}>
+                            <div className={classes.stepNumberContainer}>
+                                <div className={classes.stepNumber}>6</div>
+                            </div>
+                            <div className={classes.subStepContent}>
+                                <Typography variant={"body2"}>
+                                    前往
+                                    <Link href={"https://cdn.console.aliyun.com/domain/list"} target={"_blank"}>
+                                        阿里云 CDN 管理控制台
+                                    </Link>
+                                    创建 CDN 加速域名，并设定源站为刚创建的 OSS Bucket。在下方填写
+                                    CDN 加速域名，并选择是否使用 HTTPS：
+                                </Typography>
+                                <div className={classes.form}>
+                                    <DomainInput
+                                        value={policy.BaseURL}
+                                        onChange={handleChange("BaseURL")}
+                                        required={useCDN === "true"}
+                                        label={"CDN 加速域名"}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </Collapse>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>{getNumber(6,[
+                                useCDN === "true"
+                            ])}</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                在阿里云
+                                <Link href={"https://usercenter.console.aliyun.com/#/manage/ak"} target={"_blank"}>
+                                    安全信息管理
+                                </Link>
+                                页面获取 用户 AccessKey，并填写在下方。
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        AK
+                                        AccessKey ID
                                     </InputLabel>
                                     <Input
                                         required
+                                        inputProps={{
+                                            pattern:"\\S+" ,
+                                            title:"不能含有空格"
+                                        }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
                                     />
@@ -369,12 +472,41 @@ export default function RemoteGuide() {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        SK
+                                        Access Key Secret
                                     </InputLabel>
                                     <Input
                                         required
+                                        inputProps={{
+                                            pattern:"\\S+" ,
+                                            title:"不能含有空格"
+                                        }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
+                                    />
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>{getNumber(7,[
+                                useCDN === "true"
+                            ])}</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                为此存储策略命名：
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        存储策略名
+                                    </InputLabel>
+                                    <Input
+                                        required
+                                        value={policy.Name}
+                                        onChange={handleChange("Name")}
                                     />
                                 </FormControl>
                             </div>
@@ -600,10 +732,7 @@ export default function RemoteGuide() {
             {activeStep === 3 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
-                        e.preventDefault();
-                        setActiveStep(4);
-                    }}
+                    onSubmit={submitPolicy}
                 >
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
@@ -775,107 +904,6 @@ export default function RemoteGuide() {
                         </div>
                     </Collapse>
 
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>
-                                {getNumber(3,[
-                                    policy.MaxSize !== "0",
-                                    policy.OptionsSerialized.file_type !== "",
-                                ])}
-                            </div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                是否限制上传文件 MimeType？
-                            </Typography>
-
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        required
-                                        value={
-                                            policy.OptionsSerialized
-                                                .mimetype === ""
-                                                ? "false"
-                                                : "true"
-                                        }
-                                        onChange={e => {
-                                            if (e.target.value === "true") {
-                                                setPolicy({
-                                                    ...policy,
-                                                    OptionsSerialized: {
-                                                        ...policy.OptionsSerialized,
-                                                        mimetype:
-                                                            "image/*"
-                                                    }
-                                                });
-                                            } else {
-                                                setPolicy({
-                                                    ...policy,
-                                                    OptionsSerialized: {
-                                                        ...policy.OptionsSerialized,
-                                                        mimetype: ""
-                                                    }
-                                                });
-                                            }
-                                        }}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="限制"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="不限制"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <Collapse in={policy.OptionsSerialized.mimetype !== ""}>
-                        <div className={classes.subStepContainer}>
-                            <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>
-                                    {getNumber(4,[
-                                        policy.MaxSize !== "0",
-                                        policy.OptionsSerialized.file_type !== "",
-                                    ])}
-                                </div>
-                            </div>
-                            <div className={classes.subStepContent}>
-                                <Typography variant={"body2"}>
-                                    输入允许上传的 MimeType，多个请以半角逗号 ,
-                                    隔开。七牛服务器会侦测文件内容以判断 MimeType，再用判断值跟指定值进行匹配，匹配成功则允许上传
-                                </Typography>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            MimeType 列表
-                                        </InputLabel>
-                                        <Input
-                                            value={
-                                                policy.OptionsSerialized
-                                                    .mimetype
-                                            }
-                                            onChange={handleOptionChange(
-                                                "mimetype"
-                                            )}
-                                        />
-                                    </FormControl>
-                                </div>
-                            </div>
-                        </div>
-                    </Collapse>
-
                     <div className={classes.stepFooter}>
                         <Button
                             color={"default"}
@@ -899,22 +927,23 @@ export default function RemoteGuide() {
             {activeStep === 4 && (
                 <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}></div>
+                        <div className={classes.stepNumberContainer}/>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                最后一步，为此存储策略命名：
+                                OSS Bucket 需要正确配置跨域策略后才能使用 Web 端上传文件，Cloudreve
+                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此 Bucket 的跨域策略，此步骤可以跳过。
                             </Typography>
                             <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        存储策略名
-                                    </InputLabel>
-                                    <Input
-                                        required
-                                        value={policy.Name}
-                                        onChange={handleChange("Name")}
-                                    />
-                                </FormControl>
+                                <Button
+                                    disabled={loading}
+                                    color={"secondary"}
+                                    variant={"contained"}
+                                    className={classes.button}
+                                    onClick={()=>createCORS()}
+                                    classes={{ label: classes.viewButtonLabel }}
+                                >
+                                    让 Cloudreve 帮我设置
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -922,18 +951,19 @@ export default function RemoteGuide() {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={() => setActiveStep(3)}
+                            onClick={()=>{
+                                setActiveStep(prevActiveStep => prevActiveStep + 1);
+                                setSkipped(prevSkipped => {
+                                    const newSkipped = new Set(prevSkipped.values());
+                                    newSkipped.add(activeStep);
+                                    return newSkipped;
+                                });
+                            }
+
+                            }
                         >
-                            上一步
+                            跳过
                         </Button>{" "}
-                        <Button
-                            disabled={loading}
-                            type={"submit"}
-                            variant={"contained"}
-                            color={"primary"}
-                        >
-                            完成
-                        </Button>
                     </div>
                 </form>
             )}

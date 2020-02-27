@@ -5,6 +5,7 @@ import {useParams} from "react-router";
 import LocalGuide from "./Guid/LocalGuide";
 import RemoteGuide from "./Guid/RemoteGuide";
 import QiniuGuide from "./Guid/QiniuGuide";
+import OSSGuide from "./Guid/OSSGuide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,6 +32,7 @@ export default function AddPolicyParent( ) {
                 {type==="local"&&<LocalGuide/>}
                 {type==="remote"&&<RemoteGuide/>}
                 {type==="qiniu"&&<QiniuGuide/>}
+                {type==="oss"&&<OSSGuide/>}
             </Paper>
         </div>
     );

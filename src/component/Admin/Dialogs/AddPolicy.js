@@ -52,7 +52,7 @@ const policies = [
     {
         name:"阿里云 OSS",
         img:"oss.png",
-        path:"/admin/policy/add/soo",
+        path:"/admin/policy/add/oss",
     },
     {
         name:"又拍云",
