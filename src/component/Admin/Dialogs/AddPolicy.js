@@ -42,6 +42,7 @@ const policies = [
     {
         name:"从机存储",
         img:"remote.png",
+        path:"/admin/policy/add/remote",
     },
     {
         name:"七牛",

@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import {useParams} from "react-router";
 import LocalGuide from "./Guid/LocalGuide";
+import RemoteGuide from "./Guid/RemoteGuide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,6 +28,7 @@ export default function AddPolicyParent( ) {
         <div>
             <Paper square className={classes.content}>
                 {type==="local"&&<LocalGuide/>}
+                {type==="remote"&&<RemoteGuide/>}
             </Paper>
         </div>
     );

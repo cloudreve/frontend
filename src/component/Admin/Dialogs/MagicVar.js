@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function MagicVar({isFile, open, onClose }) {
+export default function MagicVar({isFile, open, onClose, isSlave }) {
     const classes = useStyles();
 
     return (
@@ -62,17 +62,17 @@ export default function MagicVar({isFile, open, onClose }) {
                                 <TableCell>纳秒级时间戳</TableCell>
                                 <TableCell>1582692933231834600</TableCell>
                             </TableRow>
-                            <TableRow>
+                            {!isSlave && <TableRow>
                                 <TableCell component="th" scope="row">{"{uid}"}</TableCell>
                                 <TableCell>用户ID</TableCell>
                                 <TableCell>1</TableCell>
-                            </TableRow>
+                            </TableRow>}
                             {isFile && <TableRow>
                                 <TableCell component="th" scope="row">{"{originname}"}</TableCell>
                                 <TableCell>原始文件名</TableCell>
                                 <TableCell>MyPico.mp4</TableCell>
                             </TableRow>}
-                            {!isFile && <TableRow>
+                            {!isFile && !isSlave && <TableRow>
                                 <TableCell component="th" scope="row">{"{path}"}</TableCell>
                                 <TableCell>用户上传路径</TableCell>
                                 <TableCell>/我的文件/学习资料/</TableCell>
