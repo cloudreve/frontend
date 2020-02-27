@@ -723,7 +723,8 @@ function getCookieByString(cookieName) {
                             "&size=" +
                             file.size +
                             "&name=" +
-                            encodeURIComponent(file.name),
+                            encodeURIComponent(file.name)+
+                        "&type=cos",
                         true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
@@ -736,6 +737,7 @@ function getCookieByString(cookieName) {
                                     status: 402,
                                     response: ajax.responseText,
                                     file: file,
+                                    message:res.msg,
                                     code: 402
                                 });
                                 callback();
@@ -1355,6 +1357,9 @@ function getCookieByString(cookieName) {
                                     break;
                                 case 402:
                                     errTip = "无法获取上传凭证";
+                                    if (err.message){
+                                        errTip = err.message;
+                                    }
                                     break;
                                 case 403:
                                     errTip = "无法完成文件上传";
