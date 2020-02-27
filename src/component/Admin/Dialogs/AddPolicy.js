@@ -47,22 +47,27 @@ const policies = [
     {
         name:"七牛",
         img:"qiniu.png",
+        path:"/admin/policy/add/qiniu",
     },
     {
         name:"阿里云 OSS",
         img:"oss.png",
+        path:"/admin/policy/add/soo",
     },
     {
         name:"又拍云",
         img:"upyun.png",
+        path:"/admin/policy/add/upyun",
     },
     {
         name:"腾讯云 COS",
         img:"upyun.png",
+        path:"/admin/policy/add/cos",
     },
     {
         name:"OneDrive",
         img:"onedrive.png",
+        path:"/admin/policy/add/onedrive",
     },
 ];
 

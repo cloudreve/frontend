@@ -180,3 +180,12 @@ export function randomStr(length) {
     }
     return result;
 }
+
+export function getNumber(base,conditions){
+    conditions.forEach(v=>{
+        if(v){
+            base++
+        }
+    })
+    return base
+}

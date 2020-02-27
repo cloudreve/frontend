@@ -7,10 +7,12 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {useDispatch} from "react-redux";
 import {toggleSnackbar} from "../../../actions";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 export default function DomainInput({onChange,value,required,label}){
     const [domain,setDomain] = useState("");
     const [protocol,setProtocol] = useState("https://");
+    const [error,setError] = useState();
 
     useState(()=>{
         if (value.startsWith("https://")){
@@ -22,12 +24,21 @@ export default function DomainInput({onChange,value,required,label}){
         }
     },[value]);
 
+    useEffect(()=>{
+        if(protocol === "http://" && window.location.protocol === "https:"){
+            setError("您当前站点启用了 HTTPS ，此处选择 HTTP 可能会导致无法连接。")
+        }else{
+            setError("")
+        }
+    },[protocol])
+
     return (
         <FormControl>
             <InputLabel htmlFor="component-helper">
                 {label}
             </InputLabel>
             <Input
+                error={error !== ""}
                 value={domain}
                 onChange={e=>{
                     setDomain(e.target.value);
@@ -59,6 +70,7 @@ export default function DomainInput({onChange,value,required,label}){
                     </InputAdornment>
                 }
             />
+            {error !== "" && <FormHelperText error={error !== ""}>{error}</FormHelperText>}
         </FormControl>
     )
 }

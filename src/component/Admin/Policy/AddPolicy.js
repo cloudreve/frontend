@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import {useParams} from "react-router";
 import LocalGuide from "./Guid/LocalGuide";
 import RemoteGuide from "./Guid/RemoteGuide";
+import QiniuGuide from "./Guid/QiniuGuide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,6 +30,7 @@ export default function AddPolicyParent( ) {
             <Paper square className={classes.content}>
                 {type==="local"&&<LocalGuide/>}
                 {type==="remote"&&<RemoteGuide/>}
+                {type==="qiniu"&&<QiniuGuide/>}
             </Paper>
         </div>
     );
