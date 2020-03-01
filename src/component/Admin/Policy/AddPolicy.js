@@ -8,6 +8,7 @@ import QiniuGuide from "./Guid/QiniuGuide";
 import OSSGuide from "./Guid/OSSGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
 import COSGuide from "./Guid/COSGuide";
+import OneDriveGuide from "./Guid/OneDriveGuide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,6 +38,7 @@ export default function AddPolicyParent( ) {
                 {type==="oss"&&<OSSGuide/>}
                 {type==="upyun"&&<UpyunGuide/>}
                 {type==="cos"&&<COSGuide/>}
+                {type==="onedrive"&&<OneDriveGuide/>}
             </Paper>
         </div>
     );
