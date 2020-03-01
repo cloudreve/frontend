@@ -12,6 +12,8 @@ import { toggleSnackbar } from "../../../actions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import SizeInput from "../Common/SizeInput";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +53,16 @@ export default function UploadDownload() {
         onedrive_monitor_timeout:"0",
         share_download_session_timeout:"0",
         onedrive_callback_check:"0",
+        reset_after_upload_failed:"0",
     });
+
+    const handleCheckChange = name => event => {
+        let value= event.target.checked ? "1" : "0";
+        setOptions({
+            ...options,
+            [name]: value
+        });
+    };
 
     const handleChange = name => event => {
         setOptions({
@@ -205,6 +216,27 @@ export default function UploadDownload() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     OneDrive 存储策略分片上传失败后重试的最大次数，只适用于服务端上传或中转
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.reset_after_upload_failed === "1"
+                                            }
+                                            onChange={handleCheckChange(
+                                                "reset_after_upload_failed"
+                                            )}
+                                        />
+                                    }
+                                    label="上传校验失败时强制重置连接"
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    开启后，如果本次策略、头像等数据上传校验失败，服务器会强制重置连接
                                 </FormHelperText>
                             </FormControl>
                         </div>

@@ -7,6 +7,7 @@ import RemoteGuide from "./Guid/RemoteGuide";
 import QiniuGuide from "./Guid/QiniuGuide";
 import OSSGuide from "./Guid/OSSGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
+import COSGuide from "./Guid/COSGuide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,6 +36,7 @@ export default function AddPolicyParent( ) {
                 {type==="qiniu"&&<QiniuGuide/>}
                 {type==="oss"&&<OSSGuide/>}
                 {type==="upyun"&&<UpyunGuide/>}
+                {type==="cos"&&<COSGuide/>}
             </Paper>
         </div>
     );

@@ -19,8 +19,10 @@ export default function DomainInput({onChange,value,required,label}){
             setDomain(value.replace("https://",""));
             setProtocol("https://")
         }else{
-            setDomain(value.replace("http://",""));
-            setProtocol("http://")
+            if (value !== ""){
+                setDomain(value.replace("http://",""));
+                setProtocol("http://")
+            }
         }
     },[value]);
 
