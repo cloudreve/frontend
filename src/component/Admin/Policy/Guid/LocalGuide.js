@@ -19,7 +19,7 @@ import API from "../../../../middleware/Api";
 import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
-import {useHistory} from "react-router";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles(theme => ({
     stepContent: {
@@ -37,13 +37,13 @@ const useStyles = makeStyles(theme => ({
     subStepContainer: {
         display: "flex",
         marginBottom: 20,
-        padding:10,
+        padding: 10,
         transition: theme.transitions.create("background-color", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
         }),
-        "&:focus-within":{
-            backgroundColor:theme.palette.background.default,
+        "&:focus-within": {
+            backgroundColor: theme.palette.background.default
         }
     },
     stepNumber: {
@@ -55,14 +55,14 @@ const useStyles = makeStyles(theme => ({
         borderRadius: " 50%"
     },
     stepNumberContainer: {
-        marginRight: 10,
+        marginRight: 10
     },
-    stepFooter:{
-        marginTop: 32,
+    stepFooter: {
+        marginTop: 32
     },
     button: {
-        marginRight: theme.spacing(1),
-    },
+        marginRight: theme.spacing(1)
+    }
 }));
 
 const steps = [
@@ -84,28 +84,32 @@ const steps = [
     }
 ];
 
-export default function LocalGuide() {
+export default function LocalGuide(props) {
     const classes = useStyles();
     const history = useHistory();
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
     const [skipped, setSkipped] = React.useState(new Set());
-    const [magicVar,setMagicVar] = useState("");
-    const [useCDN,setUseCDN] = useState("false");
-    const [policy, setPolicy] = useState({
-        Type:"local",
-        Name:"",
-        DirNameRule: "uploads/{uid}/{path}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable:"false",
-        BaseURL:"",
-        MaxSize:"0",
-        OptionsSerialized:{
-            file_type:"",
-        },
-    });
+    const [magicVar, setMagicVar] = useState("");
+    const [useCDN, setUseCDN] = useState("false");
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "local",
+                  Name: "",
+                  DirNameRule: "uploads/{uid}/{path}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  BaseURL: "",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: ""
+                  }
+              }
+    );
 
     const handleChange = name => event => {
         setPolicy({
@@ -117,10 +121,10 @@ export default function LocalGuide() {
     const handleOptionChange = name => event => {
         setPolicy({
             ...policy,
-            OptionsSerialized:{
+            OptionsSerialized: {
                 ...policy.OptionsSerialized,
                 [name]: event.target.value
-            },
+            }
         });
     };
 
@@ -158,20 +162,26 @@ export default function LocalGuide() {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = {...policy};
-        policyCopy.OptionsSerialized = {...policyCopy.OptionsSerialized};
+        let policyCopy = { ...policy };
+        policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // 处理存储策略
-        if (useCDN === "false" || policy.IsOriginLinkEnable === "false"){
-            policyCopy.BaseURL = ""
+        if (useCDN === "false" || policy.IsOriginLinkEnable === "false") {
+            policyCopy.BaseURL = "";
         }
 
         // 类型转换
         policyCopy.AutoRename = policyCopy.AutoRename === "true";
-        policyCopy.IsOriginLinkEnable = policyCopy.IsOriginLinkEnable === "true";
+        policyCopy.IsOriginLinkEnable =
+            policyCopy.IsOriginLinkEnable === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
-        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(",");
-        if (policyCopy.OptionsSerialized.file_type.length === 1 && policyCopy.OptionsSerialized.file_type[0] === ""){
+        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
+            ","
+        );
+        if (
+            policyCopy.OptionsSerialized.file_type.length === 1 &&
+            policyCopy.OptionsSerialized.file_type[0] === ""
+        ) {
             policyCopy.OptionsSerialized.file_type = [];
         }
 
@@ -179,7 +189,12 @@ export default function LocalGuide() {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已添加", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(4);
             })
             .catch(error => {
@@ -190,12 +205,13 @@ export default function LocalGuide() {
             });
 
         setLoading(false);
-
-    }
+    };
 
     return (
         <div>
-            <Typography variant={"h6"}>添加本机存储策略</Typography>
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"}本机存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -305,7 +321,9 @@ export default function LocalGuide() {
                                             命名规则
                                         </InputLabel>
                                         <Input
-                                            required={policy.AutoRename === "true"}
+                                            required={
+                                                policy.AutoRename === "true"
+                                            }
                                             value={policy.FileNameRule}
                                             onChange={handleChange(
                                                 "FileNameRule"
@@ -333,9 +351,9 @@ export default function LocalGuide() {
             {activeStep === 1 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e=> {
+                    onSubmit={e => {
                         e.preventDefault();
-                       setActiveStep(2);
+                        setActiveStep(2);
                     }}
                 >
                     <div className={classes.subStepContainer}>
@@ -388,7 +406,8 @@ export default function LocalGuide() {
                                 <Typography variant={"body2"}>
                                     是否要对下载/直链使用 CDN？
                                     <br />
-                                    开启后，用户访问文件时的 URL 中的域名部分会被替换为 CDN 域名。
+                                    开启后，用户访问文件时的 URL
+                                    中的域名部分会被替换为 CDN 域名。
                                 </Typography>
 
                                 <div className={classes.form}>
@@ -396,14 +415,16 @@ export default function LocalGuide() {
                                         <RadioGroup
                                             required
                                             value={useCDN}
-                                            onChange={e=>{
-                                                if (e.target.value === "false"){
+                                            onChange={e => {
+                                                if (
+                                                    e.target.value === "false"
+                                                ) {
                                                     setPolicy({
                                                         ...policy,
                                                         BaseURL: ""
                                                     });
                                                 }
-                                                setUseCDN(e.target.value)
+                                                setUseCDN(e.target.value);
                                             }}
                                             row
                                         >
@@ -424,7 +445,6 @@ export default function LocalGuide() {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-
                             </div>
                         </div>
 
@@ -442,26 +462,26 @@ export default function LocalGuide() {
                                         <DomainInput
                                             value={policy.BaseURL}
                                             onChange={handleChange("BaseURL")}
-                                            required={policy.IsOriginLinkEnable === "true" && useCDN === "true"}
+                                            required={
+                                                policy.IsOriginLinkEnable ===
+                                                    "true" && useCDN === "true"
+                                            }
                                             label={"CDN 前缀"}
                                         />
                                     </div>
-
                                 </div>
                             </div>
                         </Collapse>
-
                     </Collapse>
 
                     <div className={classes.stepFooter}>
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(0)}
+                            onClick={() => setActiveStep(0)}
                         >
                             上一步
-                        </Button>
-                        {" "}
+                        </Button>{" "}
                         <Button
                             disabled={loading}
                             type={"submit"}
@@ -471,16 +491,17 @@ export default function LocalGuide() {
                             下一步
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 2 && (
-                <form className={classes.stepContent} onSubmit={e=> {
-                    e.preventDefault();
-                    setActiveStep(3)
-                }}>
-
+                <form
+                    className={classes.stepContent}
+                    onSubmit={e => {
+                        e.preventDefault();
+                        setActiveStep(3);
+                    }}
+                >
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
@@ -494,17 +515,21 @@ export default function LocalGuide() {
                                 <FormControl required component="fieldset">
                                     <RadioGroup
                                         required
-                                        value={policy.MaxSize === "0" ? "false" : "true"}
-                                        onChange={e=>{
-                                            if(e.target.value === "true"){
+                                        value={
+                                            policy.MaxSize === "0"
+                                                ? "false"
+                                                : "true"
+                                        }
+                                        onChange={e => {
+                                            if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "10485760",
+                                                    MaxSize: "10485760"
                                                 });
-                                            }else{
+                                            } else {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "0",
+                                                    MaxSize: "0"
                                                 });
                                             }
                                         }}
@@ -548,15 +573,15 @@ export default function LocalGuide() {
                                         label={"单文件大小限制"}
                                     />
                                 </div>
-
                             </div>
                         </div>
-
                     </Collapse>
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{policy.MaxSize !== "0" ? "3" : "2"}</div>
+                            <div className={classes.stepNumber}>
+                                {policy.MaxSize !== "0" ? "3" : "2"}
+                            </div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -567,23 +592,29 @@ export default function LocalGuide() {
                                 <FormControl required component="fieldset">
                                     <RadioGroup
                                         required
-                                        value={policy.OptionsSerialized.file_type === "" ? "false" : "true"}
-                                        onChange={e=>{
-                                            if(e.target.value === "true"){
+                                        value={
+                                            policy.OptionsSerialized
+                                                .file_type === ""
+                                                ? "false"
+                                                : "true"
+                                        }
+                                        onChange={e => {
+                                            if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        file_type:"jpg,png,mp4,zip,rar",
-                                                    },
+                                                        file_type:
+                                                            "jpg,png,mp4,zip,rar"
+                                                    }
                                                 });
-                                            }else{
+                                            } else {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        file_type:"",
-                                                    },
+                                                        file_type: ""
+                                                    }
                                                 });
                                             }
                                         }}
@@ -612,11 +643,14 @@ export default function LocalGuide() {
                     <Collapse in={policy.OptionsSerialized.file_type !== ""}>
                         <div className={classes.subStepContainer}>
                             <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>{policy.MaxSize !== "0" ? "4" : "3"}</div>
+                                <div className={classes.stepNumber}>
+                                    {policy.MaxSize !== "0" ? "4" : "3"}
+                                </div>
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 , 隔开
+                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
+                                    隔开
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
@@ -624,28 +658,28 @@ export default function LocalGuide() {
                                             扩展名列表
                                         </InputLabel>
                                         <Input
-                                            value={policy.OptionsSerialized.file_type}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .file_type
+                                            }
                                             onChange={handleOptionChange(
                                                 "file_type"
                                             )}
                                         />
                                     </FormControl>
                                 </div>
-
                             </div>
                         </div>
-
                     </Collapse>
 
                     <div className={classes.stepFooter}>
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(1)}
+                            onClick={() => setActiveStep(1)}
                         >
                             上一步
-                        </Button>
-                        {" "}
+                        </Button>{" "}
                         <Button
                             disabled={loading}
                             type={"submit"}
@@ -655,16 +689,13 @@ export default function LocalGuide() {
                             下一步
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 3 && (
                 <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-
-                        </div>
+                        <div className={classes.stepNumberContainer}></div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
                                 最后一步，为此存储策略命名：
@@ -687,11 +718,10 @@ export default function LocalGuide() {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(2)}
+                            onClick={() => setActiveStep(2)}
                         >
                             上一步
-                        </Button>
-                        {" "}
+                        </Button>{" "}
                         <Button
                             disabled={loading}
                             type={"submit"}
@@ -701,31 +731,30 @@ export default function LocalGuide() {
                             完成
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 4 && (
                 <>
-                <form className={classes.stepContent}>
-                    <Typography>
-                        存储策略已添加！
-                    </Typography>
-                    <Typography variant={"body2"} color={"textSecondary"}>
-                        要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
-                    </Typography>
-                </form>
+                    <form className={classes.stepContent}>
+                        <Typography>
+                            存储策略已{props.policy ? "保存" : "添加"}！
+                        </Typography>
+                        <Typography variant={"body2"} color={"textSecondary"}>
+                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                        </Typography>
+                    </form>
                     <div className={classes.stepFooter}>
                         <Button
                             color={"primary"}
                             className={classes.button}
-                            onClick={()=> history.push("/admin/policy")}
+                            onClick={() => history.push("/admin/policy")}
                         >
                             返回存储策略列表
                         </Button>
                     </div>
-</>
-             )}
+                </>
+            )}
 
             <MagicVar
                 open={magicVar === "file"}

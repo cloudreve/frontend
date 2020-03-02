@@ -105,7 +105,7 @@ const steps = [
     }
 ];
 
-export default function OSSGuide() {
+export default function OSSGuide(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -114,7 +114,7 @@ export default function OSSGuide() {
     const [skipped, setSkipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
     const [useCDN, setUseCDN] = useState("false");
-    const [policy, setPolicy] = useState({
+    const [policy, setPolicy] = useState(props.policy?props.policy:{
         Type: "oss",
         Name: "",
         SecretKey: "",
@@ -131,7 +131,7 @@ export default function OSSGuide() {
             file_type: "",
         }
     });
-    const [policyID,setPolicyID] = useState(0);
+    const [policyID,setPolicyID] = useState(props.policy?props.policy.ID:0);
 
     const handleChange = name => event => {
         setPolicy({
@@ -192,7 +192,7 @@ export default function OSSGuide() {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已添加", "success");
+                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
                 setActiveStep(4);
                 setPolicyID(response.data);
             })
@@ -226,7 +226,7 @@ export default function OSSGuide() {
 
     return (
         <div>
-            <Typography variant={"h6"}>添加 阿里云 OSS 存储策略</Typography>
+            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} 阿里云 OSS 存储策略</Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -971,7 +971,7 @@ export default function OSSGuide() {
             {activeStep === 5 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已添加！</Typography>
+                        <Typography>存储策略已{props.policy ? "保存" : "添加"}！</Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
                             要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
                         </Typography>

@@ -17,6 +17,12 @@ import TablePagination from "@material-ui/core/TablePagination";
 import AddPolicy from "../Dialogs/AddPolicy";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import {useHistory, useLocation} from "react-router";
+import IconButton from "@material-ui/core/IconButton";
+import {Delete, Edit} from "@material-ui/icons";
+import Tooltip from "@material-ui/core/Tooltip";
+import Popover from "@material-ui/core/Popover";
+import Menu from "@material-ui/core/Menu";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -61,9 +67,14 @@ const columns = [
         id: "action",
         label: "操作",
         minWidth: 170,
-        align: "center"
+        align: "right"
     }
 ];
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 
 export default function Policy() {
     const classes = useStyles();
@@ -76,6 +87,30 @@ export default function Policy() {
     const [total, setTotal] = useState(0);
     const [addDialog, setAddDialog] = useState(false);
     const [filter, setFilter] = useState("all");
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [editID, setEditID] = React.useState(0);
+
+    let location = useLocation();
+    let history = useHistory();
+    let query = useQuery();
+
+    const handleClick = event => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+
+    useEffect(()=>{
+        if(query.get("code") === "0"){
+            ToggleSnackbar("top", "right", "授权成功", "success");
+        }else if (query.get("msg") && query.get("msg")!==""){
+            ToggleSnackbar("top", "right", query.get("msg") + ", "+ query.get("err"), "warning");
+        }
+
+    },[location])
 
     useEffect(() => {
         loadList();
@@ -98,12 +133,25 @@ export default function Policy() {
             });
     };
 
+    const deletePolicy = (id) =>{
+        API.delete("/admin/policy/" + id,)
+            .then(response => {
+                loadList();
+                ToggleSnackbar("top", "right", "存储策略已删除", "success");
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    }
+
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+
+    const open = Boolean(anchorEl);
 
     return (
         <div>
@@ -145,9 +193,9 @@ export default function Policy() {
 
             <Paper square className={classes.tableContainer}>
                 <TableContainer className={classes.container}>
-                    <Table aria-label="sticky table">
+                    <Table aria-label="sticky table" size={"small"}>
                         <TableHead>
-                            <TableRow>
+                            <TableRow style={{height:52}}>
                                 {columns.map(column => (
                                     <TableCell
                                         key={column.id}
@@ -177,6 +225,22 @@ export default function Policy() {
                                         {statics[row.ID] !== undefined &&
                                             sizeToString(statics[row.ID][1])}
                                     </TableCell>
+                                    <TableCell align={"right"}>
+                                        <Tooltip title={"删除"}>
+                                            <IconButton onClick={()=>deletePolicy(row.ID)} size={"small"}>
+                                                <Delete/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={"编辑"}>
+                                            <IconButton onClick={(e)=>{
+                                                setEditID(row.ID)
+                                                handleClick(e)
+                                            }} size={"small"}>
+                                                <Edit/>
+                                            </IconButton>
+                                        </Tooltip>
+
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -195,6 +259,21 @@ export default function Policy() {
                     }}
                 />
             </Paper>
+            <Menu
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                keepMounted
+            >
+                <MenuItem onClick={e=>{
+                    handleClose(e);
+                    history.push("/admin/policy/edit/pro/"+editID);
+                }}>专家模式编辑</MenuItem>
+                <MenuItem onClick={e=>{
+                    handleClose(e);
+                    history.push("/admin/policy/edit/guide/"+editID);
+                }}>向导模式编辑</MenuItem>
+            </Menu>
         </div>
     );
 }

@@ -21,6 +21,7 @@ const Aria2 = React.lazy(() => import("./component/Admin/Setting/Aria2"));
 const ImageSetting = React.lazy(() => import("./component/Admin/Setting/Image"));
 const Policy = React.lazy(() => import("./component/Admin/Policy/Policy"));
 const AddPolicy = React.lazy(() => import("./component/Admin/Policy/AddPolicy"));
+const EditPolicyPreload = React.lazy(() => import("./component/Admin/Policy/EditPolicy"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -135,6 +136,12 @@ export default function Admin() {
                                 <Route path={`${path}/policy/add/:type`} exact>
                                     <Suspense fallback={<PageLoading />}>
                                         <AddPolicy/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/policy/edit/:mode/:id`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <EditPolicyPreload/>
                                     </Suspense>
                                 </Route>
 

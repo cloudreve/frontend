@@ -102,15 +102,17 @@ const steps = [
     }
 ];
 
-export default function OneDriveGuide() {
+export default function OneDriveGuide(props) {
     const classes = useStyles();
     const history = useHistory();
 
-    const [activeStep, setActiveStep] = useState(3);
+    const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
     const [skipped, setSkipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
-    const [policy, setPolicy] = useState({
+    const [policy, setPolicy] = useState(props.policy
+        ? props.policy
+        : {
         Type: "onedrive",
         Name: "",
         BucketName:"",
@@ -129,7 +131,7 @@ export default function OneDriveGuide() {
             od_redirect:"",
         }
     });
-    const [policyID,setPolicyID] = useState(6);
+    const [policyID,setPolicyID] = useState(props.policy?props.policy.ID:0);
     const [httpsAlert,setHttpsAlert] = useState(false);
 
     const handleChange = name => event => {
@@ -229,7 +231,7 @@ export default function OneDriveGuide() {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已添加", "success");
+                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
                 setActiveStep(3);
                 setPolicyID(response.data);
             })
@@ -251,7 +253,7 @@ export default function OneDriveGuide() {
                 title={"警告"}
                 msg={"您必须启用 HTTPS 才能使用 OneDrive 存储策略；启用后同步更改 参数设置 - 站点信息 - 站点URL。"}
             />
-            <Typography variant={"h6"}>添加 OneDrive 存储策略</Typography>
+            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} OneDrive 存储策略</Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -292,9 +294,16 @@ export default function OneDriveGuide() {
                                     href={"https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"}
                                     target={"_blank"}
                                 >
-                                    Azure Active Directory 控制台
+                                    Azure Active Directory 控制台 (国际版账号)
                                 </Link>
-                                 并使用您要绑定的 OneDrive 所属账号登录。
+                                {" "}或者{" "}
+                                <Link
+                                    href={"https://portal.azure.cn/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"}
+                                    target={"_blank"}
+                                >
+                                    Azure Active Directory 控制台 (世纪互联账号)
+                                </Link>
+                                 并登录，登录后进入<code>Azure Active Directory</code>管理面板。
                             </Typography>
                         </div>
                     </div>
@@ -316,8 +325,11 @@ export default function OneDriveGuide() {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                填写应用注册表单。其中，名称可任取，<code>重定向 URI (可选)</code>
-                                请选择<code>Web</code>，并填写<code>{policy.OptionsSerialized.od_redirect}</code> 其他保持默认即可
+                                填写应用注册表单。其中，名称可任取；
+                                <code>受支持的帐户类型</code> 选择为<code>任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户</code>；
+                                <code>重定向 URI (可选)</code>
+                                请选择<code>Web</code>，并填写<code>{policy.OptionsSerialized.od_redirect}</code>；
+                                其他保持默认即可
                             </Typography>
                         </div>
                     </div>
@@ -772,7 +784,7 @@ export default function OneDriveGuide() {
                         <div className={classes.stepNumberContainer}/>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                存储策略已添加，但是你需要点击下方按钮，并使用 OneDrive 登录授权以完成初始化后才能使用。
+                                存储策略已{props.policy ? "保存" : "添加"}，但是你需要点击下方按钮，并使用 OneDrive 登录授权以完成初始化后才能使用。
                                 日后你可以在存储策略列表页面重新进行授权。
                             </Typography>
                             <div className={classes.form}>

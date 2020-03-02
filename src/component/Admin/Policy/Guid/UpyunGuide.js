@@ -90,7 +90,7 @@ const steps = [
     }
 ];
 
-export default function UpyunGuide() {
+export default function UpyunGuide(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -98,7 +98,7 @@ export default function UpyunGuide() {
     const [loading, setLoading] = useState(false);
     const [skipped, setSkipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
-    const [policy, setPolicy] = useState({
+    const [policy, setPolicy] = useState(props.policy?props.policy:{
         Type: "upyun",
         Name: "",
         SecretKey: "",
@@ -171,7 +171,7 @@ export default function UpyunGuide() {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已添加", "success");
+                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
                 setActiveStep(5);
             })
             .catch(error => {
@@ -186,7 +186,7 @@ export default function UpyunGuide() {
 
     return (
         <div>
-            <Typography variant={"h6"}>添加 又拍云 存储策略</Typography>
+            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} 又拍云 存储策略</Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -853,7 +853,7 @@ export default function UpyunGuide() {
             {activeStep === 5 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已添加！</Typography>
+                        <Typography>存储策略已{props.policy ? "保存" : "添加"}！</Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
                             要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
                         </Typography>
