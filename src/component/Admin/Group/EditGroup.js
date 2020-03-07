@@ -1,39 +1,14 @@
 import React, {useCallback, useEffect, useState} from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import {useParams} from "react-router";
-import LocalGuide from "../Policy/Guid/LocalGuide";
-import RemoteGuide from "../Policy/Guid/RemoteGuide";
-import QiniuGuide from "../Policy/Guid/QiniuGuide";
-import OSSGuide from "../Policy/Guid/OSSGuide";
-import UpyunGuide from "../Policy/Guid/UpyunGuide";
-import COSGuide from "../Policy/Guid/COSGuide";
-import OneDriveGuide from "../Policy/Guid/OneDriveGuide";
 import API from "../../../middleware/Api";
 import {useDispatch} from "react-redux";
 import {toggleSnackbar} from "../../../actions";
-import EditPro from "../Policy/Guid/EditPro";
+import GroupForm from "./GroupForm";
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        [theme.breakpoints.up("md")]: {
-            marginLeft: 100
-        },
-        marginBottom: 40
-    },
-    content: {
-        padding: theme.spacing(2)
-    },
-}));
+export default function EditGroupPreload( ) {
+    const [group,setGroup] = useState({});
 
-
-export default function EditPolicyPreload( ) {
-    const classes = useStyles();
-    const [loading, setLoading] = useState(false);
-    const [type,setType] = useState("");
-    const [policy,setPolicy] = useState({});
-
-    let { mode,id } = useParams();
+    let {id } = useParams();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -44,19 +19,55 @@ export default function EditPolicyPreload( ) {
 
 
     useEffect(()=>{
-        setType("");
-        API.get("/admin/policy/" + id)
+        setGroup({});
+        API.get("/admin/group/" + id)
             .then(response => {
-                response.data.IsOriginLinkEnable =  response.data.IsOriginLinkEnable ? "true" : "false";
-                response.data.AutoRename =  response.data.AutoRename ? "true" : "false";
-                response.data.MaxSize =  response.data.MaxSize.toString();
-                response.data.IsPrivate =  response.data.IsPrivate ? "true" : "false";
-                response.data.OptionsSerialized.file_type =
-                    response.data.OptionsSerialized.file_type ?
-                    response.data.OptionsSerialized.file_type.join(","):
-                        "";
-                setPolicy(response.data);
-                setType(response.data.Type);
+                // 布尔值转换
+                ["ShareEnabled", "WebDAVEnabled"].forEach(v => {
+                    response.data[v] = response.data[v]?"true":"false";
+                });
+                [
+                    "archive_download",
+                    "archive_task",
+                    "one_time_download",
+                    "share_download",
+                    "share_free",
+                    "aria2"
+                ].forEach(v => {
+                    if (response.data.OptionsSerialized[v] !== undefined){
+                        response.data.OptionsSerialized[v] = response.data.OptionsSerialized[v]?"true":"false";
+                    }
+                });
+
+                // 整型转换
+                ["MaxStorage", "SpeedLimit"].forEach(v => {
+                    response.data[v] = response.data[v].toString();
+                });
+                [
+                    "compress_size",
+                    "decompress_size",
+                ].forEach(v => {
+                    if (response.data.OptionsSerialized[v] !== undefined){
+                        response.data.OptionsSerialized[v] = response.data.OptionsSerialized[v].toString();
+                    }
+                });
+                response.data.PolicyList = response.data.PolicyList.map(v=>{
+                    return v.toString();
+                });
+
+                // JSON转换
+                if(response.data.OptionsSerialized.aria2_options === undefined){
+                    response.data.OptionsSerialized.aria2_options = "{}"
+                }else{
+                    try {
+                        response.data.OptionsSerialized.aria2_options = JSON.stringify(response.data.OptionsSerialized.aria2_options);
+                    }catch (e) {
+                        ToggleSnackbar("top", "right", "Aria2 设置项格式错误", "warning");
+                        return;
+                    }
+
+                }
+                setGroup(response.data);
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -65,23 +76,9 @@ export default function EditPolicyPreload( ) {
 
     return (
         <div>
-            <Paper square className={classes.content}>
-                {mode === "guide" &&
-                    <>
-                        {type==="local"&&<LocalGuide policy={policy}/>}
-                        {type==="remote"&&<RemoteGuide policy={policy}/>}
-                        {type==="qiniu"&&<QiniuGuide policy={policy}/>}
-                        {type==="oss"&&<OSSGuide policy={policy}/>}
-                        {type==="upyun"&&<UpyunGuide policy={policy}/>}
-                        {type==="cos"&&<COSGuide policy={policy}/>}
-                        {type==="onedrive"&&<OneDriveGuide policy={policy}/>}
-                    </>
-                }
-
-                {mode === "pro" && type !== "" &&
-                    <EditPro policy={policy}/>
-                }
-            </Paper>
+            {group.ID !== undefined &&
+                <GroupForm group={group}/>
+            }
         </div>
     );
 }

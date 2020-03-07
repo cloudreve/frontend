@@ -176,7 +176,7 @@ export default function GroupForm(props) {
             return parseInt(v)
         });
 
-        if (groupCopy.PolicyList.length < 1){
+        if (groupCopy.PolicyList.length < 1 && groupCopy.ID !== 3){
             ToggleSnackbar("top", "right", "至少要为用户组选择一个存储策略", "warning");
             return;
         }
@@ -216,83 +216,87 @@ export default function GroupForm(props) {
                     </Typography>
 
                     <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    用户组名
-                                </InputLabel>
-                                <Input
-                                    value={group.Name}
-                                    onChange={handleChange("Name")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    用户组的名称
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    可用存储策略
-                                </InputLabel>
-                                <Select
-                                    labelId="demo-mutiple-chip-label"
-                                    id="demo-mutiple-chip"
-                                    multiple
-                                    value={group.PolicyList}
-                                    onChange={handleChange("PolicyList")}
-                                    input={<Input id="select-multiple-chip" />}
-                                    renderValue={selected => (
-                                        <div className={classes.chips}>
-                                            {selected.map(value => (
-                                                <Chip
-                                                    style={{ margin: 2 }}
-                                                    key={value}
-                                                    size={"small"}
-                                                    label={policies[value]}
-                                                    className={classes.chip}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-                                >
-                                    {Object.keys(policies).map(pid => (
-                                        <MenuItem
-                                            key={pid}
-                                            value={pid}
-                                            style={getStyles(
-                                                pid,
-                                                group.PolicyList,
-                                                theme
-                                            )}
-                                        >
-                                            {policies[pid]}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    指定用户组可用的存储策略，可多选，用户可在选定范围内自由切换存储策略。
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                        {group.ID !== 3 && <>
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        用户组名
+                                    </InputLabel>
+                                    <Input
+                                        value={group.Name}
+                                        onChange={handleChange("Name")}
+                                        required
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        用户组的名称
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <SizeInput
-                                    value={group.MaxStorage}
-                                    onChange={handleChange("MaxStorage")}
-                                    min={0}
-                                    max={9223372036854775807}
-                                    label={"初始容量"}
-                                    required
-                                />
-                            </FormControl>
-                            <FormHelperText id="component-helper-text">
-                                用户组下的用户初始可用最大容量
-                            </FormHelperText>
-                        </div>
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        可用存储策略
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-mutiple-chip-label"
+                                        id="demo-mutiple-chip"
+                                        multiple
+                                        value={group.PolicyList}
+                                        onChange={handleChange("PolicyList")}
+                                        input={<Input id="select-multiple-chip" />}
+                                        renderValue={selected => (
+                                            <div className={classes.chips}>
+                                                {selected.map(value => (
+                                                    <Chip
+                                                        style={{ margin: 2 }}
+                                                        key={value}
+                                                        size={"small"}
+                                                        label={policies[value]}
+                                                        className={classes.chip}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    >
+                                        {Object.keys(policies).map(pid => (
+                                            <MenuItem
+                                                key={pid}
+                                                value={pid}
+                                                style={getStyles(
+                                                    pid,
+                                                    group.PolicyList,
+                                                    theme
+                                                )}
+                                            >
+                                                {policies[pid]}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <FormHelperText id="component-helper-text">
+                                        指定用户组可用的存储策略，可多选，用户可在选定范围内自由切换存储策略。
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <SizeInput
+                                        value={group.MaxStorage}
+                                        onChange={handleChange("MaxStorage")}
+                                        min={0}
+                                        max={9223372036854775807}
+                                        label={"初始容量"}
+                                        required
+                                    />
+                                </FormControl>
+                                <FormHelperText id="component-helper-text">
+                                    用户组下的用户初始可用最大容量
+                                </FormHelperText>
+                            </div>
+                        </>}
+
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
@@ -312,7 +316,7 @@ export default function GroupForm(props) {
                             </FormHelperText>
                         </div>
 
-                        <div className={classes.form}>
+                        {group.ID !== 3 && <div className={classes.form}>
                             <FormControl fullWidth>
                                 <FormControlLabel
                                     control={
@@ -331,7 +335,8 @@ export default function GroupForm(props) {
                                     关闭后，用户无法创建分享链接
                                 </FormHelperText>
                             </FormControl>
-                        </div>
+                        </div>}
+
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
@@ -377,7 +382,7 @@ export default function GroupForm(props) {
                             </FormControl>
                         </div>
 
-                        <div className={classes.form}>
+                        {group.ID !== 3 && <div className={classes.form}>
                             <FormControl fullWidth>
                                 <FormControlLabel
                                     control={
@@ -396,7 +401,7 @@ export default function GroupForm(props) {
                                     关闭后，用户无法通过 WebDAV 协议连接至网盘
                                 </FormHelperText>
                             </FormControl>
-                        </div>
+                        </div>}
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
@@ -421,7 +426,7 @@ export default function GroupForm(props) {
                             </FormControl>
                         </div>
 
-                        <div className={classes.form}>
+                        {group.ID !== 3 && <div className={classes.form}>
                             <FormControl fullWidth>
                                 <FormControlLabel
                                     control={
@@ -441,7 +446,8 @@ export default function GroupForm(props) {
                                     是否允许用户创建离线下载任务
                                 </FormHelperText>
                             </FormControl>
-                        </div>
+                        </div>}
+
 
                         <Collapse in={group.OptionsSerialized.aria2 === "true"}>
                             <div className={classes.form}>
@@ -451,7 +457,6 @@ export default function GroupForm(props) {
                                     </InputLabel>
                                     <Input
                                         multiline
-                                        required
                                         value={
                                             group.OptionsSerialized
                                                 .aria2_options
@@ -492,7 +497,7 @@ export default function GroupForm(props) {
                             </FormControl>
                         </div>
 
-                        <div className={classes.form}>
+                        {group.ID !== 3 && <div className={classes.form}>
                             <FormControl fullWidth>
                                 <FormControlLabel
                                     control={
@@ -512,7 +517,7 @@ export default function GroupForm(props) {
                                     是否用户创建 压缩/解压缩 任务
                                 </FormHelperText>
                             </FormControl>
-                        </div>
+                        </div>}
 
                         <Collapse
                             in={group.OptionsSerialized.archive_task === "true"}
@@ -530,7 +535,6 @@ export default function GroupForm(props) {
                                         min={0}
                                         max={9223372036854775807}
                                         label={"待压缩文件最大大小"}
-                                        required
                                     />
                                 </FormControl>
                                 <FormHelperText id="component-helper-text">
@@ -552,7 +556,6 @@ export default function GroupForm(props) {
                                         min={0}
                                         max={9223372036854775807}
                                         label={"待解压文件最大大小"}
-                                        required
                                     />
                                 </FormControl>
                                 <FormHelperText id="component-helper-text">
