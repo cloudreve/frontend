@@ -1,0 +1,415 @@
+import React, { useCallback, useEffect, useState } from "react";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import API from "../../../middleware/Api";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../../actions";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import { sizeToString } from "../../../untils";
+import TableBody from "@material-ui/core/TableBody";
+import { policyTypeMap } from "../../../config";
+import TablePagination from "@material-ui/core/TablePagination";
+import AddPolicy from "../Dialogs/AddPolicy";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { useHistory, useLocation } from "react-router";
+import IconButton from "@material-ui/core/IconButton";
+import { Delete, Edit } from "@material-ui/icons";
+import Tooltip from "@material-ui/core/Tooltip";
+import Popover from "@material-ui/core/Popover";
+import Menu from "@material-ui/core/Menu";
+import Checkbox from "@material-ui/core/Checkbox";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { lighten } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        [theme.breakpoints.up("md")]: {
+            marginLeft: 100
+        },
+        marginBottom: 40
+    },
+    content: {
+        padding: theme.spacing(2)
+    },
+    container: {
+        overflowX: "auto"
+    },
+    tableContainer: {
+        marginTop: 16
+    },
+    header: {
+        display: "flex",
+        justifyContent: "space-between"
+    },
+    headerRight: {},
+    highlight:
+        theme.palette.type === "light"
+            ? {
+                  color: theme.palette.secondary.main,
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+              }
+            : {
+                  color: theme.palette.text.primary,
+                  backgroundColor: theme.palette.secondary.dark
+              },
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+}));
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
+export default function Group() {
+    const classes = useStyles();
+    const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [total, setTotal] = useState(0);
+    const [filter, setFilter] = useState({});
+    const [orderBy, setOrderBy] = useState(["id","desc"]);
+
+    const [selected, setSelected] = useState([]);
+
+    let location = useLocation();
+    let history = useHistory();
+    let query = useQuery();
+    let theme = useTheme();
+
+    useEffect(() => {
+        loadList();
+    }, [page, pageSize,orderBy,filter]);
+
+    const loadList = () => {
+        API.post("/admin/user/list", {
+            page: page,
+            page_size: pageSize,
+            order_by: orderBy.join(" "),
+            conditions: filter
+        })
+            .then(response => {
+                setUsers(response.data.items);
+                setTotal(response.data.total);
+                setSelected([]);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
+    const deletePolicy = id => {
+        API.delete("/admin/user/" + id)
+            .then(response => {
+                loadList();
+                ToggleSnackbar("top", "right", "用户组已删除", "success");
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
+
+    const handleSelectAllClick = event => {
+        if (event.target.checked) {
+            const newSelecteds = users.map(n => n.ID);
+            setSelected(newSelecteds);
+            return;
+        }
+        setSelected([]);
+    };
+
+    const handleClick = (event, name) => {
+        const selectedIndex = selected.indexOf(name);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1)
+            );
+        }
+
+        setSelected(newSelected);
+    };
+
+    const isSelected = id => selected.indexOf(id) !== -1;
+
+    return (
+        <div>
+            <div className={classes.header}>
+                <Button
+                    color={"primary"}
+                    onClick={() => history.push("/admin/group/add")}
+                    variant={"contained"}
+                >
+                    新建用户
+                </Button>
+                <div className={classes.headerRight}>
+                    <Button
+                        color={"primary"}
+                        onClick={() => loadList()}
+                        variant={"outlined"}
+                    >
+                        刷新
+                    </Button>
+                </div>
+            </div>
+
+            <Paper square className={classes.tableContainer}>
+                {selected.length > 0 && (
+                    <Toolbar className={classes.highlight}>
+                        <Typography
+                            style={{ flex: "1 1 100%" }}
+                            color="inherit"
+                            variant="subtitle1"
+                        >
+                            已选择 {selected.length} 个对象
+                        </Typography>
+                        <Tooltip title="删除">
+                            <IconButton aria-label="delete">
+                                <Delete />
+                            </IconButton>
+                        </Tooltip>
+                    </Toolbar>
+                )}
+                <TableContainer className={classes.container}>
+                    <Table aria-label="sticky table" size={"small"}>
+                        <TableHead>
+                            <TableRow style={{ height: 52 }}>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        indeterminate={
+                                            selected.length > 0 &&
+                                            selected.length < users.length
+                                        }
+                                        checked={
+                                            users.length > 0 &&
+                                            selected.length === users.length
+                                        }
+                                        onChange={handleSelectAllClick}
+                                        inputProps={{
+                                            "aria-label": "select all desserts"
+                                        }}
+                                    />
+                                </TableCell>
+                                <TableCell style={{ minWidth: 59 }}>
+                                    <TableSortLabel
+                                        active={orderBy[0] === "id"}
+                                        direction={orderBy[1]}
+                                        onClick={()=>setOrderBy([
+                                            "id",
+                                            orderBy[1] === "asc" ? "desc":"asc",
+                                        ])}
+                                    >
+                                        #
+                                        {orderBy[0] === "id" ? (
+                                            <span className={classes.visuallyHidden}>
+                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            </span>
+                                        ) : null}
+                                    </TableSortLabel>
+
+                                </TableCell>
+                                <TableCell style={{ minWidth: 120 }}>
+                                    <TableSortLabel
+                                        active={orderBy[0] === "nick"}
+                                        direction={orderBy[1]}
+                                        onClick={()=>setOrderBy([
+                                            "nick",
+                                            orderBy[1] === "asc" ? "desc":"asc",
+                                        ])}
+                                    >
+                                        昵称
+                                        {orderBy[0] === "nick" ? (
+                                            <span className={classes.visuallyHidden}>
+                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            </span>
+                                        ) : null}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell style={{ minWidth: 170 }}>
+                                    <TableSortLabel
+                                        active={orderBy[0] === "email"}
+                                        direction={orderBy[1]}
+                                        onClick={()=>setOrderBy([
+                                            "email",
+                                            orderBy[1] === "asc" ? "desc":"asc",
+                                        ])}
+                                    >
+                                        Email
+                                        {orderBy[0] === "email" ? (
+                                            <span className={classes.visuallyHidden}>
+                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            </span>
+                                        ) : null}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell style={{ minWidth: 70 }}>用户组</TableCell>
+                                <TableCell style={{ minWidth: 50 }}>状态</TableCell>
+                                <TableCell align={"right"} style={{ minWidth: 80 }}>
+                                    <TableSortLabel
+                                        active={orderBy[0] === "storage"}
+                                        direction={orderBy[1]}
+                                        onClick={()=>setOrderBy([
+                                            "storage",
+                                            orderBy[1] === "asc" ? "desc":"asc",
+                                        ])}
+                                    >
+                                        空间容量
+                                        {orderBy[0] === "storage" ? (
+                                            <span className={classes.visuallyHidden}>
+                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            </span>
+                                        ) : null}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell align={"right"} style={{ minWidth: 100 }}>操作</TableCell>
+
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {users.map(row => (
+                                <TableRow
+                                    hover
+                                    key={row.ID}
+                                    role="checkbox"
+                                    selected={isSelected(row.ID)}
+                                >
+                                    <TableCell padding="checkbox">
+                                        <Checkbox
+                                            onClick={event =>
+                                                handleClick(event, row.ID)
+                                            }
+                                            checked={isSelected(row.ID)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>{row.ID}</TableCell>
+                                    <TableCell>{row.Nick}</TableCell>
+                                    <TableCell>{row.Email}</TableCell>
+                                    <TableCell>
+                                        <Link
+                                            href={
+                                                "/#/admin/group/edit/" +
+                                                row.Group.ID
+                                            }
+                                        >
+                                            {row.Group.Name}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.Status === 0 && (
+                                            <Typography
+                                                style={{
+                                                    color:
+                                                        theme.palette.success
+                                                            .main
+                                                }}
+                                                variant={"body2"}
+                                            >
+                                                正常
+                                            </Typography>
+                                        )}
+                                        {row.Status === 1 && (
+                                            <Typography
+                                                color={"textSecondary"}
+                                                variant={"body2"}
+                                            >
+                                                未激活
+                                            </Typography>
+                                        )}
+                                        {row.Status === 2 && (
+                                            <Typography
+                                                color={"error"}
+                                                variant={"body2"}
+                                            >
+                                                被封禁
+                                            </Typography>
+                                        )}
+                                        {row.Status === 3 && (
+                                            <Typography
+                                                color={"error"}
+                                                variant={"body2"}
+                                            >
+                                                超额封禁
+                                            </Typography>
+                                        )}
+                                    </TableCell>
+                                    <TableCell align={"right"}>
+                                        {sizeToString(row.Storage)}
+                                    </TableCell>
+                                    <TableCell align={"right"}>
+                                        <Tooltip title={"删除"}>
+                                            <IconButton
+                                                onClick={() =>
+                                                    deletePolicy(row.ID)
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Delete />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={"编辑"}>
+                                            <IconButton
+                                                onClick={() =>
+                                                    history.push(
+                                                        "/admin/user/edit/" +
+                                                            row.ID
+                                                    )
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Edit />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={total}
+                    rowsPerPage={pageSize}
+                    page={page - 1}
+                    onChangePage={(e, p) => setPage(p + 1)}
+                    onChangeRowsPerPage={e => {
+                        setPageSize(e.target.value);
+                        setPage(1);
+                    }}
+                />
+            </Paper>
+        </div>
+    );
+}

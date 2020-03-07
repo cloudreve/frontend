@@ -24,7 +24,7 @@ import {
     SettingsEthernet,
     AttachMoney,
     Palette,
-    CloudDownload, Image, Storage, Group
+    CloudDownload, Image, Storage, Group, Person
 } from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -228,6 +228,11 @@ const items = [
         title: "用户组",
         icon: <Group />,
         path: "group"
+    },
+    {
+        title: "用户",
+        icon: <Person />,
+        path: "user"
     },
 ];
 
