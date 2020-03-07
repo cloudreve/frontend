@@ -24,7 +24,7 @@ const unitTransform = (v)=>{
     return [Math.round(v/(1024*1024*1024*1024)),1024*1024*1024*1024]
 }
 
-export default function SizeInput({onChange,min,value,required,label,max}){
+export default function SizeInput({onChange,min,value,required,label,max,suffix}){
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -84,11 +84,11 @@ export default function SizeInput({onChange,min,value,required,label,max}){
 
                             }}
                         >
-                            <MenuItem value={1}>B</MenuItem>
-                            <MenuItem value={1024}>KB</MenuItem>
-                            <MenuItem value={1024*1024}>MB</MenuItem>
-                            <MenuItem value={1024*1024*1024}>GB</MenuItem>
-                            <MenuItem value={1024*1024*1024*1024}>TB</MenuItem>
+                            <MenuItem value={1}>B{suffix && suffix}</MenuItem>
+                            <MenuItem value={1024}>KB{suffix && suffix}</MenuItem>
+                            <MenuItem value={1024*1024}>MB{suffix && suffix}</MenuItem>
+                            <MenuItem value={1024*1024*1024}>GB{suffix && suffix}</MenuItem>
+                            <MenuItem value={1024*1024*1024*1024}>TB{suffix && suffix}</MenuItem>
                         </Select>
                     </InputAdornment>
                 }

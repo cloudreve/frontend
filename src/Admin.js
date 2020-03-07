@@ -22,6 +22,8 @@ const ImageSetting = React.lazy(() => import("./component/Admin/Setting/Image"))
 const Policy = React.lazy(() => import("./component/Admin/Policy/Policy"));
 const AddPolicy = React.lazy(() => import("./component/Admin/Policy/AddPolicy"));
 const EditPolicyPreload = React.lazy(() => import("./component/Admin/Policy/EditPolicy"));
+const Group = React.lazy(() => import("./component/Admin/Group/Group"));
+const GroupForm = React.lazy(() => import("./component/Admin/Group/GroupForm"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -142,6 +144,18 @@ export default function Admin() {
                                 <Route path={`${path}/policy/edit/:mode/:id`} exact>
                                     <Suspense fallback={<PageLoading />}>
                                         <EditPolicyPreload/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/group`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <Group/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/group/add`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <GroupForm/>
                                     </Suspense>
                                 </Route>
 
