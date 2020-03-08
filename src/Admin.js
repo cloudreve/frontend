@@ -28,6 +28,7 @@ const EditGroupPreload = React.lazy(() => import("./component/Admin/Group/EditGr
 const User = React.lazy(() => import("./component/Admin/User/User"));
 const UserForm = React.lazy(() => import("./component/Admin/User/UserForm"));
 const EditUserPreload = React.lazy(() => import("./component/Admin/User/EditUser"));
+const File = React.lazy(() => import("./component/Admin/File/File"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -184,6 +185,12 @@ export default function Admin() {
                                 <Route path={`${path}/user/edit/:id`} exact>
                                     <Suspense fallback={<PageLoading />}>
                                         <EditUserPreload/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/file`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <File/>
                                     </Suspense>
                                 </Route>
 
