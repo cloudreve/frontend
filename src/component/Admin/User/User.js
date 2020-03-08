@@ -19,7 +19,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useHistory, useLocation } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import { Delete, Edit } from "@material-ui/icons";
+import { Delete, Edit, FilterList } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import Popover from "@material-ui/core/Popover";
 import Menu from "@material-ui/core/Menu";
@@ -29,6 +29,8 @@ import Typography from "@material-ui/core/Typography";
 import { lighten } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
+import UserFilter from "../Dialogs/UserFilter";
+import Badge from "@material-ui/core/Badge";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -63,15 +65,15 @@ const useStyles = makeStyles(theme => ({
               },
     visuallyHidden: {
         border: 0,
-        clip: 'rect(0 0 0 0)',
+        clip: "rect(0 0 0 0)",
         height: 1,
         margin: -1,
-        overflow: 'hidden',
+        overflow: "hidden",
         padding: 0,
-        position: 'absolute',
+        position: "absolute",
         top: 20,
-        width: 1,
-    },
+        width: 1
+    }
 }));
 
 function useQuery() {
@@ -85,8 +87,9 @@ export default function Group() {
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0);
     const [filter, setFilter] = useState({});
-    const [orderBy, setOrderBy] = useState(["id","desc"]);
-
+    const [search, setSearch] = useState({});
+    const [orderBy, setOrderBy] = useState(["id", "desc"]);
+    const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
 
     let location = useLocation();
@@ -96,14 +99,15 @@ export default function Group() {
 
     useEffect(() => {
         loadList();
-    }, [page, pageSize,orderBy,filter]);
+    }, [page, pageSize, orderBy, filter, search]);
 
     const loadList = () => {
         API.post("/admin/user/list", {
             page: page,
             page_size: pageSize,
             order_by: orderBy.join(" "),
-            conditions: filter
+            conditions: filter,
+            searches: search
         })
             .then(response => {
                 setUsers(response.data.items);
@@ -166,15 +170,41 @@ export default function Group() {
 
     return (
         <div>
+            <UserFilter
+                filter={filter}
+                open={filterDialog}
+                onClose={() => setFilterDialog(false)}
+                setSearch={setSearch}
+                setFilter={setFilter}
+            />
             <div className={classes.header}>
                 <Button
+                    style={{ alignSelf: "center" }}
                     color={"primary"}
-                    onClick={() => history.push("/admin/group/add")}
+                    onClick={() => history.push("/admin/user/add")}
                     variant={"contained"}
                 >
                     新建用户
                 </Button>
                 <div className={classes.headerRight}>
+                    <Tooltip title="过滤">
+
+                            <IconButton
+                                style={{ marginRight: 8 }}
+                                onClick={() => setFilterDialog(true)}
+                            ><Badge
+                                color="secondary"
+                                variant="dot"
+                                invisible={
+                                    Object.keys(search).length === 0 &&
+                                    Object.keys(filter).length === 0
+                                }
+                            >
+                                <FilterList />
+                            </Badge>
+                            </IconButton>
+
+                    </Tooltip>
                     <Button
                         color={"primary"}
                         onClick={() => loadList()}
@@ -226,33 +256,52 @@ export default function Group() {
                                     <TableSortLabel
                                         active={orderBy[0] === "id"}
                                         direction={orderBy[1]}
-                                        onClick={()=>setOrderBy([
-                                            "id",
-                                            orderBy[1] === "asc" ? "desc":"asc",
-                                        ])}
+                                        onClick={() =>
+                                            setOrderBy([
+                                                "id",
+                                                orderBy[1] === "asc"
+                                                    ? "desc"
+                                                    : "asc"
+                                            ])
+                                        }
                                     >
                                         #
                                         {orderBy[0] === "id" ? (
-                                            <span className={classes.visuallyHidden}>
-                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            <span
+                                                className={
+                                                    classes.visuallyHidden
+                                                }
+                                            >
+                                                {orderBy[1] === "desc"
+                                                    ? "sorted descending"
+                                                    : "sorted ascending"}
                                             </span>
                                         ) : null}
                                     </TableSortLabel>
-
                                 </TableCell>
                                 <TableCell style={{ minWidth: 120 }}>
                                     <TableSortLabel
                                         active={orderBy[0] === "nick"}
                                         direction={orderBy[1]}
-                                        onClick={()=>setOrderBy([
-                                            "nick",
-                                            orderBy[1] === "asc" ? "desc":"asc",
-                                        ])}
+                                        onClick={() =>
+                                            setOrderBy([
+                                                "nick",
+                                                orderBy[1] === "asc"
+                                                    ? "desc"
+                                                    : "asc"
+                                            ])
+                                        }
                                     >
                                         昵称
                                         {orderBy[0] === "nick" ? (
-                                            <span className={classes.visuallyHidden}>
-                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            <span
+                                                className={
+                                                    classes.visuallyHidden
+                                                }
+                                            >
+                                                {orderBy[1] === "desc"
+                                                    ? "sorted descending"
+                                                    : "sorted ascending"}
                                             </span>
                                         ) : null}
                                     </TableSortLabel>
@@ -261,40 +310,71 @@ export default function Group() {
                                     <TableSortLabel
                                         active={orderBy[0] === "email"}
                                         direction={orderBy[1]}
-                                        onClick={()=>setOrderBy([
-                                            "email",
-                                            orderBy[1] === "asc" ? "desc":"asc",
-                                        ])}
+                                        onClick={() =>
+                                            setOrderBy([
+                                                "email",
+                                                orderBy[1] === "asc"
+                                                    ? "desc"
+                                                    : "asc"
+                                            ])
+                                        }
                                     >
                                         Email
                                         {orderBy[0] === "email" ? (
-                                            <span className={classes.visuallyHidden}>
-                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            <span
+                                                className={
+                                                    classes.visuallyHidden
+                                                }
+                                            >
+                                                {orderBy[1] === "desc"
+                                                    ? "sorted descending"
+                                                    : "sorted ascending"}
                                             </span>
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell style={{ minWidth: 70 }}>用户组</TableCell>
-                                <TableCell style={{ minWidth: 50 }}>状态</TableCell>
-                                <TableCell align={"right"} style={{ minWidth: 80 }}>
+                                <TableCell style={{ minWidth: 70 }}>
+                                    用户组
+                                </TableCell>
+                                <TableCell style={{ minWidth: 50 }}>
+                                    状态
+                                </TableCell>
+                                <TableCell
+                                    align={"right"}
+                                    style={{ minWidth: 80 }}
+                                >
                                     <TableSortLabel
                                         active={orderBy[0] === "storage"}
                                         direction={orderBy[1]}
-                                        onClick={()=>setOrderBy([
-                                            "storage",
-                                            orderBy[1] === "asc" ? "desc":"asc",
-                                        ])}
+                                        onClick={() =>
+                                            setOrderBy([
+                                                "storage",
+                                                orderBy[1] === "asc"
+                                                    ? "desc"
+                                                    : "asc"
+                                            ])
+                                        }
                                     >
-                                        空间容量
+                                        已用空间
                                         {orderBy[0] === "storage" ? (
-                                            <span className={classes.visuallyHidden}>
-                                              {orderBy[1] === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            <span
+                                                className={
+                                                    classes.visuallyHidden
+                                                }
+                                            >
+                                                {orderBy[1] === "desc"
+                                                    ? "sorted descending"
+                                                    : "sorted ascending"}
                                             </span>
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell align={"right"} style={{ minWidth: 100 }}>操作</TableCell>
-
+                                <TableCell
+                                    align={"right"}
+                                    style={{ minWidth: 100 }}
+                                >
+                                    操作
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
