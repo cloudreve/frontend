@@ -19,7 +19,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useHistory, useLocation } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import { Delete, Edit, FilterList } from "@material-ui/icons";
+import {Block, Delete, Edit, FilterList} from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import Popover from "@material-ui/core/Popover";
 import Menu from "@material-ui/core/Menu";
@@ -91,6 +91,7 @@ export default function Group() {
     const [orderBy, setOrderBy] = useState(["id", "desc"]);
     const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
+    const [loading,setLoading] = useState(false);
 
     let location = useLocation();
     let history = useHistory();
@@ -120,15 +121,51 @@ export default function Group() {
     };
 
     const deletePolicy = id => {
-        API.delete("/admin/user/" + id)
+        setLoading(true);
+        API.post("/admin/user/delete",{id:[id]})
             .then(response => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户组已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            });
+            }).finally(()=>{
+            setLoading(false);
+        });
     };
+
+    const deleteBatch = e =>{
+        setLoading(true);
+        API.post("/admin/user/delete",{id:selected})
+            .then(response => {
+                loadList();
+                ToggleSnackbar("top", "right", "用户组已删除", "success");
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            }).finally(()=>{
+            setLoading(false);
+        });
+    }
+
+    const block = id =>{
+        setLoading(true);
+        API.patch("/admin/user/ban/"+id)
+            .then(response => {
+                setUsers(users.map(v=>{
+                    if (v.ID === id){
+                        let newUser = {...v,Status:response.data}
+                        return newUser;
+                    }
+                    return v
+                }))
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            }).finally(()=>{
+            setLoading(false);
+        });
+    }
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -226,7 +263,7 @@ export default function Group() {
                             已选择 {selected.length} 个对象
                         </Typography>
                         <Tooltip title="删除">
-                            <IconButton aria-label="delete">
+                            <IconButton onClick={deleteBatch} disabled={loading} aria-label="delete">
                                 <Delete />
                             </IconButton>
                         </Tooltip>
@@ -370,7 +407,6 @@ export default function Group() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell
-                                    align={"right"}
                                     style={{ minWidth: 100 }}
                                 >
                                     操作
@@ -447,9 +483,10 @@ export default function Group() {
                                     <TableCell align={"right"}>
                                         {sizeToString(row.Storage)}
                                     </TableCell>
-                                    <TableCell align={"right"}>
+                                    <TableCell>
                                         <Tooltip title={"删除"}>
                                             <IconButton
+                                                disabled={loading}
                                                 onClick={() =>
                                                     deletePolicy(row.ID)
                                                 }
@@ -469,6 +506,15 @@ export default function Group() {
                                                 size={"small"}
                                             >
                                                 <Edit />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={"封禁/解封"}>
+                                            <IconButton
+                                                disabled={loading}
+                                                onClick={()=>block(row.ID)}
+                                                size={"small"}
+                                            >
+                                                <Block />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>
