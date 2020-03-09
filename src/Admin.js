@@ -29,6 +29,7 @@ const User = React.lazy(() => import("./component/Admin/User/User"));
 const UserForm = React.lazy(() => import("./component/Admin/User/UserForm"));
 const EditUserPreload = React.lazy(() => import("./component/Admin/User/EditUser"));
 const File = React.lazy(() => import("./component/Admin/File/File"));
+const Share = React.lazy(() => import("./component/Admin/Share/Share"));
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -191,6 +192,12 @@ export default function Admin() {
                                 <Route path={`${path}/file`} exact>
                                     <Suspense fallback={<PageLoading />}>
                                         <File/>
+                                    </Suspense>
+                                </Route>
+
+                                <Route path={`${path}/share`} exact>
+                                    <Suspense fallback={<PageLoading />}>
+                                        <Share/>
                                     </Suspense>
                                 </Route>
 

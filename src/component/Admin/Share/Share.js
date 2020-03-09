@@ -81,9 +81,9 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function File() {
+export default function Share() {
     const classes = useStyles();
-    const [files, setFiles] = useState([]);
+    const [shares, setShares] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0);
@@ -100,7 +100,7 @@ export default function File() {
     }, [page, pageSize, orderBy, filter, search]);
 
     const loadList = () => {
-        API.post("/admin/file/list", {
+        API.post("/admin/share/list", {
             page: page,
             page_size: pageSize,
             order_by: orderBy.join(" "),
@@ -108,7 +108,7 @@ export default function File() {
             searches: search
         })
             .then(response => {
-                setFiles(response.data.items);
+                setShares(response.data.items);
                 setTotal(response.data.total);
                 setSelected([]);
                 setUsers(response.data.users);
@@ -120,10 +120,10 @@ export default function File() {
 
     const deletePolicy = id => {
         setLoading(true);
-        API.post("/admin/file/delete",{id:[id]})
+        API.post("/admin/share/delete",{id:[id]})
             .then(response => {
                 loadList();
-                ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
+                ToggleSnackbar("top", "right", "分享已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -137,7 +137,7 @@ export default function File() {
         API.post("/admin/file/delete",{id:selected})
             .then(response => {
                 loadList();
-                ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
+                ToggleSnackbar("top", "right", "分享已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -155,7 +155,7 @@ export default function File() {
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
-            const newSelecteds = files.map(n => n.ID);
+            const newSelecteds = shares.map(n => n.ID);
             setSelected(newSelecteds);
             return;
         }
@@ -248,11 +248,11 @@ export default function File() {
                                     <Checkbox
                                         indeterminate={
                                             selected.length > 0 &&
-                                            selected.length < files.length
+                                            selected.length < shares.length
                                         }
                                         checked={
-                                            files.length > 0 &&
-                                            selected.length === files.length
+                                            shares.length > 0 &&
+                                            selected.length === shares.length
                                         }
                                         onChange={handleSelectAllClick}
                                         inputProps={{
@@ -354,7 +354,7 @@ export default function File() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {files.map(row => (
+                            {shares.map(row => (
                                 <TableRow
                                     hover
                                     key={row.ID}

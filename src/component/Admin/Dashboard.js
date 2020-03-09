@@ -24,7 +24,7 @@ import {
     SettingsEthernet,
     AttachMoney,
     Palette,
-    CloudDownload, Image, Storage, Group, Person, InsertDriveFile
+    CloudDownload, Image, Storage, Group, Person, InsertDriveFile, Share
 } from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -238,6 +238,11 @@ const items = [
         title: "文件",
         icon: <InsertDriveFile />,
         path: "file"
+    },
+    {
+        title: "分享",
+        icon: <Share />,
+        path: "share"
     },
 ];
 
