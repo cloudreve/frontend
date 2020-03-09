@@ -61,7 +61,7 @@ const policies = [
     },
     {
         name:"腾讯云 COS",
-        img:"upyun.png",
+        img:"cos.png",
         path:"/admin/policy/add/cos",
     },
     {

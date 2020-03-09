@@ -82,7 +82,8 @@ const styles = theme => ({
         textAlign: "center",
         marginTop: "1px",
         fontSize: "25px",
-        color: "#ffffffcf"
+        color: "#ffffff",
+        opacity: "0.81",
     },
     th: {
         minWidth: "106px"

@@ -24,7 +24,7 @@ import {
     SettingsEthernet,
     AttachMoney,
     Palette,
-    CloudDownload, Image, Storage, Group, Person, InsertDriveFile, Share
+    CloudDownload, Image, Storage, Group, Person, InsertDriveFile, Share, ShoppingCart, Assignment, ListAlt
 } from "@material-ui/icons";
 import { withStyles } from "@material-ui/core";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -243,6 +243,27 @@ const items = [
         title: "分享",
         icon: <Share />,
         path: "share"
+    },
+    {
+        title: "订单",
+        icon: <ShoppingCart />,
+        path: "order"
+    },
+    {
+        title: "持久任务",
+        icon: <Assignment />,
+        sub: [
+            {
+                title: "离线下载",
+                path: "download",
+                icon: <CloudDownload />
+            },
+            {
+                title: "常规任务",
+                path: "task",
+                icon: <ListAlt />
+            },
+            ],
     },
 ];
 

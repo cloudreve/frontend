@@ -10,7 +10,8 @@ import classNames from "classnames";
 
 const useStyles = makeStyles(theme => ({
     icon: {
-        color: 'rgba(255, 255, 255, 0.54)',
+        color: 'rgb(255, 255, 255)',
+        opacity: "0.54",
     },
 }));
 

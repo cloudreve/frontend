@@ -80,7 +80,8 @@ const styles = theme => ({
     },
     groupName: {
         marginLeft: "10px",
-        color: "#ffffff8a"
+        color: "#ffffff",
+        opacity: "0.54",
     },
     storageCircle: {
         width: "200px"
