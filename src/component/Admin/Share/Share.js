@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, } from "@material-ui/core/styles";
 import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
@@ -10,28 +10,20 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import { sizeToString } from "../../../untils";
 import TableBody from "@material-ui/core/TableBody";
-import { policyTypeMap } from "../../../config";
 import TablePagination from "@material-ui/core/TablePagination";
-import AddPolicy from "../Dialogs/AddPolicy";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import { useHistory, useLocation } from "react-router";
+import {  useLocation } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import {Block, Delete, Edit, FilterList} from "@material-ui/icons";
+import {  Delete,  FilterList } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
-import Popover from "@material-ui/core/Popover";
-import Menu from "@material-ui/core/Menu";
 import Checkbox from "@material-ui/core/Checkbox";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { lighten } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import UserFilter from "../Dialogs/UserFilter";
 import Badge from "@material-ui/core/Badge";
-import FileFilter from "../Dialogs/FileFilter";
+import ShareFilter from "../Dialogs/ShareFilter";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -89,11 +81,12 @@ export default function Share() {
     const [total, setTotal] = useState(0);
     const [filter, setFilter] = useState({});
     const [users, setUsers] = useState({});
+    const [ids, setIds] = useState({});
     const [search, setSearch] = useState({});
     const [orderBy, setOrderBy] = useState(["id", "desc"]);
     const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         loadList();
@@ -108,10 +101,11 @@ export default function Share() {
             searches: search
         })
             .then(response => {
+                setUsers(response.data.users);
+                setIds(response.data.ids);
                 setShares(response.data.items);
                 setTotal(response.data.total);
                 setSelected([]);
-                setUsers(response.data.users);
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -120,31 +114,33 @@ export default function Share() {
 
     const deletePolicy = id => {
         setLoading(true);
-        API.post("/admin/share/delete",{id:[id]})
+        API.post("/admin/share/delete", { id: [id] })
             .then(response => {
                 loadList();
                 ToggleSnackbar("top", "right", "分享已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
-            setLoading(false);
-        });
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
-    const deleteBatch = e =>{
+    const deleteBatch = e => {
         setLoading(true);
-        API.post("/admin/file/delete",{id:selected})
+        API.post("/admin/share/delete", { id: selected })
             .then(response => {
                 loadList();
                 ToggleSnackbar("top", "right", "分享已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
-            setLoading(false);
-        });
-    }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -186,7 +182,7 @@ export default function Share() {
 
     return (
         <div>
-            <FileFilter
+            <ShareFilter
                 filter={filter}
                 open={filterDialog}
                 onClose={() => setFilterDialog(false)}
@@ -196,11 +192,11 @@ export default function Share() {
             <div className={classes.header}>
                 <div className={classes.headerRight}>
                     <Tooltip title="过滤">
-
-                            <IconButton
-                                style={{ marginRight: 8 }}
-                                onClick={() => setFilterDialog(true)}
-                            ><Badge
+                        <IconButton
+                            style={{ marginRight: 8 }}
+                            onClick={() => setFilterDialog(true)}
+                        >
+                            <Badge
                                 color="secondary"
                                 variant="dot"
                                 invisible={
@@ -210,8 +206,7 @@ export default function Share() {
                             >
                                 <FilterList />
                             </Badge>
-                            </IconButton>
-
+                        </IconButton>
                     </Tooltip>
                     <Button
                         color={"primary"}
@@ -234,7 +229,11 @@ export default function Share() {
                             已选择 {selected.length} 个对象
                         </Typography>
                         <Tooltip title="删除">
-                            <IconButton onClick={deleteBatch} disabled={loading} aria-label="delete">
+                            <IconButton
+                                onClick={deleteBatch}
+                                disabled={loading}
+                                aria-label="delete"
+                            >
                                 <Delete />
                             </IconButton>
                         </Tooltip>
@@ -260,7 +259,7 @@ export default function Share() {
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell style={{ minWidth: 59 }}>
+                                <TableCell style={{ minWidth: 10 }}>
                                     <TableSortLabel
                                         active={orderBy[0] === "id"}
                                         direction={orderBy[1]}
@@ -287,20 +286,21 @@ export default function Share() {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell style={{ minWidth: 250 }}>
+                                <TableCell style={{ minWidth: 200 }}>
                                     <TableSortLabel
-                                        active={orderBy[0] === "name"}
+                                        active={orderBy[0] === "source_name"}
                                         direction={orderBy[1]}
                                         onClick={() =>
                                             setOrderBy([
-                                                "name",
+                                                "source_name",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
                                                     : "asc"
                                             ])
                                         }
                                     >
-                                        {orderBy[0] === "name" ? (
+                                        对象名
+                                        {orderBy[0] === "source_name" ? (
                                             <span
                                                 className={
                                                     classes.visuallyHidden
@@ -313,21 +313,78 @@ export default function Share() {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell align={"right"} style={{ minWidth: 70 }}>
+                                <TableCell style={{ minWidth: 70 }}>
+                                    类型
+                                </TableCell>
+                                <TableCell style={{ minWidth: 100 }} align={"right"}>
                                     <TableSortLabel
-                                        active={orderBy[0] === "size"}
+                                        active={orderBy[0] === "views"}
                                         direction={orderBy[1]}
                                         onClick={() =>
                                             setOrderBy([
-                                                "size",
+                                                "views",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
                                                     : "asc"
                                             ])
                                         }
                                     >
-                                        大小
-                                        {orderBy[0] === "size" ? (
+                                        浏览
+                                        {orderBy[0] === "views" ? (
+                                            <span
+                                                className={
+                                                    classes.visuallyHidden
+                                                }
+                                            >
+                                                {orderBy[1] === "desc"
+                                                    ? "sorted descending"
+                                                    : "sorted ascending"}
+                                            </span>
+                                        ) : null}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell style={{ minWidth: 100 }} align={"right"}>
+                                    <TableSortLabel
+                                        active={orderBy[0] === "downloads"}
+                                        direction={orderBy[1]}
+                                        onClick={() =>
+                                            setOrderBy([
+                                                "downloads",
+                                                orderBy[1] === "asc"
+                                                    ? "desc"
+                                                    : "asc"
+                                            ])
+                                        }
+                                    >
+                                        下载
+                                        {orderBy[0] === "downloads" ? (
+                                            <span
+                                                className={
+                                                    classes.visuallyHidden
+                                                }
+                                            >
+                                                {orderBy[1] === "desc"
+                                                    ? "sorted descending"
+                                                    : "sorted ascending"}
+                                            </span>
+                                        ) : null}
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell style={{ minWidth: 100 }} align={"right"}>
+                                    <TableSortLabel
+                                        active={orderBy[0] === "score"}
+                                        direction={orderBy[1]}
+                                        onClick={() =>
+                                            setOrderBy([
+                                                "score",
+                                                orderBy[1] === "asc"
+                                                    ? "desc"
+                                                    : "asc"
+                                            ])
+                                        }
+                                    >
+                                        积分
+                                        {orderBy[0] === "score" ? (
                                             <span
                                                 className={
                                                     classes.visuallyHidden
@@ -341,14 +398,15 @@ export default function Share() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 120 }}>
-                                    上传者
+                                    自动过期
+                                </TableCell>
+                                <TableCell style={{ minWidth: 120 }}>
+                                    分享者
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    上传于
+                                    分享于
                                 </TableCell>
-                                <TableCell
-                                    style={{ minWidth: 100 }}
-                                >
+                                <TableCell style={{ minWidth: 100 }}>
                                     操作
                                 </TableCell>
                             </TableRow>
@@ -370,11 +428,32 @@ export default function Share() {
                                         />
                                     </TableCell>
                                     <TableCell>{row.ID}</TableCell>
+                                    <TableCell style={{wordBreak: "break-all"}}>
+                                        <Link
+                                            target={"_blank"}
+                                            color="inherit"
+                                            href={
+                                                "/#/s/"+ids[row.ID]+(row.Password === "" ? "" : ("?password="+row.Password))
+                                            }
+                                        >
+                                            {row.SourceName}
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>
-                                        <Link target={"_blank"} color="inherit" href={"/api/v3/admin/file/preview/" + row.ID}>{row.Name}</Link>
+                                        {row.Password === "" ? "公开" : "私密"}
                                     </TableCell>
                                     <TableCell align={"right"}>
-                                        {sizeToString(row.Size)}
+                                        {row.Views}
+                                    </TableCell>
+                                    <TableCell align={"right"}>
+                                        {row.Downloads}
+                                    </TableCell>
+                                    <TableCell align={"right"}>
+                                        {row.Score}
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.RemainDownloads > -1 && (row.RemainDownloads+" 次下载后")}
+                                        {row.RemainDownloads === -1 && "无"}
                                     </TableCell>
                                     <TableCell>
                                         <Link
@@ -383,13 +462,19 @@ export default function Share() {
                                                 row.UserID
                                             }
                                         >
-                                            {users[row.UserID]?users[row.UserID].Nick:"未知"}
+                                            {users[row.UserID]
+                                                ? users[row.UserID].Nick
+                                                : "未知"}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        {new Date(row.CreatedAt).toLocaleDateString() +" "+
-                                        new Date(row.CreatedAt).toLocaleTimeString()
-                                        }
+                                        {new Date(
+                                            row.CreatedAt
+                                        ).toLocaleDateString() +
+                                            " " +
+                                            new Date(
+                                                row.CreatedAt
+                                            ).toLocaleTimeString()}
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title={"删除"}>
@@ -410,7 +495,7 @@ export default function Share() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[10, 25,50, 100]}
+                    rowsPerPageOptions={[10, 25, 50, 100]}
                     component="div"
                     count={total}
                     rowsPerPage={pageSize}

@@ -299,7 +299,7 @@ export default function File() {
                                                     : "asc"
                                             ])
                                         }
-                                    >
+                                    >文件名
                                         {orderBy[0] === "name" ? (
                                             <span
                                                 className={
