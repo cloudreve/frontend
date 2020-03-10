@@ -102,7 +102,7 @@ class UploaderComponent extends Component {
                     browse_button: ["pickfiles", "pickfolder"],
                     container: "container",
                     drop_element: "container",
-                    max_file_size: user.policy.maxSize === "0.0mb" ? 0 :user.policy.maxSize,
+                    max_file_size: user.policy.maxSize === "0.00mb" ? 0 :user.policy.maxSize,
                     dragdrop: true,
                     chunk_size: this.getChunkSize(user.policy.saveType),
                     filters: {
