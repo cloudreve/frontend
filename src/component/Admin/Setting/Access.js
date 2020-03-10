@@ -321,7 +321,7 @@ export default function Access() {
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
-                            <Alert severity="info">创建应用时，回调地址请填写：{siteURL.endsWith("/") ? (siteURL + "api/v3/callback/qq"):(siteURL + "/api/v3/callback/qq")}</Alert>
+                            <Alert severity="info">创建应用时，回调地址请填写：{siteURL.endsWith("/") ? (siteURL + "#/login/qq"):(siteURL + "/#/login/qq")}</Alert>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
