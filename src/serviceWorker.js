@@ -20,6 +20,10 @@ const isLocalhost = Boolean(
     )
 );
 
+function isAdminRoute() {
+  return window.location.pathname.startsWith('/api')
+}
+
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
@@ -32,6 +36,13 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
+      if (isAdminRoute()) {
+        console.info('unregistering service worker for api route')
+        unregister()
+        console.info('reloading');
+        window.location.reload();
+        return false
+      }
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
       if (isLocalhost) {
