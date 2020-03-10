@@ -107,7 +107,7 @@ class UploaderComponent extends Component {
                     chunk_size: this.getChunkSize(user.policy.saveType),
                     filters: {
                         mime_types:
-                            user.policy.allowedType === null
+                            (user.policy.allowedType === null || user.policy.allowedType.length === 0)
                                 ? []
                                 :  [{ title : "files", extensions : user.policy.allowedType.join(",") }],
                     },
