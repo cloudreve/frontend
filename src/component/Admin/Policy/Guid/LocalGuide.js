@@ -104,6 +104,7 @@ export default function LocalGuide(props) {
                   FileNameRule: "{randomkey8}_{originname}",
                   IsOriginLinkEnable: "false",
                   BaseURL: "",
+                IsPrivate:"true",
                   MaxSize: "0",
                   OptionsSerialized: {
                       file_type: ""
@@ -175,6 +176,7 @@ export default function LocalGuide(props) {
         policyCopy.IsOriginLinkEnable =
             policyCopy.IsOriginLinkEnable === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
+        policyCopy.IsPrivate = policyCopy.IsPrivate === "true";
         policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
             ","
         );

@@ -130,6 +130,7 @@ export default function RemoteGuide(props) {
         FileNameRule: "{randomkey8}_{originname}",
         IsOriginLinkEnable:"false",
         BaseURL:"",
+        IsPrivate:"true",
         MaxSize:"0",
         OptionsSerialized:{
             file_type:"",
@@ -199,6 +200,7 @@ export default function RemoteGuide(props) {
         policyCopy.AutoRename = policyCopy.AutoRename === "true";
         policyCopy.IsOriginLinkEnable = policyCopy.IsOriginLinkEnable === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
+        policyCopy.IsPrivate = policyCopy.IsPrivate === "true";
         policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(",");
         if (policyCopy.OptionsSerialized.file_type.length === 1 && policyCopy.OptionsSerialized.file_type[0] === ""){
             policyCopy.OptionsSerialized.file_type = [];
