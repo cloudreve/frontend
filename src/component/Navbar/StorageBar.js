@@ -132,16 +132,11 @@ class StorageBarCompoment extends Component {
                 className={classes.stickFooter}
             >
                 <Divider />
-                <ButtonBase onClick={() => this.props.history.push("/quota?")}>
+                <ButtonBase>
                     <div className={classes.storageContainer}>
                         <StorageIcon className={classes.iconFix} />
                         <div className={classes.detail}>
                             存储空间{"   "}
-                            {this.state.showExpand && (
-                                <Link href={"/#/buy"} color={"secondary"}>
-                                    扩容
-                                </Link>
-                            )}
                             <LinearProgress
                                 className={classes.bar}
                                 color="secondary"

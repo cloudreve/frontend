@@ -12,7 +12,6 @@ import { withStyles, Button, Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
-import PurchaseShareDialog from "../Modals/PurchaseShare";
 import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
@@ -195,28 +194,6 @@ class SharedFileCompoment extends Component {
     }
 
     scoreHandle = callback => event => {
-        if (this.props.share.score > 0) {
-            if (!Auth.Check()) {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    "登录后才能继续操作",
-                    "warning"
-                );
-                return;
-            }
-            if (!Auth.GetUser().group.shareFree && !this.downloaded) {
-                this.setState({
-                    purchaseCallback: () => {
-                        this.setState({
-                            purchaseCallback: null
-                        });
-                        callback(event);
-                    }
-                });
-                return;
-            }
-        }
         callback(event);
     };
 
@@ -249,11 +226,6 @@ class SharedFileCompoment extends Component {
             <div className={classes.layout}>
                 <Modals />
                 <ImgPreview />
-                <PurchaseShareDialog
-                    callback={this.state.purchaseCallback}
-                    score={this.props.share.score}
-                    onClose={() => this.setState({ purchaseCallback: null })}
-                />
                 <div className={classes.box}>
                    <Creator share={this.props.share}/>
                     <Divider />
@@ -275,22 +247,19 @@ class SharedFileCompoment extends Component {
                     <Divider />
                     <div className={classes.boxFooter}>
                         <div className={classes.actionLeft}>
+                            {this.props.share.preview && (
                             <Button
-                                onClick={()=>this.props.openResave(this.props.share.key)}
+                                variant="outlined"
                                 color="secondary"
-                            >保存到我的文件</Button>
+                                onClick={this.scoreHandle(this.preview)}
+                                disabled={this.state.loading}
+                            >
+                                预览
+                            </Button>
+                        )}
                         </div>
                         <div className={classes.actions}>
-                            {this.props.share.preview && (
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    onClick={this.scoreHandle(this.preview)}
-                                    disabled={this.state.loading}
-                                >
-                                    预览
-                                </Button>
-                            )}
+
                             <Button
                                 variant="contained"
                                 color="secondary"
@@ -299,13 +268,6 @@ class SharedFileCompoment extends Component {
                                 disabled={this.state.loading}
                             >
                                 下载
-                                {this.props.share.score > 0 &&
-                                    (!isLogin || !user.group.shareFree) &&
-                                    " (" + this.props.share.score + "积分)"}
-                                {this.props.share.score > 0 &&
-                                    isLogin &&
-                                    user.group.shareFree &&
-                                    " (免积分)"}
                             </Button>
                         </div>
                     </div>

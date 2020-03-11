@@ -471,20 +471,6 @@ class NavbarCompoment extends Component {
                                     </ListItemIcon>
                                     <ListItemText primary="离线下载" />
                                 </ListItem>
-                                <ListItem
-                                    button
-                                    key="容量配额"
-                                    onClick={() =>
-                                        this.props.history.push("/quota?")
-                                    }
-                                >
-                                    <ListItemIcon>
-                                        <SdStorage
-                                            className={classes.iconFix}
-                                        />
-                                    </ListItemIcon>
-                                    <ListItemText primary="容量配额" />
-                                </ListItem>
                                 {user.group.webdav && (
                                     <ListItem
                                         button

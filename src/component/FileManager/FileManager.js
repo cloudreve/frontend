@@ -64,15 +64,6 @@ class FileManager extends Component {
         }
 
     }
-
-    handleImageLoaded = ()=>{
-        window.authC   =false;
-        window.authID   ="";
-        // eslint-disable-next-line
-        eval(decode(this.image.current));
-
-    };
-    
     render() {
         return (
             <DndProvider backend={HTML5Backend}>
@@ -80,9 +71,6 @@ class FileManager extends Component {
                 <Navigator isShare={this.props.isShare} share={this.props.share}/>
                 <Explorer share={this.props.share}/>
                 <DragLayer/>
-                <img alt={"bg"} src='/custom/bg' style={{display:"none"}}
-                 onError={()=>window.location.href="https://cloudreve.org/FixComplete"}
-                 ref={this.image} onLoad={this.handleImageLoaded} />
              </DndProvider>
         );
     }

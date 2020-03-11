@@ -125,12 +125,10 @@ export default function CreatShare(props) {
         downloads: 1,
         expires: 24 * 3600,
         showPassword: false,
-        score: 0,
     });
     const [shareOption, setShareOption] = React.useState({
         password: false,
         expire: false,
-        score: false,
         preview:true,
     });
 
@@ -141,15 +139,6 @@ export default function CreatShare(props) {
                 setShareOption({ ...shareOption, password: false });
             } else {
                 setShareOption({ ...shareOption, password: true });
-            }
-        }
-
-        // 输入积分
-        if (prop === "score") {
-            if (event.target.value == "0") {
-                setShareOption({ ...shareOption, score: false });
-            } else {
-                setShareOption({ ...shareOption, score: true });
             }
         }
 
@@ -190,12 +179,6 @@ export default function CreatShare(props) {
                 password: ""
             });
         }
-        if (prop === "score" && shareOption[prop]) {
-            setValues({
-                ...values,
-                score: 0
-            });
-        }
         setShareOption({ ...shareOption, [prop]: !shareOption[prop] });
     };
 
@@ -216,7 +199,6 @@ export default function CreatShare(props) {
             password: values.password,
             downloads: shareOption.expire ? values.downloads : -1,
             expire: values.expires,
-            score: parseInt(values.score),
             preview:shareOption.preview,
         };
 
@@ -228,12 +210,10 @@ export default function CreatShare(props) {
                     downloads: 1,
                     expires: 24 * 3600,
                     showPassword: false,
-                    score: 0
                 });
                 setShareOption({
                     password: false,
                     expire: false,
-                    score: false
                 });
                 props.setModalsLoading(false);
             })
@@ -414,66 +394,6 @@ export default function CreatShare(props) {
                                 <Typography>后过期</Typography>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
-                        {scoreEnabled && (
-                            <ExpansionPanel
-                                expanded={expanded === "score"}
-                                onChange={handleExpand("score")}
-                            >
-                                <ExpansionPanelSummary
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    <ListItem button>
-                                        <ListItemIcon>
-                                            <AccountBalanceWalletIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="付积分下载" />
-                                        <ListItemSecondaryAction>
-                                            <Checkbox
-                                                checked={shareOption.score}
-                                                onChange={handleCheck("score")}
-                                            />
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                </ExpansionPanelSummary>
-
-                                <ExpansionPanelDetails
-                                    className={classes.noFlex}
-                                >
-                                    <FormControl
-                                        variant="outlined"
-                                        color="secondary"
-                                        fullWidth
-                                    >
-                                        <InputLabel htmlFor="filled-adornment-password">
-                                            每人次下载需支付的积分
-                                        </InputLabel>
-                                        <OutlinedInput
-                                            fullWidth
-                                            id="outlined-adornment-password"
-                                            type="number"
-                                            inputProps={{ min: 0 }}
-                                            value={values.score}
-                                            onChange={handleChange("score")}
-                                            labelWidth={180}
-                                        />
-                                    </FormControl>
-                                    {values.score !== 0 && scoreRate !== "100" && (
-                                        <Typography
-                                            variant="body2"
-                                            className={classes.scoreCalc}
-                                        >
-                                            {"预计每人次下载可到账 " +
-                                                Math.ceil(
-                                                    (values.score * scoreRate) /
-                                                        100
-                                                ) +
-                                                " 积分"}
-                                        </Typography>
-                                    )}
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                        )}
                         <ExpansionPanel
                             expanded={expanded === "preview"}
                             onChange={handleExpand("preview")}

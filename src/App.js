@@ -5,34 +5,30 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AlertBar from "./component/Common/Snackbar";
 import { createMuiTheme, lighten } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import {Redirect, Route, Switch, useRouteMatch} from "react-router-dom";
+import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
-import PageLoading from "./component/Placeholder/PageLoading.js";
-import {changeThemeColor} from "./untils";
+import { changeThemeColor } from "./untils";
 import NotFound from "./component/Share/NotFound";
 
 // Lazy loads
-import LoginForm from "./component/Login/LoginForm"
-import FileManager from "./component/FileManager/FileManager.js"
-import VideoPreview from "./component/Viewer/Video.js"
-import SearchResult from "./component/Share/SearchResult"
-import MyShare from "./component/Share/MyShare"
-import Download from "./component/Download/Download"
-import SharePreload from "./component/Share/SharePreload"
-import DocViewer from "./component/Viewer/Doc"
-import TextViewer from "./component/Viewer/Text"
-import Quota from "./component/VAS/Quota"
-import BuyQuota from "./component/VAS/BuyQuota"
-import WebDAV from "./component/Setting/WebDAV"
-import Tasks from "./component/Setting/Tasks"
-import Profile from "./component/Setting/Profile"
-import UserSetting from "./component/Setting/UserSetting"
-import QQCallback from "./component/Login/QQ"
-import Register from "./component/Login/Register"
-import Activation from "./component/Login/Activication"
-import ResetForm from "./component/Login/ResetForm"
-import Reset from "./component/Login/Reset"
+import LoginForm from "./component/Login/LoginForm";
+import FileManager from "./component/FileManager/FileManager.js";
+import VideoPreview from "./component/Viewer/Video.js";
+import SearchResult from "./component/Share/SearchResult";
+import MyShare from "./component/Share/MyShare";
+import Download from "./component/Download/Download";
+import SharePreload from "./component/Share/SharePreload";
+import DocViewer from "./component/Viewer/Doc";
+import TextViewer from "./component/Viewer/Text";
+import WebDAV from "./component/Setting/WebDAV";
+import Tasks from "./component/Setting/Tasks";
+import Profile from "./component/Setting/Profile";
+import UserSetting from "./component/Setting/UserSetting";
+import Register from "./component/Login/Register";
+import Activation from "./component/Login/Activication";
+import ResetForm from "./component/Login/ResetForm";
+import Reset from "./component/Login/Reset";
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -58,7 +54,11 @@ export default function App() {
                 }
             }
         });
-        changeThemeColor(themeConfig.palette.type === "dark"?theme.palette.background.default:theme.palette.primary.main);
+        changeThemeColor(
+            themeConfig.palette.type === "dark"
+                ? theme.palette.background.default
+                : theme.palette.primary.main
+        );
         return theme;
     }, [prefersDarkMode, themeConfig]);
 
@@ -90,113 +90,103 @@ export default function App() {
                             <AuthRoute exact path={path} isLogin={isLogin}>
                                 <Redirect
                                     to={{
-                                        pathname: "/home",
+                                        pathname: "/home"
                                     }}
                                 />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}home`} isLogin={isLogin}>
-                                    <FileManager />
+                                <FileManager />
                             </AuthRoute>
 
                             <AuthRoute
                                 path={`${path}video/*`}
                                 isLogin={isLogin}
                             >
-                                    <VideoPreview />
+                                <VideoPreview />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}text/*`} isLogin={isLogin}>
-                                    <TextViewer />
+                                <TextViewer />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
-                                    <DocViewer />
+                                <DocViewer />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
-                                    <Download />
+                                <Download />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}shares`} isLogin={isLogin}>
-                                    <MyShare />
+                                <MyShare />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}search`} isLogin={isLogin}>
-                                    <SearchResult />
+                                <SearchResult />
+                            </AuthRoute>
+                            
+                            <AuthRoute
+                                path={`${path}setting`}
+                                isLogin={isLogin}
+                            >
+                                <UserSetting />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}quota`} isLogin={isLogin}>
-                                    <Quota />
+                            <AuthRoute
+                                path={`${path}profile/:id`}
+                                isLogin={isLogin}
+                            >
+                                <Profile />
                             </AuthRoute>
-
-                            <AuthRoute path={`${path}buy`} isLogin={isLogin}>
-                                    <BuyQuota />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}setting`} isLogin={isLogin}>
-                                    <UserSetting />
-                            </AuthRoute>
-
-
-                            <AuthRoute path={`${path}profile/:id`} isLogin={isLogin}>
-                                    <Profile />
-                            </AuthRoute>
-
 
                             <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
-                                    <WebDAV />
+                                <WebDAV />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
-                                    <Tasks />
+                                <Tasks />
                             </AuthRoute>
 
                             <Route path={`${path}login`} exact>
-                                    <LoginForm />
+                                <LoginForm />
                             </Route>
 
                             <Route path={`${path}signup`} exact>
-                                    <Register />
+                                <Register />
                             </Route>
 
                             <Route path={`${path}activate`} exact>
-                                    <Activation />
+                                <Activation />
                             </Route>
 
                             <Route path={`${path}reset`} exact>
-                                    <ResetForm />
+                                <ResetForm />
                             </Route>
 
                             <Route path={`${path}forget`} exact>
-                                    <Reset />
-                            </Route>
-
-                            <Route path={`${path}login/qq`}>
-                                    <QQCallback />
+                                <Reset />
                             </Route>
 
                             <Route exact path={`${path}s/:id`}>
-                                    <SharePreload />
+                                <SharePreload />
                             </Route>
 
                             <Route path={`${path}s/:id/video(/)*`}>
-                                    <VideoPreview />
+                                <VideoPreview />
                             </Route>
 
                             <Route path={`${path}s/:id/doc(/)*`}>
-                                    <DocViewer />
+                                <DocViewer />
                             </Route>
 
                             <Route path={`${path}s/:id/text(/)*`}>
-                                    <TextViewer />
+                                <TextViewer />
                             </Route>
 
                             <Route path="*">
                                 <NotFound msg={"页面不存在"} />
                             </Route>
-
-
                         </Switch>
                     </main>
                 </div>

@@ -101,7 +101,6 @@ function LoginForm() {
 
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
     const title = useSelector(state => state.siteConfig.title);
-    const QQLogin = useSelector(state => state.siteConfig.QQLogin);
     const authn = useSelector(state => state.siteConfig.authn);
 
     const dispatch = useDispatch();
@@ -249,18 +248,6 @@ function LoginForm() {
             });
     };
 
-    const initQQLogin = e =>{
-        setLoading(true);
-        API.post("/user/qq")
-            .then(response => {
-                window.location.href = response.data
-            })
-            .catch(error => {
-                setLoading(false);
-                ToggleSnackbar("top", "right", error.message, "warning");
-            });
-    };
-
     const twoFALogin = e =>{
         e.preventDefault();
         setLoading(true);
@@ -350,30 +337,7 @@ function LoginForm() {
                                 </div>
                             </div>
                         )}
-                        {QQLogin && (
-                            <div className={classes.buttonContainer}>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={loading}
-                                    className={classes.submit}
-                                >
-                                    登录
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    style={{ marginLeft: "10px" }}
-                                    disabled={loading}
-                                    className={classes.submit}
-                                    onClick={initQQLogin}
-                                >
-                                    使用QQ登录
-                                </Button>
-                            </div>
-                        )}
-                        {!QQLogin && (
+
                             <Button
                                 type="submit"
                                 fullWidth
@@ -384,7 +348,7 @@ function LoginForm() {
                             >
                                 登录
                             </Button>
-                        )}
+
                     </form>
                 )}
                 {useAuthn && (
