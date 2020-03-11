@@ -29,32 +29,32 @@ const useStyles = makeStyles(theme => ({
     "@global": {
         //如果嵌套主题，则应该定位[class * =“MuiButton-root”]。
         ".for-container": {
-            border: "none"
+            border: "none!important"
         },
         ".for-container .for-editor .for-editor-edit": {
-            height: 0
+            height: "0!important"
         },
         ".for-container > div:first-child": {
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0
+            borderTopLeftRadius: "0!important",
+            borderTopRightRadius: "0!important"
         },
         ".for-container .for-editor .for-panel .for-preview": {
-            backgroundColor: theme.palette.background.paper,
-            color: theme.palette.text.primary
+            backgroundColor: theme.palette.background.paper + "!important",
+            color: theme.palette.text.primary + "!important"
         },
         ".for-container .for-markdown-preview pre": {
-            backgroundColor: theme.palette.background.default,
-            color: theme.palette.type ==="dark"?"#fff":"rgba(0, 0, 0, 0.87);",
+            backgroundColor: theme.palette.background.default + "!important",
+            color: theme.palette.type ==="dark"?"#fff !important":"rgba(0, 0, 0, 0.87);!important",
         },
 
         ".for-container .for-markdown-preview code": {
-            backgroundColor: theme.palette.background.default
+            backgroundColor: theme.palette.background.default + "!important"
         },
         ".for-container .for-markdown-preview a": {
-            color: theme.palette.type==="dark"?"#67aeff":"#0366d6",
+            color: theme.palette.type==="dark"?"#67aeff !important":"#0366d6 !important",
         },
         ".for-container .for-markdown-preview table th":{
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background.default + "!important",
         },
     }
 }));

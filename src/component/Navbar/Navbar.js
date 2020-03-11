@@ -263,7 +263,7 @@ const styles = theme => ({
         },
 
         [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(100vh - 261px)"
+            minHeight: "calc(100vh - 324px)"
         }
     }
 });

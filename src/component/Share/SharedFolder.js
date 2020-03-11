@@ -16,6 +16,7 @@ import Paper from "@material-ui/core/Paper";
 import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import pathHelper from "../../untils/page";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -84,7 +85,10 @@ class SharedFolderComponent extends Component {
     }
 
     handleClickAway = () => {
-        this.props.setSelectedTarget([]);
+        if (!pathHelper.isMobile()){
+            this.props.setSelectedTarget([]);
+        }
+
     };
 
     render() {
