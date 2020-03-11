@@ -370,33 +370,6 @@ export default function Share() {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell style={{ minWidth: 100 }} align={"right"}>
-                                    <TableSortLabel
-                                        active={orderBy[0] === "score"}
-                                        direction={orderBy[1]}
-                                        onClick={() =>
-                                            setOrderBy([
-                                                "score",
-                                                orderBy[1] === "asc"
-                                                    ? "desc"
-                                                    : "asc"
-                                            ])
-                                        }
-                                    >
-                                        积分
-                                        {orderBy[0] === "score" ? (
-                                            <span
-                                                className={
-                                                    classes.visuallyHidden
-                                                }
-                                            >
-                                                {orderBy[1] === "desc"
-                                                    ? "sorted descending"
-                                                    : "sorted ascending"}
-                                            </span>
-                                        ) : null}
-                                    </TableSortLabel>
-                                </TableCell>
                                 <TableCell style={{ minWidth: 120 }}>
                                     自动过期
                                 </TableCell>
@@ -447,9 +420,6 @@ export default function Share() {
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         {row.Downloads}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {row.Score}
                                     </TableCell>
                                     <TableCell>
                                         {row.RemainDownloads > -1 && (row.RemainDownloads+" 次下载后")}

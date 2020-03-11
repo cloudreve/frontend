@@ -31,7 +31,6 @@ export default function EditGroupPreload( ) {
                     "archive_task",
                     "one_time_download",
                     "share_download",
-                    "share_free",
                     "aria2"
                 ].forEach(v => {
                     if (response.data.OptionsSerialized[v] !== undefined){
@@ -51,9 +50,7 @@ export default function EditGroupPreload( ) {
                         response.data.OptionsSerialized[v] = response.data.OptionsSerialized[v].toString();
                     }
                 });
-                response.data.PolicyList = response.data.PolicyList.map(v=>{
-                    return v.toString();
-                });
+                response.data.PolicyList = response.data.PolicyList[0];
 
                 // JSON转换
                 if(response.data.OptionsSerialized.aria2_options === undefined){

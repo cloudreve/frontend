@@ -45,10 +45,6 @@ export default function Access() {
         login_captcha: "0",
         reg_captcha: "0",
         forget_captcha: "0",
-        qq_login: "0",
-        qq_direct_login: "0",
-        qq_login_id: "",
-        qq_login_key: "",
         authn_enabled: "0"
     });
     const [siteURL, setSiteURL] = useState("");
@@ -312,95 +308,6 @@ export default function Access() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
-                    </div>
-                </div>
-
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        QQ互联
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <Alert severity="info">创建应用时，回调地址请填写：{siteURL.endsWith("/") ? (siteURL + "#/login/qq"):(siteURL + "/#/login/qq")}</Alert>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={options.qq_login === "1"}
-                                            onChange={handleChange("qq_login")}
-                                        />
-                                    }
-                                    label="开启QQ互联"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否允许绑定QQ、使用QQ登录本站
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        {options.qq_login === "1" && (
-                            <>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <FormControlLabel
-                                            control={
-                                                <Switch
-                                                    checked={
-                                                        options.qq_direct_login ===
-                                                        "1"
-                                                    }
-                                                    onChange={handleChange(
-                                                        "qq_direct_login"
-                                                    )}
-                                                />
-                                            }
-                                            label="未绑定时可直接登录"
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            开启后，如果用户使用了QQ登录，但是没有已绑定的注册用户，系统会为其创建用户并登录。这种方式创建的用户日后只能使用QQ登录。
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            APP ID
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={options.qq_login_id}
-                                            onChange={handleInputChange(
-                                                "qq_login_id"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            应用管理页面获取到的的 APP ID
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            APP KEY
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={options.qq_login_key}
-                                            onChange={handleInputChange(
-                                                "qq_login_key"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            应用管理页面获取到的的 APP KEY
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-                            </>
-                        )}
                     </div>
                 </div>
 

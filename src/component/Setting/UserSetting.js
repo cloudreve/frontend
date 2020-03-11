@@ -266,27 +266,6 @@ class UserSettingCompoment extends Component {
             });
     };
 
-    doChangeGroup = () => {
-        API.patch("/user/setting/vip", {})
-            .then(response => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    "解约成功，更改会在数分钟后生效",
-                    "success"
-                );
-                this.handleClose();
-            })
-            .catch(error => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-            });
-    };
-
     useGravatar = () => {
         this.setState({
             loading: "gravatar"
@@ -302,26 +281,6 @@ class UserSettingCompoment extends Component {
                 this.setState({
                     loading: ""
                 });
-            })
-            .catch(error => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.setState({
-                    loading: ""
-                });
-            });
-    };
-
-    changePolicy = id => {
-        API.patch("/user/setting/policy", {
-            id: id
-        })
-            .then(response => {
-                window.location.reload();
             })
             .catch(error => {
                 this.props.toggleSnackbar(
@@ -362,45 +321,6 @@ class UserSettingCompoment extends Component {
                     error.message,
                     "error"
                 );
-                this.setState({
-                    loading: ""
-                });
-            });
-    };
-
-    bindQQ = () => {
-        this.setState({
-            loading: "nick"
-        });
-        API.patch("/user/setting/qq", {})
-            .then(response => {
-                if (response.data === "") {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "已解除与QQ账户的关联",
-                        "success"
-                    );
-                    this.setState({
-                        settings: {
-                            ...this.state.settings,
-                            qq: false
-                        }
-                    });
-                } else {
-                    window.location.href = response.data;
-                }
-                this.handleClose();
-            })
-            .catch(error => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-            })
-            .finally(() => {
                 this.setState({
                     loading: ""
                 });
@@ -761,9 +681,6 @@ class UserSettingCompoment extends Component {
                             <Divider />
                             <ListItem
                                 button
-                                onClick={() =>
-                                    this.props.history.push("/buy?tab=1")
-                                }
                             >
                                 <ListItemIcon className={classes.iconFix}>
                                     <GroupIcon />
@@ -776,115 +693,6 @@ class UserSettingCompoment extends Component {
                                         color="textSecondary"
                                     >
                                         {user.group.name}
-                                        {this.state.settings.group_expires >
-                                            0 && (
-                                            <span>
-                                                {" "}
-                                                <TimeAgo
-                                                    datetime={
-                                                        this.state.settings
-                                                            .group_expires +
-                                                        "000"
-                                                    }
-                                                    locale="zh_CN"
-                                                />{" "}
-                                                过期
-                                            </span>
-                                        )}
-                                    </Typography>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            {this.state.settings.group_expires > 0 && (
-                                <div>
-                                    <Divider />
-                                    <ListItem
-                                        button
-                                        onClick={() =>
-                                            this.setState({
-                                                groupBackModal: true
-                                            })
-                                        }
-                                    >
-                                        <ListItemIcon
-                                            className={classes.iconFix}
-                                        >
-                                            <AlarmOff />
-                                        </ListItemIcon>
-                                        <ListItemText primary="手动解约当前用户组" />
-
-                                        <ListItemSecondaryAction>
-                                            <RightIcon
-                                                className={classes.rightIcon}
-                                            />
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                </div>
-                            )}
-                            <Divider />
-                            <ListItem button onClick={() => this.bindQQ()}>
-                                <ListItemIcon className={classes.iconFix}>
-                                    <SettingsInputHdmi />
-                                </ListItemIcon>
-                                <ListItemText primary="QQ账号" />
-
-                                <ListItemSecondaryAction
-                                    className={classes.flexContainer}
-                                >
-                                    <Typography
-                                        className={classes.infoTextWithIcon}
-                                        color="textSecondary"
-                                    >
-                                        {this.state.settings.qq
-                                            ? "解除绑定"
-                                            : "绑定"}
-                                    </Typography>
-                                    <RightIcon
-                                        className={classes.rightIconWithText}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                            <ListItem
-                                button
-                                onClick={() =>
-                                    this.setState({ changePolicy: true })
-                                }
-                            >
-                                <ListItemIcon className={classes.iconFix}>
-                                    <Backup />
-                                </ListItemIcon>
-                                <ListItemText primary="存储策略" />
-
-                                <ListItemSecondaryAction
-                                    className={classes.flexContainer}
-                                >
-                                    <Typography
-                                        className={classes.infoTextWithIcon}
-                                        color="textSecondary"
-                                    >
-                                        {
-                                            this.state.settings.policy.current
-                                                .name
-                                        }
-                                    </Typography>
-                                    <RightIcon
-                                        className={classes.rightIconWithText}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                            <ListItem button>
-                                <ListItemIcon className={classes.iconFix}>
-                                    <ConfirmationNumber />
-                                </ListItemIcon>
-                                <ListItemText primary="积分" />
-
-                                <ListItemSecondaryAction>
-                                    <Typography
-                                        className={classes.infoText}
-                                        color="textSecondary"
-                                    >
-                                        {user.score}
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -1162,50 +970,6 @@ class UserSettingCompoment extends Component {
                     <div className={classes.paddingBottom}></div>
                 </div>
                 <Dialog
-                    open={this.state.changePolicy}
-                    onClose={this.handleClose}
-                >
-                    <DialogTitle>切换存储策略</DialogTitle>
-                    <List>
-                        {this.state.settings.policy.options.map(
-                            (value, index) => (
-                                <ListItem
-                                    button
-                                    component="label"
-                                    key={index}
-                                    onClick={() => this.changePolicy(value.id)}
-                                >
-                                    <ListItemAvatar>
-                                        {value.id ===
-                                            this.state.settings.policy.current
-                                                .id && (
-                                            <Avatar
-                                                className={
-                                                    classes.policySelected
-                                                }
-                                            >
-                                                <Check />
-                                            </Avatar>
-                                        )}
-                                        {value.id !==
-                                            this.state.settings.policy.current
-                                                .id && (
-                                            <Avatar
-                                                className={
-                                                    classes.uploadFromFile
-                                                }
-                                            >
-                                                <Backup />
-                                            </Avatar>
-                                        )}
-                                    </ListItemAvatar>
-                                    <ListItemText primary={value.name} />
-                                </ListItem>
-                            )
-                        )}
-                    </List>
-                </Dialog>
-                <Dialog
                     open={this.state.avatarModal}
                     onClose={this.handleClose}
                 >
@@ -1278,23 +1042,6 @@ class UserSettingCompoment extends Component {
                             }
                         >
                             保存
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.groupBackModal}
-                    onClose={this.handleClose}
-                >
-                    <DialogTitle>解约用户组</DialogTitle>
-                    <DialogContent>
-                        将要退回到初始用户组，且所支付金额无法退还，确定要继续吗？
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="default">
-                            取消
-                        </Button>
-                        <Button onClick={this.doChangeGroup} color="primary">
-                            确定
                         </Button>
                     </DialogActions>
                 </Dialog>

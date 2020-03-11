@@ -9,8 +9,6 @@ import Button from "@material-ui/core/Button";
 import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -54,7 +52,6 @@ export default function Mail() {
         smtpUser: "",
         smtpPass: "",
         mail_keepalive: "30",
-        over_used_template: "",
         mail_activation_template: "",
         mail_reset_pwd_template: ""
     });
@@ -346,26 +343,6 @@ export default function Mail() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     新用户注册后激活邮件的模板
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    超额提醒
-                                </InputLabel>
-                                <Input
-                                    value={options.over_used_template}
-                                    onChange={handleChange(
-                                        "over_used_template"
-                                    )}
-                                    multiline
-                                    rowsMax="10"
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    用户因增值服务过期，容量超出限制后发送的提醒邮件模板
                                 </FormHelperText>
                             </FormControl>
                         </div>

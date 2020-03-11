@@ -585,17 +585,6 @@ class NavigatorComponent extends Component {
                         </Menu>
                         {this.props.share && (
                             <IconButton
-                                title={"保存到我的文件"}
-                                className={classes.sideButton}
-                                onClick={e =>
-                                    this.props.openResave(this.props.share.key)
-                                }
-                            >
-                                <SaveIcon fontSize="small"/>
-                            </IconButton>
-                        )}
-                        {this.props.share && (
-                            <IconButton
                                 title={
                                     "由 " +
                                     this.props.share.creator.nick +

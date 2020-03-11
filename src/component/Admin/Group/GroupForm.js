@@ -59,7 +59,7 @@ export default function GroupForm(props) {
                   ShareEnabled: "true", // 转换类型
                   WebDAVEnabled: "true", // 转换类型
                   SpeedLimit: "0", // 转换类型
-                  PolicyList: ["1"], // 转换类型,至少选择一个
+                  PolicyList: 1, // 转换类型,至少选择一个
                   OptionsSerialized: {
                       // 批量转换类型
                       share_download: "true",
@@ -152,7 +152,6 @@ export default function GroupForm(props) {
             "archive_task",
             "one_time_download",
             "share_download",
-            "share_free",
             "aria2"
         ].forEach(v => {
             if (groupCopy.OptionsSerialized[v] !== undefined){
@@ -172,15 +171,7 @@ export default function GroupForm(props) {
                 groupCopy.OptionsSerialized[v] = parseInt(groupCopy.OptionsSerialized[v]);
             }
         });
-        groupCopy.PolicyList = groupCopy.PolicyList.map(v=>{
-            return parseInt(v)
-        });
-
-        if (groupCopy.PolicyList.length < 1 && groupCopy.ID !== 3){
-            ToggleSnackbar("top", "right", "至少要为用户组选择一个存储策略", "warning");
-            return;
-        }
-
+        groupCopy.PolicyList = [parseInt(groupCopy.PolicyList)];
         // JSON转换
         try {
             groupCopy.OptionsSerialized.aria2_options = JSON.parse(groupCopy.OptionsSerialized.aria2_options);
@@ -237,45 +228,26 @@ export default function GroupForm(props) {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        可用存储策略
+                                        存储策略
                                     </InputLabel>
                                     <Select
                                         labelId="demo-mutiple-chip-label"
                                         id="demo-mutiple-chip"
-                                        multiple
                                         value={group.PolicyList}
                                         onChange={handleChange("PolicyList")}
                                         input={<Input id="select-multiple-chip" />}
-                                        renderValue={selected => (
-                                            <div className={classes.chips}>
-                                                {selected.map(value => (
-                                                    <Chip
-                                                        style={{ margin: 2 }}
-                                                        key={value}
-                                                        size={"small"}
-                                                        label={policies[value]}
-                                                        className={classes.chip}
-                                                    />
-                                                ))}
-                                            </div>
-                                        )}
                                     >
                                         {Object.keys(policies).map(pid => (
                                             <MenuItem
                                                 key={pid}
                                                 value={pid}
-                                                style={getStyles(
-                                                    pid,
-                                                    group.PolicyList,
-                                                    theme
-                                                )}
                                             >
                                                 {policies[pid]}
                                             </MenuItem>
                                         ))}
                                     </Select>
                                     <FormHelperText id="component-helper-text">
-                                        指定用户组可用的存储策略，可多选，用户可在选定范围内自由切换存储策略。
+                                        指定用户组的存储策略。
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -356,28 +328,6 @@ export default function GroupForm(props) {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     关闭后，用户无法下载别人创建的文件分享
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.OptionsSerialized
-                                                    .share_free === "true"
-                                            }
-                                            onChange={handleOptionCheckChange(
-                                                "share_free"
-                                            )}
-                                        />
-                                    }
-                                    label="免积分下载分享"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    开启后，用户可以免费下载需付积分的分享
                                 </FormHelperText>
                             </FormControl>
                         </div>

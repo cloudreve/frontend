@@ -198,11 +198,6 @@ const items = [
                 icon: <SettingsEthernet />
             },
             {
-                title: "增值服务",
-                path: "vas",
-                icon: <AttachMoney />
-            },
-            {
                 title: "外观",
                 path: "theme",
                 icon: <Palette />
@@ -243,11 +238,6 @@ const items = [
         title: "分享",
         icon: <Share />,
         path: "share"
-    },
-    {
-        title: "订单",
-        icon: <ShoppingCart />,
-        path: "order"
     },
     {
         title: "持久任务",

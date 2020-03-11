@@ -302,35 +302,6 @@ class ModalsCompoment extends Component {
             });
     };
 
-    submitResave = e => {
-        e.preventDefault();
-        this.props.setModalsLoading(true);
-        API.post("/share/save/" + window.shareKey, {
-            path:
-                this.state.selectedPath === "//" ? "/" : this.state.selectedPath
-        })
-            .then(response => {
-                this.onClose();
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    "文件已保存",
-                    "success"
-                );
-                this.props.refreshFileList();
-                this.props.setModalsLoading(false);
-            })
-            .catch(error => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.props.setModalsLoading(false);
-            });
-    };
-
     submitMove = e => {
         if (e != null) {
             e.preventDefault();
@@ -765,48 +736,6 @@ class ModalsCompoment extends Component {
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitMove}
-                                color="primary"
-                                disabled={
-                                    this.state.selectedPath === "" ||
-                                    this.props.modalsLoading
-                                }
-                            >
-                                确定
-                                {this.props.modalsLoading && (
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.buttonProgress}
-                                    />
-                                )}
-                            </Button>
-                        </div>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.props.modalsStatus.resave}
-                    onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">保存至</DialogTitle>
-                    <PathSelector
-                        presentPath={this.props.path}
-                        selected={this.props.selected}
-                        onSelect={this.setMoveTarget}
-                    />
-
-                    {this.state.selectedPath !== "" && (
-                        <DialogContent className={classes.contentFix}>
-                            <DialogContentText>
-                                保存至{" "}
-                                <strong>{this.state.selectedPathName}</strong>
-                            </DialogContentText>
-                        </DialogContent>
-                    )}
-                    <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
-                        <div className={classes.wrapper}>
-                            <Button
-                                onClick={this.submitResave}
                                 color="primary"
                                 disabled={
                                     this.state.selectedPath === "" ||

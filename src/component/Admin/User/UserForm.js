@@ -11,11 +11,6 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Chip from "@material-ui/core/Chip";
-import SizeInput from "../Common/SizeInput";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Collapse from "@material-ui/core/Collapse";
 import { useHistory } from "react-router";
 
 const useStyles = makeStyles(theme => ({
@@ -49,7 +44,6 @@ export default function UserForm(props) {
                   Password: "", // 为空时只读
                   Status: "0", // 转换类型
                   GroupID: "2", // 转换类型
-                  Score: "0" // 转换类型
               }
     );
     const [groups, setGroups] = useState([]);
@@ -211,24 +205,6 @@ export default function UserForm(props) {
                                     <MenuItem value={"2"}>被封禁</MenuItem>
                                     <MenuItem value={"3"}>超额使用被封禁</MenuItem>
                                 </Select>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    积分
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min:0,
-                                        step:1,
-                                    }}
-                                    value={user.Score}
-                                    onChange={handleChange("Score")}
-                                    required
-                                />
                             </FormControl>
                         </div>
 

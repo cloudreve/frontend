@@ -5,7 +5,6 @@ import Dashboard from "./component/Admin/Dashboard";
 import {useHistory} from "react-router";
 import Auth from "./middleware/Auth";
 import {Route, Switch} from "react-router-dom";
-import PageLoading from "./component/Placeholder/PageLoading";
 import {ThemeProvider} from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { zhCN } from '@material-ui/core/locale';
@@ -15,7 +14,6 @@ import SiteInformation from "./component/Admin/Setting/SiteInformation"
 import Access from "./component/Admin/Setting/Access"
 import Mail from "./component/Admin/Setting/Mail"
 import UploadDownload from "./component/Admin/Setting/UploadDownload"
-import VAS from "./component/Admin/Setting/VAS"
 import Theme from "./component/Admin/Setting/Theme"
 import Aria2 from "./component/Admin/Setting/Aria2"
 import ImageSetting from "./component/Admin/Setting/Image"
@@ -30,7 +28,6 @@ import UserForm from "./component/Admin/User/UserForm"
 import EditUserPreload from "./component/Admin/User/EditUser"
 import File from "./component/Admin/File/File"
 import Share from "./component/Admin/Share/Share"
-import Order from "./component/Admin/Order/Order"
 import Download from "./component/Admin/Task/Download"
 import Task from "./component/Admin/Task/Task"
 
@@ -104,10 +101,6 @@ export default function Admin() {
                                         <UploadDownload/>
                                 </Route>
 
-                                <Route path={`${path}/vas`}>
-                                        <VAS/>
-                                </Route>
-
                                 <Route path={`${path}/theme`}>
                                         <Theme/>
                                 </Route>
@@ -162,10 +155,6 @@ export default function Admin() {
 
                                 <Route path={`${path}/share`} exact>
                                         <Share/>
-                                </Route>
-
-                                <Route path={`${path}/order`} exact>
-                                        <Order/>
                                 </Route>
 
                                 <Route path={`${path}/download`} exact>
