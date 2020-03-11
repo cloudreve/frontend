@@ -10,29 +10,29 @@ import {ThemeProvider} from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { zhCN } from '@material-ui/core/locale';
 
-const Index = React.lazy(() => import("./component/Admin/Index"));
-const SiteInformation = React.lazy(() => import("./component/Admin/Setting/SiteInformation"));
-const Access = React.lazy(() => import("./component/Admin/Setting/Access"));
-const Mail = React.lazy(() => import("./component/Admin/Setting/Mail"));
-const UploadDownload = React.lazy(() => import("./component/Admin/Setting/UploadDownload"));
-const VAS = React.lazy(() => import("./component/Admin/Setting/VAS"));
-const Theme = React.lazy(() => import("./component/Admin/Setting/Theme"));
-const Aria2 = React.lazy(() => import("./component/Admin/Setting/Aria2"));
-const ImageSetting = React.lazy(() => import("./component/Admin/Setting/Image"));
-const Policy = React.lazy(() => import("./component/Admin/Policy/Policy"));
-const AddPolicy = React.lazy(() => import("./component/Admin/Policy/AddPolicy"));
-const EditPolicyPreload = React.lazy(() => import("./component/Admin/Policy/EditPolicy"));
-const Group = React.lazy(() => import("./component/Admin/Group/Group"));
-const GroupForm = React.lazy(() => import("./component/Admin/Group/GroupForm"));
-const EditGroupPreload = React.lazy(() => import("./component/Admin/Group/EditGroup"));
-const User = React.lazy(() => import("./component/Admin/User/User"));
-const UserForm = React.lazy(() => import("./component/Admin/User/UserForm"));
-const EditUserPreload = React.lazy(() => import("./component/Admin/User/EditUser"));
-const File = React.lazy(() => import("./component/Admin/File/File"));
-const Share = React.lazy(() => import("./component/Admin/Share/Share"));
-const Order = React.lazy(() => import("./component/Admin/Order/Order"));
-const Download = React.lazy(() => import("./component/Admin/Task/Download"));
-const Task = React.lazy(() => import("./component/Admin/Task/Task"));
+import Index from "./component/Admin/Index"
+import SiteInformation from "./component/Admin/Setting/SiteInformation"
+import Access from "./component/Admin/Setting/Access"
+import Mail from "./component/Admin/Setting/Mail"
+import UploadDownload from "./component/Admin/Setting/UploadDownload"
+import VAS from "./component/Admin/Setting/VAS"
+import Theme from "./component/Admin/Setting/Theme"
+import Aria2 from "./component/Admin/Setting/Aria2"
+import ImageSetting from "./component/Admin/Setting/Image"
+import Policy from "./component/Admin/Policy/Policy"
+import AddPolicy from "./component/Admin/Policy/AddPolicy"
+import EditPolicyPreload from "./component/Admin/Policy/EditPolicy"
+import Group from "./component/Admin/Group/Group"
+import GroupForm from "./component/Admin/Group/GroupForm"
+import EditGroupPreload from "./component/Admin/Group/EditGroup"
+import User from "./component/Admin/User/User"
+import UserForm from "./component/Admin/User/UserForm"
+import EditUserPreload from "./component/Admin/User/EditUser"
+import File from "./component/Admin/File/File"
+import Share from "./component/Admin/Share/Share"
+import Order from "./component/Admin/Order/Order"
+import Download from "./component/Admin/Task/Download"
+import Task from "./component/Admin/Task/Task"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -85,141 +85,95 @@ export default function Admin() {
 
                             <Switch>
                                 <Route path={`${path}/home`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Index/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/basic`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <SiteInformation/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/access`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Access/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/mail`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Mail/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/upload`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <UploadDownload/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/vas`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <VAS/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/theme`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Theme/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/aria2`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Aria2/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/image`}>
-                                    <Suspense fallback={<PageLoading />}>
                                         <ImageSetting/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/policy`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Policy/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/policy/add/:type`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <AddPolicy/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/policy/edit/:mode/:id`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <EditPolicyPreload/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/group`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Group/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/group/add`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <GroupForm/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/group/edit/:id`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <EditGroupPreload/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/user`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <User/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/user/add`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <UserForm/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/user/edit/:id`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <EditUserPreload/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/file`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <File/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/share`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Share/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/order`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Order/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/download`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Download/>
-                                    </Suspense>
                                 </Route>
 
                                 <Route path={`${path}/task`} exact>
-                                    <Suspense fallback={<PageLoading />}>
                                         <Task/>
-                                    </Suspense>
                                 </Route>
 
                             </Switch>

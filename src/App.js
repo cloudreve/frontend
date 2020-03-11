@@ -13,28 +13,26 @@ import {changeThemeColor} from "./untils";
 import NotFound from "./component/Share/NotFound";
 
 // Lazy loads
-const LoginForm = React.lazy(() => import("./component/Login/LoginForm"));
-const FileManager = React.lazy(() =>
-    import("./component/FileManager/FileManager.js")
-);
-const VideoPreview = React.lazy(() => import("./component/Viewer/Video.js"));
-const SearchResult = React.lazy(() => import("./component/Share/SearchResult"));
-const MyShare = React.lazy(() => import("./component/Share/MyShare"));
-const Download = React.lazy(() => import("./component/Download/Download"));
-const SharePreload = React.lazy(() => import("./component/Share/SharePreload"));
-const DocViewer = React.lazy(() => import("./component/Viewer/Doc"));
-const TextViewer = React.lazy(() => import("./component/Viewer/Text"));
-const Quota = React.lazy(() => import("./component/VAS/Quota"));
-const BuyQuota = React.lazy(() => import("./component/VAS/BuyQuota"));
-const WebDAV = React.lazy(() => import("./component/Setting/WebDAV"));
-const Tasks = React.lazy(() => import("./component/Setting/Tasks"));
-const Profile = React.lazy(() => import("./component/Setting/Profile"));
-const UserSetting = React.lazy(() => import("./component/Setting/UserSetting"));
-const QQCallback = React.lazy(() => import("./component/Login/QQ"));
-const Register = React.lazy(() => import("./component/Login/Register"));
-const Activation = React.lazy(() => import("./component/Login/Activication"));
-const ResetForm = React.lazy(() => import("./component/Login/ResetForm"));
-const Reset = React.lazy(() => import("./component/Login/Reset"));
+import LoginForm from "./component/Login/LoginForm"
+import FileManager from "./component/FileManager/FileManager.js"
+import VideoPreview from "./component/Viewer/Video.js"
+import SearchResult from "./component/Share/SearchResult"
+import MyShare from "./component/Share/MyShare"
+import Download from "./component/Download/Download"
+import SharePreload from "./component/Share/SharePreload"
+import DocViewer from "./component/Viewer/Doc"
+import TextViewer from "./component/Viewer/Text"
+import Quota from "./component/VAS/Quota"
+import BuyQuota from "./component/VAS/BuyQuota"
+import WebDAV from "./component/Setting/WebDAV"
+import Tasks from "./component/Setting/Tasks"
+import Profile from "./component/Setting/Profile"
+import UserSetting from "./component/Setting/UserSetting"
+import QQCallback from "./component/Login/QQ"
+import Register from "./component/Login/Register"
+import Activation from "./component/Login/Activication"
+import ResetForm from "./component/Login/ResetForm"
+import Reset from "./component/Login/Reset"
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -98,146 +96,100 @@ export default function App() {
                             </AuthRoute>
 
                             <AuthRoute path={`${path}home`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <FileManager />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute
                                 path={`${path}video/*`}
                                 isLogin={isLogin}
                             >
-                                <Suspense fallback={<PageLoading />}>
                                     <VideoPreview />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}text/*`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <TextViewer />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <DocViewer />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <Download />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}shares`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <MyShare />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}search`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <SearchResult />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}quota`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <Quota />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}buy`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <BuyQuota />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}setting`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <UserSetting />
-                                </Suspense>
                             </AuthRoute>
 
 
                             <AuthRoute path={`${path}profile/:id`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <Profile />
-                                </Suspense>
                             </AuthRoute>
 
 
                             <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <WebDAV />
-                                </Suspense>
                             </AuthRoute>
 
                             <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
                                     <Tasks />
-                                </Suspense>
                             </AuthRoute>
 
                             <Route path={`${path}login`} exact>
-                                <Suspense fallback={<PageLoading />}>
                                     <LoginForm />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}signup`} exact>
-                                <Suspense fallback={<PageLoading />}>
                                     <Register />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}activate`} exact>
-                                <Suspense fallback={<PageLoading />}>
                                     <Activation />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}reset`} exact>
-                                <Suspense fallback={<PageLoading />}>
                                     <ResetForm />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}forget`} exact>
-                                <Suspense fallback={<PageLoading />}>
                                     <Reset />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}login/qq`}>
-                                <Suspense fallback={<PageLoading />}>
                                     <QQCallback />
-                                </Suspense>
                             </Route>
 
                             <Route exact path={`${path}s/:id`}>
-                                <Suspense fallback={<PageLoading />}>
                                     <SharePreload />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}s/:id/video(/)*`}>
-                                <Suspense fallback={<PageLoading />}>
                                     <VideoPreview />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}s/:id/doc(/)*`}>
-                                <Suspense fallback={<PageLoading />}>
                                     <DocViewer />
-                                </Suspense>
                             </Route>
 
                             <Route path={`${path}s/:id/text(/)*`}>
-                                <Suspense fallback={<PageLoading />}>
                                     <TextViewer />
-                                </Suspense>
                             </Route>
 
                             <Route path="*">
