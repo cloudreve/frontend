@@ -55,6 +55,7 @@ class FileManager extends Component {
     componentWillUnmount() {
         this.props.setSelectedTarget([]);
         this.props.closeAllModals();
+        this.props.navitateTo("/");
     }
 
     componentDidMount() {
