@@ -74,7 +74,7 @@ export async function UpdateSiteConfig(store) {
 
     }).catch(function(error) {
         store.dispatch(toggleSnackbar("top", "right", "无法加载站点配置：" + error.message, "error"));
-    }).finally(function () {
+    }).then(function () {
         enableUploaderLoad(store);
         store.dispatch(enableLoadUploader())
     });

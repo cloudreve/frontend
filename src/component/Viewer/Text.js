@@ -87,7 +87,7 @@ export default function TextViewer(props) {
                     "无法读取文件内容，" + error.message,
                     "error"
                 )
-            }).finally(()=>{
+            }).then(()=>{
             setLoading(false);
         });
         // eslint-disable-next-line

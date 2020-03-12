@@ -212,7 +212,7 @@ class SharedFileCompoment extends Component {
                     "warning"
                 );
             })
-            .finally(() => {
+            .then(() => {
                 this.setState({ loading: false });
             });
     };

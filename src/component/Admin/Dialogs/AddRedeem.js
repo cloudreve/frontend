@@ -72,7 +72,7 @@ export default function AddRedeem({ open, onClose,products ,onSuccess}) {
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
+            }).then(()=>{
                 setLoading(false);
         });
 

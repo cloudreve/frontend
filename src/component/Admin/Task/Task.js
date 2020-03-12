@@ -122,7 +122,7 @@ export default function Task() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };
@@ -137,7 +137,7 @@ export default function Task() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };

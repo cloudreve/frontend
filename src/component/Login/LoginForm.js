@@ -201,7 +201,7 @@ function LoginForm() {
                 console.log(error);
                 ToggleSnackbar("top", "right", error.message, "warning");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };

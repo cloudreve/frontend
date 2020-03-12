@@ -79,7 +79,7 @@ export default function Aria2() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {});
+            .then(() => {});
     };
 
     const test = () =>{
@@ -93,7 +93,7 @@ export default function Aria2() {
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
+            }).then(()=>{
             setLoading(false);
         });
     }
@@ -117,7 +117,7 @@ export default function Aria2() {
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).finally(()=>{
+            }).then(()=>{
                 setLoading(false);
         });
     };

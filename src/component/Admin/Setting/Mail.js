@@ -94,7 +94,7 @@ export default function Mail() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };
@@ -105,7 +105,7 @@ export default function Mail() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {});
+            .then(() => {});
     };
 
     const submit = e => {
@@ -128,7 +128,7 @@ export default function Mail() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };

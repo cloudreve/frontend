@@ -98,7 +98,7 @@ export default function ReadMe(props) {
                     "error"
                 );
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
         // eslint-disable-next-line

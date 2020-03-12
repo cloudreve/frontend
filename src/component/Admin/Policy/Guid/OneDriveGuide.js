@@ -238,7 +238,7 @@ export default function OneDriveGuide(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
 

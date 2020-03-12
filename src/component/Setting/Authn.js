@@ -75,7 +75,7 @@ export default function Authn(props) {
                     error.message,
                     "error"
                 );
-            }).finally(()=>{
+            }).then(()=>{
             setConfirm(false);
         });
     };

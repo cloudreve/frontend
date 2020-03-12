@@ -179,7 +179,7 @@ export default function RemoteGuide(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };
@@ -216,7 +216,7 @@ export default function RemoteGuide(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
 

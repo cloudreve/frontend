@@ -98,7 +98,7 @@ class UserAvatarPopoverCompoment extends Component {
                     "warning"
                 );
             })
-            .finally(() => {
+            .then(() => {
                 this.handleClose();
             });
     };

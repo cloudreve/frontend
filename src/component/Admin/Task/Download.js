@@ -121,7 +121,7 @@ export default function Download() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };
@@ -136,7 +136,7 @@ export default function Download() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
     };

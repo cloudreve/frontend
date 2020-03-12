@@ -177,7 +177,7 @@ export default function UpyunGuide(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
-            .finally(() => {
+            .then(() => {
                 setLoading(false);
             });
 

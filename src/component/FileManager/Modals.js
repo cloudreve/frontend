@@ -344,7 +344,7 @@ class ModalsCompoment extends Component {
                 );
                 this.props.setModalsLoading(false);
             })
-            .finally(() => {
+            .then(() => {
                 this.props.closeAllModals();
             });
     };
