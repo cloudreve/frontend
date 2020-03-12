@@ -165,7 +165,7 @@ function Register() {
         if (regCaptcha) {
             refreshCaptcha();
         }
-    }, []);
+    }, [regCaptcha]);
 
     return (
         <div className={classes.layout}>

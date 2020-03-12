@@ -101,7 +101,7 @@ function Reset() {
             refreshCaptcha();
         }
         // eslint-disable-next-line
-    }, []);
+    }, [forgetCaptcha]);
 
     const submit = e => {
         e.preventDefault();

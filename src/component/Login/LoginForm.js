@@ -143,7 +143,7 @@ function LoginForm() {
         if (loginCaptcha) {
             refreshCaptcha();
         }
-    }, [location]);
+    }, [location,loginCaptcha]);
 
     const authnLogin = e => {
         e.preventDefault();
