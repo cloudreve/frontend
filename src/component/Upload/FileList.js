@@ -49,7 +49,7 @@ const styles = theme => ({
     },
     errorStatus: {
         color: "#ff5722",
-        wordBreak:"break-all",
+        wordBreak: "break-all"
     },
     listAction: {
         marginLeft: 20,
@@ -72,6 +72,9 @@ const styles = theme => ({
         position: "absolute",
         left: 0,
         top: 0
+    },
+    fileName:{
+        wordBreak: "break-all",
     }
 });
 class FileList extends Component {
@@ -85,7 +88,6 @@ class FileList extends Component {
         this.setState({
             files: [...this.state.files, ...files]
         });
-
     }
 
     deQueue(file) {
@@ -97,7 +99,7 @@ class FileList extends Component {
             filesNow.splice(fileID, 1);
             this.setState({
                 files: filesNow,
-                open: filesNow.length !== 0,
+                open: filesNow.length !== 0
             });
         }
     }
@@ -114,7 +116,7 @@ class FileList extends Component {
                     files: filesNow
                 });
             }
-        }else{
+        } else {
             file.ignoreMsg = true;
         }
     }
@@ -238,18 +240,30 @@ class FileList extends Component {
                                     className={classes.progressContent}
                                     button
                                 >
-                                   <TypeIcon fileName={item.name} isUpload />
+                                    <TypeIcon fileName={item.name} isUpload />
                                     {item.status === 1 && (
                                         <ListItemText
                                             className={classes.listAction}
-                                            primary={item.name}
+                                            primary={
+                                                <span
+                                                    className={classes.fileName}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            }
                                             secondary={<div>排队中...</div>}
                                         />
                                     )}
                                     {item.status === 2 && (
                                         <ListItemText
                                             className={classes.listAction}
-                                            primary={item.name}
+                                            primary={
+                                                <span
+                                                    className={classes.fileName}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            }
                                             secondary={
                                                 <div>
                                                     {item.percent <= 99 && (
@@ -284,14 +298,26 @@ class FileList extends Component {
                                     {item.status === 3 && (
                                         <ListItemText
                                             className={classes.listAction}
-                                            primary={item.name}
+                                            primary={
+                                                <span
+                                                    className={classes.fileName}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            }
                                             secondary={item.status}
                                         />
                                     )}
                                     {item.status === 4 && (
                                         <ListItemText
                                             className={classes.listAction}
-                                            primary={item.name}
+                                            primary={
+                                                <span
+                                                    className={classes.fileName}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            }
                                             secondary={
                                                 <div
                                                     className={
@@ -307,7 +333,13 @@ class FileList extends Component {
                                     {item.status === 5 && (
                                         <ListItemText
                                             className={classes.listAction}
-                                            primary={item.name}
+                                            primary={
+                                                <span
+                                                    className={classes.fileName}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            }
                                             secondary={
                                                 <div
                                                     className={
