@@ -14,6 +14,7 @@ const checkSelectedProps = (state)=>{
 }
 
 const doNavigate = (path,state)=>{
+    window.currntPath = path;
     return Object.assign({}, state, {
         navigator:Object.assign({}, state.navigator, {
             path: path
@@ -92,18 +93,18 @@ const cloudreveApp = (state = [], action) => {
             }
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
-                contextOpen: action.open,
-                contextType:action.menuType,
+                    contextOpen: action.open,
+                    contextType:action.menuType,
                 }),
             });
         case 'DRAG_AND_DROP':
-                return Object.assign({}, state, {
-                    explorer: Object.assign({}, state.explorer, {
-                        dndSignal: !state.explorer.dndSignal,
-                        dndTarget:action.target,
-                        dndSource:action.source,
-                    }),
-                });
+            return Object.assign({}, state, {
+                explorer: Object.assign({}, state.explorer, {
+                    dndSignal: !state.explorer.dndSignal,
+                    dndTarget:action.target,
+                    dndSource:action.source,
+                }),
+            });
         case 'SET_NAVIGATOR_LOADING_STATUE':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
@@ -123,7 +124,7 @@ const cloudreveApp = (state = [], action) => {
                 switch (state.viewUpdate.sortMethod) {
                     case "sizePos":
                         return a.size-b.size;
-                    case "sizeRes": 
+                    case "sizeRes":
                         return b.size-a.size;
                     case 'namePos':
                         return a.name.localeCompare(b.name);
@@ -134,7 +135,7 @@ const cloudreveApp = (state = [], action) => {
                     case 'timeRev':
                         return Date.parse(b.date)-Date.parse(a.date);
                     default:
-                        break; 
+                        break;
                 }
             })
             // eslint-disable-next-line
@@ -324,9 +325,9 @@ const cloudreveApp = (state = [], action) => {
                 }),
             });
         case 'SET_SITE_CONFIG':
-                return Object.assign({}, state, {
-                    siteConfig: action.config,
-                });
+            return Object.assign({}, state, {
+                siteConfig: action.config,
+            });
         case 'OPEN_MUSIC_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
@@ -381,7 +382,7 @@ const cloudreveApp = (state = [], action) => {
                     contextOpen:false,
                 }),
             });
-         case 'OPEN_COPY_DIALOG':
+        case 'OPEN_COPY_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
                     modals: Object.assign({}, state.viewUpdate.modals, {
@@ -400,7 +401,7 @@ const cloudreveApp = (state = [], action) => {
                     contextOpen:false,
                 }),
             });
-        case 'CLOSE_ALL_MODALS': 
+        case 'CLOSE_ALL_MODALS':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
                     modals: Object.assign({}, state.viewUpdate.modals, {
@@ -470,7 +471,7 @@ const cloudreveApp = (state = [], action) => {
                     selectProps: {
                         isMultiple:false,
                         withFolder:false,
-                        withFile:false, 
+                        withFile:false,
                     }
                 }),
             });
@@ -490,7 +491,7 @@ const cloudreveApp = (state = [], action) => {
                     selectProps: {
                         isMultiple:false,
                         withFolder:false,
-                        withFile:false, 
+                        withFile:false,
                     },
                     keywords:action.keywords,
                 }),
@@ -519,7 +520,7 @@ const cloudreveApp = (state = [], action) => {
         default:
             return state
     }
-  }
-  
-  
+}
+
+
 export default cloudreveApp

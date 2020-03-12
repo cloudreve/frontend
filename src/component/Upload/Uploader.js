@@ -57,7 +57,7 @@ class UploaderComponent extends Component {
     }
 
     fileAdd = (up, files) => {
-        console.log(files);
+        let path = window.currntPath ? window.currntPath : this.props.path;
         if (
             this.props.keywords === null &&
             window.location.href
@@ -70,14 +70,14 @@ class UploaderComponent extends Component {
                 let source = files.getSource();
                 if (source.relativePath && source.relativePath !== "") {
                     files.path =  basename(
-                        pathJoin([this.props.path, source.relativePath])
+                        pathJoin([path, source.relativePath])
                     );
                     window.pathCache[files.id] = basename(
-                        pathJoin([this.props.path, source.relativePath])
+                        pathJoin([path, source.relativePath])
                     );
                 } else {
-                    window.pathCache[files.id] = this.props.path;
-                    files.path = this.props.path;
+                    window.pathCache[files.id] = path;
+                    files.path = path;
                 }
             });
             window.fileList["enQueue"](files);
