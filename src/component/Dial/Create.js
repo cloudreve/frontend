@@ -112,27 +112,33 @@ export default function UploadButton(props) {
                     ariaLabel="SpeedDial openIcon example"
                     hidden={false}
                     tooltipTitle="上传文件"
-                    icon={<SpeedDialIcon openIcon={<PublishIcon />} />}
+                    icon={<SpeedDialIcon openIcon={!statusHelper.isMobile()&&<PublishIcon />} />}
                     onClose={handleClose}
                     FabProps={{
-                         onClick: () => uploadClicked(),
+                        onClick: () => !statusHelper.isMobile() && uploadClicked(),
                         color: "secondary",
                     }}
                     onOpen={handleOpen}
                     open={open}
                 >
-                    <SpeedDialAction
+                    {statusHelper.isMobile() && <SpeedDialAction
+                        key="NewFolder"
+                        icon={<PublishIcon />}
+                        tooltipTitle="上传文件"
+                        onClick= {() => uploadClicked()}
+                        title={"上传文件"}/>}
+                    {!statusHelper.isMobile() && <SpeedDialAction
                         key="NewFolder"
                         icon={<FolderUpload />}
                         tooltipTitle="上传目录"
                         onClick= {() => openUpload("uploadFolderForm")}
-                        title={"上传目录"}/>
+                        title={"上传目录"}/>}
                     <SpeedDialAction
                         key="NewFolder"
                         icon={<CreateNewFolderIcon />}
                         tooltipTitle="新目录"
                         onClick= {() => OpenNewFolderDialog()}
-                     title={"新目录"}/>
+                        title={"新目录"}/>
                     {user.group.allowRemoteDownload&&
                     <SpeedDialAction
                         key="NewDownload"
