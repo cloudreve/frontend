@@ -1151,7 +1151,7 @@ class UserSettingCompoment extends Component {
                                 this.state.authCode === ""
                             }
                         >
-                            开启二步验证
+                            {this.state.settings.two_factor?"关闭":"启用"}二步验证
                         </Button>
                     </DialogActions>
                 </Dialog>
