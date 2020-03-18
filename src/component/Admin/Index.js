@@ -385,7 +385,7 @@ export default function Index() {
             <Grid item xs={12} md={8} lg={9}>
                 <Paper className={classes.paper}>
                     <List>
-                        {news.map((v, k) => (
+                        {news && news.map((v, k) => (
                             <>
                                 <ListItem button alignItems="flex-start"
                                           onClick={()=>window.open("https://forum.cloudreve.org/d/" + v.id)}

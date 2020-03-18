@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
         marginBottom: 50
     },
     player: {
-        borderRadius: "4px"
+        borderRadius: "4px",
+        maxHeight:600,
     }
 }));
 

@@ -76,9 +76,11 @@ export default function TextViewer(props) {
         }
 
         setLoading(true);
-        API.get(requestURL)
+        API.get(requestURL, { responseType: 'arraybuffer' })
             .then(response => {
-                setContent(response.rawData.toString());
+                var buffer = new Buffer(response.rawData, 'binary');
+                var textdata = buffer.toString(); // for string
+                setContent(textdata);
             })
             .catch(error => {
                 ToggleSnackbar(

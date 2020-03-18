@@ -223,13 +223,15 @@ export default function FinishedCard(props) {
                             </Tooltip>
                         </Typography>
                         {props.task.status === 3&&
+                        <Tooltip title={props.task.error}>
                             <Typography
                                 variant="body2"
                                 color="error"
                                 noWrap
                             >
-                            下载出错：{props.task.error}
+                                下载出错：{props.task.error}
                             </Typography>
+                        </Tooltip>
                         }
                         {props.task.status === 5&&
                             <Typography

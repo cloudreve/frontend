@@ -8783,10 +8783,10 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-photo-view@^0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/react-photo-view/-/react-photo-view-0.3.9.tgz#d240e04918b4df0cd3405d07159a5784391842b2"
-  integrity sha512-tXVh4SmpUYIxU4IaECNQ1nolrN6bYD1S0dGLZyWODphOdkfNAuIxDXLFfwrUVZ2MpWP5ghi7Uf7C6wRYo2meOQ==
+react-photo-view@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-photo-view/-/react-photo-view-0.4.0.tgz#62edf2c0bc3361e04110c04309b43c8d565e6c03"
+  integrity sha512-awJfXlILvBiwY8AnN4Viik/sZjstgyV/CsEK9AVPp7lBDWRMjjFZX8a6tuSFd0GO9+Y+IuHcp+S/G5/nj/xWYQ==
   dependencies:
     lodash.debounce "^4.0.8"
     lodash.uniqueid "^4.0.1"
