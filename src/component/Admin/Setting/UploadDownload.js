@@ -54,6 +54,7 @@ export default function UploadDownload() {
         share_download_session_timeout:"0",
         onedrive_callback_check:"0",
         reset_after_upload_failed:"0",
+        onedrive_source_timeout:"0",
     });
 
     const handleCheckChange = name => event => {
@@ -439,6 +440,28 @@ export default function UploadDownload() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     OneDrive 客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl >
+                                <InputLabel htmlFor="component-helper">
+                                    OneDrive 下载请求缓存
+                                </InputLabel>
+                                <Input
+                                    type={"number"}
+                                    inputProps={{
+                                        min:1,
+                                        max:3659,
+                                        step:1,
+                                    }}
+                                    value={options.onedrive_source_timeout}
+                                    onChange={handleChange("onedrive_source_timeout")}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    OneDrive 获取文件下载 URL 后可将结果缓存，减轻热门文件下载API请求频率
                                 </FormHelperText>
                             </FormControl>
                         </div>
