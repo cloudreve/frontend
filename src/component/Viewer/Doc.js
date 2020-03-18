@@ -47,7 +47,7 @@ export default function DocViewer(props) {
 
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = math.params[0].split("/");
+            let path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));

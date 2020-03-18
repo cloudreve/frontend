@@ -171,18 +171,18 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/doc?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 history.push(
-                    "/doc" +
-                    previewPath +
-                        "?id=" +
-                        selected[0].id
+                    "/doc?p=" +
+                    encodeURIComponent(previewPath) +
+                    "&id=" +
+                    selected[0].id
                 );
                 return;
             case "audio":
@@ -192,17 +192,17 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/video?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 history.push(
-                    "/video" +
-                    previewPath +
-                    "?id=" +
+                    "/video?p=" +
+                    encodeURIComponent(previewPath) +
+                    "&id=" +
                     selected[0].id
                 );
                 return;
@@ -210,14 +210,14 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/text?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                history.push("/text" + previewPath + "?id=" + selected[0].id);
+                history.push("/text?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
                 return;
             default:
                 OpenLoadingDialog("获取下载地址...");

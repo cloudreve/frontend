@@ -213,8 +213,8 @@ class ContextMenuCompoment extends Component {
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +
-                  "/" +
-                  this.props.selected[0].name;
+                "/" +
+                this.props.selected[0].name;
         switch (isPreviewable(this.props.selected[0].name)) {
             case "img":
                 this.props.showImgPreivew(this.props.selected[0]);
@@ -223,15 +223,15 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/doc?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/doc" + previewPath + "?id=" + this.props.selected[0].id
+                    "/doc?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             case "audio":
@@ -241,30 +241,30 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/video?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/video" + previewPath + "?id=" + this.props.selected[0].id
+                    "/video?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             case "edit":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/text?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/text" + previewPath + "?id=" + this.props.selected[0].id
+                    "/text?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             default:

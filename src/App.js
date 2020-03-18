@@ -100,17 +100,17 @@ export default function App() {
                             </AuthRoute>
 
                             <AuthRoute
-                                path={`${path}video/*`}
+                                path={`${path}video`}
                                 isLogin={isLogin}
                             >
                                 <VideoPreview />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}text/*`} isLogin={isLogin}>
+                            <AuthRoute path={`${path}text`} isLogin={isLogin}>
                                 <TextViewer />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
+                            <AuthRoute path={`${path}doc`} isLogin={isLogin}>
                                 <DocViewer />
                             </AuthRoute>
 

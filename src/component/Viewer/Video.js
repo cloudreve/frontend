@@ -41,7 +41,7 @@ export default function VideoViewer(props) {
     ]);
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = math.params[0].split("/");
+            let path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));
@@ -61,13 +61,13 @@ export default function VideoViewer(props) {
                                 getBaseURL() +
                                 (pathHelper.isSharePage(location.pathname)
                                     ? "/share/preview/" +
-                                      id +
-                                      (query.get("share_path") !== ""
-                                          ? "?path=" +
-                                            encodeURIComponent(
-                                                query.get("share_path")
-                                            )
-                                          : "")
+                                    id +
+                                    (query.get("share_path") !== ""
+                                        ? "?path=" +
+                                        encodeURIComponent(
+                                            query.get("share_path")
+                                        )
+                                        : "")
                                     : "/file/preview/" + query.get("id"))
                         }
                     }}
