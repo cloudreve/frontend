@@ -29,6 +29,11 @@ const useStyles = makeStyles(theme => ({
         backgroundColor:"white",
         borderRadius: "8px",
     },
+    "@global": {
+        ".for-toolbar":{
+            overflowX:"auto!important",
+        },
+    },
 }));
 
 function useQuery() {
