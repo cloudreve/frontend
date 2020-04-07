@@ -1003,7 +1003,7 @@ export default function COSGuide(props) {
                                 如果是作为公有使用，请务必创建回调云函数。<br/><br/>
                             </Typography>
                             <Typography variant={"body2"}>Cloudreve 可以尝试帮你自动创建回调云函数，请选择 COS 存储桶 所在地域后继续。
-                                创建可能会花费数秒钟，请耐心等待。</Typography>
+                                创建可能会花费数秒钟，请耐心等待。创建前请确保您的腾讯云账号已开启云函数服务。</Typography>
 
                             <div className={classes.form}>
                                 <FormControl>
@@ -1022,7 +1022,6 @@ export default function COSGuide(props) {
                                         <MenuItem value={"ap-hongkong"}>港澳台地区(中国香港)</MenuItem>
                                         <MenuItem value={"ap-mumbai"}>亚太南部(孟买)</MenuItem>
                                         <MenuItem value={"ap-shanghai"}>华东地区(上海)</MenuItem>
-                                        <MenuItem value={"ap-shanghai-fsi"}>华东地区(上海金融)</MenuItem>
                                         <MenuItem value={"ap-singapore"}>亚太东南(新加坡)</MenuItem>
                                         <MenuItem value={"na-siliconvalley"}>美国西部(硅谷)</MenuItem>
                                         <MenuItem value={"na-toronto"}>北美地区(多伦多)</MenuItem>
