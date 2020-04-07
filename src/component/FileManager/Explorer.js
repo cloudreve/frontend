@@ -281,7 +281,7 @@ class ExplorerCompoment extends Component {
                                 拖拽文件至此
                             </div>
                             <div className={classes.emptyInfoSmall}>
-                                或点击左侧“上传文件”按钮添加文件
+                                或点击右下方“上传文件”按钮添加文件
                             </div>
                         </div>
                     )}
