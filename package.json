@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "cloudreve-frontend",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.6.0",
