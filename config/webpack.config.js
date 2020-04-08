@@ -26,6 +26,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const eslint = require('eslint');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -518,6 +519,21 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      // 写入版本文件
+      new CopyPlugin([
+        {
+          from: 'package.json',
+          to: 'version.json',
+          transform(content, path) {
+            let contentJson = JSON.parse(content);
+            return JSON.stringify({
+              version:contentJson.version,
+              name:contentJson.name,
+            })
+          },
+        },
+      ]),
+
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
