@@ -21,6 +21,7 @@ import {
     Typography
 } from "@material-ui/core";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
+import ReCaptcha from "./ReCaptcha";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -97,6 +98,8 @@ function Register() {
 
     const title = useSelector(state => state.siteConfig.title);
     const regCaptcha = useSelector(state => state.siteConfig.regCaptcha);
+    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
+    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -157,12 +160,14 @@ function Register() {
             .catch(error => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                refreshCaptcha();
+                if (!useReCaptcha) {
+                    refreshCaptcha();
+                }
             });
     }
 
     useEffect(() => {
-        if (regCaptcha) {
+        if (regCaptcha && !useReCaptcha) {
             refreshCaptcha();
         }
     }, [regCaptcha]);
@@ -212,7 +217,7 @@ function Register() {
                                 value={input.password_repeat}
                                 autoComplete />
                         </FormControl>
-                        {regCaptcha && (
+                        {regCaptcha && !useReCaptcha && (
                             <div className={classes.captchaContainer}>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="captcha">
@@ -245,6 +250,25 @@ function Register() {
                                         />
                                     )}
                                 </div>
+                            </div>
+                        )}
+
+                        {regCaptcha && useReCaptcha && (
+                            <div className={classes.captchaContainer}>
+                                <FormControl margin="normal" required fullWidth>
+                                    <ReCaptcha
+                                        style={{ display: "inline-block" }}
+                                        sitekey={reCaptchaKey}
+                                        onChange={value=>
+                                            setInput({
+                                                ...input,
+                                                captcha:value
+                                            })
+                                        }
+                                        id="captcha"
+                                        name="captcha"
+                                    />
+                                </FormControl>{" "}
                             </div>
                         )}
 

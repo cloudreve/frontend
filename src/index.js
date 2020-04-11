@@ -58,7 +58,9 @@ const defaultStatus = InitSiteConfig({
                     emptyIcon: "#e8e8e8"
                 }
             }
-        }
+        },
+        captcha_IsUseReCaptcha: false,
+        captcha_ReCaptchaKey: "defaultKey"
     },
     navigator: {
         path: "/",

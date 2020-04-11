@@ -56,6 +56,7 @@
     "react-addons-update": "^15.6.2",
     "react-app-polyfill": "^1.0.4",
     "react-color": "^2.18.0",
+    "react-async-script": "^1.1.1",
     "react-content-loader": "^5.0.2",
     "react-dev-utils": "^9.1.0",
     "react-dnd": "^9.5.1",

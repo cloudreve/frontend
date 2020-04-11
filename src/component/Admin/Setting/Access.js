@@ -45,7 +45,10 @@ export default function Access() {
         login_captcha: "0",
         reg_captcha: "0",
         forget_captcha: "0",
-        authn_enabled: "0"
+        authn_enabled: "0",
+        captcha_IsUseReCaptcha: "0",
+        captcha_ReCaptchaKey: "defaultKey",
+        captcha_ReCaptchaSecret: "defaultSecret",
     });
     const [siteURL, setSiteURL] = useState("");
     const [groups, setGroups] = useState([]);
@@ -244,6 +247,67 @@ export default function Access() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.captcha_IsUseReCaptcha === "1"
+                                            }
+                                            onChange={handleChange(
+                                                "captcha_IsUseReCaptcha"
+                                            )}
+                                        />
+                                    }
+                                    label="使用ReCaptcha验证码"
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    是否使用ReCaptcha验证码
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        {options.captcha_IsUseReCaptcha === "1" && (
+                            <>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            Site KEY
+                                        </InputLabel>
+                                        <Input
+                                            required
+                                            value={options.captcha_ReCaptchaKey}
+                                            onChange={handleInputChange(
+                                                "captcha_ReCaptchaKey"
+                                            )}
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            应用管理页面获取到的的 网站密钥
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            Secret
+                                        </InputLabel>
+                                        <Input
+                                            required
+                                            value={options.captcha_ReCaptchaSecret}
+                                            onChange={handleInputChange(
+                                                "captcha_ReCaptchaSecret"
+                                            )}
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            应用管理页面获取到的的 秘钥
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+                            </>
+                        )}
 
                         <div className={classes.form}>
                             <FormControl fullWidth>

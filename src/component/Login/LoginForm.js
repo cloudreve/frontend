@@ -27,6 +27,7 @@ import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import {useLocation} from "react-router";
+import ReCaptcha from "./ReCaptcha";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -102,6 +103,8 @@ function LoginForm() {
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
     const title = useSelector(state => state.siteConfig.title);
     const authn = useSelector(state => state.siteConfig.authn);
+    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
+    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -140,7 +143,7 @@ function LoginForm() {
 
     useEffect(() => {
         setEmail(query.get("username"));
-        if (loginCaptcha) {
+        if (loginCaptcha  && !useReCaptcha) {
             refreshCaptcha();
         }
     }, [location,loginCaptcha]);
@@ -244,7 +247,9 @@ function LoginForm() {
             .catch(error => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                refreshCaptcha();
+                if (!useReCaptcha) {
+                    refreshCaptcha();
+                }
             });
     };
 
@@ -300,7 +305,7 @@ function LoginForm() {
                                 autoComplete
                             />
                         </FormControl>
-                        {loginCaptcha && (
+                        {loginCaptcha && !useReCaptcha && (
                             <div className={classes.captchaContainer}>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="captcha">
@@ -335,6 +340,24 @@ function LoginForm() {
                                         />
                                     )}
                                 </div>
+                            </div>
+                        )}
+
+                        {loginCaptcha && useReCaptcha && (
+                            <div className={classes.captchaContainer}>
+                                <FormControl margin="normal" required fullWidth>
+                                    <div>
+                                        <ReCaptcha
+                                            style={{ display: "inline-block" }}
+                                            sitekey={reCaptchaKey}
+                                            onChange={value =>
+                                                setCaptcha(value)
+                                            }
+                                            id="captcha"
+                                            name="captcha"
+                                        />
+                                    </div>
+                                </FormControl>{" "}
                             </div>
                         )}
 
