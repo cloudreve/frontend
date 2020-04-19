@@ -326,6 +326,7 @@ export default function OneDriveGuide(props) {
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
                                 填写应用注册表单。其中，名称可任取；
+                                <code>受支持的帐户类型</code> 选择为<code>任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户</code>；
                                 <code>重定向 URI (可选)</code>
                                 请选择<code>Web</code>，并填写<code>{policy.OptionsSerialized.od_redirect}</code>；
                                 其他保持默认即可
