@@ -19,7 +19,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useHistory, useLocation } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import {Block, Delete, Edit, FilterList} from "@material-ui/icons";
+import { Block, Delete, DeleteForever, Edit, FilterList } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import Popover from "@material-ui/core/Popover";
 import Menu from "@material-ui/core/Menu";
@@ -132,9 +132,9 @@ export default function File() {
         });
     };
 
-    const deleteBatch = e =>{
+    const deleteBatch =force => e =>{
         setLoading(true);
-        API.post("/admin/file/delete",{id:selected})
+        API.post("/admin/file/delete",{id:selected,force:force})
             .then(response => {
                 loadList();
                 ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
@@ -145,7 +145,6 @@ export default function File() {
             setLoading(false);
         });
     }
-
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -234,8 +233,13 @@ export default function File() {
                             已选择 {selected.length} 个对象
                         </Typography>
                         <Tooltip title="删除">
-                            <IconButton onClick={deleteBatch} disabled={loading} aria-label="delete">
+                            <IconButton onClick={deleteBatch(false)} disabled={loading} aria-label="delete">
                                 <Delete />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="强制删除">
+                            <IconButton onClick={deleteBatch(true)} disabled={loading} aria-label="delete">
+                                <DeleteForever />
                             </IconButton>
                         </Tooltip>
                     </Toolbar>
