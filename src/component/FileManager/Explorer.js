@@ -31,7 +31,7 @@ import {
     Paper,
     Button
 } from "@material-ui/core";
-import { GlobalHotKeys } from "react-hotkeys";
+import { GlobalHotKeys,  configure } from "react-hotkeys";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 
 const styles = theme => ({
@@ -203,6 +203,10 @@ class ExplorerCompoment extends Component {
                 }
             }
         };
+
+        configure({
+            ignoreTags: ['input', 'select', 'textarea'],
+        })
     }
 
     contextMenu = e => {
