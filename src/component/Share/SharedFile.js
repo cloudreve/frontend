@@ -16,6 +16,8 @@ import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
 import pathHelper from "../../untils/page";
+let vh = window.innerHeight;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -64,7 +66,7 @@ const styles = theme => ({
         borderRadius: 12,
         boxShadow: "0 8px 16px rgba(29,39,55,.25)",
         [theme.breakpoints.down("sm")]: {
-            height: "calc(100vh - 56px)",
+            height: "calc(var(--vh, 100vh) - 56px)",
             borderRadius: 0,
             maxWidth: 1000
         },
