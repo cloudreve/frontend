@@ -208,7 +208,7 @@ function Register() {
                             />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">密码</InputLabel>
+                            <InputLabel htmlFor="password">确认密码</InputLabel>
                             <Input
                                 name="pwdRepeat"
                                 onChange={handleInputChange("password_repeat")}
