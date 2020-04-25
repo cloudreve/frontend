@@ -68,6 +68,10 @@ class UploaderComponent extends Component {
             window.fileList["openFileList"]();
             window.plupload.each(files, files => {
                 let source = files.getSource();
+                if (source.name.toLowerCase() === ".ds_store") {
+                  // 不上传Mac下的布局文件 .DS_Store
+                  return
+                }
                 if (source.relativePath && source.relativePath !== "") {
                     files.path =  basename(
                         pathJoin([path, source.relativePath])
