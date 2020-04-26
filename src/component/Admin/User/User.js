@@ -125,7 +125,7 @@ export default function Group() {
         API.post("/admin/user/delete",{id:[id]})
             .then(response => {
                 loadList();
-                ToggleSnackbar("top", "right", "用户组已删除", "success");
+                ToggleSnackbar("top", "right", "用户已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -139,7 +139,7 @@ export default function Group() {
         API.post("/admin/user/delete",{id:selected})
             .then(response => {
                 loadList();
-                ToggleSnackbar("top", "right", "用户组已删除", "success");
+                ToggleSnackbar("top", "right", "用户已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
