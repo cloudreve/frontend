@@ -211,7 +211,7 @@ class NavigatorComponent extends Component {
             : "/file/search/";
         newPath = this.keywords === null ? newPath : this.keywords;
 
-        API.get(apiURL + newPath)
+        API.get(apiURL + encodeURIComponent(newPath))
             .then(response => {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
