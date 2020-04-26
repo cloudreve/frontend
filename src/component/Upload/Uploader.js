@@ -66,25 +66,31 @@ class UploaderComponent extends Component {
                 .startsWith("/home")
         ) {
             window.fileList["openFileList"]();
-            window.plupload.each(files, files => {
-                let source = files.getSource();
-                if (source.name.toLowerCase() === ".ds_store") {
-                  // 不上传Mac下的布局文件 .DS_Store
-                  return
+            const enqueFiles = files
+              // 不上传Mac下的布局文件 .DS_Store
+              .filter(file => {
+                const isDsStore = file.name.toLowerCase() === ".ds_store"
+                if (isDsStore) {
+                  up.removeFile(file)
                 }
+                return !isDsStore
+              })
+              .map(file => {
+                let source = file.getSource();
                 if (source.relativePath && source.relativePath !== "") {
-                    files.path =  basename(
+                  file.path =  basename(
                         pathJoin([path, source.relativePath])
                     );
-                    window.pathCache[files.id] = basename(
+                    window.pathCache[file.id] = basename(
                         pathJoin([path, source.relativePath])
                     );
                 } else {
-                    window.pathCache[files.id] = path;
-                    files.path = path;
+                    window.pathCache[file.id] = path;
+                    file.path = path;
                 }
-            });
-            window.fileList["enQueue"](files);
+                return file
+              })
+            window.fileList["enQueue"](enqueFiles);
         } else {
             window.plupload.each(files, files => {
                 up.removeFile(files);
