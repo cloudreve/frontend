@@ -81,7 +81,7 @@ class PathSelectorCompoment extends Component {
     }
 
     enterFolder = (toBeLoad)=>{
-        API.get('/directory'+toBeLoad,)
+        API.get('/directory'+encodeURIComponent(toBeLoad),)
         .then( (response)=> {
             var dirList =  response.data.objects.filter( (x)=> {
                 return (x.type === "dir" && (this.props.selected.findIndex((value)=>{
