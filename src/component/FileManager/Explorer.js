@@ -17,6 +17,7 @@ import classNames from "classnames";
 import ImgPreivew from "./ImgPreview";
 import UpIcon from "@material-ui/icons/ArrowUpward";
 import pathHelper from "../../untils/page";
+import { isMac } from "../../untils" 
 import { withRouter } from "react-router-dom";
 import {
     Table,
@@ -179,7 +180,7 @@ class ExplorerCompoment extends Component {
         super();
         this.keyMap = {
             DELETE_FILE: "del",
-            SELECT_ALL: "ctrl+a"
+            SELECT_ALL: `${isMac() ? 'command' : 'ctrl'}+a`
         };
 
         this.handlers = {

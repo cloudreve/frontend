@@ -189,3 +189,7 @@ export function getNumber(base,conditions){
     })
     return base
 }
+
+export const isMac = () => {
+  return "MACINTEL" === navigator.platform.toUpperCase()
+}
