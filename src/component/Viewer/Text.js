@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { changeSubTitle, toggleSnackbar } from "../../actions";
 import Editor from 'for-editor'
 import SaveButton from "../Dial/Save";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
 const useStyles = makeStyles(theme => ({
     layout: {

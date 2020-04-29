@@ -19,7 +19,7 @@ import { toggleSnackbar } from "../../actions";
 import RightIcon from "@material-ui/icons/KeyboardArrowRight";
 import {Add, Fingerprint, HighlightOff} from "@material-ui/icons";
 import API from "../../middleware/Api";
-import {bufferDecode, bufferEncode} from "../../untils";
+import {bufferDecode, bufferEncode} from "../../utils";
 
 const useStyles = makeStyles(theme => ({
     sectionTitle: {

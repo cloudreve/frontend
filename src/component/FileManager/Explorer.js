@@ -7,7 +7,7 @@ import {
     navitateUp,
     setSelectedTarget,
     openRemoveDialog,
-    changeSortMethod, refreshFileList
+    changeSortMethod,
 } from "../../actions/index";
 import ObjectIcon from "./ObjectIcon";
 import ContextMenu from "./ContextMenu";
@@ -15,8 +15,7 @@ import EmptyIcon from "@material-ui/icons/Unarchive";
 import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 import classNames from "classnames";
 import ImgPreivew from "./ImgPreview";
-import UpIcon from "@material-ui/icons/ArrowUpward";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import { withRouter } from "react-router-dom";
 import {
     Table,
@@ -29,7 +28,6 @@ import {
     Grid,
     CircularProgress,
     Paper,
-    Button
 } from "@material-ui/core";
 import { GlobalHotKeys,  configure } from "react-hotkeys";
 import TableSortLabel from "@material-ui/core/TableSortLabel";

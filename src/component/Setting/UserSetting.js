@@ -48,7 +48,7 @@ import { withRouter } from "react-router";
 import TimeAgo from "timeago-react";
 import QRCode from "qrcode-react";
 import {Brightness3, Check, ConfirmationNumber, ListAlt, PermContactCalendar} from "@material-ui/icons";
-import { transformTime } from "../../untils";
+import { transformTime } from "../../utils";
 import Authn from "./Authn";
 
 const styles = theme => ({

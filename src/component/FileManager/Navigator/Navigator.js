@@ -26,7 +26,7 @@ import {
     setShareUserPopover, openResaveDialog, openCompressDialog
 } from "../../../actions/index";
 import API from "../../../middleware/Api";
-import { setCookie, setGetParameter, fixUrlHash } from "../../../untils/index";
+import { setCookie, setGetParameter, fixUrlHash } from "../../../utils/index";
 import {
     withStyles,
     Divider,
@@ -38,7 +38,7 @@ import {
 import PathButton from "./PathButton";
 import SaveIcon from '@material-ui/icons/Save';
 import DropDown from "./DropDown";
-import pathHelper from "../../../untils/page";
+import pathHelper from "../../../utils/page";
 import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
 import Avatar from "@material-ui/core/Avatar";

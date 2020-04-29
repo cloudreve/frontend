@@ -21,7 +21,7 @@ import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import { useHistory } from "react-router";
 import Alert from "@material-ui/lab/Alert";
-import {getNumber, randomStr} from "../../../../untils";
+import {getNumber, randomStr} from "../../../../utils";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";

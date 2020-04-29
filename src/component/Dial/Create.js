@@ -8,7 +8,7 @@ import PublishIcon from "@material-ui/icons/Publish";
 import {openCreateFolderDialog, openRemoteDownloadDialog, toggleSnackbar} from "../../actions";
 import {useDispatch} from "react-redux";
 import AutoHidden from "./AutoHidden";
-import statusHelper from "../../untils/page"
+import statusHelper from "../../utils/page"
 import Backdrop from "@material-ui/core/Backdrop";
 import {CloudDownload} from "@material-ui/icons";
 import Auth from "../../middleware/Auth";

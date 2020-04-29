@@ -6,14 +6,14 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import DragLayer from "./DnD/DragLayer"
 import Explorer from "./Explorer"
 import Modals from "./Modals"
-import {decode} from "../../untils/index"
+import {decode} from "../../utils/index"
 import { withStyles } from '@material-ui/core';
 import {connect} from "react-redux";
 import {
     changeSubTitle, closeAllModals, navitateTo, setSelectedTarget, toggleSnackbar,
 } from "../../actions";
 import {withRouter} from "react-router-dom";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 const styles = theme => ({
  
 })

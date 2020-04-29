@@ -35,10 +35,10 @@ import {
     allowSharePreview,
     checkGetParameters,
     changeThemeColor
-} from "../../untils";
+} from "../../utils";
 import Uploader from "../Upload/Uploader.js";
-import { sizeToString } from "../../untils";
-import pathHelper from "../../untils/page";
+import { sizeToString } from "../../utils";
+import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
 import UserAvatar from "./UserAvatar";

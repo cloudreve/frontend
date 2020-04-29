@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
-import { changeThemeColor } from "./untils";
+import { changeThemeColor } from "./utils";
 import NotFound from "./component/Share/NotFound";
 
 // Lazy loads

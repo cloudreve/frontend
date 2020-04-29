@@ -26,7 +26,7 @@ import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import Auth from "../../middleware/Auth";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";

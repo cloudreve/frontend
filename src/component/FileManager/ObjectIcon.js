@@ -12,7 +12,7 @@ import {
     dragAndDrop,
     openLoadingDialog
 } from "../../actions/index";
-import statusHelper from "../../untils/page";
+import statusHelper from "../../utils/page";
 import FileIcon from "./FileIcon";
 import SmallIcon from "./SmallIcon";
 import TableItem from "./TableRow";
@@ -24,7 +24,7 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import DropWarpper from "./DnD/DropWarpper";
 import { useHistory, useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
-import { pathBack } from "../../untils";
+import { pathBack } from "../../utils";
 
 const useStyles = makeStyles(theme => ({
     container: {

@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import ResponsiveContainer from "recharts/lib/component/ResponsiveContainer";
 import { makeStyles } from "@material-ui/core/styles";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";

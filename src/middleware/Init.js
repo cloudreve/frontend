@@ -1,8 +1,8 @@
 import {setSiteConfig, toggleSnackbar, enableLoadUploader, changeViewMethod} from "../actions/index"
-import { fixUrlHash } from "../untils/index"
+import { fixUrlHash } from "../utils/index"
 import API from "./Api"
 import Auth from "./Auth"
-import pathHelper from "../untils/page";
+import pathHelper from "../utils/page";
 export var InitSiteConfig = (rawStore) => {
     // 从缓存获取默认配置
     let configCache = JSON.parse(localStorage.getItem('siteConfigCache'));

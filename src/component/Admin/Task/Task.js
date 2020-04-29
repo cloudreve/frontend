@@ -24,7 +24,7 @@ import Link from "@material-ui/core/Link";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Badge from "@material-ui/core/Badge";
 import ShareFilter from "../Dialogs/ShareFilter";
-import {sizeToString} from "../../../untils";
+import {sizeToString} from "../../../utils";
 import {getTaskProgress, getTaskStatus, getTaskType} from "../../../config";
 
 const useStyles = makeStyles(theme => ({

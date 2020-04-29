@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import { hex2bin, sizeToString } from "../../untils";
+import { hex2bin, sizeToString } from "../../utils";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import TypeIcon from "../FileManager/TypeIcon";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";

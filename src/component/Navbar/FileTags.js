@@ -17,7 +17,7 @@ import ImageIcon from "@material-ui/icons/CollectionsOutlined";
 import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
 import DocIcon from "@material-ui/icons/FileCopyOutlined";
 import { useHistory, useLocation } from "react-router";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";

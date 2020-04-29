@@ -34,7 +34,7 @@ import { useHistory, useLocation } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeSubTitle } from "../../actions";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 
 const ExpansionPanel = withStyles({
     root: {
