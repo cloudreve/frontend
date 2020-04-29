@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { sizeToString } from "../../untils";
+import { sizeToString } from "../../utils";
 import {
     openMusicDialog, openResaveDialog,
     setSelectedTarget,
@@ -15,7 +15,7 @@ import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 let vh = window.innerHeight;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
 const styles = theme => ({

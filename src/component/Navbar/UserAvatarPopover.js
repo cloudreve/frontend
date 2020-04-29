@@ -10,7 +10,7 @@ import {
 } from "mdi-material-ui";
 import {setSessionStatus, setUserPopover, toggleSnackbar} from "../../actions";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import Auth from "../../middleware/Auth";
 import {
     withStyles,

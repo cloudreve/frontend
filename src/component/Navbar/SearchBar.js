@@ -19,7 +19,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {withRouter} from "react-router";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import {HotKeys,configure} from "react-hotkeys";
 
 configure({

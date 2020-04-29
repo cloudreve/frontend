@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
-import { sizeToString } from "../../untils";
+import { sizeToString } from "../../utils";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import TypeIcon from "../FileManager/TypeIcon";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";

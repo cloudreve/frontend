@@ -15,7 +15,7 @@ import {
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
 import { withRouter } from "react-router";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 
 const styles = theme => ({
     container: {

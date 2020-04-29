@@ -22,7 +22,7 @@ import {
     openDecompressDialog
 } from "../../actions/index";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
-import { allowSharePreview } from "../../untils/index";
+import { allowSharePreview } from "../../utils/index";
 import UploadIcon from "@material-ui/icons/CloudUpload";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
@@ -42,7 +42,7 @@ import {
     Divider,
     ListItemIcon
 } from "@material-ui/core";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import { Archive, Unarchive } from "@material-ui/icons";

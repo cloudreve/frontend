@@ -22,7 +22,7 @@ import {
     Avatar,
     Typography
 } from "@material-ui/core";
-import { bufferDecode, bufferEncode } from "../../untils/index";
+import { bufferDecode, bufferEncode } from "../../utils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";

@@ -10,7 +10,7 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import { sizeToString } from "../../../untils";
+import { sizeToString } from "../../../utils";
 import TableBody from "@material-ui/core/TableBody";
 import { policyTypeMap } from "../../../config";
 import TablePagination from "@material-ui/core/TablePagination";

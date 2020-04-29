@@ -4,7 +4,7 @@ import {useLocation, useParams, useRouteMatch} from "react-router";
 import API from "../../middleware/Api";
 import {useDispatch} from "react-redux";
 import {changeSubTitle, toggleSnackbar} from "../../actions";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 
 const useStyles = makeStyles(theme => ({
     layout: {

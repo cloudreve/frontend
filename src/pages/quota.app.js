@@ -5,7 +5,7 @@ import AlertBar from "../component/Common/Snackbar"
 import Quota from "../component/VAS/Quota"
 import BuyQuota from "../component/VAS/BuyQuota"
 import { createMuiTheme } from '@material-ui/core/styles';
-import { checkGetParameters } from '../untils/index';
+import { checkGetParameters } from '../utils/index';
 
 import { CssBaseline, withStyles, MuiThemeProvider } from '@material-ui/core';
 

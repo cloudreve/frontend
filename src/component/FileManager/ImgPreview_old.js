@@ -7,7 +7,7 @@ import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import {withRouter} from "react-router";
 
 const styles = theme => ({});

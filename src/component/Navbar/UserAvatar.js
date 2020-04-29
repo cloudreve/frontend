@@ -14,7 +14,7 @@ import {
     Tooltip
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher"
 
 const mapStateToProps = state => {

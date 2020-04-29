@@ -6,7 +6,7 @@ import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { changeSubTitle } from "../../actions";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 
 const useStyles = makeStyles(theme => ({
     layout: {

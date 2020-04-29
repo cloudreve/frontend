@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import StorageIcon from "@material-ui/icons/Storage";
 import { connect } from "react-redux";
 import API from "../../middleware/Api";
-import { sizeToString } from "../../untils";
+import { sizeToString } from "../../utils";
 import { toggleSnackbar } from "../../actions";
 
 import {

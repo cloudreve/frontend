@@ -17,7 +17,7 @@ import {
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
-import {filePath} from "../../untils";
+import {filePath} from "../../utils";
 
 const useStyles = makeStyles(theme => ({
     contentFix: {
