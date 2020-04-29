@@ -16,6 +16,7 @@ import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 import classNames from "classnames";
 import ImgPreivew from "./ImgPreview";
 import pathHelper from "../../utils/page";
+import { isMac } from "../../utils"
 import { withRouter } from "react-router-dom";
 import {
     Table,
@@ -177,7 +178,7 @@ class ExplorerCompoment extends Component {
         super();
         this.keyMap = {
             DELETE_FILE: "del",
-            SELECT_ALL: "ctrl+a"
+            SELECT_ALL: `${isMac() ? 'command' : 'ctrl'}+a`
         };
 
         this.handlers = {
