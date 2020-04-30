@@ -1,3 +1,4 @@
+import { InitSiteConfig } from "../middleware/Init";
 
 const checkSelectedProps = (state)=>{
     let isMultiple,withFolder,withFile=false;
@@ -36,7 +37,125 @@ const doNavigate = (path,state)=>{
     });
 }
 
-const cloudreveApp = (state = [], action) => {
+const defaultStatus = InitSiteConfig({
+  siteConfig: {
+      title: "Cloudreve",
+      loginCaptcha: false,
+      regCaptcha: false,
+      forgetCaptcha: false,
+      emailActive: false,
+      QQLogin: false,
+      themes:null,
+      authn:false,
+      theme: {
+          palette: {
+              common: { black: "#000", white: "#fff" },
+              background: { paper: "#fff", default: "#fafafa" },
+              primary: {
+                  light: "#7986cb",
+                  main: "#3f51b5",
+                  dark: "#303f9f",
+                  contrastText: "#fff"
+              },
+              secondary: {
+                  light: "#ff4081",
+                  main: "#f50057",
+                  dark: "#c51162",
+                  contrastText: "#fff"
+              },
+              error: {
+                  light: "#e57373",
+                  main: "#f44336",
+                  dark: "#d32f2f",
+                  contrastText: "#fff"
+              },
+              text: {
+                  primary: "rgba(0, 0, 0, 0.87)",
+                  secondary: "rgba(0, 0, 0, 0.54)",
+                  disabled: "rgba(0, 0, 0, 0.38)",
+                  hint: "rgba(0, 0, 0, 0.38)"
+              },
+              explorer: {
+                  filename: "#474849",
+                  icon: "#8f8f8f",
+                  bgSelected: "#D5DAF0",
+                  emptyIcon: "#e8e8e8"
+              }
+          }
+      },
+      captcha_IsUseReCaptcha: false,
+      captcha_ReCaptchaKey: "defaultKey"
+  },
+  navigator: {
+      path: "/",
+      refresh: true
+  },
+  viewUpdate: {
+      isLogin:false,
+      loadUploader:false,
+      open: false,
+      explorerViewMethod: "icon",
+      sortMethod: "timePos",
+      subTitle:null,
+      contextType: "none",
+      menuOpen: false,
+      navigatorLoading: true,
+      navigatorError: false,
+      navigatorErrorMsg: null,
+      modalsLoading: false,
+      storageRefresh: false,
+      userPopoverAnchorEl: null,
+      shareUserPopoverAnchorEl: null,
+      modals: {
+          createNewFolder: false,
+          rename: false,
+          move: false,
+          remove: false,
+          share: false,
+          music: false,
+          remoteDownload: false,
+          torrentDownload: false,
+          getSource: false,
+          copy:false,
+          resave: false,
+          compress:false,
+          decompress:false,
+      },
+      snackbar: {
+          toggle: false,
+          vertical: "top",
+          horizontal: "center",
+          msg: "",
+          color: ""
+      }
+  },
+  explorer: {
+    dndSignal:false,
+    dndTarget:null,
+    dndSource:null,
+    fileList: [],
+    dirList: [],
+    selected: [],
+    selectProps: {
+        isMultiple: false,
+        withFolder: false,
+        withFile: false
+    },
+    lastSelect: {
+      file: null,
+      index: -1,
+    },
+    shiftSelectedIds: [],
+    imgPreview: {
+        first: null,
+        other: []
+    },
+    keywords: null
+  }
+});
+
+// TODO: 将cloureveApp切分成小的reducer
+const cloudreveApp = (state = defaultStatus, action) => {
     switch (action.type) {
         case 'DRAWER_TOGGLE':
             return Object.assign({}, state, {
@@ -152,10 +271,10 @@ const cloudreveApp = (state = [], action) => {
                     dirList: dirList,
                 }),
             });
-        case 'ADD_SELECTED_TARGET':
+        case 'ADD_SELECTED_TARGETS':
             var newState =  Object.assign({}, state, {
                 explorer:Object.assign({}, state.explorer, {
-                    selected: [...state.explorer.selected,action.targets]
+                    selected: [...state.explorer.selected,...action.targets]
                 }),
             });
             var selectedProps = checkSelectedProps(newState.explorer);
@@ -186,13 +305,15 @@ const cloudreveApp = (state = [], action) => {
                     }
                 }),
             });
-        case 'RMOVE_SELECTED_TARGET':
-            var oldSelected = state.explorer.selected.concat();
-            oldSelected.splice(action.id,1);
+        case 'RMOVE_SELECTED_TARGETS':
+            const { fileIds } = action
+            const newSelected = state.explorer.selected.filter((file) => {
+              return !fileIds.includes(file.id)
+            })
             // eslint-disable-next-line
             var newState =  Object.assign({}, state, {
                 explorer:Object.assign({}, state.explorer, {
-                    selected: oldSelected
+                    selected: newSelected
                 }),
             });
             // eslint-disable-next-line
@@ -517,10 +638,30 @@ const cloudreveApp = (state = [], action) => {
                     fileSave:!state.explorer.fileSave,
                 }),
             });
+        case 'SET_LAST_SELECT':
+            const { file, index } = action
+            return {
+              ...state,
+              explorer: {
+                ...state.explorer,
+                lastSelect: {
+                  file,
+                  index,
+                },
+              }
+            }
+        case 'SET_SHIFT_SELECTED_IDS':
+              const { shiftSelectedIds } = action
+              return {
+                ...state,
+                explorer: {
+                  ...state.explorer,
+                  shiftSelectedIds,
+                }
+              }
         default:
             return state
     }
 }
-
 
 export default cloudreveApp
