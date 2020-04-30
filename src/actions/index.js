@@ -1,3 +1,5 @@
+export * from './explorer'
+
 export const navitateTo = path => {
     return {
         type: "NAVIGATOR_TO",
@@ -65,27 +67,6 @@ export const changeContextMenu = (type, open) => {
         type: "CHANGE_CONTEXT_MENU",
         menuType: type,
         open: open
-    };
-};
-
-export const addSelectedTarget = targets => {
-    return {
-        type: "ADD_SELECTED_TARGET",
-        targets: targets
-    };
-};
-
-export const setSelectedTarget = targets => {
-    return {
-        type: "SET_SELECTED_TARGET",
-        targets: targets
-    };
-};
-
-export const removeSelectedTarget = id => {
-    return {
-        type: "RMOVE_SELECTED_TARGET",
-        id: id
     };
 };
 

@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     changeContextMenu,
     setSelectedTarget,
-    addSelectedTarget,
-    removeSelectedTarget,
+    selectFile as selectFileAction,
     navitateTo,
     showImgPreivew,
     openMusicDialog,
@@ -57,14 +56,7 @@ export default function ObjectIcon(props) {
         targets => dispatch(setSelectedTarget(targets)),
         [dispatch]
     );
-    const AddSelectedTarget = useCallback(
-        targets => dispatch(addSelectedTarget(targets)),
-        [dispatch]
-    );
-    const RemoveSelectedTarget = useCallback(
-        id => dispatch(removeSelectedTarget(id)),
-        [dispatch]
-    );
+
     const NavitateTo = useCallback(targets => dispatch(navitateTo(targets)), [
         dispatch
     ]);
@@ -107,18 +99,7 @@ export default function ObjectIcon(props) {
     };
 
     const selectFile = e => {
-        let presentIndex = selected.findIndex(value => {
-            return value === props.file;
-        });
-        if (presentIndex !== -1 && e.ctrlKey) {
-            RemoveSelectedTarget(presentIndex);
-        } else {
-            if (e.ctrlKey) {
-                AddSelectedTarget(props.file);
-            } else {
-                SetSelectedTarget([props.file]);
-            }
-        }
+        dispatch(selectFileAction(props.file, e, props.index))
     };
 
     const handleClick = e => {
