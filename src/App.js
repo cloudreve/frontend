@@ -122,7 +122,7 @@ export default function App() {
                                 <MyShare />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}search`} isLogin={isLogin}>
+                            <Route path={`${path}search`} isLogin={isLogin}>
                                 <SearchResult />
                             </AuthRoute>
                             
@@ -131,7 +131,7 @@ export default function App() {
                                 isLogin={isLogin}
                             >
                                 <UserSetting />
-                            </AuthRoute>
+                            </Route>
 
                             <AuthRoute
                                 path={`${path}profile/:id`}
