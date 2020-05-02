@@ -51,7 +51,8 @@ const useStyles = makeStyles(theme => ({
     },
     header: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        alignItems: "flex-start",
     },
     headerRight: {},
     highlight:
@@ -94,6 +95,8 @@ export default function File() {
     const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
     const [loading,setLoading] = useState(false);
+
+    let history = useHistory();
 
     useEffect(() => {
         loadList();
@@ -193,6 +196,16 @@ export default function File() {
                 setFilter={setFilter}
             />
             <div className={classes.header}>
+                <Button
+                    color={"primary"}
+                    onClick={() => history.push("/admin/file/import")}
+                    variant={"contained"}
+                    style={{
+                        alignSelf: "center",
+                    }}
+                >
+                    从外部导入
+                </Button>
                 <div className={classes.headerRight}>
                     <Tooltip title="过滤">
 

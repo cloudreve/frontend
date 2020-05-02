@@ -62,8 +62,8 @@ export const isCompressFile = name=>{
 }
 
 const taskStatus = ["排队中","处理中","失败","取消","已完成"];
-const taskType = ["压缩","解压缩","文件中转"];
-const taskProgress = ["等待中","压缩中","解压缩中","下载中","转存中"];
+const taskType = ["压缩","解压缩","文件中转","导入外部目录"];
+const taskProgress = ["等待中","压缩中","解压缩中","下载中","转存中","索引中","插入中"];
 
 export const getTaskStatus = status =>{
     return taskStatus[status];
