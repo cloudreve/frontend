@@ -31,8 +31,8 @@ export const ICPFooter = () => {
     // 只在分享和登录界面显示
     const isSharePage = pageHelper.isSharePage(location.pathname)
     const isLoginPage = pageHelper.isLoginPage(location.pathname)
-    setShow(!matchMediaQuery && (isSharePage || isLoginPage))
-  }, [matchMediaQuery, location]);
+    setShow(siteICPId && !matchMediaQuery && (isSharePage || isLoginPage))
+  }, [siteICPId, matchMediaQuery, location]);
 
   if (!show) {
     return (<></>)
