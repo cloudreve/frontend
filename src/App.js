@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import AuthRoute from "./middleware/AuthRoute";
 import Navbar from "./component/Navbar/Navbar.js";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -10,7 +10,7 @@ import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import { changeThemeColor } from "./utils";
 import NotFound from "./component/Share/NotFound";
-
+import { ICPFooter } from "./component/Common/ICPFooter";
 // Lazy loads
 import LoginForm from "./component/Login/LoginForm";
 import FileManager from "./component/FileManager/FileManager.js";
@@ -124,9 +124,9 @@ export default function App() {
 
                             <Route path={`${path}search`} isLogin={isLogin}>
                                 <SearchResult />
-                            </AuthRoute>
+                            </Route>
                             
-                            <AuthRoute
+                            <Route
                                 path={`${path}setting`}
                                 isLogin={isLogin}
                             >
@@ -189,6 +189,7 @@ export default function App() {
                             </Route>
                         </Switch>
                     </main>
+                    <ICPFooter />
                 </div>
             </ThemeProvider>
         </React.Fragment>
