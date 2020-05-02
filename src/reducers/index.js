@@ -40,6 +40,7 @@ const doNavigate = (path,state)=>{
 const defaultStatus = InitSiteConfig({
   siteConfig: {
       title: "Cloudreve",
+      siteICPId: "",
       loginCaptcha: false,
       regCaptcha: false,
       forgetCaptcha: false,

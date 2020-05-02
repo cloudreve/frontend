@@ -39,6 +39,7 @@ export default function SiteInformation() {
         siteURL: "",
         siteName: "",
         siteTitle: "",
+        siteICPId: "",
         pwa_small_icon: "",
         pwa_medium_icon: "",
         pwa_large_icon: "",
@@ -148,6 +149,20 @@ export default function SiteInformation() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     非常重要，请确保与实际情况一致。使用云存储策略、支付平台时，请填入可以被外网访问的地址。
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    网站备案号
+                                </InputLabel>
+                                <Input
+                                    value={options.siteICPId}
+                                    onChange={handleChange("siteICPId")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    工信部网站ICP备案号
                                 </FormHelperText>
                             </FormControl>
                         </div>
