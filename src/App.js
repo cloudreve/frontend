@@ -29,8 +29,9 @@ import Register from "./component/Login/Register";
 import Activation from "./component/Login/Activication";
 import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
-import PDFViewer from "./component/Viewer/PDF";
 import PageLoading from "./component/Placeholder/PageLoading";
+import CodeViewer from "./component/Viewer/Code";
+const PDFViewer = React.lazy(() => import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -122,6 +123,10 @@ export default function App() {
                                 </Suspense>
                             </AuthRoute>
 
+                            <AuthRoute path={`${path}code`} isLogin={isLogin}>
+                                <CodeViewer />
+                            </AuthRoute>
+
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
                                 <Download />
                             </AuthRoute>
@@ -196,6 +201,10 @@ export default function App() {
                                 <Suspense fallback={<PageLoading/>}>
                                     <PDFViewer />
                                 </Suspense>
+                            </Route>
+
+                            <Route path={`${path}s/:id/code(/)*`}>
+                                <CodeViewer />
                             </Route>
 
                             <Route path="*">

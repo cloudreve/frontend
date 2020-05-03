@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Paper } from "@material-ui/core";
+import { Paper, useTheme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";

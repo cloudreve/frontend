@@ -3,7 +3,30 @@ export const msDocPreviewSuffix = ["ppt","pptx","pps","doc","docx","xlsx","xls"]
 export const audioPreviewSuffix = ["mp3","ogg"];
 export const videoPreviewSuffix = ["mp4","mkv","webm"];
 export const pdfPreviewSuffix = ["pdf"];
-export const editSuffix = ["md","html","sql","go","py","js","json","c","cpp","css","txt","ini"];
+export const editSuffix = ["md","txt"];
+export const codePreviewSuffix = {
+    "json":"json",
+    "php":"php",
+    "bat":"bat",
+    "cpp":"cpp",
+    "c":"cpp",
+    "h":"cpp",
+    "cs":"csharp",
+    "css":"css",
+    "dockerfile":"dockerfile",
+    "go":"go",
+    "html":"html",
+    "ini":"ini",
+    "java":"java",
+    "js":"javascript",
+    "jsx":"javascript",
+    "less":"less",
+    "lua":"lua",
+    "sh":"shell",
+    "sql":"sql",
+    "xml":"xml",
+    "yaml":"yaml",
+};
 export const mediaType = {
     audio:["mp3","flac","ape","wav","acc","ogg"],
     video:["mp4","flv","avi","wmv","mkv","rm","rmvb","mov","ogv"],
@@ -47,6 +70,8 @@ export const isPreviewable = name=>{
         return "edit";
     }else if(pdfPreviewSuffix.indexOf(suffix)!==-1){
         return "pdf";
+    }else if(Object.keys(codePreviewSuffix).indexOf(suffix)!==-1){
+        return "code";
     }
     return false;
 }
