@@ -200,6 +200,19 @@ export default function ObjectIcon(props) {
                 }
                 history.push("/text?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
                 return;
+            case "pdf":
+                if (isShare) {
+                    history.push(
+                        selected[0].key +
+                        "/pdf?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                history.push("/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
+                return;
             default:
                 OpenLoadingDialog("获取下载地址...");
                 return;

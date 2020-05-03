@@ -180,6 +180,11 @@ class SharedFileCompoment extends Component {
                     "/text?name=" +
                     encodeURIComponent(this.props.share.source.name));
                 return
+            case "pdf":
+                this.props.history.push(this.props.share.key +
+                    "/pdf?name=" +
+                    encodeURIComponent(this.props.share.source.name));
+                return
             default:
                 this.props.toggleSnackbar(
                     "top",

@@ -5,10 +5,9 @@ import API from "../../middleware/Api";
 import { changeSubTitle, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
 import Notice from "./NotFound";
-
-const LockedFile = React.lazy(() => import("./LockedFile"));
-const SharedFile = React.lazy(() => import("./SharedFile"));
-const SharedFolder = React.lazy(() => import("./SharedFolder"));
+import LockedFile from "./LockedFile";
+import SharedFile from "./SharedFile";
+import SharedFolder from "./SharedFolder";
 
 export default function SharePreload() {
     const dispatch = useDispatch();

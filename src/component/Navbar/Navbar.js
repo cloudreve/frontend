@@ -404,6 +404,21 @@ class NavbarCompoment extends Component {
                     "/text?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
+            case "pdf":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/pdf?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                this.props.history.push(
+                    "/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                );
+                return;
             default:
                 return;
         }

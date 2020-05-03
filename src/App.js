@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import AuthRoute from "./middleware/AuthRoute";
 import Navbar from "./component/Navbar/Navbar.js";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -29,6 +29,8 @@ import Register from "./component/Login/Register";
 import Activation from "./component/Login/Activication";
 import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
+import PDFViewer from "./component/Viewer/PDF";
+import PageLoading from "./component/Placeholder/PageLoading";
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -114,6 +116,12 @@ export default function App() {
                                 <DocViewer />
                             </AuthRoute>
 
+                            <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <PDFViewer />
+                                </Suspense>
+                            </AuthRoute>
+
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
                                 <Download />
                             </AuthRoute>
@@ -182,6 +190,12 @@ export default function App() {
 
                             <Route path={`${path}s/:id/text(/)*`}>
                                 <TextViewer />
+                            </Route>
+
+                            <Route path={`${path}s/:id/pdf(/)*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <PDFViewer />
+                                </Suspense>
                             </Route>
 
                             <Route path="*">
