@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { InitSiteConfig } from "../middleware/Init";
 
 const checkSelectedProps = (state)=>{

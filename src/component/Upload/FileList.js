@@ -15,9 +15,7 @@ import {
     Toolbar,
     IconButton,
     Typography,
-    LinearProgress,
     Slide,
-    Avatar,
     ListItemSecondaryAction,
     withWidth,
     DialogContent

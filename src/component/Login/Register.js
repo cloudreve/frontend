@@ -8,7 +8,6 @@ import {
 import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
-import Auth from "../../middleware/Auth";
 import {
     Button,
     FormControl,
@@ -118,7 +117,7 @@ function Register() {
 
     const classes = useStyles();
 
-    const refreshCaptcha = () => {
+    const refreshCaptcha = useCallback(() => {
         API.get("/site/captcha")
             .then(response => {
                 setCaptchaData(response.data);
@@ -131,7 +130,7 @@ function Register() {
                     "error"
                 );
             });
-    };
+    }, [ToggleSnackbar]);
 
     const register = e =>{
         e.preventDefault();
@@ -170,7 +169,7 @@ function Register() {
         if (regCaptcha && !useReCaptcha) {
             refreshCaptcha();
         }
-    }, [regCaptcha]);
+    }, [refreshCaptcha, regCaptcha, useReCaptcha]);
 
     return (
         <div className={classes.layout}>

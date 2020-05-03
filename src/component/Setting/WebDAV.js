@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function WebDAV(props) {
+export default function WebDAV() {
     const [tab, setTab] = useState(0);
     const [create, setCreate] = useState(false);
     const [accounts, setAccounts] = useState([]);
@@ -77,7 +77,7 @@ export default function WebDAV(props) {
     const deleteAccount = id => {
         let account = accounts[id];
         API.delete("/webdav/accounts/" + account.ID)
-            .then(response => {
+            .then(() => {
                 let accountCopy = [...accounts];
                 accountCopy = accountCopy.filter((v, i) => {
                     return i !== id;

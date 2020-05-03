@@ -1,23 +1,22 @@
-import React, {useCallback, useState} from "react";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
-import SizeInput from "../Common/SizeInput";
-import {makeStyles} from "@material-ui/core/styles";
-import Select from "@material-ui/core/Select";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
 
     formContainer: {
         margin:"8px 0 8px 0",
@@ -124,7 +123,7 @@ export default function AddRedeem({ open, onClose,products ,onSuccess}) {
                                     }}
                                 >
                                     {products.map(v=>(
-                                        <MenuItem value={v.id} data-type={"1"}>{v.name}</MenuItem>
+                                        <MenuItem key={v.id} value={v.id} data-type={"1"}>{v.name}</MenuItem>
                                     ))}
                                     <MenuItem value={0}>积分</MenuItem>
                                 </Select>

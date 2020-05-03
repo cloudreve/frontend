@@ -1,56 +1,30 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-    changeContextMenu,
-    setNavigatorLoadingStatus,
-    navitateTo,
-    openCreateFolderDialog,
-    openRenameDialog,
-    openMoveDialog,
-    openRemoveDialog,
-    openShareDialog,
-    showImgPreivew,
-    openMusicDialog,
-    toggleSnackbar,
-    openRemoteDownloadDialog,
-    openTorrentDownloadDialog,
-    openGetSourceDialog,
-    openCopyDialog,
-    openLoadingDialog,
-    setSelectedTarget,
-    openDecompressDialog
-} from "../../actions/index";
-import { isCompressFile, isPreviewable, isTorrent } from "../../config";
-import { allowSharePreview } from "../../utils/index";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
-import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
-import OpenFolderIcon from "@material-ui/icons/FolderOpen";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import ShareIcon from "@material-ui/icons/Share";
+import { Divider, ListItemIcon, MenuItem, Typography, withStyles } from "@material-ui/core";
+import Menu from "@material-ui/core/Menu";
+import { Archive, Unarchive } from "@material-ui/icons";
 import RenameIcon from "@material-ui/icons/BorderColor";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import OpenFolderIcon from "@material-ui/icons/FolderOpen";
 import MoveIcon from "@material-ui/icons/Input";
 import LinkIcon from "@material-ui/icons/InsertLink";
-import DeleteIcon from "@material-ui/icons/Delete";
 import OpenIcon from "@material-ui/icons/OpenInNew";
-import { MagnetOn } from "mdi-material-ui";
-import {
-    withStyles,
-    Typography,
-    MenuItem,
-    Divider,
-    ListItemIcon
-} from "@material-ui/core";
-import pathHelper from "../../utils/page";
+import ShareIcon from "@material-ui/icons/Share";
+import { FolderUpload, MagnetOn } from "mdi-material-ui";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import Auth from "../../middleware/Auth";
-import { Archive, Unarchive } from "@material-ui/icons";
 import { openCompressDialog } from "../../actions";
-import Menu from "@material-ui/core/Menu";
-import {FolderUpload} from "mdi-material-ui";
+import { changeContextMenu, navitateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
+import { isCompressFile, isPreviewable, isTorrent } from "../../config";
+import Auth from "../../middleware/Auth";
+import { allowSharePreview } from "../../utils/index";
+import pathHelper from "../../utils/page";
 
-const styles = theme => ({
+const styles = () => ({
     propover: {
         minWidth: "200px!important"
     },

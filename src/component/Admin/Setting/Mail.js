@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import DialogActions from "@material-ui/core/DialogActions";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -88,7 +88,7 @@ export default function Mail() {
         API.post("/admin/mailTest", {
             to: tesInput
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "测试邮件已发送", "success");
             })
             .catch(error => {
@@ -101,7 +101,7 @@ export default function Mail() {
 
     const reload = () => {
         API.get("/admin/reload/email")
-            .then(response => {})
+            .then(() => {})
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
@@ -121,7 +121,7 @@ export default function Mail() {
         API.patch("/admin/setting", {
             options: option
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
                 reload();
             })

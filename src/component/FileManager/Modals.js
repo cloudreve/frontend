@@ -27,7 +27,6 @@ import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
-import Auth from "../../middleware/Auth";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
 
@@ -112,7 +111,7 @@ class ModalsCompoment extends Component {
     newNameSuffix = "";
     downloaded = false;
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (this.props.dndSignale !== nextProps.dndSignale) {
             this.dragMove(nextProps.dndSource, nextProps.dndTarget);
             return;
@@ -330,7 +329,7 @@ class ModalsCompoment extends Component {
                 ? "/"
                 : this.state.selectedPath
         })
-            .then(response => {
+            .then(() => {
                 this.onClose();
                 this.props.refreshFileList();
                 this.props.setModalsLoading(false);
@@ -401,10 +400,10 @@ class ModalsCompoment extends Component {
 
         // 检查重名
         if (
-            this.props.dirList.findIndex((value, index) => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === newName;
             }) !== -1 ||
-            this.props.fileList.findIndex((value, index) => {
+            this.props.fileList.findIndex((value) => {
                 return value.name === newName;
             }) !== -1
         ) {
@@ -421,7 +420,7 @@ class ModalsCompoment extends Component {
                 src: src,
                 new_name: newName
             })
-                .then(response => {
+                .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
@@ -442,7 +441,7 @@ class ModalsCompoment extends Component {
         e.preventDefault();
         this.props.setModalsLoading(true);
         if (
-            this.props.dirList.findIndex((value, index) => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === this.state.newFolderName;
             }) !== -1
         ) {
@@ -460,7 +459,7 @@ class ModalsCompoment extends Component {
                     "/" +
                     this.state.newFolderName
             })
-                .then(response => {
+                .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
@@ -486,7 +485,7 @@ class ModalsCompoment extends Component {
             .post("/aria2/torrent/" + this.props.selected[0].id, {
                 dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
-            .then(response => {
+            .then(() => {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -515,7 +514,7 @@ class ModalsCompoment extends Component {
                 url: this.state.downloadURL,
                 dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
-            .then(response => {
+            .then(() => {
                     this.props.toggleSnackbar(
                         "top",
                         "right",

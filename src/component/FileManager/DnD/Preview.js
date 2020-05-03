@@ -4,7 +4,7 @@ import FileIcon from "../FileIcon";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     dragging:{
         width:"200px",
     },

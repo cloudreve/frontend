@@ -1,19 +1,17 @@
-import React, {useCallback, useEffect, useState} from "react";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import Typography from "@material-ui/core/Typography";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import API from "../../../middleware/Api";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
+import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
 
 export default function FileFilter({setFilter,setSearch,open, onClose }) {
     const [input,setInput] = useState({
@@ -47,9 +45,9 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[])
+    },[ToggleSnackbar])
 
-    const submit = e => {
+    const submit = () => {
         let res = {};
         Object.keys(input).forEach(v=>{
             if(input[v] !== "all" && input[v] !== ""){

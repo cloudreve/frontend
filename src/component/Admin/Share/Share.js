@@ -1,28 +1,27 @@
+import { lighten } from "@material-ui/core";
+import Badge from "@material-ui/core/Badge";
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import { Delete, FilterList } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles, } from "@material-ui/core/styles";
-import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import TablePagination from "@material-ui/core/TablePagination";
-import {  useLocation } from "react-router";
-import IconButton from "@material-ui/core/IconButton";
-import {  Delete,  FilterList } from "@material-ui/icons";
-import Tooltip from "@material-ui/core/Tooltip";
-import Checkbox from "@material-ui/core/Checkbox";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { lighten } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Badge from "@material-ui/core/Badge";
+import API from "../../../middleware/Api";
 import ShareFilter from "../Dialogs/ShareFilter";
 
 const useStyles = makeStyles(theme => ({
@@ -69,10 +68,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
-
 export default function Share() {
     const classes = useStyles();
     const [shares, setShares] = useState([]);
@@ -88,11 +83,13 @@ export default function Share() {
     const [selected, setSelected] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        loadList();
-    }, [page, pageSize, orderBy, filter, search]);
-
-    const loadList = () => {
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
+    const loadList = useCallback(() => {
         API.post("/admin/share/list", {
             page: page,
             page_size: pageSize,
@@ -110,12 +107,16 @@ export default function Share() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    };
+    }, [ToggleSnackbar, filter, orderBy, page, pageSize, search]);
+
+    useEffect(() => {
+      loadList();
+    }, [page, pageSize, orderBy, filter, search, loadList]);
 
     const deletePolicy = id => {
         setLoading(true);
         API.post("/admin/share/delete", { id: [id] })
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "分享已删除", "success");
             })
@@ -127,10 +128,10 @@ export default function Share() {
             });
     };
 
-    const deleteBatch = e => {
+    const deleteBatch = () => {
         setLoading(true);
         API.post("/admin/share/delete", { id: selected })
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "分享已删除", "success");
             })
@@ -141,13 +142,6 @@ export default function Share() {
                 setLoading(false);
             });
     };
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {

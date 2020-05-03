@@ -36,7 +36,6 @@ import {
     IconButton
 } from "@material-ui/core";
 import PathButton from "./PathButton";
-import SaveIcon from '@material-ui/icons/Save';
 import DropDown from "./DropDown";
 import pathHelper from "../../../utils/page";
 import classNames from "classnames";
@@ -186,7 +185,7 @@ class NavigatorComponent extends Component {
         }
 
         // 后退操作时重新导航
-        window.onpopstate = event => {
+        window.onpopstate = () => {
             var url = new URL(fixUrlHash(window.location.href));
             var c = url.searchParams.get("path");
             if (c !== null && c !== this.props.path) {
@@ -238,7 +237,7 @@ class NavigatorComponent extends Component {
         this.renderPath(path);
     };
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (this.props.keywords !== nextProps.keywords) {
             this.keywords = nextProps.keywords;
         }

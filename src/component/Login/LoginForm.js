@@ -126,7 +126,7 @@ function LoginForm() {
 
     const classes = useStyles();
 
-    const refreshCaptcha = () => {
+    const refreshCaptcha = useCallback(() => {
         API.get("/site/captcha")
             .then(response => {
                 setCaptchaData(response.data);
@@ -139,14 +139,14 @@ function LoginForm() {
                     "error"
                 );
             });
-    };
+    }, [ToggleSnackbar]);
 
     useEffect(() => {
         setEmail(query.get("username"));
         if (loginCaptcha  && !useReCaptcha) {
             refreshCaptcha();
         }
-    }, [location,loginCaptcha]);
+    }, [location, loginCaptcha, query, refreshCaptcha, useReCaptcha]);
 
     const authnLogin = e => {
         e.preventDefault();

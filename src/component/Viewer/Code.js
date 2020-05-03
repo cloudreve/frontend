@@ -2,7 +2,7 @@ import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { Paper, useTheme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
-import API, { getBaseURL } from "../../middleware/Api";
+import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { changeSubTitle, toggleSnackbar } from "../../actions";
 import pathHelper from "../../utils/page";
@@ -10,7 +10,6 @@ import SaveButton from "../Dial/Save";
 import { codePreviewSuffix } from "../../config";
 import TextLoading from "../Placeholder/TextLoading";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
@@ -51,7 +50,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function CodeViewer(props) {
+export default function CodeViewer() {
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
@@ -121,7 +120,7 @@ export default function CodeViewer(props) {
     const save = () => {
         setStatus("loading");
         API.put("/file/update/" + query.get("id"), content)
-            .then(response => {
+            .then(() => {
                 setStatus("success");
                 setTimeout(() => setStatus(""), 2000);
             })
@@ -148,8 +147,8 @@ export default function CodeViewer(props) {
                                 new Set(Object.keys(codePreviewSuffix).map(k=>{
                                     return codePreviewSuffix[k]
                                 }))
-                            ).map(extension => (
-                                <MenuItem value={extension}>
+                            ).map((extension, index) => (
+                                <MenuItem value={extension} key={index}>
                                     {extension}
                                 </MenuItem>
                             ))}

@@ -4,7 +4,6 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 import ShareIcon from "@material-ui/icons/Share";
 import BackIcon from "@material-ui/icons/ArrowBack";
-import SdStorage from "@material-ui/icons/SdStorage";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import OpenFolderIcon from "@material-ui/icons/FolderOpen";
@@ -276,25 +275,25 @@ class NavbarCompoment extends Component {
         this.UploaderRef = React.createRef();
     }
 
-    componentWillMount() {
-        this.unlisten = this.props.history.listen((location, action) => {
-            this.setState(state => ({ mobileOpen: false }));
+    UNSAFE_componentWillMount() {
+        this.unlisten = this.props.history.listen(() => {
+            this.setState(() => ({ mobileOpen: false }));
         });
     }
     componentWillUnmount() {
         this.unlisten();
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
         changeThemeColor(
             this.props.selected.length <= 1 &&
                 !(!this.props.isMultiple && this.props.withFile)
                 ? this.props.theme.palette.primary.main
                 : this.props.theme.palette.background.default
         );
-    };
+    }
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (
             (this.props.selected.length <= 1 &&
                 !(!this.props.isMultiple && this.props.withFile)) !==
@@ -960,7 +959,7 @@ class NavbarCompoment extends Component {
                         open={this.state.mobileOpen}
                         onClose={this.handleDrawerToggle}
                         onOpen={() =>
-                            this.setState(state => ({ mobileOpen: true }))
+                            this.setState(() => ({ mobileOpen: true }))
                         }
                         disableDiscovery={iOS}
                         ModalProps={{

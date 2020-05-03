@@ -1,29 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import { Dialog } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Alert from "@material-ui/lab/Alert";
+import Chip from "@material-ui/core/Chip";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Fade from "@material-ui/core/Fade";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Chip from "@material-ui/core/Chip";
-import { Dialog } from "@material-ui/core";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import PathSelector from "../../FileManager/PathSelector";
-import DialogActions from "@material-ui/core/DialogActions";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
+import Typography from "@material-ui/core/Typography";
+import Alert from "@material-ui/lab/Alert";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
+import PathSelector from "../../FileManager/PathSelector";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,7 +58,7 @@ function useDebounce(value, delay) {
         return () => {
             clearTimeout(handler);
         };
-    }, [value]);
+    }, [delay, value]);
 
     return debouncedValue;
 }
@@ -116,7 +116,7 @@ export default function Import() {
             dst: options.dst,
             recursive: options.recursive
         })
-            .then(response => {
+            .then(() => {
                 setLoading(false);
                 history.push("/admin/file");
                 ToggleSnackbar(
@@ -152,7 +152,7 @@ export default function Import() {
                     ToggleSnackbar("top", "right", error.message, "error");
                 });
         }
-    }, [debouncedSearchTerm]);
+    }, [ToggleSnackbar, debouncedSearchTerm]);
 
     useEffect(() => {
         API.post("/admin/policy/list", {
@@ -187,7 +187,7 @@ export default function Import() {
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
-        setter(path == "//" ? "/" : path);
+        setter(path === "//" ? "/" : path);
     };
 
     const openPathSelector = isSrcSelect => {
@@ -355,6 +355,7 @@ export default function Import() {
                                             >
                                                 {users.map(u => (
                                                     <MenuItem
+                                                        key={u.Email}
                                                         onClick={() =>
                                                             selectUser(u)
                                                         }

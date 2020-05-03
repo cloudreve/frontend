@@ -1,6 +1,6 @@
 export const isDefined = val => val != null
 export const isFunction = val => typeof val === 'function'
-export const noop = _ => { }
+export const noop = () => { }
 
 export const newScript = (src) => (cb) => {
   const scriptElem = document.createElement('script')

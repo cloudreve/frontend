@@ -31,7 +31,7 @@ export default function EditUserPreload( ) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[id]);
+    },[ToggleSnackbar, id]);
 
     return (
         <div>

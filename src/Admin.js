@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CssBaseline, makeStyles } from "@material-ui/core";
 import AlertBar from "./component/Common/Snackbar";
 import Dashboard from "./component/Admin/Dashboard";

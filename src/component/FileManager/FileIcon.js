@@ -1,21 +1,15 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import classNames from "classnames";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import ContentLoader from "react-content-loader";
-import { baseURL } from "../../middleware/Api";
-import {
-    withStyles,
-    ButtonBase,
-    Typography,
-    Divider,
-    Tooltip
-} from "@material-ui/core";
-import TypeIcon from "./TypeIcon";
+import { ButtonBase, Divider, Tooltip, Typography, withStyles } from "@material-ui/core";
 import { lighten } from "@material-ui/core/styles";
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import ContentLoader from "react-content-loader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import { baseURL } from "../../middleware/Api";
 import pathHelper from "../../utils/page";
+import TypeIcon from "./TypeIcon";
 
 const styles = theme => ({
     container: {
@@ -123,7 +117,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
     return {};
 };
 

@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { Link, makeStyles, useMediaQuery, useTheme } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import {
-  makeStyles,
-  Link,
-  useTheme,
-  useMediaQuery,
-} from "@material-ui/core"
-import pageHelper from '../../utils/page'
+import pageHelper from '../../utils/page';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   icp: {
     padding: '8px 24px',
     textAlign: 'right',

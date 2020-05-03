@@ -10,7 +10,7 @@ import {withRouter} from "react-router";
 import {PhotoSlider} from "react-photo-view";
 import 'react-photo-view/dist/index.css';
 
-const styles = theme => ({});
+const styles = () => ({});
 
 const mapStateToProps = state => {
     return {
@@ -34,7 +34,7 @@ class ImagPreviewComponent extends Component {
         isOpen: false
     };
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         let items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {

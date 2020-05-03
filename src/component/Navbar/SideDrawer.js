@@ -8,7 +8,9 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    List
+    List,
+    Hidden,
+    useTheme,
 } from "@material-ui/core";
 const drawerWidth = 240;
 const styles = theme => ({
@@ -38,6 +40,7 @@ class SideDrawer extends Component {
 
     render() {
         const { classes } = this.props;
+        const theme = useTheme();
 
         const drawer = (
             <div>
@@ -67,9 +70,6 @@ class SideDrawer extends Component {
                         anchor={theme.direction === "rtl" ? "right" : "left"}
                         open={this.state.mobileOpen}
                         onClose={this.handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper
-                        }}
                         ModalProps={{
                             keepMounted: true // Better open performance on mobile.
                         }}

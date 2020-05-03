@@ -12,7 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import SizeInput from "../Common/SizeInput";
 import {makeStyles} from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
 
     formContainer: {
         margin:"8px 0 8px 0",

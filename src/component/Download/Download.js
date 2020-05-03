@@ -1,14 +1,9 @@
+import { Button, IconButton, Typography, withStyles } from "@material-ui/core";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import RefreshIcon from "@material-ui/icons/Refresh";
 import { toggleSnackbar } from "../../actions";
 import API from "../../middleware/Api";
-import {
-    withStyles,
-    Typography,
-    Button,
-    IconButton
-} from "@material-ui/core";
 import DownloadingCard from "./DownloadingCard";
 import FinishedCard from "./FinishedCard";
 
@@ -60,7 +55,7 @@ const styles = theme => ({
         marginTop:theme.spacing(2),
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 
@@ -131,7 +126,7 @@ class DownloadComponent extends Component {
                     continue: response.data.length >= 10
                 });
             })
-            .catch(error => {
+            .catch(() => {
                 this.props.toggleSnackbar("top", "right", "加载失败", "error");
                 this.setState({
                     loading: false

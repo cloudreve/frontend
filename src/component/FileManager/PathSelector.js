@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import {
     toggleSnackbar,
 } from "../../actions/index"
-import axios from 'axios'
 
 import {
     MenuList,
@@ -20,7 +19,6 @@ import {
     ListItemSecondaryAction,
 } from '@material-ui/core';
 import API from '../../middleware/Api'
-import { Api } from 'mdi-material-ui';
 
 const mapStateToProps = state => {
     return {

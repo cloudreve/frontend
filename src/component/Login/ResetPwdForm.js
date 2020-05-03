@@ -61,7 +61,7 @@ const styles = theme => ({
         },
     }
 })
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {
     }
 }

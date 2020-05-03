@@ -22,7 +22,7 @@ import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import { navitateTo, searchMyFile, toggleSnackbar } from "../../actions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Auth from "../../middleware/Auth";
 import {
     Circle,
@@ -134,7 +134,7 @@ const icons = {
 
 const AddTag = React.lazy(() => import ("../Modals/AddTag" ));
 
-export default function FileTag(props) {
+export default function FileTag() {
     const classes = useStyles();
 
     let location = useLocation();
@@ -152,7 +152,6 @@ export default function FileTag(props) {
         dispatch
     ]);
     const NavigateTo = useCallback(k => dispatch(navitateTo(k)), [dispatch]);
-    const isLogin = useSelector(state => state.viewUpdate.isLogin);
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -190,7 +189,7 @@ export default function FileTag(props) {
 
     const submitDelete = id =>{
         API.delete("/tag/"+id)
-            .then(response => {
+            .then(() => {
                 let newTags = tags.filter((v)=>{return v.id !== id});
                 setTags(newTags)
                 let user = Auth.GetUser();

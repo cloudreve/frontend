@@ -10,7 +10,7 @@ import "react-image-lightbox/style.css";
 import pathHelper from "../../utils/page";
 import {withRouter} from "react-router";
 
-const styles = theme => ({});
+const styles = () => ({});
 
 const mapStateToProps = state => {
     return {
@@ -34,7 +34,7 @@ class ImgPreviewCompoment extends Component {
         isOpen: false
     };
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         let items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {

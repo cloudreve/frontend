@@ -98,7 +98,7 @@ class UploaderComponent extends Component {
         }
     };
 
-    componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
+    UNSAFE_componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
         if (isScriptLoaded && !this.props.isScriptLoaded) {
             // load finished
             if (isScriptLoadSucceed) {
@@ -133,7 +133,7 @@ class UploaderComponent extends Component {
                     init: {
                         FilesAdded: this.fileAdd,
 
-                        BeforeUpload: function(up, file) {},
+                        BeforeUpload: function() {},
                         QueueChanged: up => {
                             this.setState({ queued: up.total.queued });
                         },
@@ -167,12 +167,12 @@ class UploaderComponent extends Component {
                             this.props.refreshFileList();
                             this.props.refreshStorage();
                         },
-                        FileUploaded: function(up, file, info) {},
+                        FileUploaded: function() {},
                         Error: (up, err, errTip) => {
                             window.fileList["openFileList"]();
                             window.fileList["setError"](err.file, errTip);
                         },
-                        FilesRemoved: (up, files) => {}
+                        FilesRemoved: () => {}
                     }
                 });
                 // this.fileList["openFileList"]();

@@ -31,7 +31,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function VideoViewer(props) {
+export default function VideoViewer() {
     const math = useRouteMatch();
     let location = useLocation();
     let query = useQuery();

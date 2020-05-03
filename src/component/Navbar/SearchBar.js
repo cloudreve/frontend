@@ -26,7 +26,7 @@ configure({
     ignoreTags:[],
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 

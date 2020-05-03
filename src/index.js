@@ -9,7 +9,6 @@ import App from "./App";
 import cloureveApp from "./reducers";
 import { UpdateSiteConfig } from "./middleware/Init";
 import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
-import PageLoading from "./component/Placeholder/PageLoading";
 const Admin = React.lazy(() => import("./Admin"));
 
 serviceWorker.register();

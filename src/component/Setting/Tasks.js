@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Tasks(props) {
+export default function Tasks() {
     const [tasks, setTasks] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);

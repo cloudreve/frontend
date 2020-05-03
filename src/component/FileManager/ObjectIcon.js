@@ -25,7 +25,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import { pathBack } from "../../utils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     container: {
         padding: "7px"
     },

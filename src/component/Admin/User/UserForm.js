@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
-import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,8 +48,14 @@ export default function UserForm(props) {
     );
     const [groups, setGroups] = useState([]);
 
-    const theme = useTheme();
     let history = useHistory();
+
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
     useEffect(() => {
         API.get("/admin/groups")
@@ -59,7 +65,7 @@ export default function UserForm(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, []);
+    }, [ToggleSnackbar]);
 
     const handleChange = name => event => {
         setUser({
@@ -67,13 +73,6 @@ export default function UserForm(props) {
             [name]: event.target.value
         });
     };
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     const submit = e => {
         e.preventDefault();
@@ -89,7 +88,7 @@ export default function UserForm(props) {
             user: userCopy,
             password:userCopy.Password,
         })
-            .then(response => {
+            .then(() => {
                 history.push("/admin/user");
                 ToggleSnackbar("top", "right", "用户已"+ (props.user ? "保存" : "添加"), "success");
             })

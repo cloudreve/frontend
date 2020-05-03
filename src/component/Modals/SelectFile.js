@@ -53,7 +53,7 @@ export default function SelectFileDialog(props) {
         setFiles(filesCopy);
     };
 
-    const submit = e =>{
+    const submit = () =>{
         let index = [];
         // eslint-disable-next-line
         files.map(v=>{

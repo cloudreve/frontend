@@ -59,7 +59,7 @@ export default function Authn(props) {
         API.patch("/user/setting/authn", {
             id:id,
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -187,7 +187,7 @@ export default function Authn(props) {
             </Typography>
             <Paper>
                 <List className={classes.desenList}>
-                    {props.list.map((v, i) => (
+                    {props.list.map((v) => (
                         <>
                             <ListItem button
                                       style={{

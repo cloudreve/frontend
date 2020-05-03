@@ -1,7 +1,7 @@
 const checkSelectedProps = (state)=>{
     let isMultiple,withFolder,withFile=false;
     isMultiple = (state.selected.length>1);
-    state.selected.map((value)=>{
+    state.selected.forEach((value) => {
         if(value.type==="dir"){
             withFolder = true;
         }else if(value.type==="file"){
@@ -34,29 +34,29 @@ const explorer = (state = [], action) => {
                 }
             });
         case 'SET_SELECTED_TARGET':
-            var newState = Object.assign({}, state, {
+            var newSelectedState = Object.assign({}, state, {
                 selected: action.targets
             });
-            var selectedProps = checkSelectedProps(newState);
-            return Object.assign({}, newState, {
+            var newSelectedProps = checkSelectedProps(newSelectedState);
+            return Object.assign({}, newSelectedState, {
                 selectProps: {
-                    isMultiple:selectedProps[0],
-                    withFolder:selectedProps[1],
-                    withFile:selectedProps[2],
+                    isMultiple:newSelectedProps[0],
+                    withFolder:newSelectedProps[1],
+                    withFile:newSelectedProps[2],
                 }
             });
         case 'RMOVE_SELECTED_TARGET':
             var oldSelected = state.selected.concat();
             oldSelected.splice(action.id,1);
-            var newState = Object.assign({}, state, {
+            var removedSelectedState = Object.assign({}, state, {
                 selected: oldSelected,
             });
-            var selectedProps = checkSelectedProps(newState);
-            return Object.assign({}, newState, {
+            var removedSelectedProps = checkSelectedProps(removedSelectedState);
+            return Object.assign({}, removedSelectedState, {
                 selectProps: {
-                    isMultiple:selectedProps[0],
-                    withFolder:selectedProps[1],
-                    withFile:selectedProps[2],
+                    isMultiple:removedSelectedProps[0],
+                    withFolder:removedSelectedProps[1],
+                    withFile:removedSelectedProps[2],
                 }
             });
         default:

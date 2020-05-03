@@ -7,8 +7,6 @@ import {
     Typography,
     useTheme
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import { sizeToString } from "../../utils";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import TypeIcon from "../FileManager/TypeIcon";
@@ -151,19 +149,12 @@ export default function FinishedCard(props) {
 
     const [expanded, setExpanded] = React.useState(false);
 
-    const handleChange = panel => (event, newExpanded) => {
+    const handleChange = () => (event, newExpanded) => {
         setExpanded(!!newExpanded);
     };
 
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
-
     const getPercent = (completed, total) => {
-        if (total == 0) {
+        if (total === 0) {
             return 0;
         }
         return (completed / total) * 100;
@@ -192,7 +183,7 @@ export default function FinishedCard(props) {
                 />
             );
         }
-    }, [props.task, classes]);
+    }, [props.task, activeFiles, classes.iconMultiple, classes.iconBig, getDownloadName]);
 
     const getTaskError = error =>{
         try{
@@ -306,7 +297,7 @@ export default function FinishedCard(props) {
                         <div className={classes.scroll}>
                             <Table>
                                 <TableBody>
-                                    {activeFiles().map((value, key) => {
+                                    {activeFiles().map((value) => {
                                         return (
                                             <TableRow
                                                 key={value.index}

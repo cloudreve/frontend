@@ -113,11 +113,9 @@ function Reset() {
             userName: input.email,
             captchaCode: input.captcha
         })
-            .then(response => {
+            .then(() => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", "密码重置邮件已发送，请注意查收", "success");
-
-
             })
             .catch(error => {
                 setLoading(false);

@@ -115,9 +115,9 @@ const uploaderLoader = () => WrappedComponent => {
             this._isMounted = false;
         }
 
-        getWrappedInstance() {
-            return this.refs.wrappedInstance;
-        }
+        // getWrappedInstance() {
+        //     return this.refs.wrappedInstance;
+        // }
 
         render() {
             const props = {
