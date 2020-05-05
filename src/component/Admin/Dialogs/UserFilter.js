@@ -40,7 +40,7 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[ToggleSnackbar])
+    },[])
 
     const submit = () => {
         let res = {};

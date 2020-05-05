@@ -180,7 +180,7 @@ export default function OneDriveGuide(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[ToggleSnackbar, policy]);
+    },[]);
 
     const statOAuth = () =>{
         setLoading(true);

@@ -123,7 +123,7 @@ export default function SearchResult() {
             .catch(() => {
                 ToggleSnackbar("top", "right", "加载失败", "error");
             });
-    }, [ToggleSnackbar]);
+    }, []);
 
     useEffect(() => {
       let keywords = query.get("keywords");
@@ -132,7 +132,7 @@ export default function SearchResult() {
       } else {
           ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
       }
-  }, [ToggleSnackbar, location, orderBy, page, query, search]);
+  }, [location]);
 
     const handlePageChange = (event, value) => {
         setPage(value);

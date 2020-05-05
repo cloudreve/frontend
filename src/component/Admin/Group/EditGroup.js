@@ -69,7 +69,7 @@ export default function EditGroupPreload( ) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[ToggleSnackbar, id]);
+    },[id]);
 
     return (
         <div>

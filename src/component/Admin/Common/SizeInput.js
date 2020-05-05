@@ -43,7 +43,7 @@ export default function SizeInput({onChange,min,value,required,label,max,suffix}
             first.current = false;
         }
         return res;
-    },[value, first]);
+    },[value]);
 
     return (
         <FormControl>

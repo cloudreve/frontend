@@ -40,7 +40,7 @@ export default function SharePreload() {
         } else {
             SetSubTitle();
         }
-    }, [share, SetSubTitle, ToggleSnackbar, password]);
+    }, [share,SetSubTitle,ToggleSnackbar]);
 
     useEffect(() => {
         return () => {

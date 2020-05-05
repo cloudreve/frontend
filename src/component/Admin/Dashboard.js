@@ -270,13 +270,13 @@ export default function Dashboard({ content }) {
 
     useEffect(() => {
         SetSubTitle("仪表盘");
-    }, [SetSubTitle]);
+    }, []);
 
     useEffect(() => {
         return () => {
             SetSubTitle();
         };
-    }, [SetSubTitle]);
+    }, []);
 
     let { path } = useRouteMatch();
 

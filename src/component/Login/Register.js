@@ -130,7 +130,7 @@ function Register() {
                     "error"
                 );
             });
-    }, [ToggleSnackbar]);
+    }, []);
 
     const register = e =>{
         e.preventDefault();
@@ -169,7 +169,7 @@ function Register() {
         if (regCaptcha && !useReCaptcha) {
             refreshCaptcha();
         }
-    }, [refreshCaptcha, regCaptcha, useReCaptcha]);
+    }, [regCaptcha]);
 
     return (
         <div className={classes.layout}>

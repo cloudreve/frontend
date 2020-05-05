@@ -110,11 +110,11 @@ export default function File() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, [ToggleSnackbar, filter, orderBy, page, pageSize, search]);
+    }, []);
 
     useEffect(() => {
       loadList();
-    }, [page, pageSize, orderBy, filter, search, loadList]);
+    }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
         setLoading(true);

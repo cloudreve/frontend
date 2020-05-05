@@ -183,7 +183,7 @@ export default function FinishedCard(props) {
                 />
             );
         }
-    }, [props.task, activeFiles, classes.iconMultiple, classes.iconBig, getDownloadName]);
+    }, [props.task, classes]);
 
     const getTaskError = error =>{
         try{

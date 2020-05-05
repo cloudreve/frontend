@@ -115,7 +115,7 @@ export default function Policy() {
             ToggleSnackbar("top", "right", query.get("msg") + ", "+ query.get("err"), "warning");
         }
 
-    },[ToggleSnackbar, location, query])
+    },[location])
 
     const loadList = useCallback(() => {
       API.post("/admin/policy/list", {
@@ -132,11 +132,11 @@ export default function Policy() {
           .catch(error => {
               ToggleSnackbar("top", "right", error.message, "error");
           });
-    }, [ToggleSnackbar, filter, page, pageSize]);
+    }, []);
 
     useEffect(() => {
         loadList();
-    }, [page, pageSize, filter, loadList]);
+    }, [page, pageSize,filter]);
 
     const deletePolicy = (id) =>{
         API.delete("/admin/policy/" + id,)

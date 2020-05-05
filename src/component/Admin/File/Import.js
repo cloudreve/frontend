@@ -58,7 +58,7 @@ function useDebounce(value, delay) {
         return () => {
             clearTimeout(handler);
         };
-    }, [delay, value]);
+    }, [value]);
 
     return debouncedValue;
 }
@@ -152,7 +152,7 @@ export default function Import() {
                     ToggleSnackbar("top", "right", error.message, "error");
                 });
         }
-    }, [ToggleSnackbar, debouncedSearchTerm]);
+    }, [debouncedSearchTerm]);
 
     useEffect(() => {
         API.post("/admin/policy/list", {

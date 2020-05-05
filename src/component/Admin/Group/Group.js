@@ -105,7 +105,7 @@ export default function Group() {
           .catch(error => {
               ToggleSnackbar("top", "right", error.message, "error");
           });
-    }, [ToggleSnackbar, page, pageSize]);
+    }, []);
 
     useEffect(()=>{
         if(query.get("code") === "0"){
@@ -114,11 +114,11 @@ export default function Group() {
             ToggleSnackbar("top", "right", query.get("msg") + ", "+ query.get("err"), "warning");
         }
 
-    },[ToggleSnackbar, location, query])
+    },[location])
 
     useEffect(() => {
         loadList();
-    }, [loadList, page, pageSize]);
+    }, [page, pageSize]);
 
     const deletePolicy = (id) =>{
         API.delete("/admin/group/" + id,)

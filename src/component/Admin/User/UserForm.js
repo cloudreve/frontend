@@ -65,7 +65,7 @@ export default function UserForm(props) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, [ToggleSnackbar]);
+    }, []);
 
     const handleChange = name => event => {
         setUser({

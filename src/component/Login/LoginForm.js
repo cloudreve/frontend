@@ -139,14 +139,14 @@ function LoginForm() {
                     "error"
                 );
             });
-    }, [ToggleSnackbar]);
+    }, []);
 
     useEffect(() => {
         setEmail(query.get("username"));
         if (loginCaptcha  && !useReCaptcha) {
             refreshCaptcha();
         }
-    }, [location, loginCaptcha, query, refreshCaptcha, useReCaptcha]);
+    }, [location,loginCaptcha]);
 
     const authnLogin = e => {
         e.preventDefault();

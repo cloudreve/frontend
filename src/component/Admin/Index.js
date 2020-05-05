@@ -159,7 +159,7 @@ export default function Index() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, [ToggleSnackbar]);
+    }, []);
 
     return (
         <Grid container spacing={3}>

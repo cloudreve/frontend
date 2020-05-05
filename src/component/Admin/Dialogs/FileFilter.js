@@ -45,7 +45,7 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[ToggleSnackbar])
+    },[])
 
     const submit = () => {
         let res = {};
