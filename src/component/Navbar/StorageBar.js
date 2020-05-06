@@ -14,7 +14,6 @@ import {
     Tooltip
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
-import Link from "@material-ui/core/Link";
 import { withRouter } from "react-router";
 
 const mapStateToProps = state => {
@@ -90,7 +89,7 @@ class StorageBarCompoment extends Component {
         this.firstLoad = false;
     }
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (
             (this.props.isLogin && this.props.refresh !== nextProps.refresh) ||
             (this.props.isLogin !== nextProps.isLogin && nextProps.isLogin)
@@ -120,7 +119,7 @@ class StorageBarCompoment extends Component {
                     total: sizeToString(response.data.total)
                 });
             })
-            .catch(error => {});
+            .catch(() => {});
     };
 
     render() {

@@ -1,0 +1,28 @@
+extends: 
+  - eslint:recommended
+  - plugin:react/recommended
+plugins:
+  - react
+  - react-hooks
+parser: babel-eslint
+parserOptions:
+  sourceType: module
+  ecmaVersion: 2020
+  ecmaFeatures:
+      jsx: true
+env:
+  es6: true
+  browser: true
+  node: true
+  jest: true
+
+settings:
+  react:
+    version: detect
+ignorePatterns:
+  - node_modules
+rules:
+  react/prop-types: 0
+  react-hooks/rules-of-hooks: "error"
+  # TODO: 修改添加deps后出现的死循环
+  react-hooks/exhaustive-deps: 0

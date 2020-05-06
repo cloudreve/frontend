@@ -41,7 +41,7 @@ function useQuery() {
 }
 
 
-export default function TextViewer(props) {
+export default function TextViewer() {
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
@@ -110,7 +110,7 @@ export default function TextViewer(props) {
     const save = ()=>{
         setStatus("loading");
         API.put("/file/update/" + query.get("id"),content)
-            .then(response => {
+            .then(() => {
                 setStatus("success");
                 setTimeout(()=>setStatus(""),2000);
             })

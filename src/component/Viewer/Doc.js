@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {changeSubTitle, toggleSnackbar} from "../../actions";
 import pathHelper from "../../utils/page";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     layout: {
         width: "auto",
         marginTop: "-48px",
@@ -25,7 +25,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function DocViewer(props) {
+export default function DocViewer() {
     let [url,setURL] = useState("");
     const math = useRouteMatch();
     let location = useLocation();

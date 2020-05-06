@@ -94,7 +94,7 @@ const styles = theme => ({
         marginLeft: 8
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 
@@ -209,7 +209,7 @@ class SharedFileCompoment extends Component {
         callback(event);
     };
 
-    download = e => {
+    download = () => {
         this.setState({ loading: true });
         API.put("/share/download/" + this.props.share.key)
             .then(response => {
@@ -231,9 +231,6 @@ class SharedFileCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-        const user = Auth.GetUser();
-        const isLogin = Auth.Check();
-
         return (
             <div className={classes.layout}>
                 <Modals />

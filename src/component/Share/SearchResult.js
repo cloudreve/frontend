@@ -77,7 +77,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function SearchResult(props) {
+export default function SearchResult() {
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -91,21 +91,12 @@ export default function SearchResult(props) {
         [dispatch]
     );
 
-    useEffect(() => {
-        let keywords = query.get("keywords");
-        if (keywords) {
-            search(keywords, page, orderBy);
-        } else {
-            ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
-        }
-    }, [location]);
-
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [shareList, setShareList] = useState([]);
     const [orderBy, setOrderBy] = useState("created_at DESC");
 
-    const search = (keywords, page, orderBy) => {
+    const search = useCallback((keywords, page, orderBy) => {
         let order = orderBy.split(" ");
         API.get(
             "/share/search?page=" +
@@ -129,10 +120,19 @@ export default function SearchResult(props) {
                 setTotal(response.data.total);
                 setShareList(response.data.items);
             })
-            .catch(error => {
+            .catch(() => {
                 ToggleSnackbar("top", "right", "加载失败", "error");
             });
-    };
+    }, []);
+
+    useEffect(() => {
+      let keywords = query.get("keywords");
+      if (keywords) {
+          search(keywords, page, orderBy);
+      } else {
+          ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
+      }
+  }, [location]);
 
     const handlePageChange = (event, value) => {
         setPage(value);

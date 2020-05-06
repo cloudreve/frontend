@@ -6,7 +6,6 @@ import DateIcon from "@material-ui/icons/DateRange";
 import EmailIcon from "@material-ui/icons/Email";
 import HomeIcon from "@material-ui/icons/Home";
 import LinkIcon from "@material-ui/icons/Phonelink";
-import AlarmOff from "@material-ui/icons/AlarmOff";
 import InputIcon from "@material-ui/icons/Input";
 import SecurityIcon from "@material-ui/icons/Security";
 import NickIcon from "@material-ui/icons/PermContactCalendar";
@@ -39,15 +38,12 @@ import {
     DialogTitle,
     Switch
 } from "@material-ui/core";
-import Backup from "@material-ui/icons/Backup";
-import SettingsInputHdmi from "@material-ui/icons/SettingsInputHdmi";
 import { blue, green, yellow } from "@material-ui/core/colors";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
-import TimeAgo from "timeago-react";
 import QRCode from "qrcode-react";
-import {Brightness3, Check, ConfirmationNumber, ListAlt, PermContactCalendar} from "@material-ui/icons";
+import {Brightness3, ListAlt, PermContactCalendar} from "@material-ui/icons";
 import { transformTime } from "../../utils";
 import Authn from "./Authn";
 
@@ -271,7 +267,7 @@ class UserSettingCompoment extends Component {
             loading: "gravatar"
         });
         API.put("/user/setting/avatar")
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -302,7 +298,7 @@ class UserSettingCompoment extends Component {
         API.patch("/user/setting/nick", {
             nick: this.state.nick
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -338,7 +334,7 @@ class UserSettingCompoment extends Component {
                 "Content-Type": "multipart/form-data"
             }
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -366,7 +362,7 @@ class UserSettingCompoment extends Component {
         API.patch("/user/setting/homepage", {
             status: !this.state.settings.homepage
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -407,7 +403,7 @@ class UserSettingCompoment extends Component {
             old: this.state.oldPwd,
             new: this.state.newPwd
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -440,7 +436,7 @@ class UserSettingCompoment extends Component {
             .patch("/user/setting/theme", {
                 theme: this.state.chosenTheme
             })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -539,7 +535,7 @@ class UserSettingCompoment extends Component {
         API.patch("/user/setting/2fa", {
                 code: this.state.authCode
             })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",

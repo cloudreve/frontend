@@ -12,7 +12,6 @@ import {
 import {
     toggleSnackbar,
     setModalsLoading,
-    refreshFileList,
 } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
@@ -93,7 +92,7 @@ export default function CompressDialog(props) {
             name:fileName,
             dst: selectedPath === "//" ? "/" : selectedPath
         })
-            .then(response => {
+            .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "压缩任务已创建", "success");
                 SetModalsLoading(false);

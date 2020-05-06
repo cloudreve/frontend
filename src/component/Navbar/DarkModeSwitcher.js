@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Auth from "../../middleware/Auth";
 import classNames from "classnames";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     icon: {
         color: 'rgb(255, 255, 255)',
         opacity: "0.54",
@@ -21,7 +21,7 @@ const DarkModeSwitcher = ({ position }) => {
     const ToggleThemeMode = useCallback(() => dispatch(toggleDaylightMode()), [
         dispatch
     ]);
-    const toggleMode = e => {
+    const toggleMode = () => {
         Auth.SetPreference("theme_mode",isDayLight?"dark":"light");
         ToggleThemeMode();
     };

@@ -1,37 +1,27 @@
-import React, { useCallback, useEffect } from "react";
-import {
-    Card,
-    CardContent,
-    darken,
-    IconButton,
-    lighten,
-    LinearProgress,
-    makeStyles,
-    Typography,
-    useTheme
-} from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
-import { hex2bin, sizeToString } from "../../utils";
-import PermMediaIcon from "@material-ui/icons/PermMedia";
-import TypeIcon from "../FileManager/TypeIcon";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Divider from "@material-ui/core/Divider";
-import { ExpandMore, HighlightOff } from "@material-ui/icons";
-import classNames from "classnames";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Table from "@material-ui/core/Table";
+import { Card, CardContent, darken, IconButton, lighten, LinearProgress, makeStyles, Typography, useTheme } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
-import Tooltip from "@material-ui/core/Tooltip";
-import API from "../../middleware/Api";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Grid from "@material-ui/core/Grid";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import Tooltip from "@material-ui/core/Tooltip";
+import { ExpandMore, HighlightOff } from "@material-ui/icons";
+import PermMediaIcon from "@material-ui/icons/PermMedia";
+import classNames from "classnames";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import TimeAgo from "timeago-react";
+import { toggleSnackbar } from "../../actions";
+import API from "../../middleware/Api";
+import { hex2bin, sizeToString } from "../../utils";
+import TypeIcon from "../FileManager/TypeIcon";
 import SelectFileDialog from "../Modals/SelectFile";
 
 const ExpansionPanel = withStyles({
@@ -235,7 +225,7 @@ export default function DownloadingCard(props) {
         API.put("/aria2/select/" + task.info.gid, {
             indexes: newIndex
         })
-            .then(response => {
+            .then(() => {
                 setTask({
                     ...task,
                     info: {
@@ -282,10 +272,10 @@ export default function DownloadingCard(props) {
         // eslint-disable-next-line
     }, [task, classes]);
 
-    const cancel = e => {
+    const cancel = () => {
         setLoading(true);
         API.delete("/aria2/task/" + task.info.gid, )
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "任务已取消，状态会在稍后更新", "success");
             })
             .catch(error => {
@@ -301,7 +291,7 @@ export default function DownloadingCard(props) {
         API.put("/aria2/select/" + task.info.gid, {
             indexes: fileIndex
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "操作成功，状态会在稍后更新", "success");
                 setSelectDialogOpen(false);
             })
@@ -392,7 +382,7 @@ export default function DownloadingCard(props) {
                         <div className={classes.scroll}>
                             <Table size="small">
                                 <TableBody>
-                                    {activeFiles().map((value, key) => {
+                                    {activeFiles().map((value) => {
                                         return (
                                             <TableRow
                                                 key={value.index}

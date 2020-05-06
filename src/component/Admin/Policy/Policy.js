@@ -1,28 +1,27 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { sizeToString } from "../../../utils";
-import TableBody from "@material-ui/core/TableBody";
-import { policyTypeMap } from "../../../config";
-import TablePagination from "@material-ui/core/TablePagination";
-import AddPolicy from "../Dialogs/AddPolicy";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import {useHistory, useLocation} from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import {Delete, Edit} from "@material-ui/icons";
-import Tooltip from "@material-ui/core/Tooltip";
-import Popover from "@material-ui/core/Popover";
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import Tooltip from "@material-ui/core/Tooltip";
+import { Delete, Edit } from "@material-ui/icons";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router";
+import { toggleSnackbar } from "../../../actions";
+import { policyTypeMap } from "../../../config";
+import API from "../../../middleware/Api";
+import { sizeToString } from "../../../utils";
+import AddPolicy from "../Dialogs/AddPolicy";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -78,8 +77,8 @@ function useQuery() {
 
 export default function Policy() {
     const classes = useStyles();
-    const [loading, setLoading] = useState(false);
-    const [tab, setTab] = useState(0);
+    // const [loading, setLoading] = useState(false);
+    // const [tab, setTab] = useState(0);
     const [policies, setPolicies] = useState([]);
     const [statics, setStatics] = useState([]);
     const [page, setPage] = useState(1);
@@ -102,6 +101,12 @@ export default function Policy() {
         setAnchorEl(null);
     };
 
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
     useEffect(()=>{
         if(query.get("code") === "0"){
@@ -112,30 +117,30 @@ export default function Policy() {
 
     },[location])
 
+    const loadList = useCallback(() => {
+      API.post("/admin/policy/list", {
+          page: page,
+          page_size: pageSize,
+          order_by: "id desc",
+          conditions: filter === "all" ? {} : { type: filter }
+      })
+          .then(response => {
+              setPolicies(response.data.items);
+              setStatics(response.data.statics);
+              setTotal(response.data.total);
+          })
+          .catch(error => {
+              ToggleSnackbar("top", "right", error.message, "error");
+          });
+    }, []);
+
     useEffect(() => {
         loadList();
     }, [page, pageSize,filter]);
 
-    const loadList = () => {
-        API.post("/admin/policy/list", {
-            page: page,
-            page_size: pageSize,
-            order_by: "id desc",
-            conditions: filter === "all" ? {} : { type: filter }
-        })
-            .then(response => {
-                setPolicies(response.data.items);
-                setStatics(response.data.statics);
-                setTotal(response.data.total);
-            })
-            .catch(error => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            });
-    };
-
     const deletePolicy = (id) =>{
         API.delete("/admin/policy/" + id,)
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "存储策略已删除", "success");
             })
@@ -143,13 +148,6 @@ export default function Policy() {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     const open = Boolean(anchorEl);
 

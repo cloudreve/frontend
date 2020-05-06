@@ -1,26 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import IconButton from "@material-ui/core/IconButton";
+import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import { Delete } from "@material-ui/icons";
+import Alert from "@material-ui/lab/Alert";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
-import TableHead from "@material-ui/core/TableHead";
-import Table from "@material-ui/core/Table";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import { Delete } from "@material-ui/icons";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
+import API from "../../../middleware/Api";
 import CreateTheme from "../Dialogs/CreateTheme";
-import Alert from "@material-ui/lab/Alert";
-import Link from "@material-ui/core/Link";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -103,7 +103,7 @@ export default function Theme() {
         let res = JSON.parse(options.themes);
         let themeString = {};
 
-        Object.keys(res).map(k => {
+        Object.keys(res).forEach(k => {
             themeString[k] = JSON.stringify(res[k]);
         });
 
@@ -151,7 +151,7 @@ export default function Theme() {
         API.patch("/admin/setting", {
             options: option
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
             .catch(error => {
@@ -243,7 +243,7 @@ export default function Theme() {
                                                                 !('secondary' in res.palette) ||
                                                                 !('main' in res.palette.secondary)
                                                             ){
-                                                                throw "error";
+                                                                throw e
                                                             }
                                                             setTheme({
                                                                 ...theme,

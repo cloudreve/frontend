@@ -40,7 +40,7 @@ const styles = theme => ({
         marginRottom: "10px"
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 

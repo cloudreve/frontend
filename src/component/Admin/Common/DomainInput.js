@@ -1,12 +1,10 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
 export default function DomainInput({onChange,value,required,label}){

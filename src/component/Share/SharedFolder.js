@@ -9,7 +9,6 @@ import {
     toggleSnackbar
 } from "../../actions";
 import { withStyles, Typography } from "@material-ui/core";
-import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router-dom";
 import FileManager from "../FileManager/FileManager";
 import Paper from "@material-ui/core/Paper";
@@ -75,7 +74,7 @@ const mapDispatchToProps = dispatch => {
 class SharedFolderComponent extends Component {
     state = {};
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         window.shareInfo = this.props.share;
     }
 

@@ -38,6 +38,6 @@ function AutoHidden  ({ children, enable }){
             {children}
         </Zoom>
     )
-};
+}
 
 export default AutoHidden

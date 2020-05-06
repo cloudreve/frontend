@@ -1,18 +1,18 @@
-import React, {useCallback, useEffect, useState} from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import {useParams} from "react-router";
-import LocalGuide from "./Guid/LocalGuide";
-import RemoteGuide from "./Guid/RemoteGuide";
-import QiniuGuide from "./Guid/QiniuGuide";
-import OSSGuide from "./Guid/OSSGuide";
-import UpyunGuide from "./Guid/UpyunGuide";
-import COSGuide from "./Guid/COSGuide";
-import OneDriveGuide from "./Guid/OneDriveGuide";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router";
+import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
+import COSGuide from "./Guid/COSGuide";
 import EditPro from "./Guid/EditPro";
+import LocalGuide from "./Guid/LocalGuide";
+import OneDriveGuide from "./Guid/OneDriveGuide";
+import OSSGuide from "./Guid/OSSGuide";
+import QiniuGuide from "./Guid/QiniuGuide";
+import RemoteGuide from "./Guid/RemoteGuide";
+import UpyunGuide from "./Guid/UpyunGuide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function EditPolicyPreload( ) {
     const classes = useStyles();
-    const [loading, setLoading] = useState(false);
     const [type,setType] = useState("");
     const [policy,setPolicy] = useState({});
 

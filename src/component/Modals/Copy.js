@@ -88,7 +88,7 @@ export default function CopyDialog(props) {
             },
             dst: selectedPath === "//" ? "/" : selectedPath
         })
-            .then(response => {
+            .then(() => {
                 props.onClose();
                 RefreshFileList();
                 SetModalsLoading(false);

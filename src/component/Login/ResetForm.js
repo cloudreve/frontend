@@ -91,7 +91,7 @@ function ResetForm() {
             id: query.get("id"),
             Password: input.password,
         })
-            .then(response => {
+            .then(() => {
                 setLoading(false);
                 history.push("/login");
                 ToggleSnackbar("top", "right", "密码已重设", "success");

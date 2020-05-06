@@ -1,28 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { sizeToString } from "../../../utils";
-import TableBody from "@material-ui/core/TableBody";
-import { policyTypeMap } from "../../../config";
-import TablePagination from "@material-ui/core/TablePagination";
-import AddPolicy from "../Dialogs/AddPolicy";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import {useHistory, useLocation} from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import {Delete, Edit} from "@material-ui/icons";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
-import Popover from "@material-ui/core/Popover";
-import Menu from "@material-ui/core/Menu";
+import { Delete, Edit } from "@material-ui/icons";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
+import { sizeToString } from "../../../utils";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -78,30 +72,40 @@ function useQuery() {
 
 export default function Group() {
     const classes = useStyles();
-    const [loading, setLoading] = useState(false);
-    const [tab, setTab] = useState(0);
     const [groups, setGroups] = useState([]);
     const [statics, setStatics] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0);
-    const [addDialog, setAddDialog] = useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [editID, setEditID] = React.useState(0);
     const [policies, setPolicies] = React.useState({});
 
     let location = useLocation();
     let history = useHistory();
     let query = useQuery();
 
-    const handleClick = event => {
-        setAnchorEl(event.currentTarget);
-    };
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
+    const loadList = useCallback(() => {
+      API.post("/admin/group/list", {
+          page: page,
+          page_size: pageSize,
+          order_by: "id desc",
+      })
+          .then(response => {
+              setGroups(response.data.items);
+              setStatics(response.data.statics);
+              setTotal(response.data.total);
+              setPolicies(response.data.policies);
+          })
+          .catch(error => {
+              ToggleSnackbar("top", "right", error.message, "error");
+          });
+    }, []);
 
     useEffect(()=>{
         if(query.get("code") === "0"){
@@ -116,26 +120,9 @@ export default function Group() {
         loadList();
     }, [page, pageSize]);
 
-    const loadList = () => {
-        API.post("/admin/group/list", {
-            page: page,
-            page_size: pageSize,
-            order_by: "id desc",
-        })
-            .then(response => {
-                setGroups(response.data.items);
-                setStatics(response.data.statics);
-                setTotal(response.data.total);
-                setPolicies(response.data.policies);
-            })
-            .catch(error => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            });
-    };
-
     const deletePolicy = (id) =>{
         API.delete("/admin/group/" + id,)
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户组已删除", "success");
             })
@@ -143,15 +130,6 @@ export default function Group() {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
-
-    const open = Boolean(anchorEl);
 
     return (
         <div>

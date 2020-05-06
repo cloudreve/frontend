@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
-import DialogContent from "@material-ui/core/DialogContent";
-import { CompactPicker } from "react-color";
-import Typography from "@material-ui/core/Typography";
-import DialogActions from "@material-ui/core/DialogActions";
+import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
+import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import { Add, Menu } from "@material-ui/icons";
 import { ThemeProvider } from "@material-ui/styles";
-import Fab from "@material-ui/core/Fab";
+import React, { useCallback, useState } from "react";
+import { CompactPicker } from "react-color";
 
 const useStyles = makeStyles(theme => ({
     picker: {
@@ -121,7 +121,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                                         "#9c27b0"
                                     ]}
                                     color={theme.palette.primary.main}
-                                    onChangeComplete={(c, e) => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -197,7 +197,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                                         "#d500f9"
                                     ]}
                                     color={theme.palette.secondary.main}
-                                    onChangeComplete={(c, e) => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -235,7 +235,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                             <div className={classes.picker}>
                                 <CompactPicker
                                     color={theme.palette.primary.contrastText}
-                                    onChangeComplete={(c, e) => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -273,7 +273,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                             <div className={classes.picker}>
                                 <CompactPicker
                                     color={theme.palette.secondary.contrastText}
-                                    onChangeComplete={(c, e) => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {

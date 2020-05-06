@@ -10,7 +10,6 @@ import {
 } from "mdi-material-ui";
 import {setSessionStatus, setUserPopover, toggleSnackbar} from "../../actions";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../utils/page";
 import Auth from "../../middleware/Auth";
 import {
     withStyles,
@@ -43,7 +42,7 @@ const mapDispatchToProps = dispatch => {
         },
     };
 };
-const styles = theme => ({
+const styles = () => ({
     avatar: {
         width: "30px",
         height: "30px"
@@ -77,9 +76,9 @@ class UserAvatarPopoverCompoment extends Component {
         window.location.href = url;
     };
 
-    sigOut = e => {
+    sigOut = () => {
         API.delete("/user/session/")
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",

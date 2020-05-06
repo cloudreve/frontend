@@ -84,7 +84,7 @@ const styles = theme => ({
         marginTop: 5,
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 
@@ -120,7 +120,7 @@ class MyShareCompoment extends Component {
     removeShare = (id) => {
         API
             .delete("/share/"+id)
-            .then(response => {
+            .then(() => {
                     let oldList = this.state.shareList;
                     oldList = oldList.filter(value => {
                         return value.key !== id;
@@ -208,7 +208,7 @@ class MyShareCompoment extends Component {
                     shareList: response.data.items
                 });
             })
-            .catch(error => {
+            .catch(() => {
                 this.props.toggleSnackbar("top", "right", "加载失败", "error");
             });
     };

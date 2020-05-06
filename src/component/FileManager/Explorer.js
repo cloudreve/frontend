@@ -1,37 +1,19 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-    navitateTo,
-    changeContextMenu,
-    navitateUp,
-    setSelectedTarget,
-    openRemoveDialog,
-    changeSortMethod,
-} from "../../actions/index";
-import ObjectIcon from "./ObjectIcon";
-import ContextMenu from "./ContextMenu";
-import EmptyIcon from "@material-ui/icons/Unarchive";
-import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-import classNames from "classnames";
-import ImgPreivew from "./ImgPreview";
-import pathHelper from "../../utils/page";
-import { isMac } from "../../utils"
-import { withRouter } from "react-router-dom";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    withStyles,
-    Typography,
-    Grid,
-    CircularProgress,
-    Paper,
-} from "@material-ui/core";
-import { GlobalHotKeys,  configure } from "react-hotkeys";
+import { CircularProgress, Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography, withStyles } from "@material-ui/core";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
+import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
+import EmptyIcon from "@material-ui/icons/Unarchive";
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { configure, GlobalHotKeys } from "react-hotkeys";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { changeContextMenu, changeSortMethod, navitateTo, navitateUp, openRemoveDialog, setSelectedTarget } from "../../actions/index";
+import { isMac } from "../../utils";
+import pathHelper from "../../utils/page";
+import ContextMenu from "./ContextMenu";
+import ImgPreivew from "./ImgPreview";
+import ObjectIcon from "./ObjectIcon";
 
 const styles = theme => ({
     paper: {
@@ -220,7 +202,7 @@ class ExplorerCompoment extends Component {
         }
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate() {
         this.away = 0;
     }
 
@@ -407,6 +389,7 @@ class ExplorerCompoment extends Component {
                       {this.props.dirList.map(
                           (value, index) => (
                               <Grid
+                                  key={value.id}
                                   item
                                   xs={6}
                                   md={3}
@@ -443,6 +426,7 @@ class ExplorerCompoment extends Component {
                       {this.props.fileList.map(
                           (value, index) => (
                               <Grid
+                                  key={value.id}
                                   item
                                   xs={6}
                                   md={3}

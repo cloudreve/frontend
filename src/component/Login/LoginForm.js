@@ -126,7 +126,7 @@ function LoginForm() {
 
     const classes = useStyles();
 
-    const refreshCaptcha = () => {
+    const refreshCaptcha = useCallback(() => {
         API.get("/site/captcha")
             .then(response => {
                 setCaptchaData(response.data);
@@ -139,7 +139,7 @@ function LoginForm() {
                     "error"
                 );
             });
-    };
+    }, []);
 
     useEffect(() => {
         setEmail(query.get("username"));
