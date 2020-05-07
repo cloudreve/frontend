@@ -28,7 +28,8 @@ import {
     openRemoveDialog,
     openShareDialog,
     openRenameDialog,
-    openLoadingDialog
+    openLoadingDialog,
+    setSessionStatus
 } from "../../actions";
 import {
     allowSharePreview,
@@ -42,7 +43,7 @@ import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
 import UserAvatar from "./UserAvatar";
 import UserInfo from "./UserInfo";
-import { AccountArrowRight, AccountPlus } from "mdi-material-ui";
+import { AccountArrowRight, AccountPlus, LogoutVariant } from "mdi-material-ui";
 import { withRouter } from "react-router-dom";
 import {
     AppBar,
@@ -62,6 +63,7 @@ import {
     Tooltip
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
+import API from "../../middleware/Api";
 import FileTag from "./FileTags";
 import {Assignment, Devices, Settings} from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
@@ -131,6 +133,9 @@ const mapDispatchToProps = dispatch => {
         },
         openLoadingDialog: text => {
             dispatch(openLoadingDialog(text));
+        },
+        setSessionStatus: () => {
+            dispatch(setSessionStatus());
         }
     };
 };
@@ -455,6 +460,32 @@ class NavbarCompoment extends Component {
         this.props.openLoadingDialog("打包中...");
     };
 
+    signOut = () => {
+        API.delete("/user/session/")
+            .then(() => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "您已退出登录",
+                    "success"
+                );
+                Auth.signout();
+                window.location.reload();
+                this.props.setSessionStatus(false);
+            })
+            .catch(error => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "warning"
+                );
+            })
+            .finally(() => {
+                this.handleClose();
+            });
+    };
+
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser(this.props.isLogin);
@@ -551,6 +582,17 @@ class NavbarCompoment extends Component {
                                             />
                                         </ListItemIcon>
                                         <ListItemText primary="个人设置" />
+                                    </ListItem>
+
+                                    <ListItem
+                                        button
+                                        key="退出登录"
+                                        onClick={this.signOut}
+                                    >
+                                        <ListItemIcon>
+                                            <LogoutVariant className={classes.iconFix} />
+                                        </ListItemIcon>
+                                        <ListItemText primary="退出登录" />
                                     </ListItem>
                                 </List>
                             </>
