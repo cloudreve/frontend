@@ -740,7 +740,9 @@ class NavbarCompoment extends Component {
                             !(
                                 !this.props.isMultiple && this.props.withFile
                             ) && (
-                                <Typography variant="h6" color="inherit" noWrap>
+                                <Typography variant="h6" color="inherit" noWrap
+                                            onClick={() => {this.props.history.push("/")}}
+                                >
                                     {this.props.subTitle
                                         ? this.props.subTitle
                                         : this.props.title}
