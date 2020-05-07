@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { sizeToString } from "../../utils";
+import { sizeToString, vhCheck } from "../../utils";
 import {
     openMusicDialog, openResaveDialog,
     setSelectedTarget,
@@ -16,8 +16,9 @@ import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
 import pathHelper from "../../utils/page";
-let vh = window.innerHeight;
-document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+
+vhCheck()
 const styles = theme => ({
     layout: {
         width: "auto",

@@ -45,7 +45,7 @@ const styles = theme => ({
         display: "flex",
         marginTop: "15px",
         textAlign: "left",
-        marginBottom: "20px"
+        marginBottom: "11px"
     },
     detail: {
         width: "100%",

@@ -37,7 +37,7 @@ import {
     changeThemeColor
 } from "../../utils";
 import Uploader from "../Upload/Uploader.js";
-import { sizeToString } from "../../utils";
+import { sizeToString, vhCheck } from "../../utils";
 import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
@@ -65,9 +65,10 @@ import {
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
 import FileTag from "./FileTags";
-import {Assignment, Devices, Settings} from "@material-ui/icons";
+import { Assignment, Devices, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 
+vhCheck()
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
 
@@ -263,11 +264,11 @@ const styles = theme => ({
     minStickDrawer: {
         overflowY: "auto",
         [theme.breakpoints.up("sm")]: {
-            height: "calc(100vh - 155px)"
+            height: "calc(var(--vh, 100vh) - 155px)"
         },
 
         [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(100vh - 324px)"
+            minHeight: "calc(var(--vh, 100vh) - 360px)"
         }
     }
 });
@@ -597,14 +598,9 @@ class NavbarCompoment extends Component {
                                 </List>
                             </>
                         )}
-
-                        {!pathHelper.isSharePage(
-                            this.props.location.pathname
-                        ) && (
-                            <div>
-                                <StorageBar></StorageBar>
-                            </div>
-                        )}
+                        <div>
+                            <StorageBar></StorageBar>
+                        </div>
                     </>
                 )}
 
