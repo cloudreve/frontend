@@ -1,13 +1,13 @@
 export * from './explorer'
 
-export const navitateTo = path => {
+export const navigateTo = path => {
     return {
         type: "NAVIGATOR_TO",
         path: path
     };
 };
 
-export const navitateUp = () => {
+export const navigateUp = () => {
     return {
         type: "NAVIGATOR_UP"
     };

@@ -38,7 +38,7 @@ const doNavigate = (path,state)=>{
     });
 }
 
-const defaultStatus = InitSiteConfig({
+export const initState = {
   siteConfig: {
       title: "Cloudreve",
       siteICPId: "",
@@ -154,7 +154,9 @@ const defaultStatus = InitSiteConfig({
     },
     keywords: null
   }
-});
+}
+
+const defaultStatus = InitSiteConfig(initState);
 
 // TODO: 将cloureveApp切分成小的reducer
 const cloudreveApp = (state = defaultStatus, action) => {
