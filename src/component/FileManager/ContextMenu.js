@@ -17,12 +17,14 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { openCompressDialog,openCreateFileDialog } from "../../actions";
+import { openCompressDialog,openCreateFileDialog ,refreshFileList} from "../../actions";
 import { changeContextMenu, navigateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
 import { allowSharePreview } from "../../utils/index";
 import pathHelper from "../../utils/page";
+import RefreshIcon from "@material-ui/icons/Refresh";
+
 
 const styles = () => ({
     propover: {
@@ -108,7 +110,10 @@ const mapDispatchToProps = dispatch => {
         },
         openCompressDialog: () => {
             dispatch(openCompressDialog());
-        }
+        },
+        refreshFileList: () => {
+            dispatch(refreshFileList());
+        },
     };
 };
 
@@ -305,6 +310,20 @@ class ContextMenuCompoment extends Component {
                 >
                     {this.props.menuType === "empty" && (
                         <>
+                            <MenuItem onClick={()=>{
+                                this.props.refreshFileList();
+                                this.props.changeContextMenu(this.props.menuType, false)
+                            }
+
+                            }>
+                                <ListItemIcon>
+                                    <RefreshIcon />
+                                </ListItemIcon>
+                                <Typography variant="inherit">
+                                    刷新
+                                </Typography>
+                            </MenuItem>
+                            <Divider className={classes.divider}/>
                             <MenuItem onClick={()=>this.clickUpload("uploadFileForm")}>
                                 <ListItemIcon>
                                     <UploadIcon />
