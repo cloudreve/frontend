@@ -264,7 +264,7 @@ const styles = theme => ({
     minStickDrawer: {
         overflowY: "auto",
         [theme.breakpoints.up("sm")]: {
-            height: "calc(var(--vh, 100vh) - 155px)"
+            height: "calc(var(--vh, 100vh) - 145px)"
         },
 
         [theme.breakpoints.down("sm")]: {
