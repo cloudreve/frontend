@@ -8,7 +8,7 @@ import React, { Component } from "react";
 import { configure, GlobalHotKeys } from "react-hotkeys";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { changeContextMenu, changeSortMethod, navitateTo, navitateUp, openRemoveDialog, setSelectedTarget } from "../../actions/index";
+import { changeContextMenu, changeSortMethod, navigateTo, navigateUp, openRemoveDialog, setSelectedTarget } from "../../actions/index";
 import { isMac } from "../../utils";
 import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";
@@ -134,14 +134,14 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigateToPath: path => {
-            dispatch(navitateTo(path));
+            dispatch(navigateTo(path));
         },
 
         changeContextMenu: (type, open) => {
             dispatch(changeContextMenu(type, open));
         },
-        navitateUp: () => {
-            dispatch(navitateUp());
+        navigateUp: () => {
+            dispatch(navigateUp());
         },
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));

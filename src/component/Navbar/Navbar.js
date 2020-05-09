@@ -16,7 +16,7 @@ import { isPreviewable } from "../../config";
 import {
     drawerToggleAction,
     setSelectedTarget,
-    navitateTo,
+    navigateTo,
     openCreateFolderDialog,
     changeContextMenu,
     searchMyFile,
@@ -96,8 +96,8 @@ const mapDispatchToProps = dispatch => {
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
-        navitateTo: path => {
-            dispatch(navitateTo(path));
+        navigateTo: path => {
+            dispatch(navigateTo(path));
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
@@ -883,7 +883,7 @@ class NavbarCompoment extends Component {
                                                     <IconButton
                                                         color="inherit"
                                                         onClick={() =>
-                                                            this.props.navitateTo(
+                                                            this.props.navigateTo(
                                                                 this.props
                                                                     .path ===
                                                                     "/"

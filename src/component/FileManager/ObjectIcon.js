@@ -4,7 +4,7 @@ import {
     changeContextMenu,
     setSelectedTarget,
     selectFile as selectFileAction,
-    navitateTo,
+    navigateTo,
     showImgPreivew,
     openMusicDialog,
     toggleSnackbar,
@@ -57,7 +57,7 @@ export default function ObjectIcon(props) {
         [dispatch]
     );
 
-    const NavitateTo = useCallback(targets => dispatch(navitateTo(targets)), [
+    const NavitateTo = useCallback(targets => dispatch(navigateTo(targets)), [
         dispatch
     ]);
     const ShowImgPreivew = useCallback(

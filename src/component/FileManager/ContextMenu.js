@@ -18,7 +18,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { openCompressDialog } from "../../actions";
-import { changeContextMenu, navitateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
+import { changeContextMenu, navigateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
 import { allowSharePreview } from "../../utils/index";
@@ -58,8 +58,8 @@ const mapDispatchToProps = dispatch => {
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
-        navitateTo: path => {
-            dispatch(navitateTo(path));
+        navigateTo: path => {
+            dispatch(navigateTo(path));
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
@@ -145,7 +145,7 @@ class ContextMenuCompoment extends Component {
     };
 
     enterFolder = () => {
-        this.props.navitateTo(
+        this.props.navigateTo(
             this.props.path === "/"
                 ? this.props.path + this.props.selected[0].name
                 : this.props.path + "/" + this.props.selected[0].name

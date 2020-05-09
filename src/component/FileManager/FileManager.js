@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
-import { changeSubTitle, closeAllModals, navitateTo, setSelectedTarget, toggleSnackbar } from "../../actions"
+import { changeSubTitle, closeAllModals, navigateTo, setSelectedTarget, toggleSnackbar } from "../../actions"
 import pathHelper from "../../utils/page"
 import DragLayer from "./DnD/DragLayer"
 import Explorer from "./Explorer"
@@ -28,8 +28,8 @@ const mapDispatchToProps = dispatch => {
         closeAllModals: () => {
             dispatch(closeAllModals());
         },
-        navitateTo:path=>{
-            dispatch(navitateTo(path));
+        navigateTo:path=>{
+            dispatch(navigateTo(path));
         },
     };
 };
@@ -42,7 +42,7 @@ class FileManager extends Component {
     componentWillUnmount() {
         this.props.setSelectedTarget([]);
         this.props.closeAllModals();
-        this.props.navitateTo("/");
+        this.props.navigateTo("/");
     }
 
     componentDidMount() {

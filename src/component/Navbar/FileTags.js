@@ -21,7 +21,7 @@ import pathHelper from "../../utils/page";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import { navitateTo, searchMyFile, toggleSnackbar } from "../../actions";
+import { navigateTo, searchMyFile, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
 import Auth from "../../middleware/Auth";
 import {
@@ -151,7 +151,7 @@ export default function FileTag() {
     const SearchMyFile = useCallback(k => dispatch(searchMyFile(k)), [
         dispatch
     ]);
-    const NavigateTo = useCallback(k => dispatch(navitateTo(k)), [dispatch]);
+    const NavigateTo = useCallback(k => dispatch(navigateTo(k)), [dispatch]);
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>

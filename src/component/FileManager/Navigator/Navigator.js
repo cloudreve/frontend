@@ -11,8 +11,8 @@ import ShareIcon from "@material-ui/icons/Share";
 import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
-    navitateTo,
-    navitateUp,
+    navigateTo,
+    navigateUp,
     changeViewMethod,
     changeSortMethod,
     setNavigatorError,
@@ -57,10 +57,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigateToPath: path => {
-            dispatch(navitateTo(path));
+            dispatch(navigateTo(path));
         },
-        navitateUp: () => {
-            dispatch(navitateUp());
+        navigateUp: () => {
+            dispatch(navigateUp());
         },
         changeView: method => {
             dispatch(changeViewMethod(method));
