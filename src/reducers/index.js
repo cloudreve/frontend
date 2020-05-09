@@ -110,6 +110,7 @@ export const initState = {
       shareUserPopoverAnchorEl: null,
       modals: {
           createNewFolder: false,
+          createNewFile: false,
           rename: false,
           move: false,
           remove: false,
@@ -391,6 +392,15 @@ const cloudreveApp = (state = defaultStatus, action) => {
                     contextOpen:false,
                 }),
             });
+        case 'OPEN_CREATE_FILE_DIALOG':
+            return Object.assign({}, state, {
+                viewUpdate: Object.assign({}, state.viewUpdate, {
+                    modals: Object.assign({}, state.viewUpdate.modals, {
+                        createNewFile:true,
+                    }),
+                    contextOpen:false,
+                }),
+            });
         case 'OPEN_RENAME_DIALOG':
             return Object.assign({}, state, {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
@@ -531,6 +541,7 @@ const cloudreveApp = (state = defaultStatus, action) => {
                 viewUpdate: Object.assign({}, state.viewUpdate, {
                     modals: Object.assign({}, state.viewUpdate.modals, {
                         createNewFolder:false,
+                        createNewFile:false,
                         rename:false,
                         move:false,
                         remove:false,

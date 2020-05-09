@@ -6,6 +6,8 @@ import { toggleSnackbar } from "../../actions";
 import API from "../../middleware/Api";
 import DownloadingCard from "./DownloadingCard";
 import FinishedCard from "./FinishedCard";
+import RemoteDownloadButton from "../Dial/Aria2";
+import Auth from "../../middleware/Auth";
 
 const styles = theme => ({
     actions: {
@@ -136,9 +138,11 @@ class DownloadComponent extends Component {
 
     render() {
         const { classes } = this.props;
+        const user = Auth.GetUser();
 
         return (
             <div className={classes.layout}>
+                {user.group.allowRemoteDownload&& <RemoteDownloadButton/>}
                 <Typography
                     color="textSecondary"
                     variant="h4"

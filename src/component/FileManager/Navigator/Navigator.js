@@ -42,6 +42,9 @@ import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
 import Avatar from "@material-ui/core/Avatar";
 import {Archive} from "@material-ui/icons";
+import { FilePlus } from "mdi-material-ui";
+import { openCreateFileDialog } from "../../../actions";
+
 
 const mapStateToProps = state => {
     return {
@@ -85,6 +88,9 @@ const mapDispatchToProps = dispatch => {
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
+        },
+        openCreateFileDialog: () => {
+            dispatch(openCreateFileDialog());
         },
         openShareDialog: () => {
             dispatch(openShareDialog());
@@ -344,6 +350,9 @@ class NavigatorComponent extends Component {
                 this.props.setSelectedTarget(newTarget);
                 this.props.openCompressDialog();
                 break;
+            case "newFile":
+                this.props.openCreateFileDialog();
+                break;
             default:
                 break;
         }
@@ -413,7 +422,7 @@ class NavigatorComponent extends Component {
                                 </ListItemIcon>
                                 压缩
                             </MenuItem>}
-
+                            <Divider />
                             <MenuItem
                                 onClick={() => this.performAction("newfolder")}
                             >
@@ -421,6 +430,14 @@ class NavigatorComponent extends Component {
                                     <NewFolderIcon />
                                 </ListItemIcon>
                                 创建文件夹
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => this.performAction("newFile")}
+                            >
+                                <ListItemIcon>
+                                    <FilePlus />
+                                </ListItemIcon>
+                                创建文件
                             </MenuItem>
                         </div>
                     )}
@@ -544,7 +561,6 @@ class NavigatorComponent extends Component {
                                 <ViewSmallIcon fontSize="small" />
                             </IconButton>
                         )}
-
                         {this.props.viewMethod === "smallIcon" && (
                             <IconButton
                                 title="大图标展示"

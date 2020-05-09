@@ -91,6 +91,12 @@ export const openCreateFolderDialog = () => {
     };
 };
 
+export const openCreateFileDialog = () => {
+    return {
+        type: "OPEN_CREATE_FILE_DIALOG"
+    };
+};
+
 export const setUserPopover = anchor => {
     return {
         type: "SET_USER_POPOVER",

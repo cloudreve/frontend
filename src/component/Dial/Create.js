@@ -5,14 +5,12 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import PublishIcon from "@material-ui/icons/Publish";
-import {openCreateFolderDialog, openRemoteDownloadDialog, toggleSnackbar} from "../../actions";
+import { openCreateFileDialog, openCreateFolderDialog, toggleSnackbar } from "../../actions";
 import {useDispatch} from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page"
 import Backdrop from "@material-ui/core/Backdrop";
-import {CloudDownload} from "@material-ui/icons";
-import Auth from "../../middleware/Auth";
-import {FolderUpload} from "mdi-material-ui";
+import {FolderUpload,FilePlus} from "mdi-material-ui";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -30,7 +28,12 @@ const useStyles = makeStyles(() => ({
         top: "auto",
         zIndex: 9999,
         right: 7
-    }
+    },
+    '@global': {
+        '.MuiSpeedDialAction-staticTooltipLabel': {
+            width:100,
+        },
+    },
 }));
 
 export default function UploadButton(props) {
@@ -50,9 +53,9 @@ export default function UploadButton(props) {
             dispatch(openCreateFolderDialog()),
         [dispatch]
     );
-    const OpenRemoteDownloadDialog = useCallback(
+    const OpenNewFileDialog = useCallback(
         () =>
-            dispatch(openRemoteDownloadDialog()),
+            dispatch(openCreateFileDialog()),
         [dispatch]
     );
 
@@ -94,8 +97,6 @@ export default function UploadButton(props) {
         setOpen(false);
     };
 
-    const user = Auth.GetUser();
-
     return (
         <AutoHidden enable>
             <Badge
@@ -124,29 +125,31 @@ export default function UploadButton(props) {
                     {statusHelper.isMobile() && <SpeedDialAction
                         key="NewFolder"
                         icon={<PublishIcon />}
+                        tooltipOpen
                         tooltipTitle="上传文件"
                         onClick= {() => uploadClicked()}
                         title={"上传文件"}/>}
                     {!statusHelper.isMobile() && <SpeedDialAction
                         key="NewFolder"
                         icon={<FolderUpload />}
+                        tooltipOpen
                         tooltipTitle="上传目录"
                         onClick= {() => openUpload("uploadFolderForm")}
                         title={"上传目录"}/>}
                     <SpeedDialAction
                         key="NewFolder"
                         icon={<CreateNewFolderIcon />}
-                        tooltipTitle="新目录"
+                        tooltipOpen
+                        tooltipTitle="新建目录"
                         onClick= {() => OpenNewFolderDialog()}
-                        title={"新目录"}/>
-                    {user.group.allowRemoteDownload&&
+                        title={"新建目录"}/>
                     <SpeedDialAction
-                        key="NewDownload"
-                        icon={<CloudDownload />}
-                        tooltipTitle="离线下载"
-                        onClick= {() => OpenRemoteDownloadDialog()}
-                        title={"离线下载"}/>
-                    }
+                        key="NewFile"
+                        icon={<FilePlus />}
+                        tooltipOpen
+                        tooltipTitle="新建文件"
+                        onClick= {() => OpenNewFileDialog()}
+                        title={"新建文件"}/>
 
                 </SpeedDial>
             </Badge>

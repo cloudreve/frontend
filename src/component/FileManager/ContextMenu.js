@@ -12,12 +12,12 @@ import MoveIcon from "@material-ui/icons/Input";
 import LinkIcon from "@material-ui/icons/InsertLink";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import ShareIcon from "@material-ui/icons/Share";
-import { FolderUpload, MagnetOn } from "mdi-material-ui";
+import { FolderUpload, MagnetOn ,FilePlus} from "mdi-material-ui";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { openCompressDialog } from "../../actions";
+import { openCompressDialog,openCreateFileDialog } from "../../actions";
 import { changeContextMenu, navigateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
@@ -63,6 +63,9 @@ const mapDispatchToProps = dispatch => {
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
+        },
+        openCreateFileDialog: () => {
+            dispatch(openCreateFileDialog());
         },
         openRenameDialog: () => {
             dispatch(openRenameDialog());
@@ -344,6 +347,18 @@ class ContextMenuCompoment extends Component {
                                 </ListItemIcon>
                                 <Typography variant="inherit">
                                     创建文件夹
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() =>
+                                    this.props.openCreateFileDialog()
+                                }
+                            >
+                                <ListItemIcon>
+                                    <FilePlus />
+                                </ListItemIcon>
+                                <Typography variant="inherit">
+                                    创建文件
                                 </Typography>
                             </MenuItem>
                         </>

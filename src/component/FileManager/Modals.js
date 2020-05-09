@@ -90,6 +90,7 @@ const mapDispatchToProps = dispatch => {
 class ModalsCompoment extends Component {
     state = {
         newFolderName: "",
+        newFileName: "",
         newName: "",
         selectedPath: "",
         selectedPathName: "",
@@ -478,6 +479,47 @@ class ModalsCompoment extends Component {
         //this.props.toggleSnackbar();
     };
 
+    submitCreateNewFile = e => {
+        e.preventDefault();
+        this.props.setModalsLoading(true);
+        if (
+            this.props.dirList.findIndex((value) => {
+                return value.name === this.state.newFileName;
+            }) !== -1
+        ) {
+            this.props.toggleSnackbar(
+                "top",
+                "right",
+                "文件名称重复",
+                "warning"
+            );
+            this.props.setModalsLoading(false);
+        } else {
+            API.post("/file/create", {
+                path:
+                    (this.props.path === "/" ? "" : this.props.path) +
+                    "/" +
+                    this.state.newFileName
+            })
+                .then(() => {
+                    this.onClose();
+                    this.props.refreshFileList();
+                    this.props.setModalsLoading(false);
+                })
+                .catch(error => {
+                    this.props.setModalsLoading(false);
+
+                    this.props.toggleSnackbar(
+                        "top",
+                        "right",
+                        error.message,
+                        "error"
+                    );
+                });
+        }
+        //this.props.toggleSnackbar();
+    };
+
     submitTorrentDownload = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
@@ -556,6 +598,7 @@ class ModalsCompoment extends Component {
     onClose = () => {
         this.setState({
             newFolderName: "",
+            newFileName: "",
             newName: "",
             selectedPath: "",
             selectedPathName: "",
@@ -649,6 +692,51 @@ class ModalsCompoment extends Component {
                         </div>
                     </DialogActions>
                 </Dialog>
+
+                <Dialog
+                    open={this.props.modalsStatus.createNewFile}
+                    onClose={this.onClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">新建文件</DialogTitle>
+
+                    <DialogContent>
+                        <form onSubmit={this.submitCreateNewFile}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="newFileName"
+                                label="文件名称"
+                                type="text"
+                                value={this.state.newFileName}
+                                onChange={e => this.handleInputChange(e)}
+                                fullWidth
+                            />
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.onClose}>取消</Button>
+                        <div className={classes.wrapper}>
+                            <Button
+                                onClick={this.submitCreateNewFile}
+                                color="primary"
+                                disabled={
+                                    this.state.newFileName === "" ||
+                                    this.props.modalsLoading
+                                }
+                            >
+                                创建
+                                {this.props.modalsLoading && (
+                                    <CircularProgress
+                                        size={24}
+                                        className={classes.buttonProgress}
+                                    />
+                                )}
+                            </Button>
+                        </div>
+                    </DialogActions>
+                </Dialog>
+
                 <Dialog
                     open={this.props.modalsStatus.rename}
                     onClose={this.onClose}
