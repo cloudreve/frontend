@@ -28,7 +28,8 @@ import {
     openRemoveDialog,
     openShareDialog,
     openRenameDialog,
-    openLoadingDialog
+    openLoadingDialog,
+    setSessionStatus
 } from "../../actions";
 import {
     allowSharePreview,
@@ -36,13 +37,13 @@ import {
     changeThemeColor
 } from "../../utils";
 import Uploader from "../Upload/Uploader.js";
-import { sizeToString } from "../../utils";
+import { sizeToString, vhCheck } from "../../utils";
 import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
 import UserAvatar from "./UserAvatar";
 import UserInfo from "./UserInfo";
-import { AccountArrowRight, AccountPlus } from "mdi-material-ui";
+import { AccountArrowRight, AccountPlus, LogoutVariant } from "mdi-material-ui";
 import { withRouter } from "react-router-dom";
 import {
     AppBar,
@@ -62,10 +63,12 @@ import {
     Tooltip
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
+import API from "../../middleware/Api";
 import FileTag from "./FileTags";
-import {Assignment, Devices, Settings} from "@material-ui/icons";
+import { Assignment, Devices, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 
+vhCheck()
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
 
@@ -131,6 +134,9 @@ const mapDispatchToProps = dispatch => {
         },
         openLoadingDialog: text => {
             dispatch(openLoadingDialog(text));
+        },
+        setSessionStatus: () => {
+            dispatch(setSessionStatus());
         }
     };
 };
@@ -258,11 +264,11 @@ const styles = theme => ({
     minStickDrawer: {
         overflowY: "auto",
         [theme.breakpoints.up("sm")]: {
-            height: "calc(100vh - 155px)"
+            height: "calc(var(--vh, 100vh) - 155px)"
         },
 
         [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(100vh - 324px)"
+            minHeight: "calc(var(--vh, 100vh) - 360px)"
         }
     }
 });
@@ -455,6 +461,32 @@ class NavbarCompoment extends Component {
         this.props.openLoadingDialog("打包中...");
     };
 
+    signOut = () => {
+        API.delete("/user/session/")
+            .then(() => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "您已退出登录",
+                    "success"
+                );
+                Auth.signout();
+                window.location.reload();
+                this.props.setSessionStatus(false);
+            })
+            .catch(error => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "warning"
+                );
+            })
+            .finally(() => {
+                this.handleClose();
+            });
+    };
+
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser(this.props.isLogin);
@@ -552,17 +584,23 @@ class NavbarCompoment extends Component {
                                         </ListItemIcon>
                                         <ListItemText primary="个人设置" />
                                     </ListItem>
+
+                                    <ListItem
+                                        button
+                                        key="退出登录"
+                                        onClick={this.signOut}
+                                    >
+                                        <ListItemIcon>
+                                            <LogoutVariant className={classes.iconFix} />
+                                        </ListItemIcon>
+                                        <ListItemText primary="退出登录" />
+                                    </ListItem>
                                 </List>
                             </>
                         )}
-
-                        {!pathHelper.isSharePage(
-                            this.props.location.pathname
-                        ) && (
-                            <div>
-                                <StorageBar></StorageBar>
-                            </div>
-                        )}
+                        <div>
+                            <StorageBar></StorageBar>
+                        </div>
                     </>
                 )}
 
@@ -698,7 +736,9 @@ class NavbarCompoment extends Component {
                             !(
                                 !this.props.isMultiple && this.props.withFile
                             ) && (
-                                <Typography variant="h6" color="inherit" noWrap>
+                                <Typography variant="h6" color="inherit" noWrap
+                                            onClick={() => {this.props.history.push("/")}}
+                                >
                                     {this.props.subTitle
                                         ? this.props.subTitle
                                         : this.props.title}

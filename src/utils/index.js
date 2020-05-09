@@ -193,3 +193,8 @@ export function getNumber(base,conditions){
 export const isMac = () => {
   return "MACINTEL" === navigator.platform.toUpperCase()
 }
+
+export function vhCheck() {
+    let vh = window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
