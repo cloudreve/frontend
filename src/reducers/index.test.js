@@ -1,4 +1,8 @@
-import cloudreveApp, { initState } from './index'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+import cloudreveApp, { initState as cloudreveState } from './index'
+import { initState as viewUpdateState } from '../redux/viewUpdate/reducer'
+
 import { setModalsLoading, openLoadingDialog, openGetSourceDialog,
   openShareDialog, openMoveDialog, navigateUp, navigateTo,
   drawerToggleAction, changeViewMethod, changeSortMethod,
@@ -10,13 +14,23 @@ import { setModalsLoading, openLoadingDialog, openGetSourceDialog,
   setShareUserPopover, setSiteConfig, openMusicDialog,
   openRemoteDownloadDialog, openTorrentDownloadDialog,
   openDecompressDialog, openCompressDialog, openCopyDialog,
-  closeAllModals, changeSubTitle, toggleSnackbar, setSessionStatus,
-  enableLoadUploader, refreshFileList, searchMyFile, showImgPreivew, refreshStorage, saveFile, setLastSelect, setShiftSelectedIds
+  closeAllModals, toggleSnackbar, setSessionStatus,
+  enableLoadUploader, refreshFileList, searchMyFile, showImgPreivew,
+  refreshStorage, saveFile, setLastSelect, setShiftSelectedIds
 } from '../actions/index'
+import { changeSubTitle } from "../redux/viewUpdate/action"
+
+
+const initState = {
+  ...cloudreveState,
+  viewUpdate: viewUpdateState,
+}
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
 
 describe('index reducer', () => {
   it('should return the initial state', () => {
-    expect(cloudreveApp(undefined, {})).toEqual(initState)
+    expect(cloudreveApp(undefined, { type: '@@INIT'})).toEqual(initState)
   })
 
   it('should handle DRAWER_TOGGLE', () => {
@@ -593,9 +607,11 @@ describe('index reducer', () => {
     })
   })
 
-  it('should handle NAVIGATOR_TO', () => {
+  it('should handle NAVIGATOR_TO', async () => {
+    const store = mockStore(initState)
     const action = navigateTo('/somewhere')
-    expect(cloudreveApp(initState, action)).toEqual({
+    const navAction = await store.dispatch(action)
+    expect(cloudreveApp(initState, navAction)).toEqual({
       ...initState,
       navigator: {
         ...initState.navigator,
@@ -621,8 +637,7 @@ describe('index reducer', () => {
     expect(window.currntPath).toEqual('/somewhere')
   })
 
-  it('should handle NAVIGATOR_UP', () => {
-    const action = navigateUp('somewhere')
+  it('should handle NAVIGATOR_UP', async () => {
     const navState = {
       ...initState,
       navigator: {
@@ -630,7 +645,10 @@ describe('index reducer', () => {
         path: '/to/somewhere'
       }
     }
-    expect(cloudreveApp(navState, action)).toEqual({
+    const store = mockStore(navState)
+    const action = navigateUp('somewhere')
+    const navAction = await store.dispatch(action)
+    expect(cloudreveApp(navState, navAction)).toEqual({
       ...initState,
       navigator: {
         ...initState.navigator,
@@ -993,15 +1011,18 @@ describe('index reducer', () => {
     })
   })
 
-  it('should handle CHANGE_SUB_TITLE', () => {
+  it('should handle CHANGE_SUB_TITLE', async () => {
+    const store = mockStore(initState)
     const action = changeSubTitle('test sub title')
-    expect(cloudreveApp(initState, action)).toEqual({
+    const changeSubtitleAction = await store.dispatch(action)
+    expect(cloudreveApp(initState, changeSubtitleAction)).toEqual({
       ...initState,
       viewUpdate: {
         ...initState.viewUpdate,
         subTitle: 'test sub title',
       }
     })
+    expect(document.title).toEqual('test sub title - Cloudreve')
   })
 
   it('should handle TOGGLE_SNACKBAR', () => {

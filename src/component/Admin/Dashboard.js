@@ -22,7 +22,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router";
 import { useRouteMatch } from "react-router-dom";
-import { changeSubTitle } from "../../actions";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import UserAvatar from "../Navbar/UserAvatar";
 

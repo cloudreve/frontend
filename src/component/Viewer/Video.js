@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../actions";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 
 const useStyles = makeStyles(theme => ({

@@ -1,16 +1,30 @@
 export * from './explorer'
 
 export const navigateTo = path => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const navigatorLoading = path !== state.navigator.path
     return {
-        type: "NAVIGATOR_TO",
-        path: path
-    };
+      type: "NAVIGATOR_TO",
+      path: path,
+      navigatorLoading,
+    }
+  }
 };
 
 export const navigateUp = () => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const pathSplit = state.navigator.path.split("/");
+    pathSplit.pop();
+    const newPath = pathSplit.length===1? "/":pathSplit.join("/");
+    const navigatorLoading = newPath !== state.navigator.path
     return {
-        type: "NAVIGATOR_UP"
-    };
+      type: "NAVIGATOR_UP",
+      path: newPath,
+      navigatorLoading
+    }
+  }
 };
 
 export const drawerToggleAction = open => {
@@ -32,13 +46,6 @@ export const changeViewMethod = method => {
     return {
         type: "CHANGE_VIEW_METHOD",
         method: method
-    };
-};
-
-export const changeSubTitle = title =>{
-    return {
-        type: "CHANGE_SUB_TITLE",
-        title: title
     };
 };
 

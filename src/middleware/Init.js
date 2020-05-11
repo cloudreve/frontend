@@ -15,8 +15,6 @@ export var InitSiteConfig = (rawStore) => {
     rawStore.navigator.path = c===null?"/":c;
     // 初始化用户个性配置
     rawStore.siteConfig = initUserConfig(rawStore.siteConfig);
-    // 是否登录
-    rawStore.viewUpdate.isLogin = Auth.Check();
 
     // 更改站点标题
     document.title = rawStore.siteConfig.title;
