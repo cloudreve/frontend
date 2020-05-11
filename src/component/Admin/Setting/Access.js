@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import AlertDialog from "../Dialogs/Alert";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,7 +48,7 @@ export default function Access() {
         authn_enabled: "0",
         captcha_IsUseReCaptcha: "0",
         captcha_ReCaptchaKey: "defaultKey",
-        captcha_ReCaptchaSecret: "defaultSecret",
+        captcha_ReCaptchaSecret: "defaultSecret"
     });
     const [siteURL, setSiteURL] = useState("");
     const [groups, setGroups] = useState([]);
@@ -253,17 +254,18 @@ export default function Access() {
                                     control={
                                         <Switch
                                             checked={
-                                                options.captcha_IsUseReCaptcha === "1"
+                                                options.captcha_IsUseReCaptcha ===
+                                                "1"
                                             }
                                             onChange={handleChange(
                                                 "captcha_IsUseReCaptcha"
                                             )}
                                         />
                                     }
-                                    label="使用ReCaptcha验证码"
+                                    label="使用 reCaptcha V2 验证码"
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    是否使用ReCaptcha验证码
+                                    是否使用 reCaptcha V2 验证码
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -283,7 +285,15 @@ export default function Access() {
                                             )}
                                         />
                                         <FormHelperText id="component-helper-text">
-                                            应用管理页面获取到的的 网站密钥
+                                            <Link
+                                                href={
+                                                    "https://www.google.com/recaptcha/admin/create"
+                                                }
+                                                target={"_blank"}
+                                            >
+                                                应用管理页面
+                                            </Link>{" "}
+                                            获取到的的 网站密钥
                                         </FormHelperText>
                                     </FormControl>
                                 </div>
@@ -295,13 +305,22 @@ export default function Access() {
                                         </InputLabel>
                                         <Input
                                             required
-                                            value={options.captcha_ReCaptchaSecret}
+                                            value={
+                                                options.captcha_ReCaptchaSecret
+                                            }
                                             onChange={handleInputChange(
                                                 "captcha_ReCaptchaSecret"
                                             )}
                                         />
                                         <FormHelperText id="component-helper-text">
-                                            应用管理页面获取到的的 秘钥
+                                            <Link
+                                                href={
+                                                    "https://www.google.com/recaptcha/admin/create"
+                                                }
+                                                target={"_blank"}
+                                            >
+                                                应用管理页面
+                                            </Link>{" "}获取到的的 秘钥
                                         </FormHelperText>
                                     </FormControl>
                                 </div>

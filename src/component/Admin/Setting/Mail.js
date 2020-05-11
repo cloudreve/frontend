@@ -15,6 +15,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,6 +53,7 @@ export default function Mail() {
         replyTo: "",
         smtpUser: "",
         smtpPass: "",
+        smtpEncryption:"",
         mail_keepalive: "30",
         mail_activation_template: "",
         mail_reset_pwd_template: ""
@@ -60,6 +63,17 @@ export default function Mail() {
         setOptions({
             ...options,
             [name]: event.target.value
+        });
+    };
+
+    const handleCheckChange = name => event => {
+        let value = event.target.value;
+        if (event.target.checked !== undefined) {
+            value = event.target.checked ? "1" : "0";
+        }
+        setOptions({
+            ...options,
+            [name]: value
         });
     };
 
@@ -295,6 +309,27 @@ export default function Mail() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     用户回复系统发送的邮件时，用于接收回信的邮箱
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.smtpEncryption === "1"
+                                            }
+                                            onChange={handleCheckChange(
+                                                "smtpEncryption"
+                                            )}
+                                        />
+                                    }
+                                    label="使用加密连接"
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    是否使用SSL加密连接
                                 </FormHelperText>
                             </FormControl>
                         </div>
