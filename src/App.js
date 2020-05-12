@@ -71,7 +71,7 @@ export default function App() {
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing.unit * 0,
+            padding: theme.spacing(0),
             minWidth: 0
         },
         toolbar: theme.mixins.toolbar

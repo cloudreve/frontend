@@ -1,5 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { InitSiteConfig } from "../middleware/Init";
+import { combineReducers } from '../redux/combineReducers'
+import viewUpdate from '../redux/viewUpdate/reducer'
 
 const checkSelectedProps = (state)=>{
     let isMultiple,withFolder,withFile=false;
@@ -15,16 +17,11 @@ const checkSelectedProps = (state)=>{
     return [isMultiple,withFolder,withFile];
 }
 
-const doNavigate = (path,state)=>{
+const doNavigate = (path, state)=>{
     window.currntPath = path;
     return Object.assign({}, state, {
         navigator:Object.assign({}, state.navigator, {
             path: path
-        }),
-        viewUpdate:Object.assign({}, state.viewUpdate, {
-            contextOpen:false,
-            navigatorError:false,
-            navigatorLoading:path !== state.navigator.path,
         }),
         explorer:Object.assign({}, state.explorer, {
             selected:[],
@@ -92,46 +89,6 @@ export const initState = {
       path: "/",
       refresh: true
   },
-  viewUpdate: {
-      isLogin:false,
-      loadUploader:false,
-      open: false,
-      explorerViewMethod: "icon",
-      sortMethod: "timePos",
-      subTitle:null,
-      contextType: "none",
-      menuOpen: false,
-      navigatorLoading: true,
-      navigatorError: false,
-      navigatorErrorMsg: null,
-      modalsLoading: false,
-      storageRefresh: false,
-      userPopoverAnchorEl: null,
-      shareUserPopoverAnchorEl: null,
-      modals: {
-          createNewFolder: false,
-          createNewFile: false,
-          rename: false,
-          move: false,
-          remove: false,
-          share: false,
-          music: false,
-          remoteDownload: false,
-          torrentDownload: false,
-          getSource: false,
-          copy:false,
-          resave: false,
-          compress:false,
-          decompress:false,
-      },
-      snackbar: {
-          toggle: false,
-          vertical: "top",
-          horizontal: "center",
-          msg: "",
-          color: ""
-      }
-  },
   explorer: {
     dndSignal:false,
     dndTarget:null,
@@ -162,18 +119,6 @@ const defaultStatus = InitSiteConfig(initState);
 // TODO: 将cloureveApp切分成小的reducer
 const cloudreveApp = (state = defaultStatus, action) => {
     switch (action.type) {
-        case 'DRAWER_TOGGLE':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    open:action.open,
-                }),
-            });
-        case 'CHANGE_VIEW_METHOD':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    explorerViewMethod:action.method,
-                }),
-            });
         case 'CHANGE_SORT_METHOD':
             let list = [...state.explorer.fileList,...state.explorer.dirList];
             // eslint-disable-next-line
@@ -203,22 +148,9 @@ const cloudreveApp = (state = defaultStatus, action) => {
             });
 
             return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    sortMethod:action.method,
-                }),
                 explorer: Object.assign({}, state.explorer, {
                     fileList: fileList,
                     dirList: dirList,
-                }),
-            });
-        case 'CHANGE_CONTEXT_MENU':
-            if(state.viewUpdate.contextOpen && action.open){
-                return Object.assign({}, state);
-            }
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    contextOpen: action.open,
-                    contextType:action.menuType,
                 }),
             });
         case 'DRAG_AND_DROP':
@@ -227,19 +159,6 @@ const cloudreveApp = (state = defaultStatus, action) => {
                     dndSignal: !state.explorer.dndSignal,
                     dndTarget:action.target,
                     dndSource:action.source,
-                }),
-            });
-        case 'SET_NAVIGATOR_LOADING_STATUE':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    navigatorLoading:action.status,
-                }),
-            });
-        case 'SET_NAVIGATOR_ERROR':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    navigatorError: action.status,
-                    navigatorErrorMsg: action.msg,
                 }),
             });
         case 'UPDATE_FILE_LIST':
@@ -379,223 +298,10 @@ const cloudreveApp = (state = defaultStatus, action) => {
             }
             break
         case 'NAVIGATOR_UP':
-            var pathSplit = state.navigator.path.split("/");
-            pathSplit.pop();
-            var newPath = pathSplit.length===1?"/":pathSplit.join("/");
-            return doNavigate(newPath,state);
-        case 'OPEN_CREATE_FOLDER_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        createNewFolder:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_CREATE_FILE_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        createNewFile:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_RENAME_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        rename:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_REMOVE_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        remove:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_MOVE_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        move:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_RESAVE_DIALOG':
-            window.shareKey = action.key;
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        resave:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'SET_USER_POPOVER':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    userPopoverAnchorEl:action.anchor,
-                }),
-            });
-        case 'SET_SHARE_USER_POPOVER':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    shareUserPopoverAnchorEl:action.anchor,
-                }),
-            });
-        case 'OPEN_SHARE_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        share:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
+            return doNavigate(action.path, state);
         case 'SET_SITE_CONFIG':
             return Object.assign({}, state, {
                 siteConfig: action.config,
-            });
-        case 'OPEN_MUSIC_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        music:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_REMOTE_DOWNLOAD_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        remoteDownload:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_TORRENT_DOWNLOAD_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        torrentDownload:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_DECOMPRESS_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        decompress:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_COMPRESS_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        compress:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_GET_SOURCE_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        getSource:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_COPY_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        copy:true,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'OPEN_LOADING_DIALOG':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        loading:true,
-                        loadingText:action.text,
-                    }),
-                    contextOpen:false,
-                }),
-            });
-        case 'CLOSE_ALL_MODALS':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modals: Object.assign({}, state.viewUpdate.modals, {
-                        createNewFolder:false,
-                        createNewFile:false,
-                        rename:false,
-                        move:false,
-                        remove:false,
-                        share:false,
-                        music:false,
-                        remoteDownload:false,
-                        torrentDownload:false,
-                        getSource:false,
-                        resave:false,
-                        copy:false,
-                        loading:false,
-                        compress:false,
-                        decompress:false,
-                    }),
-                }),
-            });
-        case 'CHANGE_SUB_TITLE':
-            document.title = (action.title === null || action.title === undefined) ? state.siteConfig.title : (action.title + " - " +state.siteConfig.title);
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    subTitle: action.title,
-                }),
-            });
-        case 'TOGGLE_SNACKBAR':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    snackbar:{
-                        toggle:!state.viewUpdate.snackbar.toggle,
-                        vertical:action.vertical,
-                        horizontal:action.horizontal,
-                        msg:action.msg,
-                        color:action.color,
-                    },
-                }),
-            });
-        case 'SET_MODALS_LOADING':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    modalsLoading:action.status,
-                }),
-            });
-        case 'SET_SESSION_STATUS':
-            return {
-                ...state,
-                viewUpdate: {
-                    ...state.viewUpdate,
-                    isLogin:action.status,
-                }
-            }
-        case 'ENABLE_LOAD_UPLOADER':
-            return Object.assign({}, state, {
-                viewUpdate: Object.assign({}, state.viewUpdate, {
-                    loadUploader:true,
-                }),
             });
         case 'REFRESH_FILE_LIST':
             return Object.assign({}, state, {
@@ -617,11 +323,6 @@ const cloudreveApp = (state = defaultStatus, action) => {
                     path: "/搜索结果",
                     refresh:state.explorer.keywords === null? state.navigator.refresh:!state.navigator.refresh,
                 }),
-                viewUpdate:Object.assign({}, state.viewUpdate, {
-                    contextOpen:false,
-                    navigatorError:false,
-                    navigatorLoading:true,
-                }),
                 explorer:Object.assign({}, state.explorer, {
                     selected:[],
                     selectProps: {
@@ -639,12 +340,6 @@ const cloudreveApp = (state = defaultStatus, action) => {
                         first:action.first,
                         other:state.explorer.fileList,
                     },
-                }),
-            });
-        case 'REFRESH_STORAGE':
-            return Object.assign({}, state, {
-                viewUpdate:Object.assign({}, state.viewUpdate, {
-                    storageRefresh:!state.viewUpdate.storageRefresh,
                 }),
             });
         case 'SAVE_FILE':
@@ -679,4 +374,12 @@ const cloudreveApp = (state = defaultStatus, action) => {
     }
 }
 
-export default cloudreveApp
+export default (state, action) => {
+  const { viewUpdate: viewUpdateState } = state || {}
+  const appState = cloudreveApp(state, action)
+  const combinedState = combineReducers({ viewUpdate })({ viewUpdate: viewUpdateState }, action)
+  return {
+    ...appState,
+    ...combinedState,
+  }
+}
