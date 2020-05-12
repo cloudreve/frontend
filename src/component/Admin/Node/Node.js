@@ -14,10 +14,11 @@ import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
 import { useHistory } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import { Delete, Edit } from "@material-ui/icons";
+import { Delete, Edit, Cancel, CheckCircle } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 import classNames from "classnames";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     disabledCell: {
         color: theme.palette.text.disabled,
     },
+    verticalAlign: {
+        verticalAlign: "middle",
+        display: "inline-block",
+    },
 }));
 
 const columns = [
@@ -68,9 +73,17 @@ const columns = [
     },
 ];
 
+const features = [
+    {
+        field: "Aria2Enabled",
+        name: "离线下载",
+    },
+];
+
 export default function Node() {
     const classes = useStyles();
     const [nodes, setNodes] = useState([]);
+    const [isActive, setIsActive] = useState({});
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0);
@@ -93,6 +106,7 @@ export default function Node() {
             .then((response) => {
                 setNodes(response.data.items);
                 setTotal(response.data.total);
+                setIsActive(response.data.active);
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -126,11 +140,35 @@ export default function Node() {
         }
     };
 
-    const getFeatureBadge = (node) => {
-        if (node.Aria2Enabled) {
-            return "0";
-        }
-    };
+    const getFeatureBadge = (node) =>
+        features.map((feature) => {
+            if (node[feature.field]) {
+                return (
+                    <Chip
+                        className={classes.disabledBadge}
+                        size="small"
+                        color="primary"
+                        label={feature.name}
+                    />
+                );
+            }
+        });
+
+    const getRealStatusBadge = (status) =>
+        status ? (
+            <Box color="success.main" fontSize="small">
+                <CheckCircle
+                    className={classes.verticalAlign}
+                    fontSize="small"
+                />{" "}
+                <span className={classes.verticalAlign}>在线</span>
+            </Box>
+        ) : (
+            <Box color="error.main" fontSize="small">
+                <Cancel className={classes.verticalAlign} fontSize="small" />{" "}
+                <span className={classes.verticalAlign}>离线</span>
+            </Box>
+        );
 
     return (
         <div>
@@ -184,7 +222,9 @@ export default function Node() {
                                         {row.Name}
                                         {getStatusBadge(row.Status)}
                                     </TableCell>
-                                    <TableCell>...</TableCell>
+                                    <TableCell>
+                                        {getRealStatusBadge(isActive[row.ID])}
+                                    </TableCell>
                                     <TableCell>
                                         {getFeatureBadge(row)}
                                     </TableCell>
