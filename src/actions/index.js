@@ -4,11 +4,11 @@ export const navigateTo = path => {
   return (dispatch, getState) => {
     const state = getState()
     const navigatorLoading = path !== state.navigator.path
-    return {
+    return dispatch({
       type: "NAVIGATOR_TO",
       path: path,
       navigatorLoading,
-    }
+    })
   }
 };
 
@@ -19,11 +19,11 @@ export const navigateUp = () => {
     pathSplit.pop();
     const newPath = pathSplit.length===1? "/":pathSplit.join("/");
     const navigatorLoading = newPath !== state.navigator.path
-    return {
+    return dispatch({
       type: "NAVIGATOR_UP",
       path: newPath,
       navigatorLoading
-    }
+    })
   }
 };
 
