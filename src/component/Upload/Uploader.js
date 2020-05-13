@@ -51,7 +51,7 @@ class UploaderComponent extends Component {
             return 4 * 1024 * 1024;
         }
         if (policyType === "onedrive") {
-            return 10 * 1024 * 1024;
+            return 100 * 1024 * 1024;
         }
         return 0;
     }
