@@ -30,8 +30,12 @@ const mockStore = configureMockStore(middlewares)
 
 describe('index reducer', () => {
   it('should return the initial state', () => {
-    expect(cloudreveApp(undefined, { type: '@@INIT'})).toEqual(initState)
-  })
+      expect(cloudreveApp(undefined, { type: '@@INIT'})).toEqual(initState)
+    })
+
+    it('should handle redux init', () => {
+      expect(cloudreveApp(undefined, { type: '@@redux/INIT'})).toEqual(initState)
+    })
 
   it('should handle DRAWER_TOGGLE', () => {
     const openAction = drawerToggleAction(true)

@@ -13,13 +13,11 @@ const Admin = React.lazy(() => import("./Admin"));
 
 serviceWorker.register();
 
-const middlewares = [thunk]
-// TODO: 仅在dev模式下添加devtools
-const store = createStore(cloureveApp, 
-  compose(
-    applyMiddleware(...middlewares),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  ));
+let reduxEnhance = applyMiddleware(thunk)
+if (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION__) {
+  reduxEnhance = compose(reduxEnhance, window.__REDUX_DEVTOOLS_EXTENSION__())
+}
+const store = createStore(cloureveApp, reduxEnhance);
 UpdateSiteConfig(store);
 
 ReactDOM.render(
