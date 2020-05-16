@@ -6,7 +6,7 @@ export interface ViewUpdateState {
   loadUploader:boolean,
   open: boolean,
   explorerViewMethod: string,
-  sortMethod: string,
+  sortMethod: 'sizePos' | 'sizeRes' | 'namePos' | 'nameRev' | 'timePos' | 'timeRev',
   subTitle: string | null,
   contextType: string,
   contextOpen: boolean,
@@ -279,28 +279,22 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
             contextOpen: action.open,
             contextType: action.menuType,
           });
-        case 'CHANGE_SUB_TITLE':
+        case 'SET_SUBTITLE':
           return Object.assign({}, state, {
             subTitle: action.title,
           });
-        case 'CHANGE_SORT_METHOD':
+        case 'SET_SORT_METHOD':
           return {
             ...state,
             sortMethod: action.method
           }
-        case 'NAVIGATOR_TO':
+        case 'SET_NAVIGATOR':
           return {
             ...state,
             contextOpen:false,
             navigatorError:false,
             navigatorLoading: action.navigatorLoading
           }
-        // case 'NAVIGATOR_TO':
-        //   return Object.assign({}, state, {
-        //     contextOpen:false,
-        //     navigatorError:false,
-        //     navigatorLoading:true,
-        //   })
       default:
         return state
     }

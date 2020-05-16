@@ -14,9 +14,7 @@ import {
     navigateTo,
     navigateUp,
     changeViewMethod,
-    changeSortMethod,
     setNavigatorError,
-    updateFileList,
     setNavigatorLoadingStatus,
     refreshFileList,
     setSelectedTarget,
@@ -25,6 +23,7 @@ import {
     drawerToggleAction,
     setShareUserPopover, openResaveDialog, openCompressDialog
 } from "../../../actions/index";
+import explorer from "../../../redux/explorer"
 import API from "../../../middleware/Api";
 import { setCookie, setGetParameter, fixUrlHash } from "../../../utils/index";
 import {
@@ -69,13 +68,13 @@ const mapDispatchToProps = dispatch => {
             dispatch(changeViewMethod(method));
         },
         changeSort: method => {
-            dispatch(changeSortMethod(method));
+            dispatch(explorer.actions.changeSortMethod(method));
         },
         setNavigatorError: (status, msg) => {
             dispatch(setNavigatorError(status, msg));
         },
         updateFileList: list => {
-            dispatch(updateFileList(list));
+            dispatch(explorer.actions.updateFileList(list));
         },
         setNavigatorLoadingStatus: status => {
             dispatch(setNavigatorLoadingStatus(status));

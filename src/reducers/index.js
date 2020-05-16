@@ -2,35 +2,13 @@
 import { InitSiteConfig } from "../middleware/Init";
 import { combineReducers } from '../redux/combineReducers'
 import viewUpdate from '../redux/viewUpdate/reducer'
-
-const checkSelectedProps = (state)=>{
-    let isMultiple,withFolder,withFile=false;
-    isMultiple = (state.selected.length>1);
-    // eslint-disable-next-line
-    state.selected.map((value)=>{
-        if(value.type==="dir"){
-            withFolder = true;
-        }else if(value.type==="file"){
-            withFile = true;
-        }
-    })
-    return [isMultiple,withFolder,withFile];
-}
+import explorer from '../redux/explorer/reducer'
 
 const doNavigate = (path, state)=>{
     window.currntPath = path;
     return Object.assign({}, state, {
         navigator:Object.assign({}, state.navigator, {
             path: path
-        }),
-        explorer:Object.assign({}, state.explorer, {
-            selected:[],
-            selectProps: {
-                isMultiple:false,
-                withFolder:false,
-                withFile:false,
-            },
-            keywords:null,
         }),
     });
 }
@@ -89,29 +67,6 @@ export const initState = {
       path: "/",
       refresh: true
   },
-  explorer: {
-    dndSignal:false,
-    dndTarget:null,
-    dndSource:null,
-    fileList: [],
-    dirList: [],
-    selected: [],
-    selectProps: {
-        isMultiple: false,
-        withFolder: false,
-        withFile: false
-    },
-    lastSelect: {
-      file: null,
-      index: -1,
-    },
-    shiftSelectedIds: [],
-    imgPreview: {
-        first: null,
-        other: []
-    },
-    keywords: null
-  }
 }
 
 const defaultStatus = InitSiteConfig(initState);
@@ -119,139 +74,7 @@ const defaultStatus = InitSiteConfig(initState);
 // TODO: 将cloureveApp切分成小的reducer
 const cloudreveApp = (state = defaultStatus, action) => {
     switch (action.type) {
-        case 'CHANGE_SORT_METHOD':
-            let list = [...state.explorer.fileList,...state.explorer.dirList];
-            // eslint-disable-next-line
-            list.sort((a,b)=>{
-                switch (action.method) {
-                    case "sizePos":
-                        return a.size-b.size;
-                    case "sizeRes":
-                        return b.size-a.size;
-                    case 'namePos':
-                        return a.name.localeCompare(b.name);
-                    case 'nameRev':
-                        return b.name.localeCompare(a.name);
-                    case 'timePos':
-                        return Date.parse(a.date)-Date.parse(b.date);
-                    case 'timeRev':
-                        return Date.parse(b.date)-Date.parse(a.date);
-                    default:
-                        break;
-                }
-            })
-            var dirList =  list.filter(function (x) {
-                return x.type === "dir";
-            });
-            var fileList =  list.filter(function (x) {
-                return x.type === "file";
-            });
-
-            return Object.assign({}, state, {
-                explorer: Object.assign({}, state.explorer, {
-                    fileList: fileList,
-                    dirList: dirList,
-                }),
-            });
-        case 'DRAG_AND_DROP':
-            return Object.assign({}, state, {
-                explorer: Object.assign({}, state.explorer, {
-                    dndSignal: !state.explorer.dndSignal,
-                    dndTarget:action.target,
-                    dndSource:action.source,
-                }),
-            });
-        case 'UPDATE_FILE_LIST':
-            // eslint-disable-next-line
-            action.list.sort((a,b)=>{
-                switch (state.viewUpdate.sortMethod) {
-                    case "sizePos":
-                        return a.size-b.size;
-                    case "sizeRes":
-                        return b.size-a.size;
-                    case 'namePos':
-                        return a.name.localeCompare(b.name);
-                    case 'nameRev':
-                        return b.name.localeCompare(a.name);
-                    case 'timePos':
-                        return Date.parse(a.date)-Date.parse(b.date);
-                    case 'timeRev':
-                        return Date.parse(b.date)-Date.parse(a.date);
-                    default:
-                        break;
-                }
-            })
-            // eslint-disable-next-line
-            var dirList =  action.list.filter(function (x) {
-                return x.type === "dir";
-            });
-            // eslint-disable-next-line
-            var fileList =  action.list.filter(function (x) {
-                return x.type === "file";
-            });
-            return Object.assign({}, state, {
-                explorer: Object.assign({}, state.explorer, {
-                    fileList: fileList,
-                    dirList: dirList,
-                }),
-            });
-        case 'ADD_SELECTED_TARGETS':
-            var newState =  Object.assign({}, state, {
-                explorer:Object.assign({}, state.explorer, {
-                    selected: [...state.explorer.selected,...action.targets]
-                }),
-            });
-            var selectedProps = checkSelectedProps(newState.explorer);
-            return Object.assign({}, newState, {
-                explorer:Object.assign({}, newState.explorer, {
-                    selectProps: {
-                        isMultiple:selectedProps[0],
-                        withFolder:selectedProps[1],
-                        withFile:selectedProps[2],
-                    }
-                }),
-            });
-        case 'SET_SELECTED_TARGET':
-            // eslint-disable-next-line
-            var newState =  Object.assign({}, state, {
-                explorer:Object.assign({}, state.explorer, {
-                    selected: action.targets
-                }),
-            });
-            // eslint-disable-next-line
-            var selectedProps = checkSelectedProps(newState.explorer);
-            return Object.assign({}, newState, {
-                explorer:Object.assign({}, newState.explorer, {
-                    selectProps: {
-                        isMultiple:selectedProps[0],
-                        withFolder:selectedProps[1],
-                        withFile:selectedProps[2],
-                    }
-                }),
-            });
-        case 'RMOVE_SELECTED_TARGETS':
-            const { fileIds } = action
-            const newSelected = state.explorer.selected.filter((file) => {
-              return !fileIds.includes(file.id)
-            })
-            // eslint-disable-next-line
-            var newState =  Object.assign({}, state, {
-                explorer:Object.assign({}, state.explorer, {
-                    selected: newSelected
-                }),
-            });
-            // eslint-disable-next-line
-            var selectedProps = checkSelectedProps(newState.explorer);
-            return Object.assign({}, newState, {
-                explorer:Object.assign({}, newState.explorer, {
-                    selectProps: {
-                        isMultiple:selectedProps[0],
-                        withFolder:selectedProps[1],
-                        withFile:selectedProps[2],
-                    }
-                }),
-            });
-        case 'NAVIGATOR_TO':
+        case 'SET_NAVIGATOR':
             return doNavigate(action.path,state);
         case 'TOGGLE_DAYLIGHT_MODE':{
             let copy = Object.assign({}, state);
@@ -308,14 +131,6 @@ const cloudreveApp = (state = defaultStatus, action) => {
                 navigator: Object.assign({}, state.navigator, {
                     refresh:!state.navigator.refresh,
                 }),
-                explorer:Object.assign({}, state.explorer, {
-                    selected:[],
-                    selectProps: {
-                        isMultiple:false,
-                        withFolder:false,
-                        withFile:false,
-                    }
-                }),
             });
         case 'SEARCH_MY_FILE':
             return Object.assign({}, state, {
@@ -323,61 +138,16 @@ const cloudreveApp = (state = defaultStatus, action) => {
                     path: "/搜索结果",
                     refresh:state.explorer.keywords === null? state.navigator.refresh:!state.navigator.refresh,
                 }),
-                explorer:Object.assign({}, state.explorer, {
-                    selected:[],
-                    selectProps: {
-                        isMultiple:false,
-                        withFolder:false,
-                        withFile:false,
-                    },
-                    keywords:action.keywords,
-                }),
             });
-        case 'SHOW_IMG_PREIVEW':
-            return Object.assign({}, state, {
-                explorer:Object.assign({}, state.explorer, {
-                    imgPreview: {
-                        first:action.first,
-                        other:state.explorer.fileList,
-                    },
-                }),
-            });
-        case 'SAVE_FILE':
-            return Object.assign({}, state, {
-                explorer:Object.assign({}, state.explorer, {
-                    fileSave:!state.explorer.fileSave,
-                }),
-            });
-        case 'SET_LAST_SELECT':
-            const { file, index } = action
-            return {
-              ...state,
-              explorer: {
-                ...state.explorer,
-                lastSelect: {
-                  file,
-                  index,
-                },
-              }
-            }
-        case 'SET_SHIFT_SELECTED_IDS':
-              const { shiftSelectedIds } = action
-              return {
-                ...state,
-                explorer: {
-                  ...state.explorer,
-                  shiftSelectedIds,
-                }
-              }
         default:
             return state
     }
 }
 
 export default (state, action) => {
-  const { viewUpdate: viewUpdateState } = state || {}
+  const { viewUpdate: viewUpdateState, explorer: explorerState } = state || {}
   const appState = cloudreveApp(state, action)
-  const combinedState = combineReducers({ viewUpdate })({ viewUpdate: viewUpdateState }, action)
+  const combinedState = combineReducers({ viewUpdate, explorer })({ viewUpdate: viewUpdateState, explorer: explorerState }, action)
   return {
     ...appState,
     ...combinedState,
