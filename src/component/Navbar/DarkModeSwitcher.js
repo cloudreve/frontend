@@ -21,13 +21,12 @@ const DarkModeSwitcher = ({ position }) => {
     const ToggleThemeMode = useCallback(() => dispatch(toggleDaylightMode()), [
         dispatch
     ]);
-    const toggleMode = () => {
-        Auth.SetPreference("theme_mode",isDayLight?"dark":"light");
-        ToggleThemeMode();
-    };
     const isDayLight = (ThemeType && ThemeType === "light") || !ThemeType;
     const isDark = ThemeType && ThemeType === "dark";
-
+    const toggleMode = () => {
+      Auth.SetPreference("theme_mode",isDayLight?"dark":"light");
+      ToggleThemeMode();
+    };
     const classes = useStyles();
     return (
         <Tooltip

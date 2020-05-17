@@ -40,11 +40,11 @@ export default function App() {
 
     const theme = React.useMemo(() => {
         themeConfig.palette.type = prefersDarkMode ? "dark" : "light";
-        let prefer = Auth.GetPreference("theme_mode");
+        const prefer = Auth.GetPreference("theme_mode");
         if (prefer) {
             themeConfig.palette.type = prefer;
         }
-        let theme = createMuiTheme({
+        const theme = createMuiTheme({
             ...themeConfig,
             palette: {
                 ...themeConfig.palette,
@@ -79,7 +79,7 @@ export default function App() {
 
     const classes = useStyles();
 
-    let { path } = useRouteMatch();
+    const { path } = useRouteMatch();
     return (
         <React.Fragment>
             <ThemeProvider theme={theme}>

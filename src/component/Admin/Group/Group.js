@@ -79,9 +79,9 @@ export default function Group() {
     const [total, setTotal] = useState(0);
     const [policies, setPolicies] = React.useState({});
 
-    let location = useLocation();
-    let history = useHistory();
-    let query = useQuery();
+    const location = useLocation();
+    const history = useHistory();
+    const query = useQuery();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(

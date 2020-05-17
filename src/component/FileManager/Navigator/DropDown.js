@@ -6,7 +6,7 @@ export default function DropDown(props) {
 
     let timer;
     let first = props.folders.length;
-    let status = [];
+    const status = [];
     for (let index = 0; index < props.folders.length; index++) {
         status[index] = false;
         

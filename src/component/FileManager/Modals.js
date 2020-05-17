@@ -137,7 +137,7 @@ class ModalsCompoment extends Component {
             return;
         }
         if (this.props.modalsStatus.rename !== nextProps.modalsStatus.rename) {
-            let name = nextProps.selected[0].name;
+            const name = nextProps.selected[0].name;
             this.setState({
                 newName: name
             });
@@ -172,7 +172,7 @@ class ModalsCompoment extends Component {
     Download = () => {
         let reqURL = "";
         if (this.props.selected[0].key) {
-            let downloadPath =
+            const downloadPath =
                 this.props.selected[0].path === "/"
                     ? this.props.selected[0].path + this.props.selected[0].name
                     : this.props.selected[0].path +
@@ -205,7 +205,7 @@ class ModalsCompoment extends Component {
     };
 
     archiveDownload = () => {
-        let dirs = [],
+        const dirs = [],
             items = [];
         this.props.selected.map(value => {
             if (value.type === "dir") {
@@ -217,7 +217,7 @@ class ModalsCompoment extends Component {
         });
 
         let reqURL = "/file/archive";
-        let postBody = {
+        const postBody = {
             items: items,
             dirs: dirs
         };
@@ -260,7 +260,7 @@ class ModalsCompoment extends Component {
     submitRemove = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
         this.props.selected.map(value => {
@@ -307,7 +307,7 @@ class ModalsCompoment extends Component {
             e.preventDefault();
         }
         this.props.setModalsLoading(true);
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
         this.props.selected.map(value => {
@@ -386,9 +386,9 @@ class ModalsCompoment extends Component {
     submitRename = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        let newName = this.state.newName;
+        const newName = this.state.newName;
 
-        let src = {
+        const src = {
             dirs: [],
             items: []
         };
@@ -578,7 +578,7 @@ class ModalsCompoment extends Component {
     };
 
     setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;

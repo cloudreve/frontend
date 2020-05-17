@@ -145,7 +145,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function DownloadingCard(props) {
-    let canvasRef = React.createRef();
+    const canvasRef = React.createRef();
     const classes = useStyles();
     const theme = useTheme();
 
@@ -202,11 +202,16 @@ export default function DownloadingCard(props) {
         return (completed / total) * 100;
     };
 
+
+    const activeFiles = useCallback(() => {
+      return task.info.files.filter(v => v.selected === "true");
+    }, [task.info.files]);
+
     const deleteFile = index => {
         setLoading(true);
-        let current = activeFiles();
-        let newIndex = [];
-        let newFiles = [];
+        const current = activeFiles();
+        const newIndex = [];
+        const newFiles = [];
         // eslint-disable-next-line
         current.map(v => {
             if (v.index !== index && v.selected) {
@@ -249,10 +254,6 @@ export default function DownloadingCard(props) {
         }
         return task.name === "." ? "[未知]" : task.name;
     }, [task]);
-
-    const activeFiles = useCallback(() => {
-        return task.info.files.filter(v => v.selected === "true");
-    }, [task.info.files]);
 
     const getIcon = useCallback(() => {
         if (task.info.bittorrent.mode === "multi") {

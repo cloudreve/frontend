@@ -34,10 +34,10 @@ export default function SizeInput({onChange,min,value,required,label,max,suffix}
 
 
     const [unit,setUnit] = useState(1);
-    let first = useRef(true);
+    const first = useRef(true);
 
     const transform = useCallback(()=>{
-        let res = unitTransform(value);
+        const res = unitTransform(value);
         if(first && value !== 0){
             setUnit(res[1]);
             first.current = false;

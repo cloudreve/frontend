@@ -41,6 +41,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                 .then(response => {
                     setGroups(response.data);
                 })
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
                 .catch(() => {});
         }
         // eslint-disable-next-line
@@ -62,7 +63,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
 
     const submit = e => {
         e.preventDefault();
-        let groupCopy = {...group};
+        const groupCopy = {...group};
         groupCopy.time = parseInt(groupCopy.time) * 86400;
         groupCopy.price = parseInt(groupCopy.price) * 100;
         groupCopy.score = parseInt(groupCopy.score);

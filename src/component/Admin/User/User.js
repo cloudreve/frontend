@@ -83,8 +83,8 @@ export default function Group() {
     const [selected, setSelected] = useState([]);
     const [loading,setLoading] = useState(false);
 
-    let history = useHistory();
-    let theme = useTheme();
+    const history = useHistory();
+    const theme = useTheme();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -149,7 +149,7 @@ export default function Group() {
             .then(response => {
                 setUsers(users.map(v=>{
                     if (v.ID === id){
-                        let newUser = {...v,Status:response.data}
+                        const newUser = {...v,Status:response.data}
                         return newUser;
                     }
                     return v

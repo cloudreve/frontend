@@ -58,9 +58,9 @@ export default function CodeViewer() {
     const [suffix, setSuffix] = useState("javascript");
 
     const math = useRouteMatch();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
     const theme = useTheme();
 
     const dispatch = useDispatch();
@@ -75,12 +75,12 @@ export default function CodeViewer() {
 
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = query.get("p").split("/");
-            let extension = query.get("p").split(".");
+            const path = query.get("p").split("/");
+            const extension = query.get("p").split(".");
             setSuffix(codePreviewSuffix[extension.pop()]);
             SetSubTitle(path[path.length - 1]);
         } else {
-            let extension = query.get("name").split(".");
+            const extension = query.get("name").split(".");
             setSuffix(codePreviewSuffix[extension.pop()]);
             SetSubTitle(query.get("name"));
         }
@@ -100,8 +100,8 @@ export default function CodeViewer() {
         setLoading(true);
         API.get(requestURL, { responseType: "arraybuffer" })
             .then(response => {
-                var buffer = new Buffer(response.rawData, "binary");
-                var textdata = buffer.toString(); // for string
+                const buffer = new Buffer(response.rawData, "binary");
+                const textdata = buffer.toString(); // for string
                 setContent(textdata);
             })
             .catch(error => {

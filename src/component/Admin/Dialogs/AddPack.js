@@ -38,7 +38,7 @@ export default function AddPack({ open, onClose,onSubmit }) {
 
     const submit = e => {
         e.preventDefault();
-        let packCopy = {...pack};
+        const packCopy = {...pack};
         packCopy.size = parseInt(packCopy.size);
         packCopy.time = parseInt(packCopy.time) * 86400;
         packCopy.price = parseInt(packCopy.price) * 100;

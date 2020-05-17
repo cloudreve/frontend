@@ -1,31 +1,32 @@
+/* eslint-disable no-case-declarations */
 import { AnyAction } from "redux"
 import { CloudreveFile } from "../../types";
 
 interface SelectProps {
-  isMultiple: boolean,
-  withFolder: boolean,
-  withFile: boolean
+  isMultiple: boolean;
+  withFolder: boolean;
+  withFile: boolean;
 }
 
 export interface ExplorerState {
-  dndSignal: boolean,
-  dndTarget: any,
-  dndSource: any,
-  fileList: CloudreveFile[],
-  dirList: CloudreveFile[],
-  selected: CloudreveFile[],
-  selectProps: SelectProps,
+  dndSignal: boolean;
+  dndTarget: any;
+  dndSource: any;
+  fileList: CloudreveFile[];
+  dirList: CloudreveFile[];
+  selected: CloudreveFile[];
+  selectProps: SelectProps;
   lastSelect: {
-    file: CloudreveFile,
-    index: number,
-  },
-  shiftSelectedIds: string[],
+    file: CloudreveFile;
+    index: number;
+  };
+  shiftSelectedIds: string[];
   imgPreview: {
-      first: CloudreveFile,
-      other: []
-  },
-  keywords: string,
-  fileSave: boolean,
+      first: CloudreveFile;
+      other: [];
+  };
+  keywords: string;
+  fileSave: boolean;
 }
 
 export const initState: ExplorerState = {

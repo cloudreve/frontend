@@ -59,7 +59,7 @@ const defaultStatus = {
     }
 };
 
-let store = createStore(cloureveApp,defaultStatus)
+const store = createStore(cloureveApp,defaultStatus)
 ReactDOM.render(
     <Provider store={store}>
         <FolderShareApp/>

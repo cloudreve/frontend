@@ -57,7 +57,7 @@ class UploaderComponent extends Component {
     }
 
     fileAdd = (up, files) => {
-        let path = window.currntPath ? window.currntPath : this.props.path;
+        const path = window.currntPath ? window.currntPath : this.props.path;
         if (
             this.props.keywords === null &&
             window.location.href
@@ -76,7 +76,7 @@ class UploaderComponent extends Component {
                 return !isDsStore
               })
               .map(file => {
-                let source = file.getSource();
+                const source = file.getSource();
                 if (source.relativePath && source.relativePath !== "") {
                   file.path =  basename(
                         pathJoin([path, source.relativePath])
@@ -106,7 +106,7 @@ class UploaderComponent extends Component {
                     return;
                 }
                 loaded = true;
-                var user = Auth.GetUser();
+                const user = Auth.GetUser();
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
                     browse_button: ["pickfiles", "pickfolder"],
@@ -133,6 +133,7 @@ class UploaderComponent extends Component {
                     init: {
                         FilesAdded: this.fileAdd,
 
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
                         BeforeUpload: function() {},
                         QueueChanged: up => {
                             this.setState({ queued: up.total.queued });
@@ -149,7 +150,7 @@ class UploaderComponent extends Component {
                                 file[0].status,
                                 file[0]
                             );
-                            for (var i = 0; i < file.length; i++) {
+                            for (let i = 0; i < file.length; i++) {
                                 if (file[i].status === 5) {
                                     window.fileList["setComplete"](file[i]);
                                 }
@@ -167,11 +168,13 @@ class UploaderComponent extends Component {
                             this.props.refreshFileList();
                             this.props.refreshStorage();
                         },
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
                         FileUploaded: function() {},
                         Error: (up, err, errTip) => {
                             window.fileList["openFileList"]();
                             window.fileList["setError"](err.file, errTip);
                         },
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
                         FilesRemoved: () => {}
                     }
                 });
@@ -180,6 +183,7 @@ class UploaderComponent extends Component {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onError() {}
 
     openFileList = () => {

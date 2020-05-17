@@ -115,17 +115,19 @@ export default function Mail() {
 
     const reload = () => {
         API.get("/admin/reload/email")
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             .then(() => {})
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             .then(() => {});
     };
 
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k => {
             option.push({
                 key: k,

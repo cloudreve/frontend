@@ -66,7 +66,7 @@ export default function Access() {
     };
 
     const handleInputChange = name => event => {
-        let value = event.target.value;
+        const value = event.target.value;
         setOptions({
             ...options,
             [name]: value
@@ -106,7 +106,7 @@ export default function Access() {
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k => {
             option.push({
                 key: k,

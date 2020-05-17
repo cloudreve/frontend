@@ -120,9 +120,9 @@ function LoginForm() {
         [dispatch]
     );
 
-    let history = useHistory();
-    let location = useLocation();
-    let query = useQuery();
+    const history = useHistory();
+    const location = useLocation();
+    const query = useQuery();
 
     const classes = useStyles();
 
@@ -148,6 +148,24 @@ function LoginForm() {
         }
     }, [location,loginCaptcha]);
 
+    const afterLogin = data =>{
+      Auth.authenticate(data);
+
+      // 设置用户主题色
+      if (data["preferred_theme"] !== "") {
+          ApplyThemes(data["preferred_theme"]);
+      }
+      enableUploaderLoad();
+
+      // 设置登录状态
+      SetSessionStatus(true);
+
+      history.push("/home");
+      ToggleSnackbar("top", "right", "登录成功", "success");
+
+      localStorage.removeItem("siteConfigCache");
+    }
+
     const authnLogin = e => {
         e.preventDefault();
         if (!navigator.credentials) {
@@ -160,7 +178,7 @@ function LoginForm() {
 
         API.get("/user/authn/" + email)
             .then(response => {
-                let credentialRequestOptions = response.data;
+                const credentialRequestOptions = response.data;
                 console.log(credentialRequestOptions);
                 credentialRequestOptions.publicKey.challenge = bufferDecode(
                     credentialRequestOptions.publicKey.challenge
@@ -176,11 +194,11 @@ function LoginForm() {
                 });
             })
             .then(assertion => {
-                let authData = assertion.response.authenticatorData;
-                let clientDataJSON = assertion.response.clientDataJSON;
-                let rawId = assertion.rawId;
-                let sig = assertion.response.signature;
-                let userHandle = assertion.response.userHandle;
+                const authData = assertion.response.authenticatorData;
+                const clientDataJSON = assertion.response.clientDataJSON;
+                const rawId = assertion.rawId;
+                const sig = assertion.response.signature;
+                const userHandle = assertion.response.userHandle;
 
                 return API.post(
                     "/user/authn/finish/" + email,
@@ -208,24 +226,6 @@ function LoginForm() {
                 setLoading(false);
             });
     };
-
-    const afterLogin = data =>{
-        Auth.authenticate(data);
-
-        // 设置用户主题色
-        if (data["preferred_theme"] !== "") {
-            ApplyThemes(data["preferred_theme"]);
-        }
-        enableUploaderLoad();
-
-        // 设置登录状态
-        SetSessionStatus(true);
-
-        history.push("/home");
-        ToggleSnackbar("top", "right", "登录成功", "success");
-
-        localStorage.removeItem("siteConfigCache");
-    }
 
     const login = e => {
         e.preventDefault();

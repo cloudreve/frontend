@@ -48,7 +48,7 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
     },[])
 
     const submit = () => {
-        let res = {};
+        const res = {};
         Object.keys(input).forEach(v=>{
             if(input[v] !== "all" && input[v] !== ""){
                 res[v] = input[v];

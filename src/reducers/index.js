@@ -77,7 +77,7 @@ const cloudreveApp = (state = defaultStatus, action) => {
         case 'SET_NAVIGATOR':
             return doNavigate(action.path,state);
         case 'TOGGLE_DAYLIGHT_MODE':{
-            let copy = Object.assign({}, state);
+            const copy = Object.assign({}, state);
             if (copy.siteConfig.theme.palette.type === undefined || copy.siteConfig.theme.palette.type === "light"){
                 return {
                     ...state,
@@ -109,7 +109,7 @@ const cloudreveApp = (state = defaultStatus, action) => {
         }
         case 'APPLY_THEME':
             if (state.siteConfig.themes !== null){
-                let themes = JSON.parse(state.siteConfig.themes);
+                const themes = JSON.parse(state.siteConfig.themes);
                 if (themes[action.theme] === undefined){
                     return state;
                 }

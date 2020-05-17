@@ -85,7 +85,7 @@ export default function File() {
     const [selected, setSelected] = useState([]);
     const [loading,setLoading] = useState(false);
 
-    let history = useHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>

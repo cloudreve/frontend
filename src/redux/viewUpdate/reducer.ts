@@ -2,45 +2,45 @@ import { AnyAction } from "redux"
 import Auth from "../../middleware/Auth"
 
 export interface ViewUpdateState {
-  isLogin: boolean,
-  loadUploader:boolean,
-  open: boolean,
-  explorerViewMethod: string,
-  sortMethod: 'sizePos' | 'sizeRes' | 'namePos' | 'nameRev' | 'timePos' | 'timeRev',
-  subTitle: string | null,
-  contextType: string,
-  contextOpen: boolean,
-  menuOpen: boolean,
-  navigatorLoading: boolean,
-  navigatorError: boolean,
-  navigatorErrorMsg: string | null,
-  modalsLoading: boolean,
-  storageRefresh: boolean,
-  userPopoverAnchorEl: any,
-  shareUserPopoverAnchorEl: any,
+  isLogin: boolean;
+  loadUploader: boolean;
+  open: boolean;
+  explorerViewMethod: string;
+  sortMethod: 'sizePos' | 'sizeRes' | 'namePos' | 'nameRev' | 'timePos' | 'timeRev';
+  subTitle: string | null;
+  contextType: string;
+  contextOpen: boolean;
+  menuOpen: boolean;
+  navigatorLoading: boolean;
+  navigatorError: boolean;
+  navigatorErrorMsg: string | null;
+  modalsLoading: boolean;
+  storageRefresh: boolean;
+  userPopoverAnchorEl: any;
+  shareUserPopoverAnchorEl: any;
   modals: {
-      createNewFolder: boolean,
-      createNewFile: boolean,
-      rename: boolean,
-      move: boolean,
-      remove: boolean,
-      share: boolean,
-      music: boolean,
-      remoteDownload: boolean,
-      torrentDownload: boolean,
-      getSource: boolean,
-      copy:boolean,
-      resave: boolean,
-      compress:boolean,
-      decompress:boolean,
-  },
+      createNewFolder: boolean;
+      createNewFile: boolean;
+      rename: boolean;
+      move: boolean;
+      remove: boolean;
+      share: boolean;
+      music: boolean;
+      remoteDownload: boolean;
+      torrentDownload: boolean;
+      getSource: boolean;
+      copy: boolean;
+      resave: boolean;
+      compress: boolean;
+      decompress: boolean;
+  };
   snackbar: {
-      toggle: boolean,
-      vertical: string,
-      horizontal: string,
-      msg: string,
-      color: string
-  }
+      toggle: boolean;
+      vertical: string;
+      horizontal: string;
+      msg: string;
+      color: string;
+  };
 }
 export const initState: ViewUpdateState = {
   // 是否登录

@@ -52,11 +52,13 @@ export default function WebDAV() {
     const [create, setCreate] = useState(false);
     const [accounts, setAccounts] = useState([]);
 
-    useEffect(() => {
-        loadList();
-        // eslint-disable-next-line
-    }, []);
-
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
+    
     const loadList = () =>{
         API.get("/webdav/accounts")
             .then(response => {
@@ -66,16 +68,13 @@ export default function WebDAV() {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
+    useEffect(() => {
+      loadList();
+      // eslint-disable-next-line
+    }, []);
 
     const deleteAccount = id => {
-        let account = accounts[id];
+        const account = accounts[id];
         API.delete("/webdav/accounts/" + account.ID)
             .then(() => {
                 let accountCopy = [...accounts];

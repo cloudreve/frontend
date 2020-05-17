@@ -89,9 +89,9 @@ export default function Policy() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [editID, setEditID] = React.useState(0);
 
-    let location = useLocation();
-    let history = useHistory();
-    let query = useQuery();
+    const location = useLocation();
+    const history = useHistory();
+    const query = useQuery();
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);

@@ -1,10 +1,10 @@
+import { AnyAction } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import { CloudreveFile, SortMethod } from './../../types/index'
-import { AnyAction } from 'redux'
 
 export interface ActionSetFileList extends AnyAction {
-  type: 'SET_FILE_LIST',
-  list: CloudreveFile[]
+  type: 'SET_FILE_LIST';
+  list: CloudreveFile[];
 }
 export const setFileList = (list: CloudreveFile[]): ActionSetFileList => {
   return {
@@ -14,8 +14,8 @@ export const setFileList = (list: CloudreveFile[]): ActionSetFileList => {
 }
 
 export interface ActionSetDirList extends AnyAction {
-  type: 'SET_DIR_LIST',
-  list: CloudreveFile[]
+  type: 'SET_DIR_LIST';
+  list: CloudreveFile[];
 }
 export const setDirList = (list: CloudreveFile[]): ActionSetDirList => {
   return {
@@ -25,8 +25,8 @@ export const setDirList = (list: CloudreveFile[]): ActionSetDirList => {
 }
 
 export interface ActionSetSortMethod extends AnyAction {
-  type: 'SET_SORT_METHOD',
-  method: SortMethod,
+  type: 'SET_SORT_METHOD';
+  method: SortMethod;
 }
 export const setSortMethod = (method: SortMethod): ActionSetSortMethod => {
   return {
@@ -57,7 +57,7 @@ const sortMethodFuncs: Record<SortMethod, SortFunc> = {
 }
 
 export const updateFileList = (list: CloudreveFile[]): ThunkAction<any, any, any, any> => {
-  return (dispatch, getState) => {
+  return (dispatch, getState): void => {
     const state = getState()
     // TODO: define state type
     const { sortMethod } = state.viewUpdate
@@ -74,7 +74,7 @@ export const updateFileList = (list: CloudreveFile[]): ThunkAction<any, any, any
 }
 
 export const changeSortMethod = (method: SortMethod): ThunkAction<any, any, any, any> => {
-  return (dispatch, getState) => {
+  return (dispatch, getState): void => {
     const state = getState()
     const { fileList, dirList } = state.explorer
     const sortFunc = sortMethodFuncs[method]

@@ -208,7 +208,7 @@ class ExplorerCompoment extends Component {
     }
 
     ClickAway = e => {
-        let element = e.target;
+        const element = e.target;
         if (element.dataset.clickaway) {
             this.props.setSelectedTarget([]);
         }

@@ -1,11 +1,11 @@
 import { ThunkAction } from 'redux-thunk'
-
-export interface ACTION_SET_SUBTITLE {
-  type: "SET_SUBTITLE",
-  title: string,
+import { AnyAction } from 'redux'
+export interface ActionSetSubtitle extends AnyAction {
+  type: "SET_SUBTITLE";
+  title: string;
 }
 
-export const setSubtitle = (title: string): ACTION_SET_SUBTITLE => {
+export const setSubtitle = (title: string): ActionSetSubtitle => {
   return {
     type: 'SET_SUBTITLE',
     title,

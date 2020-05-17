@@ -81,9 +81,9 @@ export default function SearchResult() {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    let query = useQuery();
-    let location = useLocation();
-    let history = useHistory();
+    const query = useQuery();
+    const location = useLocation();
+    const history = useHistory();
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -97,7 +97,7 @@ export default function SearchResult() {
     const [orderBy, setOrderBy] = useState("created_at DESC");
 
     const search = useCallback((keywords, page, orderBy) => {
-        let order = orderBy.split(" ");
+        const order = orderBy.split(" ");
         API.get(
             "/share/search?page=" +
                 page +
@@ -126,7 +126,7 @@ export default function SearchResult() {
     }, []);
 
     useEffect(() => {
-      let keywords = query.get("keywords");
+      const keywords = query.get("keywords");
       if (keywords) {
           search(keywords, page, orderBy);
       } else {
@@ -136,13 +136,13 @@ export default function SearchResult() {
 
     const handlePageChange = (event, value) => {
         setPage(value);
-        let keywords = query.get("keywords");
+        const keywords = query.get("keywords");
         search(keywords, value, orderBy);
     };
 
     const handleOrderChange = event => {
         setOrderBy(event.target.value);
-        let keywords = query.get("keywords");
+        const keywords = query.get("keywords");
         search(keywords, page, event.target.value);
     };
 

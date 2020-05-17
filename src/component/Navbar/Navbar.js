@@ -336,9 +336,9 @@ class NavbarCompoment extends Component {
     };
 
     openPreview = () => {
-        let isShare = pathHelper.isSharePage(this.props.location.pathname);
+        const isShare = pathHelper.isSharePage(this.props.location.pathname);
         if (isShare) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 this.props.toggleSnackbar(
                     "top",
@@ -351,7 +351,7 @@ class NavbarCompoment extends Component {
             }
         }
         this.props.changeContextMenu("file", false);
-        let previewPath =
+        const previewPath =
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +

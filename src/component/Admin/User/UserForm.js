@@ -48,7 +48,7 @@ export default function UserForm(props) {
     );
     const [groups, setGroups] = useState([]);
 
-    let history = useHistory();
+    const history = useHistory();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -76,7 +76,7 @@ export default function UserForm(props) {
 
     const submit = e => {
         e.preventDefault();
-        let userCopy = {...user};
+        const userCopy = {...user};
 
         // 整型转换
         ["Status", "GroupID","Score"].forEach(v => {

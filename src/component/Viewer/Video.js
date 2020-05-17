@@ -33,16 +33,16 @@ function useQuery() {
 
 export default function VideoViewer() {
     const math = useRouteMatch();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
     const dispatch = useDispatch();
     const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
         dispatch
     ]);
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = query.get("p").split("/");
+            const path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));

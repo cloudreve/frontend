@@ -22,7 +22,7 @@ const Auth = {
     },
     signout() {
         Auth.isAuthenticated = false;
-        let oldUser = Auth.GetUser();
+        const oldUser = Auth.GetUser();
         oldUser.id = 0;
         localStorage.setItem("user", JSON.stringify(oldUser));
     },
@@ -33,7 +33,7 @@ const Auth = {
         localStorage.setItem("user_preference", JSON.stringify(preference));
     },
     GetPreference(key: string): any | null{
-        let preference = JSON.parse(localStorage.getItem("user_preference"));
+        const preference = JSON.parse(localStorage.getItem("user_preference"));
         if (preference && preference[key]){
             return preference[key];
         }

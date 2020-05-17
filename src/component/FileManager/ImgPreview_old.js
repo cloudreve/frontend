@@ -35,11 +35,11 @@ class ImgPreviewCompoment extends Component {
     };
 
     UNSAFE_componentWillReceiveProps = nextProps => {
-        let items = [];
+        const items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {
             if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
-                let newImg = {
+                const newImg = {
                     title: nextProps.first.name,
                     src:
                         baseURL +
@@ -56,7 +56,7 @@ class ImgPreviewCompoment extends Component {
             }
             // eslint-disable-next-line
             nextProps.other.map(value => {
-                let fileType = value.name
+                const fileType = value.name
                     .split(".")
                     .pop()
                     .toLowerCase();
@@ -74,7 +74,7 @@ class ImgPreviewCompoment extends Component {
                             "/file/preview/" +
                             value.id
                     }
-                    let newImg = {
+                    const newImg = {
                         title: value.name,
                         src:src,
                     };

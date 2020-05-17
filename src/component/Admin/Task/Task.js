@@ -176,7 +176,7 @@ export default function Task() {
             return "-"
         }
         try {
-            let res = JSON.parse(error)
+            const res = JSON.parse(error)
             return res.msg
         }catch (e) {
             return "未知"

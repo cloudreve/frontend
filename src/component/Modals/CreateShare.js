@@ -189,7 +189,7 @@ export default function CreatShare(props) {
     const submitShare = e => {
         e.preventDefault();
         props.setModalsLoading(true);
-        let submitFormBody = {
+        const submitFormBody = {
             id: props.selected[0].id,
             is_dir: props.selected[0].type === "dir",
             password: values.password,

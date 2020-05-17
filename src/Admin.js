@@ -59,7 +59,7 @@ export default function Admin() {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        let user = Auth.GetUser();
+        const user = Auth.GetUser();
         if (user && user.group) {
             if (user.group.id !== 1) {
                 history.push("/home");

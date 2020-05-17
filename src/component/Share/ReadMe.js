@@ -73,11 +73,11 @@ export default function ReadMe(props) {
         [dispatch]
     );
 
-    let $vm = React.createRef();
+    const $vm = React.createRef();
 
     useEffect(() => {
         setLoading(true);
-        let previewPath =
+        const previewPath =
             props.file.path === "/"
                 ? props.file.path + props.file.name
                 : props.file.path + "/" + props.file.name;

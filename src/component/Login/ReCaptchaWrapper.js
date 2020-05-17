@@ -118,6 +118,7 @@ export default class ReCAPTCHA extends React.Component {
     render() {
         // consume properties owned by the reCATPCHA, pass the rest to the div so the user can style it.
         /* eslint-disable no-unused-vars */
+        /* eslint-disable @typescript-eslint/no-unused-vars */
         const {
             sitekey,
             onChange,
@@ -154,6 +155,7 @@ ReCAPTCHA.propTypes = {
     badge: PropTypes.oneOf(["bottomright", "bottomleft", "inline"]),
 };
 ReCAPTCHA.defaultProps = {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onChange: () => {},
     theme: "light",
     type: "image",

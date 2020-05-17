@@ -180,8 +180,8 @@ class NavigatorComponent extends Component {
     }
 
     componentDidMount = () => {
-        var url = new URL(fixUrlHash(window.location.href));
-        var c = url.searchParams.get("path");
+        const url = new URL(fixUrlHash(window.location.href));
+        const c = url.searchParams.get("path");
         this.renderPath(c === null ? "/":c);
 
         if (!this.props.isShare) {
@@ -191,8 +191,8 @@ class NavigatorComponent extends Component {
 
         // 后退操作时重新导航
         window.onpopstate = () => {
-            var url = new URL(fixUrlHash(window.location.href));
-            var c = url.searchParams.get("path");
+            const url = new URL(fixUrlHash(window.location.href));
+            const c = url.searchParams.get("path");
             if (c !== null && c !== this.props.path) {
                 this.props.navigateToPath(c);
             }
@@ -207,8 +207,8 @@ class NavigatorComponent extends Component {
                     ? path.substr(1).split("/")
                     : this.props.path.substr(1).split("/")
         });
-        var newPath = path !== null ? path : this.props.path;
-        var apiURL = this.props.share
+        let newPath = path !== null ? path : this.props.path;
+        const apiURL = this.props.share
             ? "/share/list/" + this.props.share.key
             : this.keywords === null
             ? "/directory"
@@ -220,7 +220,7 @@ class NavigatorComponent extends Component {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
-                let pathTemp = (path !== null
+                const pathTemp = (path !== null
                     ? path.substr(1).split("/")
                     : this.props.path.substr(1).split("/")
                 ).join(",");
@@ -327,8 +327,8 @@ class NavigatorComponent extends Component {
             this.redresh();
             return;
         }
-        let presentPath = this.props.path.split("/");
-        let newTarget = [
+        const presentPath = this.props.path.split("/");
+        const newTarget = [
             {
                 id:this.currentID,
                 type: "dir",
@@ -358,7 +358,7 @@ class NavigatorComponent extends Component {
     };
 
     toggleViewMethod = () => {
-        let newMethod =
+        const newMethod =
             this.props.viewMethod === "icon"
                 ? "list"
                 : this.props.viewMethod === "list"
@@ -370,7 +370,7 @@ class NavigatorComponent extends Component {
 
     handleMenuItemClick = (e, index) => {
         this.setState({ selectedIndex: index, anchorEl: null });
-        let optionsTable = {
+        const optionsTable = {
             0: "namePos",
             1: "nameRev",
             2: "timePos",
@@ -387,7 +387,7 @@ class NavigatorComponent extends Component {
         const isHomePage =  pathHelper.isHomePage(this.props.location.pathname);
         const user = Auth.GetUser();
 
-        let presentFolderMenu = (
+        const presentFolderMenu = (
             <Menu
                 id="presentFolderMenu"
                 anchorEl={this.state.anchorEl}

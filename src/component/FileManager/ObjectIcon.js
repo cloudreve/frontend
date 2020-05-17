@@ -44,8 +44,8 @@ export default function ObjectIcon(props) {
         state => state.viewUpdate.explorerViewMethod
     );
     const navigatorPath = useSelector(state => state.navigator.path);
-    let location = useLocation();
-    let history = useHistory();
+    const location = useLocation();
+    const history = useHistory();
 
     const dispatch = useDispatch();
     const ContextMenu = useCallback(
@@ -101,7 +101,11 @@ export default function ObjectIcon(props) {
     const selectFile = e => {
         dispatch(selectFileAction(props.file, e, props.index))
     };
-
+    const enterFolder = () => {
+      NavitateTo(
+          path === "/" ? path + props.file.name : path + "/" + props.file.name
+      );
+    };
     const handleClick = e => {
         if (props.file.type === "up") {
             NavitateTo(pathBack(navigatorPath));
@@ -128,9 +132,9 @@ export default function ObjectIcon(props) {
             enterFolder();
             return;
         }
-        let isShare = statusHelper.isSharePage(location.pathname);
+        const isShare = statusHelper.isSharePage(location.pathname);
         if (isShare) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 ToggleSnackbar("top", "right", "请先登录", "warning");
                 return;
@@ -140,7 +144,7 @@ export default function ObjectIcon(props) {
             OpenLoadingDialog("获取下载地址...");
             return;
         }
-        let previewPath =
+        const previewPath =
             selected[0].path === "/"
                 ? selected[0].path + selected[0].name
                 : selected[0].path + "/" + selected[0].name;
@@ -230,12 +234,6 @@ export default function ObjectIcon(props) {
                 OpenLoadingDialog("获取下载地址...");
                 return;
         }
-    };
-
-    const enterFolder = () => {
-        NavitateTo(
-            path === "/" ? path + props.file.name : path + "/" + props.file.name
-        );
     };
 
     const [{ isDragging }, drag, preview] = useDrag({

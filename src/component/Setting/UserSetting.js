@@ -233,7 +233,7 @@ class UserSettingCompoment extends Component {
     }
 
     toggleViewMethod = () => {
-        let newMethod =
+        const newMethod =
             this.props.viewMethod === "icon"
                 ? "list"
                 : this.props.viewMethod === "list"
@@ -246,7 +246,7 @@ class UserSettingCompoment extends Component {
     loadSetting = () => {
         API.get("/user/setting")
             .then(response => {
-                let theme = JSON.parse(response.data.themes);
+                const theme = JSON.parse(response.data.themes);
                 response.data.themes = theme;
                 this.setState({
                     settings: response.data
@@ -327,7 +327,7 @@ class UserSettingCompoment extends Component {
         this.setState({
             loading: "avatar"
         });
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append("avatar", this.fileInput.current.files[0]);
         API.post("/user/setting/avatar", formData, {
             headers: {

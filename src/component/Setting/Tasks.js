@@ -52,22 +52,6 @@ export default function Tasks() {
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
 
-    useEffect(() => {
-        loadList(page);
-        // eslint-disable-next-line
-    }, [page]);
-
-    const loadList = page => {
-        API.get("/user/setting/tasks?page=" + page)
-            .then(response => {
-                setTasks(response.data.tasks);
-                setTotal(response.data.total);
-            })
-            .catch(error => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            });
-    };
-
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -75,12 +59,28 @@ export default function Tasks() {
         [dispatch]
     );
 
+    const loadList = page => {
+      API.get("/user/setting/tasks?page=" + page)
+          .then(response => {
+              setTasks(response.data.tasks);
+              setTotal(response.data.total);
+          })
+          .catch(error => {
+              ToggleSnackbar("top", "right", error.message, "error");
+          });
+    };
+    
+    useEffect(() => {
+        loadList(page);
+        // eslint-disable-next-line
+    }, [page]);
+
     const getError = error => {
         if (error === ""){
             return "-"
         }
         try {
-            let res = JSON.parse(error)
+            const res = JSON.parse(error)
             return res.msg
         }catch (e) {
             return "未知"

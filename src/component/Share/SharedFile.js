@@ -134,7 +134,7 @@ class SharedFileCompoment extends Component {
 
     preview = () => {
         if (pathHelper.isSharePage(this.props.location.pathname)) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 this.props.toggleSnackbar(
                     "top",

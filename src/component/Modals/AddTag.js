@@ -110,7 +110,7 @@ export default function AddTag(props) {
     // eslint-disable-next-line
     const [selectedPathName, setSelectedPathName] = useState("");
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
@@ -147,14 +147,6 @@ export default function AddTag(props) {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-
-    const submit = () => {
-        if (value === 0) {
-            submitNewTag();
-        }else{
-            submitNewLink();
-        }
-    };
 
     const submitNewLink = ()=>{
         setLoading(true);
@@ -210,7 +202,13 @@ export default function AddTag(props) {
                 setLoading(false);
             });
     };
-
+    const submit = () => {
+      if (value === 0) {
+          submitNewTag();
+      }else{
+          submitNewLink();
+      }
+    };
     const selectPath = ()=>{
         setInput({
             ...input,
