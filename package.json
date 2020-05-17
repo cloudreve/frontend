@@ -177,5 +177,8 @@
     "hooks": {
       "pre-commit": "yarn run eslint"
     }
+  },
+  "resolutions": {
+    "@types/react": "^16.9.35"
   }
 }

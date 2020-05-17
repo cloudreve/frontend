@@ -42,21 +42,34 @@ export const initState: ExplorerState = {
       withFile: false
   },
   lastSelect: {
-    file: null,
+    file: {
+      id: '',
+      name: '',
+      size: 0,
+      type: 'file',
+      date: ''
+    },
     index: -1,
   },
   shiftSelectedIds: [],
   imgPreview: {
-      first: null,
+      first: {
+        id: '',
+        name: '',
+        size: 0,
+        type: 'file',
+        date: ''
+      },
       other: []
   },
-  keywords: null,
+  keywords: '',
   fileSave: false
 }
 
 const checkSelectedProps = (selected: CloudreveFile[]): SelectProps =>{
   const isMultiple = selected.length > 1;
-  let withFolder, withFile = false
+  let withFolder = false
+  let withFile = false
   selected.forEach((value)=>{
       if(value.type === "dir"){
           withFolder = true;
@@ -163,7 +176,7 @@ const explorer = (state: ExplorerState = initState, action: AnyAction): Explorer
             withFolder: false,
             withFile: false,
         },
-        keywords: null,
+        keywords: '',
       }
     default:
       return state

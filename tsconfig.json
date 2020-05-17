@@ -22,6 +22,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
   },
   "include": [
     "src/**/*"
