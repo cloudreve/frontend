@@ -68,7 +68,7 @@ class PathSelectorCompoment extends Component {
 
     componentDidMount= ()=>{
         const toBeLoad = this.props.presentPath;
-        this.enterFolder(this.props.keywords === null ? toBeLoad : "/");
+        this.enterFolder(this.props.keywords === "" ? toBeLoad : "/");
     }
 
     back = ()=>{

@@ -617,7 +617,7 @@ describe('index reducer', () => {
           withFolder:false,
           withFile:false,
         },
-        keywords:null,
+        keywords:"",
       }
     })
     expect(window.currntPath).toEqual('/newpath')

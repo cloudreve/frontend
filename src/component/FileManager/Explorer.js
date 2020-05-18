@@ -194,7 +194,7 @@ class ExplorerCompoment extends Component {
     contextMenu = e => {
         e.preventDefault();
         if (
-            this.props.keywords === null &&
+            this.props.keywords === "" &&
             !pathHelper.isSharePage(this.props.location.pathname)
         ) {
             if (!this.props.loading) {
@@ -485,7 +485,7 @@ class ExplorerCompoment extends Component {
                     </div>
                 )}
 
-                {this.props.keywords === null &&
+                {this.props.keywords === "" &&
                     isHomePage &&
                     this.props.dirList.length === 0 &&
                     this.props.fileList.length === 0 &&
@@ -501,7 +501,7 @@ class ExplorerCompoment extends Component {
                             </div>
                         </div>
                     )}
-                {((this.props.keywords !== null &&
+                {((this.props.keywords !== "" &&
                     this.props.dirList.length === 0 &&
                     this.props.fileList.length === 0 &&
                     !this.props.loading &&

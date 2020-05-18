@@ -160,7 +160,7 @@ const styles = theme => ({
 });
 
 class NavigatorComponent extends Component {
-    keywords = null;
+    keywords = "";
     currentID = 0;
 
     state = {
@@ -210,10 +210,10 @@ class NavigatorComponent extends Component {
         let newPath = path !== null ? path : this.props.path;
         const apiURL = this.props.share
             ? "/share/list/" + this.props.share.key
-            : this.keywords === null
+            : this.keywords === ""
             ? "/directory"
             : "/file/search/";
-        newPath = this.keywords === null ? newPath : this.keywords;
+        newPath = this.keywords === "" ? newPath : this.keywords;
 
         API.get(apiURL + encodeURIComponent(newPath))
             .then(response => {
@@ -225,7 +225,7 @@ class NavigatorComponent extends Component {
                     : this.props.path.substr(1).split("/")
                 ).join(",");
                 setCookie("path_tmp", encodeURIComponent(pathTemp), 1);
-                if (this.keywords === null) {
+                if (this.keywords === "") {
                     setGetParameter("path", encodeURIComponent(newPath));
                 }
             })
@@ -401,7 +401,7 @@ class NavigatorComponent extends Component {
                     </ListItemIcon>
                     刷新
                 </MenuItem>
-                {this.props.keywords === null &&
+                {this.props.keywords === "" &&
                 isHomePage && (
                         <div>
                             <Divider />

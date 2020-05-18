@@ -546,7 +546,7 @@ class ContextMenuCompoment extends Component {
                                             重命名
                                         </Typography>
                                     </MenuItem>
-                                    {this.props.keywords === null &&
+                                    {this.props.keywords === "" &&
                                         <MenuItem
                                             onClick={() =>
                                                 this.props.openCopyDialog()
@@ -565,7 +565,7 @@ class ContextMenuCompoment extends Component {
                             )}
                             {isHomePage && (
                                 <div>
-                                    {this.props.keywords === null &&
+                                    {this.props.keywords === "" &&
                                         <MenuItem
                                             onClick={() =>
                                                 this.props.openMoveDialog()

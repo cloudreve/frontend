@@ -59,7 +59,7 @@ class UploaderComponent extends Component {
     fileAdd = (up, files) => {
         const path = window.currntPath ? window.currntPath : this.props.path;
         if (
-            this.props.keywords === null &&
+            this.props.keywords === "" &&
             window.location.href
                 .split("#")[1]
                 .toLowerCase()
@@ -197,7 +197,7 @@ class UploaderComponent extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
-                {this.props.keywords === null && (
+                {this.props.keywords === "" && (
                     <UploadButton
                         Queued={this.state.queued}
                         openFileList={this.openFileList}

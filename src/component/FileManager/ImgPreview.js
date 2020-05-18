@@ -9,6 +9,7 @@ import pathHelper from "../../utils/page";
 import {withRouter} from "react-router";
 import {PhotoSlider} from "react-photo-view";
 import 'react-photo-view/dist/index.css';
+import * as explorer from "../../redux/explorer/reducer";
 
 const styles = () => ({});
 
@@ -37,7 +38,7 @@ class ImagPreviewComponent extends Component {
     UNSAFE_componentWillReceiveProps = nextProps => {
         const items = [];
         let firstOne = 0;
-        if (nextProps.first !== null) {
+        if (nextProps.first.id !== "") {
             if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
                 const newImg = {
                     intro: nextProps.first.name,
@@ -96,7 +97,7 @@ class ImagPreviewComponent extends Component {
     };
 
     handleClose = () => {
-        this.props.showImgPreivew(null);
+        this.props.showImgPreivew(explorer.initState.imgPreview.first);
         this.setState({
             isOpen: false
         });
