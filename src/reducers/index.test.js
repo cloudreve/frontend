@@ -2,12 +2,13 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import cloudreveApp, { initState as cloudreveState } from './index'
 import { initState as viewUpdateState } from '../redux/viewUpdate/reducer'
+import { initState as explorerState } from '../redux/explorer/reducer'
 
 import { setModalsLoading, openLoadingDialog, openGetSourceDialog,
   openShareDialog, openMoveDialog, navigateUp, navigateTo,
-  drawerToggleAction, changeViewMethod, changeSortMethod,
+  drawerToggleAction, changeViewMethod,
   changeContextMenu, dragAndDrop, setNavigatorLoadingStatus,
-  setNavigatorError, updateFileList, addSelectedTargets,
+  setNavigatorError, addSelectedTargets, setNavigator,
   setSelectedTarget, removeSelectedTargets, toggleDaylightMode,
   applyThemes, openCreateFolderDialog, openRenameDialog,
   openRemoveDialog, openResaveDialog, setUserPopover,
@@ -18,12 +19,13 @@ import { setModalsLoading, openLoadingDialog, openGetSourceDialog,
   enableLoadUploader, refreshFileList, searchMyFile, showImgPreivew,
   refreshStorage, saveFile, setLastSelect, setShiftSelectedIds
 } from '../actions/index'
-import { changeSubTitle } from "../redux/viewUpdate/action"
-
+import { changeSubTitle, setSubtitle } from "../redux/viewUpdate/action"
+import { updateFileList, setFileList, setDirList, setSortMethod, changeSortMethod } from "../redux/explorer/action"
 
 const initState = {
   ...cloudreveState,
   viewUpdate: viewUpdateState,
+  explorer: explorerState,
 }
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
@@ -68,6 +70,17 @@ describe('index reducer', () => {
     })
   })
 
+  it('should handle SET_SORT_METHOD', () => {
+    const action = setSortMethod('sizeRes')
+    expect(cloudreveApp(initState, action)).toEqual({
+      ...initState,
+      viewUpdate: {
+        ...initState.viewUpdate,
+        sortMethod: 'sizeRes',
+      }
+    })
+  })
+
   describe('CHANGE_SORT_METHOD', () => {
     const explorerState = {
       fileList: [{
@@ -103,178 +116,108 @@ describe('index reducer', () => {
         date: "2020/04/29"
       }],
     }
-    it('should handle sizePos', () => {
+
+    const state = {
+      ...initState,
+      explorer: {
+        ...initState.explorer,
+        ...explorerState,
+      },
+    }
+    it('should handle sizePos', async () => {
       const action = changeSortMethod('sizePos')
       const sortFunc = (a, b) => {
         return a.size-b.size
       }
-      const expectState = {
-        fileList: explorerState.fileList.sort(sortFunc),
-        dirList: explorerState.dirList.sort(sortFunc),
-      }
-      expect(cloudreveApp({
-        ...initState,
-        explorer: {
-          ...initState.explorer,
-          ...explorerState,
-        },
-      }, action)).toEqual({
-        ...initState,
-        viewUpdate: {
-          ...initState.viewUpdate,
-          sortMethod: 'sizePos',
-        },
-        explorer: {
-          ...initState.explorer,
-          fileList: expectState.fileList,
-          dirList: expectState.dirList,
-        }
-      })
+      const fileList = explorerState.fileList
+      const dirList = explorerState.dirList
+      const store = mockStore(state)
+      await store.dispatch(action)
+      expect(store.getActions()).toEqual([
+        setSortMethod('sizePos'),
+        setDirList(dirList.sort(sortFunc)),
+        setFileList(fileList.sort(sortFunc)),
+      ])
     })
 
-    it('should handle sizeRes', () => {
-      const action = changeSortMethod('sizeRes')
+    it('should handle sizeRes', async () => {
+      const action = changeSortMethod('sizePos')
       const sortFunc = (a, b) => {
         return b.size-a.size
       }
-      const expectState = {
-        fileList: explorerState.fileList.sort(sortFunc),
-        dirList: explorerState.dirList.sort(sortFunc),
-      }
-      expect(cloudreveApp({
-        ...initState,
-        explorer: {
-          ...initState.explorer,
-          ...explorerState,
-        },
-      }, action)).toEqual({
-        ...initState,
-        viewUpdate: {
-          ...initState.viewUpdate,
-          sortMethod: 'sizeRes',
-        },
-        explorer: {
-          ...initState.explorer,
-          fileList: expectState.fileList,
-          dirList: expectState.dirList,
-        }
-      })
+      const fileList = explorerState.fileList
+      const dirList = explorerState.dirList
+      const store = mockStore(state)
+      await store.dispatch(action)
+      expect(store.getActions()).toEqual([
+        setSortMethod('sizePos'),
+        setDirList(dirList.sort(sortFunc)),
+        setFileList(fileList.sort(sortFunc)),
+      ])
     })
 
-    it('should handle namePos', () => {
+    it('should handle namePos', async () => {
       const action = changeSortMethod('namePos')
       const sortFunc = (a, b) => {
         return a.name.localeCompare(b.name)
       }
-      const expectState = {
-        fileList: explorerState.fileList.sort(sortFunc),
-        dirList: explorerState.dirList.sort(sortFunc),
-      }
-      expect(cloudreveApp({
-        ...initState,
-        explorer: {
-          ...initState.explorer,
-          ...explorerState,
-        },
-      }, action)).toEqual({
-        ...initState,
-        viewUpdate: {
-          ...initState.viewUpdate,
-          sortMethod: 'namePos',
-        },
-        explorer: {
-          ...initState.explorer,
-          fileList: expectState.fileList,
-          dirList: expectState.dirList,
-        }
-      })
+      const fileList = explorerState.fileList
+      const dirList = explorerState.dirList
+      const store = mockStore(state)
+      await store.dispatch(action)
+      expect(store.getActions()).toEqual([
+        setSortMethod('namePos'),
+        setDirList(dirList.sort(sortFunc)),
+        setFileList(fileList.sort(sortFunc)),
+      ])
     })
 
-    it('should handle nameRev', () => {
+    it('should handle nameRev', async () => {
       const action = changeSortMethod('nameRev')
       const sortFunc = (a, b) => {
         return b.name.localeCompare(a.name)
       }
-      const expectState = {
-        fileList: explorerState.fileList.sort(sortFunc),
-        dirList: explorerState.dirList.sort(sortFunc),
-      }
-      expect(cloudreveApp({
-        ...initState,
-        explorer: {
-          ...initState.explorer,
-          ...explorerState,
-        },
-      }, action)).toEqual({
-        ...initState,
-        viewUpdate: {
-          ...initState.viewUpdate,
-          sortMethod: 'nameRev',
-        },
-        explorer: {
-          ...initState.explorer,
-          fileList: expectState.fileList,
-          dirList: expectState.dirList,
-        }
-      })
+      const fileList = explorerState.fileList
+      const dirList = explorerState.dirList
+      const store = mockStore(state)
+      await store.dispatch(action)
+      expect(store.getActions()).toEqual([
+        setSortMethod('nameRev'),
+        setDirList(dirList.sort(sortFunc)),
+        setFileList(fileList.sort(sortFunc)),
+      ])
     })
 
-    it('should handle timePos', () => {
+    it('should handle timePos', async () => {
       const action = changeSortMethod('timePos')
       const sortFunc = (a, b) => {
         return Date.parse(a.date)-Date.parse(b.date)
       }
-      const expectState = {
-        fileList: explorerState.fileList.sort(sortFunc),
-        dirList: explorerState.dirList.sort(sortFunc),
-      }
-      expect(cloudreveApp({
-        ...initState,
-        explorer: {
-          ...initState.explorer,
-          ...explorerState,
-        },
-      }, action)).toEqual({
-        ...initState,
-        viewUpdate: {
-          ...initState.viewUpdate,
-          sortMethod: 'timePos',
-        },
-        explorer: {
-          ...initState.explorer,
-          fileList: expectState.fileList,
-          dirList: expectState.dirList,
-        }
-      })
+      const fileList = explorerState.fileList
+      const dirList = explorerState.dirList
+      const store = mockStore(state)
+      await store.dispatch(action)
+      expect(store.getActions()).toEqual([
+        setSortMethod('timePos'),
+        setDirList(dirList.sort(sortFunc)),
+        setFileList(fileList.sort(sortFunc)),
+      ])
     })
 
-    it('should handle timeRev', () => {
+    it('should handle timeRev', async () => {
       const action = changeSortMethod('timeRev')
       const sortFunc = (a, b) => {
         return Date.parse(b.date)-Date.parse(a.date)
       }
-      const expectState = {
-        fileList: explorerState.fileList.sort(sortFunc),
-        dirList: explorerState.dirList.sort(sortFunc),
-      }
-      expect(cloudreveApp({
-        ...initState,
-        explorer: {
-          ...initState.explorer,
-          ...explorerState,
-        },
-      }, action)).toEqual({
-        ...initState,
-        viewUpdate: {
-          ...initState.viewUpdate,
-          sortMethod: 'timeRev',
-        },
-        explorer: {
-          ...initState.explorer,
-          fileList: expectState.fileList,
-          dirList: expectState.dirList,
-        }
-      })
+      const fileList = explorerState.fileList
+      const dirList = explorerState.dirList
+      const store = mockStore(state)
+      await store.dispatch(action)
+      expect(store.getActions()).toEqual([
+        setSortMethod('timeRev'),
+        setDirList(dirList.sort(sortFunc)),
+        setFileList(fileList.sort(sortFunc)),
+      ])
     })
   })
 
@@ -368,9 +311,8 @@ describe('index reducer', () => {
         size: 110,
         date: "2020/04/29"
       }]
-    const fileAction = updateFileList(fileList)
-    const dirAction = updateFileList(dirList)
-    it('should handle sizePos', () => {
+    const updateAction = updateFileList([...fileList, ...dirList])
+    it('should handle sizePos', async () => {
       const sortFun = (a, b) => {
         return a.size-b.size
       }
@@ -381,23 +323,15 @@ describe('index reducer', () => {
           sortMethod: 'sizePos'
         }
       }
-      expect(cloudreveApp(state, fileAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          fileList: fileList.sort(sortFun),
-        }
-      })
-      expect(cloudreveApp(state, dirAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          dirList: dirList.sort(sortFun),
-        }
-      })
+      const store = mockStore(state)
+      await store.dispatch(updateAction)
+      expect(store.getActions()).toEqual([
+        setDirList(dirList.sort(sortFun)),
+        setFileList(fileList.sort(sortFun)),
+      ])
     })
 
-    it('should handle sizeRes', () => {
+    it('should handle sizeRes', async () => {
       const sortFun = (a, b) => {
         return b.size-a.size
       }
@@ -408,23 +342,15 @@ describe('index reducer', () => {
           sortMethod: 'sizeRes'
         }
       }
-      expect(cloudreveApp(state, fileAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          fileList: fileList.sort(sortFun),
-        }
-      })
-      expect(cloudreveApp(state, dirAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          dirList: dirList.sort(sortFun),
-        }
-      })
+      const store = mockStore(state)
+      await store.dispatch(updateAction)
+      expect(store.getActions()).toEqual([
+        setDirList(dirList.sort(sortFun)),
+        setFileList(fileList.sort(sortFun)),
+      ])
     })
 
-    it('should handle namePos', () => {
+    it('should handle namePos', async () => {
       const sortFun = (a, b) => {
         return a.name.localeCompare(b.name)
       }
@@ -435,23 +361,15 @@ describe('index reducer', () => {
           sortMethod: 'namePos'
         }
       }
-      expect(cloudreveApp(state, fileAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          fileList: fileList.sort(sortFun),
-        }
-      })
-      expect(cloudreveApp(state, dirAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          dirList: dirList.sort(sortFun),
-        }
-      })
+      const store = mockStore(state)
+      await store.dispatch(updateAction)
+      expect(store.getActions()).toEqual([
+        setDirList(dirList.sort(sortFun)),
+        setFileList(fileList.sort(sortFun)),
+      ])
     })
 
-    it('should handle nameRev', () => {
+    it('should handle nameRev', async () => {
       const sortFun = (a, b) => {
         return b.name.localeCompare(a.name)
       }
@@ -462,23 +380,15 @@ describe('index reducer', () => {
           sortMethod: 'nameRev'
         }
       }
-      expect(cloudreveApp(state, fileAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          fileList: fileList.sort(sortFun),
-        }
-      })
-      expect(cloudreveApp(state, dirAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          dirList: dirList.sort(sortFun),
-        }
-      })
+      const store = mockStore(state)
+      await store.dispatch(updateAction)
+      expect(store.getActions()).toEqual([
+        setDirList(dirList.sort(sortFun)),
+        setFileList(fileList.sort(sortFun)),
+      ])
     })
 
-    it('should handle timePos', () => {
+    it('should handle timePos', async () => {
       const sortFun = (a, b) => {
         return Date.parse(a.date)-Date.parse(b.date)
       }
@@ -489,23 +399,15 @@ describe('index reducer', () => {
           sortMethod: 'timePos'
         }
       }
-      expect(cloudreveApp(state, fileAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          fileList: fileList.sort(sortFun),
-        }
-      })
-      expect(cloudreveApp(state, dirAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          dirList: dirList.sort(sortFun),
-        }
-      })
+      const store = mockStore(state)
+      await store.dispatch(updateAction)
+      expect(store.getActions()).toEqual([
+        setDirList(dirList.sort(sortFun)),
+        setFileList(fileList.sort(sortFun)),
+      ])
     })
 
-    it('should handle timeRev', () => {
+    it('should handle timeRev', async () => {
       const sortFun = (a, b) => {
         return Date.parse(b.date)-Date.parse(a.date)
       }
@@ -516,20 +418,70 @@ describe('index reducer', () => {
           sortMethod: 'timeRev'
         }
       }
-      expect(cloudreveApp(state, fileAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          fileList: fileList.sort(sortFun),
-        }
-      })
-      expect(cloudreveApp(state, dirAction)).toEqual({
-        ...state,
-        explorer: {
-          ...initState.explorer,
-          dirList: dirList.sort(sortFun),
-        }
-      })
+      const store = mockStore(state)
+      await store.dispatch(updateAction)
+      expect(store.getActions()).toEqual([
+        setDirList(dirList.sort(sortFun)),
+        setFileList(fileList.sort(sortFun)),
+      ])
+    })
+  })
+
+  it('should handle SET_FILE_LIST', () => {
+    const action = setFileList([{
+      type: 'file',
+      id: 'a'
+    }, {
+      type: 'file',
+      id: 'b'
+    }])
+    expect(cloudreveApp({
+      ...initState,
+      explorer: {
+        ...initState.explorer,
+        fileList: [{ type: 'file', id: 'test' }]
+      }
+    }, action)).toEqual({
+      ...initState,
+      explorer: {
+        ...initState.explorer,
+        fileList: [{
+          type: 'file',
+          id: 'a'
+        }, {
+          type: 'file',
+          id: 'b'
+        }]
+      }
+    })
+  })
+
+  it('should handle SET_DIR_LIST', () => {
+    const action = setDirList([{
+      type: 'dir',
+      id: 'a'
+    }, {
+      type: 'dir',
+      id: 'b'
+    }])
+    expect(cloudreveApp({
+      ...initState,
+      explorer: {
+        ...initState.explorer,
+        dirList: [{ type: 'dir', id: 'test' }]
+      }
+    }, action)).toEqual({
+      ...initState,
+      explorer: {
+        ...initState.explorer,
+        dirList: [{
+          type: 'dir',
+          id: 'a'
+        }, {
+          type: 'dir',
+          id: 'b'
+        }]
+      }
     })
   })
 
@@ -614,31 +566,10 @@ describe('index reducer', () => {
   it('should handle NAVIGATOR_TO', async () => {
     const store = mockStore(initState)
     const action = navigateTo('/somewhere')
-    const navAction = await store.dispatch(action)
-    expect(cloudreveApp(initState, navAction)).toEqual({
-      ...initState,
-      navigator: {
-        ...initState.navigator,
-        path: '/somewhere'
-      },
-      viewUpdate: {
-        ...initState.viewUpdate,
-        contextOpen:false,
-        navigatorError:false,
-        navigatorLoading: true,
-      },
-      explorer: {
-        ...initState.explorer,
-        selected: [],
-        selectProps: {
-          isMultiple:false,
-          withFolder:false,
-          withFile:false,
-        },
-        keywords:null,
-      }
-    })
-    expect(window.currntPath).toEqual('/somewhere')
+    await store.dispatch(action)
+    expect(store.getActions()).toEqual([
+      setNavigator('/somewhere', true)
+    ])
   })
 
   it('should handle NAVIGATOR_UP', async () => {
@@ -650,13 +581,27 @@ describe('index reducer', () => {
       }
     }
     const store = mockStore(navState)
-    const action = navigateUp('somewhere')
-    const navAction = await store.dispatch(action)
-    expect(cloudreveApp(navState, navAction)).toEqual({
+    const action = navigateUp()
+    await store.dispatch(action)
+    expect(store.getActions()).toEqual([
+      setNavigator('/to', true)
+    ])
+  })
+
+  it('should handle SET_NAVIGATOR', () => {
+    const navState = {
       ...initState,
       navigator: {
         ...initState.navigator,
-        path: '/to'
+        path: '/to/somewhere'
+      }
+    }
+    const action = setNavigator('/newpath', true)
+    expect(cloudreveApp(navState, action)).toEqual({
+      ...initState,
+      navigator: {
+        ...initState.navigator,
+        path: '/newpath'
       },
       viewUpdate: {
         ...initState.viewUpdate,
@@ -675,7 +620,7 @@ describe('index reducer', () => {
         keywords:null,
       }
     })
-    expect(window.currntPath).toEqual('/to')
+    expect(window.currntPath).toEqual('/newpath')
   })
   
   it('should handle TOGGLE_DAYLIGHT_MODE', () => {
@@ -1018,15 +963,20 @@ describe('index reducer', () => {
   it('should handle CHANGE_SUB_TITLE', async () => {
     const store = mockStore(initState)
     const action = changeSubTitle('test sub title')
-    const changeSubtitleAction = await store.dispatch(action)
-    expect(cloudreveApp(initState, changeSubtitleAction)).toEqual({
+    await store.dispatch(action)
+    expect(store.getActions()).toEqual([setSubtitle('test sub title')])
+    expect(document.title).toEqual('test sub title - Cloudreve')
+  })
+
+  it('should handle SET_SUBTITLE', () => {
+    const action = setSubtitle('test sub title 2')
+    expect(cloudreveApp(initState, action)).toEqual({
       ...initState,
       viewUpdate: {
         ...initState.viewUpdate,
-        subTitle: 'test sub title',
+        subTitle: 'test sub title 2',
       }
     })
-    expect(document.title).toEqual('test sub title - Cloudreve')
   })
 
   it('should handle TOGGLE_SNACKBAR', () => {

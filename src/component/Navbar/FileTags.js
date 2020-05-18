@@ -137,8 +137,8 @@ const AddTag = React.lazy(() => import ("../Modals/AddTag" ));
 export default function FileTag() {
     const classes = useStyles();
 
-    let location = useLocation();
-    let history = useHistory();
+    const location = useLocation();
+    const history = useHistory();
 
     const isHomePage = pathHelper.isHomePage(location.pathname);
 
@@ -162,7 +162,7 @@ export default function FileTag() {
 
     const getIcon = (icon, color) => {
         if (icons[icon]) {
-            let IconComponent = icons[icon];
+            const IconComponent = icons[icon];
             return (
                 <IconComponent
                     className={[classes.iconFix]}
@@ -180,9 +180,9 @@ export default function FileTag() {
     };
 
     const submitSuccess = tag =>{
-        let newTags = [...tags,tag];
+        const newTags = [...tags,tag];
         setTags(newTags);
-        let user = Auth.GetUser();
+        const user = Auth.GetUser();
         user.tags = newTags;
         Auth.SetUser(user);
     };
@@ -190,9 +190,9 @@ export default function FileTag() {
     const submitDelete = id =>{
         API.delete("/tag/"+id)
             .then(() => {
-                let newTags = tags.filter((v)=>{return v.id !== id});
+                const newTags = tags.filter((v)=>{return v.id !== id});
                 setTags(newTags)
-                let user = Auth.GetUser();
+                const user = Auth.GetUser();
                 user.tags = newTags;
                 Auth.SetUser(user);
             })

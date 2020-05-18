@@ -187,7 +187,7 @@ export default function FinishedCard(props) {
 
     const getTaskError = error =>{
         try{
-            let res = JSON.parse(error)
+            const res = JSON.parse(error)
             return res.msg + "：" + res.error
         }catch (e) {
             return "文件转存失败"

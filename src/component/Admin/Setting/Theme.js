@@ -64,6 +64,13 @@ export default function Theme() {
     const [themeConfigError, setThemeConfigError] = useState({});
     const [create, setCreate] = useState(false);
 
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
+
     const deleteTheme = color => {
         if(color === options.defaultTheme){
             ToggleSnackbar("top", "right", "不能删除默认配色", "warning");
@@ -73,9 +80,9 @@ export default function Theme() {
             ToggleSnackbar("top", "right", "请至少保留一个配色方案", "warning");
             return
         }
-        let themeCopy = {...theme};
+        const themeCopy = {...theme};
         delete themeCopy[color];
-        let resStr = JSON.stringify(themeCopy);
+        const resStr = JSON.stringify(themeCopy);
         setOptions({
             ...options,
             themes:resStr,
@@ -88,11 +95,11 @@ export default function Theme() {
             ToggleSnackbar("top", "right", "主色调不能与已有配色重复", "warning");
             return
         }
-        let res = {
+        const res = {
             ...theme,
             [newTheme.palette.primary.main]:newTheme,
         };
-        let resStr = JSON.stringify(res);
+        const resStr = JSON.stringify(res);
         setOptions({
             ...options,
             themes:resStr,
@@ -100,8 +107,8 @@ export default function Theme() {
     }
 
     useEffect(() => {
-        let res = JSON.parse(options.themes);
-        let themeString = {};
+        const res = JSON.parse(options.themes);
+        const themeString = {};
 
         Object.keys(res).forEach(k => {
             themeString[k] = JSON.stringify(res[k]);
@@ -117,13 +124,6 @@ export default function Theme() {
             [name]: event.target.value
         });
     };
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     useEffect(() => {
         API.post("/admin/setting", {
@@ -141,7 +141,7 @@ export default function Theme() {
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k => {
             option.push({
                 key: k,
@@ -233,7 +233,7 @@ export default function Theme() {
                                                     }}
                                                     onBlur={e => {
                                                         try {
-                                                            let res = JSON.parse(
+                                                            const res = JSON.parse(
                                                                 e.target.value
                                                             );
                                                             if(

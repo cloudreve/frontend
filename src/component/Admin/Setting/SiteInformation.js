@@ -78,7 +78,7 @@ export default function SiteInformation() {
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k=>{
             option.push({
                 key:k,

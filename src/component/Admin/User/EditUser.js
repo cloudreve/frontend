@@ -8,7 +8,7 @@ import UserForm from "./UserForm";
 export default function EditUserPreload( ) {
     const [user,setUser] = useState({});
 
-    let {id } = useParams();
+    const {id } = useParams();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(

@@ -50,8 +50,8 @@ function useQuery() {
 }
 
 function Activation() {
-    let query = useQuery();
-    let location = useLocation();
+    const query = useQuery();
+    const location = useLocation();
 
     const [success,setSuccess] = useState(false);
     const [email,setEmail] = useState("");

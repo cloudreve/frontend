@@ -2,45 +2,45 @@ import { AnyAction } from "redux"
 import Auth from "../../middleware/Auth"
 
 export interface ViewUpdateState {
-  isLogin: boolean,
-  loadUploader:boolean,
-  open: boolean,
-  explorerViewMethod: string,
-  sortMethod: string,
-  subTitle: string | null,
-  contextType: string,
-  contextOpen: boolean,
-  menuOpen: boolean,
-  navigatorLoading: boolean,
-  navigatorError: boolean,
-  navigatorErrorMsg: string | null,
-  modalsLoading: boolean,
-  storageRefresh: boolean,
-  userPopoverAnchorEl: any,
-  shareUserPopoverAnchorEl: any,
+  isLogin: boolean;
+  loadUploader: boolean;
+  open: boolean;
+  explorerViewMethod: string;
+  sortMethod: 'sizePos' | 'sizeRes' | 'namePos' | 'nameRev' | 'timePos' | 'timeRev';
+  subTitle: string | null;
+  contextType: string;
+  contextOpen: boolean;
+  menuOpen: boolean;
+  navigatorLoading: boolean;
+  navigatorError: boolean;
+  navigatorErrorMsg: string | null;
+  modalsLoading: boolean;
+  storageRefresh: boolean;
+  userPopoverAnchorEl: any;
+  shareUserPopoverAnchorEl: any;
   modals: {
-      createNewFolder: boolean,
-      createNewFile: boolean,
-      rename: boolean,
-      move: boolean,
-      remove: boolean,
-      share: boolean,
-      music: boolean,
-      remoteDownload: boolean,
-      torrentDownload: boolean,
-      getSource: boolean,
-      copy:boolean,
-      resave: boolean,
-      compress:boolean,
-      decompress:boolean,
-  },
+      createNewFolder: boolean;
+      createNewFile: boolean;
+      rename: boolean;
+      move: boolean;
+      remove: boolean;
+      share: boolean;
+      music: boolean;
+      remoteDownload: boolean;
+      torrentDownload: boolean;
+      getSource: boolean;
+      copy: boolean;
+      resave: boolean;
+      compress: boolean;
+      decompress: boolean;
+  };
   snackbar: {
-      toggle: boolean,
-      vertical: string,
-      horizontal: string,
-      msg: string,
-      color: string
-  }
+      toggle: boolean;
+      vertical: string;
+      horizontal: string;
+      msg: string;
+      color: string;
+  };
 }
 export const initState: ViewUpdateState = {
   // 是否登录
@@ -279,28 +279,22 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
             contextOpen: action.open,
             contextType: action.menuType,
           });
-        case 'CHANGE_SUB_TITLE':
+        case 'SET_SUBTITLE':
           return Object.assign({}, state, {
             subTitle: action.title,
           });
-        case 'CHANGE_SORT_METHOD':
+        case 'SET_SORT_METHOD':
           return {
             ...state,
             sortMethod: action.method
           }
-        case 'NAVIGATOR_TO':
+        case 'SET_NAVIGATOR':
           return {
             ...state,
             contextOpen:false,
             navigatorError:false,
             navigatorLoading: action.navigatorLoading
           }
-        // case 'NAVIGATOR_TO':
-        //   return Object.assign({}, state, {
-        //     contextOpen:false,
-        //     navigatorError:false,
-        //     navigatorLoading:true,
-        //   })
       default:
         return state
     }

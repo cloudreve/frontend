@@ -43,7 +43,7 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
     },[])
 
     const submit = () => {
-        let res = {};
+        const res = {};
         Object.keys(input).forEach(v=>{
             if(input[v] !== "all"){
                 res[v] = input[v];

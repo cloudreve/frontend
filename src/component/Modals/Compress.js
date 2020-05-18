@@ -59,7 +59,7 @@ export default function CompressDialog(props) {
     );
 
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
@@ -73,7 +73,7 @@ export default function CompressDialog(props) {
         }
         SetModalsLoading(true);
 
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
         props.selected.map(value => {

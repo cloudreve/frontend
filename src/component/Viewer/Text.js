@@ -47,10 +47,10 @@ export default function TextViewer() {
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
     const math = useRouteMatch();
-    let $vm = React.createRef();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const $vm = React.createRef();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
 
     const dispatch = useDispatch();
     const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
@@ -64,7 +64,7 @@ export default function TextViewer() {
 
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = query.get("p").split("/");
+            const path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));
@@ -84,8 +84,8 @@ export default function TextViewer() {
         setLoading(true);
         API.get(requestURL, { responseType: 'arraybuffer' })
             .then(response => {
-                var buffer = new Buffer(response.rawData, 'binary');
-                var textdata = buffer.toString(); // for string
+                const buffer = new Buffer(response.rawData, 'binary');
+                const textdata = buffer.toString(); // for string
                 setContent(textdata);
             })
             .catch(error => {

@@ -56,7 +56,7 @@ export default function UploadDownload() {
     });
 
     const handleCheckChange = name => event => {
-        let value= event.target.checked ? "1" : "0";
+        const value= event.target.checked ? "1" : "0";
         setOptions({
             ...options,
             [name]: value
@@ -94,7 +94,7 @@ export default function UploadDownload() {
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k=>{
             option.push({
                 key:k,

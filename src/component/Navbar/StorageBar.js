@@ -119,6 +119,7 @@ class StorageBarCompoment extends Component {
                     total: sizeToString(response.data.total)
                 });
             })
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             .catch(() => {});
     };
 

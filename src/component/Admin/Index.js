@@ -118,7 +118,7 @@ export default function Index() {
     useEffect(() => {
         API.get("/admin/summary")
             .then(response => {
-                let data = [];
+                const data = [];
                 response.data.date.forEach((v, k) => {
                     data.push({
                         name: v,
@@ -148,7 +148,7 @@ export default function Index() {
             .get("/api/v3/admin/news")
             .then(response => {
                 setNews(response.data.data);
-                let res = {};
+                const res = {};
                 response.data.included.forEach(v => {
                     if (v.type === "users") {
                         res[v.id] = v.attributes;

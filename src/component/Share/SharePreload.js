@@ -12,7 +12,7 @@ import SharedFolder from "./SharedFolder";
 
 export default function SharePreload() {
     const dispatch = useDispatch();
-    let { id } = useParams();
+    const { id } = useParams();
 
     const [share, setShare] = useState(undefined);
     const [loading, setLoading] = useState(false);

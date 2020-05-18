@@ -1,14 +1,18 @@
 export * from './explorer'
 
+export const setNavigator = (path, navigatorLoading) => {
+  return {
+    type: 'SET_NAVIGATOR',
+    path,
+    navigatorLoading
+  }
+}
+
 export const navigateTo = path => {
   return (dispatch, getState) => {
     const state = getState()
     const navigatorLoading = path !== state.navigator.path
-    return dispatch({
-      type: "NAVIGATOR_TO",
-      path: path,
-      navigatorLoading,
-    })
+    dispatch(setNavigator(path, navigatorLoading))
   }
 };
 
@@ -19,11 +23,7 @@ export const navigateUp = () => {
     pathSplit.pop();
     const newPath = pathSplit.length===1? "/":pathSplit.join("/");
     const navigatorLoading = newPath !== state.navigator.path
-    return dispatch({
-      type: "NAVIGATOR_UP",
-      path: newPath,
-      navigatorLoading
-    })
+    dispatch(setNavigator(newPath, navigatorLoading))
   }
 };
 
@@ -52,20 +52,6 @@ export const changeViewMethod = method => {
 export const toggleDaylightMode = ()=>{
     return {
         type: "TOGGLE_DAYLIGHT_MODE",
-    };
-};
-
-export const changeSortMethod = method => {
-    return {
-        type: "CHANGE_SORT_METHOD",
-        method: method
-    };
-};
-
-export const updateFileList = list => {
-    return {
-        type: "UPDATE_FILE_LIST",
-        list: list
     };
 };
 

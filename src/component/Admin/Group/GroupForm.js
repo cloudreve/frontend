@@ -70,7 +70,7 @@ export default function GroupForm(props) {
     );
     const [policies, setPolicies] = useState({});
 
-    let history = useHistory();
+    const history = useHistory();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -87,7 +87,7 @@ export default function GroupForm(props) {
             conditions: {}
         })
             .then(response => {
-                let res = {};
+                const res = {};
                 response.data.items.forEach(v => {
                     res[v.ID] = v.Name;
                 });
@@ -106,7 +106,7 @@ export default function GroupForm(props) {
     };
 
     const handleCheckChange = name => event => {
-        let value = event.target.checked ? "true" : "false";
+        const value = event.target.checked ? "true" : "false";
         setGroup({
             ...group,
             [name]: value
@@ -114,7 +114,7 @@ export default function GroupForm(props) {
     };
 
     const handleOptionCheckChange = name => event => {
-        let value = event.target.checked ? "true" : "false";
+        const value = event.target.checked ? "true" : "false";
         setGroup({
             ...group,
             OptionsSerialized: {
@@ -136,7 +136,7 @@ export default function GroupForm(props) {
 
     const submit = e => {
         e.preventDefault();
-        let groupCopy = {
+        const groupCopy = {
             ...group,
             OptionsSerialized: { ...group.OptionsSerialized }
         };

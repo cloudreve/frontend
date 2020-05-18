@@ -59,7 +59,7 @@ function useQuery() {
 }
 
 function ResetForm() {
-    let query = useQuery();
+    const query = useQuery();
     const [input, setInput] = useState({
         password: "",
         password_repeat: ""

@@ -198,7 +198,7 @@ export default function OneDriveGuide(props) {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = { ...policy };
+        const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // baseURL处理

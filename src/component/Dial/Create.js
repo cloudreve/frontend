@@ -63,6 +63,21 @@ export default function UploadButton(props) {
         setQueued(props.Queued);
     }, [props.Queued]);
 
+    const openUpload = id =>{
+      const uploadButton = document.getElementsByClassName(
+          id
+      )[0];
+      if (document.body.contains(uploadButton)) {
+          uploadButton.click();
+      } else {
+          ToggleSnackbar(
+              "top",
+              "right",
+              "上传组件还未加载完成",
+              "warning"
+          );
+      }
+    };
     const uploadClicked = () => {
         if (open) {
             if (queued !== 0) {
@@ -70,22 +85,6 @@ export default function UploadButton(props) {
             } else {
                 openUpload("uploadFileForm");
             }
-        }
-    };
-
-    const openUpload = id =>{
-        let uploadButton = document.getElementsByClassName(
-            id
-        )[0];
-        if (document.body.contains(uploadButton)) {
-            uploadButton.click();
-        } else {
-            ToggleSnackbar(
-                "top",
-                "right",
-                "上传组件还未加载完成",
-                "warning"
-            );
         }
     };
 

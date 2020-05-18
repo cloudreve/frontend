@@ -95,7 +95,7 @@ export default function Authn(props) {
         }
         API.put("/user/authn", {})
             .then(response => {
-                let credentialCreationOptions = response.data;
+                const credentialCreationOptions = response.data;
                 credentialCreationOptions.publicKey.challenge = bufferDecode(
                     credentialCreationOptions.publicKey.challenge
                 );
@@ -104,7 +104,7 @@ export default function Authn(props) {
                 );
                 if (credentialCreationOptions.publicKey.excludeCredentials) {
                     for (
-                        var i = 0;
+                        let i = 0;
                         i <
                         credentialCreationOptions.publicKey.excludeCredentials
                             .length;
@@ -124,9 +124,9 @@ export default function Authn(props) {
                 });
             })
             .then(credential => {
-                let attestationObject = credential.response.attestationObject;
-                let clientDataJSON = credential.response.clientDataJSON;
-                let rawId = credential.rawId;
+                const attestationObject = credential.response.attestationObject;
+                const clientDataJSON = credential.response.clientDataJSON;
+                const rawId = credential.rawId;
                 return API.put(
                     "/user/authn/finish",
                     JSON.stringify({

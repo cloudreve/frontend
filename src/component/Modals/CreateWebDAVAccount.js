@@ -43,7 +43,7 @@ export default function CreateWebDAVAccount(props) {
     const classes = useStyles();
 
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;

@@ -32,7 +32,7 @@ export default function EditPolicyPreload( ) {
     const [type,setType] = useState("");
     const [policy,setPolicy] = useState({});
 
-    let { mode,id } = useParams();
+    const { mode,id } = useParams();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(

@@ -162,7 +162,7 @@ class ContextMenuCompoment extends Component {
 
     clickUpload = id => {
         this.props.changeContextMenu("empty", false);
-        let uploadButton = document.getElementsByClassName(id)[0];
+        const uploadButton = document.getElementsByClassName(id)[0];
         if (document.body.contains(uploadButton)) {
             uploadButton.click();
         } else {
@@ -176,9 +176,9 @@ class ContextMenuCompoment extends Component {
     };
 
     openPreview = () => {
-        let isShare = pathHelper.isSharePage(this.props.location.pathname);
+        const isShare = pathHelper.isSharePage(this.props.location.pathname);
         if (isShare) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 this.props.toggleSnackbar(
                     "top",
@@ -191,7 +191,7 @@ class ContextMenuCompoment extends Component {
             }
         }
         this.props.changeContextMenu("file", false);
-        let previewPath =
+        const previewPath =
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +

@@ -94,7 +94,7 @@ export default function Import() {
         });
     };
 
-    let history = useHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -162,7 +162,7 @@ export default function Import() {
             conditions: {}
         })
             .then(response => {
-                let res = {};
+                const res = {};
                 response.data.items.forEach(v => {
                     res[v.ID] = v;
                 });
@@ -183,7 +183,7 @@ export default function Import() {
     };
 
     const setMoveTarget = setter => folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;

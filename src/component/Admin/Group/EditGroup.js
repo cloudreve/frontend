@@ -8,7 +8,7 @@ import GroupForm from "./GroupForm";
 export default function EditGroupPreload( ) {
     const [group,setGroup] = useState({});
 
-    let {id } = useParams();
+    const {id } = useParams();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(

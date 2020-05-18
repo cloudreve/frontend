@@ -93,7 +93,7 @@ export default function EditPro(props) {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = { ...policy };
+        const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // 类型转换

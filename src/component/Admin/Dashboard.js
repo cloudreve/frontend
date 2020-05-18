@@ -278,7 +278,7 @@ export default function Dashboard({ content }) {
         };
     }, []);
 
-    let { path } = useRouteMatch();
+    const { path } = useRouteMatch();
 
     return (
         <div className={classes.root}>

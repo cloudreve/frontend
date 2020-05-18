@@ -1,12 +1,13 @@
 export const isDefined = val => val != null
 export const isFunction = val => typeof val === 'function'
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => { }
 
 export const newScript = (src) => (cb) => {
   const scriptElem = document.createElement('script')
   if (typeof src === 'object') {
     // copy every property to the element
-    for (var key in src) {
+    for (const key in src) {
       if (Object.prototype.hasOwnProperty.call(src, key)) {
         scriptElem[key] = src[key];
       }
@@ -72,6 +73,7 @@ export const series = (...tasks) => (each) => (cb) => {
   const nextThunk = () => {
     const key = nextKey.next()
     let thunk = tasks[key]
+    // eslint-disable-next-line prefer-spread
     if (Array.isArray(thunk)) thunk = parallel.apply(null, thunk).call(null, each)
     return [ +key, thunk ] // convert `key` to number
   }

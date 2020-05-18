@@ -54,7 +54,7 @@ export default function DecompressDialog(props) {
     );
 
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;

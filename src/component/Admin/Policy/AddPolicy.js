@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 export default function AddPolicyParent( ) {
     const classes = useStyles();
 
-    let { type } = useParams();
+    const { type } = useParams();
 
     return (
         <div>

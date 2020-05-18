@@ -188,7 +188,7 @@ export default function RemoteGuide(props) {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = {...policy};
+        const policyCopy = {...policy};
         policyCopy.OptionsSerialized = {...policyCopy.OptionsSerialized};
 
         // 处理存储策略

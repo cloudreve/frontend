@@ -57,7 +57,7 @@ export const policyTypeMap = {
     onedrive:"OneDrive",
 };
 export const isPreviewable = name=>{
-    let suffix = name.split(".").pop().toLowerCase();
+    const suffix = name.split(".").pop().toLowerCase();
     if(imgPreviewSuffix.indexOf(suffix)!==-1){
         return "img";
     }else if(msDocPreviewSuffix.indexOf(suffix)!==-1){
@@ -76,7 +76,7 @@ export const isPreviewable = name=>{
     return false;
 }
 export const isTorrent = name=>{
-    let suffix = name.split(".").pop().toLowerCase();
+    const suffix = name.split(".").pop().toLowerCase();
     if(mediaType.torrent.indexOf(suffix)!==-1){
         return true;
     }
@@ -84,7 +84,7 @@ export const isTorrent = name=>{
 }
 
 export const isCompressFile = name=>{
-    let suffix = name.split(".").pop().toLowerCase();
+    const suffix = name.split(".").pop().toLowerCase();
     return suffix === "zip"
 }
 

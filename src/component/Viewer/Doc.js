@@ -27,11 +27,11 @@ function useQuery() {
 }
 
 export default function DocViewer() {
-    let [url,setURL] = useState("");
+    const [url,setURL] = useState("");
     const math = useRouteMatch();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
 
     const dispatch = useDispatch();
 
@@ -48,7 +48,7 @@ export default function DocViewer() {
 
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = query.get("p").split("/");
+            const path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));
