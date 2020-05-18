@@ -4,7 +4,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 

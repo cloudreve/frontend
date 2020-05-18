@@ -555,8 +555,7 @@ describe('index reducer', () => {
         selected: [{ id: '2', type: 'file' }],
         selectProps: {
           isMultiple: false,
-          // TODO: use !! case to boolean
-          withFolder: undefined,
+          withFolder: false,
           withFile: true
         }
       }
