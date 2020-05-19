@@ -38,7 +38,9 @@ export default function SiteInformation() {
         siteURL: "",
         siteName: "",
         siteTitle: "",
+        siteDes: "",
         siteICPId: "",
+        siteScript: "",
         pwa_small_icon: "",
         pwa_medium_icon: "",
         pwa_large_icon: "",
@@ -138,6 +140,20 @@ export default function SiteInformation() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
+                                    站点描述
+                                </InputLabel>
+                                <Input
+                                    value={options.siteDes}
+                                    onChange={handleChange("siteDes")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    站点描述信息，可能会在分享页面摘要内展示
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
                                     站点URL
                                 </InputLabel>
                                 <Input
@@ -162,6 +178,21 @@ export default function SiteInformation() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     工信部网站ICP备案号
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    页脚代码
+                                </InputLabel>
+                                <Input
+                                    multiline
+                                    value={options.siteScript}
+                                    onChange={handleChange("siteScript")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    在页面底部插入的自定义HTML代码
                                 </FormHelperText>
                             </FormControl>
                         </div>

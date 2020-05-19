@@ -15,7 +15,7 @@ const doNavigate = (path, state)=>{
 
 export const initState = {
   siteConfig: {
-      title: "Cloudreve",
+      title: window.subTitle,
       siteICPId: "",
       loginCaptcha: false,
       regCaptcha: false,
