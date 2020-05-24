@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     },
     active: {
         border: "2px solid " + theme.palette.primary.light
+    },
+    button:{
+        textTransform: "none",
     }
 }));
 
@@ -56,7 +59,7 @@ export default function PathButton(props) {
             ref={drop}
             className={classNames({
                 [classes.active]: isActive
-            })}
+            },classes.button)}
             component="span"
             title={props.title}
         >
