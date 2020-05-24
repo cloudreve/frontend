@@ -282,42 +282,6 @@ class SharedFileCompoment extends Component {
                         </div>
                     </div>
                 </div>
-                {/*<div className={classes.fileCotainer}>*/}
-                {/*    <FileIcon file={file} share={true} />*/}
-                {/*</div>*/}
-                {/*<div className={classes.buttonCotainer}>*/}
-                {/*    <Button*/}
-                {/*        variant="outlined"*/}
-                {/*        className={classes.button}*/}
-                {/*        onClick={this.preview}*/}
-                {/*    >*/}
-                {/*        <PreviewIcon className={classes.icon} /> 预览*/}
-                {/*    </Button>*/}
-                {/*    <Button*/}
-                {/*        variant="outlined"*/}
-                {/*        className={classes.button}*/}
-                {/*        onClick={this.handleOpen}*/}
-                {/*    >*/}
-                {/*        <InfoIcon className={classes.icon} /> 信息*/}
-                {/*    </Button>*/}
-                {/*    <Popper*/}
-                {/*        id={id}*/}
-                {/*        open={this.state.open}*/}
-                {/*        anchorEl={this.state.anchorEl}*/}
-                {/*        transition*/}
-                {/*    >*/}
-                {/*        {({ TransitionProps }) => (*/}
-                {/*            <Fade {...TransitionProps} timeout={350}>*/}
-                {/*                <Paper className={classes.paper}>*/}
-                {/*                    <Typography>*/}
-                {/*                        此分享被浏览{this.props.share.views}*/}
-                {/*                        次，被下载{this.props.share.downloads}次*/}
-                {/*                    </Typography>*/}
-                {/*                </Paper>*/}
-                {/*            </Fade>*/}
-                {/*        )}*/}
-                {/*    </Popper>*/}
-                {/*</div>*/}
             </div>
         );
     }

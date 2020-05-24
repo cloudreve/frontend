@@ -31,12 +31,12 @@ const styles = theme => ({
         [theme.breakpoints.down("sm")]: {
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(1),
-            marginRight: theme.spacing(1),
+            marginRight: theme.spacing(1)
         }
     },
-    managerContainer:{
-        overflowY: "auto",
-    },
+    managerContainer: {
+        overflowY: "auto"
+    }
 });
 
 const ReadMe = React.lazy(() => import("./ReadMe"));
@@ -84,10 +84,9 @@ class SharedFolderComponent extends Component {
     }
 
     handleClickAway = () => {
-        if (!pathHelper.isMobile()){
+        if (!pathHelper.isMobile()) {
             this.props.setSelectedTarget([]);
         }
-
     };
 
     render() {
@@ -102,7 +101,7 @@ class SharedFolderComponent extends Component {
                         <FileManager isShare share={this.props.share} />
                     </Paper>
                 </ClickAwayListener>
-                { /* eslint-disable-next-line */}
+                {/* eslint-disable-next-line */}
                 {this.props.fileList.map(value => {
                     if (
                         (value.name.toLowerCase() === "readme.md" ||
@@ -128,7 +127,11 @@ class SharedFolderComponent extends Component {
                     }}
                 >
                     <Typography>
-                        <Creator isFolder share={this.props.share} />
+                        <Creator
+                            isFolder
+                            onClose={() => this.props.setShareUserPopover(null)}
+                            share={this.props.share}
+                        />
                     </Typography>
                 </Popover>
             </div>
