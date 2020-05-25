@@ -1,0 +1,49 @@
+ame: frontend-CI
+
+on:
+  push:
+    branches: 
+      - master
+      
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: 检出代码
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: 安装go
+        uses: actions/setup-go@v2-beta
+        with:
+          go-version: '1.14'
+      - run: go version
+        
+      - name: 安装node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: node -v
+      - run: npm -v
+          
+      - name: 安装Yarn
+        run: |
+          npm install yarn -g
+      - run: yarn -v
+      
+      - name: 构建静态资源
+        run: |
+          yarn install
+          CI=false yarn run build
+          cd ../
+          
+      - name: 打包静态资源
+        uses: actions/upload-artifact@master
+        with:
+          name: statik.zip
+          path: ./build/
