@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 
 import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
-import { sizeToString } from "../../untils/index";
+import { sizeToString } from "../../utils/index";
 import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import {lighten} from "@material-ui/core/styles";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import {withRouter} from "react-router";
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 
@@ -72,7 +72,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
     return {};
 };
 

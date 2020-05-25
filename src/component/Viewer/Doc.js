@@ -3,10 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import {useLocation, useParams, useRouteMatch} from "react-router";
 import API from "../../middleware/Api";
 import {useDispatch} from "react-redux";
-import {changeSubTitle, toggleSnackbar} from "../../actions";
-import pathHelper from "../../untils/page";
+import {toggleSnackbar} from "../../actions";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
+import pathHelper from "../../utils/page";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     layout: {
         width: "auto",
         marginTop: "-48px",
@@ -25,12 +26,12 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function DocViewer(props) {
-    let [url,setURL] = useState("");
+export default function DocViewer() {
+    const [url,setURL] = useState("");
     const math = useRouteMatch();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
 
     const dispatch = useDispatch();
 
@@ -47,7 +48,7 @@ export default function DocViewer(props) {
 
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = math.params[0].split("/");
+            const path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));

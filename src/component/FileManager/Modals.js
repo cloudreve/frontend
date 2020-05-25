@@ -26,8 +26,7 @@ import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
-import Auth from "../../middleware/Auth";
+import pathHelper from "../../utils/page";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
 
@@ -91,6 +90,7 @@ const mapDispatchToProps = dispatch => {
 class ModalsCompoment extends Component {
     state = {
         newFolderName: "",
+        newFileName: "",
         newName: "",
         selectedPath: "",
         selectedPathName: "",
@@ -112,7 +112,7 @@ class ModalsCompoment extends Component {
     newNameSuffix = "";
     downloaded = false;
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (this.props.dndSignale !== nextProps.dndSignale) {
             this.dragMove(nextProps.dndSource, nextProps.dndTarget);
             return;
@@ -137,7 +137,7 @@ class ModalsCompoment extends Component {
             return;
         }
         if (this.props.modalsStatus.rename !== nextProps.modalsStatus.rename) {
-            let name = nextProps.selected[0].name;
+            const name = nextProps.selected[0].name;
             this.setState({
                 newName: name
             });
@@ -172,7 +172,7 @@ class ModalsCompoment extends Component {
     Download = () => {
         let reqURL = "";
         if (this.props.selected[0].key) {
-            let downloadPath =
+            const downloadPath =
                 this.props.selected[0].path === "/"
                     ? this.props.selected[0].path + this.props.selected[0].name
                     : this.props.selected[0].path +
@@ -205,7 +205,7 @@ class ModalsCompoment extends Component {
     };
 
     archiveDownload = () => {
-        let dirs = [],
+        const dirs = [],
             items = [];
         this.props.selected.map(value => {
             if (value.type === "dir") {
@@ -217,7 +217,7 @@ class ModalsCompoment extends Component {
         });
 
         let reqURL = "/file/archive";
-        let postBody = {
+        const postBody = {
             items: items,
             dirs: dirs
         };
@@ -260,7 +260,7 @@ class ModalsCompoment extends Component {
     submitRemove = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
         this.props.selected.map(value => {
@@ -307,7 +307,7 @@ class ModalsCompoment extends Component {
             e.preventDefault();
         }
         this.props.setModalsLoading(true);
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
         this.props.selected.map(value => {
@@ -330,7 +330,7 @@ class ModalsCompoment extends Component {
                 ? "/"
                 : this.state.selectedPath
         })
-            .then(response => {
+            .then(() => {
                 this.onClose();
                 this.props.refreshFileList();
                 this.props.setModalsLoading(false);
@@ -386,9 +386,9 @@ class ModalsCompoment extends Component {
     submitRename = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        let newName = this.state.newName;
+        const newName = this.state.newName;
 
-        let src = {
+        const src = {
             dirs: [],
             items: []
         };
@@ -401,10 +401,10 @@ class ModalsCompoment extends Component {
 
         // 检查重名
         if (
-            this.props.dirList.findIndex((value, index) => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === newName;
             }) !== -1 ||
-            this.props.fileList.findIndex((value, index) => {
+            this.props.fileList.findIndex((value) => {
                 return value.name === newName;
             }) !== -1
         ) {
@@ -421,7 +421,7 @@ class ModalsCompoment extends Component {
                 src: src,
                 new_name: newName
             })
-                .then(response => {
+                .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
@@ -442,7 +442,7 @@ class ModalsCompoment extends Component {
         e.preventDefault();
         this.props.setModalsLoading(true);
         if (
-            this.props.dirList.findIndex((value, index) => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === this.state.newFolderName;
             }) !== -1
         ) {
@@ -460,7 +460,48 @@ class ModalsCompoment extends Component {
                     "/" +
                     this.state.newFolderName
             })
-                .then(response => {
+                .then(() => {
+                    this.onClose();
+                    this.props.refreshFileList();
+                    this.props.setModalsLoading(false);
+                })
+                .catch(error => {
+                    this.props.setModalsLoading(false);
+
+                    this.props.toggleSnackbar(
+                        "top",
+                        "right",
+                        error.message,
+                        "error"
+                    );
+                });
+        }
+        //this.props.toggleSnackbar();
+    };
+
+    submitCreateNewFile = e => {
+        e.preventDefault();
+        this.props.setModalsLoading(true);
+        if (
+            this.props.dirList.findIndex((value) => {
+                return value.name === this.state.newFileName;
+            }) !== -1
+        ) {
+            this.props.toggleSnackbar(
+                "top",
+                "right",
+                "文件名称重复",
+                "warning"
+            );
+            this.props.setModalsLoading(false);
+        } else {
+            API.post("/file/create", {
+                path:
+                    (this.props.path === "/" ? "" : this.props.path) +
+                    "/" +
+                    this.state.newFileName
+            })
+                .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
@@ -486,7 +527,7 @@ class ModalsCompoment extends Component {
             .post("/aria2/torrent/" + this.props.selected[0].id, {
                 dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
-            .then(response => {
+            .then(() => {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -515,7 +556,7 @@ class ModalsCompoment extends Component {
                 url: this.state.downloadURL,
                 dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
             })
-            .then(response => {
+            .then(() => {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -537,7 +578,7 @@ class ModalsCompoment extends Component {
     };
 
     setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
@@ -557,6 +598,7 @@ class ModalsCompoment extends Component {
     onClose = () => {
         this.setState({
             newFolderName: "",
+            newFileName: "",
             newName: "",
             selectedPath: "",
             selectedPathName: "",
@@ -650,6 +692,51 @@ class ModalsCompoment extends Component {
                         </div>
                     </DialogActions>
                 </Dialog>
+
+                <Dialog
+                    open={this.props.modalsStatus.createNewFile}
+                    onClose={this.onClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">新建文件</DialogTitle>
+
+                    <DialogContent>
+                        <form onSubmit={this.submitCreateNewFile}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="newFileName"
+                                label="文件名称"
+                                type="text"
+                                value={this.state.newFileName}
+                                onChange={e => this.handleInputChange(e)}
+                                fullWidth
+                            />
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.onClose}>取消</Button>
+                        <div className={classes.wrapper}>
+                            <Button
+                                onClick={this.submitCreateNewFile}
+                                color="primary"
+                                disabled={
+                                    this.state.newFileName === "" ||
+                                    this.props.modalsLoading
+                                }
+                            >
+                                创建
+                                {this.props.modalsLoading && (
+                                    <CircularProgress
+                                        size={24}
+                                        className={classes.buttonProgress}
+                                    />
+                                )}
+                            </Button>
+                        </div>
+                    </DialogActions>
+                </Dialog>
+
                 <Dialog
                     open={this.props.modalsStatus.rename}
                     onClose={this.onClose}

@@ -6,7 +6,6 @@ import DateIcon from "@material-ui/icons/DateRange";
 import EmailIcon from "@material-ui/icons/Email";
 import HomeIcon from "@material-ui/icons/Home";
 import LinkIcon from "@material-ui/icons/Phonelink";
-import AlarmOff from "@material-ui/icons/AlarmOff";
 import InputIcon from "@material-ui/icons/Input";
 import SecurityIcon from "@material-ui/icons/Security";
 import NickIcon from "@material-ui/icons/PermContactCalendar";
@@ -39,16 +38,13 @@ import {
     DialogTitle,
     Switch
 } from "@material-ui/core";
-import Backup from "@material-ui/icons/Backup";
-import SettingsInputHdmi from "@material-ui/icons/SettingsInputHdmi";
 import { blue, green, yellow } from "@material-ui/core/colors";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
-import TimeAgo from "timeago-react";
 import QRCode from "qrcode-react";
-import {Brightness3, Check, ConfirmationNumber, ListAlt, PermContactCalendar} from "@material-ui/icons";
-import { transformTime } from "../../untils";
+import {Brightness3, ListAlt, PermContactCalendar} from "@material-ui/icons";
+import { transformTime } from "../../utils";
 import Authn from "./Authn";
 
 const styles = theme => ({
@@ -237,7 +233,7 @@ class UserSettingCompoment extends Component {
     }
 
     toggleViewMethod = () => {
-        let newMethod =
+        const newMethod =
             this.props.viewMethod === "icon"
                 ? "list"
                 : this.props.viewMethod === "list"
@@ -250,7 +246,7 @@ class UserSettingCompoment extends Component {
     loadSetting = () => {
         API.get("/user/setting")
             .then(response => {
-                let theme = JSON.parse(response.data.themes);
+                const theme = JSON.parse(response.data.themes);
                 response.data.themes = theme;
                 this.setState({
                     settings: response.data
@@ -271,7 +267,7 @@ class UserSettingCompoment extends Component {
             loading: "gravatar"
         });
         API.put("/user/setting/avatar")
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -302,7 +298,7 @@ class UserSettingCompoment extends Component {
         API.patch("/user/setting/nick", {
             nick: this.state.nick
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -331,14 +327,14 @@ class UserSettingCompoment extends Component {
         this.setState({
             loading: "avatar"
         });
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append("avatar", this.fileInput.current.files[0]);
         API.post("/user/setting/avatar", formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -366,7 +362,7 @@ class UserSettingCompoment extends Component {
         API.patch("/user/setting/homepage", {
             status: !this.state.settings.homepage
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -407,7 +403,7 @@ class UserSettingCompoment extends Component {
             old: this.state.oldPwd,
             new: this.state.newPwd
         })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -440,7 +436,7 @@ class UserSettingCompoment extends Component {
             .patch("/user/setting/theme", {
                 theme: this.state.chosenTheme
             })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -539,7 +535,7 @@ class UserSettingCompoment extends Component {
         API.patch("/user/setting/2fa", {
                 code: this.state.authCode
             })
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -1151,7 +1147,7 @@ class UserSettingCompoment extends Component {
                                 this.state.authCode === ""
                             }
                         >
-                            开启二步验证
+                            {this.state.settings.two_factor?"关闭":"启用"}二步验证
                         </Button>
                     </DialogActions>
                 </Dialog>

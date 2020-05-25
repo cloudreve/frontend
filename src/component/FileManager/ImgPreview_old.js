@@ -7,10 +7,10 @@ import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import {withRouter} from "react-router";
 
-const styles = theme => ({});
+const styles = () => ({});
 
 const mapStateToProps = state => {
     return {
@@ -34,12 +34,12 @@ class ImgPreviewCompoment extends Component {
         isOpen: false
     };
 
-    componentWillReceiveProps = nextProps => {
-        let items = [];
+    UNSAFE_componentWillReceiveProps = nextProps => {
+        const items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {
             if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
-                let newImg = {
+                const newImg = {
                     title: nextProps.first.name,
                     src:
                         baseURL +
@@ -56,7 +56,7 @@ class ImgPreviewCompoment extends Component {
             }
             // eslint-disable-next-line
             nextProps.other.map(value => {
-                let fileType = value.name
+                const fileType = value.name
                     .split(".")
                     .pop()
                     .toLowerCase();
@@ -74,7 +74,7 @@ class ImgPreviewCompoment extends Component {
                             "/file/preview/" +
                             value.id
                     }
-                    let newImg = {
+                    const newImg = {
                         title: value.name,
                         src:src,
                     };

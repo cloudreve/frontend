@@ -43,7 +43,7 @@ export default function SelectFileDialog(props) {
 
 
     const handleChange = index => event =>{
-        let filesCopy = [...files];
+        const filesCopy = [...files];
         // eslint-disable-next-line
         filesCopy.map((v,k)=>{
             if (v.index === index){
@@ -53,8 +53,8 @@ export default function SelectFileDialog(props) {
         setFiles(filesCopy);
     };
 
-    const submit = e =>{
-        let index = [];
+    const submit = () =>{
+        const index = [];
         // eslint-disable-next-line
         files.map(v=>{
             if(v.selected === "true"){

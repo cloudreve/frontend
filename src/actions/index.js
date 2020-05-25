@@ -1,14 +1,30 @@
-export const navitateTo = path => {
-    return {
-        type: "NAVIGATOR_TO",
-        path: path
-    };
+export * from './explorer'
+
+export const setNavigator = (path, navigatorLoading) => {
+  return {
+    type: 'SET_NAVIGATOR',
+    path,
+    navigatorLoading
+  }
+}
+
+export const navigateTo = path => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const navigatorLoading = path !== state.navigator.path
+    dispatch(setNavigator(path, navigatorLoading))
+  }
 };
 
-export const navitateUp = () => {
-    return {
-        type: "NAVIGATOR_UP"
-    };
+export const navigateUp = () => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const pathSplit = state.navigator.path.split("/");
+    pathSplit.pop();
+    const newPath = pathSplit.length===1? "/":pathSplit.join("/");
+    const navigatorLoading = newPath !== state.navigator.path
+    dispatch(setNavigator(newPath, navigatorLoading))
+  }
 };
 
 export const drawerToggleAction = open => {
@@ -33,30 +49,9 @@ export const changeViewMethod = method => {
     };
 };
 
-export const changeSubTitle = title =>{
-    return {
-        type: "CHANGE_SUB_TITLE",
-        title: title
-    };
-};
-
 export const toggleDaylightMode = ()=>{
     return {
         type: "TOGGLE_DAYLIGHT_MODE",
-    };
-};
-
-export const changeSortMethod = method => {
-    return {
-        type: "CHANGE_SORT_METHOD",
-        method: method
-    };
-};
-
-export const updateFileList = list => {
-    return {
-        type: "UPDATE_FILE_LIST",
-        list: list
     };
 };
 
@@ -65,27 +60,6 @@ export const changeContextMenu = (type, open) => {
         type: "CHANGE_CONTEXT_MENU",
         menuType: type,
         open: open
-    };
-};
-
-export const addSelectedTarget = targets => {
-    return {
-        type: "ADD_SELECTED_TARGET",
-        targets: targets
-    };
-};
-
-export const setSelectedTarget = targets => {
-    return {
-        type: "SET_SELECTED_TARGET",
-        targets: targets
-    };
-};
-
-export const removeSelectedTarget = id => {
-    return {
-        type: "RMOVE_SELECTED_TARGET",
-        id: id
     };
 };
 
@@ -107,6 +81,12 @@ export const setNavigatorError = (status, msg) => {
 export const openCreateFolderDialog = () => {
     return {
         type: "OPEN_CREATE_FOLDER_DIALOG"
+    };
+};
+
+export const openCreateFileDialog = () => {
+    return {
+        type: "OPEN_CREATE_FILE_DIALOG"
     };
 };
 

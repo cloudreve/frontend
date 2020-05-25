@@ -1,56 +1,32 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-    changeContextMenu,
-    setNavigatorLoadingStatus,
-    navitateTo,
-    openCreateFolderDialog,
-    openRenameDialog,
-    openMoveDialog,
-    openRemoveDialog,
-    openShareDialog,
-    showImgPreivew,
-    openMusicDialog,
-    toggleSnackbar,
-    openRemoteDownloadDialog,
-    openTorrentDownloadDialog,
-    openGetSourceDialog,
-    openCopyDialog,
-    openLoadingDialog,
-    setSelectedTarget,
-    openDecompressDialog
-} from "../../actions/index";
-import { isCompressFile, isPreviewable, isTorrent } from "../../config";
-import { allowSharePreview } from "../../untils/index";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
-import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
-import OpenFolderIcon from "@material-ui/icons/FolderOpen";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import ShareIcon from "@material-ui/icons/Share";
+import { Divider, ListItemIcon, MenuItem, Typography, withStyles } from "@material-ui/core";
+import Menu from "@material-ui/core/Menu";
+import { Archive, Unarchive } from "@material-ui/icons";
 import RenameIcon from "@material-ui/icons/BorderColor";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import OpenFolderIcon from "@material-ui/icons/FolderOpen";
 import MoveIcon from "@material-ui/icons/Input";
 import LinkIcon from "@material-ui/icons/InsertLink";
-import DeleteIcon from "@material-ui/icons/Delete";
 import OpenIcon from "@material-ui/icons/OpenInNew";
-import { MagnetOn } from "mdi-material-ui";
-import {
-    withStyles,
-    Typography,
-    MenuItem,
-    Divider,
-    ListItemIcon
-} from "@material-ui/core";
-import pathHelper from "../../untils/page";
+import ShareIcon from "@material-ui/icons/Share";
+import { FolderUpload, MagnetOn ,FilePlus} from "mdi-material-ui";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { openCompressDialog,openCreateFileDialog ,refreshFileList} from "../../actions";
+import { changeContextMenu, navigateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
+import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
-import { Archive, Unarchive } from "@material-ui/icons";
-import { openCompressDialog } from "../../actions";
-import Menu from "@material-ui/core/Menu";
-import {FolderUpload} from "mdi-material-ui";
+import { allowSharePreview } from "../../utils/index";
+import pathHelper from "../../utils/page";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
-const styles = theme => ({
+
+const styles = () => ({
     propover: {
         minWidth: "200px!important"
     },
@@ -84,11 +60,14 @@ const mapDispatchToProps = dispatch => {
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
-        navitateTo: path => {
-            dispatch(navitateTo(path));
+        navigateTo: path => {
+            dispatch(navigateTo(path));
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
+        },
+        openCreateFileDialog: () => {
+            dispatch(openCreateFileDialog());
         },
         openRenameDialog: () => {
             dispatch(openRenameDialog());
@@ -131,7 +110,10 @@ const mapDispatchToProps = dispatch => {
         },
         openCompressDialog: () => {
             dispatch(openCompressDialog());
-        }
+        },
+        refreshFileList: () => {
+            dispatch(refreshFileList());
+        },
     };
 };
 
@@ -171,7 +153,7 @@ class ContextMenuCompoment extends Component {
     };
 
     enterFolder = () => {
-        this.props.navitateTo(
+        this.props.navigateTo(
             this.props.path === "/"
                 ? this.props.path + this.props.selected[0].name
                 : this.props.path + "/" + this.props.selected[0].name
@@ -180,7 +162,7 @@ class ContextMenuCompoment extends Component {
 
     clickUpload = id => {
         this.props.changeContextMenu("empty", false);
-        let uploadButton = document.getElementsByClassName(id)[0];
+        const uploadButton = document.getElementsByClassName(id)[0];
         if (document.body.contains(uploadButton)) {
             uploadButton.click();
         } else {
@@ -194,9 +176,9 @@ class ContextMenuCompoment extends Component {
     };
 
     openPreview = () => {
-        let isShare = pathHelper.isSharePage(this.props.location.pathname);
+        const isShare = pathHelper.isSharePage(this.props.location.pathname);
         if (isShare) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 this.props.toggleSnackbar(
                     "top",
@@ -209,12 +191,12 @@ class ContextMenuCompoment extends Component {
             }
         }
         this.props.changeContextMenu("file", false);
-        let previewPath =
+        const previewPath =
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +
-                  "/" +
-                  this.props.selected[0].name;
+                "/" +
+                this.props.selected[0].name;
         switch (isPreviewable(this.props.selected[0].name)) {
             case "img":
                 this.props.showImgPreivew(this.props.selected[0]);
@@ -223,15 +205,15 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/doc?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/doc" + previewPath + "?id=" + this.props.selected[0].id
+                    "/doc?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             case "audio":
@@ -241,30 +223,60 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/video?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/video" + previewPath + "?id=" + this.props.selected[0].id
+                    "/video?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                );
+                return;
+            case "pdf":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/pdf?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                this.props.history.push(
+                    "/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             case "edit":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/text?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/text" + previewPath + "?id=" + this.props.selected[0].id
+                    "/text?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                );
+                return;
+            case "code":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/code?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                this.props.history.push(
+                    "/code?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             default:
@@ -298,6 +310,20 @@ class ContextMenuCompoment extends Component {
                 >
                     {this.props.menuType === "empty" && (
                         <>
+                            <MenuItem onClick={()=>{
+                                this.props.refreshFileList();
+                                this.props.changeContextMenu(this.props.menuType, false)
+                            }
+
+                            }>
+                                <ListItemIcon>
+                                    <RefreshIcon />
+                                </ListItemIcon>
+                                <Typography variant="inherit">
+                                    刷新
+                                </Typography>
+                            </MenuItem>
+                            <Divider className={classes.divider}/>
                             <MenuItem onClick={()=>this.clickUpload("uploadFileForm")}>
                                 <ListItemIcon>
                                     <UploadIcon />
@@ -340,6 +366,18 @@ class ContextMenuCompoment extends Component {
                                 </ListItemIcon>
                                 <Typography variant="inherit">
                                     创建文件夹
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() =>
+                                    this.props.openCreateFileDialog()
+                                }
+                            >
+                                <ListItemIcon>
+                                    <FilePlus />
+                                </ListItemIcon>
+                                <Typography variant="inherit">
+                                    创建文件
                                 </Typography>
                             </MenuItem>
                         </>
@@ -508,7 +546,7 @@ class ContextMenuCompoment extends Component {
                                             重命名
                                         </Typography>
                                     </MenuItem>
-                                    {this.props.keywords === null &&
+                                    {this.props.keywords === "" &&
                                         <MenuItem
                                             onClick={() =>
                                                 this.props.openCopyDialog()
@@ -527,7 +565,7 @@ class ContextMenuCompoment extends Component {
                             )}
                             {isHomePage && (
                                 <div>
-                                    {this.props.keywords === null &&
+                                    {this.props.keywords === "" &&
                                         <MenuItem
                                             onClick={() =>
                                                 this.props.openMoveDialog()

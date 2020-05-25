@@ -11,12 +11,10 @@ import ShareIcon from "@material-ui/icons/Share";
 import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
-    navitateTo,
-    navitateUp,
+    navigateTo,
+    navigateUp,
     changeViewMethod,
-    changeSortMethod,
     setNavigatorError,
-    updateFileList,
     setNavigatorLoadingStatus,
     refreshFileList,
     setSelectedTarget,
@@ -25,8 +23,9 @@ import {
     drawerToggleAction,
     setShareUserPopover, openResaveDialog, openCompressDialog
 } from "../../../actions/index";
+import explorer from "../../../redux/explorer"
 import API from "../../../middleware/Api";
-import { setCookie, setGetParameter, fixUrlHash } from "../../../untils/index";
+import { setCookie, setGetParameter, fixUrlHash } from "../../../utils/index";
 import {
     withStyles,
     Divider,
@@ -36,13 +35,15 @@ import {
     IconButton
 } from "@material-ui/core";
 import PathButton from "./PathButton";
-import SaveIcon from '@material-ui/icons/Save';
 import DropDown from "./DropDown";
-import pathHelper from "../../../untils/page";
+import pathHelper from "../../../utils/page";
 import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
 import Avatar from "@material-ui/core/Avatar";
 import {Archive} from "@material-ui/icons";
+import { FilePlus } from "mdi-material-ui";
+import { openCreateFileDialog } from "../../../actions";
+
 
 const mapStateToProps = state => {
     return {
@@ -58,22 +59,22 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigateToPath: path => {
-            dispatch(navitateTo(path));
+            dispatch(navigateTo(path));
         },
-        navitateUp: () => {
-            dispatch(navitateUp());
+        navigateUp: () => {
+            dispatch(navigateUp());
         },
         changeView: method => {
             dispatch(changeViewMethod(method));
         },
         changeSort: method => {
-            dispatch(changeSortMethod(method));
+            dispatch(explorer.actions.changeSortMethod(method));
         },
         setNavigatorError: (status, msg) => {
             dispatch(setNavigatorError(status, msg));
         },
         updateFileList: list => {
-            dispatch(updateFileList(list));
+            dispatch(explorer.actions.updateFileList(list));
         },
         setNavigatorLoadingStatus: status => {
             dispatch(setNavigatorLoadingStatus(status));
@@ -86,6 +87,9 @@ const mapDispatchToProps = dispatch => {
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
+        },
+        openCreateFileDialog: () => {
+            dispatch(openCreateFileDialog());
         },
         openShareDialog: () => {
             dispatch(openShareDialog());
@@ -111,7 +115,7 @@ const sortOptions = [
     "文件名称正序",
     "文件名称倒序",
     "上传时间正序",
-    "上传时间到序",
+    "上传时间倒序",
     "文件大小正序",
     "文件大小倒序"
 ];
@@ -156,7 +160,7 @@ const styles = theme => ({
 });
 
 class NavigatorComponent extends Component {
-    keywords = null;
+    keywords = "";
     currentID = 0;
 
     state = {
@@ -176,8 +180,8 @@ class NavigatorComponent extends Component {
     }
 
     componentDidMount = () => {
-        var url = new URL(fixUrlHash(window.location.href));
-        var c = url.searchParams.get("path");
+        const url = new URL(fixUrlHash(window.location.href));
+        const c = url.searchParams.get("path");
         this.renderPath(c === null ? "/":c);
 
         if (!this.props.isShare) {
@@ -186,9 +190,9 @@ class NavigatorComponent extends Component {
         }
 
         // 后退操作时重新导航
-        window.onpopstate = event => {
-            var url = new URL(fixUrlHash(window.location.href));
-            var c = url.searchParams.get("path");
+        window.onpopstate = () => {
+            const url = new URL(fixUrlHash(window.location.href));
+            const c = url.searchParams.get("path");
             if (c !== null && c !== this.props.path) {
                 this.props.navigateToPath(c);
             }
@@ -203,25 +207,25 @@ class NavigatorComponent extends Component {
                     ? path.substr(1).split("/")
                     : this.props.path.substr(1).split("/")
         });
-        var newPath = path !== null ? path : this.props.path;
-        var apiURL = this.props.share
+        let newPath = path !== null ? path : this.props.path;
+        const apiURL = this.props.share
             ? "/share/list/" + this.props.share.key
-            : this.keywords === null
+            : this.keywords === ""
             ? "/directory"
             : "/file/search/";
-        newPath = this.keywords === null ? newPath : this.keywords;
+        newPath = this.keywords === "" ? newPath : this.keywords;
 
-        API.get(apiURL + newPath)
+        API.get(apiURL + encodeURIComponent(newPath))
             .then(response => {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
-                let pathTemp = (path !== null
+                const pathTemp = (path !== null
                     ? path.substr(1).split("/")
                     : this.props.path.substr(1).split("/")
                 ).join(",");
                 setCookie("path_tmp", encodeURIComponent(pathTemp), 1);
-                if (this.keywords === null) {
+                if (this.keywords === "") {
                     setGetParameter("path", encodeURIComponent(newPath));
                 }
             })
@@ -238,7 +242,7 @@ class NavigatorComponent extends Component {
         this.renderPath(path);
     };
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (this.props.keywords !== nextProps.keywords) {
             this.keywords = nextProps.keywords;
         }
@@ -323,8 +327,8 @@ class NavigatorComponent extends Component {
             this.redresh();
             return;
         }
-        let presentPath = this.props.path.split("/");
-        let newTarget = [
+        const presentPath = this.props.path.split("/");
+        const newTarget = [
             {
                 id:this.currentID,
                 type: "dir",
@@ -345,13 +349,16 @@ class NavigatorComponent extends Component {
                 this.props.setSelectedTarget(newTarget);
                 this.props.openCompressDialog();
                 break;
+            case "newFile":
+                this.props.openCreateFileDialog();
+                break;
             default:
                 break;
         }
     };
 
     toggleViewMethod = () => {
-        let newMethod =
+        const newMethod =
             this.props.viewMethod === "icon"
                 ? "list"
                 : this.props.viewMethod === "list"
@@ -363,7 +370,7 @@ class NavigatorComponent extends Component {
 
     handleMenuItemClick = (e, index) => {
         this.setState({ selectedIndex: index, anchorEl: null });
-        let optionsTable = {
+        const optionsTable = {
             0: "namePos",
             1: "nameRev",
             2: "timePos",
@@ -380,7 +387,7 @@ class NavigatorComponent extends Component {
         const isHomePage =  pathHelper.isHomePage(this.props.location.pathname);
         const user = Auth.GetUser();
 
-        let presentFolderMenu = (
+        const presentFolderMenu = (
             <Menu
                 id="presentFolderMenu"
                 anchorEl={this.state.anchorEl}
@@ -394,7 +401,7 @@ class NavigatorComponent extends Component {
                     </ListItemIcon>
                     刷新
                 </MenuItem>
-                {this.props.keywords === null &&
+                {this.props.keywords === "" &&
                 isHomePage && (
                         <div>
                             <Divider />
@@ -414,7 +421,7 @@ class NavigatorComponent extends Component {
                                 </ListItemIcon>
                                 压缩
                             </MenuItem>}
-
+                            <Divider />
                             <MenuItem
                                 onClick={() => this.performAction("newfolder")}
                             >
@@ -422,6 +429,14 @@ class NavigatorComponent extends Component {
                                     <NewFolderIcon />
                                 </ListItemIcon>
                                 创建文件夹
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => this.performAction("newFile")}
+                            >
+                                <ListItemIcon>
+                                    <FilePlus />
+                                </ListItemIcon>
+                                创建文件
                             </MenuItem>
                         </div>
                     )}
@@ -545,7 +560,6 @@ class NavigatorComponent extends Component {
                                 <ViewSmallIcon fontSize="small" />
                             </IconButton>
                         )}
-
                         {this.props.viewMethod === "smallIcon" && (
                             <IconButton
                                 title="大图标展示"

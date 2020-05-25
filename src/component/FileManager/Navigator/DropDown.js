@@ -6,7 +6,7 @@ export default function DropDown(props) {
 
     let timer;
     let first = props.folders.length;
-    let status = [];
+    const status = [];
     for (let index = 0; index < props.folders.length; index++) {
         status[index] = false;
         
@@ -41,6 +41,7 @@ export default function DropDown(props) {
         <>
             {props.folders.map((folder, id) => (
                 <DropDownItem
+                    key={id}
                     path={"/" + props.folders.slice(0, id).join("/")}
                     navigateTo={props.navigateTo}
                     id={id}

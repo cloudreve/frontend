@@ -1,30 +1,28 @@
-import { lighten, makeStyles } from "@material-ui/core/styles";
-import React, { useCallback, useEffect, useState } from "react";
-import Stepper from "@material-ui/core/Stepper";
-import StepLabel from "@material-ui/core/StepLabel";
-import Step from "@material-ui/core/Step";
-import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
-import { changeSubTitle, toggleSnackbar } from "../../../../actions";
-import Link from "@material-ui/core/Link";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import Collapse from "@material-ui/core/Collapse";
 import Button from "@material-ui/core/Button";
+import Collapse from "@material-ui/core/Collapse";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
+import MenuItem from "@material-ui/core/MenuItem";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Select from "@material-ui/core/Select";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Stepper from "@material-ui/core/Stepper";
+import { lighten, makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { toggleSnackbar } from "../../../../actions";
 import API from "../../../../middleware/Api";
-import MagicVar from "../../Dialogs/MagicVar";
+import { getNumber } from "../../../../utils";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
-import { useHistory } from "react-router";
-import Alert from "@material-ui/lab/Alert";
-import {getNumber, randomStr} from "../../../../untils";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import MagicVar from "../../Dialogs/MagicVar";
 
 const useStyles = makeStyles(theme => ({
     stepContent: {
@@ -173,7 +171,7 @@ export default function COSGuide(props) {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = { ...policy };
+        const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         if (useCDN === "false"){
@@ -219,7 +217,7 @@ export default function COSGuide(props) {
         API.post("/admin/policy/cors", {
             id: policyID
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "跨域策略已添加", "success");
                 setActiveStep(5);
             })
@@ -238,7 +236,7 @@ export default function COSGuide(props) {
             id: policyID,
             region:region,
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "回调云函数已添加", "success");
                 setActiveStep(6);
             })
@@ -569,8 +567,10 @@ export default function COSGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("path")}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      setMagicVar("path")
+                                    }}
                                 >
                                     路径魔法变量列表
                                 </Link>{" "}
@@ -602,8 +602,10 @@ export default function COSGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("file")}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      setMagicVar("file")
+                                    }}
                                 >
                                     文件名魔法变量列表
                                 </Link>{" "}
@@ -1003,7 +1005,7 @@ export default function COSGuide(props) {
                                 如果是作为公有使用，请务必创建回调云函数。<br/><br/>
                             </Typography>
                             <Typography variant={"body2"}>Cloudreve 可以尝试帮你自动创建回调云函数，请选择 COS 存储桶 所在地域后继续。
-                                创建可能会花费数秒钟，请耐心等待。</Typography>
+                                创建可能会花费数秒钟，请耐心等待。创建前请确保您的腾讯云账号已开启云函数服务。</Typography>
 
                             <div className={classes.form}>
                                 <FormControl>
@@ -1022,7 +1024,6 @@ export default function COSGuide(props) {
                                         <MenuItem value={"ap-hongkong"}>港澳台地区(中国香港)</MenuItem>
                                         <MenuItem value={"ap-mumbai"}>亚太南部(孟买)</MenuItem>
                                         <MenuItem value={"ap-shanghai"}>华东地区(上海)</MenuItem>
-                                        <MenuItem value={"ap-shanghai-fsi"}>华东地区(上海金融)</MenuItem>
                                         <MenuItem value={"ap-singapore"}>亚太东南(新加坡)</MenuItem>
                                         <MenuItem value={"na-siliconvalley"}>美国西部(硅谷)</MenuItem>
                                         <MenuItem value={"na-toronto"}>北美地区(多伦多)</MenuItem>

@@ -5,7 +5,7 @@ import { refreshFileList, refreshStorage, toggleSnackbar } from "../../actions";
 import FileList from "./FileList.js";
 import Auth from "../../middleware/Auth";
 import UploadButton from "../Dial/Create.js";
-import { basename, pathJoin } from "../../untils";
+import { basename, pathJoin } from "../../utils";
 
 let loaded = false;
 
@@ -51,36 +51,46 @@ class UploaderComponent extends Component {
             return 4 * 1024 * 1024;
         }
         if (policyType === "onedrive") {
-            return 10 * 1024 * 1024;
+            return 100 * 1024 * 1024;
         }
         return 0;
     }
 
     fileAdd = (up, files) => {
-        let path = window.currntPath ? window.currntPath : this.props.path;
+        const path = window.currntPath ? window.currntPath : this.props.path;
         if (
-            this.props.keywords === null &&
+            this.props.keywords === "" &&
             window.location.href
                 .split("#")[1]
                 .toLowerCase()
                 .startsWith("/home")
         ) {
             window.fileList["openFileList"]();
-            window.plupload.each(files, files => {
-                let source = files.getSource();
+            const enqueFiles = files
+              // 不上传Mac下的布局文件 .DS_Store
+              .filter(file => {
+                const isDsStore = file.name.toLowerCase() === ".ds_store"
+                if (isDsStore) {
+                  up.removeFile(file)
+                }
+                return !isDsStore
+              })
+              .map(file => {
+                const source = file.getSource();
                 if (source.relativePath && source.relativePath !== "") {
-                    files.path =  basename(
+                  file.path =  basename(
                         pathJoin([path, source.relativePath])
                     );
-                    window.pathCache[files.id] = basename(
+                    window.pathCache[file.id] = basename(
                         pathJoin([path, source.relativePath])
                     );
                 } else {
-                    window.pathCache[files.id] = path;
-                    files.path = path;
+                    window.pathCache[file.id] = path;
+                    file.path = path;
                 }
-            });
-            window.fileList["enQueue"](files);
+                return file
+              })
+            window.fileList["enQueue"](enqueFiles);
         } else {
             window.plupload.each(files, files => {
                 up.removeFile(files);
@@ -88,7 +98,7 @@ class UploaderComponent extends Component {
         }
     };
 
-    componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
+    UNSAFE_componentWillReceiveProps({ isScriptLoaded, isScriptLoadSucceed }) {
         if (isScriptLoaded && !this.props.isScriptLoaded) {
             // load finished
             if (isScriptLoadSucceed) {
@@ -96,7 +106,7 @@ class UploaderComponent extends Component {
                     return;
                 }
                 loaded = true;
-                var user = Auth.GetUser();
+                const user = Auth.GetUser();
                 this.uploader = window.Qiniu.uploader({
                     runtimes: "html5",
                     browse_button: ["pickfiles", "pickfolder"],
@@ -123,7 +133,8 @@ class UploaderComponent extends Component {
                     init: {
                         FilesAdded: this.fileAdd,
 
-                        BeforeUpload: function(up, file) {},
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        BeforeUpload: function() {},
                         QueueChanged: up => {
                             this.setState({ queued: up.total.queued });
                         },
@@ -139,7 +150,7 @@ class UploaderComponent extends Component {
                                 file[0].status,
                                 file[0]
                             );
-                            for (var i = 0; i < file.length; i++) {
+                            for (let i = 0; i < file.length; i++) {
                                 if (file[i].status === 5) {
                                     window.fileList["setComplete"](file[i]);
                                 }
@@ -157,12 +168,14 @@ class UploaderComponent extends Component {
                             this.props.refreshFileList();
                             this.props.refreshStorage();
                         },
-                        FileUploaded: function(up, file, info) {},
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        FileUploaded: function() {},
                         Error: (up, err, errTip) => {
                             window.fileList["openFileList"]();
                             window.fileList["setError"](err.file, errTip);
                         },
-                        FilesRemoved: (up, files) => {}
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        FilesRemoved: () => {}
                     }
                 });
                 // this.fileList["openFileList"]();
@@ -170,6 +183,7 @@ class UploaderComponent extends Component {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onError() {}
 
     openFileList = () => {
@@ -183,7 +197,7 @@ class UploaderComponent extends Component {
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
                 />
-                {this.props.keywords === null && (
+                {this.props.keywords === "" && (
                     <UploadButton
                         Queued={this.state.queued}
                         openFileList={this.openFileList}

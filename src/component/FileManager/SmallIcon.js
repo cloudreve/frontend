@@ -16,7 +16,7 @@ const styles = theme => ({
             border: "1px solid #d0d0d0",
         },
         backgroundColor:
-            theme.palette.type == "dark"
+            theme.palette.type === "dark"
                 ? "#fff"
                 : lighten(theme.palette.primary.main,0.8),
     },
@@ -49,7 +49,7 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
     },
     folderNameSelected: {
-        color: theme.palette.type == "dark" ? theme.palette.background.paper : theme.palette.primary.dark,
+        color: theme.palette.type === "dark" ? theme.palette.background.paper : theme.palette.primary.dark,
         fontWeight: "500",
     },
     folderNameNotSelected: {
@@ -70,7 +70,7 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
     return {
     }
 }

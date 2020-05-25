@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect, useState} from "react";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
+import Select from "@material-ui/core/Select";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../../actions";
 
 const unitTransform = (v)=>{
     if(v<1024){
@@ -37,7 +37,7 @@ export default function SizeInput({onChange,min,value,required,label,max,suffix}
     let first = true;
 
     const transform = useCallback(()=>{
-        let res = unitTransform(value);
+        const res = unitTransform(value);
         if(first && value !== 0){
             setUnit(res[1]);
             first = false;

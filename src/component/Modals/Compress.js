@@ -12,7 +12,6 @@ import {
 import {
     toggleSnackbar,
     setModalsLoading,
-    refreshFileList,
 } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
@@ -60,7 +59,7 @@ export default function CompressDialog(props) {
     );
 
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
@@ -74,7 +73,7 @@ export default function CompressDialog(props) {
         }
         SetModalsLoading(true);
 
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
         props.selected.map(value => {
@@ -93,7 +92,7 @@ export default function CompressDialog(props) {
             name:fileName,
             dst: selectedPath === "//" ? "/" : selectedPath
         })
-            .then(response => {
+            .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "压缩任务已创建", "success");
                 SetModalsLoading(false);

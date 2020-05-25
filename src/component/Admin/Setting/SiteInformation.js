@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,6 +38,9 @@ export default function SiteInformation() {
         siteURL: "",
         siteName: "",
         siteTitle: "",
+        siteDes: "",
+        siteICPId: "",
+        siteScript: "",
         pwa_small_icon: "",
         pwa_medium_icon: "",
         pwa_large_icon: "",
@@ -77,7 +80,7 @@ export default function SiteInformation() {
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k=>{
             option.push({
                 key:k,
@@ -87,7 +90,7 @@ export default function SiteInformation() {
         API.patch("/admin/setting",{
             options:option,
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
             .catch(error => {
@@ -137,6 +140,20 @@ export default function SiteInformation() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
+                                    站点描述
+                                </InputLabel>
+                                <Input
+                                    value={options.siteDes}
+                                    onChange={handleChange("siteDes")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    站点描述信息，可能会在分享页面摘要内展示
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
                                     站点URL
                                 </InputLabel>
                                 <Input
@@ -147,6 +164,35 @@ export default function SiteInformation() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     非常重要，请确保与实际情况一致。使用云存储策略、支付平台时，请填入可以被外网访问的地址。
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    网站备案号
+                                </InputLabel>
+                                <Input
+                                    value={options.siteICPId}
+                                    onChange={handleChange("siteICPId")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    工信部网站ICP备案号
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    页脚代码
+                                </InputLabel>
+                                <Input
+                                    multiline
+                                    value={options.siteScript}
+                                    onChange={handleChange("siteScript")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    在页面底部插入的自定义HTML代码
                                 </FormHelperText>
                             </FormControl>
                         </div>

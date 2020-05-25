@@ -1,22 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Chip from "@material-ui/core/Chip";
-import SizeInput from "../Common/SizeInput";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import Collapse from "@material-ui/core/Collapse";
-import {useHistory} from "react-router";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
+import SizeInput from "../Common/SizeInput";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,14 +36,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function getStyles(name, personName, theme) {
-    return {
-        fontWeight:
-            personName.indexOf(name) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium
-    };
-}
+// function getStyles(name, personName, theme) {
+//     return {
+//         fontWeight:
+//             personName.indexOf(name) === -1
+//                 ? theme.typography.fontWeightRegular
+//                 : theme.typography.fontWeightMedium
+//     };
+// }
 
 export default function GroupForm(props) {
     const classes = useStyles();
@@ -71,8 +70,14 @@ export default function GroupForm(props) {
     );
     const [policies, setPolicies] = useState({});
 
-    const theme = useTheme();
-    let history = useHistory();
+    const history = useHistory();
+
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
     useEffect(() => {
         API.post("/admin/policy/list", {
@@ -82,7 +87,7 @@ export default function GroupForm(props) {
             conditions: {}
         })
             .then(response => {
-                let res = {};
+                const res = {};
                 response.data.items.forEach(v => {
                     res[v.ID] = v.Name;
                 });
@@ -101,7 +106,7 @@ export default function GroupForm(props) {
     };
 
     const handleCheckChange = name => event => {
-        let value = event.target.checked ? "true" : "false";
+        const value = event.target.checked ? "true" : "false";
         setGroup({
             ...group,
             [name]: value
@@ -109,7 +114,7 @@ export default function GroupForm(props) {
     };
 
     const handleOptionCheckChange = name => event => {
-        let value = event.target.checked ? "true" : "false";
+        const value = event.target.checked ? "true" : "false";
         setGroup({
             ...group,
             OptionsSerialized: {
@@ -129,16 +134,9 @@ export default function GroupForm(props) {
         });
     };
 
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
-
     const submit = e => {
         e.preventDefault();
-        let groupCopy = {
+        const groupCopy = {
             ...group,
             OptionsSerialized: { ...group.OptionsSerialized }
         };
@@ -184,7 +182,7 @@ export default function GroupForm(props) {
         API.post("/admin/group", {
             group: groupCopy
         })
-            .then(response => {
+            .then(() => {
                 history.push("/admin/group");
                 ToggleSnackbar("top", "right", "用户组已"+ (props.group ? "保存" : "添加"), "success");
             })

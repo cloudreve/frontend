@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { sizeToString } from "../../untils";
+import { sizeToString, vhCheck } from "../../utils";
 import {
     openMusicDialog, openResaveDialog,
     setSelectedTarget,
@@ -15,7 +15,10 @@ import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
+
+
+vhCheck()
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -64,7 +67,7 @@ const styles = theme => ({
         borderRadius: 12,
         boxShadow: "0 8px 16px rgba(29,39,55,.25)",
         [theme.breakpoints.down("sm")]: {
-            height: "calc(100vh - 56px)",
+            height: "calc(var(--vh, 100vh) - 56px)",
             borderRadius: 0,
             maxWidth: 1000
         },
@@ -92,7 +95,7 @@ const styles = theme => ({
         marginLeft: 8
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 
@@ -131,7 +134,7 @@ class SharedFileCompoment extends Component {
 
     preview = () => {
         if (pathHelper.isSharePage(this.props.location.pathname)) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 this.props.toggleSnackbar(
                     "top",
@@ -178,6 +181,16 @@ class SharedFileCompoment extends Component {
                     "/text?name=" +
                     encodeURIComponent(this.props.share.source.name));
                 return
+            case "pdf":
+                this.props.history.push(this.props.share.key +
+                    "/pdf?name=" +
+                    encodeURIComponent(this.props.share.source.name));
+                return
+            case "code":
+                this.props.history.push(this.props.share.key +
+                    "/code?name=" +
+                    encodeURIComponent(this.props.share.source.name));
+                return
             default:
                 this.props.toggleSnackbar(
                     "top",
@@ -197,7 +210,7 @@ class SharedFileCompoment extends Component {
         callback(event);
     };
 
-    download = e => {
+    download = () => {
         this.setState({ loading: true });
         API.put("/share/download/" + this.props.share.key)
             .then(response => {
@@ -219,9 +232,6 @@ class SharedFileCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-        const user = Auth.GetUser();
-        const isLogin = Auth.Check();
-
         return (
             <div className={classes.layout}>
                 <Modals />
@@ -272,42 +282,6 @@ class SharedFileCompoment extends Component {
                         </div>
                     </div>
                 </div>
-                {/*<div className={classes.fileCotainer}>*/}
-                {/*    <FileIcon file={file} share={true} />*/}
-                {/*</div>*/}
-                {/*<div className={classes.buttonCotainer}>*/}
-                {/*    <Button*/}
-                {/*        variant="outlined"*/}
-                {/*        className={classes.button}*/}
-                {/*        onClick={this.preview}*/}
-                {/*    >*/}
-                {/*        <PreviewIcon className={classes.icon} /> 预览*/}
-                {/*    </Button>*/}
-                {/*    <Button*/}
-                {/*        variant="outlined"*/}
-                {/*        className={classes.button}*/}
-                {/*        onClick={this.handleOpen}*/}
-                {/*    >*/}
-                {/*        <InfoIcon className={classes.icon} /> 信息*/}
-                {/*    </Button>*/}
-                {/*    <Popper*/}
-                {/*        id={id}*/}
-                {/*        open={this.state.open}*/}
-                {/*        anchorEl={this.state.anchorEl}*/}
-                {/*        transition*/}
-                {/*    >*/}
-                {/*        {({ TransitionProps }) => (*/}
-                {/*            <Fade {...TransitionProps} timeout={350}>*/}
-                {/*                <Paper className={classes.paper}>*/}
-                {/*                    <Typography>*/}
-                {/*                        此分享被浏览{this.props.share.views}*/}
-                {/*                        次，被下载{this.props.share.downloads}次*/}
-                {/*                    </Typography>*/}
-                {/*                </Paper>*/}
-                {/*            </Fade>*/}
-                {/*        )}*/}
-                {/*    </Popper>*/}
-                {/*</div>*/}
             </div>
         );
     }

@@ -40,7 +40,7 @@ const styles = theme => ({
         marginRottom: "10px"
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 
@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => {
 class LockedFileCompoment extends Component {
     constructor(props) {
         super(props);
-        let query = new URLSearchParams(this.props.location.search);
+        const query = new URLSearchParams(this.props.location.search);
         this.state = {
             pwd: query.get("password"),
         };

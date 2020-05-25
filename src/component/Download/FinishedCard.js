@@ -7,9 +7,7 @@ import {
     Typography,
     useTheme
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
-import { sizeToString } from "../../untils";
+import { sizeToString } from "../../utils";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import TypeIcon from "../FileManager/TypeIcon";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -151,19 +149,12 @@ export default function FinishedCard(props) {
 
     const [expanded, setExpanded] = React.useState(false);
 
-    const handleChange = panel => (event, newExpanded) => {
+    const handleChange = () => (event, newExpanded) => {
         setExpanded(!!newExpanded);
     };
 
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
-
     const getPercent = (completed, total) => {
-        if (total == 0) {
+        if (total === 0) {
             return 0;
         }
         return (completed / total) * 100;
@@ -196,7 +187,7 @@ export default function FinishedCard(props) {
 
     const getTaskError = error =>{
         try{
-            let res = JSON.parse(error)
+            const res = JSON.parse(error)
             return res.msg + "：" + res.error
         }catch (e) {
             return "文件转存失败"
@@ -223,13 +214,15 @@ export default function FinishedCard(props) {
                             </Tooltip>
                         </Typography>
                         {props.task.status === 3&&
+                        <Tooltip title={props.task.error}>
                             <Typography
                                 variant="body2"
                                 color="error"
                                 noWrap
                             >
-                            下载出错：{props.task.error}
+                                下载出错：{props.task.error}
                             </Typography>
+                        </Tooltip>
                         }
                         {props.task.status === 5&&
                             <Typography
@@ -304,7 +297,7 @@ export default function FinishedCard(props) {
                         <div className={classes.scroll}>
                             <Table>
                                 <TableBody>
-                                    {activeFiles().map((value, key) => {
+                                    {activeFiles().map((value) => {
                                         return (
                                             <TableRow
                                                 key={value.index}

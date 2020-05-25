@@ -22,11 +22,12 @@ import {
     Avatar,
     Typography
 } from "@material-ui/core";
-import { bufferDecode, bufferEncode } from "../../untils/index";
+import { bufferDecode, bufferEncode } from "../../utils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import {useLocation} from "react-router";
+import ReCaptcha from "./ReCaptcha";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -102,6 +103,8 @@ function LoginForm() {
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
     const title = useSelector(state => state.siteConfig.title);
     const authn = useSelector(state => state.siteConfig.authn);
+    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
+    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -117,13 +120,13 @@ function LoginForm() {
         [dispatch]
     );
 
-    let history = useHistory();
-    let location = useLocation();
-    let query = useQuery();
+    const history = useHistory();
+    const location = useLocation();
+    const query = useQuery();
 
     const classes = useStyles();
 
-    const refreshCaptcha = () => {
+    const refreshCaptcha = useCallback(() => {
         API.get("/site/captcha")
             .then(response => {
                 setCaptchaData(response.data);
@@ -136,14 +139,32 @@ function LoginForm() {
                     "error"
                 );
             });
-    };
+    }, []);
 
     useEffect(() => {
         setEmail(query.get("username"));
-        if (loginCaptcha) {
+        if (loginCaptcha  && !useReCaptcha) {
             refreshCaptcha();
         }
     }, [location,loginCaptcha]);
+
+    const afterLogin = data =>{
+      Auth.authenticate(data);
+
+      // 设置用户主题色
+      if (data["preferred_theme"] !== "") {
+          ApplyThemes(data["preferred_theme"]);
+      }
+      enableUploaderLoad();
+
+      // 设置登录状态
+      SetSessionStatus(true);
+
+      history.push("/home");
+      ToggleSnackbar("top", "right", "登录成功", "success");
+
+      localStorage.removeItem("siteConfigCache");
+    }
 
     const authnLogin = e => {
         e.preventDefault();
@@ -157,7 +178,7 @@ function LoginForm() {
 
         API.get("/user/authn/" + email)
             .then(response => {
-                let credentialRequestOptions = response.data;
+                const credentialRequestOptions = response.data;
                 console.log(credentialRequestOptions);
                 credentialRequestOptions.publicKey.challenge = bufferDecode(
                     credentialRequestOptions.publicKey.challenge
@@ -173,11 +194,11 @@ function LoginForm() {
                 });
             })
             .then(assertion => {
-                let authData = assertion.response.authenticatorData;
-                let clientDataJSON = assertion.response.clientDataJSON;
-                let rawId = assertion.rawId;
-                let sig = assertion.response.signature;
-                let userHandle = assertion.response.userHandle;
+                const authData = assertion.response.authenticatorData;
+                const clientDataJSON = assertion.response.clientDataJSON;
+                const rawId = assertion.rawId;
+                const sig = assertion.response.signature;
+                const userHandle = assertion.response.userHandle;
 
                 return API.post(
                     "/user/authn/finish/" + email,
@@ -206,24 +227,6 @@ function LoginForm() {
             });
     };
 
-    const afterLogin = data =>{
-        Auth.authenticate(data);
-
-        // 设置用户主题色
-        if (data["preferred_theme"] !== "") {
-            ApplyThemes(data["preferred_theme"]);
-        }
-        enableUploaderLoad();
-
-        // 设置登录状态
-        SetSessionStatus(true);
-
-        history.push("/home");
-        ToggleSnackbar("top", "right", "登录成功", "success");
-
-        localStorage.removeItem("siteConfigCache");
-    }
-
     const login = e => {
         e.preventDefault();
         setLoading(true);
@@ -244,7 +247,9 @@ function LoginForm() {
             .catch(error => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                refreshCaptcha();
+                if (!useReCaptcha) {
+                    refreshCaptcha();
+                }
             });
     };
 
@@ -300,7 +305,7 @@ function LoginForm() {
                                 autoComplete
                             />
                         </FormControl>
-                        {loginCaptcha && (
+                        {loginCaptcha && !useReCaptcha && (
                             <div className={classes.captchaContainer}>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="captcha">
@@ -335,6 +340,24 @@ function LoginForm() {
                                         />
                                     )}
                                 </div>
+                            </div>
+                        )}
+
+                        {loginCaptcha && useReCaptcha && (
+                            <div className={classes.captchaContainer}>
+                                <FormControl margin="normal" required fullWidth>
+                                    <div>
+                                        <ReCaptcha
+                                            style={{ display: "inline-block" }}
+                                            sitekey={reCaptchaKey}
+                                            onChange={value =>
+                                                setCaptcha(value)
+                                            }
+                                            id="captcha"
+                                            name="captcha"
+                                        />
+                                    </div>
+                                </FormControl>{" "}
                             </div>
                         )}
 

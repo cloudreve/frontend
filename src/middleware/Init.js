@@ -1,32 +1,13 @@
 import {setSiteConfig, toggleSnackbar, enableLoadUploader, changeViewMethod} from "../actions/index"
-import { fixUrlHash } from "../untils/index"
+import { fixUrlHash } from "../utils/index"
 import API from "./Api"
 import Auth from "./Auth"
-import pathHelper from "../untils/page";
-export var InitSiteConfig = (rawStore) => {
-    // 从缓存获取默认配置
-    let configCache = JSON.parse(localStorage.getItem('siteConfigCache'));
-    if (configCache != null) {
-        rawStore.siteConfig = configCache
-    }
-    // 检查是否有path参数
-    var url = new URL(fixUrlHash(window.location.href));
-    var c = url.searchParams.get("path");
-    rawStore.navigator.path = c===null?"/":c;
-    // 初始化用户个性配置
-    rawStore.siteConfig = initUserConfig(rawStore.siteConfig);
-    // 是否登录
-    rawStore.viewUpdate.isLogin = Auth.Check();
-
-    // 更改站点标题
-    document.title = rawStore.siteConfig.title;
-    return rawStore
-}
+import pathHelper from "../utils/page";
 
 const initUserConfig = (siteConfig) => {
     if (siteConfig.user!==undefined && !siteConfig.user.anonymous){
-        let themes = JSON.parse(siteConfig.themes);
-        let user = siteConfig.user;
+        const themes = JSON.parse(siteConfig.themes);
+        const user = siteConfig.user;
         delete siteConfig.user
     
         //更换用户自定配色
@@ -43,9 +24,27 @@ const initUserConfig = (siteConfig) => {
     return siteConfig
 }
 
+export const InitSiteConfig = (rawStore) => {
+  // 从缓存获取默认配置
+  const configCache = JSON.parse(localStorage.getItem('siteConfigCache'));
+  if (configCache != null) {
+      rawStore.siteConfig = configCache
+  }
+  // 检查是否有path参数
+  const url = new URL(fixUrlHash(window.location.href));
+  const c = url.searchParams.get("path");
+  rawStore.navigator.path = c===null?"/":c;
+  // 初始化用户个性配置
+  rawStore.siteConfig = initUserConfig(rawStore.siteConfig);
+
+  // 更改站点标题
+  document.title = rawStore.siteConfig.title;
+  return rawStore
+}
+
 export function enableUploaderLoad(){
     // 开启上传组件加载
-    let user = Auth.GetUser();
+    const user = Auth.GetUser();
     window.policyType = user!==null?user.policy.saveType : "local";
     window.uploadConfig = user!==null?user.policy:{};
     window.pathCache = [];
@@ -53,18 +52,18 @@ export function enableUploaderLoad(){
 
 export async function UpdateSiteConfig(store) {
     API.get("/site/config").then(function(response) {
-        let themes = JSON.parse(response.data.themes);
+        const themes = JSON.parse(response.data.themes);
         response.data.theme = themes[response.data.defaultTheme]
         response.data = initUserConfig(response.data)
         store.dispatch(setSiteConfig(response.data));
         localStorage.setItem('siteConfigCache', JSON.stringify(response.data));
 
         // 偏爱的列表样式
-        let preferListMethod = Auth.GetPreference("view_method");
+        const preferListMethod = Auth.GetPreference("view_method");
         if(preferListMethod){
             store.dispatch(changeViewMethod(preferListMethod));
         }else{
-            let path = window.location.hash.split("#");
+            const path = window.location.hash.split("#");
             if(path.length >=1 && pathHelper.isSharePage(path[1])){
                 store.dispatch(changeViewMethod(response.data.share_view_method));
             }else{

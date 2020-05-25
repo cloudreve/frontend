@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import CheckIcon from '@material-ui/icons/Check';
 import AutoHidden from "./AutoHidden";
-import statusHelper from "../../untils/page";
+import statusHelper from "../../utils/page";
 import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";

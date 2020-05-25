@@ -1,50 +1,32 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend
-} from "recharts";
-import ResponsiveContainer from "recharts/lib/component/ResponsiveContainer";
-import { makeStyles } from "@material-ui/core/styles";
-import pathHelper from "../../untils/page";
-import API from "../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
-import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import { blue, green, red, yellow } from "@material-ui/core/colors";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import {
-    FileCopy,
-    Forum,
-    GitHub,
-    Home,
-    Launch,
-    Lock,
-    People,
-    Public,
-    Telegram
-} from "@material-ui/icons";
-import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { blue, green, red, yellow } from "@material-ui/core/colors";
+import ListItemText from "@material-ui/core/ListItemText";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import { FileCopy, Forum, GitHub, Home, Launch, Lock, People, Public, Telegram } from "@material-ui/icons";
 import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import ResponsiveContainer from "recharts/lib/component/ResponsiveContainer";
 import TimeAgo from "timeago-react";
-import Chip from "@material-ui/core/Chip";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import { toggleSnackbar } from "../../actions";
+import API from "../../middleware/Api";
+import pathHelper from "../../utils/page";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -124,7 +106,7 @@ export default function Index() {
                 value:window.location.origin,
             }],
         })
-            .then(response => {
+            .then(() => {
                 setSiteURL(window.location.origin);
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
@@ -136,7 +118,7 @@ export default function Index() {
     useEffect(() => {
         API.get("/admin/summary")
             .then(response => {
-                let data = [];
+                const data = [];
                 response.data.date.forEach((v, k) => {
                     data.push({
                         name: v,
@@ -166,7 +148,7 @@ export default function Index() {
             .get("/api/v3/admin/news")
             .then(response => {
                 setNews(response.data.data);
-                let res = {};
+                const res = {};
                 response.data.included.forEach(v => {
                     if (v.type === "users") {
                         res[v.id] = v.attributes;
@@ -303,6 +285,7 @@ export default function Index() {
                 <Paper>
                     <div className={classes.logoContainer}>
                         <img
+                            alt="cloudreve"
                             className={classes.logo}
                             src={"/static/img/cloudreve.svg"}
                         />
@@ -385,7 +368,7 @@ export default function Index() {
             <Grid item xs={12} md={8} lg={9}>
                 <Paper className={classes.paper}>
                     <List>
-                        {news.map((v, k) => (
+                        {news && news.map((v) => (
                             <>
                                 <ListItem button alignItems="flex-start"
                                           onClick={()=>window.open("https://forum.cloudreve.org/d/" + v.id)}

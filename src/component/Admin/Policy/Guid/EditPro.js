@@ -1,81 +1,68 @@
-import { lighten, makeStyles } from "@material-ui/core/styles";
-import React, { useCallback, useEffect, useState } from "react";
-import Stepper from "@material-ui/core/Stepper";
-import StepLabel from "@material-ui/core/StepLabel";
-import Step from "@material-ui/core/Step";
-import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
-import { changeSubTitle, toggleSnackbar } from "../../../../actions";
-import Link from "@material-ui/core/Link";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import Collapse from "@material-ui/core/Collapse";
 import Button from "@material-ui/core/Button";
-import API from "../../../../middleware/Api";
-import MagicVar from "../../Dialogs/MagicVar";
-import DomainInput from "../../Common/DomainInput";
-import SizeInput from "../../Common/SizeInput";
-import { useHistory } from "react-router";
-import TableContainer from "@material-ui/core/TableContainer";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Input from "@material-ui/core/Input";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from '../../../../actions';
+import API from "../../../../middleware/Api";
 
-const useStyles = makeStyles(theme => ({
-    stepContent: {
-        padding: "16px 32px 16px 32px"
-    },
-    form: {
-        maxWidth: 400,
-        marginTop: 20
-    },
-    formContainer: {
-        [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
-    },
-    subStepContainer: {
-        display: "flex",
-        marginBottom: 20,
-        padding: 10,
-        transition: theme.transitions.create("background-color", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
-        }),
-        "&:focus-within": {
-            backgroundColor: theme.palette.background.default
-        }
-    },
-    stepNumber: {
-        width: 20,
-        height: 20,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.2),
-        color: theme.palette.secondary.contrastText,
-        textAlign: "center",
-        borderRadius: " 50%"
-    },
-    stepNumberContainer: {
-        marginRight: 10
-    },
-    stepFooter: {
-        marginTop: 32
-    },
-    button: {
-        marginRight: theme.spacing(1)
-    }
-}));
+
+// const useStyles = makeStyles(theme => ({
+//     stepContent: {
+//         padding: "16px 32px 16px 32px"
+//     },
+//     form: {
+//         maxWidth: 400,
+//         marginTop: 20
+//     },
+//     formContainer: {
+//         [theme.breakpoints.up("md")]: {
+//             padding: "0px 24px 0 24px"
+//         }
+//     },
+//     subStepContainer: {
+//         display: "flex",
+//         marginBottom: 20,
+//         padding: 10,
+//         transition: theme.transitions.create("background-color", {
+//             easing: theme.transitions.easing.sharp,
+//             duration: theme.transitions.duration.leavingScreen
+//         }),
+//         "&:focus-within": {
+//             backgroundColor: theme.palette.background.default
+//         }
+//     },
+//     stepNumber: {
+//         width: 20,
+//         height: 20,
+//         backgroundColor: lighten(theme.palette.secondary.light, 0.2),
+//         color: theme.palette.secondary.contrastText,
+//         textAlign: "center",
+//         borderRadius: " 50%"
+//     },
+//     stepNumberContainer: {
+//         marginRight: 10
+//     },
+//     stepFooter: {
+//         marginTop: 32
+//     },
+//     button: {
+//         marginRight: theme.spacing(1)
+//     }
+// }));
 
 export default function EditPro(props) {
-    const classes = useStyles();
-    const history = useHistory();
-
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     const [policy, setPolicy] = useState(props.policy);
 
     const handleChange = name => event => {
@@ -106,7 +93,7 @@ export default function EditPro(props) {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = { ...policy };
+        const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // 类型转换
@@ -128,7 +115,7 @@ export default function EditPro(props) {
         API.post("/admin/policy", {
             policy: policyCopy
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar(
                     "top",
                     "right",

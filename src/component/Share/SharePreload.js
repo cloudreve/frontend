@@ -2,17 +2,17 @@ import React, { Suspense, useCallback, useEffect, useState } from "react";
 import PageLoading from "../Placeholder/PageLoading";
 import { useParams } from "react-router";
 import API from "../../middleware/Api";
-import { changeSubTitle, toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../actions";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
 import { useDispatch } from "react-redux";
 import Notice from "./NotFound";
-
-const LockedFile = React.lazy(() => import("./LockedFile"));
-const SharedFile = React.lazy(() => import("./SharedFile"));
-const SharedFolder = React.lazy(() => import("./SharedFolder"));
+import LockedFile from "./LockedFile";
+import SharedFile from "./SharedFile";
+import SharedFolder from "./SharedFolder";
 
 export default function SharePreload() {
     const dispatch = useDispatch();
-    let { id } = useParams();
+    const { id } = useParams();
 
     const [share, setShare] = useState(undefined);
     const [loading, setLoading] = useState(false);
@@ -41,7 +41,6 @@ export default function SharePreload() {
         } else {
             SetSubTitle();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [share,SetSubTitle,ToggleSnackbar]);
 
     useEffect(() => {

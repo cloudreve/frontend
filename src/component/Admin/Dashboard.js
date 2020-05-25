@@ -1,40 +1,30 @@
-import React, { useCallback, useEffect, useState } from "react";
-import clsx from "clsx";
-import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
+import { withStyles } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import UserAvatar from "../Navbar/UserAvatar";
-import {
-    Contacts,
-    Home,
-    Language,
-    Settings,
-    Mail,
-    SettingsEthernet,
-    AttachMoney,
-    Palette,
-    CloudDownload, Image, Storage, Group, Person, InsertDriveFile, Share, ShoppingCart, Assignment, ListAlt
-} from "@material-ui/icons";
-import { withStyles } from "@material-ui/core";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { Assignment, CloudDownload, Contacts, Group, Home, Image, InsertDriveFile, Language, ListAlt, Mail, Palette, Person, Settings, SettingsEthernet, Share, Storage } from "@material-ui/icons";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import MenuIcon from "@material-ui/icons/Menu";
+import clsx from "clsx";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router";
 import { useRouteMatch } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../actions";
-import pathHelper from "../../untils/page";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
+import pathHelper from "../../utils/page";
+import UserAvatar from "../Navbar/UserAvatar";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -288,7 +278,7 @@ export default function Dashboard({ content }) {
         };
     }, []);
 
-    let { path } = useRouteMatch();
+    const { path } = useRouteMatch();
 
     return (
         <div className={classes.root}>
@@ -367,6 +357,7 @@ export default function Dashboard({ content }) {
                         }
                         return (
                             <ExpansionPanel
+                                key={item.title}
                                 square
                                 expanded={menuOpen === item.title}
                                 onChange={(event, isExpanded) => {

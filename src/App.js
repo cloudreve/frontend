@@ -8,9 +8,9 @@ import { useSelector } from "react-redux";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
-import { changeThemeColor } from "./untils";
+import { changeThemeColor } from "./utils";
 import NotFound from "./component/Share/NotFound";
-
+import { ICPFooter } from "./component/Common/ICPFooter";
 // Lazy loads
 import LoginForm from "./component/Login/LoginForm";
 import FileManager from "./component/FileManager/FileManager.js";
@@ -29,6 +29,9 @@ import Register from "./component/Login/Register";
 import Activation from "./component/Login/Activication";
 import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
+import PageLoading from "./component/Placeholder/PageLoading";
+import CodeViewer from "./component/Viewer/Code";
+const PDFViewer = React.lazy(() => import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF"));
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -37,11 +40,11 @@ export default function App() {
 
     const theme = React.useMemo(() => {
         themeConfig.palette.type = prefersDarkMode ? "dark" : "light";
-        let prefer = Auth.GetPreference("theme_mode");
+        const prefer = Auth.GetPreference("theme_mode");
         if (prefer) {
             themeConfig.palette.type = prefer;
         }
-        let theme = createMuiTheme({
+        const theme = createMuiTheme({
             ...themeConfig,
             palette: {
                 ...themeConfig.palette,
@@ -68,7 +71,7 @@ export default function App() {
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing.unit * 0,
+            padding: theme.spacing(0),
             minWidth: 0
         },
         toolbar: theme.mixins.toolbar
@@ -76,7 +79,7 @@ export default function App() {
 
     const classes = useStyles();
 
-    let { path } = useRouteMatch();
+    const { path } = useRouteMatch();
     return (
         <React.Fragment>
             <ThemeProvider theme={theme}>
@@ -100,18 +103,28 @@ export default function App() {
                             </AuthRoute>
 
                             <AuthRoute
-                                path={`${path}video/*`}
+                                path={`${path}video`}
                                 isLogin={isLogin}
                             >
                                 <VideoPreview />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}text/*`} isLogin={isLogin}>
+                            <AuthRoute path={`${path}text`} isLogin={isLogin}>
                                 <TextViewer />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}doc/*`} isLogin={isLogin}>
+                            <AuthRoute path={`${path}doc`} isLogin={isLogin}>
                                 <DocViewer />
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <PDFViewer />
+                                </Suspense>
+                            </AuthRoute>
+
+                            <AuthRoute path={`${path}code`} isLogin={isLogin}>
+                                <CodeViewer />
                             </AuthRoute>
 
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
@@ -122,16 +135,16 @@ export default function App() {
                                 <MyShare />
                             </AuthRoute>
 
-                            <AuthRoute path={`${path}search`} isLogin={isLogin}>
+                            <Route path={`${path}search`} isLogin={isLogin}>
                                 <SearchResult />
-                            </AuthRoute>
+                            </Route>
                             
-                            <AuthRoute
+                            <Route
                                 path={`${path}setting`}
                                 isLogin={isLogin}
                             >
                                 <UserSetting />
-                            </AuthRoute>
+                            </Route>
 
                             <AuthRoute
                                 path={`${path}profile/:id`}
@@ -184,11 +197,22 @@ export default function App() {
                                 <TextViewer />
                             </Route>
 
+                            <Route path={`${path}s/:id/pdf(/)*`}>
+                                <Suspense fallback={<PageLoading/>}>
+                                    <PDFViewer />
+                                </Suspense>
+                            </Route>
+
+                            <Route path={`${path}s/:id/code(/)*`}>
+                                <CodeViewer />
+                            </Route>
+
                             <Route path="*">
                                 <NotFound msg={"页面不存在"} />
                             </Route>
                         </Switch>
                     </main>
+                    <ICPFooter />
                 </div>
             </ThemeProvider>
         </React.Fragment>

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import StorageIcon from "@material-ui/icons/Storage";
 import { connect } from "react-redux";
 import API from "../../middleware/Api";
-import { sizeToString } from "../../untils";
+import { sizeToString } from "../../utils";
 import { toggleSnackbar } from "../../actions";
 
 import {
@@ -14,7 +14,6 @@ import {
     Tooltip
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
-import Link from "@material-ui/core/Link";
 import { withRouter } from "react-router";
 
 const mapStateToProps = state => {
@@ -46,7 +45,7 @@ const styles = theme => ({
         display: "flex",
         marginTop: "15px",
         textAlign: "left",
-        marginBottom: "20px"
+        marginBottom: "11px"
     },
     detail: {
         width: "100%",
@@ -90,7 +89,7 @@ class StorageBarCompoment extends Component {
         this.firstLoad = false;
     }
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (
             (this.props.isLogin && this.props.refresh !== nextProps.refresh) ||
             (this.props.isLogin !== nextProps.isLogin && nextProps.isLogin)
@@ -120,7 +119,8 @@ class StorageBarCompoment extends Component {
                     total: sizeToString(response.data.total)
                 });
             })
-            .catch(error => {});
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            .catch(() => {});
     };
 
     render() {

@@ -4,10 +4,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import {useLocation, useParams, useRouteMatch} from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle, toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../actions";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
 import Editor from 'for-editor'
 import SaveButton from "../Dial/Save";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
 const useStyles = makeStyles(theme => ({
     layout: {
@@ -29,6 +30,11 @@ const useStyles = makeStyles(theme => ({
         backgroundColor:"white",
         borderRadius: "8px",
     },
+    "@global": {
+        ".for-toolbar":{
+            overflowX:"auto!important",
+        },
+    },
 }));
 
 function useQuery() {
@@ -36,15 +42,15 @@ function useQuery() {
 }
 
 
-export default function TextViewer(props) {
+export default function TextViewer() {
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
     const math = useRouteMatch();
-    let $vm = React.createRef();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const $vm = React.createRef();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
 
     const dispatch = useDispatch();
     const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
@@ -58,7 +64,7 @@ export default function TextViewer(props) {
 
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = math.params[0].split("/");
+            const path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));
@@ -76,9 +82,11 @@ export default function TextViewer(props) {
         }
 
         setLoading(true);
-        API.get(requestURL)
+        API.get(requestURL, { responseType: 'arraybuffer' })
             .then(response => {
-                setContent(response.rawData.toString());
+                const buffer = new Buffer(response.rawData, 'binary');
+                const textdata = buffer.toString(); // for string
+                setContent(textdata);
             })
             .catch(error => {
                 ToggleSnackbar(
@@ -103,7 +111,7 @@ export default function TextViewer(props) {
     const save = ()=>{
         setStatus("loading");
         API.put("/file/update/" + query.get("id"),content)
-            .then(response => {
+            .then(() => {
                 setStatus("success");
                 setTimeout(()=>setStatus(""),2000);
             })

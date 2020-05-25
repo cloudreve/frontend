@@ -14,8 +14,9 @@ import {
     Tooltip
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher"
+import { Home } from "@material-ui/icons";
 
 const mapStateToProps = state => {
     return {
@@ -85,6 +86,11 @@ class UserAvatarCompoment extends Component {
         window.location.href = url;
     };
 
+    returnHome = () => {
+        window.location.hash = "#/home"
+        location.reload();
+    }
+
     render() {
         const { classes } = this.props;
         const loginCheck = Auth.Check(this.props.isLogin);
@@ -117,6 +123,14 @@ class UserAvatarCompoment extends Component {
                                 </>
                             )}
                         </>}
+
+                        {isAdminPage &&
+                        <Tooltip title={"返回主页"} placement="bottom">
+                            <IconButton color="inherit" onClick={this.returnHome}>
+                                <Home/>
+                            </IconButton>
+                        </Tooltip>
+                        }
 
                         <IconButton color="inherit" onClick={this.showUserInfo}>
                             {!loginCheck && <AccountCircle />}

@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import {
     toggleSnackbar,
 } from "../../actions/index"
-import axios from 'axios'
 
 import {
     MenuList,
@@ -20,7 +19,6 @@ import {
     ListItemSecondaryAction,
 } from '@material-ui/core';
 import API from '../../middleware/Api'
-import { Api } from 'mdi-material-ui';
 
 const mapStateToProps = state => {
     return {
@@ -69,21 +67,21 @@ class PathSelectorCompoment extends Component {
     }
 
     componentDidMount= ()=>{
-        let toBeLoad = this.props.presentPath;
-        this.enterFolder(this.props.keywords === null ? toBeLoad : "/");
+        const toBeLoad = this.props.presentPath;
+        this.enterFolder(this.props.keywords === "" ? toBeLoad : "/");
     }
 
     back = ()=>{
-        let paths = this.state.presentPath.split("/");
+        const paths = this.state.presentPath.split("/");
         paths.pop();
-        let toBeLoad = paths.join("/");
+        const toBeLoad = paths.join("/");
         this.enterFolder(toBeLoad===""?"/":toBeLoad);
     }
 
     enterFolder = (toBeLoad)=>{
-        API.get('/directory'+toBeLoad,)
+        API.get((this.props.api ? this.props.api : '/directory')+encodeURIComponent(toBeLoad),)
         .then( (response)=> {
-            var dirList =  response.data.objects.filter( (x)=> {
+            const dirList =  response.data.objects.filter( (x)=> {
                 return (x.type === "dir" && (this.props.selected.findIndex((value)=>{
                     return (value.name === x.name )&&(value.path === x.path);
                 }))===-1);

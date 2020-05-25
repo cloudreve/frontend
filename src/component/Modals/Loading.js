@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function LoadingDialog(props) {
+export default function LoadingDialog() {
     const classes = useStyles();
     const open = useSelector(
         state => state.viewUpdate.modals.loading,

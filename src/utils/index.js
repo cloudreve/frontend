@@ -1,31 +1,31 @@
 export const sizeToString = bytes => {
     if (bytes === 0 || bytes==="0") return "0 B";
-    var k = 1024;
-    var sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    const k = 1024;
+    const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
     return (bytes / Math.pow(k, i)).toFixed(1) + " " + sizes[i];
 };
 
 export const fixUrlHash = path => {
-    var relativePath = path.split("#");
-    var url = new URL("http://example.com/" + relativePath[1]);
+    const relativePath = path.split("#");
+    const url = new URL("http://example.com/" + relativePath[1]);
     return url.toString();
 };
 
 export const setCookie = (name, value, days) => {
     if (days) {
-        var date = new Date();
+        const date = new Date();
         date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     }
     document.cookie = name + "=" + (value || "") + "; path=/";
 };
 
 export const setGetParameter = (paramName, paramValue) => {
-    var url = window.location.href;
+    let url = window.location.href;
 
     if (url.indexOf(paramName + "=") >= 0) {
-        var prefix = url.substring(0, url.indexOf(paramName));
-        var suffix = url.substring(url.indexOf(paramName));
+        const prefix = url.substring(0, url.indexOf(paramName));
+        let suffix = url.substring(url.indexOf(paramName));
         suffix = suffix.substring(suffix.indexOf("=") + 1);
         suffix =
             suffix.indexOf("&") >= 0
@@ -58,21 +58,21 @@ export const allowSharePreview = () => {
 };
 
 export const checkGetParameters = field => {
-    var url = window.location.href;
+    const url = window.location.href;
     if (url.indexOf("?" + field + "=") !== -1) return true;
     else if (url.indexOf("&" + field + "=") !== -1) return true;
     return false;
 };
 
 export const changeThemeColor = color => {
-    var metaThemeColor = window.document.querySelector(
+    const metaThemeColor = window.document.querySelector(
         "meta[name=theme-color]"
     );
     metaThemeColor.setAttribute("content", color);
 };
 
 export const decode = c => {
-    var e = c.height,
+    let e = c.height,
         a = c.width,
         b = document.createElement("canvas");
     b.height = e;
@@ -81,7 +81,7 @@ export const decode = c => {
     b.drawImage(c, 0, 0);
     c = b.getImageData(0, 0, a, e);
     b = [];
-    for (var d = 0; d < a * e * 4; d += 4)
+    for (let d = 0; d < a * e * 4; d += 4)
         0 !== (d + 4) % (4 * a) &&
             [].push.apply(b, [].slice.call(c.data, d, d + 3));
     c = e = 0;
@@ -119,7 +119,7 @@ export function bufferEncode(value) {
 }
 
 export function pathBack(path) {
-    let folders =
+    const folders =
         path !== null
             ? path.substr(1).split("/")
             : this.props.path.substr(1).split("/");
@@ -151,20 +151,20 @@ export function pathJoin(parts, sep){
 }
 
 export function basename(path){
-    let pathList = path.split("/");
+    const pathList = path.split("/");
     pathList.pop()
     return pathList.join("/") === "" ? "/" : pathList.join("/")
 }
 
 export function transformTime(timestamp = +new Date()) {
     if (timestamp) {
-        var time = new Date(timestamp);
-        var y = time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+        const time = new Date(timestamp);
+        const y = time.getFullYear(); //getFullYear方法以四位数字返回年份
+        const M = time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+        const d = time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+        const h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+        const m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+        const s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
         return y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s;
     } else {
         return '';
@@ -172,10 +172,10 @@ export function transformTime(timestamp = +new Date()) {
 }
 
 export function randomStr(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
+    let result           = '';
+    const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
@@ -188,4 +188,13 @@ export function getNumber(base,conditions){
         }
     })
     return base
+}
+
+export const isMac = () => {
+  return "MACINTEL" === navigator.platform.toUpperCase()
+}
+
+export function vhCheck() {
+    const vh = window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
 }

@@ -19,7 +19,7 @@ import { toggleSnackbar } from "../../actions";
 import RightIcon from "@material-ui/icons/KeyboardArrowRight";
 import {Add, Fingerprint, HighlightOff} from "@material-ui/icons";
 import API from "../../middleware/Api";
-import {bufferDecode, bufferEncode} from "../../untils";
+import {bufferDecode, bufferEncode} from "../../utils";
 
 const useStyles = makeStyles(theme => ({
     sectionTitle: {
@@ -59,7 +59,7 @@ export default function Authn(props) {
         API.patch("/user/setting/authn", {
             id:id,
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -95,7 +95,7 @@ export default function Authn(props) {
         }
         API.put("/user/authn", {})
             .then(response => {
-                let credentialCreationOptions = response.data;
+                const credentialCreationOptions = response.data;
                 credentialCreationOptions.publicKey.challenge = bufferDecode(
                     credentialCreationOptions.publicKey.challenge
                 );
@@ -104,7 +104,7 @@ export default function Authn(props) {
                 );
                 if (credentialCreationOptions.publicKey.excludeCredentials) {
                     for (
-                        var i = 0;
+                        let i = 0;
                         i <
                         credentialCreationOptions.publicKey.excludeCredentials
                             .length;
@@ -124,9 +124,9 @@ export default function Authn(props) {
                 });
             })
             .then(credential => {
-                let attestationObject = credential.response.attestationObject;
-                let clientDataJSON = credential.response.clientDataJSON;
-                let rawId = credential.rawId;
+                const attestationObject = credential.response.attestationObject;
+                const clientDataJSON = credential.response.clientDataJSON;
+                const rawId = credential.rawId;
                 return API.put(
                     "/user/authn/finish",
                     JSON.stringify({
@@ -187,7 +187,7 @@ export default function Authn(props) {
             </Typography>
             <Paper>
                 <List className={classes.desenList}>
-                    {props.list.map((v, i) => (
+                    {props.list.map((v) => (
                         <>
                             <ListItem button
                                       style={{

@@ -9,6 +9,9 @@ const statusHelper = {
     isAdminPage(path){
         return path && path.startsWith("/admin")
     },
+    isLoginPage(path){
+        return path && path.startsWith("/login")
+    },
     isMobile(){
         return window.innerWidth < 600;
     },

@@ -17,12 +17,12 @@ import ImageIcon from "@material-ui/icons/CollectionsOutlined";
 import MusicIcon from "@material-ui/icons/LibraryMusicOutlined";
 import DocIcon from "@material-ui/icons/FileCopyOutlined";
 import { useHistory, useLocation } from "react-router";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import { navitateTo, searchMyFile, toggleSnackbar } from "../../actions";
-import { useDispatch, useSelector } from "react-redux";
+import { navigateTo, searchMyFile, toggleSnackbar } from "../../actions";
+import { useDispatch } from "react-redux";
 import Auth from "../../middleware/Auth";
 import {
     Circle,
@@ -134,11 +134,11 @@ const icons = {
 
 const AddTag = React.lazy(() => import ("../Modals/AddTag" ));
 
-export default function FileTag(props) {
+export default function FileTag() {
     const classes = useStyles();
 
-    let location = useLocation();
-    let history = useHistory();
+    const location = useLocation();
+    const history = useHistory();
 
     const isHomePage = pathHelper.isHomePage(location.pathname);
 
@@ -151,8 +151,7 @@ export default function FileTag(props) {
     const SearchMyFile = useCallback(k => dispatch(searchMyFile(k)), [
         dispatch
     ]);
-    const NavigateTo = useCallback(k => dispatch(navitateTo(k)), [dispatch]);
-    const isLogin = useSelector(state => state.viewUpdate.isLogin);
+    const NavigateTo = useCallback(k => dispatch(navigateTo(k)), [dispatch]);
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -163,7 +162,7 @@ export default function FileTag(props) {
 
     const getIcon = (icon, color) => {
         if (icons[icon]) {
-            let IconComponent = icons[icon];
+            const IconComponent = icons[icon];
             return (
                 <IconComponent
                     className={[classes.iconFix]}
@@ -181,19 +180,19 @@ export default function FileTag(props) {
     };
 
     const submitSuccess = tag =>{
-        let newTags = [...tags,tag];
+        const newTags = [...tags,tag];
         setTags(newTags);
-        let user = Auth.GetUser();
+        const user = Auth.GetUser();
         user.tags = newTags;
         Auth.SetUser(user);
     };
 
     const submitDelete = id =>{
         API.delete("/tag/"+id)
-            .then(response => {
-                let newTags = tags.filter((v)=>{return v.id !== id});
+            .then(() => {
+                const newTags = tags.filter((v)=>{return v.id !== id});
                 setTags(newTags)
-                let user = Auth.GetUser();
+                const user = Auth.GetUser();
                 user.tags = newTags;
                 Auth.SetUser(user);
             })

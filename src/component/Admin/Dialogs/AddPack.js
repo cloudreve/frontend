@@ -12,7 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import SizeInput from "../Common/SizeInput";
 import {makeStyles} from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
 
     formContainer: {
         margin:"8px 0 8px 0",
@@ -38,7 +38,7 @@ export default function AddPack({ open, onClose,onSubmit }) {
 
     const submit = e => {
         e.preventDefault();
-        let packCopy = {...pack};
+        const packCopy = {...pack};
         packCopy.size = parseInt(packCopy.size);
         packCopy.time = parseInt(packCopy.time) * 86400;
         packCopy.price = parseInt(packCopy.price) * 100;

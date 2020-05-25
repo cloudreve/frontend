@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from "react";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
-import SizeInput from "../Common/SizeInput";
-import { makeStyles } from "@material-ui/core/styles";
-import API from "../../../middleware/Api";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
+import React, { useEffect, useState } from "react";
+import API from "../../../middleware/Api";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     formContainer: {
         margin: "8px 0 8px 0"
     }
@@ -42,7 +41,8 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                 .then(response => {
                     setGroups(response.data);
                 })
-                .catch(error => {});
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                .catch(() => {});
         }
         // eslint-disable-next-line
     }, [open]);
@@ -63,7 +63,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
 
     const submit = e => {
         e.preventDefault();
-        let groupCopy = {...group};
+        const groupCopy = {...group};
         groupCopy.time = parseInt(groupCopy.time) * 86400;
         groupCopy.price = parseInt(groupCopy.price) * 100;
         groupCopy.score = parseInt(groupCopy.score);

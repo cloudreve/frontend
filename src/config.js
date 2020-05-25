@@ -1,9 +1,32 @@
 export const imgPreviewSuffix = ["bmp","png","gif","jpg","jpeg","svg","webp"];
 export const msDocPreviewSuffix = ["ppt","pptx","pps","doc","docx","xlsx","xls"];
 export const audioPreviewSuffix = ["mp3","ogg"];
-export const videoPreviewSuffix = ["mp4"];
-export const directOpenPreviewSuffix = ["pdf"];
-export const editSuffix = ["md","html","sql","go","py","js","json","c","cpp","css","txt","ini"];
+export const videoPreviewSuffix = ["mp4","mkv","webm"];
+export const pdfPreviewSuffix = ["pdf"];
+export const editSuffix = ["md","txt"];
+export const codePreviewSuffix = {
+    "json":"json",
+    "php":"php",
+    "bat":"bat",
+    "cpp":"cpp",
+    "c":"cpp",
+    "h":"cpp",
+    "cs":"csharp",
+    "css":"css",
+    "dockerfile":"dockerfile",
+    "go":"go",
+    "html":"html",
+    "ini":"ini",
+    "java":"java",
+    "js":"javascript",
+    "jsx":"javascript",
+    "less":"less",
+    "lua":"lua",
+    "sh":"shell",
+    "sql":"sql",
+    "xml":"xml",
+    "yaml":"yaml",
+};
 export const mediaType = {
     audio:["mp3","flac","ape","wav","acc","ogg"],
     video:["mp4","flv","avi","wmv","mkv","rm","rmvb","mov","ogv"],
@@ -34,7 +57,7 @@ export const policyTypeMap = {
     onedrive:"OneDrive",
 };
 export const isPreviewable = name=>{
-    let suffix = name.split(".").pop().toLowerCase();
+    const suffix = name.split(".").pop().toLowerCase();
     if(imgPreviewSuffix.indexOf(suffix)!==-1){
         return "img";
     }else if(msDocPreviewSuffix.indexOf(suffix)!==-1){
@@ -45,11 +68,15 @@ export const isPreviewable = name=>{
         return "video";
     }else if(editSuffix.indexOf(suffix)!==-1){
         return "edit";
+    }else if(pdfPreviewSuffix.indexOf(suffix)!==-1){
+        return "pdf";
+    }else if(Object.keys(codePreviewSuffix).indexOf(suffix)!==-1){
+        return "code";
     }
     return false;
 }
 export const isTorrent = name=>{
-    let suffix = name.split(".").pop().toLowerCase();
+    const suffix = name.split(".").pop().toLowerCase();
     if(mediaType.torrent.indexOf(suffix)!==-1){
         return true;
     }
@@ -57,13 +84,13 @@ export const isTorrent = name=>{
 }
 
 export const isCompressFile = name=>{
-    let suffix = name.split(".").pop().toLowerCase();
+    const suffix = name.split(".").pop().toLowerCase();
     return suffix === "zip"
 }
 
 const taskStatus = ["排队中","处理中","失败","取消","已完成"];
-const taskType = ["压缩","解压缩","文件中转"];
-const taskProgress = ["等待中","压缩中","解压缩中","下载中","转存中"];
+const taskType = ["压缩","解压缩","文件中转","导入外部目录"];
+const taskProgress = ["等待中","压缩中","解压缩中","下载中","转存中","索引中","插入中"];
 
 export const getTaskStatus = status =>{
     return taskStatus[status];

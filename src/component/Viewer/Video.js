@@ -5,8 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../actions";
-import pathHelper from "../../untils/page";
+import { changeSubTitle } from "../../redux/viewUpdate/action";
+import pathHelper from "../../utils/page";
 
 const useStyles = makeStyles(theme => ({
     layout: {
@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
         marginBottom: 50
     },
     player: {
-        borderRadius: "4px"
+        borderRadius: "4px",
+        maxHeight:600,
     }
 }));
 
@@ -30,18 +31,18 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-export default function VideoViewer(props) {
+export default function VideoViewer() {
     const math = useRouteMatch();
-    let location = useLocation();
-    let query = useQuery();
-    let { id } = useParams();
+    const location = useLocation();
+    const query = useQuery();
+    const { id } = useParams();
     const dispatch = useDispatch();
     const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
         dispatch
     ]);
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
-            let path = math.params[0].split("/");
+            const path = query.get("p").split("/");
             SetSubTitle(path[path.length - 1]);
         } else {
             SetSubTitle(query.get("name"));
@@ -61,13 +62,13 @@ export default function VideoViewer(props) {
                                 getBaseURL() +
                                 (pathHelper.isSharePage(location.pathname)
                                     ? "/share/preview/" +
-                                      id +
-                                      (query.get("share_path") !== ""
-                                          ? "?path=" +
-                                            encodeURIComponent(
-                                                query.get("share_path")
-                                            )
-                                          : "")
+                                    id +
+                                    (query.get("share_path") !== ""
+                                        ? "?path=" +
+                                        encodeURIComponent(
+                                            query.get("share_path")
+                                        )
+                                        : "")
                                     : "/file/preview/" + query.get("id"))
                         }
                     }}

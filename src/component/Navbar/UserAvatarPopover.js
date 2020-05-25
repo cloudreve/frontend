@@ -10,7 +10,6 @@ import {
 } from "mdi-material-ui";
 import {setSessionStatus, setUserPopover, toggleSnackbar} from "../../actions";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../untils/page";
 import Auth from "../../middleware/Auth";
 import {
     withStyles,
@@ -23,6 +22,7 @@ import {
     Divider
 } from "@material-ui/core";
 import API from "../../middleware/Api";
+import pathHelper from "../../utils/page";
 
 const mapStateToProps = state => {
     return {
@@ -43,7 +43,7 @@ const mapDispatchToProps = dispatch => {
         },
     };
 };
-const styles = theme => ({
+const styles = () => ({
     avatar: {
         width: "30px",
         height: "30px"
@@ -77,9 +77,9 @@ class UserAvatarPopoverCompoment extends Component {
         window.location.href = url;
     };
 
-    sigOut = e => {
+    sigOut = () => {
         API.delete("/user/session/")
-            .then(response => {
+            .then(() => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -106,6 +106,8 @@ class UserAvatarPopoverCompoment extends Component {
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
+        const isAdminPage = pathHelper.isAdminPage(this.props.location.pathname);
+
         return (
             <Popover
                 open={this.props.anchorEl !== null}
@@ -172,7 +174,7 @@ class UserAvatarPopoverCompoment extends Component {
                         </div>
                         <div>
                             <Divider />
-                            <MenuItem
+                            {!isAdminPage && <MenuItem
                                 style={{
                                     padding:" 11px 16px 11px 16px",
                                 }}
@@ -187,7 +189,7 @@ class UserAvatarPopoverCompoment extends Component {
                                     <HomeAccount />
                                 </ListItemIcon>
                                 个人主页
-                            </MenuItem>
+                            </MenuItem>}
                             {user.group.id === 1 && (
                                 <MenuItem
                                     style={{

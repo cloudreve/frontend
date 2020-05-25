@@ -15,9 +15,7 @@ import {
     Toolbar,
     IconButton,
     Typography,
-    LinearProgress,
     Slide,
-    Avatar,
     ListItemSecondaryAction,
     withWidth,
     DialogContent
@@ -91,8 +89,8 @@ class FileList extends Component {
     }
 
     deQueue(file) {
-        var filesNow = [...this.state.files];
-        var fileID = filesNow.findIndex(f => {
+        const filesNow = [...this.state.files];
+        const fileID = filesNow.findIndex(f => {
             return f.id === file.id;
         });
         if (fileID !== -1) {
@@ -105,8 +103,8 @@ class FileList extends Component {
     }
 
     updateStatus(file) {
-        var filesNow = [...this.state.files];
-        var fileID = filesNow.findIndex(f => {
+        const filesNow = [...this.state.files];
+        const fileID = filesNow.findIndex(f => {
             return f.id === file.id;
         });
         if (!file.errMsg || file.ignoreMsg) {
@@ -123,8 +121,8 @@ class FileList extends Component {
 
     setComplete(file) {
         console.log("setComplete");
-        var filesNow = [...this.state.files];
-        var fileID = filesNow.findIndex(f => {
+        const filesNow = [...this.state.files];
+        const fileID = filesNow.findIndex(f => {
             return f.id === file.id;
         });
         if (fileID !== -1) {
@@ -138,8 +136,8 @@ class FileList extends Component {
     }
 
     setError(file, errMsg) {
-        var filesNow = [...this.state.files];
-        var fileID = filesNow.findIndex(f => {
+        const filesNow = [...this.state.files];
+        const fileID = filesNow.findIndex(f => {
             return f.id === file.id;
         });
         if (fileID !== -1) {

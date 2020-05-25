@@ -1,19 +1,16 @@
 const Auth = {
     isAuthenticated: false,
-    authenticate(cb) {
+    authenticate(cb: any) {
         Auth.SetUser(cb);
         Auth.isAuthenticated = true;
     },
     GetUser(){
-        return JSON.parse(localStorage.getItem("user"))
+        return JSON.parse(localStorage.getItem("user") || "null")
     },
-    SetUser(newUser){
+    SetUser(newUser: any){
         localStorage.setItem("user", JSON.stringify(newUser));
     },
-    /**
-     * @return {boolean}
-     */
-    Check() {
+    Check(): boolean {
         if (Auth.isAuthenticated) {
             return true;
         }
@@ -25,21 +22,18 @@ const Auth = {
     },
     signout() {
         Auth.isAuthenticated = false;
-        let oldUser = Auth.GetUser();
+        const oldUser = Auth.GetUser();
         oldUser.id = 0;
         localStorage.setItem("user", JSON.stringify(oldUser));
     },
-    SetPreference(key,value){
-        let preference = JSON.parse(localStorage.getItem("user_preference"));
+    SetPreference(key: string,value: any){
+        let preference = JSON.parse(localStorage.getItem("user_preference") || '{}');
         preference = (preference == null) ? {} : preference;
         preference[key] = value;
         localStorage.setItem("user_preference", JSON.stringify(preference));
     },
-    /**
-     * @return {null}
-     */
-    GetPreference(key){
-        let preference = JSON.parse(localStorage.getItem("user_preference"));
+    GetPreference(key: string): any | null{
+        const preference = JSON.parse(localStorage.getItem("user_preference") || '{}');
         if (preference && preference[key]){
             return preference[key];
         }

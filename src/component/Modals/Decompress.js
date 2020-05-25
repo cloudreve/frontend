@@ -12,12 +12,11 @@ import {
 import {
     toggleSnackbar,
     setModalsLoading,
-    refreshFileList,
 } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
-import {filePath} from "../../untils";
+import {filePath} from "../../utils";
 
 const useStyles = makeStyles(theme => ({
     contentFix: {
@@ -55,7 +54,7 @@ export default function DecompressDialog(props) {
     );
 
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
@@ -72,7 +71,7 @@ export default function DecompressDialog(props) {
             src:filePath(props.selected[0]),
             dst: selectedPath === "//" ? "/" : selectedPath
         })
-            .then(response => {
+            .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "解压缩任务已创建", "success");
                 SetModalsLoading(false);

@@ -1,31 +1,28 @@
+import { lighten } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import { Delete } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles, } from "@material-ui/core/styles";
-import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import TablePagination from "@material-ui/core/TablePagination";
-import {  useLocation } from "react-router";
-import IconButton from "@material-ui/core/IconButton";
-import {  Delete,  FilterList } from "@material-ui/icons";
-import Tooltip from "@material-ui/core/Tooltip";
-import Checkbox from "@material-ui/core/Checkbox";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { lighten } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Badge from "@material-ui/core/Badge";
+import { getTaskProgress, getTaskStatus, getTaskType } from "../../../config";
+import API from "../../../middleware/Api";
 import ShareFilter from "../Dialogs/ShareFilter";
-import {sizeToString} from "../../../untils";
-import {getTaskProgress, getTaskStatus, getTaskType} from "../../../config";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -71,10 +68,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
-
 export default function Task() {
     const classes = useStyles();
     const [tasks, setTasks] = useState([]);
@@ -89,11 +82,14 @@ export default function Task() {
     const [selected, setSelected] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        loadList();
-    }, [page, pageSize, orderBy, filter, search]);
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
-    const loadList = () => {
+    const loadList = useCallback(() => {
         API.post("/admin/task/list", {
             page: page,
             page_size: pageSize,
@@ -110,12 +106,16 @@ export default function Task() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    };
+    }, []);
+
+    useEffect(() => {
+      loadList();
+  }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
         setLoading(true);
         API.post("/admin/task/delete", { id: [id] })
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "任务已删除", "success");
             })
@@ -127,10 +127,10 @@ export default function Task() {
             });
     };
 
-    const deleteBatch = e => {
+    const deleteBatch = () => {
         setLoading(true);
         API.post("/admin/task/delete", { id: selected })
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "任务已删除", "success");
             })
@@ -141,13 +141,6 @@ export default function Task() {
                 setLoading(false);
             });
     };
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
@@ -183,7 +176,7 @@ export default function Task() {
             return "-"
         }
         try {
-            let res = JSON.parse(error)
+            const res = JSON.parse(error)
             return res.msg
         }catch (e) {
             return "未知"

@@ -14,7 +14,7 @@ import {
     CircularProgress
 } from "@material-ui/core";
 import { toggleSnackbar } from "../../actions/index";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -23,7 +23,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import LockIcon from "@material-ui/icons/Lock";
 import TimerIcon from "@material-ui/icons/Timer";
 import CasinoIcon from "@material-ui/icons/Casino";
-import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Divider from "@material-ui/core/Divider";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -115,9 +114,6 @@ export default function CreatShare(props) {
         [dispatch]
     );
 
-    const scoreEnabled = useSelector(state => state.siteConfig.score_enabled);
-    const scoreRate = useSelector(state => state.siteConfig.share_score_rate);
-
     const [expanded, setExpanded] = React.useState(false);
     const [shareURL, setShareURL] = React.useState("");
     const [values, setValues] = React.useState({
@@ -153,7 +149,7 @@ export default function CreatShare(props) {
         event.preventDefault();
     };
 
-    const randomPassword = event => {
+    const randomPassword = () => {
         setShareOption({ ...shareOption, password: true });
         setValues({
             ...values,
@@ -169,7 +165,7 @@ export default function CreatShare(props) {
         setExpanded(isExpanded ? panel : false);
     };
 
-    const handleCheck = prop => event => {
+    const handleCheck = prop => () => {
         if (!shareOption[prop]) {
             handleExpand(prop)(null, true);
         }
@@ -193,7 +189,7 @@ export default function CreatShare(props) {
     const submitShare = e => {
         e.preventDefault();
         props.setModalsLoading(true);
-        let submitFormBody = {
+        const submitFormBody = {
             id: props.selected[0].id,
             is_dir: props.selected[0].type === "dir",
             password: values.password,

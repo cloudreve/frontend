@@ -1,19 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Button from "@material-ui/core/Button";
-import API from "../../../middleware/Api";
+import Alert from "@material-ui/lab/Alert";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Alert from "@material-ui/lab/Alert";
-import Link from "@material-ui/core/Link";
-import Box from "@material-ui/core/Box";
+import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -75,10 +72,12 @@ export default function Aria2() {
 
     const reload = () => {
         API.get("/admin/reload/aria2")
-            .then(response => {})
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            .then(() => {})
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             .then(() => {});
     };
 
@@ -101,7 +100,7 @@ export default function Aria2() {
     const submit = e => {
         e.preventDefault();
         setLoading(true);
-        let option = [];
+        const option = [];
         Object.keys(options).forEach(k=>{
             option.push({
                 key:k,
@@ -111,7 +110,7 @@ export default function Aria2() {
         API.patch("/admin/setting",{
             options:option,
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
                 reload();
             })

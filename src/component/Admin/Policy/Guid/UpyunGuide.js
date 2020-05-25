@@ -1,27 +1,25 @@
-import { lighten, makeStyles } from "@material-ui/core/styles";
-import React, { useCallback, useEffect, useState } from "react";
-import Stepper from "@material-ui/core/Stepper";
-import StepLabel from "@material-ui/core/StepLabel";
-import Step from "@material-ui/core/Step";
-import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
-import { changeSubTitle, toggleSnackbar } from "../../../../actions";
-import Link from "@material-ui/core/Link";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import Collapse from "@material-ui/core/Collapse";
 import Button from "@material-ui/core/Button";
+import Collapse from "@material-ui/core/Collapse";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Stepper from "@material-ui/core/Stepper";
+import { lighten, makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { toggleSnackbar } from "../../../../actions";
 import API from "../../../../middleware/Api";
-import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
-import { useHistory } from "react-router";
-import Alert from "@material-ui/lab/Alert";
-import {getNumber, randomStr} from "../../../../untils";
+import MagicVar from "../../Dialogs/MagicVar";
 
 const useStyles = makeStyles(theme => ({
     stepContent: {
@@ -96,7 +94,7 @@ export default function UpyunGuide(props) {
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [skipped, setSkipped] = React.useState(new Set());
+    const [skipped,] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
     const [policy, setPolicy] = useState(props.policy?props.policy:{
         Type: "upyun",
@@ -148,7 +146,7 @@ export default function UpyunGuide(props) {
         e.preventDefault();
         setLoading(true);
 
-        let policyCopy = { ...policy };
+        const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // 类型转换
@@ -170,7 +168,7 @@ export default function UpyunGuide(props) {
         API.post("/admin/policy", {
             policy: policyCopy
         })
-            .then(response => {
+            .then(() => {
                 ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
                 setActiveStep(5);
             })
@@ -427,8 +425,10 @@ export default function UpyunGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("path")}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      setMagicVar("path")
+                                    }}
                                 >
                                     路径魔法变量列表
                                 </Link>{" "}
@@ -460,8 +460,10 @@ export default function UpyunGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("file")}
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      setMagicVar("file")
+                                    }}
                                 >
                                     文件名魔法变量列表
                                 </Link>{" "}

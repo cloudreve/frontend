@@ -20,7 +20,7 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
     return {
     }
 }
@@ -107,7 +107,7 @@ class SnackbarCompoment extends Component {
         open:false,
     }
 
-    componentWillReceiveProps = (nextProps)=>{
+    UNSAFE_componentWillReceiveProps = (nextProps)=>{
         if(nextProps.snackbar.toggle !== this.props.snackbar.toggle){
             this.setState({open:true});
         }

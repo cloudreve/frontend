@@ -84,7 +84,7 @@ const styles = theme => ({
         marginTop: 5,
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 
@@ -120,7 +120,7 @@ class MyShareCompoment extends Component {
     removeShare = (id) => {
         API
             .delete("/share/"+id)
-            .then(response => {
+            .then(() => {
                     let oldList = this.state.shareList;
                     oldList = oldList.filter(value => {
                         return value.key !== id;
@@ -146,12 +146,12 @@ class MyShareCompoment extends Component {
     };
 
     changePermission = id => {
-        let newPwd = Math.random()
+        const newPwd = Math.random()
             .toString(36)
             .substr(2)
             .slice(2, 8);
-        let oldList = this.state.shareList;
-        let shareIndex = oldList.findIndex(value => {
+        const oldList = this.state.shareList;
+        const shareIndex = oldList.findIndex(value => {
             return value.key === id;
         });
         API
@@ -171,8 +171,8 @@ class MyShareCompoment extends Component {
     };
 
     changePreviewOption = id => {
-        let oldList = this.state.shareList;
-        let shareIndex = oldList.findIndex(value => {
+        const oldList = this.state.shareList;
+        const shareIndex = oldList.findIndex(value => {
             return value.key === id;
         });
         API
@@ -192,7 +192,7 @@ class MyShareCompoment extends Component {
     };
 
     loadList = (page,orderBy) => {
-        let order = orderBy.split(" ");
+        const order = orderBy.split(" ");
         API.get("/share?page=" + page + "&order_by=" + order[0] + "&order=" + order[1])
             .then(response => {
                 if (response.data.items.length === 0) {
@@ -208,7 +208,7 @@ class MyShareCompoment extends Component {
                     shareList: response.data.items
                 });
             })
-            .catch(error => {
+            .catch(() => {
                 this.props.toggleSnackbar("top", "right", "加载失败", "error");
             });
     };

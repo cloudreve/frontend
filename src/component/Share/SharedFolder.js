@@ -9,14 +9,13 @@ import {
     toggleSnackbar
 } from "../../actions";
 import { withStyles, Typography } from "@material-ui/core";
-import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router-dom";
 import FileManager from "../FileManager/FileManager";
 import Paper from "@material-ui/core/Paper";
 import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -32,12 +31,12 @@ const styles = theme => ({
         [theme.breakpoints.down("sm")]: {
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(1),
-            marginRight: theme.spacing(1),
+            marginRight: theme.spacing(1)
         }
     },
-    managerContainer:{
-        overflowY: "auto",
-    },
+    managerContainer: {
+        overflowY: "auto"
+    }
 });
 
 const ReadMe = React.lazy(() => import("./ReadMe"));
@@ -75,7 +74,7 @@ const mapDispatchToProps = dispatch => {
 class SharedFolderComponent extends Component {
     state = {};
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         window.shareInfo = this.props.share;
     }
 
@@ -85,10 +84,9 @@ class SharedFolderComponent extends Component {
     }
 
     handleClickAway = () => {
-        if (!pathHelper.isMobile()){
+        if (!pathHelper.isMobile()) {
             this.props.setSelectedTarget([]);
         }
-
     };
 
     render() {
@@ -103,7 +101,7 @@ class SharedFolderComponent extends Component {
                         <FileManager isShare share={this.props.share} />
                     </Paper>
                 </ClickAwayListener>
-                { /* eslint-disable-next-line */}
+                {/* eslint-disable-next-line */}
                 {this.props.fileList.map(value => {
                     if (
                         (value.name.toLowerCase() === "readme.md" ||
@@ -129,7 +127,11 @@ class SharedFolderComponent extends Component {
                     }}
                 >
                     <Typography>
-                        <Creator isFolder share={this.props.share} />
+                        <Creator
+                            isFolder
+                            onClose={() => this.props.setShareUserPopover(null)}
+                            share={this.props.share}
+                        />
                     </Typography>
                 </Popover>
             </div>

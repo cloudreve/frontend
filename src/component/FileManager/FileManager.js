@@ -1,23 +1,17 @@
 import React, { Component } from 'react'
-
-import Navigator from "./Navigator/Navigator"
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import { connect } from "react-redux"
+import { withRouter } from "react-router-dom"
+import { closeAllModals, navigateTo, setSelectedTarget, toggleSnackbar } from "../../actions"
+import { changeSubTitle } from "../../redux/viewUpdate/action";
+import pathHelper from "../../utils/page"
 import DragLayer from "./DnD/DragLayer"
 import Explorer from "./Explorer"
 import Modals from "./Modals"
-import {decode} from "../../untils/index"
-import { withStyles } from '@material-ui/core';
-import {connect} from "react-redux";
-import {
-    changeSubTitle, closeAllModals, navitateTo, setSelectedTarget, toggleSnackbar,
-} from "../../actions";
-import {withRouter} from "react-router-dom";
-import pathHelper from "../../untils/page";
-const styles = theme => ({
- 
-})
+import Navigator from "./Navigator/Navigator"
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const mapStateToProps = ()=>{
 
 }
@@ -36,26 +30,21 @@ const mapDispatchToProps = dispatch => {
         closeAllModals: () => {
             dispatch(closeAllModals());
         },
-        navitateTo:path=>{
-            dispatch(navitateTo(path));
+        navigateTo:path=>{
+            dispatch(navigateTo(path));
         },
     };
 };
 
 class FileManager extends Component {
-
     constructor(props){
         super(props);
         this.image = React.createRef();
     }
-
-    componentWillMount() {
-    }
-
     componentWillUnmount() {
         this.props.setSelectedTarget([]);
         this.props.closeAllModals();
-        this.props.navitateTo("/");
+        this.props.navigateTo("/");
     }
 
     componentDidMount() {
@@ -83,4 +72,4 @@ FileManager.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(FileManager)));
+)((withRouter(FileManager)));

@@ -5,12 +5,13 @@ import { baseURL } from "../../middleware/Api";
 import { showImgPreivew } from "../../actions/index";
 import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
-import pathHelper from "../../untils/page";
+import pathHelper from "../../utils/page";
 import {withRouter} from "react-router";
 import {PhotoSlider} from "react-photo-view";
 import 'react-photo-view/dist/index.css';
+import * as explorer from "../../redux/explorer/reducer";
 
-const styles = theme => ({});
+const styles = () => ({});
 
 const mapStateToProps = state => {
     return {
@@ -34,12 +35,12 @@ class ImagPreviewComponent extends Component {
         isOpen: false
     };
 
-    componentWillReceiveProps = nextProps => {
-        let items = [];
+    UNSAFE_componentWillReceiveProps = nextProps => {
+        const items = [];
         let firstOne = 0;
-        if (nextProps.first !== null) {
+        if (nextProps.first.id !== "") {
             if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
-                let newImg = {
+                const newImg = {
                     intro: nextProps.first.name,
                     src:
                         baseURL +
@@ -56,7 +57,7 @@ class ImagPreviewComponent extends Component {
             }
             // eslint-disable-next-line
             nextProps.other.map(value => {
-                let fileType = value.name
+                const fileType = value.name
                     .split(".")
                     .pop()
                     .toLowerCase();
@@ -74,7 +75,7 @@ class ImagPreviewComponent extends Component {
                             "/file/preview/" +
                             value.id
                     }
-                    let newImg = {
+                    const newImg = {
                         intro: value.name,
                         src:src,
                     };
@@ -96,7 +97,7 @@ class ImagPreviewComponent extends Component {
     };
 
     handleClose = () => {
-        this.props.showImgPreivew(null);
+        this.props.showImgPreivew(explorer.initState.imgPreview.first);
         this.setState({
             isOpen: false
         });

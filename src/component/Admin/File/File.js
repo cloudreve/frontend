@@ -1,36 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import API from "../../../middleware/Api";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { sizeToString } from "../../../untils";
-import TableBody from "@material-ui/core/TableBody";
-import { policyTypeMap } from "../../../config";
-import TablePagination from "@material-ui/core/TablePagination";
-import AddPolicy from "../Dialogs/AddPolicy";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import { useHistory, useLocation } from "react-router";
-import IconButton from "@material-ui/core/IconButton";
-import {Block, Delete, Edit, FilterList} from "@material-ui/icons";
-import Tooltip from "@material-ui/core/Tooltip";
-import Popover from "@material-ui/core/Popover";
-import Menu from "@material-ui/core/Menu";
-import Checkbox from "@material-ui/core/Checkbox";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import { lighten } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import UserFilter from "../Dialogs/UserFilter";
 import Badge from "@material-ui/core/Badge";
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import { Delete, DeleteForever, FilterList } from "@material-ui/icons";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import { toggleSnackbar } from "../../../actions";
+import API from "../../../middleware/Api";
+import { sizeToString } from "../../../utils";
 import FileFilter from "../Dialogs/FileFilter";
 
 const useStyles = makeStyles(theme => ({
@@ -51,7 +44,8 @@ const useStyles = makeStyles(theme => ({
     },
     header: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        alignItems: "flex-start",
     },
     headerRight: {},
     highlight:
@@ -77,10 +71,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
-
 export default function File() {
     const classes = useStyles();
     const [files, setFiles] = useState([]);
@@ -95,11 +85,15 @@ export default function File() {
     const [selected, setSelected] = useState([]);
     const [loading,setLoading] = useState(false);
 
-    useEffect(() => {
-        loadList();
-    }, [page, pageSize, orderBy, filter, search]);
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
-    const loadList = () => {
+    const loadList = useCallback(() => {
         API.post("/admin/file/list", {
             page: page,
             page_size: pageSize,
@@ -116,12 +110,16 @@ export default function File() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    };
+    }, []);
+
+    useEffect(() => {
+      loadList();
+    }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
         setLoading(true);
         API.post("/admin/file/delete",{id:[id]})
-            .then(response => {
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
             })
@@ -132,10 +130,10 @@ export default function File() {
         });
     };
 
-    const deleteBatch = e =>{
+    const deleteBatch =force => () =>{
         setLoading(true);
-        API.post("/admin/file/delete",{id:selected})
-            .then(response => {
+        API.post("/admin/file/delete",{id:selected,force:force})
+            .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
             })
@@ -145,13 +143,6 @@ export default function File() {
             setLoading(false);
         });
     }
-
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
@@ -194,6 +185,16 @@ export default function File() {
                 setFilter={setFilter}
             />
             <div className={classes.header}>
+                <Button
+                    color={"primary"}
+                    onClick={() => history.push("/admin/file/import")}
+                    variant={"contained"}
+                    style={{
+                        alignSelf: "center",
+                    }}
+                >
+                    从外部导入
+                </Button>
                 <div className={classes.headerRight}>
                     <Tooltip title="过滤">
 
@@ -234,8 +235,13 @@ export default function File() {
                             已选择 {selected.length} 个对象
                         </Typography>
                         <Tooltip title="删除">
-                            <IconButton onClick={deleteBatch} disabled={loading} aria-label="delete">
+                            <IconButton onClick={deleteBatch(false)} disabled={loading} aria-label="delete">
                                 <Delete />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="强制删除">
+                            <IconButton onClick={deleteBatch(true)} disabled={loading} aria-label="delete">
+                                <DeleteForever />
                             </IconButton>
                         </Tooltip>
                     </Toolbar>

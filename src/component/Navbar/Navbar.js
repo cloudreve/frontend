@@ -4,7 +4,6 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 import ShareIcon from "@material-ui/icons/Share";
 import BackIcon from "@material-ui/icons/ArrowBack";
-import SdStorage from "@material-ui/icons/SdStorage";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import OpenFolderIcon from "@material-ui/icons/FolderOpen";
@@ -17,7 +16,7 @@ import { isPreviewable } from "../../config";
 import {
     drawerToggleAction,
     setSelectedTarget,
-    navitateTo,
+    navigateTo,
     openCreateFolderDialog,
     changeContextMenu,
     searchMyFile,
@@ -29,21 +28,22 @@ import {
     openRemoveDialog,
     openShareDialog,
     openRenameDialog,
-    openLoadingDialog
+    openLoadingDialog,
+    setSessionStatus
 } from "../../actions";
 import {
     allowSharePreview,
     checkGetParameters,
     changeThemeColor
-} from "../../untils";
+} from "../../utils";
 import Uploader from "../Upload/Uploader.js";
-import { sizeToString } from "../../untils";
-import pathHelper from "../../untils/page";
+import { sizeToString, vhCheck } from "../../utils";
+import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
 import UserAvatar from "./UserAvatar";
 import UserInfo from "./UserInfo";
-import { AccountArrowRight, AccountPlus } from "mdi-material-ui";
+import { AccountArrowRight, AccountPlus, LogoutVariant } from "mdi-material-ui";
 import { withRouter } from "react-router-dom";
 import {
     AppBar,
@@ -63,10 +63,12 @@ import {
     Tooltip
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
+import API from "../../middleware/Api";
 import FileTag from "./FileTags";
-import {Assignment, Devices, Settings} from "@material-ui/icons";
+import { Assignment, Devices, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 
+vhCheck()
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
 
@@ -94,8 +96,8 @@ const mapDispatchToProps = dispatch => {
         setSelectedTarget: targets => {
             dispatch(setSelectedTarget(targets));
         },
-        navitateTo: path => {
-            dispatch(navitateTo(path));
+        navigateTo: path => {
+            dispatch(navigateTo(path));
         },
         openCreateFolderDialog: () => {
             dispatch(openCreateFolderDialog());
@@ -132,6 +134,9 @@ const mapDispatchToProps = dispatch => {
         },
         openLoadingDialog: text => {
             dispatch(openLoadingDialog(text));
+        },
+        setSessionStatus: () => {
+            dispatch(setSessionStatus());
         }
     };
 };
@@ -259,11 +264,11 @@ const styles = theme => ({
     minStickDrawer: {
         overflowY: "auto",
         [theme.breakpoints.up("sm")]: {
-            height: "calc(100vh - 155px)"
+            height: "calc(var(--vh, 100vh) - 145px)"
         },
 
         [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(100vh - 324px)"
+            minHeight: "calc(var(--vh, 100vh) - 360px)"
         }
     }
 });
@@ -276,25 +281,25 @@ class NavbarCompoment extends Component {
         this.UploaderRef = React.createRef();
     }
 
-    componentWillMount() {
-        this.unlisten = this.props.history.listen((location, action) => {
-            this.setState(state => ({ mobileOpen: false }));
+    UNSAFE_componentWillMount() {
+        this.unlisten = this.props.history.listen(() => {
+            this.setState(() => ({ mobileOpen: false }));
         });
     }
     componentWillUnmount() {
         this.unlisten();
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
         changeThemeColor(
             this.props.selected.length <= 1 &&
                 !(!this.props.isMultiple && this.props.withFile)
                 ? this.props.theme.palette.primary.main
                 : this.props.theme.palette.background.default
         );
-    };
+    }
 
-    componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = nextProps => {
         if (
             (this.props.selected.length <= 1 &&
                 !(!this.props.isMultiple && this.props.withFile)) !==
@@ -331,9 +336,9 @@ class NavbarCompoment extends Component {
     };
 
     openPreview = () => {
-        let isShare = pathHelper.isSharePage(this.props.location.pathname);
+        const isShare = pathHelper.isSharePage(this.props.location.pathname);
         if (isShare) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 this.props.toggleSnackbar(
                     "top",
@@ -346,7 +351,7 @@ class NavbarCompoment extends Component {
             }
         }
         this.props.changeContextMenu("file", false);
-        let previewPath =
+        const previewPath =
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +
@@ -360,15 +365,15 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/doc?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/doc" + previewPath + "?id=" + this.props.selected[0].id
+                    "/doc?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             case "audio":
@@ -378,30 +383,60 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/video?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/video" + previewPath + "?id=" + this.props.selected[0].id
+                    "/video?p=" +encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             case "edit":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/text?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/text" + previewPath + "?id=" + this.props.selected[0].id
+                    "/text?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                );
+                return;
+            case "pdf":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/pdf?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                this.props.history.push(
+                    "/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                );
+                return;
+            case "code":
+                if (isShare) {
+                    this.props.history.push(
+                        this.props.selected[0].key +
+                        "/code?name=" +
+                        encodeURIComponent(this.props.selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                this.props.history.push(
+                    "/code?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
                 );
                 return;
             default:
@@ -424,6 +459,32 @@ class NavbarCompoment extends Component {
 
     archiveDownload = () => {
         this.props.openLoadingDialog("打包中...");
+    };
+
+    signOut = () => {
+        API.delete("/user/session/")
+            .then(() => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "您已退出登录",
+                    "success"
+                );
+                Auth.signout();
+                window.location.reload();
+                this.props.setSessionStatus(false);
+            })
+            .catch(error => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "warning"
+                );
+            })
+            .finally(() => {
+                this.handleClose();
+            });
     };
 
     render() {
@@ -523,17 +584,23 @@ class NavbarCompoment extends Component {
                                         </ListItemIcon>
                                         <ListItemText primary="个人设置" />
                                     </ListItem>
+
+                                    <ListItem
+                                        button
+                                        key="退出登录"
+                                        onClick={this.signOut}
+                                    >
+                                        <ListItemIcon>
+                                            <LogoutVariant className={classes.iconFix} />
+                                        </ListItemIcon>
+                                        <ListItemText primary="退出登录" />
+                                    </ListItem>
                                 </List>
                             </>
                         )}
-
-                        {!pathHelper.isSharePage(
-                            this.props.location.pathname
-                        ) && (
-                            <div>
-                                <StorageBar></StorageBar>
-                            </div>
-                        )}
+                        <div>
+                            <StorageBar></StorageBar>
+                        </div>
                     </>
                 )}
 
@@ -669,7 +736,9 @@ class NavbarCompoment extends Component {
                             !(
                                 !this.props.isMultiple && this.props.withFile
                             ) && (
-                                <Typography variant="h6" color="inherit" noWrap>
+                                <Typography variant="h6" color="inherit" noWrap
+                                            onClick={() => {this.props.history.push("/")}}
+                                >
                                     {this.props.subTitle
                                         ? this.props.subTitle
                                         : this.props.title}
@@ -814,7 +883,7 @@ class NavbarCompoment extends Component {
                                                     <IconButton
                                                         color="inherit"
                                                         onClick={() =>
-                                                            this.props.navitateTo(
+                                                            this.props.navigateTo(
                                                                 this.props
                                                                     .path ===
                                                                     "/"
@@ -930,7 +999,7 @@ class NavbarCompoment extends Component {
                         open={this.state.mobileOpen}
                         onClose={this.handleDrawerToggle}
                         onOpen={() =>
-                            this.setState(state => ({ mobileOpen: true }))
+                            this.setState(() => ({ mobileOpen: true }))
                         }
                         disableDiscovery={iOS}
                         ModalProps={{

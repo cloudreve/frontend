@@ -1,19 +1,14 @@
-import React, {useCallback, useEffect, useState} from "react";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import Typography from "@material-ui/core/Typography";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import API from "../../../middleware/Api";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
+import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
+import React, { useState } from "react";
 
 export default function ShareFilter({setFilter,setSearch,open, onClose }) {
     const [input,setInput] = useState({
@@ -22,19 +17,12 @@ export default function ShareFilter({setFilter,setSearch,open, onClose }) {
     });
     const [keywords,setKeywords] = useState("");
 
-    const dispatch = useDispatch();
-    const ToggleSnackbar = useCallback(
-        (vertical, horizontal, msg, color) =>
-            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
-        [dispatch]
-    );
-
     const handleChange = name => event => {
         setInput({...input,[name]:event.target.value})
     }
 
-    const submit = e => {
-        let res = {};
+    const submit = () => {
+        const res = {};
         Object.keys(input).forEach(v=>{
             if(input[v] !== "all" && input[v] !== ""){
                 res[v] = input[v];

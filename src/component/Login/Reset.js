@@ -16,6 +16,7 @@ import {
     Typography
 } from "@material-ui/core";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
+import ReCaptcha from "./ReCaptcha";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -68,6 +69,8 @@ function Reset() {
     const [captchaData, setCaptchaData] = useState(null);
     const [loading, setLoading] = useState(false);
     const forgetCaptcha = useSelector(state => state.siteConfig.forgetCaptcha);
+    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
+    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -97,7 +100,7 @@ function Reset() {
     };
 
     useEffect(() => {
-        if (forgetCaptcha) {
+        if (forgetCaptcha && !useReCaptcha) {
             refreshCaptcha();
         }
         // eslint-disable-next-line
@@ -110,16 +113,16 @@ function Reset() {
             userName: input.email,
             captchaCode: input.captcha
         })
-            .then(response => {
+            .then(() => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", "密码重置邮件已发送，请注意查收", "success");
-
-
             })
             .catch(error => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                refreshCaptcha();
+                if (!useReCaptcha){
+                    refreshCaptcha();
+                }
             });
     };
 
@@ -147,7 +150,7 @@ function Reset() {
                             autoFocus
                         />
                     </FormControl>
-                    {forgetCaptcha && (
+                    {forgetCaptcha && !useReCaptcha && (
                         <div className={classes.captchaContainer}>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="captcha">
@@ -176,6 +179,24 @@ function Reset() {
                                     />
                                 )}
                             </div>
+                        </div>
+                    )}
+                    {forgetCaptcha && useReCaptcha && (
+                        <div className={classes.captchaContainer}>
+                            <FormControl margin="normal" required fullWidth>
+                                <ReCaptcha
+                                    style={{ display: "inline-block" }}
+                                    sitekey={reCaptchaKey}
+                                    onChange={value=>
+                                        setInput({
+                                            ...input,
+                                            captcha:value
+                                        })
+                                    }
+                                    id="captcha"
+                                    name="captcha"
+                                />
+                            </FormControl>{" "}
                         </div>
                     )}
                     <Button

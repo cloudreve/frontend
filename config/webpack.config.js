@@ -26,6 +26,8 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const eslint = require('eslint');
+const CopyPlugin = require('copy-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -275,6 +277,18 @@ module.exports = function(webpackEnv) {
       splitChunks: {
         chunks: 'all',
         name: false,
+        cacheGroups: {
+          monacoCommon: {
+            test: /[\\/]node_modules[\\/]monaco\-editor/,
+            name: 'monaco-editor-common',
+            chunks: 'async'
+          },
+          pdfCommon: {
+            test: /[\\/]node_modules[\\/](react\-pdf|pdfjs\-dist)/,
+            name: 'react-pdf',
+            chunks: 'async'
+          }
+        },
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
@@ -348,7 +362,6 @@ module.exports = function(webpackEnv) {
                 formatter: require.resolve('react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
                 resolvePluginsRelativeTo: __dirname,
-                
               },
               loader: require.resolve('eslint-loader'),
             },
@@ -518,6 +531,26 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      // Monaco 代码编辑器
+      new MonacoWebpackPlugin({
+        // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+        languages: ['json',"php","bat","cpp","csharp","css","dockerfile","go","html","ini","java","javascript","less","lua","shell","sql","xml","yaml"]
+      }),
+      // 写入版本文件
+      new CopyPlugin([
+        {
+          from: 'package.json',
+          to: 'version.json',
+          transform(content, path) {
+            let contentJson = JSON.parse(content);
+            return JSON.stringify({
+              version:contentJson.version,
+              name:contentJson.name,
+            })
+          },
+        },
+      ]),
+
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -620,8 +653,9 @@ module.exports = function(webpackEnv) {
       isEnvProduction &&
         new WorkboxWebpackPlugin.GenerateSW({
           clientsClaim: true,
-          exclude: [/\.map$/, /asset-manifest\.json$/],
+          exclude: [/\.map$/, /asset-manifest\.json$/,/\.ttf$/,/version\.json$/,/\.worker\.js$/],
           importWorkboxFrom: 'cdn',
+          excludeChunks:["monaco-editor-common","pdf","react-pdf"],
           navigateFallback: publicUrl + '/index.html',
           navigateFallbackBlacklist: [
             // Exclude URLs starting with /_, as they're likely an API call

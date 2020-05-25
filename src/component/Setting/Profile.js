@@ -114,7 +114,7 @@ const styles = theme => ({
         overflowX:"auto",
     }
 });
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {};
 };
 

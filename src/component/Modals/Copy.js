@@ -57,7 +57,7 @@ export default function CopyDialog(props) {
     }, [dispatch]);
 
     const setMoveTarget = folder => {
-        let path =
+        const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
@@ -70,7 +70,7 @@ export default function CopyDialog(props) {
             e.preventDefault();
         }
         SetModalsLoading(true);
-        let dirs = [],
+        const dirs = [],
             items = [];
         // eslint-disable-next-line
 
@@ -88,7 +88,7 @@ export default function CopyDialog(props) {
             },
             dst: selectedPath === "//" ? "/" : selectedPath
         })
-            .then(response => {
+            .then(() => {
                 props.onClose();
                 RefreshFileList();
                 SetModalsLoading(false);

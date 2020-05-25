@@ -1,18 +1,17 @@
-import React from "react";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import Typography from "@material-ui/core/Typography";
-import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import {makeStyles} from "@material-ui/core/styles";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import {useHistory, useLocation} from "react-router";
+import CardMedia from "@material-ui/core/CardMedia";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles(theme => ({
     cardContainer:{
@@ -91,7 +90,7 @@ export default function AddPolicy({open, onClose }) {
             <DialogContent dividers className={classes.bg}>
                 <Grid container spacing={2}>
                     {policies.map(v=>(
-                        <Grid item sm={12} md={6}>
+                        <Grid item sm={12} md={6} key={v.path}>
                             <Card className={classes.card}>
                                 <CardActionArea
                                     onClick={()=>{

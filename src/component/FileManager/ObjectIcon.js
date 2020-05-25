@@ -3,16 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     changeContextMenu,
     setSelectedTarget,
-    addSelectedTarget,
-    removeSelectedTarget,
-    navitateTo,
+    selectFile as selectFileAction,
+    navigateTo,
     showImgPreivew,
     openMusicDialog,
     toggleSnackbar,
     dragAndDrop,
     openLoadingDialog
 } from "../../actions/index";
-import statusHelper from "../../untils/page";
+import statusHelper from "../../utils/page";
 import FileIcon from "./FileIcon";
 import SmallIcon from "./SmallIcon";
 import TableItem from "./TableRow";
@@ -24,9 +23,9 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import DropWarpper from "./DnD/DropWarpper";
 import { useHistory, useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
-import { pathBack } from "../../untils";
+import { pathBack } from "../../utils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     container: {
         padding: "7px"
     },
@@ -45,8 +44,8 @@ export default function ObjectIcon(props) {
         state => state.viewUpdate.explorerViewMethod
     );
     const navigatorPath = useSelector(state => state.navigator.path);
-    let location = useLocation();
-    let history = useHistory();
+    const location = useLocation();
+    const history = useHistory();
 
     const dispatch = useDispatch();
     const ContextMenu = useCallback(
@@ -57,15 +56,8 @@ export default function ObjectIcon(props) {
         targets => dispatch(setSelectedTarget(targets)),
         [dispatch]
     );
-    const AddSelectedTarget = useCallback(
-        targets => dispatch(addSelectedTarget(targets)),
-        [dispatch]
-    );
-    const RemoveSelectedTarget = useCallback(
-        id => dispatch(removeSelectedTarget(id)),
-        [dispatch]
-    );
-    const NavitateTo = useCallback(targets => dispatch(navitateTo(targets)), [
+
+    const NavitateTo = useCallback(targets => dispatch(navigateTo(targets)), [
         dispatch
     ]);
     const ShowImgPreivew = useCallback(
@@ -107,20 +99,13 @@ export default function ObjectIcon(props) {
     };
 
     const selectFile = e => {
-        let presentIndex = selected.findIndex(value => {
-            return value === props.file;
-        });
-        if (presentIndex !== -1 && e.ctrlKey) {
-            RemoveSelectedTarget(presentIndex);
-        } else {
-            if (e.ctrlKey) {
-                AddSelectedTarget(props.file);
-            } else {
-                SetSelectedTarget([props.file]);
-            }
-        }
+        dispatch(selectFileAction(props.file, e, props.index))
     };
-
+    const enterFolder = () => {
+      NavitateTo(
+          path === "/" ? path + props.file.name : path + "/" + props.file.name
+      );
+    };
     const handleClick = e => {
         if (props.file.type === "up") {
             NavitateTo(pathBack(navigatorPath));
@@ -147,9 +132,9 @@ export default function ObjectIcon(props) {
             enterFolder();
             return;
         }
-        let isShare = statusHelper.isSharePage(location.pathname);
+        const isShare = statusHelper.isSharePage(location.pathname);
         if (isShare) {
-            let user = Auth.GetUser();
+            const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
                 ToggleSnackbar("top", "right", "请先登录", "warning");
                 return;
@@ -159,7 +144,7 @@ export default function ObjectIcon(props) {
             OpenLoadingDialog("获取下载地址...");
             return;
         }
-        let previewPath =
+        const previewPath =
             selected[0].path === "/"
                 ? selected[0].path + selected[0].name
                 : selected[0].path + "/" + selected[0].name;
@@ -171,18 +156,18 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/doc?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 history.push(
-                    "/doc" +
-                    previewPath +
-                        "?id=" +
-                        selected[0].id
+                    "/doc?p=" +
+                    encodeURIComponent(previewPath) +
+                    "&id=" +
+                    selected[0].id
                 );
                 return;
             case "audio":
@@ -192,17 +177,17 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/video?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 history.push(
-                    "/video" +
-                    previewPath +
-                    "?id=" +
+                    "/video?p=" +
+                    encodeURIComponent(previewPath) +
+                    "&id=" +
                     selected[0].id
                 );
                 return;
@@ -210,25 +195,45 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
+                        "/text?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                history.push("/text" + previewPath + "?id=" + selected[0].id);
+                history.push("/text?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
+                return;
+            case "pdf":
+                if (isShare) {
+                    history.push(
+                        selected[0].key +
+                        "/pdf?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                history.push("/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
+                return;
+            case "code":
+                if (isShare) {
+                    history.push(
+                        selected[0].key +
+                        "/code?name=" +
+                        encodeURIComponent(selected[0].name) +
+                        "&share_path=" +
+                        encodeURIComponent(previewPath)
+                    );
+                    return;
+                }
+                history.push("/code?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
                 return;
             default:
                 OpenLoadingDialog("获取下载地址...");
                 return;
         }
-    };
-
-    const enterFolder = () => {
-        NavitateTo(
-            path === "/" ? path + props.file.name : path + "/" + props.file.name
-        );
     };
 
     const [{ isDragging }, drag, preview] = useDrag({

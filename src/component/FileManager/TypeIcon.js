@@ -106,7 +106,7 @@ let color;
 const TypeIcon = props => {
     const theme = useTheme();
 
-    let fileSuffix = props.fileName
+    const fileSuffix = props.fileName
         .split(".")
         .pop()
         .toLowerCase();
@@ -116,7 +116,7 @@ const TypeIcon = props => {
             fileType = k;
         }
     });
-    let IconComponent = icons[fileType].icon;
+    const IconComponent = icons[fileType].icon;
     color = getColor(theme, icons[fileType].color);
     if (props.getColorValue) {
         props.getColorValue(color);
