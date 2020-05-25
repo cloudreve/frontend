@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
     width: '100vw',
     position: 'absolute',
     bottom: 0,
-    text-align: center
+    text-align: center,
   }
 }))
 
