@@ -1,4 +1,4 @@
-ame: frontend-CI
+name: frontend-CI
 
 on:
   push:
