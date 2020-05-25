@@ -7,11 +7,10 @@ import pageHelper from '../../utils/page';
 const useStyles = makeStyles(() => ({
   icp: {
     padding: '8px 24px',
-    textAlign: 'right',
+    textAlign: 'center',
     width: '100vw',
     position: 'absolute',
     bottom: 0,
-    text-align:'center',
   }
 }))
 
