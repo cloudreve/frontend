@@ -128,6 +128,7 @@ export default function S3Guide(props) {
         MaxSize: "0",
         OptionsSerialized: {
             file_type: "",
+            region:"",
         }
     });
     const [policyID,setPolicyID] = useState(props.policy?props.policy.ID:0);
@@ -255,31 +256,10 @@ export default function S3Guide(props) {
                     }}
                 >
 
+
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>0</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                还没填
-                            </Typography>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>1</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                还没填
-                            </Typography>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>2</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -302,7 +282,7 @@ export default function S3Guide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>3</div>
+                            <div className={classes.stepNumber}>1</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -338,7 +318,7 @@ export default function S3Guide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>4</div>
+                            <div className={classes.stepNumber}>2</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -365,7 +345,30 @@ export default function S3Guide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>5</div>
+                            <div className={classes.stepNumber}>3</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                <code>Region（储存区域）</code>
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        Region
+                                    </InputLabel>
+                                    <Input
+                                        required
+                                        value={policy.OptionsSerialized.region}
+                                        onChange={handleOptionChange("region")}
+                                    />
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>4</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -404,11 +407,11 @@ export default function S3Guide(props) {
                     <Collapse in={useCDN === "true"}>
                         <div className={classes.subStepContainer}>
                             <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>6</div>
+                                <div className={classes.stepNumber}>5</div>
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    还没填
+                                CDN 加速域名
                                 </Typography>
                                 <div className={classes.form}>
                                     <DomainInput
@@ -424,7 +427,7 @@ export default function S3Guide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{getNumber(6,[
+                            <div className={classes.stepNumber}>{getNumber(5,[
                                 useCDN === "true"
                             ])}</div>
                         </div>
@@ -469,7 +472,7 @@ export default function S3Guide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{getNumber(7,[
+                            <div className={classes.stepNumber}>{getNumber(6,[
                                 useCDN === "true"
                             ])}</div>
                         </div>
