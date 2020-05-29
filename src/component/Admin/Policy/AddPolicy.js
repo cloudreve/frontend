@@ -9,6 +9,7 @@ import OSSGuide from "./Guid/OSSGuide";
 import QiniuGuide from "./Guid/QiniuGuide";
 import RemoteGuide from "./Guid/RemoteGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
+import S3Guide from "./Guid/S3Guide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -38,6 +39,7 @@ export default function AddPolicyParent( ) {
                 {type==="upyun"&&<UpyunGuide/>}
                 {type==="cos"&&<COSGuide/>}
                 {type==="onedrive"&&<OneDriveGuide/>}
+                {type==="s3"&&(<S3Guide/>)}
             </Paper>
         </div>
     );

@@ -67,6 +67,10 @@ const policies = [
         name:"OneDrive",
         img:"onedrive.png",
         path:"/admin/policy/add/onedrive",
+    },{
+        name:"Amazon S3",
+        img:"s3.png",
+        path:"/admin/policy/add/s3",
     },
 ];
 
