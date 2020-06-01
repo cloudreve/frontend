@@ -89,7 +89,7 @@ export default function Task() {
         [dispatch]
     );
 
-    const loadList = useCallback(() => {
+    const loadList = () => {
         API.post("/admin/task/list", {
             page: page,
             page_size: pageSize,
@@ -106,7 +106,7 @@ export default function Task() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, []);
+    };
 
     useEffect(() => {
       loadList();

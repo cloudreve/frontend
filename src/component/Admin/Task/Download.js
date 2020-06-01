@@ -89,7 +89,7 @@ export default function Download() {
         [dispatch]
     );
 
-    const loadList = useCallback(() => {
+    const loadList = () => {
       API.post("/admin/download/list", {
           page: page,
           page_size: pageSize,
@@ -106,7 +106,7 @@ export default function Download() {
           .catch(error => {
               ToggleSnackbar("top", "right", error.message, "error");
           });
-    }, []);
+    };
 
     useEffect(() => {
         loadList();

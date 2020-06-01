@@ -89,7 +89,7 @@ export default function Share() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    const loadList = useCallback(() => {
+    const loadList = () => {
         API.post("/admin/share/list", {
             page: page,
             page_size: pageSize,
@@ -107,7 +107,7 @@ export default function Share() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, []);
+    };
 
     useEffect(() => {
       loadList();
