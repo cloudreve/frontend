@@ -17,7 +17,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { FileCopy, Forum, GitHub, Home, Launch, Lock, People, Public, Telegram } from "@material-ui/icons";
+import { Description, Favorite, FileCopy, Forum, GitHub, Home, Launch, Lock, People, Public, Telegram } from "@material-ui/icons";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -334,6 +334,22 @@ export default function Index() {
                             <ListItem
                                 button
                                 onClick={() =>
+                                    window.open(
+                                        "https://docs.cloudreve.org/"
+                                    )
+                                }
+                            >
+                                <ListItemIcon>
+                                    <Description />
+                                </ListItemIcon>
+                                <ListItemText primary="文档" />
+                                <ListItemIcon className={classes.iconRight}>
+                                    <Launch />
+                                </ListItemIcon>
+                            </ListItem>
+                            <ListItem
+                                button
+                                onClick={() =>
                                     window.open("https://forum.cloudreve.org")
                                 }
                             >
@@ -357,6 +373,22 @@ export default function Index() {
                                     <Telegram />
                                 </ListItemIcon>
                                 <ListItemText primary="Telegram 群组" />
+                                <ListItemIcon className={classes.iconRight}>
+                                    <Launch />
+                                </ListItemIcon>
+                            </ListItem>
+                            <ListItem
+                                button
+                                onClick={() =>
+                                    window.open(
+                                        "https://docs.cloudreve.org/use/pro/jie-shao"
+                                    )
+                                }
+                            >
+                                <ListItemIcon style={{color:"#ff789d"}}>
+                                    <Favorite />
+                                </ListItemIcon>
+                                <ListItemText primary="捐助开发者" />
                                 <ListItemIcon className={classes.iconRight}>
                                     <Launch />
                                 </ListItemIcon>
