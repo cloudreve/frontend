@@ -93,7 +93,7 @@ export default function File() {
         [dispatch]
     );
 
-    const loadList = useCallback(() => {
+    const loadList = () => {
         API.post("/admin/file/list", {
             page: page,
             page_size: pageSize,
@@ -110,7 +110,7 @@ export default function File() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, []);
+    };
 
     useEffect(() => {
       loadList();

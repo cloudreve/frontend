@@ -93,7 +93,7 @@ export default function Group() {
         [dispatch]
     );
 
-    const loadList = useCallback(() => {
+    const loadList = () => {
         API.post("/admin/user/list", {
             page: page,
             page_size: pageSize,
@@ -109,7 +109,7 @@ export default function Group() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }, []);
+    };
 
     useEffect(() => {
       loadList();

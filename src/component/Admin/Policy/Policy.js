@@ -117,7 +117,7 @@ export default function Policy() {
 
     },[location])
 
-    const loadList = useCallback(() => {
+    const loadList = () => {
       API.post("/admin/policy/list", {
           page: page,
           page_size: pageSize,
@@ -132,7 +132,7 @@ export default function Policy() {
           .catch(error => {
               ToggleSnackbar("top", "right", error.message, "error");
           });
-    }, []);
+    };
 
     useEffect(() => {
         loadList();

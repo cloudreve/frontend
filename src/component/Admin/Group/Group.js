@@ -90,7 +90,7 @@ export default function Group() {
         [dispatch]
     );
 
-    const loadList = useCallback(() => {
+    const loadList = () => {
       API.post("/admin/group/list", {
           page: page,
           page_size: pageSize,
@@ -105,7 +105,7 @@ export default function Group() {
           .catch(error => {
               ToggleSnackbar("top", "right", error.message, "error");
           });
-    }, []);
+    };
 
     useEffect(()=>{
         if(query.get("code") === "0"){
