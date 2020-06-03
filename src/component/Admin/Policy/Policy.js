@@ -178,6 +178,7 @@ export default function Policy() {
                         <MenuItem value={"oss"}>阿里云 OSS</MenuItem>
                         <MenuItem value={"cos"}>腾讯云 COS</MenuItem>
                         <MenuItem value={"onedrive"}>OneDrive</MenuItem>
+                        <MenuItem value={"bos"}>Lambda BOS</MenuItem>
                     </Select>
                     <Button
                         color={"primary"}

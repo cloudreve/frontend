@@ -68,6 +68,11 @@ const policies = [
         img:"onedrive.png",
         path:"/admin/policy/add/onedrive",
     },
+    {
+        name:"Lambda BOS",
+        img:"bos.png",
+        path:"/admin/policy/add/bos",
+    },
 ];
 
 export default function AddPolicy({open, onClose }) {
