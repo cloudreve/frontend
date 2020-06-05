@@ -452,6 +452,21 @@ export default function EditPro(props) {
                                 </TableCell>
                                 <TableCell>一般添加后无需修改</TableCell>
                             </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    Amazon S3 Region
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            multiline
+                                            value={policy.OptionsSerialized.region}
+                                            onChange={handleOptionChange("region")}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>仅对Amazon S3有效</TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
                     <Button

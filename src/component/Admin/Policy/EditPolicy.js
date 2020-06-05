@@ -13,6 +13,7 @@ import OSSGuide from "./Guid/OSSGuide";
 import QiniuGuide from "./Guid/QiniuGuide";
 import RemoteGuide from "./Guid/RemoteGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
+import S3Guide from "./Guid/S3Guide";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -74,6 +75,7 @@ export default function EditPolicyPreload( ) {
                         {type==="upyun"&&<UpyunGuide policy={policy}/>}
                         {type==="cos"&&<COSGuide policy={policy}/>}
                         {type==="onedrive"&&<OneDriveGuide policy={policy}/>}
+                        {type==="s3"&&<S3Guide policy={policy}/>}
                     </>
                 }
 
