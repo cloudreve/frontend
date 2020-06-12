@@ -31,8 +31,8 @@ const useStyles = makeStyles(theme => ({
         borderRadius: "8px",
     },
     "@global": {
-        ".for-toolbar":{
-            overflowX:"auto!important",
+        ".for-toolbar-img ul":{
+            listStyle:"none",
         },
     },
 }));
