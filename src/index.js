@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from 'redux-thunk'
 import App from "./App";
+import Home from "./component/Home/Home";
 import cloureveApp from "./reducers";
 import { UpdateSiteConfig } from "./middleware/Init";
 import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
@@ -29,6 +30,9 @@ ReactDOM.render(
                     <Suspense fallback={"Loading..."}>
                         <Admin />
                     </Suspense>
+                </Route>
+                <Route exact path="/">
+                    <Home />
                 </Route>
                 <Route exact path="">
                     <App />
