@@ -21,9 +21,19 @@ const useStyles = makeStyles(theme => ({
         },
         marginBottom: 50
     },
-    player: {
+    playerContainer:{
+        width: "100%",
+        paddingTop: "56.25%",
+        position: "relative",
         borderRadius: "4px",
-        maxHeight:600,
+        overflow: "hidden"
+    },
+    player: {
+        position: "absolute",
+        width: "100%",
+        height:"100%",
+        left: 0,
+        top:0,
     }
 }));
 
@@ -54,25 +64,27 @@ export default function VideoViewer() {
     return (
         <div className={classes.layout}>
             <Paper className={classes.root} elevation={1}>
-                <DPlayer
-                    className={classes.player}
-                    options={{
-                        video: {
-                            url:
-                                getBaseURL() +
-                                (pathHelper.isSharePage(location.pathname)
-                                    ? "/share/preview/" +
-                                    id +
-                                    (query.get("share_path") !== ""
-                                        ? "?path=" +
-                                        encodeURIComponent(
-                                            query.get("share_path")
-                                        )
-                                        : "")
-                                    : "/file/preview/" + query.get("id"))
-                        }
-                    }}
-                />
+                <div className={classes.playerContainer}>
+                    <DPlayer
+                        className={classes.player}
+                        options={{
+                            video: {
+                                url:
+                                    getBaseURL() +
+                                    (pathHelper.isSharePage(location.pathname)
+                                        ? "/share/preview/" +
+                                        id +
+                                        (query.get("share_path") !== ""
+                                            ? "?path=" +
+                                            encodeURIComponent(
+                                                query.get("share_path")
+                                            )
+                                            : "")
+                                        : "/file/preview/" + query.get("id"))
+                            }
+                        }}
+                    />
+                </div>
             </Paper>
         </div>
     );
