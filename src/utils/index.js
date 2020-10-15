@@ -156,6 +156,10 @@ export function basename(path){
     return pathList.join("/") === "" ? "/" : pathList.join("/")
 }
 
+function addZero(m) {
+    return m < 10 ? '0' + m : m;
+}
+
 export function transformTime(timestamp = +new Date()) {
     if (timestamp) {
         const time = new Date(timestamp);
@@ -165,7 +169,7 @@ export function transformTime(timestamp = +new Date()) {
         const h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
         const m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
         const s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-        return y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s;
+        return y + '-' + addZero(M) + '-' + addZero(d) + ' ' + addZero(h) + ':' + addZero(m) + ':' + addZero(s);
     } else {
         return '';
     }
