@@ -55,6 +55,7 @@ export const policyTypeMap = {
     oss:"阿里云 OSS",
     cos:"腾讯云",
     onedrive:"OneDrive",
+    s3:"Amazon S3",
 };
 export const isPreviewable = name=>{
     const suffix = name.split(".").pop().toLowerCase();

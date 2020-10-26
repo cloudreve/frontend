@@ -549,7 +549,7 @@ export default function COSGuide(props) {
 
             {activeStep === 1 && (
                 <form
-                    className={classes.stepContent}
+                    className={classes.stepContental}
                     onSubmit={e => {
                         e.preventDefault();
                         setActiveStep(2);
