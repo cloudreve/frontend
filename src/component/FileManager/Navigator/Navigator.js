@@ -193,7 +193,7 @@ class NavigatorComponent extends Component {
         window.onpopstate = () => {
             const url = new URL(fixUrlHash(window.location.href));
             const c = url.searchParams.get("path");
-            if (c !== null && c !== this.props.path) {
+            if (c !== null) {
                 this.props.navigateToPath(c);
             }
         };
