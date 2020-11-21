@@ -309,7 +309,7 @@ class ContextMenuCompoment extends Component {
                     }}
                 >
                     {this.props.menuType === "empty" && (
-                        <>
+                        <div>
                             <MenuItem onClick={()=>{
                                 this.props.refreshFileList();
                                 this.props.changeContextMenu(this.props.menuType, false)
@@ -380,12 +380,12 @@ class ContextMenuCompoment extends Component {
                                     创建文件
                                 </Typography>
                             </MenuItem>
-                        </>
+                        </div>
                     )}
                     {this.props.menuType !== "empty" && (
-                        <>
+                        <div>
                             {!this.props.isMultiple && this.props.withFolder && (
-                                <>
+                                <div>
                                     <MenuItem onClick={this.enterFolder}>
                                         <ListItemIcon>
                                             <OpenFolderIcon />
@@ -395,14 +395,14 @@ class ContextMenuCompoment extends Component {
                                         </Typography>
                                     </MenuItem>
                                     {isHomePage && <Divider className={classes.divider} />}
-                                </>
+                                </div>
                             )}
                             {!this.props.isMultiple &&
                                 this.props.withFile &&
                                 (!this.props.share ||
                                     this.props.share.preview) &&
                                 isPreviewable(this.props.selected[0].name) && (
-                                    <>
+                                    <div>
                                         <MenuItem
                                             onClick={() => this.openPreview()}
                                         >
@@ -413,11 +413,11 @@ class ContextMenuCompoment extends Component {
                                                 打开
                                             </Typography>
                                         </MenuItem>
-                                    </>
+                                    </div>
                                 )}
 
                             {!this.props.isMultiple && this.props.withFile && (
-                                <>
+                                <div>
                                     <MenuItem
                                         onClick={() => this.openDownload()}
                                     >
@@ -429,7 +429,7 @@ class ContextMenuCompoment extends Component {
                                         </Typography>
                                     </MenuItem>
                                     {isHomePage && <Divider className={classes.divider} />}
-                                </>
+                                </div>
                             )}
 
                             {(this.props.isMultiple || this.props.withFolder) &&
@@ -533,7 +533,7 @@ class ContextMenuCompoment extends Component {
                             )}
 
                             {!this.props.isMultiple && isHomePage && (
-                                <>
+                                <div>
                                     <MenuItem
                                         onClick={() =>
                                             this.props.openRenameDialog()
@@ -561,7 +561,7 @@ class ContextMenuCompoment extends Component {
                                         </MenuItem>
                                     }
 
-                                </>
+                                </div>
                             )}
                             {isHomePage && (
                                 <div>
@@ -596,7 +596,7 @@ class ContextMenuCompoment extends Component {
                                     </MenuItem>
                                 </div>
                             )}
-                        </>
+                        </div>
                     )}
                 </Menu>
             </div>

@@ -111,7 +111,7 @@ export default function UploadButton(props) {
                 <SpeedDial
                     ariaLabel="SpeedDial openIcon example"
                     hidden={false}
-                    tooltipTitle="上传文件"
+                    tooltiptitle="上传文件"
                     icon={<SpeedDialIcon openIcon={!statusHelper.isMobile()&&<PublishIcon />} />}
                     onClose={handleClose}
                     FabProps={{
@@ -122,31 +122,31 @@ export default function UploadButton(props) {
                     open={open}
                 >
                     {statusHelper.isMobile() && <SpeedDialAction
-                        key="NewFolder"
+                        key="UploadFile"
                         icon={<PublishIcon />}
                         tooltipOpen
-                        tooltipTitle="上传文件"
+                        tooltiptitle="上传文件"
                         onClick= {() => uploadClicked()}
                         title={"上传文件"}/>}
                     {!statusHelper.isMobile() && <SpeedDialAction
-                        key="NewFolder"
+                        key="UploadFolder"
                         icon={<FolderUpload />}
                         tooltipOpen
-                        tooltipTitle="上传目录"
+                        tooltiptitle="上传目录"
                         onClick= {() => openUpload("uploadFolderForm")}
                         title={"上传目录"}/>}
                     <SpeedDialAction
                         key="NewFolder"
                         icon={<CreateNewFolderIcon />}
                         tooltipOpen
-                        tooltipTitle="新建目录"
+                        tooltiptitle="新建目录"
                         onClick= {() => OpenNewFolderDialog()}
                         title={"新建目录"}/>
                     <SpeedDialAction
                         key="NewFile"
                         icon={<FilePlus />}
                         tooltipOpen
-                        tooltipTitle="新建文件"
+                        tooltiptitle="新建文件"
                         onClick= {() => OpenNewFileDialog()}
                         title={"新建文件"}/>
 
