@@ -7,19 +7,14 @@ import pageHelper from '../../utils/page';
 const useStyles = makeStyles(() => ({
   icp: {
     padding: '8px 24px',
-    textAlign: 'center',
-    width: '100vw',
     position: 'absolute',
     bottom: 0,
-    
   }
 }))
 
 export const ICPFooter = () => {
   const siteICPId = useSelector(state => state.siteConfig.siteICPId);
   const classes = useStyles()
-  const theme = useTheme()
-  const matchMediaQuery = useMediaQuery(theme.breakpoints.down('sm'))
   const location = useLocation()
   const [show, setShow] = useState(true)
 
@@ -27,8 +22,8 @@ export const ICPFooter = () => {
     // 只在分享和登录界面显示
     const isSharePage = pageHelper.isSharePage(location.pathname)
     const isLoginPage = pageHelper.isLoginPage(location.pathname)
-    setShow(siteICPId && !matchMediaQuery && (isSharePage || isLoginPage))
-  }, [siteICPId, matchMediaQuery, location]);
+    setShow(siteICPId && (isSharePage || isLoginPage))
+  }, [siteICPId, location]);
 
   if (!show) {
     return (<></>)
