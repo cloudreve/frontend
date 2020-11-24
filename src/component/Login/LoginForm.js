@@ -28,6 +28,7 @@ import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import {useLocation} from "react-router";
 import ReCaptcha from "./ReCaptcha";
+import { ICPFooter } from "../Common/ICPFooter";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -410,6 +411,8 @@ function LoginForm() {
                         <Link href={"/#/signup"}>注册账号</Link>
                     </div>
                 </div>
+                
+                <ICPFooter/>
             </Paper>
 
                 {authn &&<div className={classes.authnLink}>

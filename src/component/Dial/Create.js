@@ -122,14 +122,14 @@ export default function UploadButton(props) {
                     open={open}
                 >
                     {statusHelper.isMobile() && <SpeedDialAction
-                        key="NewFolder"
+                        key="UploadFile"
                         icon={<PublishIcon />}
                         tooltipOpen
                         tooltipTitle="上传文件"
                         onClick= {() => uploadClicked()}
                         title={"上传文件"}/>}
                     {!statusHelper.isMobile() && <SpeedDialAction
-                        key="NewFolder"
+                        key="UploadFolder"
                         icon={<FolderUpload />}
                         tooltipOpen
                         tooltipTitle="上传目录"

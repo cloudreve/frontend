@@ -452,7 +452,6 @@ class ExplorerCompoment extends Component {
             <div
                 onContextMenu={this.contextMenu}
                 onClick={this.ClickAway}
-                data-clickAway={"true"}
                 className={classNames(
                     {
                         [classes.root]: this.props.viewMethod !== "list",

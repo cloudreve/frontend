@@ -1,28 +1,29 @@
-import Button from "@material-ui/core/Button";
-import Collapse from "@material-ui/core/Collapse";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import Link from "@material-ui/core/Link";
-import MenuItem from "@material-ui/core/MenuItem";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Select from "@material-ui/core/Select";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Stepper from "@material-ui/core/Stepper";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useState } from "react";
+import Stepper from "@material-ui/core/Stepper";
+import StepLabel from "@material-ui/core/StepLabel";
+import Step from "@material-ui/core/Step";
+import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../../actions";
+import Link from "@material-ui/core/Link";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import Collapse from "@material-ui/core/Collapse";
+import Button from "@material-ui/core/Button";
 import API from "../../../../middleware/Api";
-import { getNumber } from "../../../../utils";
+import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
-import MagicVar from "../../Dialogs/MagicVar";
+import { useHistory } from "react-router";
+import { getNumber } from "../../../../utils";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import AlertDialog from "../../Dialogs/Alert";
 
 const useStyles = makeStyles(theme => ({
     stepContent: {
@@ -67,16 +68,26 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1)
     },
     viewButtonLabel: { textTransform: "none" },
-    "@global":{
-        "code":{
+    "@global": {
+        code: {
             color: "rgba(0, 0, 0, 0.87)",
             display: "inline-block",
             padding: "2px 6px",
-            fontFamily:" Consolas, \"Liberation Mono\", Menlo, Courier, monospace",
+            fontFamily:
+                ' Consolas, "Liberation Mono", Menlo, Courier, monospace',
             borderRadius: "2px",
-            backgroundColor: "rgba(255,229,100,0.1)",
+            backgroundColor: "rgba(255,229,100,0.1)"
         },
-    },
+        pre: {
+            margin: "24px 0",
+            padding: "12px 18px",
+            overflow: "auto",
+            direction: "ltr",
+            borderRadius: "4px",
+            backgroundColor: "#272c34",
+            color: "#fff"
+        }
+    }
 }));
 
 const steps = [
@@ -101,43 +112,72 @@ const steps = [
         optional: true
     },
     {
-        title: "云函数回调",
-        optional: true
-    },
-    {
         title: "完成",
         optional: false
     }
 ];
 
-export default function COSGuide(props) {
+const regions = {
+    "us-east-2":"US East (Ohio)",
+    "us-east-1":"US East (N. Virginia)",
+    "us-west-1":"US West (N. California)",
+    "us-west-2":"US West (Oregon)",
+    "af-south-1":"Africa (Cape Town)",
+    "ap-east-1":"Asia Pacific (Hong Kong)",
+    "ap-south-1":"Asia Pacific (Mumbai)",
+    "ap-northeast-3":"Asia Pacific (Osaka-Local)",
+    "ap-northeast-2":"Asia Pacific (Seoul)",
+    "ap-southeast-1":"Asia Pacific (Singapore)",
+    "ap-southeast-2":"Asia Pacific (Sydney)",
+    "ap-northeast-1":"Asia Pacific (Tokyo)",
+    "ca-central-1":"Canada (Central)",
+    "cn-north-1":"China (Beijing)",
+    "cn-northwest-1":"China (Ningxia)",
+    "eu-central-1":"Europe (Frankfurt)",
+    "eu-west-1":"Europe (Ireland)",
+    "eu-west-2":"Europe (London)",
+    "eu-south-1":"Europe (Milan)",
+    "eu-west-3":"Europe (Paris)",
+    "eu-north-1":"Europe (Stockholm)",
+    "me-south-1":"Middle East (Bahrain)",
+    "sa-east-1":"South America (São Paulo)",
+};
+
+export default function S3Guide(props) {
     const classes = useStyles();
     const history = useHistory();
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(true);
     const [skipped, setSkipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
     const [useCDN, setUseCDN] = useState("false");
-    const [policy, setPolicy] = useState(props.policy?props.policy:{
-        Type: "cos",
-        Name: "",
-        SecretKey: "",
-        AccessKey: "",
-        BaseURL: "",
-        Server: "",
-        IsPrivate: "true",
-        DirNameRule: "uploads/{year}/{month}/{day}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable: "false",
-        MaxSize: "0",
-        OptionsSerialized: {
-            file_type: "",
-        }
-    });
-    const [policyID,setPolicyID] = useState(props.policy?props.policy.ID:0);
-    const [region,setRegion] = useState("ap-chengdu");
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "s3",
+                  Name: "",
+                  SecretKey: "",
+                  AccessKey: "",
+                  BaseURL: "",
+                  Server: "",
+                  IsPrivate: "true",
+                  DirNameRule: "uploads/{year}/{month}/{day}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: "",
+                      region: "us-east-2",
+                  }
+              }
+    );
+    const [policyID, setPolicyID] = useState(
+        props.policy ? props.policy.ID : 0
+    );
 
     const handleChange = name => event => {
         setPolicy({
@@ -174,8 +214,8 @@ export default function COSGuide(props) {
         const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
-        if (useCDN === "false"){
-            policyCopy.BaseURL = policy.Server
+        if (useCDN === "false") {
+            policyCopy.BaseURL = "";
         }
 
         // 类型转换
@@ -198,7 +238,12 @@ export default function COSGuide(props) {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(4);
                 setPolicyID(response.data);
             })
@@ -212,7 +257,7 @@ export default function COSGuide(props) {
         setLoading(false);
     };
 
-    const createCORS = ()=>{
+    const createCORS = () => {
         setLoading(true);
         API.post("/admin/policy/cors", {
             id: policyID
@@ -227,30 +272,19 @@ export default function COSGuide(props) {
             .then(() => {
                 setLoading(false);
             });
-
-    }
-
-    const creatCallback = ()=>{
-        setLoading(true);
-        API.post("/admin/policy/scf", {
-            id: policyID,
-            region:region,
-        })
-            .then(() => {
-                ToggleSnackbar("top", "right", "回调云函数已添加", "success");
-                setActiveStep(6);
-            })
-            .catch(error => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            })
-            .then(() => {
-                setLoading(false);
-            });
-    }
+    };
 
     return (
         <div>
-            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} 腾讯云 COS 存储策略</Typography>
+            <AlertDialog
+                open={alertOpen}
+                onClose={()=>setAlertOpen(false)}
+                title={"警告"}
+                msg={"S3 类型存储策略目前仅可用于自己使用，或者是给受信任的用户组使用。"}
+            />
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"} Amazon S3 存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -279,16 +313,24 @@ export default function COSGuide(props) {
                         setActiveStep(1);
                     }}
                 >
-
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>0</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用 腾讯云 COS 储策略前，请确保您在 参数设置 - 站点信息
-                                - 站点URL 中填写的 地址与实际相符，并且
-                                <strong>能够被外网正常访问</strong>。
+                                Cloudreve 主站需要启用 CORS 支持，具体步骤如下：
+                                <br />
+                                修改 Cloudreve 配置文件，新增以下 CORS
+                                配置项，保存并重启 Cloudreve。
+                                <pre>
+                                    [CORS]
+                                    <br />
+                                    AllowOrigins = *<br />
+                                    AllowMethods = OPTIONS,GET,POST
+                                    <br />
+                                    AllowHeaders = *<br />
+                                </pre>
                             </Typography>
                         </div>
                     </div>
@@ -299,36 +341,16 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                前往
-                                <Link
-                                    href={"https://console.cloud.tencent.com/cos5"}
-                                    target={"_blank"}
-                                >
-                                    COS 管理控制台
-                                </Link>
-                                创建存储桶。
-                            </Typography>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>2</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                转到所创建存储桶的基础配置页面，将<code>空间名称</code>填写在下方：
+                                前往 AWS S3
+                                控制台创建存储桶，在下方填写您创建存储桶时指定的
+                                <code>存储桶名称</code>：
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        空间名称
+                                        存储桶名称
                                     </InputLabel>
                                     <Input
-                                        inputProps={{
-                                            pattern:"[a-z0-9-]+-[0-9]+",
-                                            title:"空间名格式不正确, 举例：ccc-1252109809"
-                                        }}
                                         required
                                         value={policy.BucketName}
                                         onChange={handleChange("BucketName")}
@@ -340,13 +362,11 @@ export default function COSGuide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>3</div>
+                            <div className={classes.stepNumber}>2</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方选择您创建的空间的访问权限类型，推荐选择
-                                <code>私有读写</code>
-                                以获得更高的安全性，私有空间无法开启“获取直链”功能。
+                                在下方选择您创建的空间的公共访问权限类型，推荐选择“私有”以获得更高的安全性，私有空间无法开启“获取直链”功能。
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -361,16 +381,41 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="私有读写"
+                                            label="阻止全部公共访问权限"
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="公共读私有写"
+                                            label="允许公共读取"
                                         />
                                     </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>3</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                (可选) 指定存储桶的 EndPoint（地域节点），
+                                填写为完整的 URL 格式，比如{" "}
+                                <code>https://bucket.region.example.com</code>。
+                                留空则将使用系统生成的默认接入点。
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        EndPoint
+                                    </InputLabel>
+                                    <Input
+                                        value={policy.Server}
+                                        onChange={handleChange("Server")}
+                                    />
                                 </FormControl>
                             </div>
                         </div>
@@ -382,16 +427,30 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                转到所创建 Bucket 的基础配置，填写<code>基本信息</code>栏目下
-                                给出的 <code>访问域名</code>
+                                选择存储桶所在的区域，或者手动输入区域代码
                             </Typography>
                             <div className={classes.form}>
-                                <DomainInput
-                                    value={policy.Server}
-                                    onChange={handleChange("Server")}
-                                    required
-                                    label={"访问域名"}
-                                />
+                                <FormControl fullWidth>
+                                    <Autocomplete
+                                        options={Object.keys(regions)}
+                                        freeSolo
+                                        value={policy.OptionsSerialized.region}
+                                        onInputChange={(_, value) =>
+                                            handleOptionChange("region")({target:{value:value}})
+                                        }
+                                        renderOption={(option) => (
+                                            <React.Fragment>
+                                                {regions[option]}
+                                            </React.Fragment>
+                                        )}
+                                        renderInput={params => (
+                                            <TextField
+                                                style={{ width: "100%" }}
+                                                {...params}
+                                            />
+                                        )}
+                                    />
+                                </FormControl>
                             </div>
                         </div>
                     </div>
@@ -402,15 +461,15 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要使用配套的 腾讯云CDN 加速 COS 访问？
+                                是否要使用 CDN 加速访问？
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
                                     <RadioGroup
                                         required
                                         value={useCDN}
-                                        onChange={e=>{
-                                            setUseCDN(e.target.value)
+                                        onChange={e => {
+                                            setUseCDN(e.target.value);
                                         }}
                                         row
                                     >
@@ -441,12 +500,7 @@ export default function COSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    前往
-                                    <Link href={"https://console.cloud.tencent.com/cdn/access/guid"} target={"_blank"}>
-                                        腾讯云 CDN 管理控制台
-                                    </Link>
-                                    创建 CDN 加速域名，并设定源站为刚创建的 COS 存储桶。在下方填写
-                                    CDN 加速域名，并选择是否使用 HTTPS：
+                                    CDN 加速域名
                                 </Typography>
                                 <div className={classes.form}>
                                     <DomainInput
@@ -462,28 +516,24 @@ export default function COSGuide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{getNumber(6,[
-                                useCDN === "true"
-                            ])}</div>
+                            <div className={classes.stepNumber}>
+                                {getNumber(6, [useCDN === "true"])}
+                            </div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在腾讯云
-                                <Link href={"https://console.cloud.tencent.com/cam/capi"} target={"_blank"}>
-                                    访问密钥
-                                </Link>
-                                页面获取 一对访问密钥，并填写在下方。请确保这对密钥拥有 COS 和 SCF 服务的访问权限。
+                                获取访问密钥，并填写在下方。
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        SecretId
+                                        AccessKey
                                     </InputLabel>
                                     <Input
                                         required
                                         inputProps={{
-                                            pattern:"\\S+" ,
-                                            title:"不能含有空格"
+                                            pattern: "\\S+",
+                                            title: "不能含有空格"
                                         }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
@@ -498,8 +548,8 @@ export default function COSGuide(props) {
                                     <Input
                                         required
                                         inputProps={{
-                                            pattern:"\\S+" ,
-                                            title:"不能含有空格"
+                                            pattern: "\\S+",
+                                            title: "不能含有空格"
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -511,9 +561,9 @@ export default function COSGuide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{getNumber(7,[
-                                useCDN === "true"
-                            ])}</div>
+                            <div className={classes.stepNumber}>
+                                {getNumber(7, [useCDN === "true"])}
+                            </div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -549,7 +599,7 @@ export default function COSGuide(props) {
 
             {activeStep === 1 && (
                 <form
-                    className={classes.stepContental}
+                    className={classes.stepContent}
                     onSubmit={e => {
                         e.preventDefault();
                         setActiveStep(2);
@@ -567,10 +617,8 @@ export default function COSGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
-                                    }}
+                                    href={"javascript:void()"}
+                                    onClick={() => setMagicVar("path")}
                                 >
                                     路径魔法变量列表
                                 </Link>{" "}
@@ -602,10 +650,8 @@ export default function COSGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
-                                    }}
+                                    href={"javascript:void()"}
+                                    onClick={() => setMagicVar("file")}
                                 >
                                     文件名魔法变量列表
                                 </Link>{" "}
@@ -703,14 +749,22 @@ export default function COSGuide(props) {
                                     <RadioGroup
                                         required
                                         value={policy.IsOriginLinkEnable}
-                                        onChange={e=>{
-                                            if (policy.IsPrivate === "true" && e.target.value==="true"){
-                                                ToggleSnackbar("top", "right","私有空间无法开启此功能", "warning");
-                                                return
+                                        onChange={e => {
+                                            if (
+                                                policy.IsPrivate === "true" &&
+                                                e.target.value === "true"
+                                            ) {
+                                                ToggleSnackbar(
+                                                    "top",
+                                                    "right",
+                                                    "私有空间无法开启此功能",
+                                                    "warning"
+                                                );
+                                                return;
                                             }
-                                            handleChange(
-                                            "IsOriginLinkEnable"
-                                            )(e)
+                                            handleChange("IsOriginLinkEnable")(
+                                                e
+                                            );
                                         }}
                                         row
                                     >
@@ -755,10 +809,7 @@ export default function COSGuide(props) {
             )}
 
             {activeStep === 3 && (
-                <form
-                    className={classes.stepContent}
-                    onSubmit={submitPolicy}
-                >
+                <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
@@ -950,13 +1001,15 @@ export default function COSGuide(props) {
             )}
 
             {activeStep === 4 && (
-                <form className={classes.stepContent}>
+                <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}/>
+                        <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                COS 存储桶 需要正确配置跨域策略后才能使用 Web 端上传文件，Cloudreve
-                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此 Bucket 的跨域策略，此步骤可以跳过。
+                                S3 Bucket 需要正确配置跨域策略后才能使用 Web
+                                端上传文件，Cloudreve
+                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此
+                                Bucket 的跨域策略，此步骤可以跳过。
                             </Typography>
                             <div className={classes.form}>
                                 <Button
@@ -964,7 +1017,7 @@ export default function COSGuide(props) {
                                     color={"secondary"}
                                     variant={"contained"}
                                     className={classes.button}
-                                    onClick={()=>createCORS()}
+                                    onClick={() => createCORS()}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
                                     让 Cloudreve 帮我设置
@@ -976,16 +1029,18 @@ export default function COSGuide(props) {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=>{
-                                setActiveStep(prevActiveStep => prevActiveStep + 1);
+                            onClick={() => {
+                                setActiveStep(
+                                    prevActiveStep => prevActiveStep + 1
+                                );
                                 setSkipped(prevSkipped => {
-                                    const newSkipped = new Set(prevSkipped.values());
+                                    const newSkipped = new Set(
+                                        prevSkipped.values()
+                                    );
                                     newSkipped.add(activeStep);
                                     return newSkipped;
                                 });
-                            }
-
-                            }
+                            }}
                         >
                             跳过
                         </Button>{" "}
@@ -994,82 +1049,11 @@ export default function COSGuide(props) {
             )}
 
             {activeStep === 5 && (
-                <form className={classes.stepContent}>
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}/>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                COS 存储桶 客户端直传需要借助腾讯云的
-                                 <Link href={"https://console.cloud.tencent.com/scf/index?rid=16"} target={"_blank"}>云函数</Link>
-                                 产品以确保上传回调可控。如果您打算将此存储策略自用，或者分配给可信赖用户组，此步骤可以跳过。
-                                如果是作为公有使用，请务必创建回调云函数。<br/><br/>
-                            </Typography>
-                            <Typography variant={"body2"}>Cloudreve 可以尝试帮你自动创建回调云函数，请选择 COS 存储桶 所在地域后继续。
-                                创建可能会花费数秒钟，请耐心等待。创建前请确保您的腾讯云账号已开启云函数服务。</Typography>
-
-                            <div className={classes.form}>
-                                <FormControl>
-                                    <InputLabel htmlFor="component-helper">
-                                        存储桶所在地区
-                                    </InputLabel>
-                                    <Select
-                                        value={region}
-                                        onChange={e=>setRegion(e.target.value)}
-                                        required
-                                    >
-                                        <MenuItem value={"ap-beijing"}>华北地区(北京)</MenuItem>
-                                        <MenuItem value={"ap-chengdu"}>西南地区(成都)</MenuItem>
-                                        <MenuItem value={"ap-guangzhou"}>华南地区(广州)</MenuItem>
-                                        <MenuItem value={"ap-guangzhou-open"}>华南地区(广州Open)</MenuItem>
-                                        <MenuItem value={"ap-hongkong"}>港澳台地区(中国香港)</MenuItem>
-                                        <MenuItem value={"ap-mumbai"}>亚太南部(孟买)</MenuItem>
-                                        <MenuItem value={"ap-shanghai"}>华东地区(上海)</MenuItem>
-                                        <MenuItem value={"ap-singapore"}>亚太东南(新加坡)</MenuItem>
-                                        <MenuItem value={"na-siliconvalley"}>美国西部(硅谷)</MenuItem>
-                                        <MenuItem value={"na-toronto"}>北美地区(多伦多)</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
-
-                            <div className={classes.form}>
-                                <Button
-                                    disabled={loading}
-                                    color={"secondary"}
-                                    variant={"contained"}
-                                    className={classes.button}
-                                    onClick={()=>creatCallback()}
-                                    classes={{ label: classes.viewButtonLabel }}
-                                >
-                                    让 Cloudreve 帮我创建
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={classes.stepFooter}>
-                        <Button
-                            color={"default"}
-                            className={classes.button}
-                            onClick={()=>{
-                                setActiveStep(prevActiveStep => prevActiveStep + 1);
-                                setSkipped(prevSkipped => {
-                                    const newSkipped = new Set(prevSkipped.values());
-                                    newSkipped.add(activeStep);
-                                    return newSkipped;
-                                });
-                            }
-
-                            }
-                        >
-                            跳过
-                        </Button>{" "}
-                    </div>
-                </form>
-            )}
-
-            {activeStep === 6 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已{props.policy ? "保存" : "添加"}！</Typography>
+                        <Typography>
+                            存储策略已{props.policy ? "保存" : "添加"}！
+                        </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
                             要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
                         </Typography>

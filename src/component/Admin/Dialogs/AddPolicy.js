@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useHistory } from "react-router";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(theme => ({
     cardContainer:{
@@ -29,6 +30,9 @@ const useStyles = makeStyles(theme => ({
     bg:{
         backgroundColor:theme.palette.background.default,
         padding: "24px 24px",
+    },
+    dialogFooter:{
+        justifyContent: "space-between",
     }
 }));
 
@@ -67,6 +71,10 @@ const policies = [
         name:"OneDrive",
         img:"onedrive.png",
         path:"/admin/policy/add/onedrive",
+    },{
+        name:"Amazon S3",
+        img:"s3.png",
+        path:"/admin/policy/add/s3",
     },
 ];
 
@@ -114,7 +122,10 @@ export default function AddPolicy({open, onClose }) {
                     ))}
                 </Grid>
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.dialogFooter}>
+                <Button onClick={()=>window.open("https://docs.cloudreve.org/use/policy/compare")} color="primary">
+                    存储策略对比
+                </Button>
                 <Button onClick={onClose} color="primary">
                     取消
                 </Button>

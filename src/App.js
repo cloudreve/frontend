@@ -10,7 +10,6 @@ import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import { changeThemeColor } from "./utils";
 import NotFound from "./component/Share/NotFound";
-import { ICPFooter } from "./component/Common/ICPFooter";
 // Lazy loads
 import LoginForm from "./component/Login/LoginForm";
 import FileManager from "./component/FileManager/FileManager.js";
@@ -212,7 +211,6 @@ export default function App() {
                             </Route>
                         </Switch>
                     </main>
-                    <ICPFooter />
                 </div>
             </ThemeProvider>
         </React.Fragment>

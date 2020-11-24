@@ -11,10 +11,7 @@ import Explorer from "./Explorer"
 import Modals from "./Modals"
 import Navigator from "./Navigator/Navigator"
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const mapStateToProps = ()=>{
-
-}
+const mapStateToProps = ()=>({});
 
 const mapDispatchToProps = dispatch => {
     return {

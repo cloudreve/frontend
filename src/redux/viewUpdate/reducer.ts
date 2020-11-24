@@ -33,6 +33,8 @@ export interface ViewUpdateState {
       resave: boolean;
       compress: boolean;
       decompress: boolean;
+      loading: boolean;
+      loadingText: string;
   };
   snackbar: {
       toggle: boolean;
@@ -75,6 +77,8 @@ export const initState: ViewUpdateState = {
       resave: false,
       compress:false,
       decompress:false,
+      loading: false,
+      loadingText: ''
   },
   snackbar: {
       toggle: false,
