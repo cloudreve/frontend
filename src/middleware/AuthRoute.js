@@ -13,7 +13,12 @@ function AuthRoute({ children, ...rest }) {
         Auth.Check(rest.isLogin) ? (
             children
           ) : (
-            window.location.href="/cindex.html"
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { from: location }
+              }}
+            />
           )
         }
       />
