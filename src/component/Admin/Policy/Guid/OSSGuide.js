@@ -65,16 +65,17 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1)
     },
     viewButtonLabel: { textTransform: "none" },
-    "@global":{
-        "code":{
+    "@global": {
+        code: {
             color: "rgba(0, 0, 0, 0.87)",
             display: "inline-block",
             padding: "2px 6px",
-            fontFamily:" Consolas, \"Liberation Mono\", Menlo, Courier, monospace",
+            fontFamily:
+                ' Consolas, "Liberation Mono", Menlo, Courier, monospace',
             borderRadius: "2px",
-            backgroundColor: "rgba(255,229,100,0.1)",
-        },
-    },
+            backgroundColor: "rgba(255,229,100,0.1)"
+        }
+    }
 }));
 
 const steps = [
@@ -113,24 +114,36 @@ export default function OSSGuide(props) {
     const [skipped, setSkipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
     const [useCDN, setUseCDN] = useState("false");
-    const [policy, setPolicy] = useState(props.policy?props.policy:{
-        Type: "oss",
-        Name: "",
-        SecretKey: "",
-        AccessKey: "",
-        BaseURL: "",
-        Server: "",
-        IsPrivate: "true",
-        DirNameRule: "uploads/{year}/{month}/{day}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable: "false",
-        MaxSize: "0",
-        OptionsSerialized: {
-            file_type: "",
-        }
-    });
-    const [policyID,setPolicyID] = useState(props.policy?props.policy.ID:0);
+    const [useLanEndpoint, setUseLanEndpoint] = useState(
+        props.policy && props.policy.OptionsSerialized.server_side_endpoint
+            ? props.policy.OptionsSerialized.server_side_endpoint !== ""
+            : false
+    );
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "oss",
+                  Name: "",
+                  SecretKey: "",
+                  AccessKey: "",
+                  BaseURL: "",
+                  Server: "",
+                  IsPrivate: "true",
+                  DirNameRule: "uploads/{year}/{month}/{day}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: "",
+                      server_side_endpoint: ""
+                  }
+              }
+    );
+    const [policyID, setPolicyID] = useState(
+        props.policy ? props.policy.ID : 0
+    );
 
     const handleChange = name => event => {
         setPolicy({
@@ -167,8 +180,12 @@ export default function OSSGuide(props) {
         const policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
-        if (useCDN === "false"){
-            policyCopy.BaseURL = ""
+        if (useCDN === "false") {
+            policyCopy.BaseURL = "";
+        }
+
+        if (!useLanEndpoint) {
+            policyCopy.OptionsSerialized.server_side_endpoint = "";
         }
 
         // 类型转换
@@ -191,7 +208,12 @@ export default function OSSGuide(props) {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(4);
                 setPolicyID(response.data);
             })
@@ -205,7 +227,7 @@ export default function OSSGuide(props) {
         setLoading(false);
     };
 
-    const createCORS = ()=>{
+    const createCORS = () => {
         setLoading(true);
         API.post("/admin/policy/cors", {
             id: policyID
@@ -220,12 +242,13 @@ export default function OSSGuide(props) {
             .then(() => {
                 setLoading(false);
             });
-
-    }
+    };
 
     return (
         <div>
-            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} 阿里云 OSS 存储策略</Typography>
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"} 阿里云 OSS 存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -254,15 +277,15 @@ export default function OSSGuide(props) {
                         setActiveStep(1);
                     }}
                 >
-
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>0</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用 阿里云 OSS 储策略前，请确保您在 参数设置 - 站点信息
-                                - 站点URL 中填写的 地址与实际相符，并且
+                                在使用 阿里云 OSS 储策略前，请确保您在 参数设置
+                                - 站点信息 - 站点URL 中填写的
+                                地址与实际相符，并且
                                 <strong>能够被外网正常访问</strong>。
                             </Typography>
                         </div>
@@ -276,12 +299,15 @@ export default function OSSGuide(props) {
                             <Typography variant={"body2"}>
                                 前往
                                 <Link
-                                    href={"https://oss.console.aliyun.com/overview"}
+                                    href={
+                                        "https://oss.console.aliyun.com/overview"
+                                    }
                                     target={"_blank"}
                                 >
                                     OSS 管理控制台
                                 </Link>
-                                创建 Bucket。注意：创建空间类型只能选择<code>标准存储</code>或<code>低频访问</code>
+                                创建 Bucket。注意：创建空间类型只能选择
+                                <code>标准存储</code>或<code>低频访问</code>
                                 ，暂不支持<code>归档存储</code>
                             </Typography>
                         </div>
@@ -293,7 +319,8 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方填写您创建 Bucket 时指定的<code>Bucket 名称</code>：
+                                在下方填写您创建 Bucket 时指定的
+                                <code>Bucket 名称</code>：
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
@@ -352,8 +379,10 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                转到所创建 Bucket 的概览页面，填写<code>访问域名</code>栏目下
-                                <code>外网访问</code> 一行中间的 <code>EndPoint（地域节点）</code>
+                                转到所创建 Bucket 的概览页面，填写
+                                <code>访问域名</code>栏目下
+                                <code>外网访问</code> 一行中间的{" "}
+                                <code>EndPoint（地域节点）</code>
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
@@ -365,8 +394,10 @@ export default function OSSGuide(props) {
                                         value={policy.Server}
                                         onChange={handleChange("Server")}
                                         inputProps={{
-                                            pattern:"(?:(?:(?<thld>[\\w\\-]*)(?:\\.))?(?<sld>[\\w\\-]*))\\.(?<tld>[\\w\\-]*)" ,
-                                            title:"格式不合法，只需输入域名部分即可"
+                                            pattern:
+                                                "(?:(?:(?<thld>[\\w\\-]*)(?:\\.))?(?<sld>[\\w\\-]*))\\.(?<tld>[\\w\\-]*)",
+                                            title:
+                                                "格式不合法，只需输入域名部分即可"
                                         }}
                                     />
                                 </FormControl>
@@ -380,6 +411,76 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
+                                如果您的 Cloudreve
+                                部署在阿里云计算服务中，并且与 OSS
+                                处在同一可用区下，您可以额外指定使用内网
+                                EndPoint
+                                以节省流量开始。是否要在服务端发送请求时使用 OSS
+                                内网 EndPoint？
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl required component="fieldset">
+                                    <RadioGroup
+                                        required
+                                        value={useLanEndpoint.toString()}
+                                        onChange={e => {
+                                            setUseLanEndpoint(
+                                                e.target.value === "true"
+                                            );
+                                        }}
+                                        row
+                                    >
+                                        <FormControlLabel
+                                            value={"true"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="使用"
+                                        />
+                                        <FormControlLabel
+                                            value={"false"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="不使用"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                            <Collapse in={useLanEndpoint}>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            内网 EndPoint
+                                        </InputLabel>
+                                        <Input
+                                            required={useLanEndpoint}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .server_side_endpoint
+                                            }
+                                            onChange={handleOptionChange(
+                                                "server_side_endpoint"
+                                            )}
+                                            inputProps={{
+                                                pattern:
+                                                    "(?:(?:(?<thld>[\\w\\-]*)(?:\\.))?(?<sld>[\\w\\-]*))\\.(?<tld>[\\w\\-]*)",
+                                                title:
+                                                    "格式不合法，只需输入域名部分即可"
+                                            }}
+                                        />
+                                    </FormControl>
+                                </div>
+                            </Collapse>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>6</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
                                 是否要使用配套的 阿里云CDN 加速 OSS 访问？
                             </Typography>
                             <div className={classes.form}>
@@ -387,8 +488,8 @@ export default function OSSGuide(props) {
                                     <RadioGroup
                                         required
                                         value={useCDN}
-                                        onChange={e=>{
-                                            setUseCDN(e.target.value)
+                                        onChange={e => {
+                                            setUseCDN(e.target.value);
                                         }}
                                         row
                                     >
@@ -415,16 +516,22 @@ export default function OSSGuide(props) {
                     <Collapse in={useCDN === "true"}>
                         <div className={classes.subStepContainer}>
                             <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>6</div>
+                                <div className={classes.stepNumber}>7</div>
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
                                     前往
-                                    <Link href={"https://cdn.console.aliyun.com/domain/list"} target={"_blank"}>
+                                    <Link
+                                        href={
+                                            "https://cdn.console.aliyun.com/domain/list"
+                                        }
+                                        target={"_blank"}
+                                    >
                                         阿里云 CDN 管理控制台
                                     </Link>
-                                    创建 CDN 加速域名，并设定源站为刚创建的 OSS Bucket。在下方填写
-                                    CDN 加速域名，并选择是否使用 HTTPS：
+                                    创建 CDN 加速域名，并设定源站为刚创建的 OSS
+                                    Bucket。在下方填写 CDN
+                                    加速域名，并选择是否使用 HTTPS：
                                 </Typography>
                                 <div className={classes.form}>
                                     <DomainInput
@@ -440,14 +547,19 @@ export default function OSSGuide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{getNumber(6,[
-                                useCDN === "true"
-                            ])}</div>
+                            <div className={classes.stepNumber}>
+                                {getNumber(7, [useCDN === "true"])}
+                            </div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
                                 在阿里云
-                                <Link href={"https://usercenter.console.aliyun.com/#/manage/ak"} target={"_blank"}>
+                                <Link
+                                    href={
+                                        "https://usercenter.console.aliyun.com/#/manage/ak"
+                                    }
+                                    target={"_blank"}
+                                >
                                     安全信息管理
                                 </Link>
                                 页面获取 用户 AccessKey，并填写在下方。
@@ -460,8 +572,8 @@ export default function OSSGuide(props) {
                                     <Input
                                         required
                                         inputProps={{
-                                            pattern:"\\S+" ,
-                                            title:"不能含有空格"
+                                            pattern: "\\S+",
+                                            title: "不能含有空格"
                                         }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
@@ -476,8 +588,8 @@ export default function OSSGuide(props) {
                                     <Input
                                         required
                                         inputProps={{
-                                            pattern:"\\S+" ,
-                                            title:"不能含有空格"
+                                            pattern: "\\S+",
+                                            title: "不能含有空格"
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -489,9 +601,9 @@ export default function OSSGuide(props) {
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{getNumber(7,[
-                                useCDN === "true"
-                            ])}</div>
+                            <div className={classes.stepNumber}>
+                                {getNumber(8, [useCDN === "true"])}
+                            </div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -545,9 +657,9 @@ export default function OSSGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("path");
                                     }}
                                 >
                                     路径魔法变量列表
@@ -580,9 +692,9 @@ export default function OSSGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("file");
                                     }}
                                 >
                                     文件名魔法变量列表
@@ -681,14 +793,22 @@ export default function OSSGuide(props) {
                                     <RadioGroup
                                         required
                                         value={policy.IsOriginLinkEnable}
-                                        onChange={e=>{
-                                            if (policy.IsPrivate === "true" && e.target.value==="true"){
-                                                ToggleSnackbar("top", "right","私有空间无法开启此功能", "warning");
-                                                return
+                                        onChange={e => {
+                                            if (
+                                                policy.IsPrivate === "true" &&
+                                                e.target.value === "true"
+                                            ) {
+                                                ToggleSnackbar(
+                                                    "top",
+                                                    "right",
+                                                    "私有空间无法开启此功能",
+                                                    "warning"
+                                                );
+                                                return;
                                             }
-                                            handleChange(
-                                            "IsOriginLinkEnable"
-                                            )(e)
+                                            handleChange("IsOriginLinkEnable")(
+                                                e
+                                            );
                                         }}
                                         row
                                     >
@@ -733,10 +853,7 @@ export default function OSSGuide(props) {
             )}
 
             {activeStep === 3 && (
-                <form
-                    className={classes.stepContent}
-                    onSubmit={submitPolicy}
-                >
+                <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
@@ -930,11 +1047,13 @@ export default function OSSGuide(props) {
             {activeStep === 4 && (
                 <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}/>
+                        <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                OSS Bucket 需要正确配置跨域策略后才能使用 Web 端上传文件，Cloudreve
-                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此 Bucket 的跨域策略，此步骤可以跳过。
+                                OSS Bucket 需要正确配置跨域策略后才能使用 Web
+                                端上传文件，Cloudreve
+                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此
+                                Bucket 的跨域策略，此步骤可以跳过。
                             </Typography>
                             <div className={classes.form}>
                                 <Button
@@ -942,7 +1061,7 @@ export default function OSSGuide(props) {
                                     color={"secondary"}
                                     variant={"contained"}
                                     className={classes.button}
-                                    onClick={()=>createCORS()}
+                                    onClick={() => createCORS()}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
                                     让 Cloudreve 帮我设置
@@ -954,16 +1073,18 @@ export default function OSSGuide(props) {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=>{
-                                setActiveStep(prevActiveStep => prevActiveStep + 1);
+                            onClick={() => {
+                                setActiveStep(
+                                    prevActiveStep => prevActiveStep + 1
+                                );
                                 setSkipped(prevSkipped => {
-                                    const newSkipped = new Set(prevSkipped.values());
+                                    const newSkipped = new Set(
+                                        prevSkipped.values()
+                                    );
                                     newSkipped.add(activeStep);
                                     return newSkipped;
                                 });
-                            }
-
-                            }
+                            }}
                         >
                             跳过
                         </Button>{" "}
@@ -974,7 +1095,9 @@ export default function OSSGuide(props) {
             {activeStep === 5 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已{props.policy ? "保存" : "添加"}！</Typography>
+                        <Typography>
+                            存储策略已{props.policy ? "保存" : "添加"}！
+                        </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
                             要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
                         </Typography>
