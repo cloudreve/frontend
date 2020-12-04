@@ -162,6 +162,7 @@ export default function DownloadingCard(props) {
     const [task, setTask] = React.useState(props.task);
     const [loading, setLoading] = React.useState(false);
     const [selectDialogOpen, setSelectDialogOpen] = React.useState(false);
+    const [selectFileOption, setSelectFileOption] = React.useState([]);
 
     const handleChange = panel => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
@@ -330,7 +331,7 @@ export default function DownloadingCard(props) {
                 open={selectDialogOpen}
                 onClose={() => setSelectDialogOpen(false)}
                 modalsLoading={loading}
-                files={props.task.info.files}
+                files={selectFileOption}
                 onSubmit={changeSelectedFile}
             />
             <ExpansionPanel
@@ -543,7 +544,12 @@ export default function DownloadingCard(props) {
                                 variant="outlined"
                                 color="secondary"
                                 disabled={loading}
-                                onClick={() => setSelectDialogOpen(true)}
+                                onClick={() => {
+                                    setSelectDialogOpen(true);
+                                    setSelectFileOption([
+                                        ...props.task.info.files
+                                    ]);
+                                }}
                             >
                                 选择要下载的文件
                             </Button>
