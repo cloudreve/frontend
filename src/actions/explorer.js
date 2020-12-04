@@ -62,15 +62,12 @@ export const selectFile = (file, event, fileIndex) => {
         ) {
             // shift 多选
             // 取消原有选择
-            dispatch(removeSelectedTargets(shiftSelectedIds));
+            dispatch(removeSelectedTargets(selected.map(v => v.id)));
             // 添加新选择
             const begin = Math.min(lastSelect.index, fileIndex);
             const end = Math.max(lastSelect.index, fileIndex);
             const list = file.type === "dir" ? dirList : fileList;
-            const newShiftSelected = list.slice(begin + 1, end + 1);
-            dispatch(
-                setShiftSelectedIds(newShiftSelected.map(file => file.id))
-            );
+            const newShiftSelected = list.slice(begin, end + 1);
             return dispatch(addSelectedTargets(newShiftSelected));
         }
         dispatch(setLastSelect(file, fileIndex));
