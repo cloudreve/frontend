@@ -8,7 +8,13 @@ import {
     Android,
     FileExcelBox,
     FilePowerpointBox,
-    FileWordBox, LanguageC, LanguageCpp, LanguageGo, LanguageJavascript, LanguagePhp, LanguagePython,
+    FileWordBox,
+    LanguageC,
+    LanguageCpp,
+    LanguageGo,
+    LanguageJavascript,
+    LanguagePhp,
+    LanguagePython,
     MagnetOn,
     ScriptText,
     WindowRestore,
@@ -80,22 +86,22 @@ const icons = {
         color: "#16b3da",
         icon: LanguageGo
     },
-    python:{
+    python: {
         color: "#3776ab",
         icon: LanguagePython
     },
-    c:{
+    c: {
         color: "#a8b9cc",
-        icon: LanguageC,
+        icon: LanguageC
     },
-    cpp:{
+    cpp: {
         color: "#004482",
-        icon: LanguageCpp,
+        icon: LanguageCpp
     },
-    js:{
+    js: {
         color: "#f4d003",
-        icon: LanguageJavascript,
-    },
+        icon: LanguageJavascript
+    }
 };
 
 const getColor = (theme, color) =>
@@ -133,7 +139,7 @@ const TypeIcon = props => {
                 >
                     <IconComponent
                         style={{
-                            color: theme.palette.background.paper,
+                            color: theme.palette.background.paper
                         }}
                     />
                 </Avatar>

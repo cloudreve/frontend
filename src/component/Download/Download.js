@@ -53,8 +53,8 @@ const styles = theme => ({
         marginTop: "20px",
         marginBottom: "20px"
     },
-    margin:{
-        marginTop:theme.spacing(2),
+    margin: {
+        marginTop: theme.spacing(2)
     }
 });
 const mapStateToProps = () => {
@@ -101,8 +101,11 @@ class DownloadComponent extends Component {
                 });
                 // 设定自动更新
                 clearTimeout(this.interval);
-                if(response.data.length > 0){
-                    this.interval = setTimeout(this.loadDownloading,1000 * response.data[0].interval);
+                if (response.data.length > 0) {
+                    this.interval = setTimeout(
+                        this.loadDownloading,
+                        1000 * response.data[0].interval
+                    );
                 }
             })
             .catch(error => {
@@ -119,11 +122,13 @@ class DownloadComponent extends Component {
         this.setState({
             loading: true
         });
-        API
-            .get("/aria2/finished?page=" + ++this.page)
+        API.get("/aria2/finished?page=" + ++this.page)
             .then(response => {
                 this.setState({
-                    finishedList: [...this.state.finishedList,...response.data],
+                    finishedList: [
+                        ...this.state.finishedList,
+                        ...response.data
+                    ],
                     loading: false,
                     continue: response.data.length >= 10
                 });
@@ -142,7 +147,7 @@ class DownloadComponent extends Component {
 
         return (
             <div className={classes.layout}>
-                {user.group.allowRemoteDownload&& <RemoteDownloadButton/>}
+                {user.group.allowRemoteDownload && <RemoteDownloadButton />}
                 <Typography
                     color="textSecondary"
                     variant="h4"
@@ -157,7 +162,7 @@ class DownloadComponent extends Component {
                     </IconButton>
                 </Typography>
                 {this.state.downloading.map((value, k) => (
-                    <DownloadingCard key={ k } task={value} />
+                    <DownloadingCard key={k} task={value} />
                 ))}
                 <Typography
                     color="textSecondary"
@@ -169,12 +174,9 @@ class DownloadComponent extends Component {
                 <div className={classes.loadMore}>
                     {this.state.finishedList.map((value, k) => {
                         if (value.files) {
-                            return (
-                                <FinishedCard key={k} task={value}/>
-                            )
+                            return <FinishedCard key={k} task={value} />;
                         }
-                        return null
-
+                        return null;
                     })}
                     <Button
                         size="large"

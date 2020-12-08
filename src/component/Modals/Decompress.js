@@ -9,14 +9,11 @@ import {
     DialogContentText,
     CircularProgress
 } from "@material-ui/core";
-import {
-    toggleSnackbar,
-    setModalsLoading,
-} from "../../actions/index";
+import { toggleSnackbar, setModalsLoading } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
-import {filePath} from "../../utils";
+import { filePath } from "../../utils";
 
 const useStyles = makeStyles(theme => ({
     contentFix: {
@@ -68,7 +65,7 @@ export default function DecompressDialog(props) {
         }
         SetModalsLoading(true);
         API.post("/file/decompress", {
-            src:filePath(props.selected[0]),
+            src: filePath(props.selected[0]),
             dst: selectedPath === "//" ? "/" : selectedPath
         })
             .then(() => {

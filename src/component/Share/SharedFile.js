@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { sizeToString, vhCheck } from "../../utils";
 import {
-    openMusicDialog, openResaveDialog,
+    openMusicDialog,
+    openResaveDialog,
     setSelectedTarget,
     showImgPreivew,
     toggleSnackbar
@@ -17,8 +18,7 @@ import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
 import pathHelper from "../../utils/page";
 
-
-vhCheck()
+vhCheck();
 const styles = theme => ({
     layout: {
         width: "auto",
@@ -113,9 +113,9 @@ const mapDispatchToProps = dispatch => {
         showImgPreivew: first => {
             dispatch(showImgPreivew(first));
         },
-        openResave: (key) => {
+        openResave: key => {
             dispatch(openResaveDialog(key));
-        },
+        }
     };
 };
 
@@ -156,8 +156,8 @@ class SharedFileCompoment extends Component {
             case "msDoc":
                 this.props.history.push(
                     this.props.share.key +
-                    "/doc?name=" +
-                    encodeURIComponent(this.props.share.source.name)
+                        "/doc?name=" +
+                        encodeURIComponent(this.props.share.source.name)
                 );
                 return;
             case "audio":
@@ -177,20 +177,26 @@ class SharedFileCompoment extends Component {
                 );
                 return;
             case "edit":
-                this.props.history.push(this.props.share.key +
-                    "/text?name=" +
-                    encodeURIComponent(this.props.share.source.name));
-                return
+                this.props.history.push(
+                    this.props.share.key +
+                        "/text?name=" +
+                        encodeURIComponent(this.props.share.source.name)
+                );
+                return;
             case "pdf":
-                this.props.history.push(this.props.share.key +
-                    "/pdf?name=" +
-                    encodeURIComponent(this.props.share.source.name));
-                return
+                this.props.history.push(
+                    this.props.share.key +
+                        "/pdf?name=" +
+                        encodeURIComponent(this.props.share.source.name)
+                );
+                return;
             case "code":
-                this.props.history.push(this.props.share.key +
-                    "/code?name=" +
-                    encodeURIComponent(this.props.share.source.name));
-                return
+                this.props.history.push(
+                    this.props.share.key +
+                        "/code?name=" +
+                        encodeURIComponent(this.props.share.source.name)
+                );
+                return;
             default:
                 this.props.toggleSnackbar(
                     "top",
@@ -237,7 +243,7 @@ class SharedFileCompoment extends Component {
                 <Modals />
                 <ImgPreview />
                 <div className={classes.box}>
-                   <Creator share={this.props.share}/>
+                    <Creator share={this.props.share} />
                     <Divider />
                     <div className={classes.boxContent}>
                         <TypeIcon
@@ -258,18 +264,17 @@ class SharedFileCompoment extends Component {
                     <div className={classes.boxFooter}>
                         <div className={classes.actionLeft}>
                             {this.props.share.preview && (
-                            <Button
-                                variant="outlined"
-                                color="secondary"
-                                onClick={this.scoreHandle(this.preview)}
-                                disabled={this.state.loading}
-                            >
-                                预览
-                            </Button>
-                        )}
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={this.scoreHandle(this.preview)}
+                                    disabled={this.state.loading}
+                                >
+                                    预览
+                                </Button>
+                            )}
                         </div>
                         <div className={classes.actions}>
-
                             <Button
                                 variant="contained"
                                 color="secondary"

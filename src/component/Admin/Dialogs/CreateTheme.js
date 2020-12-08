@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function CreateTheme({ open, onClose,onSubmit }) {
+export default function CreateTheme({ open, onClose, onSubmit }) {
     const classes = useStyles();
     const [theme, setTheme] = useState({
         palette: {
@@ -121,7 +121,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                                         "#9c27b0"
                                     ]}
                                     color={theme.palette.primary.main}
-                                    onChangeComplete={(c) => {
+                                    onChangeComplete={c => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -197,7 +197,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                                         "#d500f9"
                                     ]}
                                     color={theme.palette.secondary.main}
-                                    onChangeComplete={(c) => {
+                                    onChangeComplete={c => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -235,7 +235,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                             <div className={classes.picker}>
                                 <CompactPicker
                                     color={theme.palette.primary.contrastText}
-                                    onChangeComplete={(c) => {
+                                    onChangeComplete={c => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -273,7 +273,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                             <div className={classes.picker}>
                                 <CompactPicker
                                     color={theme.palette.secondary.contrastText}
-                                    onChangeComplete={(c) => {
+                                    onChangeComplete={c => {
                                         setTheme({
                                             ...theme,
                                             palette: {
@@ -339,7 +339,7 @@ export default function CreateTheme({ open, onClose,onSubmit }) {
                 <Button onClick={onClose} color="default">
                     取消
                 </Button>
-                <Button onClick={()=>onSubmit(theme)} color="primary">
+                <Button onClick={() => onSubmit(theme)} color="primary">
                     创建
                 </Button>
             </DialogActions>

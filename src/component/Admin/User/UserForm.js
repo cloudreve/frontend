@@ -43,7 +43,7 @@ export default function UserForm(props) {
                   Nick: "",
                   Password: "", // 为空时只读
                   Status: "0", // 转换类型
-                  GroupID: "2", // 转换类型
+                  GroupID: "2" // 转换类型
               }
     );
     const [groups, setGroups] = useState([]);
@@ -76,21 +76,26 @@ export default function UserForm(props) {
 
     const submit = e => {
         e.preventDefault();
-        const userCopy = {...user};
+        const userCopy = { ...user };
 
         // 整型转换
-        ["Status", "GroupID","Score"].forEach(v => {
+        ["Status", "GroupID", "Score"].forEach(v => {
             userCopy[v] = parseInt(userCopy[v]);
         });
 
         setLoading(true);
         API.post("/admin/user", {
             user: userCopy,
-            password:userCopy.Password,
+            password: userCopy.Password
         })
             .then(() => {
                 history.push("/admin/user");
-                ToggleSnackbar("top", "right", "用户已"+ (props.user ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "用户已" + (props.user ? "保存" : "添加"),
+                    "success"
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -110,7 +115,6 @@ export default function UserForm(props) {
                     </Typography>
 
                     <div className={classes.formContainer}>
-
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
@@ -162,9 +166,7 @@ export default function UserForm(props) {
                                 </InputLabel>
                                 <Select
                                     value={user.GroupID}
-                                    onChange={handleChange(
-                                        "GroupID"
-                                    )}
+                                    onChange={handleChange("GroupID")}
                                     required
                                 >
                                     {groups.map(v => {
@@ -194,19 +196,18 @@ export default function UserForm(props) {
                                 </InputLabel>
                                 <Select
                                     value={user.Status}
-                                    onChange={handleChange(
-                                        "Status"
-                                    )}
+                                    onChange={handleChange("Status")}
                                     required
                                 >
                                     <MenuItem value={"0"}>正常</MenuItem>
                                     <MenuItem value={"1"}>未激活</MenuItem>
                                     <MenuItem value={"2"}>被封禁</MenuItem>
-                                    <MenuItem value={"3"}>超额使用被封禁</MenuItem>
+                                    <MenuItem value={"3"}>
+                                        超额使用被封禁
+                                    </MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
                 <div className={classes.root}>

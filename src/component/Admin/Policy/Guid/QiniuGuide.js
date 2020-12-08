@@ -95,26 +95,30 @@ export default function RemoteGuide(props) {
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [skipped,] = React.useState(new Set());
+    const [skipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
     // const [useCDN, setUseCDN] = useState("false");
-    const [policy, setPolicy] = useState(props.policy?props.policy:{
-        Type: "qiniu",
-        Name: "",
-        SecretKey: "",
-        AccessKey: "",
-        BaseURL: "",
-        IsPrivate: "true",
-        DirNameRule: "uploads/{year}/{month}/{day}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable: "false",
-        MaxSize: "0",
-        OptionsSerialized: {
-            file_type: "",
-            mimetype:"",
-        }
-    });
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "qiniu",
+                  Name: "",
+                  SecretKey: "",
+                  AccessKey: "",
+                  BaseURL: "",
+                  IsPrivate: "true",
+                  DirNameRule: "uploads/{year}/{month}/{day}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: "",
+                      mimetype: ""
+                  }
+              }
+    );
 
     const handleChange = name => event => {
         setPolicy({
@@ -171,7 +175,12 @@ export default function RemoteGuide(props) {
             policy: policyCopy
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(5);
             })
             .catch(error => {
@@ -186,7 +195,9 @@ export default function RemoteGuide(props) {
 
     return (
         <div>
-            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} 七牛 存储策略</Typography>
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"} 七牛 存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -215,15 +226,14 @@ export default function RemoteGuide(props) {
                         setActiveStep(1);
                     }}
                 >
-
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>0</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用七牛存储策略前，请确保您在 参数设置 - 站点信息
-                                - 站点URL 中填写的 地址与实际相符，并且
+                                在使用七牛存储策略前，请确保您在 参数设置 -
+                                站点信息 - 站点URL 中填写的 地址与实际相符，并且
                                 <strong>能够被外网正常访问</strong>。
                             </Typography>
                         </div>
@@ -394,9 +404,9 @@ export default function RemoteGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("path");
                                     }}
                                 >
                                     路径魔法变量列表
@@ -429,9 +439,9 @@ export default function RemoteGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("file");
                                     }}
                                 >
                                     文件名魔法变量列表
@@ -530,14 +540,22 @@ export default function RemoteGuide(props) {
                                     <RadioGroup
                                         required
                                         value={policy.IsOriginLinkEnable}
-                                        onChange={e=>{
-                                            if (policy.IsPrivate === "true" && e.target.value==="true"){
-                                                ToggleSnackbar("top", "right","私有空间无法开启此功能", "warning");
-                                                return
+                                        onChange={e => {
+                                            if (
+                                                policy.IsPrivate === "true" &&
+                                                e.target.value === "true"
+                                            ) {
+                                                ToggleSnackbar(
+                                                    "top",
+                                                    "right",
+                                                    "私有空间无法开启此功能",
+                                                    "warning"
+                                                );
+                                                return;
                                             }
-                                            handleChange(
-                                            "IsOriginLinkEnable"
-                                            )(e)
+                                            handleChange("IsOriginLinkEnable")(
+                                                e
+                                            );
                                         }}
                                         row
                                     >
@@ -762,9 +780,9 @@ export default function RemoteGuide(props) {
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>
-                                {getNumber(3,[
+                                {getNumber(3, [
                                     policy.MaxSize !== "0",
-                                    policy.OptionsSerialized.file_type !== "",
+                                    policy.OptionsSerialized.file_type !== ""
                                 ])}
                             </div>
                         </div>
@@ -789,8 +807,7 @@ export default function RemoteGuide(props) {
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        mimetype:
-                                                            "image/*"
+                                                        mimetype: "image/*"
                                                     }
                                                 });
                                             } else {
@@ -829,16 +846,18 @@ export default function RemoteGuide(props) {
                         <div className={classes.subStepContainer}>
                             <div className={classes.stepNumberContainer}>
                                 <div className={classes.stepNumber}>
-                                    {getNumber(4,[
+                                    {getNumber(4, [
                                         policy.MaxSize !== "0",
-                                        policy.OptionsSerialized.file_type !== "",
+                                        policy.OptionsSerialized.file_type !==
+                                            ""
                                     ])}
                                 </div>
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
                                     输入允许上传的 MimeType，多个请以半角逗号 ,
-                                    隔开。七牛服务器会侦测文件内容以判断 MimeType，再用判断值跟指定值进行匹配，匹配成功则允许上传
+                                    隔开。七牛服务器会侦测文件内容以判断
+                                    MimeType，再用判断值跟指定值进行匹配，匹配成功则允许上传
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
@@ -925,7 +944,9 @@ export default function RemoteGuide(props) {
             {activeStep === 5 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已{props.policy ? "保存" : "添加"}！</Typography>
+                        <Typography>
+                            存储策略已{props.policy ? "保存" : "添加"}！
+                        </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
                             要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
                         </Typography>

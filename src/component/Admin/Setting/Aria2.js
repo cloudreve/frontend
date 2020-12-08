@@ -152,7 +152,9 @@ export default function Aria2() {
                                     Aria2 的配置文件中开启 RPC
                                     服务。更多信息及指引请参考文档的{" "}
                                     <Link
-                                        href={"https://docs.cloudreve.org/use/aria2"}
+                                        href={
+                                            "https://docs.cloudreve.org/use/aria2"
+                                        }
                                         target={"_blank"}
                                     >
                                         离线下载

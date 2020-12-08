@@ -40,10 +40,10 @@ const useStyles = makeStyles(theme => ({
         }
     },
     formControl: {
-        margin: "8px 16px 8px 16px",
+        margin: "8px 16px 8px 16px"
     },
-    toobar:{
-        textAlign:"right",
+    toobar: {
+        textAlign: "right"
     }
 }));
 
@@ -145,9 +145,11 @@ export default function CodeViewer() {
                             onChange={e => setSuffix(e.target.value)}
                         >
                             {Array.from(
-                                new Set(Object.keys(codePreviewSuffix).map(k=>{
-                                    return codePreviewSuffix[k]
-                                }))
+                                new Set(
+                                    Object.keys(codePreviewSuffix).map(k => {
+                                        return codePreviewSuffix[k];
+                                    })
+                                )
                             ).map((extension, index) => (
                                 <MenuItem value={extension} key={index}>
                                     {extension}

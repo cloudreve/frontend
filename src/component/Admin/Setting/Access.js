@@ -320,7 +320,8 @@ export default function Access() {
                                                 target={"_blank"}
                                             >
                                                 应用管理页面
-                                            </Link>{" "}获取到的的 秘钥
+                                            </Link>{" "}
+                                            获取到的的 秘钥
                                         </FormHelperText>
                                     </FormControl>
                                 </div>

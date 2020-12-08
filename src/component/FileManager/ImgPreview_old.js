@@ -8,7 +8,7 @@ import { withStyles } from "@material-ui/core";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css";
 import pathHelper from "../../utils/page";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
 
 const styles = () => ({});
 
@@ -38,21 +38,22 @@ class ImgPreviewCompoment extends Component {
         const items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {
-            if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
+            if (
+                pathHelper.isSharePage(this.props.location.pathname) &&
+                !nextProps.first.path
+            ) {
                 const newImg = {
                     title: nextProps.first.name,
-                    src:
-                        baseURL +
-                        "/share/preview/" +nextProps.first.key
+                    src: baseURL + "/share/preview/" + nextProps.first.key
                 };
                 firstOne = 0;
                 items.push(newImg);
                 this.setState({
-                    photoIndex:firstOne,
+                    photoIndex: firstOne,
                     items: items,
                     isOpen: true
                 });
-                return
+                return;
             }
             // eslint-disable-next-line
             nextProps.other.map(value => {
@@ -62,21 +63,22 @@ class ImgPreviewCompoment extends Component {
                     .toLowerCase();
                 if (imgPreviewSuffix.indexOf(fileType) !== -1) {
                     let src = "";
-                    if (pathHelper.isSharePage(this.props.location.pathname)){
-                        src = baseURL +
-                            "/share/preview/" + value.key
-                        src = src + "?path=" + encodeURIComponent( (value.path === "/"
-                                ? value.path + value.name
-                                : value.path + "/" + value.name))
-
-                    }else{
-                        src = baseURL +
-                            "/file/preview/" +
-                            value.id
+                    if (pathHelper.isSharePage(this.props.location.pathname)) {
+                        src = baseURL + "/share/preview/" + value.key;
+                        src =
+                            src +
+                            "?path=" +
+                            encodeURIComponent(
+                                value.path === "/"
+                                    ? value.path + value.name
+                                    : value.path + "/" + value.name
+                            );
+                    } else {
+                        src = baseURL + "/file/preview/" + value.id;
                     }
                     const newImg = {
                         title: value.name,
-                        src:src,
+                        src: src
                     };
                     if (
                         value.path === nextProps.first.path &&
@@ -88,7 +90,7 @@ class ImgPreviewCompoment extends Component {
                 }
             });
             this.setState({
-                photoIndex:firstOne,
+                photoIndex: firstOne,
                 items: items,
                 isOpen: true
             });
@@ -103,34 +105,42 @@ class ImgPreviewCompoment extends Component {
     };
 
     render() {
-        const { photoIndex, isOpen,items } = this.state;
+        const { photoIndex, isOpen, items } = this.state;
 
         return (
             <div>
-                 {isOpen && (<Lightbox
-                    mainSrc={items[photoIndex].src}
-                    nextSrc={items[(photoIndex + 1) % items.length].src}
-                    prevSrc={items[(photoIndex + items.length - 1) % items.length].src}
-                    onCloseRequest={() => this.handleClose()}
-                    imageLoadErrorMessage = "无法加载此图像"
-                    imageCrossOrigin = "anonymous"
-                    imageTitle = {items[photoIndex].title}
-                    onMovePrevRequest={() =>
-                      this.setState({
-                        photoIndex: (photoIndex + items.length - 1) % items.length,
-                      })
-                    }
-                    reactModalStyle={{
-                        overlay:{
-                            zIndex:10000
-                        },
-                    }}
-                    onMoveNextRequest={() =>
-                      this.setState({
-                        photoIndex: (photoIndex + 1) % items.length,
-                      })
-                    }
-                />)}
+                {isOpen && (
+                    <Lightbox
+                        mainSrc={items[photoIndex].src}
+                        nextSrc={items[(photoIndex + 1) % items.length].src}
+                        prevSrc={
+                            items[
+                                (photoIndex + items.length - 1) % items.length
+                            ].src
+                        }
+                        onCloseRequest={() => this.handleClose()}
+                        imageLoadErrorMessage="无法加载此图像"
+                        imageCrossOrigin="anonymous"
+                        imageTitle={items[photoIndex].title}
+                        onMovePrevRequest={() =>
+                            this.setState({
+                                photoIndex:
+                                    (photoIndex + items.length - 1) %
+                                    items.length
+                            })
+                        }
+                        reactModalStyle={{
+                            overlay: {
+                                zIndex: 10000
+                            }
+                        }}
+                        onMoveNextRequest={() =>
+                            this.setState({
+                                photoIndex: (photoIndex + 1) % items.length
+                            })
+                        }
+                    />
+                )}
             </div>
         );
     }

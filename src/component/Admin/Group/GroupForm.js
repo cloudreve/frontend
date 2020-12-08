@@ -152,8 +152,9 @@ export default function GroupForm(props) {
             "share_download",
             "aria2"
         ].forEach(v => {
-            if (groupCopy.OptionsSerialized[v] !== undefined){
-                groupCopy.OptionsSerialized[v] = groupCopy.OptionsSerialized[v] === "true";
+            if (groupCopy.OptionsSerialized[v] !== undefined) {
+                groupCopy.OptionsSerialized[v] =
+                    groupCopy.OptionsSerialized[v] === "true";
             }
         });
 
@@ -161,19 +162,20 @@ export default function GroupForm(props) {
         ["MaxStorage", "SpeedLimit"].forEach(v => {
             groupCopy[v] = parseInt(groupCopy[v]);
         });
-        [
-            "compress_size",
-            "decompress_size",
-        ].forEach(v => {
-            if (groupCopy.OptionsSerialized[v] !== undefined){
-                groupCopy.OptionsSerialized[v] = parseInt(groupCopy.OptionsSerialized[v]);
+        ["compress_size", "decompress_size"].forEach(v => {
+            if (groupCopy.OptionsSerialized[v] !== undefined) {
+                groupCopy.OptionsSerialized[v] = parseInt(
+                    groupCopy.OptionsSerialized[v]
+                );
             }
         });
         groupCopy.PolicyList = [parseInt(groupCopy.PolicyList)];
         // JSON转换
         try {
-            groupCopy.OptionsSerialized.aria2_options = JSON.parse(groupCopy.OptionsSerialized.aria2_options);
-        }catch (e) {
+            groupCopy.OptionsSerialized.aria2_options = JSON.parse(
+                groupCopy.OptionsSerialized.aria2_options
+            );
+        } catch (e) {
             ToggleSnackbar("top", "right", "Aria2 设置项格式错误", "warning");
             return;
         }
@@ -184,7 +186,12 @@ export default function GroupForm(props) {
         })
             .then(() => {
                 history.push("/admin/group");
-                ToggleSnackbar("top", "right", "用户组已"+ (props.group ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "用户组已" + (props.group ? "保存" : "添加"),
+                    "success"
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -192,7 +199,6 @@ export default function GroupForm(props) {
             .then(() => {
                 setLoading(false);
             });
-
     };
 
     return (
@@ -205,68 +211,71 @@ export default function GroupForm(props) {
                     </Typography>
 
                     <div className={classes.formContainer}>
+                        {group.ID !== 3 && (
+                            <>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            用户组名
+                                        </InputLabel>
+                                        <Input
+                                            value={group.Name}
+                                            onChange={handleChange("Name")}
+                                            required
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            用户组的名称
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
 
-                        {group.ID !== 3 && <>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        用户组名
-                                    </InputLabel>
-                                    <Input
-                                        value={group.Name}
-                                        onChange={handleChange("Name")}
-                                        required
-                                    />
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            存储策略
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-mutiple-chip-label"
+                                            id="demo-mutiple-chip"
+                                            value={group.PolicyList}
+                                            onChange={handleChange(
+                                                "PolicyList"
+                                            )}
+                                            input={
+                                                <Input id="select-multiple-chip" />
+                                            }
+                                        >
+                                            {Object.keys(policies).map(pid => (
+                                                <MenuItem key={pid} value={pid}>
+                                                    {policies[pid]}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        <FormHelperText id="component-helper-text">
+                                            指定用户组的存储策略。
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <SizeInput
+                                            value={group.MaxStorage}
+                                            onChange={handleChange(
+                                                "MaxStorage"
+                                            )}
+                                            min={0}
+                                            max={9223372036854775807}
+                                            label={"初始容量"}
+                                            required
+                                        />
+                                    </FormControl>
                                     <FormHelperText id="component-helper-text">
-                                        用户组的名称
+                                        用户组下的用户初始可用最大容量
                                     </FormHelperText>
-                                </FormControl>
-                            </div>
-
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        存储策略
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-mutiple-chip-label"
-                                        id="demo-mutiple-chip"
-                                        value={group.PolicyList}
-                                        onChange={handleChange("PolicyList")}
-                                        input={<Input id="select-multiple-chip" />}
-                                    >
-                                        {Object.keys(policies).map(pid => (
-                                            <MenuItem
-                                                key={pid}
-                                                value={pid}
-                                            >
-                                                {policies[pid]}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    <FormHelperText id="component-helper-text">
-                                        指定用户组的存储策略。
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <SizeInput
-                                        value={group.MaxStorage}
-                                        onChange={handleChange("MaxStorage")}
-                                        min={0}
-                                        max={9223372036854775807}
-                                        label={"初始容量"}
-                                        required
-                                    />
-                                </FormControl>
-                                <FormHelperText id="component-helper-text">
-                                    用户组下的用户初始可用最大容量
-                                </FormHelperText>
-                            </div>
-                        </>}
-
+                                </div>
+                            </>
+                        )}
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
@@ -286,27 +295,29 @@ export default function GroupForm(props) {
                             </FormHelperText>
                         </div>
 
-                        {group.ID !== 3 && <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.ShareEnabled === "true"
-                                            }
-                                            onChange={handleCheckChange(
-                                                "ShareEnabled"
-                                            )}
-                                        />
-                                    }
-                                    label="允许创建分享"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    关闭后，用户无法创建分享链接
-                                </FormHelperText>
-                            </FormControl>
-                        </div>}
-
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.ShareEnabled ===
+                                                    "true"
+                                                }
+                                                onChange={handleCheckChange(
+                                                    "ShareEnabled"
+                                                )}
+                                            />
+                                        }
+                                        label="允许创建分享"
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        关闭后，用户无法创建分享链接
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
@@ -330,26 +341,30 @@ export default function GroupForm(props) {
                             </FormControl>
                         </div>
 
-                        {group.ID !== 3 && <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.WebDAVEnabled === "true"
-                                            }
-                                            onChange={handleCheckChange(
-                                                "WebDAVEnabled"
-                                            )}
-                                        />
-                                    }
-                                    label="WebDAV"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    关闭后，用户无法通过 WebDAV 协议连接至网盘
-                                </FormHelperText>
-                            </FormControl>
-                        </div>}
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.WebDAVEnabled ===
+                                                    "true"
+                                                }
+                                                onChange={handleCheckChange(
+                                                    "WebDAVEnabled"
+                                                )}
+                                            />
+                                        }
+                                        label="WebDAV"
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        关闭后，用户无法通过 WebDAV
+                                        协议连接至网盘
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
@@ -374,28 +389,29 @@ export default function GroupForm(props) {
                             </FormControl>
                         </div>
 
-                        {group.ID !== 3 && <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.OptionsSerialized
-                                                    .aria2 === "true"
-                                            }
-                                            onChange={handleOptionCheckChange(
-                                                "aria2"
-                                            )}
-                                        />
-                                    }
-                                    label="离线下载"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否允许用户创建离线下载任务
-                                </FormHelperText>
-                            </FormControl>
-                        </div>}
-
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.OptionsSerialized
+                                                        .aria2 === "true"
+                                                }
+                                                onChange={handleOptionCheckChange(
+                                                    "aria2"
+                                                )}
+                                            />
+                                        }
+                                        label="离线下载"
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        是否允许用户创建离线下载任务
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
 
                         <Collapse in={group.OptionsSerialized.aria2 === "true"}>
                             <div className={classes.form}>
@@ -445,27 +461,29 @@ export default function GroupForm(props) {
                             </FormControl>
                         </div>
 
-                        {group.ID !== 3 && <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.OptionsSerialized
-                                                    .archive_task === "true"
-                                            }
-                                            onChange={handleOptionCheckChange(
-                                                "archive_task"
-                                            )}
-                                        />
-                                    }
-                                    label="压缩/解压缩 任务"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否用户创建 压缩/解压缩 任务
-                                </FormHelperText>
-                            </FormControl>
-                        </div>}
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.OptionsSerialized
+                                                        .archive_task === "true"
+                                                }
+                                                onChange={handleOptionCheckChange(
+                                                    "archive_task"
+                                                )}
+                                            />
+                                        }
+                                        label="压缩/解压缩 任务"
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        是否用户创建 压缩/解压缩 任务
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
 
                         <Collapse
                             in={group.OptionsSerialized.archive_task === "true"}

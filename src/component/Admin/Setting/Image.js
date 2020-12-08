@@ -36,18 +36,18 @@ export default function ImageSetting() {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
-        gravatar_server:"",
-        avatar_path:"",
-        avatar_size:"",
-        avatar_size_l:"",
-        avatar_size_m:"",
-        avatar_size_s:"",
-        thumb_width:"",
-        thumb_height:"",
-        captcha_height:"1",
-        captcha_width:"1",
-        captcha_mode:"3",
-        captcha_CaptchaLen:"",
+        gravatar_server: "",
+        avatar_path: "",
+        avatar_size: "",
+        avatar_size_l: "",
+        avatar_size_m: "",
+        avatar_size_s: "",
+        thumb_width: "",
+        thumb_height: "",
+        captcha_height: "1",
+        captcha_width: "1",
+        captcha_mode: "3",
+        captcha_CaptchaLen: ""
     });
 
     const handleChange = name => event => {
@@ -77,34 +77,33 @@ export default function ImageSetting() {
         // eslint-disable-next-line
     }, []);
 
-
     const submit = e => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k=>{
+        Object.keys(options).forEach(k => {
             option.push({
-                key:k,
-                value:options[k],
+                key: k,
+                value: options[k]
             });
-        })
-        API.patch("/admin/setting",{
-            options:option,
+        });
+        API.patch("/admin/setting", {
+            options: option
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
+            })
+            .then(() => {
                 setLoading(false);
-        });
+            });
     };
 
     return (
         <div>
             <form onSubmit={submit}>
-
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
                         头像
@@ -167,8 +166,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.avatar_size_s}
                                     onChange={handleChange("avatar_size_s")}
@@ -185,8 +184,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.avatar_size_m}
                                     onChange={handleChange("avatar_size_m")}
@@ -203,8 +202,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.avatar_size_l}
                                     onChange={handleChange("avatar_size_l")}
@@ -212,7 +211,6 @@ export default function ImageSetting() {
                                 />
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
 
@@ -230,8 +228,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.thumb_width}
                                     onChange={handleChange("thumb_width")}
@@ -250,8 +248,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.thumb_height}
                                     onChange={handleChange("thumb_height")}
@@ -260,7 +258,6 @@ export default function ImageSetting() {
                             </FormControl>
                         </div>
                     </div>
-
                 </div>
 
                 <div className={classes.root}>
@@ -276,8 +273,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.captcha_width}
                                     onChange={handleChange("captcha_width")}
@@ -294,8 +291,8 @@ export default function ImageSetting() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.captcha_height}
                                     onChange={handleChange("captcha_height")}
@@ -324,7 +321,6 @@ export default function ImageSetting() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
 

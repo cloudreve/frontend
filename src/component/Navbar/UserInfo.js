@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import { setUserPopover } from "../../actions";
 import { withStyles, Typography } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
-import DarkModeSwitcher from "./DarkModeSwitcher"
+import DarkModeSwitcher from "./DarkModeSwitcher";
 import Avatar from "@material-ui/core/Avatar";
 
 const mapStateToProps = state => {
     return {
-        isLogin:state.viewUpdate.isLogin,
+        isLogin: state.viewUpdate.isLogin
     };
 };
 
@@ -76,12 +76,12 @@ const styles = theme => ({
     flexAvatar: {
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "end",
+        alignItems: "end"
     },
     groupName: {
         marginLeft: "10px",
         color: "#ffffff",
-        opacity: "0.54",
+        opacity: "0.54"
     },
     storageCircle: {
         width: "200px"
@@ -101,13 +101,11 @@ class UserInfoCompoment extends Component {
         return (
             <div className={classes.userNav}>
                 <div className={classes.flexAvatar}>
-                    { /* eslint-disable-next-line */}
+                    {/* eslint-disable-next-line */}
                     <a onClick={this.showUserInfo} className={classes.avatar}>
                         {isLogin && (
                             <Avatar
-                                src={
-                                    "/api/v3/user/avatar/"+user.id + "/l"
-                                }
+                                src={"/api/v3/user/avatar/" + user.id + "/l"}
                                 className={classes.avatarImg}
                             />
                         )}
@@ -118,7 +116,7 @@ class UserInfoCompoment extends Component {
                             />
                         )}
                     </a>
-                    <DarkModeSwitcher position="left"/>
+                    <DarkModeSwitcher position="left" />
                 </div>
                 <div className={classes.storageCircle}>
                     <Typography
@@ -126,7 +124,7 @@ class UserInfoCompoment extends Component {
                         component="h2"
                         noWrap
                     >
-                        {isLogin?user.nickname:"未登录"}
+                        {isLogin ? user.nickname : "未登录"}
                     </Typography>
                     <Typography
                         className={classes.groupName}
@@ -134,7 +132,7 @@ class UserInfoCompoment extends Component {
                         color="textSecondary"
                         noWrap
                     >
-                        {isLogin?user.group.name:"游客"}
+                        {isLogin ? user.group.name : "游客"}
                     </Typography>
                 </div>
             </div>

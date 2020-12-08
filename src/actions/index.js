@@ -1,30 +1,30 @@
-export * from './explorer'
+export * from "./explorer";
 
 export const setNavigator = (path, navigatorLoading) => {
-  return {
-    type: 'SET_NAVIGATOR',
-    path,
-    navigatorLoading
-  }
-}
+    return {
+        type: "SET_NAVIGATOR",
+        path,
+        navigatorLoading
+    };
+};
 
 export const navigateTo = path => {
-  return (dispatch, getState) => {
-    const state = getState()
-    const navigatorLoading = path !== state.navigator.path
-    dispatch(setNavigator(path, navigatorLoading))
-  }
+    return (dispatch, getState) => {
+        const state = getState();
+        const navigatorLoading = path !== state.navigator.path;
+        dispatch(setNavigator(path, navigatorLoading));
+    };
 };
 
 export const navigateUp = () => {
-  return (dispatch, getState) => {
-    const state = getState()
-    const pathSplit = state.navigator.path.split("/");
-    pathSplit.pop();
-    const newPath = pathSplit.length===1? "/":pathSplit.join("/");
-    const navigatorLoading = newPath !== state.navigator.path
-    dispatch(setNavigator(newPath, navigatorLoading))
-  }
+    return (dispatch, getState) => {
+        const state = getState();
+        const pathSplit = state.navigator.path.split("/");
+        pathSplit.pop();
+        const newPath = pathSplit.length === 1 ? "/" : pathSplit.join("/");
+        const navigatorLoading = newPath !== state.navigator.path;
+        dispatch(setNavigator(newPath, navigatorLoading));
+    };
 };
 
 export const drawerToggleAction = open => {
@@ -34,11 +34,11 @@ export const drawerToggleAction = open => {
     };
 };
 
-export const dragAndDrop = (source,target) => {
+export const dragAndDrop = (source, target) => {
     return {
         type: "DRAG_AND_DROP",
         source: source,
-        target: target,
+        target: target
     };
 };
 
@@ -49,9 +49,9 @@ export const changeViewMethod = method => {
     };
 };
 
-export const toggleDaylightMode = ()=>{
+export const toggleDaylightMode = () => {
     return {
-        type: "TOGGLE_DAYLIGHT_MODE",
+        type: "TOGGLE_DAYLIGHT_MODE"
     };
 };
 
@@ -110,10 +110,10 @@ export const openRenameDialog = () => {
     };
 };
 
-export const openResaveDialog = (key) => {
+export const openResaveDialog = key => {
     return {
         type: "OPEN_RESAVE_DIALOG",
-        key:key,
+        key: key
     };
 };
 
@@ -135,20 +135,19 @@ export const openShareDialog = () => {
     };
 };
 
-export const applyThemes = (theme)=>{
+export const applyThemes = theme => {
     return {
-        type:'APPLY_THEME',
-        theme:theme,
+        type: "APPLY_THEME",
+        theme: theme
     };
 };
 
-export const setSessionStatus = (status)=>{
+export const setSessionStatus = status => {
     return {
-        type:'SET_SESSION_STATUS',
-        status:status,
+        type: "SET_SESSION_STATUS",
+        status: status
     };
 };
-
 
 export const openMusicDialog = () => {
     return {
@@ -192,11 +191,11 @@ export const openCopyDialog = () => {
     };
 };
 
-export const openLoadingDialog = (text) => {
+export const openLoadingDialog = text => {
     return {
         type: "OPEN_LOADING_DIALOG",
-        text: text,
-    }
+        text: text
+    };
 };
 
 export const closeAllModals = () => {

@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         width: "100%",
         justifyContent: "space-between"
-    },
+    }
 }));
 
 function useQuery() {
@@ -68,9 +68,9 @@ function ResetForm() {
     const handleInputChange = name => e => {
         setInput({
             ...input,
-            [name]:e.target.value
-        })
-    }
+            [name]: e.target.value
+        });
+    };
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -81,15 +81,15 @@ function ResetForm() {
 
     const submit = e => {
         e.preventDefault();
-        if (input.password !== input.password_repeat){
+        if (input.password !== input.password_repeat) {
             ToggleSnackbar("top", "right", "两次密码输入不一致", "warning");
-            return
+            return;
         }
         setLoading(true);
         API.patch("/user/reset", {
             secret: query.get("sign"),
             id: query.get("id"),
-            Password: input.password,
+            Password: input.password
         })
             .then(() => {
                 setLoading(false);
@@ -100,7 +100,7 @@ function ResetForm() {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
             });
-    }
+    };
 
     const classes = useStyles();
 

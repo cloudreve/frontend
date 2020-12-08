@@ -30,7 +30,9 @@ import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
 import PageLoading from "./component/Placeholder/PageLoading";
 import CodeViewer from "./component/Viewer/Code";
-const PDFViewer = React.lazy(() => import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF"));
+const PDFViewer = React.lazy(() =>
+    import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
+);
 
 export default function App() {
     const themeConfig = useSelector(state => state.siteConfig.theme);
@@ -101,10 +103,7 @@ export default function App() {
                                 <FileManager />
                             </AuthRoute>
 
-                            <AuthRoute
-                                path={`${path}video`}
-                                isLogin={isLogin}
-                            >
+                            <AuthRoute path={`${path}video`} isLogin={isLogin}>
                                 <VideoPreview />
                             </AuthRoute>
 
@@ -117,7 +116,7 @@ export default function App() {
                             </AuthRoute>
 
                             <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading/>}>
+                                <Suspense fallback={<PageLoading />}>
                                     <PDFViewer />
                                 </Suspense>
                             </AuthRoute>
@@ -137,11 +136,8 @@ export default function App() {
                             <Route path={`${path}search`} isLogin={isLogin}>
                                 <SearchResult />
                             </Route>
-                            
-                            <Route
-                                path={`${path}setting`}
-                                isLogin={isLogin}
-                            >
+
+                            <Route path={`${path}setting`} isLogin={isLogin}>
                                 <UserSetting />
                             </Route>
 
@@ -197,7 +193,7 @@ export default function App() {
                             </Route>
 
                             <Route path={`${path}s/:id/pdf(/)*`}>
-                                <Suspense fallback={<PageLoading/>}>
+                                <Suspense fallback={<PageLoading />}>
                                     <PDFViewer />
                                 </Suspense>
                             </Route>

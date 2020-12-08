@@ -7,7 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 
-export default function AlertDialog({title, msg, open, onClose }) {
+export default function AlertDialog({ title, msg, open, onClose }) {
     return (
         <Dialog
             open={open}
@@ -15,14 +15,10 @@ export default function AlertDialog({title, msg, open, onClose }) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-                {title}
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    <Typography>
-                        {msg}
-                    </Typography>
+                    <Typography>{msg}</Typography>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

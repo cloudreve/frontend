@@ -11,5 +11,5 @@ function getURL() {
 
 export default makeAsyncScriptLoader(getURL, {
     callbackName,
-    globalName,
+    globalName
 })(ReCAPTCHA);

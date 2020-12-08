@@ -1,19 +1,12 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
-import {
-    toggleSnackbar,
-} from "../../actions/index";
+import { toggleSnackbar } from "../../actions/index";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
-import {
-    Button,
-    Paper,
-    Avatar,
-    Typography
-} from "@material-ui/core";
+import { Button, Paper, Avatar, Typography } from "@material-ui/core";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
-import {useLocation} from "react-router";
+import { useLocation } from "react-router";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -42,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     },
     submit: {
         marginTop: theme.spacing(3)
-    },
+    }
 }));
 
 function useQuery() {
@@ -53,8 +46,8 @@ function Activation() {
     const query = useQuery();
     const location = useLocation();
 
-    const [success,setSuccess] = useState(false);
-    const [email,setEmail] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [email, setEmail] = useState("");
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -66,10 +59,10 @@ function Activation() {
 
     const classes = useStyles();
 
-
-
     useEffect(() => {
-        API.get("/user/activate/" + query.get("id") + "?sign=" + query.get("sign"))
+        API.get(
+            "/user/activate/" + query.get("id") + "?sign=" + query.get("sign")
+        )
             .then(response => {
                 setEmail(response.data);
                 setSuccess(true);
@@ -83,28 +76,29 @@ function Activation() {
 
     return (
         <div className={classes.layout}>
-            {success && <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <EmailIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    激活成功
-                </Typography>
-                <Typography style={{marginTop:"20px"}}>您的账号已被成功激活。</Typography>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={()=>history.push("/login?username="+email)}
-                >
-                    返回登录
-                </Button>
-
-            </Paper>}
-
-
+            {success && (
+                <Paper className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <EmailIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        激活成功
+                    </Typography>
+                    <Typography style={{ marginTop: "20px" }}>
+                        您的账号已被成功激活。
+                    </Typography>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={() => history.push("/login?username=" + email)}
+                    >
+                        返回登录
+                    </Button>
+                </Paper>
+            )}
         </div>
     );
 }

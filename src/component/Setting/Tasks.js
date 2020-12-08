@@ -10,7 +10,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import API from "../../middleware/Api";
 import TimeAgo from "timeago-react";
-import {getTaskProgress, getTaskStatus, getTaskType} from "../../config";
+import { getTaskProgress, getTaskStatus, getTaskType } from "../../config";
 import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles(theme => ({
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     },
     content: {
         marginTop: theme.spacing(4),
-        overflowX:"auto",
+        overflowX: "auto"
     },
     cardContent: {
         padding: theme.spacing(2)
@@ -39,11 +39,11 @@ const useStyles = makeStyles(theme => ({
     create: {
         marginTop: theme.spacing(2)
     },
-    noWrap:{
-        wordBreak: "keepAll",
+    noWrap: {
+        wordBreak: "keepAll"
     },
-    footer:{
-        padding:theme.spacing(2),
+    footer: {
+        padding: theme.spacing(2)
     }
 }));
 
@@ -60,33 +60,32 @@ export default function Tasks() {
     );
 
     const loadList = page => {
-      API.get("/user/setting/tasks?page=" + page)
-          .then(response => {
-              setTasks(response.data.tasks);
-              setTotal(response.data.total);
-          })
-          .catch(error => {
-              ToggleSnackbar("top", "right", error.message, "error");
-          });
+        API.get("/user/setting/tasks?page=" + page)
+            .then(response => {
+                setTasks(response.data.tasks);
+                setTotal(response.data.total);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
     };
-    
+
     useEffect(() => {
         loadList(page);
         // eslint-disable-next-line
     }, [page]);
 
     const getError = error => {
-        if (error === ""){
-            return "-"
+        if (error === "") {
+            return "-";
         }
         try {
-            const res = JSON.parse(error)
-            return res.msg
-        }catch (e) {
-            return "未知"
+            const res = JSON.parse(error);
+            return res.msg;
+        } catch (e) {
+            return "未知";
         }
-
-    }
+    };
 
     const classes = useStyles();
 
@@ -100,16 +99,26 @@ export default function Tasks() {
                     <TableHead>
                         <TableRow>
                             <TableCell nowrap="nowrap">创建于</TableCell>
-                            <TableCell nowrap="nowrap" align="right">任务类型</TableCell>
-                            <TableCell nowrap="nowrap" align="right">状态</TableCell>
-                            <TableCell nowrap="nowrap" align="right">最后进度</TableCell>
+                            <TableCell nowrap="nowrap" align="right">
+                                任务类型
+                            </TableCell>
+                            <TableCell nowrap="nowrap" align="right">
+                                状态
+                            </TableCell>
+                            <TableCell nowrap="nowrap" align="right">
+                                最后进度
+                            </TableCell>
                             <TableCell nowrap="nowrap">错误信息</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {tasks.map((row, id) => (
                             <TableRow key={id}>
-                                <TableCell nowrap="nowrap" component="th" scope="row">
+                                <TableCell
+                                    nowrap="nowrap"
+                                    component="th"
+                                    scope="row"
+                                >
                                     <TimeAgo
                                         datetime={row.create_date}
                                         locale="zh_CN"
@@ -118,22 +127,25 @@ export default function Tasks() {
                                 <TableCell nowrap="nowrap" align="right">
                                     {getTaskType(row.type)}
                                 </TableCell>
-                                <TableCell nowrap="nowrap" align="right">{getTaskStatus(row.status)}</TableCell>
                                 <TableCell nowrap="nowrap" align="right">
-                                    {getTaskProgress(row.type,row.progress)}
+                                    {getTaskStatus(row.status)}
+                                </TableCell>
+                                <TableCell nowrap="nowrap" align="right">
+                                    {getTaskProgress(row.type, row.progress)}
                                 </TableCell>
                                 <TableCell className={classes.noWrap}>
                                     {getError(row.error)}
                                 </TableCell>
-
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
                 <div className={classes.footer}>
-                    <Pagination   count={Math.ceil(total / 10)}
-                                  onChange={(e,v)=>setPage(v)}
-                                  color="secondary"/>
+                    <Pagination
+                        count={Math.ceil(total / 10)}
+                        onChange={(e, v) => setPage(v)}
+                        color="secondary"
+                    />
                 </div>
             </Paper>
         </div>

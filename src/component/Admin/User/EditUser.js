@@ -1,14 +1,14 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {useParams} from "react-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import API from "../../../middleware/Api";
-import {useDispatch} from "react-redux";
-import {toggleSnackbar} from "../../../actions";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../../actions";
 import UserForm from "./UserForm";
 
-export default function EditUserPreload( ) {
-    const [user,setUser] = useState({});
+export default function EditUserPreload() {
+    const [user, setUser] = useState({});
 
-    const {id } = useParams();
+    const { id } = useParams();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -17,8 +17,7 @@ export default function EditUserPreload( ) {
         [dispatch]
     );
 
-
-    useEffect(()=>{
+    useEffect(() => {
         setUser({});
         API.get("/admin/user/" + id)
             .then(response => {
@@ -31,13 +30,7 @@ export default function EditUserPreload( ) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[id]);
+    }, [id]);
 
-    return (
-        <div>
-            {user.ID !== undefined &&
-                <UserForm user={user}/>
-            }
-        </div>
-    );
+    return <div>{user.ID !== undefined && <UserForm user={user} />}</div>;
 }
