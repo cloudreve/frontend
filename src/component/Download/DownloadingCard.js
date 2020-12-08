@@ -157,6 +157,7 @@ export default function DownloadingCard(props) {
     const canvasRef = React.createRef();
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
 
     const [expanded, setExpanded] = React.useState("");
     const [task, setTask] = React.useState(props.task);
@@ -531,9 +532,10 @@ export default function DownloadingCard(props) {
                             variant="outlined"
                             color="secondary"
                             onClick={() =>
-                                (window.location.href =
+                                history.push(
                                     "/#/home?path=" +
-                                    encodeURIComponent(task.dst))
+                                        encodeURIComponent(task.dst)
+                                )
                             }
                         >
                             打开存放目录

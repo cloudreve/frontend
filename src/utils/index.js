@@ -6,12 +6,6 @@ export const sizeToString = bytes => {
     return (bytes / Math.pow(k, i)).toFixed(1) + " " + sizes[i];
 };
 
-export const fixUrlHash = path => {
-    const relativePath = path.split("#");
-    const url = new URL("http://example.com/" + relativePath[1]);
-    return url.toString();
-};
-
 export const setCookie = (name, value, days) => {
     if (days) {
         const date = new Date();

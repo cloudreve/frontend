@@ -90,22 +90,22 @@ export default function Download() {
     );
 
     const loadList = () => {
-      API.post("/admin/download/list", {
-          page: page,
-          page_size: pageSize,
-          order_by: orderBy.join(" "),
-          conditions: filter,
-          searches: search
-      })
-          .then(response => {
-              setUsers(response.data.users);
-              setDownloads(response.data.items);
-              setTotal(response.data.total);
-              setSelected([]);
-          })
-          .catch(error => {
-              ToggleSnackbar("top", "right", error.message, "error");
-          });
+        API.post("/admin/download/list", {
+            page: page,
+            page_size: pageSize,
+            order_by: orderBy.join(" "),
+            conditions: filter,
+            searches: search
+        })
+            .then(response => {
+                setUsers(response.data.users);
+                setDownloads(response.data.items);
+                setTotal(response.data.total);
+                setSelected([]);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
     };
 
     useEffect(() => {
@@ -268,7 +268,10 @@ export default function Download() {
                                 <TableCell style={{ minWidth: 90 }}>
                                     状态
                                 </TableCell>
-                                <TableCell style={{ minWidth: 150 }} align={"right"}>
+                                <TableCell
+                                    style={{ minWidth: 150 }}
+                                    align={"right"}
+                                >
                                     <TableSortLabel
                                         active={orderBy[0] === "total_size"}
                                         direction={orderBy[1]}
@@ -323,7 +326,9 @@ export default function Download() {
                                         />
                                     </TableCell>
                                     <TableCell>{row.ID}</TableCell>
-                                    <TableCell style={{wordBreak:"break-all"}}>
+                                    <TableCell
+                                        style={{ wordBreak: "break-all" }}
+                                    >
                                         {row.Source}
                                     </TableCell>
                                     <TableCell>
@@ -341,8 +346,7 @@ export default function Download() {
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/#/admin/user/edit/" +
-                                                row.UserID
+                                                "/admin/user/edit/" + row.UserID
                                             }
                                         >
                                             {users[row.UserID]

@@ -1,10 +1,8 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import RegIcon from '@material-ui/icons/AssignmentIndOutlined';
+import RegIcon from "@material-ui/icons/AssignmentIndOutlined";
 import { makeStyles } from "@material-ui/core";
-import {
-    toggleSnackbar,
-} from "../../actions/index";
+import { toggleSnackbar } from "../../actions/index";
 import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
@@ -64,9 +62,8 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         marginTop: "10px",
         [theme.breakpoints.down("sm")]: {
-            display: "block",
-        },
-
+            display: "block"
+        }
     },
     captchaPlaceholder: {
         width: 200
@@ -78,18 +75,18 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         marginTop: 16
     },
-    avatarSuccess:{
+    avatarSuccess: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-    },
+        backgroundColor: theme.palette.primary.main
+    }
 }));
 
 function Register() {
-    const [input,setInput] = useState({
-        "email":"",
-        "password":"",
-        "password_repeat":"",
-        "captcha":"",
+    const [input, setInput] = useState({
+        email: "",
+        password: "",
+        password_repeat: "",
+        captcha: ""
     });
     const [loading, setLoading] = useState(false);
     const [emailActive, setEmailActive] = useState(false);
@@ -97,8 +94,12 @@ function Register() {
 
     const title = useSelector(state => state.siteConfig.title);
     const regCaptcha = useSelector(state => state.siteConfig.regCaptcha);
-    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
-    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
+    const useReCaptcha = useSelector(
+        state => state.siteConfig.captcha_IsUseReCaptcha
+    );
+    const reCaptchaKey = useSelector(
+        state => state.siteConfig.captcha_ReCaptchaKey
+    );
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -111,9 +112,9 @@ function Register() {
     const handleInputChange = name => e => {
         setInput({
             ...input,
-            [name]:e.target.value
-        })
-    }
+            [name]: e.target.value
+        });
+    };
 
     const classes = useStyles();
 
@@ -132,12 +133,12 @@ function Register() {
             });
     }, []);
 
-    const register = e =>{
+    const register = e => {
         e.preventDefault();
 
-        if (input.password !== input.password_repeat){
+        if (input.password !== input.password_repeat) {
             ToggleSnackbar("top", "right", "两次密码输入不一致", "warning");
-            return
+            return;
         }
 
         setLoading(true);
@@ -148,13 +149,12 @@ function Register() {
         })
             .then(response => {
                 setLoading(false);
-                if (response.rawData.code === 203){
+                if (response.rawData.code === 203) {
                     setEmailActive(true);
-                }else{
-                    history.push("/login?username="+input.email)
+                } else {
+                    history.push("/login?username=" + input.email);
                     ToggleSnackbar("top", "right", "注册成功", "success");
                 }
-
             })
             .catch(error => {
                 setLoading(false);
@@ -163,7 +163,7 @@ function Register() {
                     refreshCaptcha();
                 }
             });
-    }
+    };
 
     useEffect(() => {
         if (regCaptcha && !useReCaptcha) {
@@ -174,138 +174,157 @@ function Register() {
     return (
         <div className={classes.layout}>
             <>
-                {!emailActive &&  <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <RegIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        注册 {title}
-                    </Typography>
+                {!emailActive && (
+                    <Paper className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <RegIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            注册 {title}
+                        </Typography>
 
-                    <form className={classes.form} onSubmit={register}>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">电子邮箱</InputLabel>
-                            <Input
-                                id="email"
-                                type="email"
-                                name="email"
-                                onChange={handleInputChange("email")}
-                                autoComplete
-                                value={input.email}
-                                autoFocus
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">密码</InputLabel>
-                            <Input
-                                name="password"
-                                onChange={handleInputChange("password")}
-                                type="password"
-                                id="password"
-                                value={input.password}
-                                autoComplete
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">确认密码</InputLabel>
-                            <Input
-                                name="pwdRepeat"
-                                onChange={handleInputChange("password_repeat")}
-                                type="password"
-                                id="pwdRepeat"
-                                value={input.password_repeat}
-                                autoComplete />
-                        </FormControl>
-                        {regCaptcha && !useReCaptcha && (
-                            <div className={classes.captchaContainer}>
-                                <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="captcha">
-                                        验证码
-                                    </InputLabel>
-                                    <Input
-                                        name="captcha"
-                                        onChange={handleInputChange("captcha")}
-                                        type="text"
-                                        id="captcha"
-                                        value={input.captcha}
-                                        autoComplete
-                                    />
-                                </FormControl>{" "}
-                                <div>
-                                    {captchaData === null && (
-                                        <div
-                                            className={
-                                                classes.captchaPlaceholder
-                                            }
-                                        >
-                                            <Placeholder />
-                                        </div>
+                        <form className={classes.form} onSubmit={register}>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">
+                                    电子邮箱
+                                </InputLabel>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    onChange={handleInputChange("email")}
+                                    autoComplete
+                                    value={input.email}
+                                    autoFocus
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">密码</InputLabel>
+                                <Input
+                                    name="password"
+                                    onChange={handleInputChange("password")}
+                                    type="password"
+                                    id="password"
+                                    value={input.password}
+                                    autoComplete
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">
+                                    确认密码
+                                </InputLabel>
+                                <Input
+                                    name="pwdRepeat"
+                                    onChange={handleInputChange(
+                                        "password_repeat"
                                     )}
-                                    {captchaData !== null && (
-                                        <img
-                                            src={captchaData}
-                                            alt="captcha"
-                                            onClick={refreshCaptcha}
+                                    type="password"
+                                    id="pwdRepeat"
+                                    value={input.password_repeat}
+                                    autoComplete
+                                />
+                            </FormControl>
+                            {regCaptcha && !useReCaptcha && (
+                                <div className={classes.captchaContainer}>
+                                    <FormControl
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                    >
+                                        <InputLabel htmlFor="captcha">
+                                            验证码
+                                        </InputLabel>
+                                        <Input
+                                            name="captcha"
+                                            onChange={handleInputChange(
+                                                "captcha"
+                                            )}
+                                            type="text"
+                                            id="captcha"
+                                            value={input.captcha}
+                                            autoComplete
                                         />
-                                    )}
+                                    </FormControl>{" "}
+                                    <div>
+                                        {captchaData === null && (
+                                            <div
+                                                className={
+                                                    classes.captchaPlaceholder
+                                                }
+                                            >
+                                                <Placeholder />
+                                            </div>
+                                        )}
+                                        {captchaData !== null && (
+                                            <img
+                                                src={captchaData}
+                                                alt="captcha"
+                                                onClick={refreshCaptcha}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
+                            )}
+
+                            {regCaptcha && useReCaptcha && (
+                                <div className={classes.captchaContainer}>
+                                    <FormControl
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                    >
+                                        <ReCaptcha
+                                            style={{ display: "inline-block" }}
+                                            sitekey={reCaptchaKey}
+                                            onChange={value =>
+                                                setInput({
+                                                    ...input,
+                                                    captcha: value
+                                                })
+                                            }
+                                            id="captcha"
+                                            name="captcha"
+                                        />
+                                    </FormControl>{" "}
+                                </div>
+                            )}
+
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                disabled={loading}
+                                className={classes.submit}
+                            >
+                                注册账号
+                            </Button>
+                        </form>
+
+                        <Divider />
+                        <div className={classes.link}>
+                            <div>
+                                <Link href={"/login"}>返回登录</Link>
                             </div>
-                        )}
-
-                        {regCaptcha && useReCaptcha && (
-                            <div className={classes.captchaContainer}>
-                                <FormControl margin="normal" required fullWidth>
-                                    <ReCaptcha
-                                        style={{ display: "inline-block" }}
-                                        sitekey={reCaptchaKey}
-                                        onChange={value=>
-                                            setInput({
-                                                ...input,
-                                                captcha:value
-                                            })
-                                        }
-                                        id="captcha"
-                                        name="captcha"
-                                    />
-                                </FormControl>{" "}
+                            <div>
+                                <Link href={"/forget"}>忘记密码</Link>
                             </div>
-                        )}
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={loading}
-                            className={classes.submit}
-                        >
-                            注册账号
-                        </Button>
-                    </form>
-
-                    <Divider />
-                    <div className={classes.link}>
-                        <div>
-                            <Link href={"/#/login"}>返回登录</Link>
                         </div>
-                        <div>
-                            <Link href={"/#/forget"}>忘记密码</Link>
-                        </div>
-                    </div>
-                </Paper>}
-                {emailActive &&
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatarSuccess}>
-                        <EmailIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        邮件激活
-                    </Typography>
-                    <Typography style={{marginTop:"10px"}}>一封激活邮件已经发送至您的邮箱，请访问邮件中的链接以继续完成注册。</Typography>
-
-                </Paper>
-                }
-
+                    </Paper>
+                )}
+                {emailActive && (
+                    <Paper className={classes.paper}>
+                        <Avatar className={classes.avatarSuccess}>
+                            <EmailIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            邮件激活
+                        </Typography>
+                        <Typography style={{ marginTop: "10px" }}>
+                            一封激活邮件已经发送至您的邮箱，请访问邮件中的链接以继续完成注册。
+                        </Typography>
+                    </Paper>
+                )}
             </>
         </div>
     );

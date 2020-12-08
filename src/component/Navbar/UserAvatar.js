@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
-import DarkModeSwitcher from "./DarkModeSwitcher"
+import DarkModeSwitcher from "./DarkModeSwitcher";
 import { Home } from "@material-ui/icons";
 
 const mapStateToProps = state => {
@@ -24,7 +24,7 @@ const mapStateToProps = state => {
         isMultiple: state.explorer.selectProps.isMultiple,
         withFolder: state.explorer.selectProps.withFolder,
         withFile: state.explorer.selectProps.withFile,
-        isLogin:state.viewUpdate.isLogin,
+        isLogin: state.viewUpdate.isLogin
     };
 };
 
@@ -41,7 +41,7 @@ const styles = theme => ({
         [theme.breakpoints.down("xs")]: {
             display: "none"
         },
-        whiteSpace: "nowrap",
+        whiteSpace: "nowrap"
     },
     avatar: {
         width: "30px",
@@ -87,15 +87,16 @@ class UserAvatarCompoment extends Component {
     };
 
     returnHome = () => {
-        window.location.hash = "#/home"
-        location.reload();
-    }
+        window.location.href = "/home";
+    };
 
     render() {
         const { classes } = this.props;
         const loginCheck = Auth.Check(this.props.isLogin);
         const user = Auth.GetUser(this.props.isLogin);
-        const isAdminPage = pathHelper.isAdminPage(this.props.location.pathname);
+        const isAdminPage = pathHelper.isAdminPage(
+            this.props.location.pathname
+        );
 
         return (
             <div className={classes.mobileHidden}>
@@ -106,38 +107,46 @@ class UserAvatarCompoment extends Component {
                     }
                 >
                     <div>
-                        {!isAdminPage && <>
-                            <DarkModeSwitcher position="top"/>
-                            {loginCheck && (
-                                <>
-                                    <Tooltip title={"设置"} placement="bottom">
-                                        <IconButton
-                                            onClick={() =>
-                                                this.props.history.push("/setting?")
-                                            }
-                                            color="inherit"
+                        {!isAdminPage && (
+                            <>
+                                <DarkModeSwitcher position="top" />
+                                {loginCheck && (
+                                    <>
+                                        <Tooltip
+                                            title={"设置"}
+                                            placement="bottom"
                                         >
-                                            <SettingIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </>
-                            )}
-                        </>}
-
-                        {isAdminPage &&
-                        <Tooltip title={"返回主页"} placement="bottom">
-                            <IconButton color="inherit" onClick={this.returnHome}>
-                                <Home/>
-                            </IconButton>
-                        </Tooltip>
-                        }
-
+                                            <IconButton
+                                                onClick={() =>
+                                                    this.props.history.push(
+                                                        "/setting?"
+                                                    )
+                                                }
+                                                color="inherit"
+                                            >
+                                                <SettingIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </>
+                                )}
+                            </>
+                        )}
+                        {isAdminPage && (
+                            <Tooltip title={"返回主页"} placement="bottom">
+                                <IconButton
+                                    color="inherit"
+                                    onClick={this.returnHome}
+                                >
+                                    <Home />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                         <IconButton color="inherit" onClick={this.showUserInfo}>
                             {!loginCheck && <AccountCircle />}
                             {loginCheck && (
                                 <Avatar
                                     src={
-                                        "/api/v3/user/avatar/"+user.id + "/s"
+                                        "/api/v3/user/avatar/" + user.id + "/s"
                                     }
                                     className={classes.avatar}
                                 />

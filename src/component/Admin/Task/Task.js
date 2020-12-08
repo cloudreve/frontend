@@ -109,8 +109,8 @@ export default function Task() {
     };
 
     useEffect(() => {
-      loadList();
-  }, [page, pageSize, orderBy, filter, search]);
+        loadList();
+    }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
         setLoading(true);
@@ -172,17 +172,16 @@ export default function Task() {
     };
 
     const getError = error => {
-        if (error === ""){
-            return "-"
+        if (error === "") {
+            return "-";
         }
         try {
-            const res = JSON.parse(error)
-            return res.msg
-        }catch (e) {
-            return "未知"
+            const res = JSON.parse(error);
+            return res.msg;
+        } catch (e) {
+            return "未知";
         }
-
-    }
+    };
 
     const isSelected = id => selected.indexOf(id) !== -1;
 
@@ -315,14 +314,19 @@ export default function Task() {
                                         />
                                     </TableCell>
                                     <TableCell>{row.ID}</TableCell>
-                                    <TableCell style={{wordBreak:"break-all"}}>
+                                    <TableCell
+                                        style={{ wordBreak: "break-all" }}
+                                    >
                                         {getTaskType(row.Type)}
                                     </TableCell>
                                     <TableCell>
                                         {getTaskStatus(row.Status)}
                                     </TableCell>
                                     <TableCell>
-                                        {getTaskProgress(row.Type,row.Progress)}
+                                        {getTaskProgress(
+                                            row.Type,
+                                            row.Progress
+                                        )}
                                     </TableCell>
                                     <TableCell className={classes.noWrap}>
                                         {getError(row.Error)}
@@ -330,8 +334,7 @@ export default function Task() {
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/#/admin/user/edit/" +
-                                                row.UserID
+                                                "/admin/user/edit/" + row.UserID
                                             }
                                         >
                                             {users[row.UserID]
