@@ -20,6 +20,7 @@ import API from "../../../../middleware/Api";
 import SizeInput from "../../Common/SizeInput";
 import AlertDialog from "../../Dialogs/Alert";
 import MagicVar from "../../Dialogs/MagicVar";
+import DomainInput from "../../Common/DomainInput";
 
 const useStyles = makeStyles(theme => ({
     stepContent: {

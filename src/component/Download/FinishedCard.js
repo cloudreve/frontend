@@ -28,6 +28,7 @@ import Grid from "@material-ui/core/Grid";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
+import { useHistory } from "react-router";
 
 const ExpansionPanel = withStyles({
     root: {

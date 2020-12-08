@@ -33,6 +33,7 @@ import API from "../../middleware/Api";
 import { hex2bin, sizeToString } from "../../utils";
 import TypeIcon from "../FileManager/TypeIcon";
 import SelectFileDialog from "../Modals/SelectFile";
+import { useHistory } from "react-router";
 const ExpansionPanel = withStyles({
     root: {
         maxWidth: "100%",

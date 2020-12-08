@@ -4,7 +4,6 @@ import {
     enableLoadUploader,
     changeViewMethod
 } from "../actions/index";
-import { fixUrlHash } from "../utils/index";
 import API from "./Api";
 import Auth from "./Auth";
 import pathHelper from "../utils/page";

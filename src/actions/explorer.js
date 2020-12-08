@@ -45,13 +45,7 @@ export const selectFile = (file, event, fileIndex) => {
         }
         const isMacbook = isMac();
         const { explorer } = getState();
-        const {
-            selected,
-            lastSelect,
-            dirList,
-            fileList,
-            shiftSelectedIds
-        } = explorer;
+        const { selected, lastSelect, dirList, fileList } = explorer;
         if (
             shiftKey &&
             !ctrlKey &&
