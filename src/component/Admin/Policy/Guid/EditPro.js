@@ -446,6 +446,28 @@ export default function EditPro(props) {
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
+                                    OneDrive 反代服务器地址
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            multiline
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .od_proxy
+                                            }
+                                            onChange={handleOptionChange(
+                                                "od_proxy"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    仅对 OneDrive 存储策略有效
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
                                     Amazon S3 Region
                                 </TableCell>
                                 <TableCell>
