@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     header: {
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "flex-start",
+        alignItems: "flex-start"
     },
     headerRight: {},
     highlight:
@@ -83,7 +83,7 @@ export default function File() {
     const [orderBy, setOrderBy] = useState(["id", "desc"]);
     const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -113,36 +113,48 @@ export default function File() {
     };
 
     useEffect(() => {
-      loadList();
+        loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
         setLoading(true);
-        API.post("/admin/file/delete",{id:[id]})
+        API.post("/admin/file/delete", { id: [id] })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "删除任务将在后台执行",
+                    "success"
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
-            setLoading(false);
-        });
+            })
+            .then(() => {
+                setLoading(false);
+            });
     };
 
-    const deleteBatch =force => () =>{
+    const deleteBatch = force => () => {
         setLoading(true);
-        API.post("/admin/file/delete",{id:selected,force:force})
+        API.post("/admin/file/delete", { id: selected, force: force })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "删除任务将在后台执行", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "删除任务将在后台执行",
+                    "success"
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
-            setLoading(false);
-        });
-    }
+            })
+            .then(() => {
+                setLoading(false);
+            });
+    };
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
@@ -190,18 +202,18 @@ export default function File() {
                     onClick={() => history.push("/admin/file/import")}
                     variant={"contained"}
                     style={{
-                        alignSelf: "center",
+                        alignSelf: "center"
                     }}
                 >
                     从外部导入
                 </Button>
                 <div className={classes.headerRight}>
                     <Tooltip title="过滤">
-
-                            <IconButton
-                                style={{ marginRight: 8 }}
-                                onClick={() => setFilterDialog(true)}
-                            ><Badge
+                        <IconButton
+                            style={{ marginRight: 8 }}
+                            onClick={() => setFilterDialog(true)}
+                        >
+                            <Badge
                                 color="secondary"
                                 variant="dot"
                                 invisible={
@@ -211,8 +223,7 @@ export default function File() {
                             >
                                 <FilterList />
                             </Badge>
-                            </IconButton>
-
+                        </IconButton>
                     </Tooltip>
                     <Button
                         color={"primary"}
@@ -235,12 +246,20 @@ export default function File() {
                             已选择 {selected.length} 个对象
                         </Typography>
                         <Tooltip title="删除">
-                            <IconButton onClick={deleteBatch(false)} disabled={loading} aria-label="delete">
+                            <IconButton
+                                onClick={deleteBatch(false)}
+                                disabled={loading}
+                                aria-label="delete"
+                            >
                                 <Delete />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="强制删除">
-                            <IconButton onClick={deleteBatch(true)} disabled={loading} aria-label="delete">
+                            <IconButton
+                                onClick={deleteBatch(true)}
+                                disabled={loading}
+                                aria-label="delete"
+                            >
                                 <DeleteForever />
                             </IconButton>
                         </Tooltip>
@@ -305,7 +324,8 @@ export default function File() {
                                                     : "asc"
                                             ])
                                         }
-                                    >文件名
+                                    >
+                                        文件名
                                         {orderBy[0] === "name" ? (
                                             <span
                                                 className={
@@ -319,7 +339,10 @@ export default function File() {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell align={"right"} style={{ minWidth: 70 }}>
+                                <TableCell
+                                    align={"right"}
+                                    style={{ minWidth: 70 }}
+                                >
                                     <TableSortLabel
                                         active={orderBy[0] === "size"}
                                         direction={orderBy[1]}
@@ -352,9 +375,7 @@ export default function File() {
                                 <TableCell style={{ minWidth: 150 }}>
                                     上传于
                                 </TableCell>
-                                <TableCell
-                                    style={{ minWidth: 100 }}
-                                >
+                                <TableCell style={{ minWidth: 100 }}>
                                     操作
                                 </TableCell>
                             </TableRow>
@@ -377,7 +398,16 @@ export default function File() {
                                     </TableCell>
                                     <TableCell>{row.ID}</TableCell>
                                     <TableCell>
-                                        <Link target={"_blank"} color="inherit" href={"/api/v3/admin/file/preview/" + row.ID}>{row.Name}</Link>
+                                        <Link
+                                            target={"_blank"}
+                                            color="inherit"
+                                            href={
+                                                "/api/v3/admin/file/preview/" +
+                                                row.ID
+                                            }
+                                        >
+                                            {row.Name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         {sizeToString(row.Size)}
@@ -385,17 +415,22 @@ export default function File() {
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/#/admin/user/edit/" +
-                                                row.UserID
+                                                "/admin/user/edit/" + row.UserID
                                             }
                                         >
-                                            {users[row.UserID]?users[row.UserID].Nick:"未知"}
+                                            {users[row.UserID]
+                                                ? users[row.UserID].Nick
+                                                : "未知"}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        {new Date(row.CreatedAt).toLocaleDateString() +" "+
-                                        new Date(row.CreatedAt).toLocaleTimeString()
-                                        }
+                                        {new Date(
+                                            row.CreatedAt
+                                        ).toLocaleDateString() +
+                                            " " +
+                                            new Date(
+                                                row.CreatedAt
+                                            ).toLocaleTimeString()}
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title={"删除"}>
@@ -416,7 +451,7 @@ export default function File() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[10, 25,50, 100]}
+                    rowsPerPageOptions={[10, 25, 50, 100]}
                     component="div"
                     count={total}
                     rowsPerPage={pageSize}

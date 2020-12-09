@@ -12,7 +12,7 @@ import {
 import {
     toggleSnackbar,
     setModalsLoading,
-    refreshFileList,
+    refreshFileList
 } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";

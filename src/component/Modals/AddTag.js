@@ -8,9 +8,7 @@ import {
     DialogTitle,
     CircularProgress
 } from "@material-ui/core";
-import {
-    toggleSnackbar,
-} from "../../actions/index";
+import { toggleSnackbar } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
@@ -35,7 +33,7 @@ import {
     RhombusOutline,
     Square,
     SquareOutline,
-    Triangle,
+    Triangle
 } from "mdi-material-ui";
 
 const useStyles = makeStyles(theme => ({
@@ -148,12 +146,12 @@ export default function AddTag(props) {
         [dispatch]
     );
 
-    const submitNewLink = ()=>{
+    const submitNewLink = () => {
         setLoading(true);
 
         API.post("/tag/link", {
             path: input.path,
-            name:input.tagName
+            name: input.tagName
         })
             .then(response => {
                 setLoading(false);
@@ -161,7 +159,7 @@ export default function AddTag(props) {
                 props.onSuccess({
                     type: 1,
                     name: input.tagName,
-                    expression:input.path,
+                    expression: input.path,
                     color: theme.palette.text.secondary,
                     icon: "FolderHeartOutline",
                     id: response.data
@@ -173,7 +171,7 @@ export default function AddTag(props) {
             .then(() => {
                 setLoading(false);
             });
-    }
+    };
 
     const submitNewTag = () => {
         setLoading(true);
@@ -203,19 +201,19 @@ export default function AddTag(props) {
             });
     };
     const submit = () => {
-      if (value === 0) {
-          submitNewTag();
-      }else{
-          submitNewLink();
-      }
+        if (value === 0) {
+            submitNewTag();
+        } else {
+            submitNewLink();
+        }
     };
-    const selectPath = ()=>{
+    const selectPath = () => {
         setInput({
             ...input,
             path: selectedPath === "//" ? "/" : selectedPath
         });
         setPathSelectDialog(false);
-    }
+    };
 
     const classes = useStyles();
 
@@ -232,13 +230,21 @@ export default function AddTag(props) {
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
-                <PathSelector presentPath="/" selected={[]} onSelect={setMoveTarget} />
+                <PathSelector
+                    presentPath="/"
+                    selected={[]}
+                    onSelect={setMoveTarget}
+                />
 
                 <DialogActions>
                     <Button onClick={() => setPathSelectDialog(false)}>
                         取消
                     </Button>
-                    <Button onClick={selectPath} color="primary" disabled={selectedPath === ""}>
+                    <Button
+                        onClick={selectPath}
+                        color="primary"
+                        disabled={selectedPath === ""}
+                    >
                         确定
                     </Button>
                 </DialogActions>
@@ -355,7 +361,7 @@ export default function AddTag(props) {
                             className={classes.textField}
                         />
                         <Button
-                            onClick={()=>setPathSelectDialog(true)}
+                            onClick={() => setPathSelectDialog(true)}
                             style={{
                                 marginLeft: theme.spacing(1),
                                 alignSelf: "flex-end"
@@ -379,8 +385,8 @@ export default function AddTag(props) {
                             (value === 0 &&
                                 (input.filename === "" ||
                                     input.tagName === "")) ||
-                            (value === 1 && (input.tagName === "" ||
-                                input.path === ""))
+                            (value === 1 &&
+                                (input.tagName === "" || input.path === ""))
                         }
                     >
                         确定

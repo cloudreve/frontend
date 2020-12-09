@@ -13,7 +13,24 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { Assignment, CloudDownload, Contacts, Group, Home, Image, InsertDriveFile, Language, ListAlt, Mail, Palette, Person, Settings, SettingsEthernet, Share, Storage } from "@material-ui/icons";
+import {
+    Assignment,
+    CloudDownload,
+    Contacts,
+    Group,
+    Home,
+    Image,
+    InsertDriveFile,
+    Language,
+    ListAlt,
+    Mail,
+    Palette,
+    Person,
+    Settings,
+    SettingsEthernet,
+    Share,
+    Storage
+} from "@material-ui/icons";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -139,21 +156,21 @@ const useStyles = makeStyles(theme => ({
     },
     subMenu: {
         backgroundColor: theme.palette.background.default,
-        paddingTop:0,
-        paddingBottom:0,
+        paddingTop: 0,
+        paddingBottom: 0
     },
     active: {
         backgroundColor: lighten(theme.palette.primary.main, 0.8),
         color: theme.palette.primary.main,
-        "&:hover":{
-            backgroundColor: lighten(theme.palette.primary.main, 0.7),
-        },
+        "&:hover": {
+            backgroundColor: lighten(theme.palette.primary.main, 0.7)
+        }
     },
-    activeText:{
-        fontWeight: 500,
+    activeText: {
+        fontWeight: 500
     },
-    activeIcon:{
-        color: theme.palette.primary.main,
+    activeIcon: {
+        color: theme.palette.primary.main
     }
 }));
 
@@ -201,7 +218,7 @@ const items = [
                 title: "图像处理",
                 path: "image",
                 icon: <Image />
-            },
+            }
         ]
     },
     {
@@ -242,9 +259,9 @@ const items = [
                 title: "常规任务",
                 path: "task",
                 icon: <ListAlt />
-            },
-            ],
-    },
+            }
+        ]
+    }
 ];
 
 export default function Dashboard({ content }) {
@@ -339,19 +356,29 @@ export default function Dashboard({ content }) {
                                     }
                                     button
                                     className={clsx({
-                                        [classes.active]:
-                                        location.pathname.startsWith("/admin/" + item.path)
+                                        [classes.active]: location.pathname.startsWith(
+                                            "/admin/" + item.path
+                                        )
                                     })}
                                     key={item.title}
                                 >
-                                    <ListItemIcon  className={clsx({
-                                        [classes.activeIcon]:
-                                            location.pathname.startsWith("/admin/" + item.path)
-                                    })}>{item.icon}</ListItemIcon>
-                                    <ListItemText className={clsx({
-                                        [classes.activeText]:
-                                            location.pathname.startsWith("/admin/" + item.path)
-                                    })} primary={item.title} />
+                                    <ListItemIcon
+                                        className={clsx({
+                                            [classes.activeIcon]: location.pathname.startsWith(
+                                                "/admin/" + item.path
+                                            )
+                                        })}
+                                    >
+                                        {item.icon}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        className={clsx({
+                                            [classes.activeText]: location.pathname.startsWith(
+                                                "/admin/" + item.path
+                                            )
+                                        })}
+                                        primary={item.title}
+                                    />
                                 </ListItem>
                             );
                         }
@@ -384,16 +411,20 @@ export default function Dashboard({ content }) {
                                                 }
                                                 className={clsx({
                                                     [classes.sub]: open,
-                                                    [classes.active]:
-                                                        location.pathname.startsWith("/admin/" + sub.path)
+                                                    [classes.active]: location.pathname.startsWith(
+                                                        "/admin/" + sub.path
+                                                    )
                                                 })}
                                                 button
                                                 key={sub.title}
                                             >
-                                                <ListItemIcon className={clsx({
-                                                    [classes.activeIcon]:
-                                                        location.pathname.startsWith("/admin/" + sub.path)
-                                                })}>
+                                                <ListItemIcon
+                                                    className={clsx({
+                                                        [classes.activeIcon]: location.pathname.startsWith(
+                                                            "/admin/" + sub.path
+                                                        )
+                                                    })}
+                                                >
                                                     {sub.icon}
                                                 </ListItemIcon>
                                                 <ListItemText

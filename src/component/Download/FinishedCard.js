@@ -28,6 +28,7 @@ import Grid from "@material-ui/core/Grid";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
+import { useHistory } from "react-router";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -91,7 +92,7 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             borderInlineStart: "1px " + theme.palette.divider + " solid"
         },
-        textAlign:"left",
+        textAlign: "left"
     },
     contentSide: {
         minWidth: 0,
@@ -142,12 +143,13 @@ const useStyles = makeStyles(theme => ({
     },
     infoValue: {
         color: theme.palette.text.secondary
-    },
+    }
 }));
 
 export default function FinishedCard(props) {
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
 
     const [expanded, setExpanded] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
@@ -172,7 +174,7 @@ export default function FinishedCard(props) {
 
     const cancel = () => {
         setLoading(true);
-        API.delete("/aria2/task/" + props.task.gid, )
+        API.delete("/aria2/task/" + props.task.gid)
             .then(() => {
                 ToggleSnackbar("top", "right", "删除成功", "success");
             })
@@ -209,14 +211,13 @@ export default function FinishedCard(props) {
         }
     }, [props.task, classes]);
 
-    const getTaskError = error =>{
-        try{
-            const res = JSON.parse(error)
-            return res.msg + "：" + res.error
-        }catch (e) {
-            return "文件转存失败"
+    const getTaskError = error => {
+        try {
+            const res = JSON.parse(error);
+            return res.msg + "：" + res.error;
+        } catch (e) {
+            return "文件转存失败";
         }
-
     };
 
     return (
@@ -237,77 +238,82 @@ export default function FinishedCard(props) {
                                 <span>{getDownloadName()}</span>
                             </Tooltip>
                         </Typography>
-                        {props.task.status === 3&&
-                        <Tooltip title={props.task.error}>
-                            <Typography
-                                variant="body2"
-                                color="error"
-                                noWrap
-                            >
-                                下载出错：{props.task.error}
-                            </Typography>
-                        </Tooltip>
-                        }
-                        {props.task.status === 5&&
+                        {props.task.status === 3 && (
+                            <Tooltip title={props.task.error}>
+                                <Typography
+                                    variant="body2"
+                                    color="error"
+                                    noWrap
+                                >
+                                    下载出错：{props.task.error}
+                                </Typography>
+                            </Tooltip>
+                        )}
+                        {props.task.status === 5 && (
                             <Typography
                                 variant="body2"
                                 color="textSecondary"
                                 noWrap
                             >
-                                已取消{props.task.error !== "" &&<span>：{props.task.error}</span>}
+                                已取消
+                                {props.task.error !== "" && (
+                                    <span>：{props.task.error}</span>
+                                )}
                             </Typography>
-                        }
-                        {(props.task.status === 4 && props.task.task_status === 4)&&
-                            <Typography
-                                variant="body2"
-                                style={{
-                                    color:theme.palette.success.main,
-                                }}
-                                noWrap
-                            >
-                                已完成
-                            </Typography>
-                        }
-                        {(props.task.status === 4 && props.task.task_status === 0)&&
-                            <Typography
-                                variant="body2"
-                                style={{
-                                    color:theme.palette.success.light,
-                                }}
-                                noWrap
-                            >
-                                已完成，转存排队中
-                            </Typography>
-                        }
-                        {(props.task.status === 4 && props.task.task_status === 1)&&
-                            <Typography
-                                variant="body2"
-                                style={{
-                                    color:theme.palette.success.light,
-                                }}
-                                noWrap
-                            >
-                                已完成，转存处理中
-                            </Typography>
-                        }
-                        {(props.task.status === 4 && props.task.task_status === 2)&&
-                        <Typography
-                            variant="body2"
-                            color={"error"}
-                            noWrap
-                        >
-                            {getTaskError(props.task.task_error)}
-                        </Typography>
-                        }
-
+                        )}
+                        {props.task.status === 4 &&
+                            props.task.task_status === 4 && (
+                                <Typography
+                                    variant="body2"
+                                    style={{
+                                        color: theme.palette.success.main
+                                    }}
+                                    noWrap
+                                >
+                                    已完成
+                                </Typography>
+                            )}
+                        {props.task.status === 4 &&
+                            props.task.task_status === 0 && (
+                                <Typography
+                                    variant="body2"
+                                    style={{
+                                        color: theme.palette.success.light
+                                    }}
+                                    noWrap
+                                >
+                                    已完成，转存排队中
+                                </Typography>
+                            )}
+                        {props.task.status === 4 &&
+                            props.task.task_status === 1 && (
+                                <Typography
+                                    variant="body2"
+                                    style={{
+                                        color: theme.palette.success.light
+                                    }}
+                                    noWrap
+                                >
+                                    已完成，转存处理中
+                                </Typography>
+                            )}
+                        {props.task.status === 4 &&
+                            props.task.task_status === 2 && (
+                                <Typography
+                                    variant="body2"
+                                    color={"error"}
+                                    noWrap
+                                >
+                                    {getTaskError(props.task.task_error)}
+                                </Typography>
+                            )}
                     </CardContent>
                     <CardContent className={classes.contentSide}>
                         <IconButton>
                             <ExpandMore
                                 className={classNames(
                                     {
-                                        [classes.expanded]:
-                                            expanded
+                                        [classes.expanded]: expanded
                                     },
                                     classes.expand
                                 )}
@@ -317,15 +323,13 @@ export default function FinishedCard(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Divider />
-                    {props.task.files.length>1 &&
+                    {props.task.files.length > 1 && (
                         <div className={classes.scroll}>
                             <Table>
                                 <TableBody>
-                                    {activeFiles().map((value) => {
+                                    {activeFiles().map(value => {
                                         return (
-                                            <TableRow
-                                                key={value.index}
-                                            >
+                                            <TableRow key={value.index}>
                                                 <TableCell
                                                     component="th"
                                                     scope="row"
@@ -339,7 +343,9 @@ export default function FinishedCard(props) {
                                                             className={
                                                                 classes.subFileIcon
                                                             }
-                                                            fileName={value.path}
+                                                            fileName={
+                                                                value.path
+                                                            }
                                                         />
                                                         {value.path}
                                                     </Typography>
@@ -350,7 +356,9 @@ export default function FinishedCard(props) {
                                                 >
                                                     <Typography noWrap>
                                                         {" "}
-                                                        {sizeToString(value.length)}
+                                                        {sizeToString(
+                                                            value.length
+                                                        )}
                                                     </Typography>
                                                 </TableCell>
                                                 <TableCell
@@ -371,14 +379,19 @@ export default function FinishedCard(props) {
                                 </TableBody>
                             </Table>
                         </div>
-                    }
+                    )}
 
                     <div className={classes.action}>
                         <Button
                             className={classes.actionButton}
                             variant="outlined"
                             color="secondary"
-                            onClick={() => window.location.href="/#/home?path=" + encodeURIComponent(props.task.dst)}
+                            onClick={() =>
+                                history.push(
+                                    "/#/home?path=" +
+                                        encodeURIComponent(props.task.dst)
+                                )
+                            }
                         >
                             打开存放目录
                         </Button>
@@ -412,7 +425,6 @@ export default function FinishedCard(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-
                     </div>
                 </ExpansionPanelDetails>
             </ExpansionPanel>

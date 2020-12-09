@@ -34,7 +34,7 @@ import { VisibilityOff, VpnKey } from "@material-ui/icons";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 const styles = theme => ({
     cardContainer: {
@@ -79,9 +79,9 @@ const styles = theme => ({
         marginLeft: theme.spacing(1),
         height: 17
     },
-    orderSelect:{
-        textAlign:"right",
-        marginTop: 5,
+    orderSelect: {
+        textAlign: "right",
+        marginTop: 5
     }
 });
 const mapStateToProps = () => {
@@ -102,11 +102,11 @@ class MyShareCompoment extends Component {
         total: 0,
         shareList: [],
         showPwd: null,
-        orderBy:"created_at DESC",
+        orderBy: "created_at DESC"
     };
 
     componentDidMount = () => {
-        this.loadList(1,this.state.orderBy);
+        this.loadList(1, this.state.orderBy);
     };
 
     showPwd = pwd => {
@@ -117,31 +117,34 @@ class MyShareCompoment extends Component {
         this.setState({ showPwd: null });
     };
 
-    removeShare = (id) => {
-        API
-            .delete("/share/"+id)
+    removeShare = id => {
+        API.delete("/share/" + id)
             .then(() => {
-                    let oldList = this.state.shareList;
-                    oldList = oldList.filter(value => {
-                        return value.key !== id;
-                    });
-                    this.setState({
-                        shareList: oldList,
-                        total:this.state.total-1,
-                    });
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "分享已取消",
-                        "success"
-                    );
-                    if (oldList.length === 0){
-                        this.loadList(1,this.state.orderBy);
-                    }
-
+                let oldList = this.state.shareList;
+                oldList = oldList.filter(value => {
+                    return value.key !== id;
+                });
+                this.setState({
+                    shareList: oldList,
+                    total: this.state.total - 1
+                });
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "分享已取消",
+                    "success"
+                );
+                if (oldList.length === 0) {
+                    this.loadList(1, this.state.orderBy);
+                }
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", error.message, "error");
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
             });
     };
 
@@ -154,11 +157,10 @@ class MyShareCompoment extends Component {
         const shareIndex = oldList.findIndex(value => {
             return value.key === id;
         });
-        API
-            .patch("/share/"+id, {
-                prop:"password",
-                value:oldList[shareIndex].password === "" ? newPwd : "",
-            })
+        API.patch("/share/" + id, {
+            prop: "password",
+            value: oldList[shareIndex].password === "" ? newPwd : ""
+        })
             .then(response => {
                 oldList[shareIndex].password = response.data;
                 this.setState({
@@ -166,7 +168,12 @@ class MyShareCompoment extends Component {
                 });
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", error.message, "error");
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
             });
     };
 
@@ -175,11 +182,10 @@ class MyShareCompoment extends Component {
         const shareIndex = oldList.findIndex(value => {
             return value.key === id;
         });
-        API
-            .patch("/share/"+id, {
-                prop:"preview_enabled",
-                value:oldList[shareIndex].preview?"false":"true",
-            })
+        API.patch("/share/" + id, {
+            prop: "preview_enabled",
+            value: oldList[shareIndex].preview ? "false" : "true"
+        })
             .then(response => {
                 oldList[shareIndex].preview = response.data;
                 this.setState({
@@ -187,13 +193,25 @@ class MyShareCompoment extends Component {
                 });
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", error.message, "error");
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
             });
     };
 
-    loadList = (page,orderBy) => {
+    loadList = (page, orderBy) => {
         const order = orderBy.split(" ");
-        API.get("/share?page=" + page + "&order_by=" + order[0] + "&order=" + order[1])
+        API.get(
+            "/share?page=" +
+                page +
+                "&order_by=" +
+                order[0] +
+                "&order=" +
+                order[1]
+        )
             .then(response => {
                 if (response.data.items.length === 0) {
                     this.props.toggleSnackbar(
@@ -217,14 +235,14 @@ class MyShareCompoment extends Component {
         this.setState({
             page: value
         });
-        this.loadList(value,this.state.orderBy);
+        this.loadList(value, this.state.orderBy);
     };
 
-    handleOrderChange =  event => {
+    handleOrderChange = event => {
         this.setState({
-            orderBy:event.target.value,
+            orderBy: event.target.value
         });
-        this.loadList(this.state.page,event.target.value);
+        this.loadList(this.state.page, event.target.value);
     };
 
     isExpired = share => {
@@ -239,19 +257,34 @@ class MyShareCompoment extends Component {
                 <Grid container>
                     <Grid sm={6} xs={6}>
                         <Typography color="textSecondary" variant="h4">
-
                             我的分享
                         </Typography>
-                        </Grid>
+                    </Grid>
                     <Grid sm={6} xs={6} className={classes.orderSelect}>
                         <FormControl>
-                            <Select color={"secondary"}  onChange={this.handleOrderChange} value={this.state.orderBy}>
-                                <MenuItem value={"created_at DESC"}>创建日期由晚到早</MenuItem>
-                                <MenuItem value={"created_at ASC"}>创建日期由早到晚</MenuItem>
-                                <MenuItem value={"downloads DESC"}>下载次数由大到小</MenuItem>
-                                <MenuItem value={"downloads ASC"}>下载次数由小到大</MenuItem>
-                                <MenuItem value={"views DESC"}>浏览次数由大到小</MenuItem>
-                                <MenuItem value={"views ASC"}>浏览次数由小到大</MenuItem>
+                            <Select
+                                color={"secondary"}
+                                onChange={this.handleOrderChange}
+                                value={this.state.orderBy}
+                            >
+                                <MenuItem value={"created_at DESC"}>
+                                    创建日期由晚到早
+                                </MenuItem>
+                                <MenuItem value={"created_at ASC"}>
+                                    创建日期由早到晚
+                                </MenuItem>
+                                <MenuItem value={"downloads DESC"}>
+                                    下载次数由大到小
+                                </MenuItem>
+                                <MenuItem value={"downloads ASC"}>
+                                    下载次数由小到大
+                                </MenuItem>
+                                <MenuItem value={"views DESC"}>
+                                    浏览次数由大到小
+                                </MenuItem>
+                                <MenuItem value={"views ASC"}>
+                                    浏览次数由小到大
+                                </MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
@@ -333,7 +366,14 @@ class MyShareCompoment extends Component {
                                     <Tooltip placement="top" title="打开">
                                         <IconButton
                                             onClick={() =>
-                                                this.props.history.push("/s/"+value.key + (value.password === "" ?"":"?password=" + value.password))
+                                                this.props.history.push(
+                                                    "/s/" +
+                                                        value.key +
+                                                        (value.password === ""
+                                                            ? ""
+                                                            : "?password=" +
+                                                              value.password)
+                                                )
                                             }
                                         >
                                             <OpenIcon />
@@ -358,9 +398,7 @@ class MyShareCompoment extends Component {
                                                 placement="top"
                                                 title="查看密码"
                                                 onClick={() =>
-                                                    this.showPwd(
-                                                        value.password
-                                                    )
+                                                    this.showPwd(value.password)
                                                 }
                                             >
                                                 <IconButton>
@@ -374,9 +412,7 @@ class MyShareCompoment extends Component {
                                             placement="top"
                                             title="变更为私密分享"
                                             onClick={() =>
-                                                this.changePermission(
-                                                    value.key
-                                                )
+                                                this.changePermission(value.key)
                                             }
                                         >
                                             <IconButton>
@@ -392,9 +428,7 @@ class MyShareCompoment extends Component {
                                                 : "允许预览"
                                         }
                                         onClick={() =>
-                                            this.changePreviewOption(
-                                                value.key
-                                            )
+                                            this.changePreviewOption(value.key)
                                         }
                                     >
                                         <IconButton>
@@ -423,10 +457,10 @@ class MyShareCompoment extends Component {
                 </Grid>
                 <div className={classes.loadMore}>
                     <Pagination
-                            count={Math.ceil(this.state.total / 18)}
-                            onChange={this.handlePageChange}
-                            color="secondary"
-                        />
+                        count={Math.ceil(this.state.total / 18)}
+                        onChange={this.handlePageChange}
+                        color="secondary"
+                    />
                 </div>{" "}
                 <Dialog
                     open={this.state.showPwd !== null}

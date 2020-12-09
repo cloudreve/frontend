@@ -99,12 +99,12 @@ export default function ObjectIcon(props) {
     };
 
     const selectFile = e => {
-        dispatch(selectFileAction(props.file, e, props.index))
+        dispatch(selectFileAction(props.file, e, props.index));
     };
     const enterFolder = () => {
-      NavitateTo(
-          path === "/" ? path + props.file.name : path + "/" + props.file.name
-      );
+        NavitateTo(
+            path === "/" ? path + props.file.name : path + "/" + props.file.name
+        );
     };
     const handleClick = e => {
         if (props.file.type === "up") {
@@ -156,18 +156,18 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                        "/doc?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/doc?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 history.push(
                     "/doc?p=" +
-                    encodeURIComponent(previewPath) +
-                    "&id=" +
-                    selected[0].id
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        selected[0].id
                 );
                 return;
             case "audio":
@@ -177,58 +177,73 @@ export default function ObjectIcon(props) {
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                        "/video?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/video?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 history.push(
                     "/video?p=" +
-                    encodeURIComponent(previewPath) +
-                    "&id=" +
-                    selected[0].id
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        selected[0].id
                 );
                 return;
             case "edit":
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                        "/text?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/text?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                history.push("/text?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
+                history.push(
+                    "/text?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        selected[0].id
+                );
                 return;
             case "pdf":
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                        "/pdf?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/pdf?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                history.push("/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
+                history.push(
+                    "/pdf?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        selected[0].id
+                );
                 return;
             case "code":
                 if (isShare) {
                     history.push(
                         selected[0].key +
-                        "/code?name=" +
-                        encodeURIComponent(selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/code?name=" +
+                            encodeURIComponent(selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
-                history.push("/code?p=" + encodeURIComponent(previewPath) + "&id=" + selected[0].id);
+                history.push(
+                    "/code?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        selected[0].id
+                );
                 return;
             default:
                 OpenLoadingDialog("获取下载地址...");

@@ -13,7 +13,7 @@ import {
     TextField,
     Avatar
 } from "@material-ui/core";
-import { withRouter} from "react-router";
+import { withRouter } from "react-router";
 
 const styles = theme => ({
     card: {
@@ -57,9 +57,8 @@ class LockedFileCompoment extends Component {
         super(props);
         const query = new URLSearchParams(this.props.location.search);
         this.state = {
-            pwd: query.get("password"),
+            pwd: query.get("password")
         };
-
     }
 
     handleChange = name => event => {
@@ -85,7 +84,9 @@ class LockedFileCompoment extends Component {
                             <Avatar
                                 aria-label="Recipe"
                                 src={
-                                    "/api/v3/user/avatar/"+this.props.share.creator.key + "/l"
+                                    "/api/v3/user/avatar/" +
+                                    this.props.share.creator.key +
+                                    "/l"
                                 }
                             />
                         }

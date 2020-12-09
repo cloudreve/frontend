@@ -13,13 +13,13 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 
-export default function UserFilter({setFilter,setSearch,open, onClose }) {
-    const [input,setInput] = useState({
-        group_id:"all",
-        status:"all",
+export default function UserFilter({ setFilter, setSearch, open, onClose }) {
+    const [input, setInput] = useState({
+        group_id: "all",
+        status: "all"
     });
-    const [groups,setGroups] = useState([]);
-    const [keywords,setKeywords] = useState("");
+    const [groups, setGroups] = useState([]);
+    const [keywords, setKeywords] = useState("");
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -29,10 +29,10 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
     );
 
     const handleChange = name => event => {
-        setInput({...input,[name]:event.target.value})
-    }
+        setInput({ ...input, [name]: event.target.value });
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         API.get("/admin/groups")
             .then(response => {
                 setGroups(response.data);
@@ -40,26 +40,26 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[])
+    }, []);
 
     const submit = () => {
         const res = {};
-        Object.keys(input).forEach(v=>{
-            if(input[v] !== "all"){
+        Object.keys(input).forEach(v => {
+            if (input[v] !== "all") {
                 res[v] = input[v];
             }
-        })
+        });
         setFilter(res);
-        if (keywords !== ""){
+        if (keywords !== "") {
             setSearch({
-                nick:keywords,
-                email:keywords,
+                nick: keywords,
+                email: keywords
             });
-        }else{
+        } else {
             setSearch({});
         }
         onClose();
-    }
+    };
 
     return (
         <Dialog
@@ -70,12 +70,12 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle id="alert-dialog-title">
-                过滤条件
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">用户组</InputLabel>
+                    <InputLabel id="demo-simple-select-label">
+                        用户组
+                    </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -88,18 +88,17 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
                                 return null;
                             }
                             return (
-                                <MenuItem
-                                    key={v.ID}
-                                    value={v.ID.toString()}
-                                >
+                                <MenuItem key={v.ID} value={v.ID.toString()}>
                                     {v.Name}
                                 </MenuItem>
                             );
                         })}
                     </Select>
                 </FormControl>
-                <FormControl fullWidth style={{marginTop:16}}>
-                    <InputLabel id="demo-simple-select-label">用户状态</InputLabel>
+                <FormControl fullWidth style={{ marginTop: 16 }}>
+                    <InputLabel id="demo-simple-select-label">
+                        用户状态
+                    </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -113,8 +112,13 @@ export default function UserFilter({setFilter,setSearch,open, onClose }) {
                         <MenuItem value={"3"}>超额使用被封禁</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl fullWidth style={{marginTop:16}}>
-                    <TextField value={keywords} onChange={e=>setKeywords(e.target.value)} id="standard-basic" label="搜索 昵称 / 用户名" />
+                <FormControl fullWidth style={{ marginTop: 16 }}>
+                    <TextField
+                        value={keywords}
+                        onChange={e => setKeywords(e.target.value)}
+                        id="standard-basic"
+                        label="搜索 昵称 / 用户名"
+                    />
                 </FormControl>
             </DialogContent>
             <DialogActions>

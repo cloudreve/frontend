@@ -17,7 +17,7 @@ import {
     TableRow,
     Grid
 } from "@material-ui/core";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
 import Pagination from "@material-ui/lab/Pagination";
 
 const styles = theme => ({
@@ -83,7 +83,7 @@ const styles = theme => ({
         marginTop: "1px",
         fontSize: "25px",
         color: "#ffffff",
-        opacity: "0.81",
+        opacity: "0.81"
     },
     th: {
         minWidth: "106px"
@@ -97,7 +97,7 @@ const styles = theme => ({
         cursor: "pointer"
     },
     navigator: {
-        padding:theme.spacing(2),
+        padding: theme.spacing(2)
     },
     pageInfo: {
         marginTop: "14px",
@@ -110,8 +110,8 @@ const styles = theme => ({
     infoContainer: {
         marginTop: "30px"
     },
-    tableContainer:{
-        overflowX:"auto",
+    tableContainer: {
+        overflowX: "auto"
     }
 });
 const mapStateToProps = () => {
@@ -131,8 +131,8 @@ class ProfileCompoment extends Component {
         listType: 0,
         shareList: [],
         page: 1,
-        user:null,
-        total:0,
+        user: null,
+        total: 0
     };
 
     handleChange = (event, listType) => {
@@ -148,18 +148,29 @@ class ProfileCompoment extends Component {
         this.loadList(1, "default");
     };
 
-    loadList = (page,order) => {
-        API
-            .get("/user/profile/" + this.props.match.params.id + "?page=" + page + "&type=" + order)
+    loadList = (page, order) => {
+        API.get(
+            "/user/profile/" +
+                this.props.match.params.id +
+                "?page=" +
+                page +
+                "&type=" +
+                order
+        )
             .then(response => {
                 this.setState({
                     shareList: response.data.items,
-                    user:response.data.user,
-                    total:response.data.total,
+                    user: response.data.user,
+                    total: response.data.total
                 });
             })
             .catch(error => {
-                this.props.toggleSnackbar("top", "right", error.message, "error");
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
             });
     };
 
@@ -182,17 +193,17 @@ class ProfileCompoment extends Component {
 
         return (
             <div className={classes.layout}>
-                {this.state.user === null &&
-                    <div></div>
-                }
-                {this.state.user !== null &&
+                {this.state.user === null && <div></div>}
+                {this.state.user !== null && (
                     <Paper square>
                         <div className={classes.userNav}>
                             <div>
                                 <Avatar
                                     className={classes.avatarContainer}
                                     src={
-                                        "/api/v3/user/avatar/"+this.state.user.id + "/l"
+                                        "/api/v3/user/avatar/" +
+                                        this.state.user.id +
+                                        "/l"
                                     }
                                 />
                             </div>
@@ -303,88 +314,109 @@ class ProfileCompoment extends Component {
                             this.state.listType === 1) && (
                             <div>
                                 <div className={classes.tableContainer}>
-                                <Table className={classes.table}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>文件名</TableCell>
-                                            <TableCell
-                                                className={classes.mobileHide}
-                                            >
-                                                分享日期
-                                            </TableCell>
-                                            <TableCell
-                                                className={[
-                                                    classes.th,
-                                                    classes.mobileHide
-                                                ]}
-                                            >
-                                                下载次数
-                                            </TableCell>
-                                            <TableCell
-                                                className={[
-                                                    classes.th,
-                                                    classes.mobileHide
-                                                ]}
-                                            >
-                                                浏览次数
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {this.state.shareList.map((row,id) => (
-                                            <TableRow
-                                                key={id}
-                                                className={classes.tableLink}
-                                                onClick={() =>
-                                                    this.props.history.push(
-                                                        "/s/" + row.key
-                                                    )
-                                                }
-                                            >
-                                                <TableCell>
-                                                    <Typography>
-                                                        {row.source?row.source.name:"[已失效]"}
-                                                    </Typography>
+                                    <Table className={classes.table}>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>文件名</TableCell>
+                                                <TableCell
+                                                    className={
+                                                        classes.mobileHide
+                                                    }
+                                                >
+                                                    分享日期
                                                 </TableCell>
                                                 <TableCell
-                                                    nowrap={"nowrap"}
-                                                    className={classes.mobileHide}
+                                                    className={[
+                                                        classes.th,
+                                                        classes.mobileHide
+                                                    ]}
                                                 >
-                                                    {row.create_date}
+                                                    下载次数
                                                 </TableCell>
                                                 <TableCell
-                                                    className={classes.mobileHide}
+                                                    className={[
+                                                        classes.th,
+                                                        classes.mobileHide
+                                                    ]}
                                                 >
-                                                    {row.downloads}
-                                                </TableCell>
-                                                <TableCell
-                                                    className={classes.mobileHide}
-                                                >
-                                                    {row.views}
+                                                    浏览次数
                                                 </TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                        </TableHead>
+                                        <TableBody>
+                                            {this.state.shareList.map(
+                                                (row, id) => (
+                                                    <TableRow
+                                                        key={id}
+                                                        className={
+                                                            classes.tableLink
+                                                        }
+                                                        onClick={() =>
+                                                            this.props.history.push(
+                                                                "/s/" + row.key
+                                                            )
+                                                        }
+                                                    >
+                                                        <TableCell>
+                                                            <Typography>
+                                                                {row.source
+                                                                    ? row.source
+                                                                          .name
+                                                                    : "[已失效]"}
+                                                            </Typography>
+                                                        </TableCell>
+                                                        <TableCell
+                                                            nowrap={"nowrap"}
+                                                            className={
+                                                                classes.mobileHide
+                                                            }
+                                                        >
+                                                            {row.create_date}
+                                                        </TableCell>
+                                                        <TableCell
+                                                            className={
+                                                                classes.mobileHide
+                                                            }
+                                                        >
+                                                            {row.downloads}
+                                                        </TableCell>
+                                                        <TableCell
+                                                            className={
+                                                                classes.mobileHide
+                                                            }
+                                                        >
+                                                            {row.views}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            )}
+                                        </TableBody>
+                                    </Table>
                                 </div>
                                 {this.state.shareList.length !== 0 &&
-                                this.state.listType === 0 && (
-                                    <div className={classes.navigator}>
-                                        <Pagination
-                                            count={Math.ceil(this.state.total / 10)}
-                                            onChange={(e,v)=>this.loadList(
-                                                v,
-                                                this.state.listType === 0 ? "default" : "hot"
-                                            )}
-                                            color="secondary"
-                                        />
-                                    </div>
-                                )}
+                                    this.state.listType === 0 && (
+                                        <div className={classes.navigator}>
+                                            <Pagination
+                                                count={Math.ceil(
+                                                    this.state.total / 10
+                                                )}
+                                                onChange={(e, v) =>
+                                                    this.loadList(
+                                                        v,
+                                                        this.state.listType ===
+                                                            0
+                                                            ? "default"
+                                                            : "hot"
+                                                    )
+                                                }
+                                                color="secondary"
+                                            />
+                                        </div>
+                                    )}
                             </div>
                         )}
                     </Paper>
-                }
-
+                )}
             </div>
         );
     }

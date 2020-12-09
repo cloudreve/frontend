@@ -71,8 +71,8 @@ const styles = theme => ({
         left: 0,
         top: 0
     },
-    fileName:{
-        wordBreak: "break-all",
+    fileName: {
+        wordBreak: "break-all"
     }
 });
 class FileList extends Component {

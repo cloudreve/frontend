@@ -94,25 +94,29 @@ export default function UpyunGuide(props) {
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [skipped,] = React.useState(new Set());
+    const [skipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
-    const [policy, setPolicy] = useState(props.policy?props.policy:{
-        Type: "upyun",
-        Name: "",
-        SecretKey: "",
-        AccessKey: "",
-        BaseURL: "",
-        IsPrivate: "false",
-        DirNameRule: "uploads/{year}/{month}/{day}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable: "false",
-        MaxSize: "0",
-        OptionsSerialized: {
-            file_type: "",
-            token:"",
-        }
-    });
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "upyun",
+                  Name: "",
+                  SecretKey: "",
+                  AccessKey: "",
+                  BaseURL: "",
+                  IsPrivate: "false",
+                  DirNameRule: "uploads/{year}/{month}/{day}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: "",
+                      token: ""
+                  }
+              }
+    );
 
     const handleChange = name => event => {
         setPolicy({
@@ -169,7 +173,12 @@ export default function UpyunGuide(props) {
             policy: policyCopy
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(5);
             })
             .catch(error => {
@@ -184,7 +193,9 @@ export default function UpyunGuide(props) {
 
     return (
         <div>
-            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} 又拍云 存储策略</Typography>
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"} 又拍云 存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -213,15 +224,14 @@ export default function UpyunGuide(props) {
                         setActiveStep(1);
                     }}
                 >
-
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>0</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用又拍云存储策略前，请确保您在 参数设置 - 站点信息
-                                - 站点URL 中填写的 地址与实际相符，并且
+                                在使用又拍云存储策略前，请确保您在 参数设置 -
+                                站点信息 - 站点URL 中填写的 地址与实际相符，并且
                                 <strong>能够被外网正常访问</strong>。
                             </Typography>
                         </div>
@@ -235,7 +245,9 @@ export default function UpyunGuide(props) {
                             <Typography variant={"body2"}>
                                 前往
                                 <Link
-                                    href={"https://console.upyun.com/services/create/file/"}
+                                    href={
+                                        "https://console.upyun.com/services/create/file/"
+                                    }
                                     target={"_blank"}
                                 >
                                     又拍云面板
@@ -309,7 +321,8 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                填写为云存储服务绑定的域名，并根据实际情况选择是否使用 HTTPS：
+                                填写为云存储服务绑定的域名，并根据实际情况选择是否使用
+                                HTTPS：
                             </Typography>
                             <div className={classes.form}>
                                 <DomainInput
@@ -328,8 +341,10 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                此步骤可保持默认并跳过，但是强烈建议您跟随此步骤操作。<br/>
-                                前往所创建云存储服务的 功能配置 面板，转到 访问配置 选项卡，开启 Token 防盗链并设定密码。
+                                此步骤可保持默认并跳过，但是强烈建议您跟随此步骤操作。
+                                <br />
+                                前往所创建云存储服务的 功能配置 面板，转到
+                                访问配置 选项卡，开启 Token 防盗链并设定密码。
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -362,9 +377,7 @@ export default function UpyunGuide(props) {
                     <Collapse in={policy.IsPrivate === "true"}>
                         <div className={classes.subStepContainer}>
                             <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>
-                                    6
-                                </div>
+                                <div className={classes.stepNumber}>6</div>
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
@@ -377,20 +390,20 @@ export default function UpyunGuide(props) {
                                         </InputLabel>
                                         <Input
                                             value={
-                                                policy.OptionsSerialized
-                                                    .token
+                                                policy.OptionsSerialized.token
                                             }
                                             onChange={handleOptionChange(
                                                 "token"
                                             )}
-                                            required={policy.IsPrivate === "true"}
+                                            required={
+                                                policy.IsPrivate === "true"
+                                            }
                                         />
                                     </FormControl>
                                 </div>
                             </div>
                         </div>
                     </Collapse>
-
 
                     <div className={classes.stepFooter}>
                         <Button
@@ -425,9 +438,9 @@ export default function UpyunGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("path");
                                     }}
                                 >
                                     路径魔法变量列表
@@ -460,9 +473,9 @@ export default function UpyunGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("file");
                                     }}
                                 >
                                     文件名魔法变量列表
@@ -561,14 +574,22 @@ export default function UpyunGuide(props) {
                                     <RadioGroup
                                         required
                                         value={policy.IsOriginLinkEnable}
-                                        onChange={e=>{
-                                            if (policy.IsPrivate === "true" && e.target.value==="true"){
-                                                ToggleSnackbar("top", "right","开启 Token 防盗链后无法使用直链功能", "warning");
-                                                return
+                                        onChange={e => {
+                                            if (
+                                                policy.IsPrivate === "true" &&
+                                                e.target.value === "true"
+                                            ) {
+                                                ToggleSnackbar(
+                                                    "top",
+                                                    "right",
+                                                    "开启 Token 防盗链后无法使用直链功能",
+                                                    "warning"
+                                                );
+                                                return;
                                             }
-                                            handleChange(
-                                            "IsOriginLinkEnable"
-                                            )(e)
+                                            handleChange("IsOriginLinkEnable")(
+                                                e
+                                            );
                                         }}
                                         row
                                     >
@@ -855,7 +876,9 @@ export default function UpyunGuide(props) {
             {activeStep === 5 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已{props.policy ? "保存" : "添加"}！</Typography>
+                        <Typography>
+                            存储策略已{props.policy ? "保存" : "添加"}！
+                        </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
                             要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
                         </Typography>

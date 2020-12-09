@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from "@material-ui/icons/Check";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page";
 import Fab from "@material-ui/core/Fab";
@@ -40,16 +40,16 @@ const useStyles = makeStyles(theme => ({
     },
     buttonSuccess: {
         backgroundColor: green[500],
-        '&:hover': {
-            backgroundColor: green[700],
-        },
-    },
+        "&:hover": {
+            backgroundColor: green[700]
+        }
+    }
 }));
 
 export default function SaveButton(props) {
     const classes = useStyles();
     const buttonClassname = clsx({
-        [classes.buttonSuccess]: props.status==="success",
+        [classes.buttonSuccess]: props.status === "success"
     });
 
     return (
@@ -64,14 +64,19 @@ export default function SaveButton(props) {
                             disabled={props.status === "loading"}
                             aria-label="add"
                         >
-                            {props.status==="success" ? <CheckIcon /> : <SaveIcon />}
+                            {props.status === "success" ? (
+                                <CheckIcon />
+                            ) : (
+                                <SaveIcon />
+                            )}
                         </Fab>
                     </Tooltip>
-                    {props.status === "loading"&&<CircularProgress
-                        size={68}
-                        className={classes.fabProgress}
-                    />}
-
+                    {props.status === "loading" && (
+                        <CircularProgress
+                            size={68}
+                            className={classes.fabProgress}
+                        />
+                    )}
                 </div>
             </div>
         </AutoHidden>

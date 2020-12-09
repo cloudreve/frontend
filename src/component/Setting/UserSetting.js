@@ -12,7 +12,12 @@ import NickIcon from "@material-ui/icons/PermContactCalendar";
 import LockIcon from "@material-ui/icons/Lock";
 import VerifyIcon from "@material-ui/icons/VpnKey";
 import ColorIcon from "@material-ui/icons/Palette";
-import {applyThemes, changeViewMethod, toggleDaylightMode, toggleSnackbar} from "../../actions";
+import {
+    applyThemes,
+    changeViewMethod,
+    toggleDaylightMode,
+    toggleSnackbar
+} from "../../actions";
 import axios from "axios";
 import FingerprintIcon from "@material-ui/icons/Fingerprint";
 import ToggleButton from "@material-ui/lab/ToggleButton";
@@ -43,7 +48,7 @@ import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import QRCode from "qrcode-react";
-import {Brightness3, ListAlt, PermContactCalendar} from "@material-ui/icons";
+import { Brightness3, ListAlt, PermContactCalendar } from "@material-ui/icons";
 import { transformTime } from "../../utils";
 import Authn from "./Authn";
 
@@ -136,18 +141,18 @@ const styles = theme => ({
     paddingText: {
         paddingRight: theme.spacing(2)
     },
-    qrcode:{
+    qrcode: {
         width: 128,
         marginTop: 16,
-        marginRight: 16,
-    },
+        marginRight: 16
+    }
 });
 
 const mapStateToProps = state => {
     return {
         title: state.siteConfig.title,
-        authn:state.siteConfig.authn,
-        viewMethod: state.viewUpdate.explorerViewMethod,
+        authn: state.siteConfig.authn,
+        viewMethod: state.viewUpdate.explorerViewMethod
     };
 };
 
@@ -156,15 +161,15 @@ const mapDispatchToProps = dispatch => {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        applyThemes: (color) => {
+        applyThemes: color => {
             dispatch(applyThemes(color));
         },
-        toggleDaylightMode:()=>{
-            dispatch(toggleDaylightMode())
+        toggleDaylightMode: () => {
+            dispatch(toggleDaylightMode());
         },
         changeView: method => {
             dispatch(changeViewMethod(method));
-        },
+        }
     };
 };
 
@@ -208,7 +213,7 @@ class UserSettingCompoment extends Component {
             two_fa_secret: "",
             prefer_theme: "",
             themes: {},
-            authn:[],
+            authn: []
         }
     };
 
@@ -432,10 +437,9 @@ class UserSettingCompoment extends Component {
         this.setState({
             loading: "changeTheme"
         });
-        API
-            .patch("/user/setting/theme", {
-                theme: this.state.chosenTheme
-            })
+        API.patch("/user/setting/theme", {
+            theme: this.state.chosenTheme
+        })
             .then(() => {
                 this.props.toggleSnackbar(
                     "top",
@@ -507,7 +511,7 @@ class UserSettingCompoment extends Component {
     };
 
     init2FA = () => {
-        if (this.state.settings.two_factor){
+        if (this.state.settings.two_factor) {
             this.setState({ twoFactor: true });
             return;
         }
@@ -515,7 +519,7 @@ class UserSettingCompoment extends Component {
             .then(response => {
                 this.setState({
                     two_fa_secret: response.data,
-                    twoFactor: true,
+                    twoFactor: true
                 });
             })
             .catch(error => {
@@ -533,8 +537,8 @@ class UserSettingCompoment extends Component {
             loading: "twoFactor"
         });
         API.patch("/user/setting/2fa", {
-                code: this.state.authCode
-            })
+            code: this.state.authCode
+        })
             .then(() => {
                 this.props.toggleSnackbar(
                     "top",
@@ -544,9 +548,9 @@ class UserSettingCompoment extends Component {
                 );
                 this.setState({
                     loading: "",
-                    settings:{
+                    settings: {
                         ...this.state.settings,
-                        two_factor:!this.state.settings.two_factor,
+                        two_factor: !this.state.settings.two_factor
                     }
                 });
                 this.handleClose();
@@ -570,17 +574,17 @@ class UserSettingCompoment extends Component {
 
     handleAlignment = (event, chosenTheme) => this.setState({ chosenTheme });
 
-    toggleThemeMode = (current) => {
-        if (current !== null){
+    toggleThemeMode = current => {
+        if (current !== null) {
             this.props.toggleDaylightMode();
-            Auth.SetPreference("theme_mode",null);
+            Auth.SetPreference("theme_mode", null);
         }
-    }
+    };
 
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
-        const dark = Auth.GetPreference("theme_mode")
+        const dark = Auth.GetPreference("theme_mode");
 
         return (
             <div>
@@ -675,9 +679,7 @@ class UserSettingCompoment extends Component {
                                 </ListItemSecondaryAction>
                             </ListItem>
                             <Divider />
-                            <ListItem
-                                button
-                            >
+                            <ListItem button>
                                 <ListItemIcon className={classes.iconFix}>
                                     <GroupIcon />
                                 </ListItemIcon>
@@ -779,30 +781,29 @@ class UserSettingCompoment extends Component {
 
                     <Authn
                         list={this.state.settings.authn}
-                        add = {
-                            (credential)=>{
-                                this.setState({
-                                    settings:{
-                                        ...this.state.settings,
-                                        authn: [...this.state.settings.authn,credential],
-                                    }
-                                })
-                            }
-                        }
-                        remove={
-                            (id)=>{
-                                let credentials = [...this.state.settings.authn];
-                                credentials = credentials.filter((v)=>{
-                                    return v.id !== id
-                                })
-                                this.setState({
-                                    settings:{
-                                        ...this.state.settings,
-                                        authn: credentials,
-                                    }
-                                })
-                            }
-                        }
+                        add={credential => {
+                            this.setState({
+                                settings: {
+                                    ...this.state.settings,
+                                    authn: [
+                                        ...this.state.settings.authn,
+                                        credential
+                                    ]
+                                }
+                            });
+                        }}
+                        remove={id => {
+                            let credentials = [...this.state.settings.authn];
+                            credentials = credentials.filter(v => {
+                                return v.id !== id;
+                            });
+                            this.setState({
+                                settings: {
+                                    ...this.state.settings,
+                                    authn: credentials
+                                }
+                            });
+                        }}
                     />
 
                     <Typography
@@ -831,8 +832,11 @@ class UserSettingCompoment extends Component {
                                     <div className={classes.secondColor}></div>
                                 </ListItemSecondaryAction>
                             </ListItem>
-                            <Divider/>
-                            <ListItem button onClick={()=>this.toggleThemeMode(dark)}>
+                            <Divider />
+                            <ListItem
+                                button
+                                onClick={() => this.toggleThemeMode(dark)}
+                            >
                                 <ListItemIcon className={classes.iconFix}>
                                     <Brightness3 />
                                 </ListItemIcon>
@@ -845,18 +849,22 @@ class UserSettingCompoment extends Component {
                                         className={classes.infoTextWithIcon}
                                         color="textSecondary"
                                     >
-                                        {dark&&(dark==="dark"
-                                            ? "偏好开启"
-                                            : "偏好关闭")}
-                                        {dark === null&&"跟随系统"}
+                                        {dark &&
+                                            (dark === "dark"
+                                                ? "偏好开启"
+                                                : "偏好关闭")}
+                                        {dark === null && "跟随系统"}
                                     </Typography>
                                     <RightIcon
                                         className={classes.rightIconWithText}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
-                            <Divider/>
-                            <ListItem button onClick={()=>this.toggleViewMethod()}>
+                            <Divider />
+                            <ListItem
+                                button
+                                onClick={() => this.toggleViewMethod()}
+                            >
                                 <ListItemIcon className={classes.iconFix}>
                                     <ListAlt />
                                 </ListItemIcon>
@@ -869,9 +877,12 @@ class UserSettingCompoment extends Component {
                                         className={classes.infoTextWithIcon}
                                         color="textSecondary"
                                     >
-                                        {this.props.viewMethod === "icon" && "大图标"}
-                                        {this.props.viewMethod === "list" && "列表"}
-                                        {this.props.viewMethod === "smallIcon" && "小图标"}
+                                        {this.props.viewMethod === "icon" &&
+                                            "大图标"}
+                                        {this.props.viewMethod === "list" &&
+                                            "列表"}
+                                        {this.props.viewMethod ===
+                                            "smallIcon" && "小图标"}
                                     </Typography>
                                     <RightIcon
                                         className={classes.rightIconWithText}
@@ -1101,26 +1112,36 @@ class UserSettingCompoment extends Component {
                     </DialogActions>
                 </Dialog>
                 <Dialog open={this.state.twoFactor} onClose={this.handleClose}>
-                    <DialogTitle>{this.state.settings.two_factor?"关闭":"启用"}二步验证</DialogTitle>
+                    <DialogTitle>
+                        {this.state.settings.two_factor ? "关闭" : "启用"}
+                        二步验证
+                    </DialogTitle>
                     <DialogContent>
                         <div className={classes.flexContainerResponse}>
-
-                                {!this.state.settings.two_factor && <div className={classes.qrcode}><QRCode
-                                    value={
-                                        "otpauth://totp/" +
-                                        this.props.title +
-                                        "?secret=" +
-                                        this.state.two_fa_secret
-                                    }
-                                /></div>}
+                            {!this.state.settings.two_factor && (
+                                <div className={classes.qrcode}>
+                                    <QRCode
+                                        value={
+                                            "otpauth://totp/" +
+                                            this.props.title +
+                                            "?secret=" +
+                                            this.state.two_fa_secret
+                                        }
+                                    />
+                                </div>
+                            )}
 
                             <div className={classes.desText}>
-                                {!this.state.settings.two_factor && <Typography>
-                                请使用任意二步验证APP或者支持二步验证的密码管理软件扫描左侧二维码添加本站。扫描完成后请填写二步验证APP给出的6位验证码以开启二步验证。
-                            </Typography>}
-                                {this.state.settings.two_factor && <Typography>
-                                    请验证当前二步验证代码。
-                                </Typography>}
+                                {!this.state.settings.two_factor && (
+                                    <Typography>
+                                        请使用任意二步验证APP或者支持二步验证的密码管理软件扫描左侧二维码添加本站。扫描完成后请填写二步验证APP给出的6位验证码以开启二步验证。
+                                    </Typography>
+                                )}
+                                {this.state.settings.two_factor && (
+                                    <Typography>
+                                        请验证当前二步验证代码。
+                                    </Typography>
+                                )}
                                 <TextField
                                     id="standard-name"
                                     label="6位验证码"
@@ -1147,7 +1168,8 @@ class UserSettingCompoment extends Component {
                                 this.state.authCode === ""
                             }
                         >
-                            {this.state.settings.two_factor?"关闭":"启用"}二步验证
+                            {this.state.settings.two_factor ? "关闭" : "启用"}
+                            二步验证
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -1199,10 +1221,7 @@ class UserSettingCompoment extends Component {
                         <TextField
                             id="standard-name"
                             className={classes.textField}
-                            value={
-                                window.location.origin +
-                                "/dav"
-                            }
+                            value={window.location.origin + "/dav"}
                             margin="normal"
                             autoFocus
                         />

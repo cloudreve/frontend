@@ -60,36 +60,33 @@ class UploaderComponent extends Component {
         const path = window.currntPath ? window.currntPath : this.props.path;
         if (
             this.props.keywords === "" &&
-            window.location.href
-                .split("#")[1]
-                .toLowerCase()
-                .startsWith("/home")
+            window.location.pathname.toLowerCase().startsWith("/home")
         ) {
             window.fileList["openFileList"]();
             const enqueFiles = files
-              // 不上传Mac下的布局文件 .DS_Store
-              .filter(file => {
-                const isDsStore = file.name.toLowerCase() === ".ds_store"
-                if (isDsStore) {
-                  up.removeFile(file)
-                }
-                return !isDsStore
-              })
-              .map(file => {
-                const source = file.getSource();
-                if (source.relativePath && source.relativePath !== "") {
-                  file.path =  basename(
-                        pathJoin([path, source.relativePath])
-                    );
-                    window.pathCache[file.id] = basename(
-                        pathJoin([path, source.relativePath])
-                    );
-                } else {
-                    window.pathCache[file.id] = path;
-                    file.path = path;
-                }
-                return file
-              })
+                // 不上传Mac下的布局文件 .DS_Store
+                .filter(file => {
+                    const isDsStore = file.name.toLowerCase() === ".ds_store";
+                    if (isDsStore) {
+                        up.removeFile(file);
+                    }
+                    return !isDsStore;
+                })
+                .map(file => {
+                    const source = file.getSource();
+                    if (source.relativePath && source.relativePath !== "") {
+                        file.path = basename(
+                            pathJoin([path, source.relativePath])
+                        );
+                        window.pathCache[file.id] = basename(
+                            pathJoin([path, source.relativePath])
+                        );
+                    } else {
+                        window.pathCache[file.id] = path;
+                        file.path = path;
+                    }
+                    return file;
+                });
             window.fileList["enQueue"](enqueFiles);
         } else {
             window.plupload.each(files, files => {
@@ -112,14 +109,25 @@ class UploaderComponent extends Component {
                     browse_button: ["pickfiles", "pickfolder"],
                     container: "container",
                     drop_element: "container",
-                    max_file_size: user.policy.maxSize === "0.00mb" ? 0 :user.policy.maxSize,
+                    max_file_size:
+                        user.policy.maxSize === "0.00mb"
+                            ? 0
+                            : user.policy.maxSize,
                     dragdrop: true,
                     chunk_size: this.getChunkSize(user.policy.saveType),
                     filters: {
                         mime_types:
-                            (user.policy.allowedType === null || user.policy.allowedType.length === 0)
+                            user.policy.allowedType === null ||
+                            user.policy.allowedType.length === 0
                                 ? []
-                                :  [{ title : "files", extensions : user.policy.allowedType.join(",") }],
+                                : [
+                                      {
+                                          title: "files",
+                                          extensions: user.policy.allowedType.join(
+                                              ","
+                                          )
+                                      }
+                                  ]
                     },
                     // iOS不能多选？
                     multi_selection: true,

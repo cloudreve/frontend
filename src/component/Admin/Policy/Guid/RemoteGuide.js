@@ -39,13 +39,13 @@ const useStyles = makeStyles(theme => ({
     subStepContainer: {
         display: "flex",
         marginBottom: 20,
-        padding:10,
+        padding: 10,
         transition: theme.transitions.create("background-color", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
         }),
-        "&:focus-within":{
-            backgroundColor:theme.palette.background.default,
+        "&:focus-within": {
+            backgroundColor: theme.palette.background.default
         }
     },
     stepNumber: {
@@ -57,35 +57,35 @@ const useStyles = makeStyles(theme => ({
         borderRadius: " 50%"
     },
     stepNumberContainer: {
-        marginRight: 10,
+        marginRight: 10
     },
-    stepFooter:{
-        marginTop: 32,
+    stepFooter: {
+        marginTop: 32
     },
     button: {
-        marginRight: theme.spacing(1),
+        marginRight: theme.spacing(1)
     },
-    "@global":{
-        "code":{
+    "@global": {
+        code: {
             color: "rgba(0, 0, 0, 0.87)",
             display: "inline-block",
             padding: "2px 6px",
             fontSize: "14px",
-            fontFamily:" Consolas, \"Liberation Mono\", Menlo, Courier, monospace",
+            fontFamily:
+                ' Consolas, "Liberation Mono", Menlo, Courier, monospace',
             borderRadius: "2px",
-            backgroundColor: "rgba(255,229,100,0.1)",
+            backgroundColor: "rgba(255,229,100,0.1)"
         },
-        "pre":{
+        pre: {
             margin: "24px 0",
             padding: "12px 18px",
             overflow: "auto",
             direction: "ltr",
             borderRadius: "4px",
             backgroundColor: "#272c34",
-            color:"#fff",
+            color: "#fff"
         }
-    },
-
+    }
 }));
 
 const steps = [
@@ -117,25 +117,29 @@ export default function RemoteGuide(props) {
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [skipped,] = React.useState(new Set());
-    const [magicVar,setMagicVar] = useState("");
-    const [useCDN,setUseCDN] = useState("false");
-    const [policy, setPolicy] = useState(props.policy?props.policy:{
-        Type:"remote",
-        Name:"",
-        Server:"https://example.com:5212",
-        SecretKey:randomStr(64),
-        DirNameRule: "uploads/{year}/{month}/{day}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable:"false",
-        BaseURL:"",
-        IsPrivate:"true",
-        MaxSize:"0",
-        OptionsSerialized:{
-            file_type:"",
-        },
-    });
+    const [skipped] = React.useState(new Set());
+    const [magicVar, setMagicVar] = useState("");
+    const [useCDN, setUseCDN] = useState("false");
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "remote",
+                  Name: "",
+                  Server: "https://example.com:5212",
+                  SecretKey: randomStr(64),
+                  DirNameRule: "uploads/{year}/{month}/{day}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  BaseURL: "",
+                  IsPrivate: "true",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: ""
+                  }
+              }
+    );
 
     const handleChange = name => event => {
         setPolicy({
@@ -147,10 +151,10 @@ export default function RemoteGuide(props) {
     const handleOptionChange = name => event => {
         setPolicy({
             ...policy,
-            OptionsSerialized:{
+            OptionsSerialized: {
                 ...policy.OptionsSerialized,
                 [name]: event.target.value
-            },
+            }
         });
     };
 
@@ -165,13 +169,13 @@ export default function RemoteGuide(props) {
         [dispatch]
     );
 
-    const testSlave = ()=>{
+    const testSlave = () => {
         setLoading(true);
 
         // 测试路径是否可用
         API.post("/admin/policy/test/slave", {
             server: policy.Server,
-            secret:policy.SecretKey,
+            secret: policy.SecretKey
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "通信正常", "success");
@@ -188,21 +192,27 @@ export default function RemoteGuide(props) {
         e.preventDefault();
         setLoading(true);
 
-        const policyCopy = {...policy};
-        policyCopy.OptionsSerialized = {...policyCopy.OptionsSerialized};
+        const policyCopy = { ...policy };
+        policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // 处理存储策略
-        if (useCDN === "false" || policy.IsOriginLinkEnable === "false"){
-            policyCopy.BaseURL = ""
+        if (useCDN === "false" || policy.IsOriginLinkEnable === "false") {
+            policyCopy.BaseURL = "";
         }
 
         // 类型转换
         policyCopy.AutoRename = policyCopy.AutoRename === "true";
-        policyCopy.IsOriginLinkEnable = policyCopy.IsOriginLinkEnable === "true";
+        policyCopy.IsOriginLinkEnable =
+            policyCopy.IsOriginLinkEnable === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
         policyCopy.IsPrivate = policyCopy.IsPrivate === "true";
-        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(",");
-        if (policyCopy.OptionsSerialized.file_type.length === 1 && policyCopy.OptionsSerialized.file_type[0] === ""){
+        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
+            ","
+        );
+        if (
+            policyCopy.OptionsSerialized.file_type.length === 1 &&
+            policyCopy.OptionsSerialized.file_type[0] === ""
+        ) {
             policyCopy.OptionsSerialized.file_type = [];
         }
 
@@ -210,7 +220,12 @@ export default function RemoteGuide(props) {
             policy: policyCopy
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "存储策略已" + (props.policy ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(5);
             })
             .catch(error => {
@@ -221,12 +236,13 @@ export default function RemoteGuide(props) {
             });
 
         setLoading(false);
-
-    }
+    };
 
     return (
         <div>
-            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"}从机存储策略</Typography>
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"}从机存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -250,14 +266,14 @@ export default function RemoteGuide(props) {
             {activeStep === 0 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e=>{
+                    onSubmit={e => {
                         e.preventDefault();
                         setActiveStep(1);
                     }}
                 >
-                    <Alert severity="info" style={{marginBottom:10,}}>
-                        从机存储策略允许你使用同样运行了 Cloudreve 的服务器作为存储端，
-                        用户上传下载流量通过 HTTP 直传。
+                    <Alert severity="info" style={{ marginBottom: 10 }}>
+                        从机存储策略允许你使用同样运行了 Cloudreve
+                        的服务器作为存储端， 用户上传下载流量通过 HTTP 直传。
                     </Alert>
 
                     <div className={classes.subStepContainer}>
@@ -266,7 +282,8 @@ export default function RemoteGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                将和主站相同版本的 Cloudreve 程序拷贝至要作为从机的服务器上。
+                                将和主站相同版本的 Cloudreve
+                                程序拷贝至要作为从机的服务器上。
                             </Typography>
                         </div>
                     </div>
@@ -288,7 +305,7 @@ export default function RemoteGuide(props) {
                                     <Input
                                         required
                                         inputProps={{
-                                            minlength:64,
+                                            minlength: 64
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -304,23 +321,33 @@ export default function RemoteGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                修改从机配置文件。<br/>在从机端 Cloudreve 的同级目录下新建
-                                <code>conf.ini</code>文件，填入从机配置，启动/重启从机端 Cloudreve。
+                                修改从机配置文件。
+                                <br />
+                                在从机端 Cloudreve 的同级目录下新建
+                                <code>conf.ini</code>
+                                文件，填入从机配置，启动/重启从机端 Cloudreve。
                                 以下为一个可供参考的配置例子，其中密钥部分已帮您填写为上一步所生成的。
                             </Typography>
-                                <pre>
-                                    [System]<br/>
-                                    Mode = slave<br/>
-                                    Listen = :5212<br/>
-                                    <br/>
-                                    [Slave]<br/>
-                                    Secret = {policy.SecretKey}<br/>
-                                    <br/>
-                                    [CORS]<br/>
-                                    AllowOrigins = *<br/>
-                                    AllowMethods = OPTIONS,GET,POST<br/>
-                                    AllowHeaders = *<br/>
-                                </pre>
+                            <pre>
+                                [System]
+                                <br />
+                                Mode = slave
+                                <br />
+                                Listen = :5212
+                                <br />
+                                <br />
+                                [Slave]
+                                <br />
+                                Secret = {policy.SecretKey}
+                                <br />
+                                <br />
+                                [CORS]
+                                <br />
+                                AllowOrigins = *<br />
+                                AllowMethods = OPTIONS,GET,POST
+                                <br />
+                                AllowHeaders = *<br />
+                            </pre>
                             <Typography variant={"body2"}>
                                 从机端配置文件格式大致与主站端相同，区别在于：
                                 <ul>
@@ -331,11 +358,15 @@ export default function RemoteGuide(props) {
                                         字段必须更改为<code>slave</code>
                                     </li>
                                     <li>
-                                        必须指定<code>Slave</code>分区下的<code>Secret</code>
+                                        必须指定<code>Slave</code>分区下的
+                                        <code>Secret</code>
                                         字段，其值为第二步里填写或生成的密钥。
                                     </li>
-                                    <li>必须启动跨域配置，即<code>CORS</code>字段的内容，
-                                    具体可参考上文范例或官方文档。如果配置不正确，用户将无法通过 Web 端向从机上传文件。
+                                    <li>
+                                        必须启动跨域配置，即<code>CORS</code>
+                                        字段的内容，
+                                        具体可参考上文范例或官方文档。如果配置不正确，用户将无法通过
+                                        Web 端向从机上传文件。
                                     </li>
                                 </ul>
                             </Typography>
@@ -348,8 +379,11 @@ export default function RemoteGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                填写从机地址。<br/>
-                                如果主站启用了 HTTPS，从机也需要启用，并在下方填入 HTTPS 协议的地址。
+                                填写从机地址。
+                                <br />
+                                如果主站启用了
+                                HTTPS，从机也需要启用，并在下方填入 HTTPS
+                                协议的地址。
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
@@ -379,7 +413,7 @@ export default function RemoteGuide(props) {
                             <div className={classes.form}>
                                 <Button
                                     disabled={loading}
-                                    onClick={()=>testSlave()}
+                                    onClick={() => testSlave()}
                                     variant={"outlined"}
                                     color={"primary"}
                                 >
@@ -399,14 +433,13 @@ export default function RemoteGuide(props) {
                             下一步
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 1 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e=> {
+                    onSubmit={e => {
                         e.preventDefault();
                         setActiveStep(2);
                     }}
@@ -418,13 +451,14 @@ export default function RemoteGuide(props) {
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
                                 请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的 Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
+                                从机的
+                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("path");
                                     }}
                                 >
                                     路径魔法变量列表
@@ -457,9 +491,9 @@ export default function RemoteGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("file");
                                     }}
                                 >
                                     文件名魔法变量列表
@@ -500,7 +534,9 @@ export default function RemoteGuide(props) {
                                             命名规则
                                         </InputLabel>
                                         <Input
-                                            required={policy.AutoRename === "true"}
+                                            required={
+                                                policy.AutoRename === "true"
+                                            }
                                             value={policy.FileNameRule}
                                             onChange={handleChange(
                                                 "FileNameRule"
@@ -516,7 +552,7 @@ export default function RemoteGuide(props) {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(0)}
+                            onClick={() => setActiveStep(0)}
                         >
                             上一步
                         </Button>
@@ -535,9 +571,9 @@ export default function RemoteGuide(props) {
             {activeStep === 2 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e=> {
+                    onSubmit={e => {
                         e.preventDefault();
-                       setActiveStep(3);
+                        setActiveStep(3);
                     }}
                 >
                     <div className={classes.subStepContainer}>
@@ -590,7 +626,8 @@ export default function RemoteGuide(props) {
                                 <Typography variant={"body2"}>
                                     是否要对下载/直链使用 CDN？
                                     <br />
-                                    开启后，用户访问文件时的 URL 中的域名部分会被替换为 CDN 域名。
+                                    开启后，用户访问文件时的 URL
+                                    中的域名部分会被替换为 CDN 域名。
                                 </Typography>
 
                                 <div className={classes.form}>
@@ -598,14 +635,16 @@ export default function RemoteGuide(props) {
                                         <RadioGroup
                                             required
                                             value={useCDN}
-                                            onChange={e=>{
-                                                if (e.target.value === "false"){
+                                            onChange={e => {
+                                                if (
+                                                    e.target.value === "false"
+                                                ) {
                                                     setPolicy({
                                                         ...policy,
                                                         BaseURL: ""
                                                     });
                                                 }
-                                                setUseCDN(e.target.value)
+                                                setUseCDN(e.target.value);
                                             }}
                                             row
                                         >
@@ -626,7 +665,6 @@ export default function RemoteGuide(props) {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-
                             </div>
                         </div>
 
@@ -644,26 +682,26 @@ export default function RemoteGuide(props) {
                                         <DomainInput
                                             value={policy.BaseURL}
                                             onChange={handleChange("BaseURL")}
-                                            required={policy.IsOriginLinkEnable === "true" && useCDN === "true"}
+                                            required={
+                                                policy.IsOriginLinkEnable ===
+                                                    "true" && useCDN === "true"
+                                            }
                                             label={"CDN 前缀"}
                                         />
                                     </div>
-
                                 </div>
                             </div>
                         </Collapse>
-
                     </Collapse>
 
                     <div className={classes.stepFooter}>
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(1)}
+                            onClick={() => setActiveStep(1)}
                         >
                             上一步
-                        </Button>
-                        {" "}
+                        </Button>{" "}
                         <Button
                             disabled={loading}
                             type={"submit"}
@@ -673,18 +711,17 @@ export default function RemoteGuide(props) {
                             下一步
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 3 && (
-                <form className={classes.stepContent}
-                      onSubmit={e=> {
-                    e.preventDefault();
-                    setActiveStep(4)
-                }}
+                <form
+                    className={classes.stepContent}
+                    onSubmit={e => {
+                        e.preventDefault();
+                        setActiveStep(4);
+                    }}
                 >
-
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
@@ -698,17 +735,21 @@ export default function RemoteGuide(props) {
                                 <FormControl required component="fieldset">
                                     <RadioGroup
                                         required
-                                        value={policy.MaxSize === "0" ? "false" : "true"}
-                                        onChange={e=>{
-                                            if(e.target.value === "true"){
+                                        value={
+                                            policy.MaxSize === "0"
+                                                ? "false"
+                                                : "true"
+                                        }
+                                        onChange={e => {
+                                            if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "10485760",
+                                                    MaxSize: "10485760"
                                                 });
-                                            }else{
+                                            } else {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "0",
+                                                    MaxSize: "0"
                                                 });
                                             }
                                         }}
@@ -752,15 +793,15 @@ export default function RemoteGuide(props) {
                                         label={"单文件大小限制"}
                                     />
                                 </div>
-
                             </div>
                         </div>
-
                     </Collapse>
 
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>{policy.MaxSize !== "0" ? "3" : "2"}</div>
+                            <div className={classes.stepNumber}>
+                                {policy.MaxSize !== "0" ? "3" : "2"}
+                            </div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -771,23 +812,29 @@ export default function RemoteGuide(props) {
                                 <FormControl required component="fieldset">
                                     <RadioGroup
                                         required
-                                        value={policy.OptionsSerialized.file_type === "" ? "false" : "true"}
-                                        onChange={e=>{
-                                            if(e.target.value === "true"){
+                                        value={
+                                            policy.OptionsSerialized
+                                                .file_type === ""
+                                                ? "false"
+                                                : "true"
+                                        }
+                                        onChange={e => {
+                                            if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        file_type:"jpg,png,mp4,zip,rar",
-                                                    },
+                                                        file_type:
+                                                            "jpg,png,mp4,zip,rar"
+                                                    }
                                                 });
-                                            }else{
+                                            } else {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        file_type:"",
-                                                    },
+                                                        file_type: ""
+                                                    }
                                                 });
                                             }
                                         }}
@@ -816,11 +863,14 @@ export default function RemoteGuide(props) {
                     <Collapse in={policy.OptionsSerialized.file_type !== ""}>
                         <div className={classes.subStepContainer}>
                             <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>{policy.MaxSize !== "0" ? "4" : "3"}</div>
+                                <div className={classes.stepNumber}>
+                                    {policy.MaxSize !== "0" ? "4" : "3"}
+                                </div>
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 , 隔开
+                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
+                                    隔开
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
@@ -828,28 +878,28 @@ export default function RemoteGuide(props) {
                                             扩展名列表
                                         </InputLabel>
                                         <Input
-                                            value={policy.OptionsSerialized.file_type}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .file_type
+                                            }
                                             onChange={handleOptionChange(
                                                 "file_type"
                                             )}
                                         />
                                     </FormControl>
                                 </div>
-
                             </div>
                         </div>
-
                     </Collapse>
 
                     <div className={classes.stepFooter}>
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(2)}
+                            onClick={() => setActiveStep(2)}
                         >
                             上一步
-                        </Button>
-                        {" "}
+                        </Button>{" "}
                         <Button
                             disabled={loading}
                             type={"submit"}
@@ -859,16 +909,13 @@ export default function RemoteGuide(props) {
                             下一步
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 4 && (
                 <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-
-                        </div>
+                        <div className={classes.stepNumberContainer}></div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
                                 最后一步，为此存储策略命名：
@@ -891,11 +938,10 @@ export default function RemoteGuide(props) {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={()=> setActiveStep(3)}
+                            onClick={() => setActiveStep(3)}
                         >
                             上一步
-                        </Button>
-                        {" "}
+                        </Button>{" "}
                         <Button
                             disabled={loading}
                             type={"submit"}
@@ -905,31 +951,30 @@ export default function RemoteGuide(props) {
                             完成
                         </Button>
                     </div>
-
                 </form>
             )}
 
             {activeStep === 5 && (
                 <>
-                <form className={classes.stepContent}>
-                    <Typography>
-                        存储策略已{props.policy ? "保存" : "添加"}！
-                    </Typography>
-                    <Typography variant={"body2"} color={"textSecondary"}>
-                        要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
-                    </Typography>
-                </form>
+                    <form className={classes.stepContent}>
+                        <Typography>
+                            存储策略已{props.policy ? "保存" : "添加"}！
+                        </Typography>
+                        <Typography variant={"body2"} color={"textSecondary"}>
+                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                        </Typography>
+                    </form>
                     <div className={classes.stepFooter}>
                         <Button
                             color={"primary"}
                             className={classes.button}
-                            onClick={()=> history.push("/admin/policy")}
+                            onClick={() => history.push("/admin/policy")}
                         >
                             返回存储策略列表
                         </Button>
                     </div>
-</>
-             )}
+                </>
+            )}
 
             <MagicVar
                 open={magicVar === "file"}

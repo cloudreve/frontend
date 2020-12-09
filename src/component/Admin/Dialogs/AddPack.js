@@ -10,16 +10,15 @@ import Input from "@material-ui/core/Input";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import SizeInput from "../Common/SizeInput";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
-
     formContainer: {
-        margin:"8px 0 8px 0",
+        margin: "8px 0 8px 0"
     }
 }));
 
-export default function AddPack({ open, onClose,onSubmit }) {
+export default function AddPack({ open, onClose, onSubmit }) {
     const classes = useStyles();
     const [pack, setPack] = useState({
         name: "",
@@ -38,14 +37,14 @@ export default function AddPack({ open, onClose,onSubmit }) {
 
     const submit = e => {
         e.preventDefault();
-        const packCopy = {...pack};
+        const packCopy = { ...pack };
         packCopy.size = parseInt(packCopy.size);
         packCopy.time = parseInt(packCopy.time) * 86400;
         packCopy.price = parseInt(packCopy.price) * 100;
         packCopy.score = parseInt(packCopy.score);
-        packCopy.id = (new Date()).valueOf();
+        packCopy.id = new Date().valueOf();
         onSubmit(packCopy);
-    }
+    };
 
     return (
         <Dialog
@@ -99,8 +98,8 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={pack.time}
                                     onChange={handleChange("time")}
@@ -120,8 +119,8 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:0.01,
-                                        step:0.01
+                                        min: 0.01,
+                                        step: 0.01
                                     }}
                                     value={pack.price}
                                     onChange={handleChange("price")}
@@ -141,19 +140,19 @@ export default function AddPack({ open, onClose,onSubmit }) {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:0,
-                                        step:1
+                                        min: 0,
+                                        step: 1
                                     }}
                                     value={pack.score}
                                     onChange={handleChange("score")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    使用积分购买时的价格，填写为 0 表示不能使用积分购买
+                                    使用积分购买时的价格，填写为 0
+                                    表示不能使用积分购买
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

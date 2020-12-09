@@ -10,34 +10,34 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
 
-export default function ShareFilter({setFilter,setSearch,open, onClose }) {
-    const [input,setInput] = useState({
-        is_dir:"all",
-        user_id:"",
+export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
+    const [input, setInput] = useState({
+        is_dir: "all",
+        user_id: ""
     });
-    const [keywords,setKeywords] = useState("");
+    const [keywords, setKeywords] = useState("");
 
     const handleChange = name => event => {
-        setInput({...input,[name]:event.target.value})
-    }
+        setInput({ ...input, [name]: event.target.value });
+    };
 
     const submit = () => {
         const res = {};
-        Object.keys(input).forEach(v=>{
-            if(input[v] !== "all" && input[v] !== ""){
+        Object.keys(input).forEach(v => {
+            if (input[v] !== "all" && input[v] !== "") {
                 res[v] = input[v];
             }
-        })
+        });
         setFilter(res);
-        if (keywords !== ""){
+        if (keywords !== "") {
             setSearch({
-                source_name:keywords,
+                source_name: keywords
             });
-        }else{
+        } else {
             setSearch({});
         }
         onClose();
-    }
+    };
 
     return (
         <Dialog
@@ -48,12 +48,12 @@ export default function ShareFilter({setFilter,setSearch,open, onClose }) {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle id="alert-dialog-title">
-                过滤条件
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">源文件类型</InputLabel>
+                    <InputLabel id="demo-simple-select-label">
+                        源文件类型
+                    </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -65,11 +65,21 @@ export default function ShareFilter({setFilter,setSearch,open, onClose }) {
                         <MenuItem value={"0"}>文件</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl fullWidth style={{marginTop:16}}>
-                    <TextField value={input.user_id} onChange={handleChange("user_id")} id="standard-basic" label="上传者ID" />
+                <FormControl fullWidth style={{ marginTop: 16 }}>
+                    <TextField
+                        value={input.user_id}
+                        onChange={handleChange("user_id")}
+                        id="standard-basic"
+                        label="上传者ID"
+                    />
                 </FormControl>
-                <FormControl fullWidth style={{marginTop:16}}>
-                    <TextField value={keywords} onChange={e=>setKeywords(e.target.value)} id="standard-basic" label="搜索 文件名" />
+                <FormControl fullWidth style={{ marginTop: 16 }}>
+                    <TextField
+                        value={keywords}
+                        onChange={e => setKeywords(e.target.value)}
+                        id="standard-basic"
+                        label="搜索 文件名"
+                    />
                 </FormControl>
             </DialogContent>
             <DialogActions>

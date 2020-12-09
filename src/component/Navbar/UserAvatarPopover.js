@@ -8,7 +8,11 @@ import {
     AccountArrowRight,
     AccountPlus
 } from "mdi-material-ui";
-import {setSessionStatus, setUserPopover, toggleSnackbar} from "../../actions";
+import {
+    setSessionStatus,
+    setUserPopover,
+    toggleSnackbar
+} from "../../actions";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import {
@@ -38,9 +42,9 @@ const mapDispatchToProps = dispatch => {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        setSessionStatus:status=>{
+        setSessionStatus: status => {
             dispatch(setSessionStatus(status));
-        },
+        }
     };
 };
 const styles = () => ({
@@ -106,7 +110,9 @@ class UserAvatarPopoverCompoment extends Component {
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
-        const isAdminPage = pathHelper.isAdminPage(this.props.location.pathname);
+        const isAdminPage = pathHelper.isAdminPage(
+            this.props.location.pathname
+        );
 
         return (
             <Popover
@@ -125,17 +131,17 @@ class UserAvatarPopoverCompoment extends Component {
                 {!Auth.Check() && (
                     <div className={classes.visitorMenu}>
                         <Divider />
-                        <MenuItem onClick={() =>
-                            this.props.history.push("/login")
-                        }>
+                        <MenuItem
+                            onClick={() => this.props.history.push("/login")}
+                        >
                             <ListItemIcon>
                                 <AccountArrowRight />
                             </ListItemIcon>
                             登录
                         </MenuItem>
-                        <MenuItem onClick={() =>
-                            this.props.history.push("/signup")
-                        }>
+                        <MenuItem
+                            onClick={() => this.props.history.push("/signup")}
+                        >
                             <ListItemIcon>
                                 <AccountPlus />
                             </ListItemIcon>
@@ -149,16 +155,20 @@ class UserAvatarPopoverCompoment extends Component {
                             <div className={classes.largeAvatarContainer}>
                                 <Avatar
                                     className={classes.largeAvatar}
-                                    src={"/api/v3/user/avatar/"+user.id + "/l"}
+                                    src={
+                                        "/api/v3/user/avatar/" + user.id + "/l"
+                                    }
                                 />
                             </div>
                             <div className={classes.info}>
                                 <Typography noWrap>{user.nickname}</Typography>
-                                <Typography color="textSecondary"
-                                            style={{
-                                                fontSize: "0.875rem",
-                                            }}
-                                            noWrap>
+                                <Typography
+                                    color="textSecondary"
+                                    style={{
+                                        fontSize: "0.875rem"
+                                    }}
+                                    noWrap
+                                >
                                     {user.user_name}
                                 </Typography>
                                 <Chip
@@ -174,33 +184,33 @@ class UserAvatarPopoverCompoment extends Component {
                         </div>
                         <div>
                             <Divider />
-                            {!isAdminPage && <MenuItem
-                                style={{
-                                    padding:" 11px 16px 11px 16px",
-                                }}
-                                onClick={() =>{
-                                    this.handleClose();
-                                    this.props.history.push("/profile/"+user.id);
-                                }
-
-                                }
-                            >
-                                <ListItemIcon>
-                                    <HomeAccount />
-                                </ListItemIcon>
-                                个人主页
-                            </MenuItem>}
+                            {!isAdminPage && (
+                                <MenuItem
+                                    style={{
+                                        padding: " 11px 16px 11px 16px"
+                                    }}
+                                    onClick={() => {
+                                        this.handleClose();
+                                        this.props.history.push(
+                                            "/profile/" + user.id
+                                        );
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <HomeAccount />
+                                    </ListItemIcon>
+                                    个人主页
+                                </MenuItem>
+                            )}
                             {user.group.id === 1 && (
                                 <MenuItem
                                     style={{
-                                        padding:" 11px 16px 11px 16px",
+                                        padding: " 11px 16px 11px 16px"
                                     }}
-                                    onClick={() =>{
+                                    onClick={() => {
                                         this.handleClose();
                                         this.props.history.push("/admin/home");
-                                    }
-
-                                    }
+                                    }}
                                 >
                                     <ListItemIcon>
                                         <DesktopMacDashboard />
@@ -209,9 +219,12 @@ class UserAvatarPopoverCompoment extends Component {
                                 </MenuItem>
                             )}
 
-                            <MenuItem  style={{
-                                padding:" 11px 16px 11px 16px",
-                            }} onClick={this.sigOut}>
+                            <MenuItem
+                                style={{
+                                    padding: " 11px 16px 11px 16px"
+                                }}
+                                onClick={this.sigOut}
+                            >
                                 <ListItemIcon>
                                     <LogoutVariant />
                                 </ListItemIcon>

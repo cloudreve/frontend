@@ -20,11 +20,10 @@ const useStyles = makeStyles(theme => ({
     },
     content: {
         padding: theme.spacing(2)
-    },
+    }
 }));
 
-
-export default function AddPolicyParent( ) {
+export default function AddPolicyParent() {
     const classes = useStyles();
 
     const { type } = useParams();
@@ -32,14 +31,14 @@ export default function AddPolicyParent( ) {
     return (
         <div>
             <Paper square className={classes.content}>
-                {type==="local"&&<LocalGuide/>}
-                {type==="remote"&&<RemoteGuide/>}
-                {type==="qiniu"&&<QiniuGuide/>}
-                {type==="oss"&&<OSSGuide/>}
-                {type==="upyun"&&<UpyunGuide/>}
-                {type==="cos"&&<COSGuide/>}
-                {type==="onedrive"&&<OneDriveGuide/>}
-                {type==="s3"&&(<S3Guide/>)}
+                {type === "local" && <LocalGuide />}
+                {type === "remote" && <RemoteGuide />}
+                {type === "qiniu" && <QiniuGuide />}
+                {type === "oss" && <OSSGuide />}
+                {type === "upyun" && <UpyunGuide />}
+                {type === "cos" && <COSGuide />}
+                {type === "onedrive" && <OneDriveGuide />}
+                {type === "s3" && <S3Guide />}
             </Paper>
         </div>
     );

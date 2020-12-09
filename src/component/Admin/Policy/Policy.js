@@ -74,7 +74,6 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-
 export default function Policy() {
     const classes = useStyles();
     // const [loading, setLoading] = useState(false);
@@ -108,38 +107,42 @@ export default function Policy() {
         [dispatch]
     );
 
-    useEffect(()=>{
-        if(query.get("code") === "0"){
+    useEffect(() => {
+        if (query.get("code") === "0") {
             ToggleSnackbar("top", "right", "授权成功", "success");
-        }else if (query.get("msg") && query.get("msg")!==""){
-            ToggleSnackbar("top", "right", query.get("msg") + ", "+ query.get("err"), "warning");
+        } else if (query.get("msg") && query.get("msg") !== "") {
+            ToggleSnackbar(
+                "top",
+                "right",
+                query.get("msg") + ", " + query.get("err"),
+                "warning"
+            );
         }
-
-    },[location])
+    }, [location]);
 
     const loadList = () => {
-      API.post("/admin/policy/list", {
-          page: page,
-          page_size: pageSize,
-          order_by: "id desc",
-          conditions: filter === "all" ? {} : { type: filter }
-      })
-          .then(response => {
-              setPolicies(response.data.items);
-              setStatics(response.data.statics);
-              setTotal(response.data.total);
-          })
-          .catch(error => {
-              ToggleSnackbar("top", "right", error.message, "error");
-          });
+        API.post("/admin/policy/list", {
+            page: page,
+            page_size: pageSize,
+            order_by: "id desc",
+            conditions: filter === "all" ? {} : { type: filter }
+        })
+            .then(response => {
+                setPolicies(response.data.items);
+                setStatics(response.data.statics);
+                setTotal(response.data.total);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
     };
 
     useEffect(() => {
         loadList();
-    }, [page, pageSize,filter]);
+    }, [page, pageSize, filter]);
 
-    const deletePolicy = (id) =>{
-        API.delete("/admin/policy/" + id,)
+    const deletePolicy = id => {
+        API.delete("/admin/policy/" + id)
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "存储策略已删除", "success");
@@ -147,7 +150,7 @@ export default function Policy() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }
+    };
 
     const open = Boolean(anchorEl);
 
@@ -165,10 +168,10 @@ export default function Policy() {
                 <div className={classes.headerRight}>
                     <Select
                         style={{
-                            marginRight:8,
+                            marginRight: 8
                         }}
                         value={filter}
-                        onChange={e=>setFilter(e.target.value)}
+                        onChange={e => setFilter(e.target.value)}
                     >
                         <MenuItem value={"all"}>全部</MenuItem>
                         <MenuItem value={"local"}>本机</MenuItem>
@@ -194,7 +197,7 @@ export default function Policy() {
                 <TableContainer className={classes.container}>
                     <Table aria-label="sticky table" size={"small"}>
                         <TableHead>
-                            <TableRow style={{height:52}}>
+                            <TableRow style={{ height: 52 }}>
                                 {columns.map(column => (
                                     <TableCell
                                         key={column.id}
@@ -226,19 +229,26 @@ export default function Policy() {
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         <Tooltip title={"删除"}>
-                                            <IconButton onClick={()=>deletePolicy(row.ID)} size={"small"}>
-                                                <Delete/>
+                                            <IconButton
+                                                onClick={() =>
+                                                    deletePolicy(row.ID)
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Delete />
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title={"编辑"}>
-                                            <IconButton onClick={(e)=>{
-                                                setEditID(row.ID)
-                                                handleClick(e)
-                                            }} size={"small"}>
-                                                <Edit/>
+                                            <IconButton
+                                                onClick={e => {
+                                                    setEditID(row.ID);
+                                                    handleClick(e);
+                                                }}
+                                                size={"small"}
+                                            >
+                                                <Edit />
                                             </IconButton>
                                         </Tooltip>
-
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -264,14 +274,22 @@ export default function Policy() {
                 onClose={handleClose}
                 keepMounted
             >
-                <MenuItem onClick={e=>{
-                    handleClose(e);
-                    history.push("/admin/policy/edit/pro/"+editID);
-                }}>专家模式编辑</MenuItem>
-                <MenuItem onClick={e=>{
-                    handleClose(e);
-                    history.push("/admin/policy/edit/guide/"+editID);
-                }}>向导模式编辑</MenuItem>
+                <MenuItem
+                    onClick={e => {
+                        handleClose(e);
+                        history.push("/admin/policy/edit/pro/" + editID);
+                    }}
+                >
+                    专家模式编辑
+                </MenuItem>
+                <MenuItem
+                    onClick={e => {
+                        handleClose(e);
+                        history.push("/admin/policy/edit/guide/" + editID);
+                    }}
+                >
+                    向导模式编辑
+                </MenuItem>
             </Menu>
         </div>
     );

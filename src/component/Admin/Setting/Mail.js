@@ -53,7 +53,7 @@ export default function Mail() {
         replyTo: "",
         smtpUser: "",
         smtpPass: "",
-        smtpEncryption:"",
+        smtpEncryption: "",
         mail_keepalive: "30",
         mail_activation_template: "",
         mail_reset_pwd_template: ""
@@ -254,7 +254,7 @@ export default function Mail() {
                                     SMTP 端口
                                 </InputLabel>
                                 <Input
-                                    inputProps={{ min: 1 ,step:1}}
+                                    inputProps={{ min: 1, step: 1 }}
                                     type={"number"}
                                     value={options.smtpPort}
                                     onChange={handleChange("smtpPort")}
@@ -342,7 +342,7 @@ export default function Mail() {
                                     SMTP 连接有效期 (秒)
                                 </InputLabel>
                                 <Input
-                                    inputProps={{ min: 1 ,step:1}}
+                                    inputProps={{ min: 1, step: 1 }}
                                     type={"number"}
                                     value={options.mail_keepalive}
                                     onChange={handleChange("mail_keepalive")}
@@ -363,7 +363,6 @@ export default function Mail() {
                     </Typography>
 
                     <div className={classes.formContainer}>
-
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
@@ -403,7 +402,6 @@ export default function Mail() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
 

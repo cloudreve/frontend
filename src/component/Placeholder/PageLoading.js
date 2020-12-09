@@ -1,5 +1,5 @@
 import React from "react";
-import  { Facebook } from "react-content-loader";
+import { Facebook } from "react-content-loader";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -14,9 +14,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MyLoader = props => {
-    return (
-        <Facebook className={props.className} />
-    );
+    return <Facebook className={props.className} />;
 };
 
 function PageLoading() {

@@ -76,28 +76,28 @@ export default function SiteInformation() {
         // eslint-disable-next-line
     }, []);
 
-
     const submit = e => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k=>{
+        Object.keys(options).forEach(k => {
             option.push({
-                key:k,
-                value:options[k],
+                key: k,
+                value: options[k]
             });
-        })
-        API.patch("/admin/setting",{
-            options:option,
+        });
+        API.patch("/admin/setting", {
+            options: option
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
+            })
+            .then(() => {
                 setLoading(false);
-        });
+            });
     };
 
     return (
@@ -254,7 +254,6 @@ export default function SiteInformation() {
                                     value={options.pwa_display}
                                     onChange={handleChange("pwa_display")}
                                 >
-
                                     <MenuItem value={"fullscreen"}>
                                         fullscreen
                                     </MenuItem>

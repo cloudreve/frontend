@@ -104,7 +104,7 @@ export default function LocalGuide(props) {
                   FileNameRule: "{randomkey8}_{originname}",
                   IsOriginLinkEnable: "false",
                   BaseURL: "",
-                IsPrivate:"true",
+                  IsPrivate: "true",
                   MaxSize: "0",
                   OptionsSerialized: {
                       file_type: ""
@@ -249,9 +249,9 @@ export default function LocalGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("path");
                                     }}
                                 >
                                     路径魔法变量列表
@@ -284,9 +284,9 @@ export default function LocalGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("file");
                                     }}
                                 >
                                     文件名魔法变量列表

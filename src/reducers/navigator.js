@@ -1,12 +1,12 @@
 const navigator = (state = [], action) => {
     switch (action.type) {
-        case 'NAVIGATOR_TO':
+        case "NAVIGATOR_TO":
             return Object.assign({}, state, {
                 path: action.path
             });
         default:
-            return state
+            return state;
     }
-  }
-  
-  export default navigator
+};
+
+export default navigator;
