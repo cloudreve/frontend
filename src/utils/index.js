@@ -6,6 +6,10 @@ export const sizeToString = bytes => {
     return (bytes / Math.pow(k, i)).toFixed(1) + " " + sizes[i];
 };
 
+export const fixUrlHash = path => {
+    return path;
+};
+
 export const setCookie = (name, value, days) => {
     if (days) {
         const date = new Date();
