@@ -150,7 +150,7 @@ export default function WebDAV() {
                                 >
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>账号名称</TableCell>
+                                            <TableCell>备注名</TableCell>
                                             <TableCell align="right">
                                                 密码
                                             </TableCell>

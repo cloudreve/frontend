@@ -108,7 +108,7 @@ export default function CreateWebDAVAccount(props) {
                             className={classes.input}
                             value={value.name}
                             onChange={handleInputChange("name")}
-                            label="账户名称"
+                            label="备注名"
                         />
                     </div>
                     <div className={classes.formGroup}>
