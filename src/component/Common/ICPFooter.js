@@ -14,6 +14,8 @@ const useStyles = makeStyles(() => ({
 
 export const ICPFooter = () => {
     const siteICPId = useSelector(state => state.siteConfig.siteICPId);
+    const siteGONGANId = useSelector(state => state.siteConfig.siteGONGANId);
+    const siteGONGANIdNum = siteGONGANId.replace(/[^0-9]/ig,"");
     const classes = useStyles();
     const location = useLocation();
     const [show, setShow] = useState(true);
@@ -32,11 +34,18 @@ export const ICPFooter = () => {
         <div className={classes.icp}>
             {`备案号: `}
             <Link
-                href="http://www.beian.gov.cn/portal/registerSystemInfo"
+                href="https://beian.miit.gov.cn"
                 rel="noopener noreferrer"
                 target="_blank"
             >
                 {siteICPId}
+            </Link>
+            <Link
+                href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={siteGONGANIdNum}"
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                {siteGONGANId}
             </Link>
         </div>
     );
