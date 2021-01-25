@@ -88,6 +88,10 @@ const steps = [
         optional: false
     },
     {
+        title: "直链设置",
+        optional: false
+    },
+    {
         title: "上传限制",
         optional: false
     },
@@ -254,7 +258,7 @@ export default function OneDriveGuide(props) {
                     "存储策略已" + (props.policy ? "保存" : "添加"),
                     "success"
                 );
-                setActiveStep(3);
+                setActiveStep(4);
                 setPolicyID(response.data);
             })
             .catch(error => {
@@ -691,6 +695,75 @@ export default function OneDriveGuide(props) {
             )}
 
             {activeStep === 2 && (
+                <form
+                    className={classes.stepContent}
+                    onSubmit={e => {
+                        e.preventDefault();
+                        setActiveStep(3);
+                    }}
+                >
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>1</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                是否允许获取文件永久直链？
+                                <br />
+                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                            </Typography>
+
+                            <div className={classes.form}>
+                                <FormControl required component="fieldset">
+                                    <RadioGroup
+                                        required
+                                        value={policy.IsOriginLinkEnable}
+                                        onChange={handleChange(
+                                            "IsOriginLinkEnable"
+                                        )}
+                                        row
+                                    >
+                                        <FormControlLabel
+                                            value={"true"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="允许"
+                                        />
+                                        <FormControlLabel
+                                            value={"false"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="禁止"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={classes.stepFooter}>
+                        <Button
+                            color={"default"}
+                            className={classes.button}
+                            onClick={() => setActiveStep(1)}
+                        >
+                            上一步
+                        </Button>{" "}
+                        <Button
+                            disabled={loading}
+                            type={"submit"}
+                            variant={"contained"}
+                            color={"primary"}
+                        >
+                            下一步
+                        </Button>
+                    </div>
+                </form>
+            )}
+
+            {activeStep === 3 && (
                 <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
@@ -866,7 +939,7 @@ export default function OneDriveGuide(props) {
                         <Button
                             color={"default"}
                             className={classes.button}
-                            onClick={() => setActiveStep(1)}
+                            onClick={() => setActiveStep(2)}
                         >
                             上一步
                         </Button>{" "}
@@ -882,7 +955,7 @@ export default function OneDriveGuide(props) {
                 </form>
             )}
 
-            {activeStep === 3 && (
+            {activeStep === 4 && (
                 <form className={classes.stepContent}>
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer} />
