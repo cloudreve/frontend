@@ -26,8 +26,9 @@ import { bufferDecode, bufferEncode } from "../../utils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
-import {useLocation} from "react-router";
+import { useLocation } from "react-router";
 import ReCaptcha from "./ReCaptcha";
+import { ICPFooter } from "../Common/ICPFooter";
 const useStyles = makeStyles(theme => ({
     layout: {
         width: "auto",
@@ -71,11 +72,11 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         marginTop: "10px",
         [theme.breakpoints.down("sm")]: {
-            display: "block",
-        },
+            display: "block"
+        }
     },
     captchaPlaceholder: {
-        width: 200,
+        width: 200
     },
     buttonContainer: {
         display: "flex"
@@ -97,14 +98,18 @@ function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [useAuthn, setUseAuthn] = useState(false);
     const [captchaData, setCaptchaData] = useState(null);
-    const [twoFA,setTwoFA] = useState(false);
-    const [faCode,setFACode] = useState("");
+    const [twoFA, setTwoFA] = useState(false);
+    const [faCode, setFACode] = useState("");
 
     const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
     const title = useSelector(state => state.siteConfig.title);
     const authn = useSelector(state => state.siteConfig.authn);
-    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
-    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
+    const useReCaptcha = useSelector(
+        state => state.siteConfig.captcha_IsUseReCaptcha
+    );
+    const reCaptchaKey = useSelector(
+        state => state.siteConfig.captcha_ReCaptchaKey
+    );
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -143,28 +148,28 @@ function LoginForm() {
 
     useEffect(() => {
         setEmail(query.get("username"));
-        if (loginCaptcha  && !useReCaptcha) {
+        if (loginCaptcha && !useReCaptcha) {
             refreshCaptcha();
         }
-    }, [location,loginCaptcha]);
+    }, [location, loginCaptcha]);
 
-    const afterLogin = data =>{
-      Auth.authenticate(data);
+    const afterLogin = data => {
+        Auth.authenticate(data);
 
-      // 设置用户主题色
-      if (data["preferred_theme"] !== "") {
-          ApplyThemes(data["preferred_theme"]);
-      }
-      enableUploaderLoad();
+        // 设置用户主题色
+        if (data["preferred_theme"] !== "") {
+            ApplyThemes(data["preferred_theme"]);
+        }
+        enableUploaderLoad();
 
-      // 设置登录状态
-      SetSessionStatus(true);
+        // 设置登录状态
+        SetSessionStatus(true);
 
-      history.push("/home");
-      ToggleSnackbar("top", "right", "登录成功", "success");
+        history.push("/home");
+        ToggleSnackbar("top", "right", "登录成功", "success");
 
-      localStorage.removeItem("siteConfigCache");
-    }
+        localStorage.removeItem("siteConfigCache");
+    };
 
     const authnLogin = e => {
         e.preventDefault();
@@ -216,7 +221,7 @@ function LoginForm() {
                 );
             })
             .then(response => {
-                afterLogin(response.data)
+                afterLogin(response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -237,12 +242,11 @@ function LoginForm() {
         })
             .then(response => {
                 setLoading(false);
-                if (response.rawData.code === 203){
+                if (response.rawData.code === 203) {
                     setTwoFA(true);
-                }else{
-                    afterLogin(response.data)
+                } else {
+                    afterLogin(response.data);
                 }
-
             })
             .catch(error => {
                 setLoading(false);
@@ -253,15 +257,15 @@ function LoginForm() {
             });
     };
 
-    const twoFALogin = e =>{
+    const twoFALogin = e => {
         e.preventDefault();
         setLoading(true);
-        API.post("/user/2fa",{
-            code:faCode,
+        API.post("/user/2fa", {
+            code: faCode
         })
             .then(response => {
                 setLoading(false);
-                afterLogin(response.data)
+                afterLogin(response.data);
             })
             .catch(error => {
                 setLoading(false);
@@ -271,120 +275,217 @@ function LoginForm() {
 
     return (
         <div className={classes.layout}>
-            {!twoFA &&
-            <>
-                <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    登录 {title}
-                </Typography>
-                {!useAuthn && (
-                    <form className={classes.form} onSubmit={login}>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">电子邮箱</InputLabel>
-                            <Input
-                                id="email"
-                                type="email"
-                                name="email"
-                                onChange={e => setEmail(e.target.value)}
-                                autoComplete
-                                value={email}
-                                autoFocus
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">密码</InputLabel>
-                            <Input
-                                name="password"
-                                onChange={e => setPwd(e.target.value)}
-                                type="password"
-                                id="password"
-                                value={pwd}
-                                autoComplete
-                            />
-                        </FormControl>
-                        {loginCaptcha && !useReCaptcha && (
-                            <div className={classes.captchaContainer}>
+            {!twoFA && (
+                <>
+                    <Paper className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            登录 {title}
+                        </Typography>
+                        {!useAuthn && (
+                            <form className={classes.form} onSubmit={login}>
                                 <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="captcha">
-                                        验证码
+                                    <InputLabel htmlFor="email">
+                                        电子邮箱
                                     </InputLabel>
                                     <Input
-                                        name="captcha"
-                                        onChange={e =>
-                                            setCaptcha(e.target.value)
-                                        }
-                                        type="text"
-                                        id="captcha"
-                                        value={captcha}
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        onChange={e => setEmail(e.target.value)}
+                                        autoComplete
+                                        value={email}
+                                        autoFocus
+                                    />
+                                </FormControl>
+                                <FormControl margin="normal" required fullWidth>
+                                    <InputLabel htmlFor="password">
+                                        密码
+                                    </InputLabel>
+                                    <Input
+                                        name="password"
+                                        onChange={e => setPwd(e.target.value)}
+                                        type="password"
+                                        id="password"
+                                        value={pwd}
                                         autoComplete
                                     />
-                                </FormControl>{" "}
-                                <div>
-                                    {captchaData === null && (
-                                        <div
-                                            className={
-                                                classes.captchaPlaceholder
-                                            }
+                                </FormControl>
+                                {loginCaptcha && !useReCaptcha && (
+                                    <div className={classes.captchaContainer}>
+                                        <FormControl
+                                            margin="normal"
+                                            required
+                                            fullWidth
                                         >
-                                            <Placeholder />
+                                            <InputLabel htmlFor="captcha">
+                                                验证码
+                                            </InputLabel>
+                                            <Input
+                                                name="captcha"
+                                                onChange={e =>
+                                                    setCaptcha(e.target.value)
+                                                }
+                                                type="text"
+                                                id="captcha"
+                                                value={captcha}
+                                                autoComplete
+                                            />
+                                        </FormControl>{" "}
+                                        <div>
+                                            {captchaData === null && (
+                                                <div
+                                                    className={
+                                                        classes.captchaPlaceholder
+                                                    }
+                                                >
+                                                    <Placeholder />
+                                                </div>
+                                            )}
+                                            {captchaData !== null && (
+                                                <img
+                                                    src={captchaData}
+                                                    alt="captcha"
+                                                    onClick={refreshCaptcha}
+                                                />
+                                            )}
                                         </div>
-                                    )}
-                                    {captchaData !== null && (
-                                        <img
-                                            src={captchaData}
-                                            alt="captcha"
-                                            onClick={refreshCaptcha}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {loginCaptcha && useReCaptcha && (
-                            <div className={classes.captchaContainer}>
-                                <FormControl margin="normal" required fullWidth>
-                                    <div>
-                                        <ReCaptcha
-                                            style={{ display: "inline-block" }}
-                                            sitekey={reCaptchaKey}
-                                            onChange={value =>
-                                                setCaptcha(value)
-                                            }
-                                            id="captcha"
-                                            name="captcha"
-                                        />
                                     </div>
-                                </FormControl>{" "}
-                            </div>
+                                )}
+
+                                {loginCaptcha && useReCaptcha && (
+                                    <div className={classes.captchaContainer}>
+                                        <FormControl
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                        >
+                                            <div>
+                                                <ReCaptcha
+                                                    style={{
+                                                        display: "inline-block"
+                                                    }}
+                                                    sitekey={reCaptchaKey}
+                                                    onChange={value =>
+                                                        setCaptcha(value)
+                                                    }
+                                                    id="captcha"
+                                                    name="captcha"
+                                                />
+                                            </div>
+                                        </FormControl>{" "}
+                                    </div>
+                                )}
+
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={loading}
+                                    className={classes.submit}
+                                >
+                                    登录
+                                </Button>
+                            </form>
                         )}
+                        {useAuthn && (
+                            <form className={classes.form}>
+                                <FormControl margin="normal" required fullWidth>
+                                    <InputLabel htmlFor="email">
+                                        电子邮箱
+                                    </InputLabel>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        onChange={e => setEmail(e.target.value)}
+                                        autoComplete
+                                        value={email}
+                                        autoFocus
+                                    />
+                                </FormControl>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={loading}
+                                    onClick={authnLogin}
+                                    className={classes.submit}
+                                >
+                                    下一步
+                                </Button>
+                            </form>
+                        )}
+                        <Divider />
+                        <div className={classes.link}>
+                            <div>
+                                <Link href={"/forget"}>忘记密码</Link>
+                            </div>
+                            <div>
+                                <Link href={"/signup"}>注册账号</Link>
+                            </div>
+                        </div>
 
+                        <ICPFooter />
+                    </Paper>
+
+                    {authn && (
+                        <div className={classes.authnLink}>
                             <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
                                 color="primary"
-                                disabled={loading}
-                                className={classes.submit}
+                                onClick={() => setUseAuthn(!useAuthn)}
                             >
-                                登录
+                                {!useAuthn && (
+                                    <>
+                                        <Fingerprint
+                                            style={{
+                                                marginRight: 8
+                                            }}
+                                        />
+                                        使用外部验证器登录
+                                    </>
+                                )}
+                                {useAuthn && (
+                                    <>
+                                        <VpnKey
+                                            style={{
+                                                marginRight: 8
+                                            }}
+                                        />
+                                        使用密码登录
+                                    </>
+                                )}
                             </Button>
-
-                    </form>
-                )}
-                {useAuthn && (
-                    <form className={classes.form}>
+                        </div>
+                    )}
+                </>
+            )}
+            {twoFA && (
+                <Paper className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <VpnIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        二步验证
+                    </Typography>
+                    <form className={classes.form} onSubmit={twoFALogin}>
                         <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">电子邮箱</InputLabel>
+                            <InputLabel htmlFor="code">
+                                请输入六位二步验证代码
+                            </InputLabel>
                             <Input
-                                id="email"
-                                type="email"
-                                name="email"
-                                onChange={e => setEmail(e.target.value)}
+                                id="code"
+                                type="number"
+                                name="code"
+                                onChange={event =>
+                                    setFACode(event.target.value)
+                                }
                                 autoComplete
-                                value={email}
+                                value={faCode}
                                 autoFocus
                             />
                         </FormControl>
@@ -394,84 +495,14 @@ function LoginForm() {
                             variant="contained"
                             color="primary"
                             disabled={loading}
-                            onClick={authnLogin}
                             className={classes.submit}
                         >
-                            下一步
-                        </Button>
-                    </form>
-                )}
-                <Divider />
-                <div className={classes.link}>
-                    <div>
-                        <Link href={"/#/forget"}>忘记密码</Link>
-                    </div>
-                    <div>
-                        <Link href={"/#/signup"}>注册账号</Link>
-                    </div>
-                </div>
-            </Paper>
-
-                {authn &&<div className={classes.authnLink}>
-                    <Button color="primary" onClick={() => setUseAuthn(!useAuthn)}>
-                        {!useAuthn && (
-                            <>
-                                <Fingerprint
-                                    style={{
-                                        marginRight: 8
-                                    }}
-                                />
-                                使用外部验证器登录
-                            </>
-                        )}
-                        {useAuthn && (
-                            <>
-                                <VpnKey
-                                    style={{
-                                        marginRight: 8
-                                    }}
-                                />
-                                使用密码登录
-                            </>
-                        )}
-                    </Button>
-                </div>}
-            </>
-            }
-            {twoFA &&
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <VpnIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    二步验证
-                </Typography>
-                <form className={classes.form} onSubmit={twoFALogin}>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="code">请输入六位二步验证代码</InputLabel>
-                        <Input
-                            id="code"
-                            type="number"
-                            name="code"
-                            onChange={(event)=>setFACode(event.target.value )}
-                            autoComplete
-                            value={faCode}
-                            autoFocus />
-                    </FormControl>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        disabled={loading}
-                        className={classes.submit}
-                    >
-                        继续登录
-                    </Button>  </form>                          <Divider/>
-
-            </Paper>
-            }
-
+                            继续登录
+                        </Button>{" "}
+                    </form>{" "}
+                    <Divider />
+                </Paper>
+            )}
         </div>
     );
 }

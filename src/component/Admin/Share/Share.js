@@ -110,7 +110,7 @@ export default function Share() {
     };
 
     useEffect(() => {
-      loadList();
+        loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
@@ -310,7 +310,10 @@ export default function Share() {
                                 <TableCell style={{ minWidth: 70 }}>
                                     类型
                                 </TableCell>
-                                <TableCell style={{ minWidth: 100 }} align={"right"}>
+                                <TableCell
+                                    style={{ minWidth: 100 }}
+                                    align={"right"}
+                                >
                                     <TableSortLabel
                                         active={orderBy[0] === "views"}
                                         direction={orderBy[1]}
@@ -337,7 +340,10 @@ export default function Share() {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell style={{ minWidth: 100 }} align={"right"}>
+                                <TableCell
+                                    style={{ minWidth: 100 }}
+                                    align={"right"}
+                                >
                                     <TableSortLabel
                                         active={orderBy[0] === "downloads"}
                                         direction={orderBy[1]}
@@ -395,12 +401,19 @@ export default function Share() {
                                         />
                                     </TableCell>
                                     <TableCell>{row.ID}</TableCell>
-                                    <TableCell style={{wordBreak: "break-all"}}>
+                                    <TableCell
+                                        style={{ wordBreak: "break-all" }}
+                                    >
                                         <Link
                                             target={"_blank"}
                                             color="inherit"
                                             href={
-                                                "/#/s/"+ids[row.ID]+(row.Password === "" ? "" : ("?password="+row.Password))
+                                                "/s/" +
+                                                ids[row.ID] +
+                                                (row.Password === ""
+                                                    ? ""
+                                                    : "?password=" +
+                                                      row.Password)
                                             }
                                         >
                                             {row.SourceName}
@@ -416,14 +429,14 @@ export default function Share() {
                                         {row.Downloads}
                                     </TableCell>
                                     <TableCell>
-                                        {row.RemainDownloads > -1 && (row.RemainDownloads+" 次下载后")}
+                                        {row.RemainDownloads > -1 &&
+                                            row.RemainDownloads + " 次下载后"}
                                         {row.RemainDownloads === -1 && "无"}
                                     </TableCell>
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/#/admin/user/edit/" +
-                                                row.UserID
+                                                "/admin/user/edit/" + row.UserID
                                             }
                                         >
                                             {users[row.UserID]

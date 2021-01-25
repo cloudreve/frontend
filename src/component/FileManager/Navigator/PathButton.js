@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -13,14 +13,14 @@ const useStyles = makeStyles(theme => ({
     active: {
         border: "2px solid " + theme.palette.primary.light
     },
-    button:{
-        textTransform: "none",
+    button: {
+        textTransform: "none"
     }
 }));
 
 export default function PathButton(props) {
-    const inputRef = React.useRef(null)
-    
+    const inputRef = React.useRef(null);
+
     const [{ canDrop, isOver }, drop] = useDrop({
         accept: "object",
         drop: () => {
@@ -45,35 +45,36 @@ export default function PathButton(props) {
     const isActive = canDrop && isOver;
 
     useEffect(() => {
-        if(props.more && isActive){
+        if (props.more && isActive) {
             inputRef.current.click();
         }
         // eslint-disable-next-line
-    }, [isActive])
+    }, [isActive]);
 
     const classes = useStyles();
     return (
-        
-        <span onClick={props.onClick}  ref={inputRef} >
-        <Button
-            ref={drop}
-            className={classNames({
-                [classes.active]: isActive
-            },classes.button)}
-            component="span"
-            title={props.title}
-        >
-            {props.more && <MoreIcon />}
-            {!props.more && (
-                <>
-                    {props.folder}
-                    {props.last && (
-                        <ExpandMore className={classes.expandMore} />
-                    )}
-                </>
-            )}
-        </Button>
+        <span onClick={props.onClick} ref={inputRef}>
+            <Button
+                ref={drop}
+                className={classNames(
+                    {
+                        [classes.active]: isActive
+                    },
+                    classes.button
+                )}
+                component="span"
+                title={props.title}
+            >
+                {props.more && <MoreIcon />}
+                {!props.more && (
+                    <>
+                        {props.folder}
+                        {props.last && (
+                            <ExpandMore className={classes.expandMore} />
+                        )}
+                    </>
+                )}
+            </Button>
         </span>
-        
     );
 }

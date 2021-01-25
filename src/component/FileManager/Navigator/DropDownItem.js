@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import FolderIcon from "@material-ui/icons/Folder";
-import {
-    MenuItem,
-    ListItemIcon,
-    ListItemText
-} from "@material-ui/core";
+import { MenuItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { useDrop } from "react-dnd";
 import classNames from "classnames";
 
@@ -36,9 +32,9 @@ export default function DropDownItem(props) {
     const isActive = canDrop && isOver;
 
     useEffect(() => {
-        props.setActiveStatus(props.id,isActive);
+        props.setActiveStatus(props.id, isActive);
         // eslint-disable-next-line
-    }, [isActive])
+    }, [isActive]);
 
     const classes = useStyles();
     return (

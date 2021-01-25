@@ -69,8 +69,12 @@ function Reset() {
     const [captchaData, setCaptchaData] = useState(null);
     const [loading, setLoading] = useState(false);
     const forgetCaptcha = useSelector(state => state.siteConfig.forgetCaptcha);
-    const useReCaptcha = useSelector(state => state.siteConfig.captcha_IsUseReCaptcha);
-    const reCaptchaKey = useSelector(state => state.siteConfig.captcha_ReCaptchaKey);
+    const useReCaptcha = useSelector(
+        state => state.siteConfig.captcha_IsUseReCaptcha
+    );
+    const reCaptchaKey = useSelector(
+        state => state.siteConfig.captcha_ReCaptchaKey
+    );
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -115,12 +119,17 @@ function Reset() {
         })
             .then(() => {
                 setLoading(false);
-                ToggleSnackbar("top", "right", "密码重置邮件已发送，请注意查收", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "密码重置邮件已发送，请注意查收",
+                    "success"
+                );
             })
             .catch(error => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                if (!useReCaptcha){
+                if (!useReCaptcha) {
                     refreshCaptcha();
                 }
             });
@@ -187,10 +196,10 @@ function Reset() {
                                 <ReCaptcha
                                     style={{ display: "inline-block" }}
                                     sitekey={reCaptchaKey}
-                                    onChange={value=>
+                                    onChange={value =>
                                         setInput({
                                             ...input,
-                                            captcha:value
+                                            captcha: value
                                         })
                                     }
                                     id="captcha"
@@ -213,10 +222,10 @@ function Reset() {
                 <Divider />
                 <div className={classes.link}>
                     <div>
-                        <Link href={"/#/login"}>返回登录</Link>
+                        <Link href={"/login"}>返回登录</Link>
                     </div>
                     <div>
-                        <Link href={"/#/signup"}>注册账号</Link>
+                        <Link href={"/signup"}>注册账号</Link>
                     </div>
                 </div>
             </Paper>

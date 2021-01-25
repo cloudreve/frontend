@@ -17,11 +17,31 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { Description, Favorite, FileCopy, Forum, GitHub, Home, Launch, Lock, People, Public, Telegram } from "@material-ui/icons";
+import {
+    Description,
+    Favorite,
+    FileCopy,
+    Forum,
+    GitHub,
+    Home,
+    Launch,
+    Lock,
+    People,
+    Public,
+    Telegram
+} from "@material-ui/icons";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import {
+    CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    Tooltip,
+    XAxis,
+    YAxis
+} from "recharts";
 import ResponsiveContainer from "recharts/lib/component/ResponsiveContainer";
 import TimeAgo from "timeago-react";
 import { toggleSnackbar } from "../../actions";
@@ -98,13 +118,15 @@ export default function Index() {
         [dispatch]
     );
 
-    const ResetSiteURL = ()=>{
+    const ResetSiteURL = () => {
         setOpen(false);
-        API.patch("/admin/setting",{
-            options:[{
-                key:"siteURL",
-                value:window.location.origin,
-            }],
+        API.patch("/admin/setting", {
+            options: [
+                {
+                    key: "siteURL",
+                    value: window.location.origin
+                }
+            ]
         })
             .then(() => {
                 setSiteURL(window.location.origin);
@@ -113,7 +135,7 @@ export default function Index() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }
+    };
 
     useEffect(() => {
         API.get("/admin/summary")
@@ -136,7 +158,10 @@ export default function Index() {
                 });
                 setVersion(response.data.version);
                 setSiteURL(response.data.siteURL);
-                if (response.data.siteURL === "" || response.data.siteURL !== window.location.origin){
+                if (
+                    response.data.siteURL === "" ||
+                    response.data.siteURL !== window.location.origin
+                ) {
                     setOpen(true);
                 }
             })
@@ -165,27 +190,36 @@ export default function Index() {
         <Grid container spacing={3}>
             <Dialog
                 open={open}
-                onClose={()=>setOpen(false)}
+                onClose={() => setOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"确定站点URL设置"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">
+                    {"确定站点URL设置"}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <Typography>
-                            {siteURL === "" && "您尚未设定站点URL，是否要将其设定为当前的 "+ window.location.origin + " ?"}
-                            {siteURL !== "" && "您设置的站点URL与当前实际不一致，是否要将其设定为当前的 "+ window.location.origin + " ?"}
+                            {siteURL === "" &&
+                                "您尚未设定站点URL，是否要将其设定为当前的 " +
+                                    window.location.origin +
+                                    " ?"}
+                            {siteURL !== "" &&
+                                "您设置的站点URL与当前实际不一致，是否要将其设定为当前的 " +
+                                    window.location.origin +
+                                    " ?"}
                         </Typography>
                         <Typography>
-                            此设置非常重要，请确保其与您站点的实际地址一致。你可以在 参数设置 - 站点信息 中更改此设置。
+                            此设置非常重要，请确保其与您站点的实际地址一致。你可以在
+                            参数设置 - 站点信息 中更改此设置。
                         </Typography>
-                        </DialogContentText>
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={()=>setOpen(false)} color="default">
+                    <Button onClick={() => setOpen(false)} color="default">
                         忽略
                     </Button>
-                    <Button onClick={()=>ResetSiteURL()} color="primary">
+                    <Button onClick={() => ResetSiteURL()} color="primary">
                         更改
                     </Button>
                 </DialogActions>
@@ -294,7 +328,10 @@ export default function Index() {
                                 Cloudreve
                             </Typography>
                             <Typography className={classes.version}>
-                                {version.backend} {version.is_pro === "true" && <Chip size="small" label="Pro" />}
+                                {version.backend}{" "}
+                                {version.is_pro === "true" && (
+                                    <Chip size="small" label="Pro" />
+                                )}
                             </Typography>
                         </div>
                     </div>
@@ -334,9 +371,7 @@ export default function Index() {
                             <ListItem
                                 button
                                 onClick={() =>
-                                    window.open(
-                                        "https://docs.cloudreve.org/"
-                                    )
+                                    window.open("https://docs.cloudreve.org/")
                                 }
                             >
                                 <ListItemIcon>
@@ -385,7 +420,7 @@ export default function Index() {
                                     )
                                 }
                             >
-                                <ListItemIcon style={{color:"#ff789d"}}>
+                                <ListItemIcon style={{ color: "#ff789d" }}>
                                     <Favorite />
                                 </ListItemIcon>
                                 <ListItemText primary="捐助开发者" />
@@ -400,58 +435,72 @@ export default function Index() {
             <Grid item xs={12} md={8} lg={9}>
                 <Paper className={classes.paper}>
                     <List>
-                        {news && news.map((v) => (
-                            <>
-                                <ListItem button alignItems="flex-start"
-                                          onClick={()=>window.open("https://forum.cloudreve.org/d/" + v.id)}
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar
-                                            alt="Travis Howard"
-                                            src={
-                                                newsUsers[
-                                                    v.relationships.startUser
-                                                        .data.id
-                                                ] &&
-                                                newsUsers[
-                                                    v.relationships.startUser
-                                                        .data.id
-                                                ].avatarUrl
-                                            }
-                                        />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={v.attributes.title}
-                                        secondary={
-                                            <React.Fragment>
-                                                <Typography
-                                                    component="span"
-                                                    variant="body2"
-                                                    className={classes.inline}
-                                                    color="textPrimary"
-                                                >
-                                                    {newsUsers[
+                        {news &&
+                            news.map(v => (
+                                <>
+                                    <ListItem
+                                        button
+                                        alignItems="flex-start"
+                                        onClick={() =>
+                                            window.open(
+                                                "https://forum.cloudreve.org/d/" +
+                                                    v.id
+                                            )
+                                        }
+                                    >
+                                        <ListItemAvatar>
+                                            <Avatar
+                                                alt="Travis Howard"
+                                                src={
+                                                    newsUsers[
                                                         v.relationships
                                                             .startUser.data.id
                                                     ] &&
-                                                        newsUsers[
+                                                    newsUsers[
+                                                        v.relationships
+                                                            .startUser.data.id
+                                                    ].avatarUrl
+                                                }
+                                            />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={v.attributes.title}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography
+                                                        component="span"
+                                                        variant="body2"
+                                                        className={
+                                                            classes.inline
+                                                        }
+                                                        color="textPrimary"
+                                                    >
+                                                        {newsUsers[
                                                             v.relationships
                                                                 .startUser.data
                                                                 .id
-                                                        ].username}{" "}
-                                                </Typography>
-                                                发表于{" "}
-                                                <TimeAgo
-                                                    datetime={v.attributes.startTime}
-                                                    locale='zh_CN'
-                                                />
-                                            </React.Fragment>
-                                        }
-                                    />
-                                </ListItem>
-                                <Divider />
-                            </>
-                        ))}
+                                                        ] &&
+                                                            newsUsers[
+                                                                v.relationships
+                                                                    .startUser
+                                                                    .data.id
+                                                            ].username}{" "}
+                                                    </Typography>
+                                                    发表于{" "}
+                                                    <TimeAgo
+                                                        datetime={
+                                                            v.attributes
+                                                                .startTime
+                                                        }
+                                                        locale="zh_CN"
+                                                    />
+                                                </React.Fragment>
+                                            }
+                                        />
+                                    </ListItem>
+                                    <Divider />
+                                </>
+                            ))}
                     </List>
                 </Paper>
             </Grid>

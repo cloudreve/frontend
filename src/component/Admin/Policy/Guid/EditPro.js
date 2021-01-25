@@ -13,53 +13,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from '../../../../actions';
+import { toggleSnackbar } from "../../../../actions";
 import API from "../../../../middleware/Api";
-
-
-// const useStyles = makeStyles(theme => ({
-//     stepContent: {
-//         padding: "16px 32px 16px 32px"
-//     },
-//     form: {
-//         maxWidth: 400,
-//         marginTop: 20
-//     },
-//     formContainer: {
-//         [theme.breakpoints.up("md")]: {
-//             padding: "0px 24px 0 24px"
-//         }
-//     },
-//     subStepContainer: {
-//         display: "flex",
-//         marginBottom: 20,
-//         padding: 10,
-//         transition: theme.transitions.create("background-color", {
-//             easing: theme.transitions.easing.sharp,
-//             duration: theme.transitions.duration.leavingScreen
-//         }),
-//         "&:focus-within": {
-//             backgroundColor: theme.palette.background.default
-//         }
-//     },
-//     stepNumber: {
-//         width: 20,
-//         height: 20,
-//         backgroundColor: lighten(theme.palette.secondary.light, 0.2),
-//         color: theme.palette.secondary.contrastText,
-//         textAlign: "center",
-//         borderRadius: " 50%"
-//     },
-//     stepNumberContainer: {
-//         marginRight: 10
-//     },
-//     stepFooter: {
-//         marginTop: 32
-//     },
-//     button: {
-//         marginRight: theme.spacing(1)
-//     }
-// }));
 
 export default function EditPro(props) {
     const [, setLoading] = useState(false);
@@ -198,7 +153,9 @@ export default function EditPro(props) {
                                     <FormControl>
                                         <Input
                                             value={policy.BucketName}
-                                            onChange={handleChange("BucketName")}
+                                            onChange={handleChange(
+                                                "BucketName"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
@@ -247,7 +204,9 @@ export default function EditPro(props) {
                                         />
                                     </FormControl>
                                 </TableCell>
-                                <TableCell>预览/获取文件外链时生成URL的前缀</TableCell>
+                                <TableCell>
+                                    预览/获取文件外链时生成URL的前缀
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
@@ -290,15 +249,17 @@ export default function EditPro(props) {
                                         <Input
                                             type={"number"}
                                             inputProps={{
-                                                min:0,
-                                                step:1,
+                                                min: 0,
+                                                step: 1
                                             }}
                                             value={policy.MaxSize}
                                             onChange={handleChange("MaxSize")}
                                         />
                                     </FormControl>
                                 </TableCell>
-                                <TableCell>最大可上传的文件尺寸，填写为0表示不限制</TableCell>
+                                <TableCell>
+                                    最大可上传的文件尺寸，填写为0表示不限制
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
@@ -309,7 +270,9 @@ export default function EditPro(props) {
                                         <RadioGroup
                                             required
                                             value={policy.AutoRename}
-                                            onChange={handleChange("AutoRename")}
+                                            onChange={handleChange(
+                                                "AutoRename"
+                                            )}
                                             row
                                         >
                                             <FormControlLabel
@@ -329,7 +292,9 @@ export default function EditPro(props) {
                                         </RadioGroup>
                                     </FormControl>
                                 </TableCell>
-                                <TableCell>是否根据规则对上传物理文件重命名</TableCell>
+                                <TableCell>
+                                    是否根据规则对上传物理文件重命名
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
@@ -340,7 +305,9 @@ export default function EditPro(props) {
                                         <Input
                                             multiline
                                             value={policy.DirNameRule}
-                                            onChange={handleChange("DirNameRule")}
+                                            onChange={handleChange(
+                                                "DirNameRule"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
@@ -355,7 +322,9 @@ export default function EditPro(props) {
                                         <Input
                                             multiline
                                             value={policy.FileNameRule}
-                                            onChange={handleChange("FileNameRule")}
+                                            onChange={handleChange(
+                                                "FileNameRule"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
@@ -370,7 +339,9 @@ export default function EditPro(props) {
                                         <RadioGroup
                                             required
                                             value={policy.IsOriginLinkEnable}
-                                            onChange={handleChange("IsOriginLinkEnable")}
+                                            onChange={handleChange(
+                                                "IsOriginLinkEnable"
+                                            )}
                                             row
                                         >
                                             <FormControlLabel
@@ -390,7 +361,9 @@ export default function EditPro(props) {
                                         </RadioGroup>
                                     </FormControl>
                                 </TableCell>
-                                <TableCell>是否允许获取外链。注意，某些存储策略类型不支持，即使在此开启，获取的外链也无法使用。</TableCell>
+                                <TableCell>
+                                    是否允许获取外链。注意，某些存储策略类型不支持，即使在此开启，获取的外链也无法使用。
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
@@ -400,8 +373,12 @@ export default function EditPro(props) {
                                     <FormControl>
                                         <Input
                                             multiline
-                                            value={policy.OptionsSerialized.token}
-                                            onChange={handleOptionChange("token")}
+                                            value={
+                                                policy.OptionsSerialized.token
+                                            }
+                                            onChange={handleOptionChange(
+                                                "token"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
@@ -415,8 +392,13 @@ export default function EditPro(props) {
                                     <FormControl>
                                         <Input
                                             multiline
-                                            value={policy.OptionsSerialized.file_type}
-                                            onChange={handleOptionChange("file_type")}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .file_type
+                                            }
+                                            onChange={handleOptionChange(
+                                                "file_type"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
@@ -430,8 +412,13 @@ export default function EditPro(props) {
                                     <FormControl>
                                         <Input
                                             multiline
-                                            value={policy.OptionsSerialized.mimetype}
-                                            onChange={handleOptionChange("mimetype")}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .mimetype
+                                            }
+                                            onChange={handleOptionChange(
+                                                "mimetype"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
@@ -445,12 +432,39 @@ export default function EditPro(props) {
                                     <FormControl>
                                         <Input
                                             multiline
-                                            value={policy.OptionsSerialized.od_redirect}
-                                            onChange={handleOptionChange("od_redirect")}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .od_redirect
+                                            }
+                                            onChange={handleOptionChange(
+                                                "od_redirect"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>一般添加后无需修改</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    OneDrive 反代服务器地址
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            multiline
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .od_proxy
+                                            }
+                                            onChange={handleOptionChange(
+                                                "od_proxy"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    仅对 OneDrive 存储策略有效
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
@@ -460,12 +474,38 @@ export default function EditPro(props) {
                                     <FormControl>
                                         <Input
                                             multiline
-                                            value={policy.OptionsSerialized.region}
-                                            onChange={handleOptionChange("region")}
+                                            value={
+                                                policy.OptionsSerialized.region
+                                            }
+                                            onChange={handleOptionChange(
+                                                "region"
+                                            )}
                                         />
                                     </FormControl>
                                 </TableCell>
-                                <TableCell>仅对Amazon S3有效</TableCell>
+                                <TableCell>
+                                    仅对 Amazon S3 存储策略有效
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    内网 EndPoint
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            multiline
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .server_side_endpoint
+                                            }
+                                            onChange={handleOptionChange(
+                                                "server_side_endpoint"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>仅对 OSS 存储策略有效</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -473,12 +513,11 @@ export default function EditPro(props) {
                         type={"submit"}
                         color={"primary"}
                         variant={"contained"}
-                        style={{margin:8,}}
+                        style={{ margin: 8 }}
                     >
                         保存更改
                     </Button>
                 </form>
-
             </TableContainer>
         </div>
     );

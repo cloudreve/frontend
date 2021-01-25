@@ -63,11 +63,11 @@ export default function AddGroup({ open, onClose, onSubmit }) {
 
     const submit = e => {
         e.preventDefault();
-        const groupCopy = {...group};
+        const groupCopy = { ...group };
         groupCopy.time = parseInt(groupCopy.time) * 86400;
         groupCopy.price = parseInt(groupCopy.price) * 100;
         groupCopy.score = parseInt(groupCopy.score);
-        groupCopy.id = (new Date()).valueOf();
+        groupCopy.id = new Date().valueOf();
         groupCopy.des = groupCopy.des.split("\n");
         onSubmit(groupCopy);
     };
@@ -218,7 +218,9 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     control={
                                         <Switch
                                             checked={group.highlight}
-                                            onChange={handleCheckChange("highlight")}
+                                            onChange={handleCheckChange(
+                                                "highlight"
+                                            )}
                                         />
                                     }
                                     label="突出展示"

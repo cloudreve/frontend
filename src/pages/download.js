@@ -1,66 +1,66 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import DownloadApp from "./download.app"
-import cloureveApp from '../reducers'
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import DownloadApp from "./download.app";
+import cloureveApp from "../reducers";
 
 const defaultStatus = {
-    navigator:{
-        path:window.path,
-        refresh:true,
+    navigator: {
+        path: window.path,
+        refresh: true
     },
-    viewUpdate:{
-        open:window.isHomePage,
+    viewUpdate: {
+        open: window.isHomePage,
         explorerViewMethod: "icon",
-        sortMethod:"timePos",
-        contextType:"none",  
-        menuOpen:false,
-        navigatorLoading:true,
-        navigatorError:false,
-        navigatorErrorMsg:null,
-        modalsLoading:false,
-        storageRefresh:false,
-        modals:{
-            createNewFolder:false,
-            rename:false,
-            move:false,
-            remove:false,
-            share:false,
-            music:false,
-            remoteDownload:false,
-            torrentDownload:false,
+        sortMethod: "timePos",
+        contextType: "none",
+        menuOpen: false,
+        navigatorLoading: true,
+        navigatorError: false,
+        navigatorErrorMsg: null,
+        modalsLoading: false,
+        storageRefresh: false,
+        modals: {
+            createNewFolder: false,
+            rename: false,
+            move: false,
+            remove: false,
+            share: false,
+            music: false,
+            remoteDownload: false,
+            torrentDownload: false
         },
-        snackbar:{
-            toggle:false,
-            vertical:"top",
-            horizontal:"center",
-            msg:"",
-            color:"",
+        snackbar: {
+            toggle: false,
+            vertical: "top",
+            horizontal: "center",
+            msg: "",
+            color: ""
         }
     },
-    explorer:{
-        fileList:[],
-        dirList:[
-        ],
-        selected:[],
-        selectProps:{
-            isMultiple:false,
-            withFolder:false,
-            withFile:false,
+    explorer: {
+        fileList: [],
+        dirList: [],
+        selected: [],
+        selectProps: {
+            isMultiple: false,
+            withFolder: false,
+            withFile: false
         },
-        imgPreview:{
-            first:null,
-            other:[],
+        imgPreview: {
+            first: null,
+            other: []
         },
-        keywords:null,
+        keywords: null
     }
 };
 
-const store = createStore(cloureveApp,defaultStatus)
+const store = createStore(cloureveApp, defaultStatus);
 ReactDOM.render(
     <Provider store={store}>
-        <DownloadApp/>
-    </Provider>
-, document.getElementById('root'));
+        <DownloadApp />
+    </Provider>,
+    document.getElementById("root")
+);

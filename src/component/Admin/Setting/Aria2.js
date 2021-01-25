@@ -35,12 +35,12 @@ export default function Aria2() {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
-        aria2_rpcurl:"",
-        aria2_token:"",
-        aria2_temp_path:"",
-        aria2_options:"",
-        aria2_interval:"0",
-        aria2_call_timeout:"0",
+        aria2_rpcurl: "",
+        aria2_token: "",
+        aria2_temp_path: "",
+        aria2_options: "",
+        aria2_interval: "0",
+        aria2_call_timeout: "0"
     });
 
     const handleChange = name => event => {
@@ -81,34 +81,40 @@ export default function Aria2() {
             .then(() => {});
     };
 
-    const test = () =>{
+    const test = () => {
         setLoading(true);
-        API.post("/admin/aria2/test",{
-            server:options.aria2_rpcurl,
-            token:options.aria2_token,
+        API.post("/admin/aria2/test", {
+            server: options.aria2_rpcurl,
+            token: options.aria2_token
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "连接成功，Aria2 版本为："+response.data, "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "连接成功，Aria2 版本为：" + response.data,
+                    "success"
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
-            setLoading(false);
-        });
-    }
+            })
+            .then(() => {
+                setLoading(false);
+            });
+    };
 
     const submit = e => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k=>{
+        Object.keys(options).forEach(k => {
             option.push({
-                key:k,
-                value:options[k],
+                key: k,
+                value: options[k]
             });
-        })
-        API.patch("/admin/setting",{
-            options:option,
+        });
+        API.patch("/admin/setting", {
+            options: option
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
@@ -116,9 +122,10 @@ export default function Aria2() {
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
+            })
+            .then(() => {
                 setLoading(false);
-        });
+            });
     };
 
     return (
@@ -131,17 +138,28 @@ export default function Aria2() {
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
-                            <Alert severity="info" style={{marginTop:8}}>
+                            <Alert severity="info" style={{ marginTop: 8 }}>
                                 <Typography variant="body2">
-                                    Cloudreve 的离线下载功能由 {" "}
+                                    Cloudreve 的离线下载功能由{" "}
                                     <Link
                                         href={"https://aria2.github.io/"}
                                         target={"_blank"}
                                     >
                                         Aria2
                                     </Link>{" "}
-                                    驱动。如需使用，请在同一设备上以和运行 Cloudreve 相同的用户身份启动 Aria2，
-                                    并在 Aria2 的配置文件中开启 RPC 服务。
+                                    驱动。如需使用，请在同一设备上以和运行
+                                    Cloudreve 相同的用户身份启动 Aria2， 并在
+                                    Aria2 的配置文件中开启 RPC
+                                    服务。更多信息及指引请参考文档的{" "}
+                                    <Link
+                                        href={
+                                            "https://docs.cloudreve.org/use/aria2"
+                                        }
+                                        target={"_blank"}
+                                    >
+                                        离线下载
+                                    </Link>{" "}
+                                    章节。
                                 </Typography>
                             </Alert>
                         </div>
@@ -157,7 +175,9 @@ export default function Aria2() {
                                     onChange={handleChange("aria2_rpcurl")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    包含端口的完整 RPC 服务器地址，例如：http://127.0.0.1:6800/，留空表示不启用 Aria2 服务
+                                    包含端口的完整 RPC
+                                    服务器地址，例如：http://127.0.0.1:6800/，留空表示不启用
+                                    Aria2 服务
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -172,7 +192,8 @@ export default function Aria2() {
                                     onChange={handleChange("aria2_token")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    RPC 授权令牌，与 Aria2 配置文件中保持一致，未设置请留空。
+                                    RPC 授权令牌，与 Aria2
+                                    配置文件中保持一致，未设置请留空。
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -187,7 +208,9 @@ export default function Aria2() {
                                     onChange={handleChange("aria2_temp_path")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    离线下载临时下载目录的<strong>绝对路径</strong>，Cloudreve 进程需要此目录的读、写、执行权限。
+                                    离线下载临时下载目录的
+                                    <strong>绝对路径</strong>，Cloudreve
+                                    进程需要此目录的读、写、执行权限。
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -200,8 +223,8 @@ export default function Aria2() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        step:1,
-                                        min:1,
+                                        step: 1,
+                                        min: 1
                                     }}
                                     required
                                     value={options.aria2_interval}
@@ -221,12 +244,14 @@ export default function Aria2() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        step:1,
-                                        min:1,
+                                        step: 1,
+                                        min: 1
                                     }}
                                     required
                                     value={options.aria2_call_timeout}
-                                    onChange={handleChange("aria2_call_timeout")}
+                                    onChange={handleChange(
+                                        "aria2_call_timeout"
+                                    )}
                                 />
                                 <FormHelperText id="component-helper-text">
                                     调用 RPC 服务时最长等待时间
@@ -246,11 +271,12 @@ export default function Aria2() {
                                     onChange={handleChange("aria2_options")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    创建下载任务时携带的额外设置参数，以 JSON 编码后的格式书写，您可也可以将这些设置写在 Aria2 配置文件里，可用参数请查阅官方文档
+                                    创建下载任务时携带的额外设置参数，以 JSON
+                                    编码后的格式书写，您可也可以将这些设置写在
+                                    Aria2 配置文件里，可用参数请查阅官方文档
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
 
@@ -264,9 +290,9 @@ export default function Aria2() {
                         保存
                     </Button>
                     <Button
-                        style={{marginLeft:8}}
+                        style={{ marginLeft: 8 }}
                         disabled={loading}
-                        onClick={()=>test()}
+                        onClick={() => test()}
                         variant={"outlined"}
                         color={"secondary"}
                     >

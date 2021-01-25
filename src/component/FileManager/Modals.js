@@ -20,7 +20,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogContentText,
-    CircularProgress,
+    CircularProgress
 } from "@material-ui/core";
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
@@ -100,7 +100,7 @@ class ModalsCompoment extends Component {
         downloadURL: "",
         remoteDownloadPathSelect: false,
         source: "",
-        purchaseCallback:null,
+        purchaseCallback: null
     };
 
     handleInputChange = e => {
@@ -121,17 +121,25 @@ class ModalsCompoment extends Component {
             // 打包下载
             if (nextProps.loading === true) {
                 if (nextProps.loadingText === "打包中...") {
-                    if (pathHelper.isSharePage(this.props.location.pathname) && this.props.share && this.props.share.score > 0){
+                    if (
+                        pathHelper.isSharePage(this.props.location.pathname) &&
+                        this.props.share &&
+                        this.props.share.score > 0
+                    ) {
                         this.scoreHandler(this.archiveDownload);
-                        return
+                        return;
                     }
                     this.archiveDownload();
                 } else if (nextProps.loadingText === "获取下载地址...") {
-                    if (pathHelper.isSharePage(this.props.location.pathname) && this.props.share && this.props.share.score > 0){
+                    if (
+                        pathHelper.isSharePage(this.props.location.pathname) &&
+                        this.props.share &&
+                        this.props.share.score > 0
+                    ) {
                         this.scoreHandler(this.Download);
-                        return
+                        return;
                     }
-                        this.Download();
+                    this.Download();
                 }
             }
             return;
@@ -165,9 +173,9 @@ class ModalsCompoment extends Component {
         }
     };
 
-    scoreHandler = callback =>{
-            callback();
-    }
+    scoreHandler = callback => {
+        callback();
+    };
 
     Download = () => {
         let reqURL = "";
@@ -176,8 +184,8 @@ class ModalsCompoment extends Component {
                 this.props.selected[0].path === "/"
                     ? this.props.selected[0].path + this.props.selected[0].name
                     : this.props.selected[0].path +
-                    "/" +
-                    this.props.selected[0].name;
+                      "/" +
+                      this.props.selected[0].name;
             reqURL =
                 "/share/download/" +
                 this.props.selected[0].key +
@@ -213,7 +221,7 @@ class ModalsCompoment extends Component {
             } else {
                 items.push(value.id);
             }
-            return null
+            return null;
         });
 
         let reqURL = "/file/archive";
@@ -221,13 +229,9 @@ class ModalsCompoment extends Component {
             items: items,
             dirs: dirs
         };
-        if (pathHelper.isSharePage(
-            this.props.location.pathname
-        )) {
-            reqURL =
-                "/share/archive/" +
-                window.shareInfo.key;
-            postBody["path"] = this.props.selected[0].path
+        if (pathHelper.isSharePage(this.props.location.pathname)) {
+            reqURL = "/share/archive/" + window.shareInfo.key;
+            postBody["path"] = this.props.selected[0].path;
         }
 
         API.post(reqURL, postBody)
@@ -279,7 +283,7 @@ class ModalsCompoment extends Component {
             .then(response => {
                 if (response.rawData.code === 0) {
                     this.onClose();
-                    setTimeout(this.props.refreshFileList,500);
+                    setTimeout(this.props.refreshFileList, 500);
                 } else {
                     this.props.toggleSnackbar(
                         "top",
@@ -401,10 +405,10 @@ class ModalsCompoment extends Component {
 
         // 检查重名
         if (
-            this.props.dirList.findIndex((value) => {
+            this.props.dirList.findIndex(value => {
                 return value.name === newName;
             }) !== -1 ||
-            this.props.fileList.findIndex((value) => {
+            this.props.fileList.findIndex(value => {
                 return value.name === newName;
             }) !== -1
         ) {
@@ -442,7 +446,7 @@ class ModalsCompoment extends Component {
         e.preventDefault();
         this.props.setModalsLoading(true);
         if (
-            this.props.dirList.findIndex((value) => {
+            this.props.dirList.findIndex(value => {
                 return value.name === this.state.newFolderName;
             }) !== -1
         ) {
@@ -483,7 +487,7 @@ class ModalsCompoment extends Component {
         e.preventDefault();
         this.props.setModalsLoading(true);
         if (
-            this.props.dirList.findIndex((value) => {
+            this.props.dirList.findIndex(value => {
                 return value.name === this.state.newFileName;
             }) !== -1
         ) {
@@ -523,18 +527,18 @@ class ModalsCompoment extends Component {
     submitTorrentDownload = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        API
-            .post("/aria2/torrent/" + this.props.selected[0].id, {
-                dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
-            })
+        API.post("/aria2/torrent/" + this.props.selected[0].id, {
+            dst:
+                this.state.selectedPath === "//" ? "/" : this.state.selectedPath
+        })
             .then(() => {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "任务已创建",
-                        "success"
-                    );
-                    this.onClose();
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "任务已创建",
+                    "success"
+                );
+                this.onClose();
                 this.props.setModalsLoading(false);
             })
             .catch(error => {
@@ -551,19 +555,19 @@ class ModalsCompoment extends Component {
     submitDownload = e => {
         e.preventDefault();
         this.props.setModalsLoading(true);
-        API
-            .post("/aria2/url", {
-                url: this.state.downloadURL,
-                dst: this.state.selectedPath === "//" ? "/" : this.state.selectedPath
-            })
+        API.post("/aria2/url", {
+            url: this.state.downloadURL,
+            dst:
+                this.state.selectedPath === "//" ? "/" : this.state.selectedPath
+        })
             .then(() => {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "任务已创建",
-                        "success"
-                    );
-                    this.onClose();
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    "任务已创建",
+                    "success"
+                );
+                this.onClose();
                 this.props.setModalsLoading(false);
             })
             .catch(error => {
@@ -607,7 +611,7 @@ class ModalsCompoment extends Component {
             downloadURL: "",
             shareUrl: "",
             remoteDownloadPathSelect: false,
-            source: "",
+            source: ""
         });
         this.newNameSuffix = "";
         this.props.closeAllModals();
@@ -930,7 +934,7 @@ class ModalsCompoment extends Component {
                                                   : "")
                                             : baseURL +
                                               "/file/preview/" +
-                                                    this.props.selected[0].id
+                                              this.props.selected[0].id
                                     }
                                 />
                             )}

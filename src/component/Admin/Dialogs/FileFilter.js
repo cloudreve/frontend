@@ -13,13 +13,13 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 
-export default function FileFilter({setFilter,setSearch,open, onClose }) {
-    const [input,setInput] = useState({
-        policy_id:"all",
-        user_id:"",
+export default function FileFilter({ setFilter, setSearch, open, onClose }) {
+    const [input, setInput] = useState({
+        policy_id: "all",
+        user_id: ""
     });
-    const [policies,setPolicies] = useState([]);
-    const [keywords,setKeywords] = useState("");
+    const [policies, setPolicies] = useState([]);
+    const [keywords, setKeywords] = useState("");
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -29,10 +29,10 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
     );
 
     const handleChange = name => event => {
-        setInput({...input,[name]:event.target.value})
-    }
+        setInput({ ...input, [name]: event.target.value });
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         API.post("/admin/policy/list", {
             page: 1,
             page_size: 10000,
@@ -45,25 +45,25 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[])
+    }, []);
 
     const submit = () => {
         const res = {};
-        Object.keys(input).forEach(v=>{
-            if(input[v] !== "all" && input[v] !== ""){
+        Object.keys(input).forEach(v => {
+            if (input[v] !== "all" && input[v] !== "") {
                 res[v] = input[v];
             }
-        })
+        });
         setFilter(res);
-        if (keywords !== ""){
+        if (keywords !== "") {
             setSearch({
-                name:keywords,
+                name: keywords
             });
-        }else{
+        } else {
             setSearch({});
         }
         onClose();
-    }
+    };
 
     return (
         <Dialog
@@ -74,12 +74,12 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle id="alert-dialog-title">
-                过滤条件
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">存储策略</InputLabel>
+                    <InputLabel id="demo-simple-select-label">
+                        存储策略
+                    </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -92,21 +92,28 @@ export default function FileFilter({setFilter,setSearch,open, onClose }) {
                                 return null;
                             }
                             return (
-                                <MenuItem
-                                    key={v.ID}
-                                    value={v.ID.toString()}
-                                >
+                                <MenuItem key={v.ID} value={v.ID.toString()}>
                                     {v.Name}
                                 </MenuItem>
                             );
                         })}
                     </Select>
                 </FormControl>
-                <FormControl fullWidth style={{marginTop:16}}>
-                    <TextField value={input.user_id} onChange={handleChange("user_id")} id="standard-basic" label="上传者ID" />
+                <FormControl fullWidth style={{ marginTop: 16 }}>
+                    <TextField
+                        value={input.user_id}
+                        onChange={handleChange("user_id")}
+                        id="standard-basic"
+                        label="上传者ID"
+                    />
                 </FormControl>
-                <FormControl fullWidth style={{marginTop:16}}>
-                    <TextField value={keywords} onChange={e=>setKeywords(e.target.value)} id="standard-basic" label="搜索 文件名" />
+                <FormControl fullWidth style={{ marginTop: 16 }}>
+                    <TextField
+                        value={keywords}
+                        onChange={e => setKeywords(e.target.value)}
+                        id="standard-basic"
+                        label="搜索 文件名"
+                    />
                 </FormControl>
             </DialogContent>
             <DialogActions>

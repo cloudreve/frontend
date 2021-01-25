@@ -1,5 +1,5 @@
 export const sizeToString = bytes => {
-    if (bytes === 0 || bytes==="0") return "0 B";
+    if (bytes === 0 || bytes === "0") return "0 B";
     const k = 1024;
     const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -7,9 +7,7 @@ export const sizeToString = bytes => {
 };
 
 export const fixUrlHash = path => {
-    const relativePath = path.split("#");
-    const url = new URL("http://example.com/" + relativePath[1]);
-    return url.toString();
+    return path;
 };
 
 export const setCookie = (name, value, days) => {
@@ -132,28 +130,30 @@ export function filePath(file) {
         : file.path + "/" + file.name;
 }
 
-export function hex2bin(hex){
-    return (parseInt(hex, 16).toString(2)).padStart(8, '0');
+export function hex2bin(hex) {
+    return parseInt(hex, 16)
+        .toString(2)
+        .padStart(8, "0");
 }
 
-export function pathJoin(parts, sep){
-    const separator = sep || '/';
-    parts = parts.map((part, index)=>{
+export function pathJoin(parts, sep) {
+    const separator = sep || "/";
+    parts = parts.map((part, index) => {
         if (index) {
-            part = part.replace(new RegExp('^' + separator), '');
+            part = part.replace(new RegExp("^" + separator), "");
         }
         if (index !== parts.length - 1) {
-            part = part.replace(new RegExp(separator + '$'), '');
+            part = part.replace(new RegExp(separator + "$"), "");
         }
         return part;
-    })
+    });
     return parts.join(separator);
 }
 
-export function basename(path){
+export function basename(path) {
     const pathList = path.split("/");
-    pathList.pop()
-    return pathList.join("/") === "" ? "/" : pathList.join("/")
+    pathList.pop();
+    return pathList.join("/") === "" ? "/" : pathList.join("/");
 }
 
 export function transformTime(timestamp = +new Date()) {
@@ -165,36 +165,39 @@ export function transformTime(timestamp = +new Date()) {
         const h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
         const m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
         const s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-        return y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s;
+        return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
     } else {
-        return '';
+        return "";
     }
 }
 
 export function randomStr(length) {
-    let result           = '';
-    const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = "";
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        );
     }
     return result;
 }
 
-export function getNumber(base,conditions){
-    conditions.forEach(v=>{
-        if(v){
-            base++
+export function getNumber(base, conditions) {
+    conditions.forEach(v => {
+        if (v) {
+            base++;
         }
-    })
-    return base
+    });
+    return base;
 }
 
 export const isMac = () => {
-  return "MACINTEL" === navigator.platform.toUpperCase()
-}
+    return navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+};
 
 export function vhCheck() {
     const vh = window.innerHeight;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
 }

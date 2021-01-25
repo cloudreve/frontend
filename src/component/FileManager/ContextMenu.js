@@ -1,4 +1,10 @@
-import { Divider, ListItemIcon, MenuItem, Typography, withStyles } from "@material-ui/core";
+import {
+    Divider,
+    ListItemIcon,
+    MenuItem,
+    Typography,
+    withStyles
+} from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
 import { Archive, Unarchive } from "@material-ui/icons";
 import RenameIcon from "@material-ui/icons/BorderColor";
@@ -12,27 +18,49 @@ import MoveIcon from "@material-ui/icons/Input";
 import LinkIcon from "@material-ui/icons/InsertLink";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import ShareIcon from "@material-ui/icons/Share";
-import { FolderUpload, MagnetOn ,FilePlus} from "mdi-material-ui";
+import { FolderUpload, MagnetOn, FilePlus } from "mdi-material-ui";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { openCompressDialog,openCreateFileDialog ,refreshFileList} from "../../actions";
-import { changeContextMenu, navigateTo, openCopyDialog, openCreateFolderDialog, openDecompressDialog, openGetSourceDialog, openLoadingDialog, openMoveDialog, openMusicDialog, openRemoteDownloadDialog, openRemoveDialog, openRenameDialog, openShareDialog, openTorrentDownloadDialog, setNavigatorLoadingStatus, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../actions/index";
+import {
+    openCompressDialog,
+    openCreateFileDialog,
+    refreshFileList
+} from "../../actions";
+import {
+    changeContextMenu,
+    navigateTo,
+    openCopyDialog,
+    openCreateFolderDialog,
+    openDecompressDialog,
+    openGetSourceDialog,
+    openLoadingDialog,
+    openMoveDialog,
+    openMusicDialog,
+    openRemoteDownloadDialog,
+    openRemoveDialog,
+    openRenameDialog,
+    openShareDialog,
+    openTorrentDownloadDialog,
+    setNavigatorLoadingStatus,
+    setSelectedTarget,
+    showImgPreivew,
+    toggleSnackbar
+} from "../../actions/index";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
 import { allowSharePreview } from "../../utils/index";
 import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
-
 const styles = () => ({
     propover: {
         minWidth: "200px!important"
     },
-    divider:{
-        marginTop:4,
-        marginBottom:4,
+    divider: {
+        marginTop: 4,
+        marginBottom: 4
     }
 });
 
@@ -45,7 +73,7 @@ const mapStateToProps = state => {
         withFile: state.explorer.selectProps.withFile,
         path: state.navigator.path,
         selected: state.explorer.selected,
-        keywords: state.explorer.keywords,
+        keywords: state.explorer.keywords
     };
 };
 
@@ -113,7 +141,7 @@ const mapDispatchToProps = dispatch => {
         },
         refreshFileList: () => {
             dispatch(refreshFileList());
-        },
+        }
     };
 };
 
@@ -195,8 +223,8 @@ class ContextMenuCompoment extends Component {
             this.props.selected[0].path === "/"
                 ? this.props.selected[0].path + this.props.selected[0].name
                 : this.props.selected[0].path +
-                "/" +
-                this.props.selected[0].name;
+                  "/" +
+                  this.props.selected[0].name;
         switch (isPreviewable(this.props.selected[0].name)) {
             case "img":
                 this.props.showImgPreivew(this.props.selected[0]);
@@ -205,15 +233,18 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/doc?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/doc?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/doc?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/doc?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "audio":
@@ -223,60 +254,72 @@ class ContextMenuCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/video?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/video?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/video?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/video?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "pdf":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/pdf?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/pdf?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/pdf?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "edit":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/text?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/text?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/text?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/text?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "code":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/code?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/code?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/code?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/code?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             default:
@@ -309,22 +352,27 @@ class ContextMenuCompoment extends Component {
                     }}
                 >
                     {this.props.menuType === "empty" && (
-                        <>
-                            <MenuItem onClick={()=>{
-                                this.props.refreshFileList();
-                                this.props.changeContextMenu(this.props.menuType, false)
-                            }
-
-                            }>
+                        <div>
+                            <MenuItem
+                                onClick={() => {
+                                    this.props.refreshFileList();
+                                    this.props.changeContextMenu(
+                                        this.props.menuType,
+                                        false
+                                    );
+                                }}
+                            >
                                 <ListItemIcon>
                                     <RefreshIcon />
                                 </ListItemIcon>
-                                <Typography variant="inherit">
-                                    刷新
-                                </Typography>
+                                <Typography variant="inherit">刷新</Typography>
                             </MenuItem>
-                            <Divider className={classes.divider}/>
-                            <MenuItem onClick={()=>this.clickUpload("uploadFileForm")}>
+                            <Divider className={classes.divider} />
+                            <MenuItem
+                                onClick={() =>
+                                    this.clickUpload("uploadFileForm")
+                                }
+                            >
                                 <ListItemIcon>
                                     <UploadIcon />
                                 </ListItemIcon>
@@ -332,7 +380,11 @@ class ContextMenuCompoment extends Component {
                                     上传文件
                                 </Typography>
                             </MenuItem>
-                            <MenuItem onClick={()=>this.clickUpload("uploadFolderForm")}>
+                            <MenuItem
+                                onClick={() =>
+                                    this.clickUpload("uploadFolderForm")
+                                }
+                            >
                                 <ListItemIcon>
                                     <FolderUpload />
                                 </ListItemIcon>
@@ -355,7 +407,7 @@ class ContextMenuCompoment extends Component {
                                 </MenuItem>
                             )}
 
-                            <Divider className={classes.divider}/>
+                            <Divider className={classes.divider} />
                             <MenuItem
                                 onClick={() =>
                                     this.props.openCreateFolderDialog()
@@ -380,12 +432,12 @@ class ContextMenuCompoment extends Component {
                                     创建文件
                                 </Typography>
                             </MenuItem>
-                        </>
+                        </div>
                     )}
                     {this.props.menuType !== "empty" && (
-                        <>
+                        <div>
                             {!this.props.isMultiple && this.props.withFolder && (
-                                <>
+                                <div>
                                     <MenuItem onClick={this.enterFolder}>
                                         <ListItemIcon>
                                             <OpenFolderIcon />
@@ -394,15 +446,17 @@ class ContextMenuCompoment extends Component {
                                             进入
                                         </Typography>
                                     </MenuItem>
-                                    {isHomePage && <Divider className={classes.divider} />}
-                                </>
+                                    {isHomePage && (
+                                        <Divider className={classes.divider} />
+                                    )}
+                                </div>
                             )}
                             {!this.props.isMultiple &&
                                 this.props.withFile &&
                                 (!this.props.share ||
                                     this.props.share.preview) &&
                                 isPreviewable(this.props.selected[0].name) && (
-                                    <>
+                                    <div>
                                         <MenuItem
                                             onClick={() => this.openPreview()}
                                         >
@@ -413,11 +467,11 @@ class ContextMenuCompoment extends Component {
                                                 打开
                                             </Typography>
                                         </MenuItem>
-                                    </>
+                                    </div>
                                 )}
 
                             {!this.props.isMultiple && this.props.withFile && (
-                                <>
+                                <div>
                                     <MenuItem
                                         onClick={() => this.openDownload()}
                                     >
@@ -428,8 +482,10 @@ class ContextMenuCompoment extends Component {
                                             下载
                                         </Typography>
                                     </MenuItem>
-                                    {isHomePage && <Divider className={classes.divider} />}
-                                </>
+                                    {isHomePage && (
+                                        <Divider className={classes.divider} />
+                                    )}
+                                </div>
                             )}
 
                             {(this.props.isMultiple || this.props.withFolder) &&
@@ -533,7 +589,7 @@ class ContextMenuCompoment extends Component {
                             )}
 
                             {!this.props.isMultiple && isHomePage && (
-                                <>
+                                <div>
                                     <MenuItem
                                         onClick={() =>
                                             this.props.openRenameDialog()
@@ -546,7 +602,7 @@ class ContextMenuCompoment extends Component {
                                             重命名
                                         </Typography>
                                     </MenuItem>
-                                    {this.props.keywords === "" &&
+                                    {this.props.keywords === "" && (
                                         <MenuItem
                                             onClick={() =>
                                                 this.props.openCopyDialog()
@@ -559,13 +615,12 @@ class ContextMenuCompoment extends Component {
                                                 复制
                                             </Typography>
                                         </MenuItem>
-                                    }
-
-                                </>
+                                    )}
+                                </div>
                             )}
                             {isHomePage && (
                                 <div>
-                                    {this.props.keywords === "" &&
+                                    {this.props.keywords === "" && (
                                         <MenuItem
                                             onClick={() =>
                                                 this.props.openMoveDialog()
@@ -578,7 +633,7 @@ class ContextMenuCompoment extends Component {
                                                 移动
                                             </Typography>
                                         </MenuItem>
-                                    }
+                                    )}
 
                                     <Divider className={classes.divider} />
                                     <MenuItem
@@ -596,7 +651,7 @@ class ContextMenuCompoment extends Component {
                                     </MenuItem>
                                 </div>
                             )}
-                        </>
+                        </div>
                     )}
                 </Menu>
             </div>

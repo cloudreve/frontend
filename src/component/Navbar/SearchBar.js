@@ -18,12 +18,12 @@ import {
     ListItemText,
     Typography
 } from "@material-ui/core";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
 import pathHelper from "../../utils/page";
-import {HotKeys,configure} from "react-hotkeys";
+import { HotKeys, configure } from "react-hotkeys";
 
 configure({
-    ignoreTags:[],
+    ignoreTags: []
 });
 
 const mapStateToProps = () => {
@@ -91,11 +91,10 @@ const styles = theme => ({
 });
 
 const keyMap = {
-    SEARCH: "enter",
+    SEARCH: "enter"
 };
 
 class SearchBarCompoment extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -104,15 +103,15 @@ class SearchBarCompoment extends Component {
         };
     }
 
-    handlers={
-        SEARCH:(e)=>{
-            if(pathHelper.isHomePage(this.props.location.pathname)){
+    handlers = {
+        SEARCH: e => {
+            if (pathHelper.isHomePage(this.props.location.pathname)) {
                 this.searchMyFile();
-            }else{
+            } else {
                 this.searchShare();
             }
             e.target.blur();
-        },
+        }
     };
 
     handleChange = event => {
@@ -131,13 +130,14 @@ class SearchBarCompoment extends Component {
     };
 
     searchMyFile = () => {
-        this.props.searchMyFile("keywords/"+this.input);
+        this.props.searchMyFile("keywords/" + this.input);
     };
 
     searchShare = () => {
-        this.props.history.push("/search?keywords="+encodeURIComponent(this.input));
+        this.props.history.push(
+            "/search?keywords=" + encodeURIComponent(this.input)
+        );
     };
-
 
     render() {
         const { classes } = this.props;
@@ -146,22 +146,22 @@ class SearchBarCompoment extends Component {
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
-                <div className={classes.search}>
+            <div className={classes.search}>
                 <div className={classes.searchIcon}>
                     <SearchIcon />
                 </div>
-                    <HotKeys keyMap={keyMap} handlers={this.handlers}>
-                        <InputBase
-                            placeholder="搜索..."
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput
-                            }}
-                            onChange={this.handleChange}
-                            onBlur={this.cancelSuggest}
-                            value={this.state.input}
-                        />
-                    </HotKeys>
+                <HotKeys keyMap={keyMap} handlers={this.handlers}>
+                    <InputBase
+                        placeholder="搜索..."
+                        classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput
+                        }}
+                        onChange={this.handleChange}
+                        onBlur={this.cancelSuggest}
+                        value={this.state.input}
+                    />
+                </HotKeys>
                 <Popper
                     id={id}
                     open={this.state.input !== ""}

@@ -6,9 +6,9 @@ import { showImgPreivew } from "../../actions/index";
 import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
 import pathHelper from "../../utils/page";
-import {withRouter} from "react-router";
-import {PhotoSlider} from "react-photo-view";
-import 'react-photo-view/dist/index.css';
+import { withRouter } from "react-router";
+import { PhotoSlider } from "react-photo-view";
+import "react-photo-view/dist/index.css";
 import * as explorer from "../../redux/explorer/reducer";
 
 const styles = () => ({});
@@ -39,21 +39,22 @@ class ImagPreviewComponent extends Component {
         const items = [];
         let firstOne = 0;
         if (nextProps.first.id !== "") {
-            if (pathHelper.isSharePage(this.props.location.pathname) && !nextProps.first.path){
+            if (
+                pathHelper.isSharePage(this.props.location.pathname) &&
+                !nextProps.first.path
+            ) {
                 const newImg = {
                     intro: nextProps.first.name,
-                    src:
-                        baseURL +
-                        "/share/preview/" +nextProps.first.key
+                    src: baseURL + "/share/preview/" + nextProps.first.key
                 };
                 firstOne = 0;
                 items.push(newImg);
                 this.setState({
-                    photoIndex:firstOne,
+                    photoIndex: firstOne,
                     items: items,
                     isOpen: true
                 });
-                return
+                return;
             }
             // eslint-disable-next-line
             nextProps.other.map(value => {
@@ -63,21 +64,22 @@ class ImagPreviewComponent extends Component {
                     .toLowerCase();
                 if (imgPreviewSuffix.indexOf(fileType) !== -1) {
                     let src = "";
-                    if (pathHelper.isSharePage(this.props.location.pathname)){
-                        src = baseURL +
-                            "/share/preview/" + value.key
-                        src = src + "?path=" + encodeURIComponent( (value.path === "/"
-                                ? value.path + value.name
-                                : value.path + "/" + value.name))
-
-                    }else{
-                        src = baseURL +
-                            "/file/preview/" +
-                            value.id
+                    if (pathHelper.isSharePage(this.props.location.pathname)) {
+                        src = baseURL + "/share/preview/" + value.key;
+                        src =
+                            src +
+                            "?path=" +
+                            encodeURIComponent(
+                                value.path === "/"
+                                    ? value.path + value.name
+                                    : value.path + "/" + value.name
+                            );
+                    } else {
+                        src = baseURL + "/file/preview/" + value.id;
                     }
                     const newImg = {
                         intro: value.name,
-                        src:src,
+                        src: src
                     };
                     if (
                         value.path === nextProps.first.path &&
@@ -89,7 +91,7 @@ class ImagPreviewComponent extends Component {
                 }
             });
             this.setState({
-                photoIndex:firstOne,
+                photoIndex: firstOne,
                 items: items,
                 isOpen: true
             });
@@ -104,22 +106,23 @@ class ImagPreviewComponent extends Component {
     };
 
     render() {
-        const { photoIndex, isOpen,items } = this.state;
+        const { photoIndex, isOpen, items } = this.state;
 
         return (
             <div>
-                 {isOpen && (<PhotoSlider
-                     images={items}
-                     visible={isOpen}
-                     onClose={() => this.handleClose()}
-                     index={photoIndex}
-                     onIndexChange={(n) =>
-                         this.setState({
-                             photoIndex: n,
-                         })
-                     }
-
-                />)}
+                {isOpen && (
+                    <PhotoSlider
+                        images={items}
+                        visible={isOpen}
+                        onClose={() => this.handleClose()}
+                        index={photoIndex}
+                        onIndexChange={n =>
+                            this.setState({
+                                photoIndex: n
+                            })
+                        }
+                    />
+                )}
             </div>
         );
     }

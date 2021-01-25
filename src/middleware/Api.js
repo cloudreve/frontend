@@ -13,11 +13,11 @@ const instance = axios.create({
     crossDomain: true
 });
 
-function AppError(message,code,error) {
+function AppError(message, code, error) {
     this.code = code;
-    this.message = message || '未知错误';
-    this.message += error?(" "+error) : "";
-    this.stack = (new Error()).stack;
+    this.message = message || "未知错误";
+    this.message += error ? " " + error : "";
+    this.stack = new Error().stack;
 }
 AppError.prototype = Object.create(Error.prototype);
 AppError.prototype.constructor = AppError;
@@ -34,14 +34,18 @@ instance.interceptors.response.use(
             // 登录过期
             if (response.rawData.code === 401) {
                 Auth.signout();
-                window.location.href = "/#/login";
+                window.location.href = "/login";
             }
 
             // 非管理员
             if (response.rawData.code === 40008) {
-                window.location.href = "/#/home";
+                window.location.href = "/home";
             }
-            throw new AppError(response.rawData.msg,response.rawData.code,response.rawData.error);
+            throw new AppError(
+                response.rawData.msg,
+                response.rawData.code,
+                response.rawData.error
+            );
         }
         return response;
     },

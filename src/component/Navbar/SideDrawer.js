@@ -9,7 +9,7 @@ import {
     ListItemIcon,
     ListItemText,
     List,
-    Hidden,
+    Hidden
 } from "@material-ui/core";
 const drawerWidth = 240;
 const styles = theme => ({

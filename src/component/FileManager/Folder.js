@@ -1,9 +1,9 @@
-import React  from "react";
+import React from "react";
 import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
 import { ButtonBase, Typography, Tooltip, makeStyles } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import {lighten} from "@material-ui/core/styles";
+import { lighten } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
     container: {
         padding: "7px"
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
         paddingTop: "2px",
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.secondary
     },
     folderNameSelected: {
         color:
@@ -65,12 +65,12 @@ const useStyles = makeStyles(theme => ({
         overflow: "hidden",
         marginRight: "20px"
     },
-    active:{
-        border: "2px solid " + theme.palette.primary.light,
-    },
+    active: {
+        border: "2px solid " + theme.palette.primary.light
+    }
 }));
 
-export default function Folder({ folder,isActive }) {
+export default function Folder({ folder, isActive }) {
     const selected = useSelector(state => state.explorer.selected);
 
     const classes = useStyles();
@@ -87,9 +87,9 @@ export default function Folder({ folder,isActive }) {
                 {
                     [classes.selected]: isSelected,
                     [classes.notSelected]: !isSelected,
-                    [classes.active]: isActive,
+                    [classes.active]: isActive
                 },
-                classes.button,
+                classes.button
             )}
         >
             <div

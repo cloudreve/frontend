@@ -7,10 +7,10 @@ import classNames from "classnames";
 import { sizeToString } from "../../utils/index";
 import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
-import {lighten} from "@material-ui/core/styles";
+import { lighten } from "@material-ui/core/styles";
 import pathHelper from "../../utils/page";
-import {withRouter} from "react-router";
-import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import { withRouter } from "react-router";
+import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
 
 const styles = theme => ({
     selected: {
@@ -18,20 +18,20 @@ const styles = theme => ({
         backgroundColor:
             theme.palette.type === "dark"
                 ? theme.palette.background.paper
-                : lighten(theme.palette.primary.main,0.8),
+                : lighten(theme.palette.primary.main, 0.8)
     },
 
     selectedShared: {
         "&:hover": {},
         backgroundColor:
             theme.palette.type === "dark"
-                ? lighten(theme.palette.background.paper,0.15)
-                : lighten(theme.palette.primary.main,0.8),
+                ? lighten(theme.palette.background.paper, 0.15)
+                : lighten(theme.palette.primary.main, 0.8)
     },
 
     notSelected: {
         "&:hover": {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background.default
         }
     },
     icon: {
@@ -39,12 +39,13 @@ const styles = theme => ({
         marginRight: "20px",
         color: theme.palette.text.secondary
     },
-    tableIcon:{
+    tableIcon: {
         marginRight: "20px",
-        verticalAlign: "middle",
+        verticalAlign: "middle"
     },
     folderNameSelected: {
-        color: theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
+        color:
+            theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
         fontWeight: "500",
         userSelect: "none"
     },
@@ -54,7 +55,7 @@ const styles = theme => ({
     },
     folderName: {
         marginRight: "20px",
-        display: "flex",
+        display: "flex"
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
@@ -86,10 +87,15 @@ class TableRowCompoment extends Component {
         let icon;
         if (this.props.file.type === "dir") {
             icon = <FolderIcon className={classes.icon} />;
-        }else if (this.props.file.type === "up"){
-            icon = <KeyboardReturnIcon className={classes.icon}/>
+        } else if (this.props.file.type === "up") {
+            icon = <KeyboardReturnIcon className={classes.icon} />;
         } else {
-           icon = <TypeIcon className={classes.tableIcon} fileName={this.props.file.name}/>
+            icon = (
+                <TypeIcon
+                    className={classes.tableIcon}
+                    fileName={this.props.file.name}
+                />
+            );
         }
 
         const isSelected =
@@ -102,15 +108,17 @@ class TableRowCompoment extends Component {
                 onContextMenu={this.props.contextMenu}
                 onClick={this.props.handleClick}
                 onDoubleClick={this.props.handleDoubleClick.bind(this)}
-                className={classNames(
-                    {
-                        [classes.selected]: isSelected&&!isShare,
-                        [classes.selectedShared]: isSelected&&isShare,
-                        [classes.notSelected]: !isSelected
-                    }
-                )}
+                className={classNames({
+                    [classes.selected]: isSelected && !isShare,
+                    [classes.selectedShared]: isSelected && isShare,
+                    [classes.notSelected]: !isSelected
+                })}
             >
-                <TableCell component="th" scope="row" className={classes.tableRow}>
+                <TableCell
+                    component="th"
+                    scope="row"
+                    className={classes.tableRow}
+                >
                     <Typography
                         variant="body2"
                         className={classNames(classes.folderName, {
@@ -122,7 +130,9 @@ class TableRowCompoment extends Component {
                         {this.props.file.name}
                     </Typography>
                 </TableCell>
-                <TableCell className={classNames(classes.hideAuto,classes.tableRow)}>
+                <TableCell
+                    className={classNames(classes.hideAuto, classes.tableRow)}
+                >
                     <Typography
                         variant="body2"
                         className={classNames(classes.folderName, {
@@ -131,11 +141,14 @@ class TableRowCompoment extends Component {
                         })}
                     >
                         {" "}
-                        {this.props.file.type !== "dir" &&this.props.file.type !== "up"&&
+                        {this.props.file.type !== "dir" &&
+                            this.props.file.type !== "up" &&
                             sizeToString(this.props.file.size)}
                     </Typography>
                 </TableCell>
-                <TableCell className={classNames(classes.hideAuto,classes.tableRow)}>
+                <TableCell
+                    className={classNames(classes.hideAuto, classes.tableRow)}
+                >
                     <Typography
                         variant="body2"
                         className={classNames(classes.folderName, {

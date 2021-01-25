@@ -1,4 +1,4 @@
-import React, {useCallback, useState, Suspense} from "react";
+import React, { useCallback, useState, Suspense } from "react";
 import {
     Divider,
     List,
@@ -8,7 +8,7 @@ import {
     makeStyles,
     withStyles
 } from "@material-ui/core";
-import { Clear, KeyboardArrowRight} from "@material-ui/icons";
+import { Clear, KeyboardArrowRight } from "@material-ui/icons";
 import classNames from "classnames";
 import FolderShared from "@material-ui/icons/FolderShared";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -106,12 +106,11 @@ const useStyles = makeStyles(theme => ({
     subMenu: {
         marginLeft: theme.spacing(2)
     },
-    overFlow:{
+    overFlow: {
         whiteSpace: "nowrap",
         overflow: "hidden",
-        textOverflow: "ellipsis",
+        textOverflow: "ellipsis"
     }
-
 }));
 
 const icons = {
@@ -132,7 +131,7 @@ const icons = {
     FolderHeartOutline: FolderHeartOutline
 };
 
-const AddTag = React.lazy(() => import ("../Modals/AddTag" ));
+const AddTag = React.lazy(() => import("../Modals/AddTag"));
 
 export default function FileTag() {
     const classes = useStyles();
@@ -143,9 +142,11 @@ export default function FileTag() {
     const isHomePage = pathHelper.isHomePage(location.pathname);
 
     const [tagOpen, setTagOpen] = useState(true);
-    const [addTagModal,setAddTagModal] = useState(false);
-    const [tagHover,setTagHover] = useState(null);
-    const [tags,setTags] = useState(Auth.GetUser().tags?Auth.GetUser().tags:[]);
+    const [addTagModal, setAddTagModal] = useState(false);
+    const [tagHover, setTagHover] = useState(null);
+    const [tags, setTags] = useState(
+        Auth.GetUser().tags ? Auth.GetUser().tags : []
+    );
 
     const dispatch = useDispatch();
     const SearchMyFile = useCallback(k => dispatch(searchMyFile(k)), [
@@ -158,7 +159,6 @@ export default function FileTag() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-
 
     const getIcon = (icon, color) => {
         if (icons[icon]) {
@@ -179,19 +179,21 @@ export default function FileTag() {
         return <Circle className={[classes.iconFix]} />;
     };
 
-    const submitSuccess = tag =>{
-        const newTags = [...tags,tag];
+    const submitSuccess = tag => {
+        const newTags = [...tags, tag];
         setTags(newTags);
         const user = Auth.GetUser();
         user.tags = newTags;
         Auth.SetUser(user);
     };
 
-    const submitDelete = id =>{
-        API.delete("/tag/"+id)
+    const submitDelete = id => {
+        API.delete("/tag/" + id)
             .then(() => {
-                const newTags = tags.filter((v)=>{return v.id !== id});
-                setTags(newTags)
+                const newTags = tags.filter(v => {
+                    return v.id !== id;
+                });
+                setTags(newTags);
                 const user = Auth.GetUser();
                 user.tags = newTags;
                 Auth.SetUser(user);
@@ -204,131 +206,136 @@ export default function FileTag() {
     return (
         <>
             <Suspense fallback={""}>
-                <AddTag onSuccess={submitSuccess} open={addTagModal} onClose={()=>setAddTagModal(false)}/>
+                <AddTag
+                    onSuccess={submitSuccess}
+                    open={addTagModal}
+                    onClose={() => setAddTagModal(false)}
+                />
             </Suspense>
-        <ExpansionPanel
-            square
-            expanded={tagOpen && isHomePage}
-            onChange={() => isHomePage && setTagOpen(!tagOpen)}
-        >
-            <ExpansionPanelSummary
-                aria-controls="panel1d-content"
-                id="panel1d-header"
+            <ExpansionPanel
+                square
+                expanded={tagOpen && isHomePage}
+                onChange={() => isHomePage && setTagOpen(!tagOpen)}
             >
-                <ListItem
-                    button
-                    key="我的文件"
-                    onClick={() =>
-                        !isHomePage && history.push("/home?path=%2F")
-                    }
+                <ExpansionPanelSummary
+                    aria-controls="panel1d-content"
+                    id="panel1d-header"
                 >
-                    <ListItemIcon>
-                        <KeyboardArrowRight
-                            className={classNames(
-                                {
-                                    [classes.expanded]: tagOpen && isHomePage,
-                                    [classes.iconFix]: true
-                                },
-                                classes.expand
-                            )}
-                        />
-                        {!(tagOpen && isHomePage) && (
-                            <FolderShared className={classes.iconFix} />
-                        )}
-                    </ListItemIcon>
-                    <ListItemText primary="我的文件" />
-                </ListItem>
-                <Divider />
-            </ExpansionPanelSummary>
-
-            <ExpansionPanelDetails>
-                <List onMouseLeave={()=>setTagHover(null)}>
                     <ListItem
                         button
-                        id="pickfiles"
-                        className={classes.hiddenButton}
-                    >
-                        <ListItemIcon>
-                            <UploadIcon />
-                        </ListItemIcon>
-                        <ListItemText />
-                    </ListItem>
-                    <ListItem
-                        button
-                        id="pickfolder"
-                        className={classes.hiddenButton}
-                    >
-                        <ListItemIcon>
-                            <UploadIcon />
-                        </ListItemIcon>
-                        <ListItemText />
-                    </ListItem>
-                    {[
-                        {
-                            key: "视频",
-                            id: "video",
-                            icon: (
-                                <VideoIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconVideo
-                                    ]}
-                                />
-                            )
-                        },
-                        {
-                            key: "图片",
-                            id: "image",
-                            icon: (
-                                <ImageIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconImg
-                                    ]}
-                                />
-                            )
-                        },
-                        {
-                            key: "音频",
-                            id: "audio",
-                            icon: (
-                                <MusicIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconAudio
-                                    ]}
-                                />
-                            )
-                        },
-                        {
-                            key: "文档",
-                            id: "doc",
-                            icon: (
-                                <DocIcon
-                                    className={[
-                                        classes.iconFix,
-                                        classes.iconDoc
-                                    ]}
-                                />
-                            )
+                        key="我的文件"
+                        onClick={() =>
+                            !isHomePage && history.push("/home?path=%2F")
                         }
-                    ].map(v => (
+                    >
+                        <ListItemIcon>
+                            <KeyboardArrowRight
+                                className={classNames(
+                                    {
+                                        [classes.expanded]:
+                                            tagOpen && isHomePage,
+                                        [classes.iconFix]: true
+                                    },
+                                    classes.expand
+                                )}
+                            />
+                            {!(tagOpen && isHomePage) && (
+                                <FolderShared className={classes.iconFix} />
+                            )}
+                        </ListItemIcon>
+                        <ListItemText primary="我的文件" />
+                    </ListItem>
+                    <Divider />
+                </ExpansionPanelSummary>
+
+                <ExpansionPanelDetails>
+                    <List onMouseLeave={() => setTagHover(null)}>
                         <ListItem
                             button
-                            key={v.key}
-                            onClick={() => SearchMyFile(v.id + "/internal")}
+                            id="pickfiles"
+                            className={classes.hiddenButton}
                         >
-                            <ListItemIcon className={classes.subMenu}>
-                                {v.icon}
+                            <ListItemIcon>
+                                <UploadIcon />
                             </ListItemIcon>
-                            <ListItemText primary={v.key} />
+                            <ListItemText />
                         </ListItem>
-                    ))}
-                    {tags.map(v => (
+                        <ListItem
+                            button
+                            id="pickfolder"
+                            className={classes.hiddenButton}
+                        >
+                            <ListItemIcon>
+                                <UploadIcon />
+                            </ListItemIcon>
+                            <ListItemText />
+                        </ListItem>
+                        {[
+                            {
+                                key: "视频",
+                                id: "video",
+                                icon: (
+                                    <VideoIcon
+                                        className={[
+                                            classes.iconFix,
+                                            classes.iconVideo
+                                        ]}
+                                    />
+                                )
+                            },
+                            {
+                                key: "图片",
+                                id: "image",
+                                icon: (
+                                    <ImageIcon
+                                        className={[
+                                            classes.iconFix,
+                                            classes.iconImg
+                                        ]}
+                                    />
+                                )
+                            },
+                            {
+                                key: "音频",
+                                id: "audio",
+                                icon: (
+                                    <MusicIcon
+                                        className={[
+                                            classes.iconFix,
+                                            classes.iconAudio
+                                        ]}
+                                    />
+                                )
+                            },
+                            {
+                                key: "文档",
+                                id: "doc",
+                                icon: (
+                                    <DocIcon
+                                        className={[
+                                            classes.iconFix,
+                                            classes.iconDoc
+                                        ]}
+                                    />
+                                )
+                            }
+                        ].map(v => (
+                            <ListItem
+                                button
+                                key={v.key}
+                                onClick={() => SearchMyFile(v.id + "/internal")}
+                            >
+                                <ListItemIcon className={classes.subMenu}>
+                                    {v.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={v.key} />
+                            </ListItem>
+                        ))}
+                        {tags.map(v => (
                             <ListItem
                                 button
                                 key={v.id}
-                                onMouseEnter={()=>setTagHover(v.id)}
+                                onMouseEnter={() => setTagHover(v.id)}
                                 onClick={() => {
                                     if (v.type === 0) {
                                         SearchMyFile("tag/" + v.id);
@@ -345,26 +352,37 @@ export default function FileTag() {
                                         v.type === 0 ? v.color : null
                                     )}
                                 </ListItemIcon>
-                                <ListItemText className={classes.overFlow} primary={v.name} />
+                                <ListItemText
+                                    className={classes.overFlow}
+                                    primary={v.name}
+                                />
 
-                                {tagHover === v.id && <ListItemSecondaryAction onClick={()=>submitDelete(v.id)}>
-                                        <IconButton size={"small"} edge="end" aria-label="delete">
+                                {tagHover === v.id && (
+                                    <ListItemSecondaryAction
+                                        onClick={() => submitDelete(v.id)}
+                                    >
+                                        <IconButton
+                                            size={"small"}
+                                            edge="end"
+                                            aria-label="delete"
+                                        >
                                             <Clear />
                                         </IconButton>
-                                    </ListItemSecondaryAction>}
+                                    </ListItemSecondaryAction>
+                                )}
                             </ListItem>
                         ))}
 
-                    <ListItem button onClick={()=>setAddTagModal(true)}>
-                        <ListItemIcon className={classes.subMenu}>
-                            <TagPlus className={classes.iconFix} />
-                        </ListItemIcon>
-                        <ListItemText primary={"添加标签..."} />
-                    </ListItem>
-                </List>{" "}
-                <Divider />
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
-            </>
+                        <ListItem button onClick={() => setAddTagModal(true)}>
+                            <ListItemIcon className={classes.subMenu}>
+                                <TagPlus className={classes.iconFix} />
+                            </ListItemIcon>
+                            <ListItemText primary={"添加标签..."} />
+                        </ListItem>
+                    </List>{" "}
+                    <Divider />
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+        </>
     );
 }

@@ -69,7 +69,6 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-
 export default function Group() {
     const classes = useStyles();
     const [groups, setGroups] = useState([]);
@@ -91,37 +90,41 @@ export default function Group() {
     );
 
     const loadList = () => {
-      API.post("/admin/group/list", {
-          page: page,
-          page_size: pageSize,
-          order_by: "id desc",
-      })
-          .then(response => {
-              setGroups(response.data.items);
-              setStatics(response.data.statics);
-              setTotal(response.data.total);
-              setPolicies(response.data.policies);
-          })
-          .catch(error => {
-              ToggleSnackbar("top", "right", error.message, "error");
-          });
+        API.post("/admin/group/list", {
+            page: page,
+            page_size: pageSize,
+            order_by: "id desc"
+        })
+            .then(response => {
+                setGroups(response.data.items);
+                setStatics(response.data.statics);
+                setTotal(response.data.total);
+                setPolicies(response.data.policies);
+            })
+            .catch(error => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
     };
 
-    useEffect(()=>{
-        if(query.get("code") === "0"){
+    useEffect(() => {
+        if (query.get("code") === "0") {
             ToggleSnackbar("top", "right", "授权成功", "success");
-        }else if (query.get("msg") && query.get("msg")!==""){
-            ToggleSnackbar("top", "right", query.get("msg") + ", "+ query.get("err"), "warning");
+        } else if (query.get("msg") && query.get("msg") !== "") {
+            ToggleSnackbar(
+                "top",
+                "right",
+                query.get("msg") + ", " + query.get("err"),
+                "warning"
+            );
         }
-
-    },[location])
+    }, [location]);
 
     useEffect(() => {
         loadList();
     }, [page, pageSize]);
 
-    const deletePolicy = (id) =>{
-        API.delete("/admin/group/" + id,)
+    const deletePolicy = id => {
+        API.delete("/admin/group/" + id)
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户组已删除", "success");
@@ -129,7 +132,7 @@ export default function Group() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }
+    };
 
     return (
         <div>
@@ -156,7 +159,7 @@ export default function Group() {
                 <TableContainer className={classes.container}>
                     <Table aria-label="sticky table" size={"small"}>
                         <TableHead>
-                            <TableRow style={{height:52}}>
+                            <TableRow style={{ height: 52 }}>
                                 {columns.map(column => (
                                     <TableCell
                                         key={column.id}
@@ -174,16 +177,20 @@ export default function Group() {
                                     <TableCell>{row.ID}</TableCell>
                                     <TableCell>{row.Name}</TableCell>
                                     <TableCell>
-                                        {row.PolicyList !== null && row.PolicyList.map((pid,key)=>{
-                                            let res = "";
-                                            if (policies[pid]){
-                                                res += policies[pid].Name;
-                                            }
-                                            if (key !== row.PolicyList.length-1){
-                                                res += " / ";
-                                            }
-                                            return res
-                                        })}
+                                        {row.PolicyList !== null &&
+                                            row.PolicyList.map((pid, key) => {
+                                                let res = "";
+                                                if (policies[pid]) {
+                                                    res += policies[pid].Name;
+                                                }
+                                                if (
+                                                    key !==
+                                                    row.PolicyList.length - 1
+                                                ) {
+                                                    res += " / ";
+                                                }
+                                                return res;
+                                            })}
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         {statics[row.ID] !== undefined &&
@@ -195,16 +202,28 @@ export default function Group() {
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         <Tooltip title={"删除"}>
-                                            <IconButton onClick={()=>deletePolicy(row.ID)} size={"small"}>
-                                                <Delete/>
+                                            <IconButton
+                                                onClick={() =>
+                                                    deletePolicy(row.ID)
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Delete />
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title={"编辑"}>
-                                            <IconButton onClick={()=>history.push("/admin/group/edit/" + row.ID)} size={"small"}>
-                                                <Edit/>
+                                            <IconButton
+                                                onClick={() =>
+                                                    history.push(
+                                                        "/admin/group/edit/" +
+                                                            row.ID
+                                                    )
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Edit />
                                             </IconButton>
                                         </Tooltip>
-
                                     </TableCell>
                                 </TableRow>
                             ))}

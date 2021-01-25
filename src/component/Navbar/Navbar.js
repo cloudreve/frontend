@@ -68,7 +68,7 @@ import FileTag from "./FileTags";
 import { Assignment, Devices, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 
-vhCheck()
+vhCheck();
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
 
@@ -365,15 +365,18 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/doc?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/doc?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/doc?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/doc?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "audio":
@@ -383,60 +386,72 @@ class NavbarCompoment extends Component {
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/video?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/video?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/video?p=" +encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/video?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "edit":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/text?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/text?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/text?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/text?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "pdf":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/pdf?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/pdf?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/pdf?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/pdf?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             case "code":
                 if (isShare) {
                     this.props.history.push(
                         this.props.selected[0].key +
-                        "/code?name=" +
-                        encodeURIComponent(this.props.selected[0].name) +
-                        "&share_path=" +
-                        encodeURIComponent(previewPath)
+                            "/code?name=" +
+                            encodeURIComponent(this.props.selected[0].name) +
+                            "&share_path=" +
+                            encodeURIComponent(previewPath)
                     );
                     return;
                 }
                 this.props.history.push(
-                    "/code?p=" + encodeURIComponent(previewPath) + "&id=" + this.props.selected[0].id
+                    "/code?p=" +
+                        encodeURIComponent(previewPath) +
+                        "&id=" +
+                        this.props.selected[0].id
                 );
                 return;
             default:
@@ -568,7 +583,7 @@ class NavbarCompoment extends Component {
 
                         {pathHelper.isMobile() && (
                             <>
-                                <Divider/>
+                                <Divider />
                                 <List>
                                     <ListItem
                                         button
@@ -591,7 +606,9 @@ class NavbarCompoment extends Component {
                                         onClick={this.signOut}
                                     >
                                         <ListItemIcon>
-                                            <LogoutVariant className={classes.iconFix} />
+                                            <LogoutVariant
+                                                className={classes.iconFix}
+                                            />
                                         </ListItemIcon>
                                         <ListItemText primary="退出登录" />
                                     </ListItem>
@@ -736,8 +753,13 @@ class NavbarCompoment extends Component {
                             !(
                                 !this.props.isMultiple && this.props.withFile
                             ) && (
-                                <Typography variant="h6" color="inherit" noWrap
-                                            onClick={() => {this.props.history.push("/")}}
+                                <Typography
+                                    variant="h6"
+                                    color="inherit"
+                                    noWrap
+                                    onClick={() => {
+                                        this.props.history.push("/");
+                                    }}
                                 >
                                     {this.props.subTitle
                                         ? this.props.subTitle
@@ -799,8 +821,7 @@ class NavbarCompoment extends Component {
                             (isHomePage || isSharePage) && (
                                 <div className={classes.sectionForFile}>
                                     {!this.props.isMultiple &&
-                                        this.props.withFile
-                                        &&
+                                        this.props.withFile &&
                                         isPreviewable(
                                             this.props.selected[0].name
                                         ) && (

@@ -20,6 +20,7 @@ import API from "../../../../middleware/Api";
 import SizeInput from "../../Common/SizeInput";
 import AlertDialog from "../../Dialogs/Alert";
 import MagicVar from "../../Dialogs/MagicVar";
+import DomainInput from "../../Common/DomainInput";
 
 const useStyles = makeStyles(theme => ({
     stepContent: {
@@ -64,16 +65,17 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1)
     },
     viewButtonLabel: { textTransform: "none" },
-    "@global":{
-        "code":{
+    "@global": {
+        code: {
             color: "rgba(0, 0, 0, 0.87)",
             display: "inline-block",
             padding: "2px 6px",
-            fontFamily:" Consolas, \"Liberation Mono\", Menlo, Courier, monospace",
+            fontFamily:
+                ' Consolas, "Liberation Mono", Menlo, Courier, monospace',
             borderRadius: "2px",
-            backgroundColor: "rgba(255,229,100,0.1)",
-        },
-    },
+            backgroundColor: "rgba(255,229,100,0.1)"
+        }
+    }
 }));
 
 const steps = [
@@ -105,31 +107,41 @@ export default function OneDriveGuide(props) {
 
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [skipped,] = React.useState(new Set());
+    const [skipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
-    const [policy, setPolicy] = useState(props.policy
-        ? props.policy
-        : {
-        Type: "onedrive",
-        Name: "",
-        BucketName:"",
-        SecretKey: "",
-        AccessKey: "",
-        BaseURL: "",
-        Server: "https://graph.microsoft.com/v1.0",
-        IsPrivate: "true",
-        DirNameRule: "uploads/{year}/{month}/{day}",
-        AutoRename: "true",
-        FileNameRule: "{randomkey8}_{originname}",
-        IsOriginLinkEnable: "false",
-        MaxSize: "0",
-        OptionsSerialized: {
-            file_type: "",
-            od_redirect:"",
-        }
-    });
-    const [policyID,setPolicyID] = useState(props.policy?props.policy.ID:0);
-    const [httpsAlert,setHttpsAlert] = useState(false);
+    const [useCDN, setUseCDN] = useState(
+        props.policy && props.policy.OptionsSerialized.od_proxy
+            ? props.policy.OptionsSerialized.od_proxy !== ""
+            : false
+    );
+    const [policy, setPolicy] = useState(
+        props.policy
+            ? props.policy
+            : {
+                  Type: "onedrive",
+                  Name: "",
+                  BucketName: "",
+                  SecretKey: "",
+                  AccessKey: "",
+                  BaseURL: "",
+                  Server: "https://graph.microsoft.com/v1.0",
+                  IsPrivate: "true",
+                  DirNameRule: "uploads/{year}/{month}/{day}",
+                  AutoRename: "true",
+                  FileNameRule: "{randomkey8}_{originname}",
+                  IsOriginLinkEnable: "false",
+                  MaxSize: "0",
+                  OptionsSerialized: {
+                      file_type: "",
+                      od_redirect: "",
+                      od_proxy: ""
+                  }
+              }
+    );
+    const [policyID, setPolicyID] = useState(
+        props.policy ? props.policy.ID : 0
+    );
+    const [httpsAlert, setHttpsAlert] = useState(false);
 
     const handleChange = name => event => {
         setPolicy({
@@ -159,40 +171,43 @@ export default function OneDriveGuide(props) {
         [dispatch]
     );
 
-    useEffect(()=>{
+    useEffect(() => {
         API.post("/admin/setting", {
             keys: ["siteURL"]
         })
             .then(response => {
-                if (!response.data.siteURL.startsWith("https://")){
+                if (!response.data.siteURL.startsWith("https://")) {
                     setHttpsAlert(true);
                 }
-                if (policy.OptionsSerialized.od_redirect === ""){
+                if (policy.OptionsSerialized.od_redirect === "") {
                     setPolicy({
                         ...policy,
-                        OptionsSerialized:{
+                        OptionsSerialized: {
                             ...policy.OptionsSerialized,
-                            od_redirect: new URL("/api/v3/callback/onedrive/auth", response.data.siteURL).toString(),
+                            od_redirect: new URL(
+                                "/api/v3/callback/onedrive/auth",
+                                response.data.siteURL
+                            ).toString()
                         }
-                    })
+                    });
                 }
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    },[]);
+    }, []);
 
-    const statOAuth = () =>{
+    const statOAuth = () => {
         setLoading(true);
-        API.get("/admin/policy/" + policyID + "/oauth", )
+        API.get("/admin/policy/" + policyID + "/oauth")
             .then(response => {
-                window.location.href = response.data
+                window.location.href = response.data;
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
                 setLoading(false);
             });
-    }
+    };
 
     const submitPolicy = e => {
         e.preventDefault();
@@ -202,10 +217,15 @@ export default function OneDriveGuide(props) {
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // baseURL处理
-        if (policyCopy.Server === "https://graph.microsoft.com/v1.0"){
-            policyCopy.BaseURL = "https://login.microsoftonline.com/common/oauth2/v2.0"
-        }else{
-            policyCopy.BaseURL = "https://login.chinacloudapi.cn/common/oauth2"
+        if (policyCopy.Server === "https://graph.microsoft.com/v1.0") {
+            policyCopy.BaseURL =
+                "https://login.microsoftonline.com/common/oauth2/v2.0";
+        } else {
+            policyCopy.BaseURL = "https://login.chinacloudapi.cn/common/oauth2";
+        }
+
+        if (!useCDN) {
+            policyCopy.OptionsSerialized.od_proxy = "";
         }
 
         // 类型转换
@@ -228,7 +248,12 @@ export default function OneDriveGuide(props) {
             policy: policyCopy
         })
             .then(response => {
-                ToggleSnackbar("top", "right", "存储策略已"+ (props.policy ? "保存" : "添加"), "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    "success"
+                );
                 setActiveStep(3);
                 setPolicyID(response.data);
             })
@@ -246,11 +271,15 @@ export default function OneDriveGuide(props) {
         <div>
             <AlertDialog
                 open={httpsAlert}
-                onClose={()=>setHttpsAlert(false)}
+                onClose={() => setHttpsAlert(false)}
                 title={"警告"}
-                msg={"您必须启用 HTTPS 才能使用 OneDrive 存储策略；启用后同步更改 参数设置 - 站点信息 - 站点URL。"}
+                msg={
+                    "您必须启用 HTTPS 才能使用 OneDrive 存储策略；启用后同步更改 参数设置 - 站点信息 - 站点URL。"
+                }
             />
-            <Typography variant={"h6"}>{props.policy ? "修改" : "添加"} OneDrive 存储策略</Typography>
+            <Typography variant={"h6"}>
+                {props.policy ? "修改" : "添加"} OneDrive 存储策略
+            </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -279,7 +308,6 @@ export default function OneDriveGuide(props) {
                         setActiveStep(1);
                     }}
                 >
-
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
@@ -288,19 +316,24 @@ export default function OneDriveGuide(props) {
                             <Typography variant={"body2"}>
                                 前往
                                 <Link
-                                    href={"https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"}
+                                    href={
+                                        "https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"
+                                    }
                                     target={"_blank"}
                                 >
                                     Azure Active Directory 控制台 (国际版账号)
-                                </Link>
-                                {" "}或者{" "}
+                                </Link>{" "}
+                                或者{" "}
                                 <Link
-                                    href={"https://portal.azure.cn/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"}
+                                    href={
+                                        "https://portal.azure.cn/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"
+                                    }
                                     target={"_blank"}
                                 >
                                     Azure Active Directory 控制台 (世纪互联账号)
                                 </Link>
-                                 并登录，登录后进入<code>Azure Active Directory</code>管理面板。
+                                并登录，登录后进入
+                                <code>Azure Active Directory</code>管理面板。
                             </Typography>
                         </div>
                     </div>
@@ -311,7 +344,8 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                               进入左侧 <code>应用注册</code> 菜单，并点击 <code>新注册</code> 按钮。
+                                进入左侧 <code>应用注册</code> 菜单，并点击{" "}
+                                <code>新注册</code> 按钮。
                             </Typography>
                         </div>
                     </div>
@@ -323,10 +357,17 @@ export default function OneDriveGuide(props) {
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
                                 填写应用注册表单。其中，名称可任取；
-                                <code>受支持的帐户类型</code> 选择为<code>任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户</code>；
-                                <code>重定向 URI (可选)</code>
-                                请选择<code>Web</code>，并填写<code>{policy.OptionsSerialized.od_redirect}</code>；
-                                其他保持默认即可
+                                <code>受支持的帐户类型</code> 选择为
+                                <code>
+                                    任何组织目录(任何 Azure AD 目录 -
+                                    多租户)中的帐户
+                                </code>
+                                ；<code>重定向 URI (可选)</code>
+                                请选择<code>Web</code>，并填写
+                                <code>
+                                    {policy.OptionsSerialized.od_redirect}
+                                </code>
+                                ； 其他保持默认即可
                             </Typography>
                         </div>
                     </div>
@@ -337,7 +378,8 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                创建完成后进入应用管理的<code>概览</code>页面，复制<code>应用程序(客户端) ID</code>
+                                创建完成后进入应用管理的<code>概览</code>
+                                页面，复制<code>应用程序(客户端) ID</code>
                                 并填写在下方：
                             </Typography>
                             <div className={classes.form}>
@@ -361,9 +403,12 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                进入应用管理页面左侧的<code>证书和密码</code>菜单，点击
+                                进入应用管理页面左侧的<code>证书和密码</code>
+                                菜单，点击
                                 <code>新建客户端密码</code>
-                                按钮，<code>截止期限</code>选择为<code>从不</code>。创建完成后将客户端密码的值填写在下方：
+                                按钮，<code>截止期限</code>选择为
+                                <code>从不</code>
+                                。创建完成后将客户端密码的值填写在下方：
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
@@ -397,14 +442,18 @@ export default function OneDriveGuide(props) {
                                         row
                                     >
                                         <FormControlLabel
-                                            value={"https://graph.microsoft.com/v1.0"}
+                                            value={
+                                                "https://graph.microsoft.com/v1.0"
+                                            }
                                             control={
                                                 <Radio color={"primary"} />
                                             }
                                             label="国际版"
                                         />
                                         <FormControlLabel
-                                            value={"https://microsoftgraph.chinacloudapi.cn/v1.0"}
+                                            value={
+                                                "https://microsoftgraph.chinacloudapi.cn/v1.0"
+                                            }
                                             control={
                                                 <Radio color={"primary"} />
                                             }
@@ -419,6 +468,63 @@ export default function OneDriveGuide(props) {
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>7</div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                是否要在文件下载时替换为使用自建的反代服务器？
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl required component="fieldset">
+                                    <RadioGroup
+                                        required
+                                        value={useCDN.toString()}
+                                        onChange={e => {
+                                            setUseCDN(
+                                                e.target.value === "true"
+                                            );
+                                        }}
+                                        row
+                                    >
+                                        <FormControlLabel
+                                            value={"true"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="使用"
+                                        />
+                                        <FormControlLabel
+                                            value={"false"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="不使用"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                            <Collapse in={useCDN}>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <DomainInput
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .od_proxy
+                                            }
+                                            onChange={handleOptionChange(
+                                                "od_proxy"
+                                            )}
+                                            required={useCDN}
+                                            label={"反代服务器地址"}
+                                        />
+                                    </FormControl>
+                                </div>
+                            </Collapse>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>8</div>
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
@@ -472,9 +578,9 @@ export default function OneDriveGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("path")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("path");
                                     }}
                                 >
                                     路径魔法变量列表
@@ -507,9 +613,9 @@ export default function OneDriveGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      setMagicVar("file")
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setMagicVar("file");
                                     }}
                                 >
                                     文件名魔法变量列表
@@ -585,10 +691,7 @@ export default function OneDriveGuide(props) {
             )}
 
             {activeStep === 2 && (
-                <form
-                    className={classes.stepContent}
-                    onSubmit={submitPolicy}
-                >
+                <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
@@ -782,10 +885,12 @@ export default function OneDriveGuide(props) {
             {activeStep === 3 && (
                 <form className={classes.stepContent}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}/>
+                        <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                存储策略已{props.policy ? "保存" : "添加"}，但是你需要点击下方按钮，并使用 OneDrive 登录授权以完成初始化后才能使用。
+                                存储策略已{props.policy ? "保存" : "添加"}
+                                ，但是你需要点击下方按钮，并使用 OneDrive
+                                登录授权以完成初始化后才能使用。
                                 日后你可以在存储策略列表页面重新进行授权。
                             </Typography>
                             <div className={classes.form}>
@@ -802,8 +907,7 @@ export default function OneDriveGuide(props) {
                             </div>
                         </div>
                     </div>
-                    <div className={classes.stepFooter}>
-                    </div>
+                    <div className={classes.stepFooter}></div>
                 </form>
             )}
 

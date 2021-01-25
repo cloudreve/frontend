@@ -82,7 +82,7 @@ export default function PDFViewer() {
         <div className={classes.layout}>
             <Document
                 onLoadSuccess={({ numPages }) => setPageNumber(numPages)}
-                onLoadError = {error=>{
+                onLoadError={error => {
                     ToggleSnackbar(
                         "top",
                         "right",

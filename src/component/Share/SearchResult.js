@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import Pagination from "@material-ui/lab/Pagination";
@@ -12,14 +12,14 @@ import {
     CardHeader,
     Typography,
     Grid,
-    IconButton,
+    IconButton
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import TypeIcon from "../FileManager/TypeIcon";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router";
 import TimeAgo from "timeago-react";
@@ -126,13 +126,13 @@ export default function SearchResult() {
     }, []);
 
     useEffect(() => {
-      const keywords = query.get("keywords");
-      if (keywords) {
-          search(keywords, page, orderBy);
-      } else {
-          ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
-      }
-  }, [location]);
+        const keywords = query.get("keywords");
+        if (keywords) {
+            search(keywords, page, orderBy);
+        } else {
+            ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
+        }
+    }, [location]);
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -219,10 +219,7 @@ export default function SearchResult() {
                                     <Tooltip placement="top" title="打开">
                                         <IconButton
                                             onClick={() =>
-                                                history.push(
-                                                    "/s/" +
-                                                        value.key
-                                                )
+                                                history.push("/s/" + value.key)
                                             }
                                         >
                                             <OpenIcon />
@@ -248,10 +245,15 @@ export default function SearchResult() {
                                         </Typography>
                                     </Tooltip>
                                 }
-                                subheader={<span>分享于{" "}<TimeAgo
-                                    datetime={value.create_date}
-                                    locale="zh_CN"
-                                /></span>}
+                                subheader={
+                                    <span>
+                                        分享于{" "}
+                                        <TimeAgo
+                                            datetime={value.create_date}
+                                            locale="zh_CN"
+                                        />
+                                    </span>
+                                }
                             />
                         </Card>
                     </Grid>

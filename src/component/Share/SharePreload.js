@@ -41,12 +41,12 @@ export default function SharePreload() {
         } else {
             SetSubTitle();
         }
-    }, [share,SetSubTitle,ToggleSnackbar]);
+    }, [share, SetSubTitle, ToggleSnackbar]);
 
     useEffect(() => {
         return () => {
             SetSubTitle();
-        }
+        };
         // eslint-disable-next-line
     }, []);
 
@@ -69,12 +69,12 @@ export default function SharePreload() {
                     ToggleSnackbar("top", "right", error.message, "error");
                 }
             });
-    }, [id, password,ToggleSnackbar]);
+    }, [id, password, ToggleSnackbar]);
 
     return (
         <Suspense fallback={<PageLoading />}>
             {share === undefined && <PageLoading />}
-            {share === null && <Notice msg={"分享不存在或已过期"}/>}
+            {share === null && <Notice msg={"分享不存在或已过期"} />}
             {share && share.locked && (
                 <LockedFile
                     loading={loading}
@@ -82,8 +82,12 @@ export default function SharePreload() {
                     share={share}
                 />
             )}
-            {share&&!share.locked&&!share.is_dir&&<SharedFile share={share}/>}
-            {share&&!share.locked&&share.is_dir&&<SharedFolder share={share}/>}
+            {share && !share.locked && !share.is_dir && (
+                <SharedFile share={share} />
+            )}
+            {share && !share.locked && share.is_dir && (
+                <SharedFolder share={share} />
+            )}
         </Suspense>
     );
 }

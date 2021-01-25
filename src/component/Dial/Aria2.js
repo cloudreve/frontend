@@ -16,11 +16,10 @@ const useStyles = makeStyles(() => ({
         left: "auto",
         zIndex: 5,
         position: "fixed"
-    },
+    }
 }));
 
 export default function RemoteDownloadButton() {
-
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -29,19 +28,18 @@ export default function RemoteDownloadButton() {
         [dispatch]
     );
 
-
     return (
         <>
-        <Modals/>
-        <AutoHidden enable>
-            <Fab
-                className={classes.fab}
-                color="secondary"
-                onClick={()=>OpenRemoteDownloadDialog()}
-            >
-                <Add/>
-            </Fab>
-        </AutoHidden>
-            </>
+            <Modals />
+            <AutoHidden enable>
+                <Fab
+                    className={classes.fab}
+                    color="secondary"
+                    onClick={() => OpenRemoteDownloadDialog()}
+                >
+                    <Add />
+                </Fab>
+            </AutoHidden>
+        </>
     );
 }

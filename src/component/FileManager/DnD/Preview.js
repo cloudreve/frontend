@@ -5,21 +5,21 @@ import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
-    dragging:{
-        width:"200px",
+    dragging: {
+        width: "200px"
     },
     cardDragged: {
         position: "absolute",
-        "transform-origin": "bottom left",
-    },
+        "transform-origin": "bottom left"
+    }
 }));
 
-const diliverIcon = (object,viewMethod,classes)=>{
+const diliverIcon = (object, viewMethod, classes) => {
     return (
         <>
             {object.type === "dir" && viewMethod !== "list" && (
                 <div className={classes.dragging}>
-                <SmallIcon file={object} />
+                    <SmallIcon file={object} />
                 </div>
             )}
             {object.type === "file" && viewMethod === "icon" && (
@@ -27,15 +27,14 @@ const diliverIcon = (object,viewMethod,classes)=>{
                     <FileIcon file={object} />
                 </div>
             )}
-            {object.type === "file" &&
-                viewMethod === "smallIcon" && (
-                    <div className={classes.dragging}>
+            {object.type === "file" && viewMethod === "smallIcon" && (
+                <div className={classes.dragging}>
                     <SmallIcon file={object} />
-                    </div>
-                )}
+                </div>
+            )}
         </>
-    )
-}
+    );
+};
 
 const Preview = props => {
     const selected = useSelector(state => state.explorer.selected);
@@ -45,22 +44,24 @@ const Preview = props => {
     const classes = useStyles();
     return (
         <>
-            {selected.length === 0 && diliverIcon(props.object,viewMethod,classes)}
-            {selected.length>0&&<>
-                {selected.slice(0, 3).map((card, i) => (
-                    <div
-                    key={card.id}
-                    className={classes.cardDragged}
-                    style={{
-                      zIndex: selected.length - i,
-                      transform: `rotateZ(${-i * 2.5}deg)`,
-                    }}
-                  >
-                    {diliverIcon(card,viewMethod,classes)}
-                  </div>
-                ))}
+            {selected.length === 0 &&
+                diliverIcon(props.object, viewMethod, classes)}
+            {selected.length > 0 && (
+                <>
+                    {selected.slice(0, 3).map((card, i) => (
+                        <div
+                            key={card.id}
+                            className={classes.cardDragged}
+                            style={{
+                                zIndex: selected.length - i,
+                                transform: `rotateZ(${-i * 2.5}deg)`
+                            }}
+                        >
+                            {diliverIcon(card, viewMethod, classes)}
+                        </div>
+                    ))}
                 </>
-            }
+            )}
         </>
     );
 };

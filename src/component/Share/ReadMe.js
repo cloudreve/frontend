@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {  makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { MenuBook } from "@material-ui/icons";
 import { Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
@@ -14,8 +14,8 @@ const useStyles = makeStyles(theme => ({
     readMeContainer: {
         marginTop: 30,
         [theme.breakpoints.down("sm")]: {
-            marginTop: theme.spacing(2),
-        },
+            marginTop: theme.spacing(2)
+        }
     },
     readMeHeader: {
         padding: "10px 16px",
@@ -44,18 +44,24 @@ const useStyles = makeStyles(theme => ({
         },
         ".for-container .for-markdown-preview pre": {
             backgroundColor: theme.palette.background.default + "!important",
-            color: theme.palette.type ==="dark"?"#fff !important":"rgba(0, 0, 0, 0.87);!important",
+            color:
+                theme.palette.type === "dark"
+                    ? "#fff !important"
+                    : "rgba(0, 0, 0, 0.87);!important"
         },
 
         ".for-container .for-markdown-preview code": {
             backgroundColor: theme.palette.background.default + "!important"
         },
         ".for-container .for-markdown-preview a": {
-            color: theme.palette.type==="dark"?"#67aeff !important":"#0366d6 !important",
+            color:
+                theme.palette.type === "dark"
+                    ? "#67aeff !important"
+                    : "#0366d6 !important"
         },
-        ".for-container .for-markdown-preview table th":{
-            backgroundColor: theme.palette.background.default + "!important",
-        },
+        ".for-container .for-markdown-preview table th": {
+            backgroundColor: theme.palette.background.default + "!important"
+        }
     }
 }));
 

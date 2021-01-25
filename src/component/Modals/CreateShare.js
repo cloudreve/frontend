@@ -120,12 +120,12 @@ export default function CreatShare(props) {
         password: "",
         downloads: 1,
         expires: 24 * 3600,
-        showPassword: false,
+        showPassword: false
     });
     const [shareOption, setShareOption] = React.useState({
         password: false,
         expire: false,
-        preview:true,
+        preview: true
     });
 
     const handleChange = prop => event => {
@@ -180,10 +180,9 @@ export default function CreatShare(props) {
 
     const onClose = () => {
         props.onClose();
-        setTimeout(()=>{
+        setTimeout(() => {
             setShareURL("");
-        },500)
-
+        }, 500);
     };
 
     const submitShare = e => {
@@ -195,7 +194,7 @@ export default function CreatShare(props) {
             password: values.password,
             downloads: shareOption.expire ? values.downloads : -1,
             expire: values.expires,
-            preview:shareOption.preview,
+            preview: shareOption.preview
         };
 
         API.post("/share", submitFormBody)
@@ -205,11 +204,11 @@ export default function CreatShare(props) {
                     password: "",
                     downloads: 1,
                     expires: 24 * 3600,
-                    showPassword: false,
+                    showPassword: false
                 });
                 setShareOption({
                     password: false,
-                    expire: false,
+                    expire: false
                 });
                 props.setModalsLoading(false);
             })
@@ -412,7 +411,9 @@ export default function CreatShare(props) {
                                 </ListItem>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                                <Typography>是否允许在分享页面预览文件内容</Typography>
+                                <Typography>
+                                    是否允许在分享页面预览文件内容
+                                </Typography>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     </List>

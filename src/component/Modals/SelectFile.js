@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import {
     Button,
@@ -29,35 +29,37 @@ const useStyles = makeStyles(theme => ({
         marginTop: -12,
         marginLeft: -12
     },
-    content:{
-        padding:0,
+    content: {
+        padding: 0
     }
 }));
 
 export default function SelectFileDialog(props) {
-    const [files,setFiles] = useState(props.files);
+    const [files, setFiles] = useState(props.files);
 
-    useEffect(()=>{
+    useEffect(() => {
         setFiles(props.files);
-    },[props.files]);
+    }, [props.files]);
 
-
-    const handleChange = index => event =>{
+    const handleChange = index => event => {
         const filesCopy = [...files];
         // eslint-disable-next-line
-        filesCopy.map((v,k)=>{
-            if (v.index === index){
-                filesCopy[k] = {...filesCopy[k],selected:event.target.checked ? "true" : "false"};
+        filesCopy.map((v, k) => {
+            if (v.index === index) {
+                filesCopy[k] = {
+                    ...filesCopy[k],
+                    selected: event.target.checked ? "true" : "false"
+                };
             }
         });
         setFiles(filesCopy);
     };
 
-    const submit = () =>{
+    const submit = () => {
         const index = [];
         // eslint-disable-next-line
-        files.map(v=>{
-            if(v.selected === "true"){
+        files.map(v => {
+            if (v.selected === "true") {
                 index.push(parseInt(v.index));
             }
         });
@@ -77,25 +79,30 @@ export default function SelectFileDialog(props) {
                 {files.map((v, k) => {
                     return (
                         <MenuItem key={k}>
-                        <FormGroup row>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        onChange={handleChange(v.index)}
-                                        checked={v.selected === "true"}
-                                        value="checkedA"
-                                    />
-                                }
-                                label={v.path}
-                            />
-                        </FormGroup></MenuItem>
+                            <FormGroup row>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            onChange={handleChange(v.index)}
+                                            checked={v.selected === "true"}
+                                            value="checkedA"
+                                        />
+                                    }
+                                    label={v.path}
+                                />
+                            </FormGroup>
+                        </MenuItem>
                     );
                 })}
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.onClose}>取消</Button>
                 <div className={classes.wrapper}>
-                    <Button color="primary" onClick={submit} disabled={props.modalsLoading}>
+                    <Button
+                        color="primary"
+                        onClick={submit}
+                        disabled={props.modalsLoading}
+                    >
                         确定
                         {props.modalsLoading && (
                             <CircularProgress

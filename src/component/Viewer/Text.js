@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {useLocation, useParams, useRouteMatch} from "react-router";
+import { useLocation, useParams, useRouteMatch } from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
-import Editor from 'for-editor'
+import Editor from "for-editor";
 import SaveButton from "../Dial/Save";
 import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
@@ -26,21 +26,20 @@ const useStyles = makeStyles(theme => ({
     player: {
         borderRadius: "4px"
     },
-    root:{
-        backgroundColor:"white",
-        borderRadius: "8px",
+    root: {
+        backgroundColor: "white",
+        borderRadius: "8px"
     },
     "@global": {
-        ".for-toolbar":{
-            overflowX:"auto!important",
-        },
-    },
+        ".for-toolbar": {
+            overflowX: "auto!important"
+        }
+    }
 }));
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
-
 
 export default function TextViewer() {
     const [content, setContent] = useState("");
@@ -74,17 +73,18 @@ export default function TextViewer() {
 
     useEffect(() => {
         let requestURL = "/file/content/" + query.get("id");
-        if (pathHelper.isSharePage(location.pathname)){
+        if (pathHelper.isSharePage(location.pathname)) {
             requestURL = "/share/content/" + id;
-            if(query.get("share_path") !== ""){
-                requestURL +=("?path=" +encodeURIComponent(query.get("share_path")))
+            if (query.get("share_path") !== "") {
+                requestURL +=
+                    "?path=" + encodeURIComponent(query.get("share_path"));
             }
         }
 
         setLoading(true);
-        API.get(requestURL, { responseType: 'arraybuffer' })
+        API.get(requestURL, { responseType: "arraybuffer" })
             .then(response => {
-                const buffer = new Buffer(response.rawData, 'binary');
+                const buffer = new Buffer(response.rawData, "binary");
                 const textdata = buffer.toString(); // for string
                 setContent(textdata);
             })
@@ -94,75 +94,75 @@ export default function TextViewer() {
                     "right",
                     "无法读取文件内容，" + error.message,
                     "error"
-                )
-            }).then(()=>{
-            setLoading(false);
-        });
+                );
+            })
+            .then(() => {
+                setLoading(false);
+            });
         // eslint-disable-next-line
     }, [math.params[0]]);
 
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
+    const toBase64 = file =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
 
-    const save = ()=>{
+    const save = () => {
         setStatus("loading");
-        API.put("/file/update/" + query.get("id"),content)
+        API.put("/file/update/" + query.get("id"), content)
             .then(() => {
                 setStatus("success");
-                setTimeout(()=>setStatus(""),2000);
+                setTimeout(() => setStatus(""), 2000);
             })
             .catch(error => {
                 setStatus("");
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                )
+                ToggleSnackbar("top", "right", error.message, "error");
             });
     };
 
-    const addImg = async ($file) => {
+    const addImg = async $file => {
         $vm.current.$img2Url($file.name, await toBase64($file));
-        console.log($file)
+        console.log($file);
     };
 
     const classes = useStyles();
     return (
         <div className={classes.layout}>
-
             <Paper className={classes.root} elevation={1}>
-                {loading && <TextLoading/>}
-                {!loading && <Editor
-                    ref={$vm}
-                    value={content}
-                    onSave = {()=>save()}
-                    addImg={($file) => addImg($file)}
-                    onChange={value => setContent(value)}
-                    toolbar = {{
-                        h1: true, // h1
-                        h2: true, // h2
-                        h3: true, // h3
-                        h4: true, // h4
-                        img: true, // 图片
-                        link: true, // 链接
-                        code: true, // 代码块
-                        preview: true, // 预览
-                        expand: true, // 全屏
-                        /* v0.0.9 */
-                        undo: true, // 撤销
-                        redo: true, // 重做
-                        save: false, // 保存
-                        /* v0.2.3 */
-                        subfield: true, // 单双栏模式
-                    }}
-                />}
+                {loading && <TextLoading />}
+                {!loading && (
+                    <Editor
+                        ref={$vm}
+                        value={content}
+                        onSave={() => save()}
+                        addImg={$file => addImg($file)}
+                        onChange={value => setContent(value)}
+                        toolbar={{
+                            h1: true, // h1
+                            h2: true, // h2
+                            h3: true, // h3
+                            h4: true, // h4
+                            img: true, // 图片
+                            link: true, // 链接
+                            code: true, // 代码块
+                            preview: true, // 预览
+                            expand: true, // 全屏
+                            /* v0.0.9 */
+                            undo: true, // 撤销
+                            redo: true, // 重做
+                            save: false, // 保存
+                            /* v0.2.3 */
+                            subfield: true // 单双栏模式
+                        }}
+                    />
+                )}
             </Paper>
-            {!pathHelper.isSharePage(location.pathname) && <SaveButton onClick={save} status={status}/>}
+            {!pathHelper.isSharePage(location.pathname) && (
+                <SaveButton onClick={save} status={status} />
+            )}
         </div>
     );
 }

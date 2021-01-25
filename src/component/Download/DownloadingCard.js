@@ -1,4 +1,14 @@
-import { Card, CardContent, darken, IconButton, lighten, LinearProgress, makeStyles, Typography, useTheme } from "@material-ui/core";
+import {
+    Card,
+    CardContent,
+    darken,
+    IconButton,
+    lighten,
+    LinearProgress,
+    makeStyles,
+    Typography,
+    useTheme
+} from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -23,7 +33,7 @@ import API from "../../middleware/Api";
 import { hex2bin, sizeToString } from "../../utils";
 import TypeIcon from "../FileManager/TypeIcon";
 import SelectFileDialog from "../Modals/SelectFile";
-
+import { useHistory } from "react-router";
 const ExpansionPanel = withStyles({
     root: {
         maxWidth: "100%",
@@ -148,11 +158,13 @@ export default function DownloadingCard(props) {
     const canvasRef = React.createRef();
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
 
     const [expanded, setExpanded] = React.useState("");
     const [task, setTask] = React.useState(props.task);
     const [loading, setLoading] = React.useState(false);
-    const [selectDialogOpen,setSelectDialogOpen] = React.useState(false);
+    const [selectDialogOpen, setSelectDialogOpen] = React.useState(false);
+    const [selectFileOption, setSelectFileOption] = React.useState([]);
 
     const handleChange = panel => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
@@ -183,7 +195,9 @@ export default function DownloadingCard(props) {
         context.strokeStyle = theme.palette.primary.main;
         for (let i = 0; i < canvas.width; i++) {
             let bit =
-                result[Math.round(((i + 1) / canvas.width) * task.info.numPieces)];
+                result[
+                    Math.round(((i + 1) / canvas.width) * task.info.numPieces)
+                ];
             bit = bit ? bit : result.slice(-1);
             if (bit === "1") {
                 context.beginPath();
@@ -193,7 +207,7 @@ export default function DownloadingCard(props) {
             }
         }
         // eslint-disable-next-line
-    }, [task.info.bitfield,task.info.numPieces, theme]);
+    }, [task.info.bitfield, task.info.numPieces, theme]);
 
     const getPercent = (completed, total) => {
         if (total === 0) {
@@ -202,9 +216,8 @@ export default function DownloadingCard(props) {
         return (completed / total) * 100;
     };
 
-
     const activeFiles = useCallback(() => {
-      return task.info.files.filter(v => v.selected === "true");
+        return task.info.files.filter(v => v.selected === "true");
     }, [task.info.files]);
 
     const deleteFile = index => {
@@ -275,9 +288,14 @@ export default function DownloadingCard(props) {
 
     const cancel = () => {
         setLoading(true);
-        API.delete("/aria2/task/" + task.info.gid, )
+        API.delete("/aria2/task/" + task.info.gid)
             .then(() => {
-                ToggleSnackbar("top", "right", "任务已取消，状态会在稍后更新", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "任务已取消，状态会在稍后更新",
+                    "success"
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -287,13 +305,18 @@ export default function DownloadingCard(props) {
             });
     };
 
-    const changeSelectedFile = fileIndex =>{
+    const changeSelectedFile = fileIndex => {
         setLoading(true);
         API.put("/aria2/select/" + task.info.gid, {
             indexes: fileIndex
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "操作成功，状态会在稍后更新", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "操作成功，状态会在稍后更新",
+                    "success"
+                );
                 setSelectDialogOpen(false);
             })
             .catch(error => {
@@ -307,10 +330,10 @@ export default function DownloadingCard(props) {
     return (
         <Card className={classes.card}>
             <SelectFileDialog
-                open = {selectDialogOpen}
-                onClose ={()=>setSelectDialogOpen(false)}
+                open={selectDialogOpen}
+                onClose={() => setSelectDialogOpen(false)}
                 modalsLoading={loading}
-                files={props.task.info.files}
+                files={selectFileOption}
                 onSubmit={changeSelectedFile}
             />
             <ExpansionPanel
@@ -379,11 +402,11 @@ export default function DownloadingCard(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Divider />
-                    {task.info.bittorrent.mode === "multi" &&
+                    {task.info.bittorrent.mode === "multi" && (
                         <div className={classes.scroll}>
                             <Table size="small">
                                 <TableBody>
-                                    {activeFiles().map((value) => {
+                                    {activeFiles().map(value => {
                                         return (
                                             <TableRow
                                                 key={value.index}
@@ -393,28 +416,32 @@ export default function DownloadingCard(props) {
                                                         (theme.palette.type ===
                                                         "dark"
                                                             ? darken(
-                                                                theme.palette
-                                                                    .primary.main,
-                                                                0.4
-                                                            )
+                                                                  theme.palette
+                                                                      .primary
+                                                                      .main,
+                                                                  0.4
+                                                              )
                                                             : lighten(
-                                                                theme.palette
-                                                                    .primary.main,
-                                                                0.85
-                                                            )) +
+                                                                  theme.palette
+                                                                      .primary
+                                                                      .main,
+                                                                  0.85
+                                                              )) +
                                                         " 0%," +
                                                         (theme.palette.type ===
                                                         "dark"
                                                             ? darken(
-                                                                theme.palette
-                                                                    .primary.main,
-                                                                0.4
-                                                            )
+                                                                  theme.palette
+                                                                      .primary
+                                                                      .main,
+                                                                  0.4
+                                                              )
                                                             : lighten(
-                                                                theme.palette
-                                                                    .primary.main,
-                                                                0.85
-                                                            )) +
+                                                                  theme.palette
+                                                                      .primary
+                                                                      .main,
+                                                                  0.85
+                                                              )) +
                                                         " " +
                                                         getPercent(
                                                             value.completedLength,
@@ -447,7 +474,9 @@ export default function DownloadingCard(props) {
                                                             className={
                                                                 classes.subFileIcon
                                                             }
-                                                            fileName={value.path}
+                                                            fileName={
+                                                                value.path
+                                                            }
                                                         />
                                                         {value.path}
                                                     </Typography>
@@ -458,7 +487,9 @@ export default function DownloadingCard(props) {
                                                 >
                                                     <Typography noWrap>
                                                         {" "}
-                                                        {sizeToString(value.length)}
+                                                        {sizeToString(
+                                                            value.length
+                                                        )}
                                                     </Typography>
                                                 </TableCell>
                                                 <TableCell
@@ -494,28 +525,38 @@ export default function DownloadingCard(props) {
                                 </TableBody>
                             </Table>
                         </div>
-                    }
+                    )}
 
                     <div className={classes.action}>
                         <Button
                             className={classes.actionButton}
                             variant="outlined"
                             color="secondary"
-                            onClick={() => window.location.href="/#/home?path=" + encodeURIComponent(task.dst)}
+                            onClick={() =>
+                                history.push(
+                                    "/#/home?path=" +
+                                        encodeURIComponent(task.dst)
+                                )
+                            }
                         >
                             打开存放目录
                         </Button>
-                        {task.info.bittorrent.mode === "multi" &&
+                        {task.info.bittorrent.mode === "multi" && (
                             <Button
                                 className={classes.actionButton}
                                 variant="outlined"
                                 color="secondary"
                                 disabled={loading}
-                                onClick={() => setSelectDialogOpen(true)}
+                                onClick={() => {
+                                    setSelectDialogOpen(true);
+                                    setSelectFileOption([
+                                        ...props.task.info.files
+                                    ]);
+                                }}
                             >
                                 选择要下载的文件
                             </Button>
-                        }
+                        )}
                         <Button
                             className={classes.actionButton}
                             onClick={cancel}
@@ -581,7 +622,7 @@ export default function DownloadingCard(props) {
                                             sm={10}
                                             xs={8}
                                             style={{
-                                                wordBreak:"break-all",
+                                                wordBreak: "break-all"
                                             }}
                                             className={classes.infoValue}
                                         >

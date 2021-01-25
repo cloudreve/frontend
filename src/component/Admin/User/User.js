@@ -81,7 +81,7 @@ export default function Group() {
     const [orderBy, setOrderBy] = useState(["id", "desc"]);
     const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const history = useHistory();
     const theme = useTheme();
@@ -112,55 +112,60 @@ export default function Group() {
     };
 
     useEffect(() => {
-      loadList();
+        loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
     const deletePolicy = id => {
         setLoading(true);
-        API.post("/admin/user/delete",{id:[id]})
+        API.post("/admin/user/delete", { id: [id] })
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
-            setLoading(false);
-        });
+            })
+            .then(() => {
+                setLoading(false);
+            });
     };
 
-    const deleteBatch = () =>{
+    const deleteBatch = () => {
         setLoading(true);
-        API.post("/admin/user/delete",{id:selected})
+        API.post("/admin/user/delete", { id: selected })
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户已删除", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
-            setLoading(false);
-        });
-    }
+            })
+            .then(() => {
+                setLoading(false);
+            });
+    };
 
-    const block = id =>{
+    const block = id => {
         setLoading(true);
-        API.patch("/admin/user/ban/"+id)
+        API.patch("/admin/user/ban/" + id)
             .then(response => {
-                setUsers(users.map(v=>{
-                    if (v.ID === id){
-                        const newUser = {...v,Status:response.data}
-                        return newUser;
-                    }
-                    return v
-                }))
+                setUsers(
+                    users.map(v => {
+                        if (v.ID === id) {
+                            const newUser = { ...v, Status: response.data };
+                            return newUser;
+                        }
+                        return v;
+                    })
+                );
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
-            setLoading(false);
-        });
-    }
+            })
+            .then(() => {
+                setLoading(false);
+            });
+    };
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
@@ -213,11 +218,11 @@ export default function Group() {
                 </Button>
                 <div className={classes.headerRight}>
                     <Tooltip title="过滤">
-
-                            <IconButton
-                                style={{ marginRight: 8 }}
-                                onClick={() => setFilterDialog(true)}
-                            ><Badge
+                        <IconButton
+                            style={{ marginRight: 8 }}
+                            onClick={() => setFilterDialog(true)}
+                        >
+                            <Badge
                                 color="secondary"
                                 variant="dot"
                                 invisible={
@@ -227,8 +232,7 @@ export default function Group() {
                             >
                                 <FilterList />
                             </Badge>
-                            </IconButton>
-
+                        </IconButton>
                     </Tooltip>
                     <Button
                         color={"primary"}
@@ -251,7 +255,11 @@ export default function Group() {
                             已选择 {selected.length} 个对象
                         </Typography>
                         <Tooltip title="删除">
-                            <IconButton onClick={deleteBatch} disabled={loading} aria-label="delete">
+                            <IconButton
+                                onClick={deleteBatch}
+                                disabled={loading}
+                                aria-label="delete"
+                            >
                                 <Delete />
                             </IconButton>
                         </Tooltip>
@@ -394,9 +402,7 @@ export default function Group() {
                                         ) : null}
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell
-                                    style={{ minWidth: 100 }}
-                                >
+                                <TableCell style={{ minWidth: 100 }}>
                                     操作
                                 </TableCell>
                             </TableRow>
@@ -423,7 +429,7 @@ export default function Group() {
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/#/admin/group/edit/" +
+                                                "/admin/group/edit/" +
                                                 row.Group.ID
                                             }
                                         >
@@ -499,7 +505,7 @@ export default function Group() {
                                         <Tooltip title={"封禁/解封"}>
                                             <IconButton
                                                 disabled={loading}
-                                                onClick={()=>block(row.ID)}
+                                                onClick={() => block(row.ID)}
                                                 size={"small"}
                                             >
                                                 <Block />

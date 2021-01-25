@@ -58,8 +58,8 @@ export default function WebDAV() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    
-    const loadList = () =>{
+
+    const loadList = () => {
         API.get("/webdav/accounts")
             .then(response => {
                 setAccounts(response.data.accounts);
@@ -67,10 +67,10 @@ export default function WebDAV() {
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
-    }
+    };
     useEffect(() => {
-      loadList();
-      // eslint-disable-next-line
+        loadList();
+        // eslint-disable-next-line
     }, []);
 
     const deleteAccount = id => {
@@ -138,7 +138,9 @@ export default function WebDAV() {
                     {tab === 0 && (
                         <div>
                             <Alert severity="info">
-                                WebDAV的地址为：{window.location.origin + "/dav"}；登陆用户名统一为：{user.user_name}{" "}
+                                WebDAV的地址为：
+                                {window.location.origin + "/dav"}
+                                ；登陆用户名统一为：{user.user_name}{" "}
                                 ；密码为所创建账号的密码。
                             </Alert>
                             <TableContainer className={classes.tableContainer}>
@@ -148,7 +150,7 @@ export default function WebDAV() {
                                 >
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>账号名称</TableCell>
+                                            <TableCell>备注名</TableCell>
                                             <TableCell align="right">
                                                 密码
                                             </TableCell>

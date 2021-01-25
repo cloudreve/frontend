@@ -37,26 +37,26 @@ export default function UploadDownload() {
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
         max_worker_num: "1",
-        max_parallel_transfer:"1",
-        temp_path:"",
-        maxEditSize:"0",
-        onedrive_chunk_retries:"0",
-        archive_timeout:"0",
-        download_timeout:"0",
-        preview_timeout:"0",
-        doc_preview_timeout:"0",
-        upload_credential_timeout:"0",
-        upload_session_timeout:"0",
-        slave_api_timeout:"0",
-        onedrive_monitor_timeout:"0",
-        share_download_session_timeout:"0",
-        onedrive_callback_check:"0",
-        reset_after_upload_failed:"0",
-        onedrive_source_timeout:"0",
+        max_parallel_transfer: "1",
+        temp_path: "",
+        maxEditSize: "0",
+        onedrive_chunk_retries: "0",
+        archive_timeout: "0",
+        download_timeout: "0",
+        preview_timeout: "0",
+        doc_preview_timeout: "0",
+        upload_credential_timeout: "0",
+        upload_session_timeout: "0",
+        slave_api_timeout: "0",
+        onedrive_monitor_timeout: "0",
+        share_download_session_timeout: "0",
+        onedrive_callback_check: "0",
+        reset_after_upload_failed: "0",
+        onedrive_source_timeout: "0"
     });
 
     const handleCheckChange = name => event => {
-        const value= event.target.checked ? "1" : "0";
+        const value = event.target.checked ? "1" : "0";
         setOptions({
             ...options,
             [name]: value
@@ -90,57 +90,56 @@ export default function UploadDownload() {
         // eslint-disable-next-line
     }, []);
 
-
     const submit = e => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k=>{
+        Object.keys(options).forEach(k => {
             option.push({
-                key:k,
-                value:options[k],
+                key: k,
+                value: options[k]
             });
-        })
-        API.patch("/admin/setting",{
-            options:option,
+        });
+        API.patch("/admin/setting", {
+            options: option
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
             .catch(error => {
                 ToggleSnackbar("top", "right", error.message, "error");
-            }).then(()=>{
+            })
+            .then(() => {
                 setLoading(false);
-        });
+            });
     };
 
     return (
         <div>
             <form onSubmit={submit}>
-
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
                         存储与传输
                     </Typography>
                     <div className={classes.formContainer}>
-
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     Worker 数量
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.max_worker_num}
                                     onChange={handleChange("max_worker_num")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    任务队列最多并行执行的任务数，保存后需要重启 Cloudreve 生效
+                                    任务队列最多并行执行的任务数，保存后需要重启
+                                    Cloudreve 生效
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -153,11 +152,13 @@ export default function UploadDownload() {
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.max_parallel_transfer}
-                                    onChange={handleChange("max_parallel_transfer")}
+                                    onChange={handleChange(
+                                        "max_parallel_transfer"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
@@ -199,22 +200,25 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     OneDrive 分片错误重试
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:0,
-                                        step:1,
+                                        min: 0,
+                                        step: 1
                                     }}
                                     value={options.onedrive_chunk_retries}
-                                    onChange={handleChange("onedrive_chunk_retries")}
+                                    onChange={handleChange(
+                                        "onedrive_chunk_retries"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    OneDrive 存储策略分片上传失败后重试的最大次数，只适用于服务端上传或中转
+                                    OneDrive
+                                    存储策略分片上传失败后重试的最大次数，只适用于服务端上传或中转
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -225,7 +229,8 @@ export default function UploadDownload() {
                                     control={
                                         <Switch
                                             checked={
-                                                options.reset_after_upload_failed === "1"
+                                                options.reset_after_upload_failed ===
+                                                "1"
                                             }
                                             onChange={handleCheckChange(
                                                 "reset_after_upload_failed"
@@ -239,7 +244,6 @@ export default function UploadDownload() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
 
@@ -249,17 +253,16 @@ export default function UploadDownload() {
                     </Typography>
 
                     <div className={classes.formContainer}>
-
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     打包下载
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.archive_timeout}
                                     onChange={handleChange("archive_timeout")}
@@ -269,15 +272,15 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     下载会话
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.download_timeout}
                                     onChange={handleChange("download_timeout")}
@@ -287,15 +290,15 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     预览链接
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.preview_timeout}
                                     onChange={handleChange("preview_timeout")}
@@ -305,54 +308,60 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     Office 文档预览连接
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.doc_preview_timeout}
-                                    onChange={handleChange("doc_preview_timeout")}
+                                    onChange={handleChange(
+                                        "doc_preview_timeout"
+                                    )}
                                     required
                                 />
                             </FormControl>
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     上传凭证
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.upload_credential_timeout}
-                                    onChange={handleChange("upload_credential_timeout")}
+                                    onChange={handleChange(
+                                        "upload_credential_timeout"
+                                    )}
                                     required
                                 />
                             </FormControl>
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     上传会话
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.upload_session_timeout}
-                                    onChange={handleChange("upload_session_timeout")}
+                                    onChange={handleChange(
+                                        "upload_session_timeout"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
@@ -362,15 +371,15 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     从机API请求
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.slave_api_timeout}
                                     onChange={handleChange("slave_api_timeout")}
@@ -380,18 +389,22 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     分享下载会话
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
-                                    value={options.share_download_session_timeout}
-                                    onChange={handleChange("share_download_session_timeout")}
+                                    value={
+                                        options.share_download_session_timeout
+                                    }
+                                    onChange={handleChange(
+                                        "share_download_session_timeout"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
@@ -401,69 +414,77 @@ export default function UploadDownload() {
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     OneDrive 客户端上传监控间隔
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.onedrive_monitor_timeout}
-                                    onChange={handleChange("onedrive_monitor_timeout")}
+                                    onChange={handleChange(
+                                        "onedrive_monitor_timeout"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    每间隔所设定时间，Cloudreve 会向 OneDrive 请求检查客户端上传情况已确保客户端上传可控
+                                    每间隔所设定时间，Cloudreve 会向 OneDrive
+                                    请求检查客户端上传情况已确保客户端上传可控
                                 </FormHelperText>
                             </FormControl>
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     OneDrive 回调等待
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        step:1,
+                                        min: 1,
+                                        step: 1
                                     }}
                                     value={options.onedrive_callback_check}
-                                    onChange={handleChange("onedrive_callback_check")}
+                                    onChange={handleChange(
+                                        "onedrive_callback_check"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    OneDrive 客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败
+                                    OneDrive
+                                    客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败
                                 </FormHelperText>
                             </FormControl>
                         </div>
 
                         <div className={classes.form}>
-                            <FormControl >
+                            <FormControl>
                                 <InputLabel htmlFor="component-helper">
                                     OneDrive 下载请求缓存
                                 </InputLabel>
                                 <Input
                                     type={"number"}
                                     inputProps={{
-                                        min:1,
-                                        max:3659,
-                                        step:1,
+                                        min: 1,
+                                        max: 3659,
+                                        step: 1
                                     }}
                                     value={options.onedrive_source_timeout}
-                                    onChange={handleChange("onedrive_source_timeout")}
+                                    onChange={handleChange(
+                                        "onedrive_source_timeout"
+                                    )}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    OneDrive 获取文件下载 URL 后可将结果缓存，减轻热门文件下载API请求频率
+                                    OneDrive 获取文件下载 URL
+                                    后可将结果缓存，减轻热门文件下载API请求频率
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
                     </div>
                 </div>
 

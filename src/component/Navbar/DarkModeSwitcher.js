@@ -10,9 +10,9 @@ import classNames from "classnames";
 
 const useStyles = makeStyles(() => ({
     icon: {
-        color: 'rgb(255, 255, 255)',
-        opacity: "0.54",
-    },
+        color: "rgb(255, 255, 255)",
+        opacity: "0.54"
+    }
 }));
 
 const DarkModeSwitcher = ({ position }) => {
@@ -24,8 +24,8 @@ const DarkModeSwitcher = ({ position }) => {
     const isDayLight = (ThemeType && ThemeType === "light") || !ThemeType;
     const isDark = ThemeType && ThemeType === "dark";
     const toggleMode = () => {
-      Auth.SetPreference("theme_mode",isDayLight?"dark":"light");
-      ToggleThemeMode();
+        Auth.SetPreference("theme_mode", isDayLight ? "dark" : "light");
+        ToggleThemeMode();
     };
     const classes = useStyles();
     return (
@@ -35,9 +35,11 @@ const DarkModeSwitcher = ({ position }) => {
         >
             <IconButton
                 className={classNames({
-                    [classes.icon]: "left" === position,
+                    [classes.icon]: "left" === position
                 })}
-                onClick={toggleMode} color="inherit">
+                onClick={toggleMode}
+                color="inherit"
+            >
                 {isDayLight && <NightIcon />}
                 {isDark && <DayIcon />}
             </IconButton>

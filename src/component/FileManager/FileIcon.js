@@ -1,4 +1,10 @@
-import { ButtonBase, Divider, Tooltip, Typography, withStyles } from "@material-ui/core";
+import {
+    ButtonBase,
+    Divider,
+    Tooltip,
+    Typography,
+    withStyles
+} from "@material-ui/core";
 import { lighten } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -95,7 +101,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
         paddingTop: "2px",
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.secondary
     },
     hide: {
         display: "none"

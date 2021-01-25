@@ -9,10 +9,7 @@ import {
     DialogContentText,
     CircularProgress
 } from "@material-ui/core";
-import {
-    toggleSnackbar,
-    setModalsLoading,
-} from "../../actions/index";
+import { toggleSnackbar, setModalsLoading } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
@@ -21,7 +18,7 @@ import TextField from "@material-ui/core/TextField";
 const useStyles = makeStyles(theme => ({
     contentFix: {
         padding: "10px 24px 0px 24px",
-        backgroundColor:theme.palette.background.default,
+        backgroundColor: theme.palette.background.default
     },
     wrapper: {
         margin: theme.spacing(1),
@@ -85,11 +82,11 @@ export default function CompressDialog(props) {
         });
 
         API.post("/file/compress", {
-            src:{
-                dirs:dirs,
-                items:items,
+            src: {
+                dirs: dirs,
+                items: items
             },
-            name:fileName,
+            name: fileName,
             dst: selectedPath === "//" ? "/" : selectedPath
         })
             .then(() => {
@@ -121,7 +118,14 @@ export default function CompressDialog(props) {
             {selectedPath !== "" && (
                 <DialogContent className={classes.contentFix}>
                     <DialogContentText>
-                        <TextField onChange={e=>setFileName(e.target.value)} value={fileName} fullWidth autoFocus id="standard-basic" label="压缩文件名" />
+                        <TextField
+                            onChange={e => setFileName(e.target.value)}
+                            value={fileName}
+                            fullWidth
+                            autoFocus
+                            id="standard-basic"
+                            label="压缩文件名"
+                        />
                     </DialogContentText>
                 </DialogContent>
             )}
@@ -131,7 +135,11 @@ export default function CompressDialog(props) {
                     <Button
                         onClick={submitMove}
                         color="primary"
-                        disabled={selectedPath === "" || fileName ==="" || props.modalsLoading}
+                        disabled={
+                            selectedPath === "" ||
+                            fileName === "" ||
+                            props.modalsLoading
+                        }
                     >
                         确定
                         {props.modalsLoading && (

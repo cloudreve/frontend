@@ -21,9 +21,11 @@ import {
     openCreateFolderDialog,
     openShareDialog,
     drawerToggleAction,
-    setShareUserPopover, openResaveDialog, openCompressDialog
+    setShareUserPopover,
+    openResaveDialog,
+    openCompressDialog
 } from "../../../actions/index";
-import explorer from "../../../redux/explorer"
+import explorer from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import { setCookie, setGetParameter, fixUrlHash } from "../../../utils/index";
 import {
@@ -40,10 +42,9 @@ import pathHelper from "../../../utils/page";
 import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
 import Avatar from "@material-ui/core/Avatar";
-import {Archive} from "@material-ui/icons";
+import { Archive } from "@material-ui/icons";
 import { FilePlus } from "mdi-material-ui";
 import { openCreateFileDialog } from "../../../actions";
-
 
 const mapStateToProps = state => {
     return {
@@ -100,12 +101,12 @@ const mapDispatchToProps = dispatch => {
         setShareUserPopover: e => {
             dispatch(setShareUserPopover(e));
         },
-        openResave: (key) => {
+        openResave: key => {
             dispatch(openResaveDialog(key));
         },
-        openCompressDialog: ()=>{
-            dispatch(openCompressDialog())
-        },
+        openCompressDialog: () => {
+            dispatch(openCompressDialog());
+        }
     };
 };
 
@@ -182,7 +183,7 @@ class NavigatorComponent extends Component {
     componentDidMount = () => {
         const url = new URL(fixUrlHash(window.location.href));
         const c = url.searchParams.get("path");
-        this.renderPath(c === null ? "/":c);
+        this.renderPath(c === null ? "/" : c);
 
         if (!this.props.isShare) {
             // 如果是在个人文件管理页，首次加载时打开侧边栏
@@ -193,7 +194,7 @@ class NavigatorComponent extends Component {
         window.onpopstate = () => {
             const url = new URL(fixUrlHash(window.location.href));
             const c = url.searchParams.get("path");
-            if (c !== null && c !== this.props.path) {
+            if (c !== null) {
                 this.props.navigateToPath(c);
             }
         };
@@ -330,7 +331,7 @@ class NavigatorComponent extends Component {
         const presentPath = this.props.path.split("/");
         const newTarget = [
             {
-                id:this.currentID,
+                id: this.currentID,
                 type: "dir",
                 name: presentPath.pop(),
                 path: presentPath.length === 1 ? "/" : presentPath.join("/")
@@ -384,7 +385,7 @@ class NavigatorComponent extends Component {
 
     render() {
         const { classes } = this.props;
-        const isHomePage =  pathHelper.isHomePage(this.props.location.pathname);
+        const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
         const user = Auth.GetUser();
 
         const presentFolderMenu = (
@@ -401,45 +402,42 @@ class NavigatorComponent extends Component {
                     </ListItemIcon>
                     刷新
                 </MenuItem>
-                {this.props.keywords === "" &&
-                isHomePage && (
-                        <div>
-                            <Divider />
+                {this.props.keywords === "" && isHomePage && (
+                    <div>
+                        <Divider />
+                        <MenuItem onClick={() => this.performAction("share")}>
+                            <ListItemIcon>
+                                <ShareIcon />
+                            </ListItemIcon>
+                            分享
+                        </MenuItem>
+                        {user.group.compress && (
                             <MenuItem
-                                onClick={() => this.performAction("share")}
-                            >
-                                <ListItemIcon>
-                                    <ShareIcon />
-                                </ListItemIcon>
-                                分享
-                            </MenuItem>
-                            {user.group.compress && <MenuItem
                                 onClick={() => this.performAction("compress")}
                             >
                                 <ListItemIcon>
                                     <Archive />
                                 </ListItemIcon>
                                 压缩
-                            </MenuItem>}
-                            <Divider />
-                            <MenuItem
-                                onClick={() => this.performAction("newfolder")}
-                            >
-                                <ListItemIcon>
-                                    <NewFolderIcon />
-                                </ListItemIcon>
-                                创建文件夹
                             </MenuItem>
-                            <MenuItem
-                                onClick={() => this.performAction("newFile")}
-                            >
-                                <ListItemIcon>
-                                    <FilePlus />
-                                </ListItemIcon>
-                                创建文件
-                            </MenuItem>
-                        </div>
-                    )}
+                        )}
+                        <Divider />
+                        <MenuItem
+                            onClick={() => this.performAction("newfolder")}
+                        >
+                            <ListItemIcon>
+                                <NewFolderIcon />
+                            </ListItemIcon>
+                            创建文件夹
+                        </MenuItem>
+                        <MenuItem onClick={() => this.performAction("newFile")}>
+                            <ListItemIcon>
+                                <FilePlus />
+                            </ListItemIcon>
+                            创建文件
+                        </MenuItem>
+                    </div>
+                )}
             </Menu>
         );
 
@@ -614,7 +612,11 @@ class NavigatorComponent extends Component {
                             >
                                 <Avatar
                                     style={{ height: 23, width: 23 }}
-                                    src={"/api/v3/user/avatar/"+this.props.share.creator.key + "/s"}
+                                    src={
+                                        "/api/v3/user/avatar/" +
+                                        this.props.share.creator.key +
+                                        "/s"
+                                    }
                                 />
                             </IconButton>
                         )}
