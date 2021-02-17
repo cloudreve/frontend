@@ -42,7 +42,7 @@ import {
     XAxis,
     YAxis
 } from "recharts";
-import ResponsiveContainer from "recharts/lib/component/ResponsiveContainer";
+import { ResponsiveContainer } from "recharts/lib/component/ResponsiveContainer";
 import TimeAgo from "timeago-react";
 import { toggleSnackbar } from "../../actions";
 import API from "../../middleware/Api";
