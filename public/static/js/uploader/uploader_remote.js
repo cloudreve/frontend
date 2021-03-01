@@ -729,7 +729,7 @@ function getCookieByString(cookieName) {
                     !that.token ||
                     (op.uptoken_url && that.tokenInfo.isExpired())
                 ) {
-                    return getNewUpToken(file,function(){});
+                    return getNewUpToken(file, function() {});
                 } else {
                     return that.token;
                 }
@@ -740,38 +740,38 @@ function getCookieByString(cookieName) {
             // if op.uptoken has value, set uptoken with op.uptoken
             // else if op.uptoken_url has value, set uptoken from op.uptoken_url
             // else if op.uptoken_func has value, set uptoken by result of op.uptoken_func
-            var getNewUpToken = function(file,callback) {
+            var getNewUpToken = function(file, callback) {
                 if (op.uptoken) {
                     that.token = op.uptoken;
                 } else if (op.uptoken_url) {
                     logger.debug("get uptoken from: ", that.uptoken_url);
                     var ajax = that.createAjax();
-                    if (file.size === undefined){
+                    if (file.size === undefined) {
                         file.size = 0;
                     }
                     ajax.open(
                         "GET",
                         that.uptoken_url +
-                        "?path=" +
-                        encodeURIComponent(window.pathCache[file.id]) +
-                        "&size=" +
-                        file.size +
-                        "&name=" +
-                        encodeURIComponent(file.name)+
-                        "&type=remote",
+                            "?path=" +
+                            encodeURIComponent(window.pathCache[file.id]) +
+                            "&size=" +
+                            file.size +
+                            "&name=" +
+                            encodeURIComponent(file.name) +
+                            "&type=remote",
                         true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
                     ajax.send();
-                    ajax.onload = function (e){
-                    	if (ajax.status === 200) {
+                    ajax.onload = function(e) {
+                        if (ajax.status === 200) {
                             var res = that.parseJSON(ajax.responseText);
                             if (res.code != 0) {
                                 uploader.trigger("Error", {
                                     status: 402,
                                     response: ajax.responseText,
                                     file: file,
-                                    message:res.msg,
+                                    message: res.msg,
                                     code: 402
                                 });
                                 callback();
@@ -781,18 +781,21 @@ function getCookieByString(cookieName) {
                             that.putPolicy = res.data.policy;
                             logger.debug("get new uptoken: ", that.token);
                             logger.debug("get new policy: ", that.putPolicy);
-                    	} else {
+                        } else {
                             uploader.trigger("Error", {
                                 status: 402,
                                 response: ajax.responseText,
                                 file: file,
                                 code: 402
                             });
-                    		logger.error("get uptoken error: ", ajax.responseText);
-                    	}
+                            logger.error(
+                                "get uptoken error: ",
+                                ajax.responseText
+                            );
+                        }
                         callback();
-                    }
-                    ajax.onerror = function (e){
+                    };
+                    ajax.onerror = function(e) {
                         uploader.trigger("Error", {
                             status: 402,
                             response: ajax.responseText,
@@ -800,8 +803,8 @@ function getCookieByString(cookieName) {
                             code: 402
                         });
                         callback();
-                    	logger.error("get uptoken error: ", ajax.responseText);
-                    }
+                        logger.error("get uptoken error: ", ajax.responseText);
+                    };
                 } else if (op.uptoken_func) {
                     logger.debug("get uptoken from uptoken_func");
                     that.token = op.uptoken_func(file);
@@ -933,7 +936,7 @@ function getCookieByString(cookieName) {
                 // else
                 //      getNewUptoken everytime before a new file upload
                 if (!op.get_new_uptoken) {
-                    getNewUpToken(null,function(){});
+                    getNewUpToken(null, function() {});
                 }
                 //getNewUpToken(null);
             });
@@ -950,7 +953,6 @@ function getCookieByString(cookieName) {
                     auto_start || (up.settings && up.settings.auto_start);
                 logger.debug("auto_start: ", auto_start);
                 logger.debug("files: ", files);
-
 
                 // detect is iOS
                 var is_ios = function() {
@@ -1049,8 +1051,9 @@ function getCookieByString(cookieName) {
                         multipart: false,
                         send_file_name: false,
                         headers: {
-							"X-Policy": that.putPolicy,
-							"Authorization": that.token,
+                            "X-Policy": that.putPolicy,
+                            "X-Overwrite": "false",
+                            Authorization: that.token,
                             "X-FileName": encodeURIComponent(
                                 getFileKey(up, file, func)
                             )
@@ -1080,7 +1083,7 @@ function getCookieByString(cookieName) {
                 logger.debug("uploader.runtime: ", uploader.runtime);
                 logger.debug("chunk_size: ", chunk_size);
 
-                getNewUpToken(file,()=>{
+                getNewUpToken(file, () => {
                     if (that.token) {
                         getUpHosts(that.token);
                     }
@@ -1090,7 +1093,10 @@ function getCookieByString(cookieName) {
                             uploader.runtime === "flash") &&
                         chunk_size
                     ) {
-                        if (file.size < chunk_size || is_android_weixin_or_qq()) {
+                        if (
+                            file.size < chunk_size ||
+                            is_android_weixin_or_qq()
+                        ) {
                             logger.debug(
                                 "directUpload because file.size < chunk_size || is_android_weixin_or_qq()"
                             );
@@ -1118,7 +1124,8 @@ function getCookieByString(cookieName) {
                                         if (file.size === localFileInfo.total) {
                                             // TODO: if file.name and file.size is the same
                                             // but not the same file will cause error
-                                            file.percent = localFileInfo.percent;
+                                            file.percent =
+                                                localFileInfo.percent;
                                             file.loaded = localFileInfo.offset;
                                             ctx = localFileInfo.ctx;
 
@@ -1129,7 +1136,8 @@ function getCookieByString(cookieName) {
 
                                             // set block size
                                             if (
-                                                localFileInfo.offset + blockSize >
+                                                localFileInfo.offset +
+                                                    blockSize >
                                                 file.size
                                             ) {
                                                 blockSize =
@@ -1182,7 +1190,8 @@ function getCookieByString(cookieName) {
                                     chunk_size: chunk_size,
                                     required_features: "chunks",
                                     headers: {
-                                        Authorization: "UpToken " + getUptoken(file)
+                                        Authorization:
+                                            "UpToken " + getUptoken(file)
                                     },
                                     multipart_params: multipart_params_obj
                                 });
@@ -1195,15 +1204,15 @@ function getCookieByString(cookieName) {
                         // direct upload if runtime is not html5
                         directUpload(up, file, that.key_handler);
                     }
-                    if (file.status != plupload.FAILED){
+                    if (file.status != plupload.FAILED) {
                         file.status = plupload.UPLOADING;
                         up.trigger("UploadFile", file);
-                    }else{
+                    } else {
                         up.stop();
                     }
                 });
 
-                return false
+                return false;
             });
 
             logger.debug("bind BeforeUpload event");
@@ -1360,7 +1369,7 @@ function getCookieByString(cookieName) {
                                     break;
                                 case 402:
                                     errTip = "无法获取上传凭证";
-                                    if (err.message){
+                                    if (err.message) {
                                         errTip = err.message;
                                     }
                                     break;
@@ -1393,7 +1402,7 @@ function getCookieByString(cookieName) {
                         if (uploadConfig.saveType == "s3") {
                         }
                         var last_step = function(up, file, info) {
-                          if (_FileUploaded_Handler) {
+                            if (_FileUploaded_Handler) {
                                 _FileUploaded_Handler(up, file, info);
                             }
                         };
