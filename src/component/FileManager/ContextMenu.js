@@ -55,14 +55,18 @@ import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
 const styles = () => ({
-    propover: {
-        minWidth: "200px!important"
-    },
+    propover: {},
     divider: {
         marginTop: 4,
         marginBottom: 4
     }
 });
+
+const StyledListItemIcon = withStyles({
+    root: {
+        minWidth: 38
+    }
+})(ListItemIcon);
 
 const mapStateToProps = state => {
     return {
@@ -327,10 +331,93 @@ class ContextMenuCompoment extends Component {
         }
     };
 
+    // 暂时只对空白处右键菜单使用这个函数，疑似有bug会导致的一个菜单被默认选中。
+    // 相关issue： https://github.com/mui-org/material-ui/issues/23747
+    renderMenuItems = items => {
+        const res = [];
+        let key = 0;
+
+        ["top", "center", "bottom"].forEach(position => {
+            let visibleCount = 0;
+            items[position].forEach(item => {
+                if (item.condition) {
+                    res.push(
+                        <MenuItem dense key={key} onClick={item.onClick}>
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <Typography variant="inherit">
+                                {item.text}
+                            </Typography>
+                        </MenuItem>
+                    );
+                    key++;
+                    visibleCount++;
+                }
+            });
+            if (visibleCount > 0 && position != "bottom") {
+                res.push(
+                    <Divider key={key} className={this.props.classes.divider} />
+                );
+                key++;
+            }
+        });
+
+        return res;
+    };
+
     render() {
         const { classes } = this.props;
         const user = Auth.GetUser();
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
+        const emptyMenuList = {
+            top: [
+                {
+                    condition: true,
+                    onClick: () => {
+                        this.props.refreshFileList();
+                        this.props.changeContextMenu(
+                            this.props.menuType,
+                            false
+                        );
+                    },
+                    icon: <RefreshIcon />,
+                    text: "刷新"
+                }
+            ],
+            center: [
+                {
+                    condition: true,
+                    onClick: () => this.clickUpload("uploadFileForm"),
+                    icon: <UploadIcon />,
+                    text: "上传文件"
+                },
+                {
+                    condition: true,
+                    onClick: () => this.clickUpload("uploadFolderForm"),
+                    icon: <FolderUpload />,
+                    text: "上传目录"
+                },
+                {
+                    condition: user.group.allowRemoteDownload,
+                    onClick: () => this.props.openRemoteDownloadDialog(),
+                    icon: <DownloadIcon />,
+                    text: "离线下载"
+                }
+            ],
+            bottom: [
+                {
+                    condition: true,
+                    onClick: () => this.props.openCreateFolderDialog(),
+                    icon: <NewFolderIcon />,
+                    text: "创建文件夹"
+                },
+                {
+                    condition: true,
+                    onClick: () => this.props.openCreateFileDialog(),
+                    icon: <FilePlus />,
+                    text: "创建文件"
+                }
+            ]
+        };
 
         return (
             <div>
@@ -354,6 +441,7 @@ class ContextMenuCompoment extends Component {
                     {this.props.menuType === "empty" && (
                         <div>
                             <MenuItem
+                                dense
                                 onClick={() => {
                                     this.props.refreshFileList();
                                     this.props.changeContextMenu(
@@ -362,45 +450,48 @@ class ContextMenuCompoment extends Component {
                                     );
                                 }}
                             >
-                                <ListItemIcon>
+                                <StyledListItemIcon>
                                     <RefreshIcon />
-                                </ListItemIcon>
+                                </StyledListItemIcon>
                                 <Typography variant="inherit">刷新</Typography>
                             </MenuItem>
                             <Divider className={classes.divider} />
                             <MenuItem
+                                dense
                                 onClick={() =>
                                     this.clickUpload("uploadFileForm")
                                 }
                             >
-                                <ListItemIcon>
+                                <StyledListItemIcon>
                                     <UploadIcon />
-                                </ListItemIcon>
+                                </StyledListItemIcon>
                                 <Typography variant="inherit">
                                     上传文件
                                 </Typography>
                             </MenuItem>
                             <MenuItem
+                                dense
                                 onClick={() =>
                                     this.clickUpload("uploadFolderForm")
                                 }
                             >
-                                <ListItemIcon>
+                                <StyledListItemIcon>
                                     <FolderUpload />
-                                </ListItemIcon>
+                                </StyledListItemIcon>
                                 <Typography variant="inherit">
                                     上传目录
                                 </Typography>
                             </MenuItem>
                             {user.group.allowRemoteDownload && (
                                 <MenuItem
+                                    dense
                                     onClick={() =>
                                         this.props.openRemoteDownloadDialog()
                                     }
                                 >
-                                    <ListItemIcon>
+                                    <StyledListItemIcon>
                                         <DownloadIcon />
-                                    </ListItemIcon>
+                                    </StyledListItemIcon>
                                     <Typography variant="inherit">
                                         离线下载
                                     </Typography>
@@ -409,25 +500,27 @@ class ContextMenuCompoment extends Component {
 
                             <Divider className={classes.divider} />
                             <MenuItem
+                                dense
                                 onClick={() =>
                                     this.props.openCreateFolderDialog()
                                 }
                             >
-                                <ListItemIcon>
+                                <StyledListItemIcon>
                                     <NewFolderIcon />
-                                </ListItemIcon>
+                                </StyledListItemIcon>
                                 <Typography variant="inherit">
                                     创建文件夹
                                 </Typography>
                             </MenuItem>
                             <MenuItem
+                                dense
                                 onClick={() =>
                                     this.props.openCreateFileDialog()
                                 }
                             >
-                                <ListItemIcon>
+                                <StyledListItemIcon>
                                     <FilePlus />
-                                </ListItemIcon>
+                                </StyledListItemIcon>
                                 <Typography variant="inherit">
                                     创建文件
                                 </Typography>
@@ -438,10 +531,10 @@ class ContextMenuCompoment extends Component {
                         <div>
                             {!this.props.isMultiple && this.props.withFolder && (
                                 <div>
-                                    <MenuItem onClick={this.enterFolder}>
-                                        <ListItemIcon>
+                                    <MenuItem dense onClick={this.enterFolder}>
+                                        <StyledListItemIcon>
                                             <OpenFolderIcon />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             进入
                                         </Typography>
@@ -458,11 +551,12 @@ class ContextMenuCompoment extends Component {
                                 isPreviewable(this.props.selected[0].name) && (
                                     <div>
                                         <MenuItem
+                                            dense
                                             onClick={() => this.openPreview()}
                                         >
-                                            <ListItemIcon>
+                                            <StyledListItemIcon>
                                                 <OpenIcon />
-                                            </ListItemIcon>
+                                            </StyledListItemIcon>
                                             <Typography variant="inherit">
                                                 打开
                                             </Typography>
@@ -473,11 +567,12 @@ class ContextMenuCompoment extends Component {
                             {!this.props.isMultiple && this.props.withFile && (
                                 <div>
                                     <MenuItem
+                                        dense
                                         onClick={() => this.openDownload()}
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <DownloadIcon />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             下载
                                         </Typography>
@@ -492,13 +587,14 @@ class ContextMenuCompoment extends Component {
                                 (user.group.allowArchiveDownload ||
                                     !isHomePage) && (
                                     <MenuItem
+                                        dense
                                         onClick={() =>
                                             this.openArchiveDownload()
                                         }
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <DownloadIcon />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             打包下载
                                         </Typography>
@@ -510,13 +606,14 @@ class ContextMenuCompoment extends Component {
                                 isHomePage &&
                                 user.policy.allowSource && (
                                     <MenuItem
+                                        dense
                                         onClick={() =>
                                             this.props.openGetSourceDialog()
                                         }
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <LinkIcon />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             获取外链
                                         </Typography>
@@ -529,13 +626,14 @@ class ContextMenuCompoment extends Component {
                                 this.props.withFile &&
                                 isTorrent(this.props.selected[0].name) && (
                                     <MenuItem
+                                        dense
                                         onClick={() =>
                                             this.props.openTorrentDownloadDialog()
                                         }
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <MagnetOn />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             创建离线下载任务
                                         </Typography>
@@ -547,13 +645,14 @@ class ContextMenuCompoment extends Component {
                                 this.props.withFile &&
                                 isCompressFile(this.props.selected[0].name) && (
                                     <MenuItem
+                                        dense
                                         onClick={() =>
                                             this.props.openDecompressDialog()
                                         }
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <Unarchive />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             解压缩
                                         </Typography>
@@ -562,13 +661,14 @@ class ContextMenuCompoment extends Component {
 
                             {isHomePage && user.group.compress && (
                                 <MenuItem
+                                    dense
                                     onClick={() =>
                                         this.props.openCompressDialog()
                                     }
                                 >
-                                    <ListItemIcon>
+                                    <StyledListItemIcon>
                                         <Archive />
-                                    </ListItemIcon>
+                                    </StyledListItemIcon>
                                     <Typography variant="inherit">
                                         创建压缩文件
                                     </Typography>
@@ -577,11 +677,12 @@ class ContextMenuCompoment extends Component {
 
                             {!this.props.isMultiple && isHomePage && (
                                 <MenuItem
+                                    dense
                                     onClick={() => this.props.openShareDialog()}
                                 >
-                                    <ListItemIcon>
+                                    <StyledListItemIcon>
                                         <ShareIcon />
-                                    </ListItemIcon>
+                                    </StyledListItemIcon>
                                     <Typography variant="inherit">
                                         创建分享链接
                                     </Typography>
@@ -591,26 +692,28 @@ class ContextMenuCompoment extends Component {
                             {!this.props.isMultiple && isHomePage && (
                                 <div>
                                     <MenuItem
+                                        dense
                                         onClick={() =>
                                             this.props.openRenameDialog()
                                         }
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <RenameIcon />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             重命名
                                         </Typography>
                                     </MenuItem>
                                     {this.props.keywords === "" && (
                                         <MenuItem
+                                            dense
                                             onClick={() =>
                                                 this.props.openCopyDialog()
                                             }
                                         >
-                                            <ListItemIcon>
+                                            <StyledListItemIcon>
                                                 <FileCopyIcon />
-                                            </ListItemIcon>
+                                            </StyledListItemIcon>
                                             <Typography variant="inherit">
                                                 复制
                                             </Typography>
@@ -622,13 +725,14 @@ class ContextMenuCompoment extends Component {
                                 <div>
                                     {this.props.keywords === "" && (
                                         <MenuItem
+                                            dense
                                             onClick={() =>
                                                 this.props.openMoveDialog()
                                             }
                                         >
-                                            <ListItemIcon>
+                                            <StyledListItemIcon>
                                                 <MoveIcon />
-                                            </ListItemIcon>
+                                            </StyledListItemIcon>
                                             <Typography variant="inherit">
                                                 移动
                                             </Typography>
@@ -637,14 +741,15 @@ class ContextMenuCompoment extends Component {
 
                                     <Divider className={classes.divider} />
                                     <MenuItem
+                                        dense
                                         className={classes.propover}
                                         onClick={() =>
                                             this.props.openRemoveDialog()
                                         }
                                     >
-                                        <ListItemIcon>
+                                        <StyledListItemIcon>
                                             <DeleteIcon />
-                                        </ListItemIcon>
+                                        </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             删除
                                         </Typography>
