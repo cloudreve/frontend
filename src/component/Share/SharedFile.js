@@ -132,6 +132,7 @@ class SharedFileCompoment extends Component {
 
     downloaded = false;
 
+    // TODO merge into react thunk
     preview = () => {
         if (pathHelper.isSharePage(this.props.location.pathname)) {
             const user = Auth.GetUser();

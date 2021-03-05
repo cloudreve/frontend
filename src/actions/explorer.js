@@ -3,6 +3,7 @@ import pathHelper from "../utils/page";
 import Auth from "../middleware/Auth";
 import {
     changeContextMenu,
+    openLoadingDialog,
     openMusicDialog,
     showImgPreivew,
     toggleSnackbar
@@ -187,6 +188,7 @@ export const openPreview = () => {
                 );
                 return;
             default:
+                dispatch(openLoadingDialog("获取下载地址..."));
                 return;
         }
     };

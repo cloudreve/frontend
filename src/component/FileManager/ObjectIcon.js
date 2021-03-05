@@ -24,6 +24,7 @@ import DropWarpper from "./DnD/DropWarpper";
 import { useHistory, useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import { pathBack } from "../../utils";
+import { openPreview } from "../../actions";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -45,7 +46,6 @@ export default function ObjectIcon(props) {
     );
     const navigatorPath = useSelector(state => state.navigator.path);
     const location = useLocation();
-    const history = useHistory();
 
     const dispatch = useDispatch();
     const ContextMenu = useCallback(
@@ -58,13 +58,6 @@ export default function ObjectIcon(props) {
     );
 
     const NavitateTo = useCallback(targets => dispatch(navigateTo(targets)), [
-        dispatch
-    ]);
-    const ShowImgPreivew = useCallback(
-        targets => dispatch(showImgPreivew(targets)),
-        [dispatch]
-    );
-    const OpenMusicDialog = useCallback(() => dispatch(openMusicDialog()), [
         dispatch
     ]);
     const ToggleSnackbar = useCallback(
@@ -80,6 +73,7 @@ export default function ObjectIcon(props) {
         text => dispatch(openLoadingDialog(text)),
         [dispatch]
     );
+    const OpenPreview = useCallback(() => dispatch(openPreview()), [dispatch]);
 
     const classes = useStyles();
 
@@ -144,111 +138,8 @@ export default function ObjectIcon(props) {
             OpenLoadingDialog("获取下载地址...");
             return;
         }
-        const previewPath =
-            selected[0].path === "/"
-                ? selected[0].path + selected[0].name
-                : selected[0].path + "/" + selected[0].name;
-        switch (isPreviewable(selected[0].name)) {
-            case "img":
-                ShowImgPreivew(selected[0]);
-                return;
-            case "msDoc":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/doc?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "audio":
-                OpenMusicDialog();
-                return;
-            case "video":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/video?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "edit":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/text?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "pdf":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/pdf?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/pdf?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "code":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/code?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/code?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            default:
-                OpenLoadingDialog("获取下载地址...");
-                return;
-        }
+
+        OpenPreview();
     };
 
     const [{ isDragging }, drag, preview] = useDrag({

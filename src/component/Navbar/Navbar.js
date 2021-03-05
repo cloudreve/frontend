@@ -29,7 +29,8 @@ import {
     openShareDialog,
     openRenameDialog,
     openLoadingDialog,
-    setSessionStatus
+    setSessionStatus,
+    openPreview
 } from "../../actions";
 import {
     allowSharePreview,
@@ -137,6 +138,9 @@ const mapDispatchToProps = dispatch => {
         },
         setSessionStatus: () => {
             dispatch(setSessionStatus());
+        },
+        openPreview: () => {
+            dispatch(openPreview());
         }
     };
 };
@@ -335,130 +339,6 @@ class NavbarCompoment extends Component {
         }
     };
 
-    openPreview = () => {
-        const isShare = pathHelper.isSharePage(this.props.location.pathname);
-        if (isShare) {
-            const user = Auth.GetUser();
-            if (!Auth.Check() && user && !user.group.shareDownload) {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    "请先登录",
-                    "warning"
-                );
-                this.props.changeContextMenu("file", false);
-                return;
-            }
-        }
-        this.props.changeContextMenu("file", false);
-        const previewPath =
-            this.props.selected[0].path === "/"
-                ? this.props.selected[0].path + this.props.selected[0].name
-                : this.props.selected[0].path +
-                  "/" +
-                  this.props.selected[0].name;
-        switch (isPreviewable(this.props.selected[0].name)) {
-            case "img":
-                this.props.showImgPreivew(this.props.selected[0]);
-                return;
-            case "msDoc":
-                if (isShare) {
-                    this.props.history.push(
-                        this.props.selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                this.props.history.push(
-                    "/doc?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        this.props.selected[0].id
-                );
-                return;
-            case "audio":
-                this.props.openMusicDialog();
-                return;
-            case "video":
-                if (isShare) {
-                    this.props.history.push(
-                        this.props.selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                this.props.history.push(
-                    "/video?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        this.props.selected[0].id
-                );
-                return;
-            case "edit":
-                if (isShare) {
-                    this.props.history.push(
-                        this.props.selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                this.props.history.push(
-                    "/text?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        this.props.selected[0].id
-                );
-                return;
-            case "pdf":
-                if (isShare) {
-                    this.props.history.push(
-                        this.props.selected[0].key +
-                            "/pdf?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                this.props.history.push(
-                    "/pdf?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        this.props.selected[0].id
-                );
-                return;
-            case "code":
-                if (isShare) {
-                    this.props.history.push(
-                        this.props.selected[0].key +
-                            "/code?name=" +
-                            encodeURIComponent(this.props.selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                this.props.history.push(
-                    "/code?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        this.props.selected[0].id
-                );
-                return;
-            default:
-                return;
-        }
-    };
-
     openDownload = () => {
         if (!allowSharePreview()) {
             this.props.toggleSnackbar(
@@ -647,36 +527,6 @@ class NavbarCompoment extends Component {
                         </ListItem>
                     </div>
                 )}
-                {/*{pathHelper.isSharePage(this.props.location.pathname) && (*/}
-                {/*    <div className={classes.stickFooter}>*/}
-                {/*        <Divider />*/}
-                {/*        <a*/}
-                {/*            className={classes.shareInfoContainer}*/}
-                {/*            href={"/Profile/" + window.shareInfo.ownerUid}*/}
-                {/*        >*/}
-                {/*            <Avatar*/}
-                {/*                src={*/}
-                {/*                    "/Member/Avatar/" +*/}
-                {/*                    window.shareInfo.ownerUid +*/}
-                {/*                    "/l"*/}
-                {/*                }*/}
-                {/*                className={classes.shareAvatar}*/}
-                {/*            />*/}
-                {/*            <div className={classes.ownerInfo}>*/}
-                {/*                <Typography noWrap>*/}
-                {/*                    {window.shareInfo.ownerNick}*/}
-                {/*                </Typography>*/}
-                {/*                <Typography*/}
-                {/*                    noWrap*/}
-                {/*                    variant="caption"*/}
-                {/*                    color="textSecondary"*/}
-                {/*                >*/}
-                {/*                    分享于{window.shareInfo.shareDate}*/}
-                {/*                </Typography>*/}
-                {/*            </div>*/}
-                {/*        </a>*/}
-                {/*    </div>*/}
-                {/*)}*/}
             </div>
         );
         const iOS =
@@ -839,7 +689,7 @@ class NavbarCompoment extends Component {
                                                     <IconButton
                                                         color="inherit"
                                                         onClick={() =>
-                                                            this.openPreview()
+                                                            this.props.openPreview()
                                                         }
                                                     >
                                                         <OpenIcon />
