@@ -25,6 +25,7 @@
     "case-sensitive-paths-webpack-plugin": "2.2.0",
     "classnames": "^2.2.6",
     "clsx": "latest",
+    "connected-react-router": "^6.9.1",
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "5.1.0",

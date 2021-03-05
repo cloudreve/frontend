@@ -53,6 +53,7 @@ import Auth from "../../middleware/Auth";
 import { allowSharePreview } from "../../utils/index";
 import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import { openPreview } from "../../actions";
 
 const styles = () => ({
     propover: {},
@@ -145,6 +146,9 @@ const mapDispatchToProps = dispatch => {
         },
         refreshFileList: () => {
             dispatch(refreshFileList());
+        },
+        openPreview: () => {
+            dispatch(openPreview());
         }
     };
 };
@@ -552,7 +556,9 @@ class ContextMenuCompoment extends Component {
                                     <div>
                                         <MenuItem
                                             dense
-                                            onClick={() => this.openPreview()}
+                                            onClick={() =>
+                                                this.props.openPreview()
+                                            }
                                         >
                                             <StyledListItemIcon>
                                                 <OpenIcon />

@@ -1,4 +1,14 @@
 import { isMac } from "../utils";
+import pathHelper from "../utils/page";
+import Auth from "../middleware/Auth";
+import {
+    changeContextMenu,
+    openMusicDialog,
+    showImgPreivew,
+    toggleSnackbar
+} from "./index";
+import { isPreviewable } from "../config";
+import { push } from "connected-react-router";
 
 export const removeSelectedTargets = fileIds => {
     return {
@@ -33,6 +43,152 @@ export const setShiftSelectedIds = shiftSelectedIds => {
     return {
         type: "SET_SHIFT_SELECTED_IDS",
         shiftSelectedIds
+    };
+};
+
+export const openPreview = () => {
+    return (dispatch, getState) => {
+        const {
+            explorer: { selected },
+            router: {
+                location: { pathname }
+            }
+        } = getState();
+        const isShare = pathHelper.isSharePage(pathname);
+        if (isShare) {
+            const user = Auth.GetUser();
+            if (!Auth.Check() && user && !user.group.shareDownload) {
+                dispatch(toggleSnackbar("top", "right", "请先登录", "warning"));
+                dispatch(changeContextMenu("file", false));
+                return;
+            }
+        }
+
+        dispatch(changeContextMenu("file", false));
+        const previewPath =
+            selected[0].path === "/"
+                ? selected[0].path + selected[0].name
+                : selected[0].path + "/" + selected[0].name;
+        switch (isPreviewable(selected[0].name)) {
+            case "img":
+                dispatch(showImgPreivew(selected[0]));
+                return;
+            case "msDoc":
+                if (isShare) {
+                    dispatch(
+                        push(
+                            selected[0].key +
+                                "/doc?name=" +
+                                encodeURIComponent(selected[0].name) +
+                                "&share_path=" +
+                                encodeURIComponent(previewPath)
+                        )
+                    );
+                    return;
+                }
+                dispatch(
+                    push(
+                        "/doc?p=" +
+                            encodeURIComponent(previewPath) +
+                            "&id=" +
+                            selected[0].id
+                    )
+                );
+                return;
+            case "audio":
+                dispatch(openMusicDialog());
+                return;
+            case "video":
+                if (isShare) {
+                    dispatch(
+                        push(
+                            selected[0].key +
+                                "/video?name=" +
+                                encodeURIComponent(selected[0].name) +
+                                "&share_path=" +
+                                encodeURIComponent(previewPath)
+                        )
+                    );
+                    return;
+                }
+                dispatch(
+                    push(
+                        "/video?p=" +
+                            encodeURIComponent(previewPath) +
+                            "&id=" +
+                            selected[0].id
+                    )
+                );
+                return;
+            case "pdf":
+                if (isShare) {
+                    dispatch(
+                        push(
+                            selected[0].key +
+                                "/pdf?name=" +
+                                encodeURIComponent(selected[0].name) +
+                                "&share_path=" +
+                                encodeURIComponent(previewPath)
+                        )
+                    );
+                    return;
+                }
+                dispatch(
+                    push(
+                        "/pdf?p=" +
+                            encodeURIComponent(previewPath) +
+                            "&id=" +
+                            selected[0].id
+                    )
+                );
+                return;
+            case "edit":
+                if (isShare) {
+                    dispatch(
+                        push(
+                            selected[0].key +
+                                "/text?name=" +
+                                encodeURIComponent(selected[0].name) +
+                                "&share_path=" +
+                                encodeURIComponent(previewPath)
+                        )
+                    );
+                    return;
+                }
+                dispatch(
+                    push(
+                        "/text?p=" +
+                            encodeURIComponent(previewPath) +
+                            "&id=" +
+                            selected[0].id
+                    )
+                );
+                return;
+            case "code":
+                if (isShare) {
+                    dispatch(
+                        push(
+                            selected[0].key +
+                                "/code?name=" +
+                                encodeURIComponent(selected[0].name) +
+                                "&share_path=" +
+                                encodeURIComponent(previewPath)
+                        )
+                    );
+                    return;
+                }
+                dispatch(
+                    push(
+                        "/code?p=" +
+                            encodeURIComponent(previewPath) +
+                            "&id=" +
+                            selected[0].id
+                    )
+                );
+                return;
+            default:
+                return;
+        }
     };
 };
 
