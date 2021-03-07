@@ -11,6 +11,9 @@ import { lighten } from "@material-ui/core/styles";
 import pathHelper from "../../utils/page";
 import { withRouter } from "react-router";
 import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import statusHelper from "../../utils/page";
+import Grow from "@material-ui/core/Grow";
 
 const styles = theme => ({
     selected: {
@@ -55,7 +58,8 @@ const styles = theme => ({
     },
     folderName: {
         marginRight: "20px",
-        display: "flex"
+        display: "flex",
+        alignItems: "center"
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
@@ -64,6 +68,9 @@ const styles = theme => ({
     },
     tableRow: {
         padding: "10px 16px"
+    },
+    checkIcon: {
+        color: theme.palette.primary.main
     }
 });
 
@@ -97,11 +104,11 @@ class TableRowCompoment extends Component {
                 />
             );
         }
-
         const isSelected =
             this.props.selected.findIndex(value => {
                 return value === this.props.file;
             }) !== -1;
+        const isMobile = statusHelper.isMobile();
 
         return (
             <TableRow
@@ -126,7 +133,25 @@ class TableRowCompoment extends Component {
                             [classes.folderNameNotSelected]: !isSelected
                         })}
                     >
-                        {icon}
+                        <div
+                            onClick={
+                                this.props.file.type !== "up"
+                                    ? this.props.onIconClick
+                                    : null
+                            }
+                        >
+                            {(!isSelected || !isMobile) && icon}
+                            {isSelected && isMobile && (
+                                <Grow in={isSelected && isMobile}>
+                                    <CheckCircleRoundedIcon
+                                        className={classNames(
+                                            classes.checkIcon,
+                                            classes.icon
+                                        )}
+                                    />
+                                </Grow>
+                            )}
+                        </div>
                         {this.props.file.name}
                     </Typography>
                 </TableCell>

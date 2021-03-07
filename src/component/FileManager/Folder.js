@@ -4,6 +4,9 @@ import classNames from "classnames";
 import { ButtonBase, Typography, Tooltip, makeStyles } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { lighten } from "@material-ui/core/styles";
+import statusHelper from "../../utils/page";
+import TypeIcon from "./TypeIcon";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 const useStyles = makeStyles(theme => ({
     container: {
         padding: "7px"
@@ -45,7 +48,7 @@ const useStyles = makeStyles(theme => ({
         minWidth: "30px",
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
-        paddingTop: "2px",
+        paddingTop: "3px",
         color: theme.palette.text.secondary
     },
     folderNameSelected: {
@@ -67,14 +70,16 @@ const useStyles = makeStyles(theme => ({
     },
     active: {
         border: "2px solid " + theme.palette.primary.light
+    },
+    checkIcon: {
+        color: theme.palette.primary.main
     }
 }));
 
-export default function Folder({ folder, isActive }) {
+export default function Folder({ folder, isActive, onIconClick }) {
     const selected = useSelector(state => state.explorer.selected);
-
     const classes = useStyles();
-
+    const isMobile = statusHelper.isMobile();
     const isSelected =
         selected.findIndex(value => {
             return value === folder;
@@ -93,12 +98,16 @@ export default function Folder({ folder, isActive }) {
             )}
         >
             <div
+                onClick={onIconClick}
                 className={classNames(classes.icon, {
                     [classes.iconSelected]: isSelected,
                     [classes.iconNotSelected]: !isSelected
                 })}
             >
-                <FolderIcon />
+                {(!isSelected || !isMobile) && <FolderIcon />}
+                {isSelected && isMobile && (
+                    <CheckCircleRoundedIcon className={classes.checkIcon} />
+                )}
             </div>
             <Tooltip title={folder.name} aria-label={folder.name}>
                 <Typography

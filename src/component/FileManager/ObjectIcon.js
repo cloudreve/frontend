@@ -142,6 +142,15 @@ export default function ObjectIcon(props) {
         OpenPreview();
     };
 
+    const handleIconClick = e => {
+        if (statusHelper.isMobile()) {
+            e.stopPropagation();
+            e.ctrlKey = true;
+            selectFile(e);
+            return false;
+        }
+    };
+
     const [{ isDragging }, drag, preview] = useDrag({
         item: {
             object: props.file,
@@ -181,6 +190,7 @@ export default function ObjectIcon(props) {
     if (viewMethod === "list") {
         return (
             <TableItem
+                onIconClick={handleIconClick}
                 contextMenu={contextMenu}
                 handleClick={handleClick}
                 handleDoubleClick={handleDoubleClick.bind(this)}
@@ -204,13 +214,23 @@ export default function ObjectIcon(props) {
                 onDoubleClick={handleDoubleClick.bind(this)}
             >
                 {props.file.type === "dir" && viewMethod !== "list" && (
-                    <DropWarpper folder={props.file} />
+                    <DropWarpper
+                        onIconClick={handleIconClick}
+                        folder={props.file}
+                    />
                 )}
                 {props.file.type === "file" && viewMethod === "icon" && (
-                    <FileIcon ref={drag} file={props.file} />
+                    <FileIcon
+                        onIconClick={handleIconClick}
+                        ref={drag}
+                        file={props.file}
+                    />
                 )}
                 {props.file.type === "file" && viewMethod === "smallIcon" && (
-                    <SmallIcon file={props.file} />
+                    <SmallIcon
+                        onIconClick={handleIconClick}
+                        file={props.file}
+                    />
                 )}
             </div>
         </div>

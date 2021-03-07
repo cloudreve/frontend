@@ -16,6 +16,9 @@ import { withRouter } from "react-router";
 import { baseURL } from "../../middleware/Api";
 import pathHelper from "../../utils/page";
 import TypeIcon from "./TypeIcon";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import statusHelper from "../../utils/page";
+import Grow from "@material-ui/core/Grow";
 
 const styles = theme => ({
     container: {
@@ -100,7 +103,7 @@ const styles = theme => ({
         minWidth: "30px",
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
-        paddingTop: "2px",
+        paddingTop: "3px",
         color: theme.palette.text.secondary
     },
     hide: {
@@ -113,6 +116,9 @@ const styles = theme => ({
     },
     shareFix: {
         marginLeft: "20px"
+    },
+    checkIcon: {
+        color: theme.palette.primary.main
     }
 });
 
@@ -139,15 +145,14 @@ class FileIconCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-
         const isSelected =
             this.props.selected.findIndex(value => {
                 return value === this.props.file;
             }) !== -1;
-
         const isSharePage = pathHelper.isSharePage(
             this.props.location.pathname
         );
+        const isMobile = statusHelper.isMobile();
 
         return (
             <div className={classes.container}>
@@ -233,12 +238,22 @@ class FileIconCompoment extends Component {
                     <div className={classes.fileInfo}>
                         {!this.props.share && (
                             <div
+                                onClick={this.props.onIconClick}
                                 className={classNames(classes.icon, {
                                     [classes.iconSelected]: isSelected,
                                     [classes.iconNotSelected]: !isSelected
                                 })}
                             >
-                                <TypeIcon fileName={this.props.file.name} />
+                                {(!isSelected || !isMobile) && (
+                                    <TypeIcon fileName={this.props.file.name} />
+                                )}
+                                {isSelected && isMobile && (
+                                    <Grow in={isSelected && isMobile}>
+                                        <CheckCircleRoundedIcon
+                                            className={classes.checkIcon}
+                                        />
+                                    </Grow>
+                                )}
                             </div>
                         )}
                         <Tooltip

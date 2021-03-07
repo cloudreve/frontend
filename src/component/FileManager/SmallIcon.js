@@ -5,6 +5,9 @@ import classNames from "classnames";
 import { withStyles, ButtonBase, Typography, Tooltip } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import statusHelper from "../../utils/page";
+import Grow from "@material-ui/core/Grow";
 
 const styles = theme => ({
     container: {
@@ -46,7 +49,7 @@ const styles = theme => ({
         minWidth: "30px",
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
-        paddingTop: "2px",
+        paddingTop: "3px",
         color: theme.palette.text.secondary
     },
     folderNameSelected: {
@@ -65,6 +68,9 @@ const styles = theme => ({
         whiteSpace: "nowrap",
         overflow: "hidden",
         marginRight: "20px"
+    },
+    checkIcon: {
+        color: theme.palette.primary.main
     }
 });
 
@@ -83,11 +89,11 @@ class SmallIconCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-
         const isSelected =
             this.props.selected.findIndex(value => {
                 return value === this.props.file;
             }) !== -1;
+        const isMobile = statusHelper.isMobile();
 
         return (
             <ButtonBase
@@ -101,12 +107,22 @@ class SmallIconCompoment extends Component {
                 )}
             >
                 <div
+                    onClick={this.props.onIconClick}
                     className={classNames(classes.icon, {
                         [classes.iconSelected]: isSelected,
                         [classes.iconNotSelected]: !isSelected
                     })}
                 >
-                    <TypeIcon fileName={this.props.file.name} />
+                    {(!isSelected || !isMobile) && (
+                        <TypeIcon fileName={this.props.file.name} />
+                    )}
+                    {isSelected && isMobile && (
+                        <Grow in={isSelected && isMobile}>
+                            <CheckCircleRoundedIcon
+                                className={classes.checkIcon}
+                            />
+                        </Grow>
+                    )}
                 </div>
                 <Tooltip
                     title={this.props.file.name}
