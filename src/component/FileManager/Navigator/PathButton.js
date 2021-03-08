@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
         color: "#8d8d8d"
     },
     active: {
-        border: "2px solid " + theme.palette.primary.light
+        boxShadow: "0 0 0 2px " + theme.palette.primary.light
     },
     button: {
         textTransform: "none"

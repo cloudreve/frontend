@@ -24,18 +24,12 @@ import Grow from "@material-ui/core/Grow";
 const styles = theme => ({
     selected: {
         "&:hover": {},
-        backgroundColor:
-            theme.palette.type === "dark"
-                ? theme.palette.background.paper
-                : lighten(theme.palette.primary.main, 0.8)
+        backgroundColor: fade(theme.palette.primary.main, 0.18)
     },
 
     selectedShared: {
         "&:hover": {},
-        backgroundColor:
-            theme.palette.type === "dark"
-                ? lighten(theme.palette.background.paper, 0.15)
-                : lighten(theme.palette.primary.main, 0.8)
+        backgroundColor: fade(theme.palette.primary.main, 0.18)
     },
 
     notSelected: {

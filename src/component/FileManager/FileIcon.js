@@ -3,7 +3,8 @@ import {
     Divider,
     Tooltip,
     Typography,
-    withStyles
+    withStyles,
+    fade
 } from "@material-ui/core";
 import { lighten } from "@material-ui/core/styles";
 import classNames from "classnames";
@@ -29,10 +30,10 @@ const styles = theme => ({
         "&:hover": {
             border: "1px solid #d0d0d0"
         },
-        backgroundColor:
-            theme.palette.type === "dark"
-                ? "#fff"
-                : lighten(theme.palette.primary.main, 0.8)
+        backgroundColor: fade(
+            theme.palette.primary.main,
+            theme.palette.type === "dark" ? 0.3 : 0.18
+        )
     },
 
     notSelected: {
@@ -55,9 +56,7 @@ const styles = theme => ({
     },
     folderNameSelected: {
         color:
-            theme.palette.type === "dark"
-                ? theme.palette.background.paper
-                : theme.palette.primary.dark,
+            theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
         fontWeight: "500"
     },
     folderNameNotSelected: {
