@@ -3,17 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import RightIcon from "@material-ui/icons/KeyboardArrowRight";
-import ViewListIcon from "@material-ui/icons/ViewList";
-import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import ViewSmallIcon from "@material-ui/icons/ViewComfy";
-import TextTotateVerticalIcon from "@material-ui/icons/TextRotateVertical";
 import ShareIcon from "@material-ui/icons/Share";
 import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
     navigateTo,
     navigateUp,
-    changeViewMethod,
     setNavigatorError,
     setNavigatorLoadingStatus,
     refreshFileList,
@@ -21,8 +16,6 @@ import {
     openCreateFolderDialog,
     openShareDialog,
     drawerToggleAction,
-    setShareUserPopover,
-    openResaveDialog,
     openCompressDialog
 } from "../../../actions/index";
 import explorer from "../../../redux/explorer";
@@ -33,8 +26,7 @@ import {
     Divider,
     Menu,
     MenuItem,
-    ListItemIcon,
-    IconButton
+    ListItemIcon
 } from "@material-ui/core";
 import PathButton from "./PathButton";
 import DropDown from "./DropDown";
@@ -45,6 +37,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { Archive } from "@material-ui/icons";
 import { FilePlus } from "mdi-material-ui";
 import { openCreateFileDialog } from "../../../actions";
+import SubActions from "./SubActions";
 
 const mapStateToProps = state => {
     return {
@@ -64,12 +57,6 @@ const mapDispatchToProps = dispatch => {
         },
         navigateUp: () => {
             dispatch(navigateUp());
-        },
-        changeView: method => {
-            dispatch(changeViewMethod(method));
-        },
-        changeSort: method => {
-            dispatch(explorer.actions.changeSortMethod(method));
         },
         setNavigatorError: (status, msg) => {
             dispatch(setNavigatorError(status, msg));
@@ -98,12 +85,6 @@ const mapDispatchToProps = dispatch => {
         handleDesktopToggle: open => {
             dispatch(drawerToggleAction(open));
         },
-        setShareUserPopover: e => {
-            dispatch(setShareUserPopover(e));
-        },
-        openResave: key => {
-            dispatch(openResaveDialog(key));
-        },
         openCompressDialog: () => {
             dispatch(openCompressDialog());
         }
@@ -111,15 +92,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-const sortOptions = [
-    "文件名称正序",
-    "文件名称倒序",
-    "上传时间正序",
-    "上传时间倒序",
-    "文件大小正序",
-    "文件大小倒序"
-];
 
 const styles = theme => ({
     container: {
@@ -151,10 +123,6 @@ const styles = theme => ({
     expandMore: {
         color: "#8d8d8d"
     },
-    sideButton: {
-        padding: "8px",
-        marginRight: "5px"
-    },
     roundBorder: {
         borderRadius: "4px 4px 0 0"
     }
@@ -170,9 +138,7 @@ class NavigatorComponent extends Component {
         folders: [],
         anchorEl: null,
         hiddenMode: false,
-        anchorHidden: null,
-        anchorSort: null,
-        selectedIndex: 0
+        anchorHidden: null
     };
 
     constructor(props) {
@@ -318,10 +284,6 @@ class NavigatorComponent extends Component {
         this.setState({ anchorHidden: e.currentTarget });
     };
 
-    showSortOptions = e => {
-        this.setState({ anchorSort: e.currentTarget });
-    };
-
     performAction = e => {
         this.handleClose();
         if (e === "refresh") {
@@ -356,31 +318,6 @@ class NavigatorComponent extends Component {
             default:
                 break;
         }
-    };
-
-    toggleViewMethod = () => {
-        const newMethod =
-            this.props.viewMethod === "icon"
-                ? "list"
-                : this.props.viewMethod === "list"
-                ? "smallIcon"
-                : "icon";
-        Auth.SetPreference("view_method", newMethod);
-        this.props.changeView(newMethod);
-    };
-
-    handleMenuItemClick = (e, index) => {
-        this.setState({ selectedIndex: index, anchorEl: null });
-        const optionsTable = {
-            0: "namePos",
-            1: "nameRev",
-            2: "timePos",
-            3: "timeRev",
-            4: "sizePos",
-            5: "sizeRes"
-        };
-        this.props.changeSort(optionsTable[index]);
-        this.handleClose();
     };
 
     render() {
@@ -540,86 +477,7 @@ class NavigatorComponent extends Component {
                             ))}
                     </div>
                     <div className={classes.optionContainer}>
-                        {this.props.viewMethod === "icon" && (
-                            <IconButton
-                                title="列表展示"
-                                className={classes.sideButton}
-                                onClick={this.toggleViewMethod}
-                            >
-                                <ViewListIcon fontSize="small" />
-                            </IconButton>
-                        )}
-                        {this.props.viewMethod === "list" && (
-                            <IconButton
-                                title="小图标展示"
-                                className={classes.sideButton}
-                                onClick={this.toggleViewMethod}
-                            >
-                                <ViewSmallIcon fontSize="small" />
-                            </IconButton>
-                        )}
-                        {this.props.viewMethod === "smallIcon" && (
-                            <IconButton
-                                title="大图标展示"
-                                className={classes.sideButton}
-                                onClick={this.toggleViewMethod}
-                            >
-                                <ViewModuleIcon fontSize="small" />
-                            </IconButton>
-                        )}
-
-                        <IconButton
-                            title="排序方式"
-                            className={classes.sideButton}
-                            onClick={this.showSortOptions}
-                        >
-                            <TextTotateVerticalIcon fontSize="small" />
-                        </IconButton>
-                        <Menu
-                            id="sort-menu"
-                            anchorEl={this.state.anchorSort}
-                            open={Boolean(this.state.anchorSort)}
-                            onClose={this.handleClose}
-                        >
-                            {sortOptions.map((option, index) => (
-                                <MenuItem
-                                    key={option}
-                                    selected={
-                                        index === this.state.selectedIndex
-                                    }
-                                    onClick={event =>
-                                        this.handleMenuItemClick(event, index)
-                                    }
-                                >
-                                    {option}
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                        {this.props.share && (
-                            <IconButton
-                                title={
-                                    "由 " +
-                                    this.props.share.creator.nick +
-                                    " 创建"
-                                }
-                                className={classes.sideButton}
-                                onClick={e =>
-                                    this.props.setShareUserPopover(
-                                        e.currentTarget
-                                    )
-                                }
-                                style={{ padding: 5 }}
-                            >
-                                <Avatar
-                                    style={{ height: 23, width: 23 }}
-                                    src={
-                                        "/api/v3/user/avatar/" +
-                                        this.props.share.creator.key +
-                                        "/s"
-                                    }
-                                />
-                            </IconButton>
-                        )}
+                        <SubActions isSmall share={this.props.share} />
                     </div>
                 </div>
                 <Divider />

@@ -19,7 +19,7 @@ const diliverIcon = (object, viewMethod, classes) => {
     if (object.type === "dir") {
         return (
             <div className={classes.dragging}>
-                <Folder folder={object} />
+                <SmallIcon file={object} isFolder />
             </div>
         );
     }

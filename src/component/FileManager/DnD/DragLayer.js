@@ -32,8 +32,7 @@ function getItemStyles(
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
-        WebkitTransform: transform,
-        opacity: 0.5
+        WebkitTransform: transform
     };
 }
 const CustomDragLayer = props => {

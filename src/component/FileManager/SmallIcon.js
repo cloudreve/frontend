@@ -14,6 +14,7 @@ import { lighten } from "@material-ui/core/styles";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
+import { Folder } from "@material-ui/icons";
 
 const styles = theme => ({
     container: {
@@ -118,7 +119,12 @@ class SmallIconCompoment extends Component {
                     })}
                 >
                     {(!isSelected || !isMobile) && (
-                        <TypeIcon fileName={this.props.file.name} />
+                        <>
+                            {this.props.isFolder && <Folder />}
+                            {!this.props.isFolder && (
+                                <TypeIcon fileName={this.props.file.name} />
+                            )}
+                        </>
                     )}
                     {isSelected && isMobile && (
                         <Grow in={isSelected && isMobile}>
