@@ -1,6 +1,7 @@
 import React from "react";
 import { useDragLayer } from "react-dnd";
 import Preview from "./Preview";
+import { useSelector } from "react-redux";
 const layerStyles = {
     position: "fixed",
     pointerEvents: "none",
@@ -10,25 +11,24 @@ const layerStyles = {
     width: "100%",
     height: "100%"
 };
-function snapToGrid(x, y) {
-    const snappedX = Math.round(x / 32) * 32;
-    const snappedY = Math.round(y / 32) * 32;
-    return [snappedX, snappedY];
-}
-function getItemStyles(initialOffset, currentOffset, isSnapToGrid) {
+
+function getItemStyles(
+    initialOffset,
+    currentOffset,
+    pointerOffset,
+    viewMethod
+) {
     if (!initialOffset || !currentOffset) {
         return {
             display: "none"
         };
     }
     let { x, y } = currentOffset;
-    if (isSnapToGrid) {
-        x -= initialOffset.x;
-        y -= initialOffset.y;
-        [x, y] = snapToGrid(x, y);
-        x += initialOffset.x;
-        y += initialOffset.y;
+    if (viewMethod === "list") {
+        x += pointerOffset.x - initialOffset.x;
+        y += pointerOffset.y - initialOffset.y;
     }
+
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
@@ -42,14 +42,19 @@ const CustomDragLayer = props => {
         isDragging,
         item,
         initialOffset,
-        currentOffset
+        currentOffset,
+        pointerOffset
     } = useDragLayer(monitor => ({
         item: monitor.getItem(),
         itemType: monitor.getItemType(),
         initialOffset: monitor.getInitialSourceClientOffset(),
         currentOffset: monitor.getSourceClientOffset(),
+        pointerOffset: monitor.getInitialClientOffset(),
         isDragging: monitor.isDragging()
     }));
+    const viewMethod = useSelector(
+        state => state.viewUpdate.explorerViewMethod
+    );
     function renderItem() {
         switch (itemType) {
             case "object":
@@ -67,7 +72,8 @@ const CustomDragLayer = props => {
                 style={getItemStyles(
                     initialOffset,
                     currentOffset,
-                    props.snapToGrid
+                    pointerOffset,
+                    viewMethod
                 )}
             >
                 {renderItem()}

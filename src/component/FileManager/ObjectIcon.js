@@ -189,13 +189,35 @@ export default function ObjectIcon(props) {
 
     if (viewMethod === "list") {
         return (
-            <TableItem
-                onIconClick={handleIconClick}
-                contextMenu={contextMenu}
-                handleClick={handleClick}
-                handleDoubleClick={handleDoubleClick.bind(this)}
-                file={props.file}
-            />
+            <>
+                {props.file.type === "dir" && (
+                    <DropWarpper
+                        isListView={true}
+                        pref={drag}
+                        className={classNames(classes.container, {
+                            [classes.dragging]: isDragging
+                        })}
+                        onIconClick={handleIconClick}
+                        contextMenu={contextMenu}
+                        handleClick={handleClick}
+                        handleDoubleClick={handleDoubleClick.bind(this)}
+                        folder={props.file}
+                    />
+                )}
+                {props.file.type !== "dir" && (
+                    <TableItem
+                        pref={drag}
+                        className={classNames(classes.container, {
+                            [classes.dragging]: isDragging
+                        })}
+                        onIconClick={handleIconClick}
+                        contextMenu={contextMenu}
+                        handleClick={handleClick}
+                        handleDoubleClick={handleDoubleClick.bind(this)}
+                        file={props.file}
+                    />
+                )}
+            </>
         );
     }
 
@@ -215,6 +237,7 @@ export default function ObjectIcon(props) {
             >
                 {props.file.type === "dir" && viewMethod !== "list" && (
                     <DropWarpper
+                        isListView={false}
                         onIconClick={handleIconClick}
                         folder={props.file}
                     />

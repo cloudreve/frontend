@@ -5,7 +5,13 @@ import { connect } from "react-redux";
 import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
 import { sizeToString } from "../../utils/index";
-import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import {
+    withStyles,
+    TableCell,
+    TableRow,
+    Typography,
+    fade
+} from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
 import pathHelper from "../../utils/page";
@@ -71,6 +77,9 @@ const styles = theme => ({
     },
     checkIcon: {
         color: theme.palette.primary.main
+    },
+    active: {
+        backgroundColor: fade(theme.palette.primary.main, 0.1)
     }
 });
 
@@ -112,16 +121,19 @@ class TableRowCompoment extends Component {
 
         return (
             <TableRow
+                ref={this.props.pref}
                 onContextMenu={this.props.contextMenu}
                 onClick={this.props.handleClick}
                 onDoubleClick={this.props.handleDoubleClick.bind(this)}
                 className={classNames({
                     [classes.selected]: isSelected && !isShare,
                     [classes.selectedShared]: isSelected && isShare,
-                    [classes.notSelected]: !isSelected
+                    [classes.notSelected]: !isSelected,
+                    [classes.active]: this.props.isActive
                 })}
             >
                 <TableCell
+                    ref={this.props.dref}
                     component="th"
                     scope="row"
                     className={classes.tableRow}

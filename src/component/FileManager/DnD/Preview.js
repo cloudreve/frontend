@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 const diliverIcon = (object, viewMethod, classes) => {
     return (
         <>
-            {object.type === "dir" && viewMethod !== "list" && (
+            {(object.type === "dir" || viewMethod === "list") && (
                 <div className={classes.dragging}>
                     <SmallIcon file={object} />
                 </div>
