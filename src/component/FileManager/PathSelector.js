@@ -142,6 +142,9 @@ class PathSelectorCompoment extends Component {
                             <ListItemText
                                 classes={{ primary: classes.primary }}
                                 primary={value.name}
+                                primaryTypographyProps={{
+                                    style: { whiteSpace: "normal" }
+                                }}
                             />
                             {value.name !== "/" && (
                                 <ListItemSecondaryAction
