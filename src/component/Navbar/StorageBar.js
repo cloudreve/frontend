@@ -146,11 +146,11 @@ class StorageBarCompoment extends Component {
                             <div className={classes.info}>
                                 <Tooltip
                                     title={
-                                        "已使用" +
+                                        "已使用 " +
                                         (this.state.used === null
                                             ? " -- "
                                             : this.state.used) +
-                                        "，共" +
+                                        ", 共 " +
                                         (this.state.total === null
                                             ? " -- "
                                             : this.state.total)
@@ -162,14 +162,10 @@ class StorageBarCompoment extends Component {
                                         noWrap
                                         color="textSecondary"
                                     >
-                                        已使用
+                                        已使用{" "}
                                         {this.state.used === null
                                             ? " -- "
                                             : this.state.used}
-                                        ，共
-                                        {this.state.total === null
-                                            ? " -- "
-                                            : this.state.total}
                                     </Typography>
                                 </Tooltip>
                             </div>
