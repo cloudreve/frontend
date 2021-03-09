@@ -66,7 +66,7 @@ import {
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
 import FileTag from "./FileTags";
-import { Assignment, Devices, Settings } from "@material-ui/icons";
+import { Assignment, Devices, MoreHoriz, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import SubActions from "../FileManager/Navigator/SubActions";
 
@@ -780,20 +780,22 @@ class NavbarCompoment extends Component {
                                                 </Tooltip>
                                             </Grow>
                                         )}
-                                    {!this.props.isMultiple && !isSharePage && (
-                                        <Grow in={!this.props.isMultiple}>
-                                            <Tooltip title="分享">
-                                                <IconButton
-                                                    color="inherit"
-                                                    onClick={() =>
-                                                        this.props.openShareDialog()
-                                                    }
-                                                >
-                                                    <ShareIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Grow>
-                                    )}
+                                    {!this.props.isMultiple &&
+                                        !pathHelper.isMobile() &&
+                                        !isSharePage && (
+                                            <Grow in={!this.props.isMultiple}>
+                                                <Tooltip title="分享">
+                                                    <IconButton
+                                                        color="inherit"
+                                                        onClick={() =>
+                                                            this.props.openShareDialog()
+                                                        }
+                                                    >
+                                                        <ShareIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Grow>
+                                        )}
                                     {!this.props.isMultiple && !isSharePage && (
                                         <Grow in={!this.props.isMultiple}>
                                             <Tooltip title="重命名">
@@ -848,6 +850,30 @@ class NavbarCompoment extends Component {
                                                     </IconButton>
                                                 </Tooltip>
                                             </Grow>
+
+                                            {pathHelper.isMobile() && (
+                                                <Grow
+                                                    in={
+                                                        this.props.selected
+                                                            .length !== 0 &&
+                                                        pathHelper.isMobile()
+                                                    }
+                                                >
+                                                    <Tooltip title="更多操作">
+                                                        <IconButton
+                                                            color="inherit"
+                                                            onClick={() =>
+                                                                this.props.changeContextMenu(
+                                                                    "file",
+                                                                    true
+                                                                )
+                                                            }
+                                                        >
+                                                            <MoreHoriz />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </Grow>
+                                            )}
                                         </div>
                                     )}
                                 </div>
