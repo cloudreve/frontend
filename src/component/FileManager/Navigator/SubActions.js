@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 const sortOptions = ["A-Z", "Z-A", "最早", "最新", "最小", "最大"];
 
-export default function SubActions({ isSmall, share }) {
+export default function SubActions({ isSmall, share, inherit }) {
     const dispatch = useDispatch();
     const viewMethod = useSelector(
         state => state.viewUpdate.explorerViewMethod
@@ -74,6 +74,7 @@ export default function SubActions({ isSmall, share }) {
                     title="列表展示"
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
+                    color={inherit ? "inherit" : "default"}
                 >
                     <ViewListIcon fontSize={isSmall ? "small" : "default"} />
                 </IconButton>
@@ -83,6 +84,7 @@ export default function SubActions({ isSmall, share }) {
                     title="小图标展示"
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
+                    color={inherit ? "inherit" : "default"}
                 >
                     <ViewSmallIcon fontSize={isSmall ? "small" : "default"} />
                 </IconButton>
@@ -93,6 +95,7 @@ export default function SubActions({ isSmall, share }) {
                     title="大图标展示"
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
+                    color={inherit ? "inherit" : "default"}
                 >
                     <ViewModuleIcon fontSize={isSmall ? "small" : "default"} />
                 </IconButton>
@@ -102,6 +105,7 @@ export default function SubActions({ isSmall, share }) {
                 title="排序方式"
                 className={classes.sideButton}
                 onClick={showSortOptions}
+                color={inherit ? "inherit" : "default"}
             >
                 <TextTotateVerticalIcon
                     fontSize={isSmall ? "small" : "default"}

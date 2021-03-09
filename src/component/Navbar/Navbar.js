@@ -68,6 +68,7 @@ import API from "../../middleware/Api";
 import FileTag from "./FileTags";
 import { Assignment, Devices, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
+import SubActions from "../FileManager/Navigator/SubActions";
 
 vhCheck();
 const drawerWidth = 240;
@@ -855,6 +856,10 @@ class NavbarCompoment extends Component {
                             !(
                                 !this.props.isMultiple && this.props.withFile
                             ) && <UserAvatar />}
+                        {this.props.selected.length <= 1 &&
+                            !(!this.props.isMultiple && this.props.withFile) &&
+                            isHomePage &&
+                            pathHelper.isMobile() && <SubActions inherit />}
                     </Toolbar>
                 </AppBar>
                 {this.loadUploader()}
