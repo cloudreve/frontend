@@ -364,6 +364,8 @@ class NavigatorComponent extends Component {
                 ? "list"
                 : this.props.viewMethod === "list"
                 ? "smallIcon"
+                : this.props.viewMethod === "smallIcon"
+                ? "photoAlbum"
                 : "icon";
         Auth.SetPreference("view_method", newMethod);
         this.props.changeView(newMethod);
@@ -561,6 +563,15 @@ class NavigatorComponent extends Component {
                         {this.props.viewMethod === "smallIcon" && (
                             <IconButton
                                 title="大图标展示"
+                                className={classes.sideButton}
+                                onClick={this.toggleViewMethod}
+                            >
+                                <ViewModuleIcon fontSize="small" />
+                            </IconButton>
+                        )}
+                        {this.props.viewMethod === "photoAlbum" && (
+                            <IconButton
+                                title="相册模式"
                                 className={classes.sideButton}
                                 onClick={this.toggleViewMethod}
                             >
