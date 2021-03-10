@@ -61,7 +61,7 @@ export default function SubActions({ isSmall, share, inherit }) {
                 ? "list"
                 : viewMethod === "list"
                 ? "smallIcon"
-                : this.props.viewMethod === "smallIcon"
+                : viewMethod === "smallIcon"
                 ? "photoAlbum"
                 : "icon";
         Auth.SetPreference("view_method", newMethod);
