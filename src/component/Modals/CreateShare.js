@@ -38,6 +38,8 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import EyeIcon from "@material-ui/icons/RemoveRedEye";
+import ToggleIcon from "material-ui-toggle-icon";
 
 const useStyles = makeStyles(theme => ({
     widthAnimation: {},
@@ -296,11 +298,13 @@ export default function CreatShare(props) {
                                                     }
                                                     edge="end"
                                                 >
-                                                    {values.showPassword ? (
-                                                        <Visibility />
-                                                    ) : (
-                                                        <VisibilityOff />
-                                                    )}
+                                                    <ToggleIcon
+                                                        on={values.showPassword}
+                                                        onIcon={<Visibility />}
+                                                        offIcon={
+                                                            <VisibilityOff />
+                                                        }
+                                                    />
                                                 </IconButton>
                                             </InputAdornment>
                                         }

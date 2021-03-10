@@ -24,6 +24,7 @@ import DropWarpper from "./DnD/DropWarpper";
 import { useHistory, useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import { pathBack } from "../../utils";
+import { openPreview } from "../../actions";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -48,7 +49,6 @@ export default function ObjectIcon(props) {
     );
     const navigatorPath = useSelector(state => state.navigator.path);
     const location = useLocation();
-    const history = useHistory();
 
     const dispatch = useDispatch();
     const ContextMenu = useCallback(
@@ -61,13 +61,6 @@ export default function ObjectIcon(props) {
     );
 
     const NavitateTo = useCallback(targets => dispatch(navigateTo(targets)), [
-        dispatch
-    ]);
-    const ShowImgPreivew = useCallback(
-        targets => dispatch(showImgPreivew(targets)),
-        [dispatch]
-    );
-    const OpenMusicDialog = useCallback(() => dispatch(openMusicDialog()), [
         dispatch
     ]);
     const ToggleSnackbar = useCallback(
@@ -83,6 +76,7 @@ export default function ObjectIcon(props) {
         text => dispatch(openLoadingDialog(text)),
         [dispatch]
     );
+    const OpenPreview = useCallback(() => dispatch(openPreview()), [dispatch]);
 
     const classes = useStyles();
 
@@ -147,110 +141,16 @@ export default function ObjectIcon(props) {
             OpenLoadingDialog("获取下载地址...");
             return;
         }
-        const previewPath =
-            selected[0].path === "/"
-                ? selected[0].path + selected[0].name
-                : selected[0].path + "/" + selected[0].name;
-        switch (isPreviewable(selected[0].name)) {
-            case "img":
-                ShowImgPreivew(selected[0]);
-                return;
-            case "msDoc":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/doc?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/doc?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "audio":
-                OpenMusicDialog();
-                return;
-            case "video":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/video?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/video?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "edit":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/text?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/text?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "pdf":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/pdf?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/pdf?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            case "code":
-                if (isShare) {
-                    history.push(
-                        selected[0].key +
-                            "/code?name=" +
-                            encodeURIComponent(selected[0].name) +
-                            "&share_path=" +
-                            encodeURIComponent(previewPath)
-                    );
-                    return;
-                }
-                history.push(
-                    "/code?p=" +
-                        encodeURIComponent(previewPath) +
-                        "&id=" +
-                        selected[0].id
-                );
-                return;
-            default:
-                OpenLoadingDialog("获取下载地址...");
-                return;
+
+        OpenPreview();
+    };
+
+    const handleIconClick = e => {
+        if (statusHelper.isMobile()) {
+            e.stopPropagation();
+            e.ctrlKey = true;
+            selectFile(e);
+            return false;
         }
     };
 
@@ -292,12 +192,35 @@ export default function ObjectIcon(props) {
 
     if (viewMethod === "list") {
         return (
-            <TableItem
-                contextMenu={contextMenu}
-                handleClick={handleClick}
-                handleDoubleClick={handleDoubleClick.bind(this)}
-                file={props.file}
-            />
+            <>
+                {props.file.type === "dir" && (
+                    <DropWarpper
+                        isListView={true}
+                        pref={drag}
+                        className={classNames(classes.container, {
+                            [classes.dragging]: isDragging
+                        })}
+                        onIconClick={handleIconClick}
+                        contextMenu={contextMenu}
+                        handleClick={handleClick}
+                        handleDoubleClick={handleDoubleClick.bind(this)}
+                        folder={props.file}
+                    />
+                )}
+                {props.file.type !== "dir" && (
+                    <TableItem
+                        pref={drag}
+                        className={classNames(classes.container, {
+                            [classes.dragging]: isDragging
+                        })}
+                        onIconClick={handleIconClick}
+                        contextMenu={contextMenu}
+                        handleClick={handleClick}
+                        handleDoubleClick={handleDoubleClick.bind(this)}
+                        file={props.file}
+                    />
+                )}
+            </>
         );
     }
     return (
@@ -316,13 +239,24 @@ export default function ObjectIcon(props) {
                 onDoubleClick={handleDoubleClick.bind(this)}
             >
                 {props.file.type === "dir" && viewMethod !== "list" && (
-                    <DropWarpper folder={props.file} />
+                    <DropWarpper
+                        isListView={false}
+                        onIconClick={handleIconClick}
+                        folder={props.file}
+                    />
                 )}
                 {props.file.type === "file" && viewMethod === "icon" && (
-                    <FileIcon ref={drag} file={props.file} />
+                    <FileIcon
+                        onIconClick={handleIconClick}
+                        ref={drag}
+                        file={props.file}
+                    />
                 )}
                 {props.file.type === "file" && viewMethod === "smallIcon" && (
-                    <SmallIcon file={props.file} />
+                    <SmallIcon
+                        onIconClick={handleIconClick}
+                        file={props.file}
+                    />
                 )}
                 {props.file.type === "file" && viewMethod === "photoAlbum" && (
                     <FileIcon  file={props.file}  viewMethod={viewMethod}/>

@@ -35,6 +35,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { withRouter } from "react-router-dom";
+import ToggleIcon from "material-ui-toggle-icon";
 
 const styles = theme => ({
     cardContainer: {
@@ -376,7 +377,7 @@ class MyShareCompoment extends Component {
                                                 )
                                             }
                                         >
-                                            <OpenIcon />
+                                            <OpenIcon fontSize={"small"} />
                                         </IconButton>
                                     </Tooltip>{" "}
                                     {value.password !== "" && (
@@ -391,7 +392,9 @@ class MyShareCompoment extends Component {
                                                 }
                                             >
                                                 <IconButton>
-                                                    <LockIcon />
+                                                    <LockIcon
+                                                        fontSize={"small"}
+                                                    />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip
@@ -402,7 +405,9 @@ class MyShareCompoment extends Component {
                                                 }
                                             >
                                                 <IconButton>
-                                                    <VpnKey />
+                                                    <VpnKey
+                                                        fontSize={"small"}
+                                                    />
                                                 </IconButton>
                                             </Tooltip>
                                         </>
@@ -416,7 +421,9 @@ class MyShareCompoment extends Component {
                                             }
                                         >
                                             <IconButton>
-                                                <UnlockIcon />
+                                                <UnlockIcon
+                                                    fontSize={"small"}
+                                                />
                                             </IconButton>
                                         </Tooltip>
                                     )}
@@ -432,11 +439,19 @@ class MyShareCompoment extends Component {
                                         }
                                     >
                                         <IconButton>
-                                            {!value.preview ? (
-                                                <VisibilityOff />
-                                            ) : (
-                                                <EyeIcon />
-                                            )}
+                                            <ToggleIcon
+                                                on={value.preview}
+                                                onIcon={
+                                                    <EyeIcon
+                                                        fontSize={"small"}
+                                                    />
+                                                }
+                                                offIcon={
+                                                    <VisibilityOff
+                                                        fontSize={"small"}
+                                                    />
+                                                }
+                                            />
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip
@@ -447,7 +462,7 @@ class MyShareCompoment extends Component {
                                         }
                                     >
                                         <IconButton>
-                                            <DeleteIcon />
+                                            <DeleteIcon fontSize={"small"} />
                                         </IconButton>
                                     </Tooltip>
                                 </CardActions>

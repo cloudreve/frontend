@@ -5,28 +5,31 @@ import { connect } from "react-redux";
 import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
 import { sizeToString } from "../../utils/index";
-import { withStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import {
+    withStyles,
+    TableCell,
+    TableRow,
+    Typography,
+    fade
+} from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
 import pathHelper from "../../utils/page";
 import { withRouter } from "react-router";
 import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import statusHelper from "../../utils/page";
+import Grow from "@material-ui/core/Grow";
 
 const styles = theme => ({
     selected: {
         "&:hover": {},
-        backgroundColor:
-            theme.palette.type === "dark"
-                ? theme.palette.background.paper
-                : lighten(theme.palette.primary.main, 0.8)
+        backgroundColor: fade(theme.palette.primary.main, 0.18)
     },
 
     selectedShared: {
         "&:hover": {},
-        backgroundColor:
-            theme.palette.type === "dark"
-                ? lighten(theme.palette.background.paper, 0.15)
-                : lighten(theme.palette.primary.main, 0.8)
+        backgroundColor: fade(theme.palette.primary.main, 0.18)
     },
 
     notSelected: {
@@ -55,7 +58,8 @@ const styles = theme => ({
     },
     folderName: {
         marginRight: "20px",
-        display: "flex"
+        display: "flex",
+        alignItems: "center"
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
@@ -64,6 +68,12 @@ const styles = theme => ({
     },
     tableRow: {
         padding: "10px 16px"
+    },
+    checkIcon: {
+        color: theme.palette.primary.main
+    },
+    active: {
+        backgroundColor: fade(theme.palette.primary.main, 0.1)
     }
 });
 
@@ -97,24 +107,27 @@ class TableRowCompoment extends Component {
                 />
             );
         }
-
         const isSelected =
             this.props.selected.findIndex(value => {
                 return value === this.props.file;
             }) !== -1;
+        const isMobile = statusHelper.isMobile();
 
         return (
             <TableRow
+                ref={this.props.pref}
                 onContextMenu={this.props.contextMenu}
                 onClick={this.props.handleClick}
                 onDoubleClick={this.props.handleDoubleClick.bind(this)}
                 className={classNames({
                     [classes.selected]: isSelected && !isShare,
                     [classes.selectedShared]: isSelected && isShare,
-                    [classes.notSelected]: !isSelected
+                    [classes.notSelected]: !isSelected,
+                    [classes.active]: this.props.isActive
                 })}
             >
                 <TableCell
+                    ref={this.props.dref}
                     component="th"
                     scope="row"
                     className={classes.tableRow}
@@ -126,7 +139,25 @@ class TableRowCompoment extends Component {
                             [classes.folderNameNotSelected]: !isSelected
                         })}
                     >
-                        {icon}
+                        <div
+                            onClick={
+                                this.props.file.type !== "up"
+                                    ? this.props.onIconClick
+                                    : null
+                            }
+                        >
+                            {(!isSelected || !isMobile) && icon}
+                            {isSelected && isMobile && (
+                                <Grow in={isSelected && isMobile}>
+                                    <CheckCircleRoundedIcon
+                                        className={classNames(
+                                            classes.checkIcon,
+                                            classes.icon
+                                        )}
+                                    />
+                                </Grow>
+                            )}
+                        </div>
                         {this.props.file.name}
                     </Typography>
                 </TableCell>

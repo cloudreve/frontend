@@ -1,5 +1,12 @@
-import {ButtonBase, Divider, Tooltip, Typography, withStyles} from "@material-ui/core";
-import {lighten} from "@material-ui/core/styles";
+import {
+    ButtonBase,
+    Divider,
+    Tooltip,
+    Typography,
+    withStyles,
+    fade
+} from "@material-ui/core";
+import { lighten } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
@@ -10,6 +17,9 @@ import {withRouter} from "react-router";
 import {baseURL} from "../../middleware/Api";
 import pathHelper from "../../utils/page";
 import TypeIcon from "./TypeIcon";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import statusHelper from "../../utils/page";
+import Grow from "@material-ui/core/Grow";
 
 const styles = theme => ({
     container: {
@@ -20,10 +30,10 @@ const styles = theme => ({
         "&:hover": {
             border: "1px solid #d0d0d0"
         },
-        backgroundColor:
-            theme.palette.type === "dark"
-                ? "#fff"
-                : lighten(theme.palette.primary.main, 0.8)
+        backgroundColor: fade(
+            theme.palette.primary.main,
+            theme.palette.type === "dark" ? 0.3 : 0.18
+        )
     },
     picSelected: {
         "&:hover": {
@@ -59,9 +69,7 @@ const styles = theme => ({
     },
     folderNameSelected: {
         color:
-            theme.palette.type === "dark"
-                ? theme.palette.background.paper
-                : theme.palette.primary.dark,
+            theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
         fontWeight: "500"
     },
     folderNameNotSelected: {
@@ -107,7 +115,7 @@ const styles = theme => ({
         minWidth: "30px",
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
-        paddingTop: "2px",
+        paddingTop: "3px",
         color: theme.palette.text.secondary
     },
     hide: {
@@ -119,8 +127,7 @@ const styles = theme => ({
         width: "100%"
     },
     shareFix: {
-        marginLeft: "20px"
-    },
+        marginLeft: "20px"    },
     hiddenTitle:{
         display: "none"
     },
@@ -134,6 +141,9 @@ const styles = theme => ({
         left:"0px",
         width:"100%",
         verticalAlign: "bottom"
+    },
+checkIcon: {
+        color: theme.palette.primary.main
     }
 });
 
@@ -160,15 +170,14 @@ class FileIconCompoment extends Component {
 
     render() {
         const { classes } = this.props;
-
         const isSelected =
             this.props.selected.findIndex(value => {
                 return value === this.props.file;
             }) !== -1;
-
         const isSharePage = pathHelper.isSharePage(
             this.props.location.pathname
         );
+        const isMobile = statusHelper.isMobile();
 
         const isPhotos = this.props.file.pic !== "" &&
             !this.state.showPicIcon &&
@@ -275,12 +284,22 @@ class FileIconCompoment extends Component {
                     <div className={classNames(classes.fileInfo, {[classes.hiddenTitle]:showPhotoAlbum && isPhotos})}>
                         {!this.props.share && (
                             <div
+                                onClick={this.props.onIconClick}
                                 className={classNames(classes.icon, {
                                     [classes.iconSelected]: isSelected,
                                     [classes.iconNotSelected]: !isSelected
                                 })}
                             >
-                                <TypeIcon fileName={this.props.file.name} />
+                                {(!isSelected || !isMobile) && (
+                                    <TypeIcon fileName={this.props.file.name} />
+                                )}
+                                {isSelected && isMobile && (
+                                    <Grow in={isSelected && isMobile}>
+                                        <CheckCircleRoundedIcon
+                                            className={classes.checkIcon}
+                                        />
+                                    </Grow>
+                                )}
                             </div>
                         )}
                         <Tooltip

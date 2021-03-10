@@ -3,6 +3,7 @@ import SmallIcon from "../SmallIcon";
 import FileIcon from "../FileIcon";
 import { useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
+import Folder from "../Folder";
 
 const useStyles = makeStyles(() => ({
     dragging: {
@@ -15,25 +16,30 @@ const useStyles = makeStyles(() => ({
 }));
 
 const diliverIcon = (object, viewMethod, classes) => {
-    return (
-        <>
-            {object.type === "dir" && viewMethod !== "list" && (
-                <div className={classes.dragging}>
-                    <SmallIcon file={object} />
-                </div>
-            )}
-            {object.type === "file" && viewMethod === "icon" && (
-                <div className={classes.dragging}>
-                    <FileIcon file={object} />
-                </div>
-            )}
-            {object.type === "file" && viewMethod === "smallIcon" && (
-                <div className={classes.dragging}>
-                    <SmallIcon file={object} />
-                </div>
-            )}
-        </>
-    );
+    if (object.type === "dir") {
+        return (
+            <div className={classes.dragging}>
+                <SmallIcon file={object} isFolder />
+            </div>
+        );
+    }
+    if (object.type === "file" && viewMethod === "icon") {
+        return (
+            <div className={classes.dragging}>
+                <FileIcon file={object} />
+            </div>
+        );
+    }
+    if (
+        (object.type === "file" && viewMethod === "smallIcon") ||
+        viewMethod === "list"
+    ) {
+        return (
+            <div className={classes.dragging}>
+                <SmallIcon file={object} />
+            </div>
+        );
+    }
 };
 
 const Preview = props => {

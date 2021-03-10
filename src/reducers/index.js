@@ -3,6 +3,7 @@ import { InitSiteConfig } from "../middleware/Init";
 import { combineReducers } from "../redux/combineReducers";
 import viewUpdate from "../redux/viewUpdate/reducer";
 import explorer from "../redux/explorer/reducer";
+import { connectRouter } from "connected-react-router";
 
 const doNavigate = (path, state) => {
     window.currntPath = path;
@@ -150,14 +151,15 @@ const cloudreveApp = (state = defaultStatus, action) => {
     }
 };
 
-export default (state, action) => {
+export default history => (state, action) => {
     const { viewUpdate: viewUpdateState, explorer: explorerState } =
         state || {};
     const appState = cloudreveApp(state, action);
-    const combinedState = combineReducers({ viewUpdate, explorer })(
-        { viewUpdate: viewUpdateState, explorer: explorerState },
-        action
-    );
+    const combinedState = combineReducers({
+        viewUpdate,
+        explorer,
+        router: connectRouter(history)
+    })({ viewUpdate: viewUpdateState, explorer: explorerState }, action);
     return {
         ...appState,
         ...combinedState
