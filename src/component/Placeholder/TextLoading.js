@@ -1,6 +1,6 @@
 import React from "react";
-import { Code } from "react-content-loader";
-import { makeStyles } from "@material-ui/core/styles";
+import { Code, Facebook } from "react-content-loader";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
     loader: {
@@ -13,14 +13,24 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const MyLoader = props => <Code className={props.className} />;
+const MyLoader = props => (
+    <Code
+        backgroundColor={props.dark ? "#333" : "#f5f6f7"}
+        foregroundColor={props.dark ? "#636363" : "#eee"}
+        className={props.className}
+    />
+);
 
 function TextLoading() {
+    const theme = useTheme();
     const classes = useStyles();
 
     return (
         <div>
-            <MyLoader className={classes.loader} />
+            <MyLoader
+                dark={theme.palette.type === "dark"}
+                className={classes.loader}
+            />
         </div>
     );
 }
