@@ -108,7 +108,7 @@ export default function SubActions({ isSmall, share, inherit }) {
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
                 >
-                    <ViewModuleIcon fontSize="small" />
+                    <ViewModuleIcon fontSize={isSmall ? "small" : "default"} />
                 </IconButton>
             )}
 
