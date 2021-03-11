@@ -61,6 +61,8 @@ export default function SubActions({ isSmall, share, inherit }) {
                 ? "list"
                 : viewMethod === "list"
                 ? "smallIcon"
+                : viewMethod === "smallIcon"
+                ? "photoAlbum"
                 : "icon";
         Auth.SetPreference("view_method", newMethod);
         OpenLoadingDialog(newMethod);
@@ -96,6 +98,15 @@ export default function SubActions({ isSmall, share, inherit }) {
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
                     color={inherit ? "inherit" : "default"}
+                >
+                    <ViewModuleIcon fontSize={isSmall ? "small" : "default"} />
+                </IconButton>
+            )}
+            {viewMethod === "photoAlbum" && (
+                <IconButton
+                    title="相册模式"
+                    className={classes.sideButton}
+                    onClick={toggleViewMethod}
                 >
                     <ViewModuleIcon fontSize={isSmall ? "small" : "default"} />
                 </IconButton>

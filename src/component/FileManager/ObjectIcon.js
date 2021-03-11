@@ -35,6 +35,9 @@ const useStyles = makeStyles(() => ({
     },
     dragging: {
         opacity: 0.4
+    },
+    clearPadding:{
+        padding: 0
     }
 }));
 
@@ -220,13 +223,13 @@ export default function ObjectIcon(props) {
             </>
         );
     }
-
     return (
         <div
             ref={drag}
             className={classNames({
                 [classes.container]: viewMethod !== "list",
-                [classes.dragging]: isDragging
+                [classes.dragging]: isDragging,
+                [classes.clearPadding]: viewMethod === "photoAlbum" && props.file.type === "file"
             })}
         >
             <div
@@ -254,6 +257,9 @@ export default function ObjectIcon(props) {
                         onIconClick={handleIconClick}
                         file={props.file}
                     />
+                )}
+                {props.file.type === "file" && viewMethod === "photoAlbum" && (
+                    <FileIcon  file={props.file}  viewMethod={viewMethod}/>
                 )}
             </div>
         </div>

@@ -9,12 +9,12 @@ import {
 import { lighten } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 import ContentLoader from "react-content-loader";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import { baseURL } from "../../middleware/Api";
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import {connect} from "react-redux";
+import {withRouter} from "react-router";
+import {baseURL} from "../../middleware/Api";
 import pathHelper from "../../utils/page";
 import TypeIcon from "./TypeIcon";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
@@ -34,6 +34,19 @@ const styles = theme => ({
             theme.palette.primary.main,
             theme.palette.type === "dark" ? 0.3 : 0.18
         )
+    },
+    picSelected: {
+        "&:hover": {
+            border: "1px solid #d0d0d0"
+        },
+        // backgroundColor:
+        //     theme.palette.type === "dark"
+        //         ? "#fff"
+        //         : lighten(theme.palette.primary.main, 0.8),
+
+        padding: "8px",
+        border: "solid 1px #d0d0d0",
+        backgroundColor: "#3f51b58f",
     },
 
     notSelected: {
@@ -114,9 +127,22 @@ const styles = theme => ({
         width: "100%"
     },
     shareFix: {
-        marginLeft: "20px"
+        marginLeft: "20px"    },
+    hiddenTitle:{
+        display: "none"
     },
-    checkIcon: {
+    resetPicParentContainer:{
+        borderRadius: 0,
+        height: "auto"
+    },
+    resetPicStyle: {
+        position: "absolute",
+        top:"0px",
+        left:"0px",
+        width:"100%",
+        verticalAlign: "bottom"
+    },
+checkIcon: {
         color: theme.palette.primary.main
     }
 });
@@ -153,14 +179,26 @@ class FileIconCompoment extends Component {
         );
         const isMobile = statusHelper.isMobile();
 
+        const isPhotos = this.props.file.pic !== "" &&
+            !this.state.showPicIcon &&
+            this.props.file.pic !== " " &&
+            this.props.file.pic !== "null,null";
+
+        const viewMethod = this.props.viewMethod;
+        const picArr = this.props.file.pic.split(',')
+        const picPaddingBottom = picArr.length == 2 ? parseInt(picArr[1]) / parseInt(picArr[0]) * 100 : 0;
+        const showPhotoAlbum = (viewMethod == "photoAlbum" && picPaddingBottom > 0) ? true : false;
+
         return (
-            <div className={classes.container}>
+            <div
+                className={classNames({[classes.container]: !showPhotoAlbum})}
+            >
                 <ButtonBase
                     focusRipple
                     className={classNames(
                         {
-                            [classes.selected]: isSelected,
-                            [classes.notSelected]: !isSelected
+                            [classes.selected]: !showPhotoAlbum && isSelected,
+                            [classes.notSelected]:!showPhotoAlbum && !isSelected
                         },
                         classes.button
                     )}
@@ -169,13 +207,22 @@ class FileIconCompoment extends Component {
                         !this.state.showPicIcon &&
                         this.props.file.pic !== " " &&
                         this.props.file.pic !== "null,null" && (
-                            <div className={classes.preview}>
+                            <div className={classNames(classes.preview,{[classes.resetPicParentContainer]: showPhotoAlbum})} >
+                                {showPhotoAlbum && (
+                                    <i style={{display: "block", paddingBottom:picPaddingBottom+"%"}}></i>
+                                )}
                                 <LazyLoadImage
                                     className={classNames({
                                         [classes.hide]: this.state.loading,
                                         [classes.picPreview]: !this.state
                                             .loading
-                                    })}
+                                    },
+                                        {
+                                            [classes.picSelected]: isSelected,
+                                            [classes.notSelected]: !isSelected,
+                                            [classes.resetPicStyle]: showPhotoAlbum
+                                        }
+                                    )}
                                     src={
                                         baseURL +
                                         (isSharePage
@@ -234,7 +281,7 @@ class FileIconCompoment extends Component {
                         this.state.showPicIcon ||
                         this.props.file.pic === " " ||
                         this.props.file.pic === "null,null") && <Divider />}
-                    <div className={classes.fileInfo}>
+                    <div className={classNames(classes.fileInfo, {[classes.hiddenTitle]:showPhotoAlbum && isPhotos})}>
                         {!this.props.share && (
                             <div
                                 onClick={this.props.onIconClick}

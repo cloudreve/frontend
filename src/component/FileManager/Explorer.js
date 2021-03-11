@@ -15,23 +15,18 @@ import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
 import EmptyIcon from "@material-ui/icons/Unarchive";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { configure, GlobalHotKeys } from "react-hotkeys";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import {
-    changeContextMenu,
-    navigateTo,
-    navigateUp,
-    openRemoveDialog,
-    setSelectedTarget
-} from "../../actions/index";
+import React, {Component} from "react";
+import {configure, GlobalHotKeys} from "react-hotkeys";
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
+import {changeContextMenu, navigateTo, navigateUp, openRemoveDialog, setSelectedTarget} from "../../actions/index";
 import explorer from "../../redux/explorer";
-import { isMac } from "../../utils";
+import {isMac} from "../../utils";
 import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";
 import ImgPreivew from "./ImgPreview";
 import ObjectIcon from "./ObjectIcon";
+import PhotosAlbum from "./PhotosAlbum";
 
 const styles = theme => ({
     paper: {
@@ -130,6 +125,10 @@ const styles = theme => ({
         position: "absolute",
         top: 20,
         width: 1
+    },
+    photosGroupSection: {
+        display: "flex",
+        flexWrap: "wrap",
     }
 });
 
@@ -354,6 +353,57 @@ class ExplorerCompoment extends Component {
             </Table>
         );
 
+        const photoAlbumView = (
+            <div className={classes.flexFix}>
+                {this.props.dirList.length !== 0 && (
+                    <>
+                        <Typography
+                            data-clickAway={"true"}
+                            variant="body2"
+                            className={classes.typeHeader}
+                        >
+                            文件夹
+                        </Typography>
+                        <Grid
+                            data-clickAway={"true"}
+                            container
+                            spacing={0}
+                            alignItems="flex-start"
+                        >
+                            {this.props.dirList.map((value, index) => (
+                                <Grid
+                                    key={value.id}
+                                    item
+                                    xs={6}
+                                    md={3}
+                                    sm={4}
+                                    lg={2}
+                                >
+                                    <ObjectIcon
+                                        key={value.id}
+                                        file={value}
+                                        index={index}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </>
+                )}
+                {this.props.fileList.length !== 0 && (
+                    <>
+                        <Typography
+                            data-clickAway={"true"}
+                            variant="body2"
+                            className={classes.typeHeader}
+                        >
+                            照片
+                        </Typography>
+                        <PhotosAlbum  fileList={this.props.fileList}></PhotosAlbum>
+                    </>
+                )}
+            </div>
+        );
+
         const normalView = (
             <div className={classes.flexFix}>
                 {this.props.dirList.length !== 0 && (
@@ -400,11 +450,13 @@ class ExplorerCompoment extends Component {
                             文件
                         </Typography>
                         <Grid
-                            data-clickAway={"true"}
-                            container
-                            spacing={0}
-                            alignItems="flex-start"
+                        data-clickAway={"true"}
+                        container
+                        spacing={0}
+                        alignItems="flex-start"
+                        className={classes.photosGroupSection}
                         >
+
                             {this.props.fileList.map((value, index) => (
                                 <Grid
                                     key={value.id}
@@ -415,9 +467,9 @@ class ExplorerCompoment extends Component {
                                     lg={2}
                                 >
                                     <ObjectIcon
-                                        key={value.id}
-                                        index={index}
-                                        file={value}
+                                    key={value.id}
+                                    index={index}
+                                    file={value}
                                     />
                                 </Grid>
                             ))}
@@ -426,7 +478,7 @@ class ExplorerCompoment extends Component {
                 )}
             </div>
         );
-        const view = this.props.viewMethod === "list" ? listView : normalView;
+        const view = this.props.viewMethod === "list" ? listView : this.props.viewMethod == "photoAlbum" ? photoAlbumView : normalView;
         return (
             <div
                 onContextMenu={this.contextMenu}
