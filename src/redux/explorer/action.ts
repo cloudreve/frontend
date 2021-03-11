@@ -1,6 +1,7 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { CloudreveFile, SortMethod } from "./../../types/index";
+import { closeContextMenu } from "../viewUpdate/action";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -34,6 +35,14 @@ export const setSortMethod = (method: SortMethod): ActionSetSortMethod => {
         method
     };
 };
+
+export const setSideBar = (open: boolean) => {
+    return {
+        type: "SET_SIDE_BAR",
+        open
+    };
+};
+
 type SortFunc = (a: CloudreveFile, b: CloudreveFile) => number;
 const sortMethodFuncs: Record<SortMethod, SortFunc> = {
     sizePos: (a: CloudreveFile, b: CloudreveFile) => {
@@ -93,5 +102,17 @@ export const changeSortMethod = (
         dispatch(setSortMethod(method));
         dispatch(setDirList(dirList.sort(sortFunc)));
         dispatch(setFileList(fileList.sort(sortFunc)));
+    };
+};
+
+export const toggleObjectInfoSidebar = (
+    open: boolean
+): ThunkAction<any, any, any, any> => {
+    return (dispatch, getState): void => {
+        const state = getState();
+        if (open) {
+            dispatch(closeContextMenu());
+        }
+        dispatch(setSideBar(true));
     };
 };

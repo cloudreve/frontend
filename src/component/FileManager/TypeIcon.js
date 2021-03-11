@@ -138,6 +138,7 @@ const TypeIcon = props => {
                     }}
                 >
                     <IconComponent
+                        className={props.iconClassName}
                         style={{
                             color: theme.palette.background.paper
                         }}

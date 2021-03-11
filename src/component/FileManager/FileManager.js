@@ -15,6 +15,7 @@ import DragLayer from "./DnD/DragLayer";
 import Explorer from "./Explorer";
 import Modals from "./Modals";
 import Navigator from "./Navigator/Navigator";
+import SideDrawer from "./Sidebar/SideDrawer";
 
 const mapStateToProps = () => ({});
 
@@ -56,15 +57,18 @@ class FileManager extends Component {
     }
     render() {
         return (
-            <DndProvider backend={HTML5Backend}>
-                <Modals share={this.props.share} />
-                <Navigator
-                    isShare={this.props.isShare}
-                    share={this.props.share}
-                />
-                <Explorer share={this.props.share} />
-                <DragLayer />
-            </DndProvider>
+            <div>
+                <DndProvider backend={HTML5Backend}>
+                    <Modals share={this.props.share} />
+                    <Navigator
+                        isShare={this.props.isShare}
+                        share={this.props.share}
+                    />
+                    <Explorer share={this.props.share} />
+                    <DragLayer />
+                </DndProvider>
+                <SideDrawer />
+            </div>
         );
     }
 }

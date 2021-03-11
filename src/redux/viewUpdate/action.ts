@@ -12,6 +12,12 @@ export const setSubtitle = (title: string): ActionSetSubtitle => {
     };
 };
 
+export const closeContextMenu = () => {
+    return {
+        type: "CLOSE_CONTEXT_MENU"
+    };
+};
+
 export const changeSubTitle = (
     title: string
 ): ThunkAction<any, any, any, any> => {

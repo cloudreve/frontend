@@ -6,7 +6,7 @@ import {
     withStyles
 } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
-import { Archive, Unarchive } from "@material-ui/icons";
+import { Archive,InfoOutlined, Unarchive } from "@material-ui/icons";
 import RenameIcon from "@material-ui/icons/BorderColor";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -54,6 +54,10 @@ import { allowSharePreview } from "../../utils/index";
 import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { openPreview } from "../../actions";
+import {
+    setSideBar,
+    toggleObjectInfoSidebar
+} from "../../redux/explorer/action";
 
 const styles = () => ({
     propover: {},
@@ -149,6 +153,9 @@ const mapDispatchToProps = dispatch => {
         },
         openPreview: () => {
             dispatch(openPreview());
+        },
+        toggleObjectInfoSidebar: open => {
+            dispatch(toggleObjectInfoSidebar(open));
         }
     };
 };
@@ -569,6 +576,26 @@ class ContextMenuCompoment extends Component {
                                         创建分享链接
                                     </Typography>
                                 </MenuItem>
+                            )}
+
+                            {!this.props.isMultiple && isHomePage && (
+                                <MenuItem
+                                    dense
+                                    onClick={() =>
+                                        this.props.toggleObjectInfoSidebar(true)
+                                    }
+                                >
+                                    <StyledListItemIcon>
+                                        <InfoOutlined />
+                                    </StyledListItemIcon>
+                                    <Typography variant="inherit">
+                                        详细信息
+                                    </Typography>
+                                </MenuItem>
+                            )}
+
+                            {!this.props.isMultiple && isHomePage && (
+                                <Divider className={classes.divider} />
                             )}
 
                             {!this.props.isMultiple && isHomePage && (

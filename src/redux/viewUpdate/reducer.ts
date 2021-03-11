@@ -228,6 +228,10 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 }),
                 contextOpen: false
             });
+        case "CLOSE_CONTEXT_MENU":
+            return Object.assign({}, state, {
+                contextOpen: false
+            });
         case "CLOSE_ALL_MODALS":
             return Object.assign({}, state, {
                 modals: Object.assign({}, state.modals, {

@@ -27,6 +27,7 @@ export interface ExplorerState {
     };
     keywords: string;
     fileSave: boolean;
+    sideBarOpen: boolean;
 }
 
 export const initState: ExplorerState = {
@@ -63,7 +64,8 @@ export const initState: ExplorerState = {
         other: []
     },
     keywords: "",
-    fileSave: false
+    fileSave: false,
+    sideBarOpen: false
 };
 
 const checkSelectedProps = (selected: CloudreveFile[]): SelectProps => {
@@ -180,6 +182,11 @@ const explorer = (
                     withFile: false
                 },
                 keywords: ""
+            };
+        case "SET_SIDE_BAR":
+            return {
+                ...state,
+                sideBarOpen: action.open
             };
         default:
             return state;
