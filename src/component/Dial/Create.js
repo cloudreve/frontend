@@ -43,9 +43,7 @@ const useStyles = makeStyles(() => ({
 export default function UploadButton(props) {
     const [open, setOpen] = useState(false);
     const [queued, setQueued] = useState(5);
-
     const classes = useStyles();
-
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>

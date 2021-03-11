@@ -156,6 +156,11 @@ export function basename(path) {
     return pathList.join("/") === "" ? "/" : pathList.join("/");
 }
 
+export function filename(path) {
+    const pathList = path.split("/");
+    return pathList.pop();
+}
+
 export function transformTime(timestamp = +new Date()) {
     if (timestamp) {
         const time = new Date(timestamp);

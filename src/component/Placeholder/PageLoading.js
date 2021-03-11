@@ -1,5 +1,5 @@
 import React from "react";
-import { Code, Facebook } from "react-content-loader";
+import { Facebook } from "react-content-loader";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
