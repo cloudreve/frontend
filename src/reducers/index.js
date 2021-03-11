@@ -9,8 +9,8 @@ const doNavigate = (path, state) => {
     window.currntPath = path;
     return Object.assign({}, state, {
         navigator: Object.assign({}, state.navigator, {
-            path: path
-        })
+            path: path,
+        }),
     });
 };
 
@@ -33,41 +33,41 @@ export const initState = {
                     light: "#7986cb",
                     main: "#3f51b5",
                     dark: "#303f9f",
-                    contrastText: "#fff"
+                    contrastText: "#fff",
                 },
                 secondary: {
                     light: "#ff4081",
                     main: "#f50057",
                     dark: "#c51162",
-                    contrastText: "#fff"
+                    contrastText: "#fff",
                 },
                 error: {
                     light: "#e57373",
                     main: "#f44336",
                     dark: "#d32f2f",
-                    contrastText: "#fff"
+                    contrastText: "#fff",
                 },
                 text: {
                     primary: "rgba(0, 0, 0, 0.87)",
                     secondary: "rgba(0, 0, 0, 0.54)",
                     disabled: "rgba(0, 0, 0, 0.38)",
-                    hint: "rgba(0, 0, 0, 0.38)"
+                    hint: "rgba(0, 0, 0, 0.38)",
                 },
                 explorer: {
                     filename: "#474849",
                     icon: "#8f8f8f",
                     bgSelected: "#D5DAF0",
-                    emptyIcon: "#e8e8e8"
-                }
-            }
+                    emptyIcon: "#e8e8e8",
+                },
+            },
         },
         captcha_IsUseReCaptcha: false,
-        captcha_ReCaptchaKey: "defaultKey"
+        captcha_ReCaptchaKey: "defaultKey",
     },
     navigator: {
         path: "/",
-        refresh: true
-    }
+        refresh: true,
+    },
 };
 
 const defaultStatus = InitSiteConfig(initState);
@@ -91,10 +91,10 @@ const cloudreveApp = (state = defaultStatus, action) => {
                             ...state.siteConfig.theme,
                             palette: {
                                 ...state.siteConfig.theme.palette,
-                                type: "dark"
-                            }
-                        }
-                    }
+                                type: "dark",
+                            },
+                        },
+                    },
                 };
             }
             return {
@@ -105,10 +105,10 @@ const cloudreveApp = (state = defaultStatus, action) => {
                         ...state.siteConfig.theme,
                         palette: {
                             ...state.siteConfig.theme.palette,
-                            type: "light"
-                        }
-                    }
-                }
+                            type: "light",
+                        },
+                    },
+                },
             };
         }
         case "APPLY_THEME":
@@ -119,8 +119,8 @@ const cloudreveApp = (state = defaultStatus, action) => {
                 }
                 return Object.assign({}, state, {
                     siteConfig: Object.assign({}, state.siteConfig, {
-                        theme: themes[action.theme]
-                    })
+                        theme: themes[action.theme],
+                    }),
                 });
             }
             break;
@@ -128,13 +128,13 @@ const cloudreveApp = (state = defaultStatus, action) => {
             return doNavigate(action.path, state);
         case "SET_SITE_CONFIG":
             return Object.assign({}, state, {
-                siteConfig: action.config
+                siteConfig: action.config,
             });
         case "REFRESH_FILE_LIST":
             return Object.assign({}, state, {
                 navigator: Object.assign({}, state.navigator, {
-                    refresh: !state.navigator.refresh
-                })
+                    refresh: !state.navigator.refresh,
+                }),
             });
         case "SEARCH_MY_FILE":
             return Object.assign({}, state, {
@@ -143,25 +143,25 @@ const cloudreveApp = (state = defaultStatus, action) => {
                     refresh:
                         state.explorer.keywords === ""
                             ? state.navigator.refresh
-                            : !state.navigator.refresh
-                })
+                            : !state.navigator.refresh,
+                }),
             });
         default:
             return state;
     }
 };
 
-export default history => (state, action) => {
+export default (history) => (state, action) => {
     const { viewUpdate: viewUpdateState, explorer: explorerState } =
         state || {};
     const appState = cloudreveApp(state, action);
     const combinedState = combineReducers({
         viewUpdate,
         explorer,
-        router: connectRouter(history)
+        router: connectRouter(history),
     })({ viewUpdate: viewUpdateState, explorer: explorerState }, action);
     return {
         ...appState,
-        ...combinedState
+        ...combinedState,
     };
 };

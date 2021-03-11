@@ -6,7 +6,7 @@ import {
     openResaveDialog,
     setSelectedTarget,
     showImgPreivew,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions";
 import { isPreviewable } from "../../config";
 import { withStyles, Button, Typography } from "@material-ui/core";
@@ -19,7 +19,7 @@ import Creator from "./Creator";
 import pathHelper from "../../utils/page";
 
 vhCheck();
-const styles = theme => ({
+const styles = (theme) => ({
     layout: {
         width: "auto",
         marginTop: "90px",
@@ -29,35 +29,35 @@ const styles = theme => ({
             width: 1100,
             marginTop: "90px",
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
         [theme.breakpoints.down("sm")]: {
             marginTop: 0,
             marginLeft: 0,
-            marginRight: 0
+            marginRight: 0,
         },
         justifyContent: "center",
-        display: "flex"
+        display: "flex",
     },
     player: {
-        borderRadius: "4px"
+        borderRadius: "4px",
     },
     fileCotainer: {
         width: "200px",
-        margin: "0 auto"
+        margin: "0 auto",
     },
     buttonCotainer: {
         width: "400px",
         margin: "0 auto",
         textAlign: "center",
-        marginTop: "20px"
+        marginTop: "20px",
     },
     paper: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     icon: {
         borderRadius: "10%",
-        marginTop: 2
+        marginTop: 2,
     },
 
     box: {
@@ -69,37 +69,37 @@ const styles = theme => ({
         [theme.breakpoints.down("sm")]: {
             height: "calc(var(--vh, 100vh) - 56px)",
             borderRadius: 0,
-            maxWidth: 1000
+            maxWidth: 1000,
         },
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
     },
     boxContent: {
         padding: 24,
         display: "flex",
-        flex: "1"
+        flex: "1",
     },
     fileName: {
-        marginLeft: 20
+        marginLeft: 20,
     },
     fileSize: {
         color: theme.palette.text.disabled,
-        fontSize: 14
+        fontSize: 14,
     },
     boxFooter: {
         display: "flex",
         padding: "20px 16px",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     downloadButton: {
-        marginLeft: 8
-    }
+        marginLeft: 8,
+    },
 });
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
@@ -107,15 +107,15 @@ const mapDispatchToProps = dispatch => {
         openMusicDialog: () => {
             dispatch(openMusicDialog());
         },
-        setSelectedTarget: targets => {
+        setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
         },
-        showImgPreivew: first => {
+        showImgPreivew: (first) => {
             dispatch(showImgPreivew(first));
         },
-        openResave: key => {
+        openResave: (key) => {
             dispatch(openResaveDialog(key));
-        }
+        },
     };
 };
 
@@ -127,7 +127,7 @@ class SharedFileCompoment extends Component {
         anchorEl: null,
         open: false,
         purchaseCallback: null,
-        loading: false
+        loading: false,
     };
 
     downloaded = false;
@@ -151,7 +151,7 @@ class SharedFileCompoment extends Component {
             case "img":
                 this.props.showImgPreivew({
                     key: this.props.share.key,
-                    name: this.props.share.source.name
+                    name: this.props.share.source.name,
                 });
                 return;
             case "msDoc":
@@ -165,8 +165,8 @@ class SharedFileCompoment extends Component {
                 this.props.setSelectedTarget([
                     {
                         key: this.props.share.key,
-                        type: "share"
-                    }
+                        type: "share",
+                    },
                 ]);
                 this.props.openMusicDialog();
                 return;
@@ -213,18 +213,18 @@ class SharedFileCompoment extends Component {
         this.props.setSelectedTarget([]);
     }
 
-    scoreHandle = callback => event => {
+    scoreHandle = (callback) => (event) => {
         callback(event);
     };
 
     download = () => {
         this.setState({ loading: true });
         API.put("/share/download/" + this.props.share.key)
-            .then(response => {
+            .then((response) => {
                 this.downloaded = true;
                 window.location.assign(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",

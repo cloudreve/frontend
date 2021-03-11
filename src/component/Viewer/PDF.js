@@ -11,7 +11,7 @@ import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         marginTop: "30px",
         marginLeft: theme.spacing(3),
@@ -19,20 +19,20 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             maxWidth: 900,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 50
+        marginBottom: 50,
     },
     "@global": {
         canvas: {
             width: "100% !important",
             height: "auto !important",
-            borderRadius: 4
-        }
+            borderRadius: 4,
+        },
     },
     paper: {
-        marginBottom: theme.spacing(3)
-    }
+        marginBottom: theme.spacing(3),
+    },
 }));
 
 function useQuery() {
@@ -48,9 +48,10 @@ export default function PDFViewer() {
     const [pageNumber, setPageNumber] = useState(1);
 
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
-        dispatch
-    ]);
+    const SetSubTitle = useCallback(
+        (title) => dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
@@ -71,7 +72,7 @@ export default function PDFViewer() {
         const textLayers = document.querySelectorAll(
             ".react-pdf__Page__textContent"
         );
-        textLayers.forEach(layer => {
+        textLayers.forEach((layer) => {
             const { style } = layer;
             style.display = "none";
         });
@@ -82,7 +83,7 @@ export default function PDFViewer() {
         <div className={classes.layout}>
             <Document
                 onLoadSuccess={({ numPages }) => setPageNumber(numPages)}
-                onLoadError={error => {
+                onLoadError={(error) => {
                     ToggleSnackbar(
                         "top",
                         "right",

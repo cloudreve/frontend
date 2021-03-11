@@ -11,61 +11,61 @@ import {
     LinearProgress,
     Typography,
     Divider,
-    Tooltip
+    Tooltip,
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { withRouter } from "react-router";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         refresh: state.viewUpdate.storageRefresh,
-        isLogin: state.viewUpdate.isLogin
+        isLogin: state.viewUpdate.isLogin,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
     iconFix: {
         marginLeft: "32px",
         marginRight: "17px",
         color: theme.palette.text.secondary,
-        marginTop: "2px"
+        marginTop: "2px",
     },
     textFix: {
-        padding: " 0 0 0 16px"
+        padding: " 0 0 0 16px",
     },
     storageContainer: {
         display: "flex",
         marginTop: "15px",
         textAlign: "left",
-        marginBottom: "11px"
+        marginBottom: "11px",
     },
     detail: {
         width: "100%",
-        marginRight: "35px"
+        marginRight: "35px",
     },
     info: {
         width: "131px",
         overflow: "hidden",
         textOverflow: "ellipsis",
         [theme.breakpoints.down("xs")]: {
-            width: "162px"
+            width: "162px",
         },
-        marginTop: "5px"
+        marginTop: "5px",
     },
     bar: {
-        marginTop: "5px"
+        marginTop: "5px",
     },
     stickFooter: {
-        backgroundColor: theme.palette.background.paper
-    }
+        backgroundColor: theme.palette.background.paper,
+    },
 });
 
 class StorageBarCompoment extends Component {
@@ -73,7 +73,7 @@ class StorageBarCompoment extends Component {
         percent: 0,
         used: null,
         total: null,
-        showExpand: false
+        showExpand: false,
     };
 
     firstLoad = true;
@@ -89,7 +89,7 @@ class StorageBarCompoment extends Component {
         this.firstLoad = false;
     }
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (
             (this.props.isLogin && this.props.refresh !== nextProps.refresh) ||
             (this.props.isLogin !== nextProps.isLogin && nextProps.isLogin)
@@ -101,7 +101,7 @@ class StorageBarCompoment extends Component {
     updateStatus = () => {
         let percent = 0;
         API.get("/user/storage")
-            .then(response => {
+            .then((response) => {
                 if (response.data.used / response.data.total >= 1) {
                     percent = 100;
                     this.props.toggleSnackbar(
@@ -116,7 +116,7 @@ class StorageBarCompoment extends Component {
                 this.setState({
                     percent: percent,
                     used: sizeToString(response.data.used),
-                    total: sizeToString(response.data.total)
+                    total: sizeToString(response.data.total),
                 });
             })
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -178,7 +178,7 @@ class StorageBarCompoment extends Component {
 }
 
 StorageBarCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const StorageBar = connect(

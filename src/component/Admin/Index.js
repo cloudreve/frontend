@@ -28,7 +28,7 @@ import {
     Lock,
     People,
     Public,
-    Telegram
+    Telegram,
 } from "@material-ui/icons";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
@@ -40,7 +40,7 @@ import {
     LineChart,
     Tooltip,
     XAxis,
-    YAxis
+    YAxis,
 } from "recharts";
 import { ResponsiveContainer } from "recharts/lib/component/ResponsiveContainer";
 import TimeAgo from "timeago-react";
@@ -48,50 +48,50 @@ import { toggleSnackbar } from "../../actions";
 import API from "../../middleware/Api";
 import pathHelper from "../../utils/page";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(3),
-        height: "100%"
+        height: "100%",
     },
     logo: {
-        width: 70
+        width: 70,
     },
     logoContainer: {
         padding: theme.spacing(3),
-        display: "flex"
+        display: "flex",
     },
     title: {
-        marginLeft: 16
+        marginLeft: 16,
     },
     cloudreve: {
         fontSize: 25,
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     version: {
-        color: theme.palette.text.hint
+        color: theme.palette.text.hint,
     },
     links: {
-        padding: theme.spacing(3)
+        padding: theme.spacing(3),
     },
     iconRight: {
-        minWidth: 0
+        minWidth: 0,
     },
     userIcon: {
         backgroundColor: blue[100],
-        color: blue[600]
+        color: blue[600],
     },
     fileIcon: {
         backgroundColor: yellow[100],
-        color: yellow[800]
+        color: yellow[800],
     },
     publicIcon: {
         backgroundColor: green[100],
-        color: green[800]
+        color: green[800],
     },
     secretIcon: {
         backgroundColor: red[100],
-        color: red[800]
-    }
+        color: red[800],
+    },
 }));
 
 export default function Index() {
@@ -105,10 +105,10 @@ export default function Index() {
         fileTotal: 0,
         userTotal: 0,
         publicShareTotal: 0,
-        secretShareTotal: 0
+        secretShareTotal: 0,
     });
     const [version, setVersion] = useState({
-        backend: "-"
+        backend: "-",
     });
 
     const dispatch = useDispatch();
@@ -124,29 +124,29 @@ export default function Index() {
             options: [
                 {
                     key: "siteURL",
-                    value: window.location.origin
-                }
-            ]
+                    value: window.location.origin,
+                },
+            ],
         })
             .then(() => {
                 setSiteURL(window.location.origin);
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
 
     useEffect(() => {
         API.get("/admin/summary")
-            .then(response => {
+            .then((response) => {
                 const data = [];
                 response.data.date.forEach((v, k) => {
                     data.push({
                         name: v,
                         file: response.data.files[k],
                         user: response.data.users[k],
-                        share: response.data.shares[k]
+                        share: response.data.shares[k],
                     });
                 });
                 setLineData(data);
@@ -154,7 +154,7 @@ export default function Index() {
                     fileTotal: response.data.fileTotal,
                     userTotal: response.data.userTotal,
                     publicShareTotal: response.data.publicShareTotal,
-                    secretShareTotal: response.data.secretShareTotal
+                    secretShareTotal: response.data.secretShareTotal,
                 });
                 setVersion(response.data.version);
                 setSiteURL(response.data.siteURL);
@@ -165,23 +165,23 @@ export default function Index() {
                     setOpen(true);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
 
         axios
             .get("/api/v3/admin/news")
-            .then(response => {
+            .then((response) => {
                 setNews(response.data.data);
                 const res = {};
-                response.data.included.forEach(v => {
+                response.data.included.forEach((v) => {
                     if (v.type === "users") {
                         res[v.id] = v.attributes;
                     }
                 });
                 setNewsUsers(res);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, []);
@@ -436,7 +436,7 @@ export default function Index() {
                 <Paper className={classes.paper}>
                     <List>
                         {news &&
-                            news.map(v => (
+                            news.map((v) => (
                                 <>
                                     <ListItem
                                         button

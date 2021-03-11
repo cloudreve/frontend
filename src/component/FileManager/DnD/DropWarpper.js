@@ -11,15 +11,15 @@ export default function FolderDropWarpper({
     handleClick,
     handleDoubleClick,
     className,
-    pref
+    pref,
 }) {
     const [{ canDrop, isOver }, drop] = useDrop({
         accept: "object",
         drop: () => ({ folder }),
-        collect: monitor => ({
+        collect: (monitor) => ({
             isOver: monitor.isOver(),
-            canDrop: monitor.canDrop()
-        })
+            canDrop: monitor.canDrop(),
+        }),
     });
     const isActive = canDrop && isOver;
     if (!isListView) {

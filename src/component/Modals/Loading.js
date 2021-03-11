@@ -10,21 +10,21 @@ import { useSelector } from "react-redux";
 const useStyles = makeStyles({
     avatar: {
         backgroundColor: blue[100],
-        color: blue[600]
+        color: blue[600],
     },
     loadingContainer: {
-        display: "flex"
+        display: "flex",
     },
     loading: {
         marginTop: 10,
-        marginLeft: 20
-    }
+        marginLeft: 20,
+    },
 });
 
 export default function LoadingDialog() {
     const classes = useStyles();
-    const open = useSelector(state => state.viewUpdate.modals.loading);
-    const text = useSelector(state => state.viewUpdate.modals.loadingText);
+    const open = useSelector((state) => state.viewUpdate.modals.loading);
+    const text = useSelector((state) => state.viewUpdate.modals.loadingText);
 
     return (
         <Dialog aria-labelledby="simple-dialog-title" open={open}>

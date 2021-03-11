@@ -7,21 +7,21 @@ import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import Avatar from "@material-ui/core/Avatar";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        isLogin: state.viewUpdate.isLogin
+        isLogin: state.viewUpdate.isLogin,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        setUserPopover: anchor => {
+        setUserPopover: (anchor) => {
             dispatch(setUserPopover(anchor));
-        }
+        },
     };
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
     userNav: {
         height: "170px",
         backgroundColor: theme.palette.primary.main,
@@ -52,7 +52,7 @@ const styles = theme => ({
             "' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='" +
             theme.palette.secondary.dark.replace("#", "%23") +
             "' points='943 900 1210 900 971 687'/%3E%3C/svg%3E\")",
-        backgroundSize: "cover"
+        backgroundSize: "cover",
     },
     avatar: {
         display: "block",
@@ -61,35 +61,36 @@ const styles = theme => ({
         border: " 2px solid #fff",
         borderRadius: "50%",
         overflow: "hidden",
-        boxShadow: "0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)"
+        boxShadow:
+            "0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)",
     },
     avatarImg: {
         width: "66px",
-        height: "66px"
+        height: "66px",
     },
     nickName: {
         color: "#fff",
         marginLeft: "10px",
         marginTop: "15px",
-        fontSize: "17px"
+        fontSize: "17px",
     },
     flexAvatar: {
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "end"
+        alignItems: "end",
     },
     groupName: {
         marginLeft: "10px",
         color: "#ffffff",
-        opacity: "0.54"
+        opacity: "0.54",
     },
     storageCircle: {
-        width: "200px"
-    }
+        width: "200px",
+    },
 });
 
 class UserInfoCompoment extends Component {
-    showUserInfo = e => {
+    showUserInfo = (e) => {
         this.props.setUserPopover(e.currentTarget);
     };
 
@@ -141,7 +142,7 @@ class UserInfoCompoment extends Component {
 }
 
 UserInfoCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const UserInfo = connect(

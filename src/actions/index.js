@@ -4,11 +4,11 @@ export const setNavigator = (path, navigatorLoading) => {
     return {
         type: "SET_NAVIGATOR",
         path,
-        navigatorLoading
+        navigatorLoading,
     };
 };
 
-export const navigateTo = path => {
+export const navigateTo = (path) => {
     return (dispatch, getState) => {
         const state = getState();
         const navigatorLoading = path !== state.navigator.path;
@@ -27,10 +27,10 @@ export const navigateUp = () => {
     };
 };
 
-export const drawerToggleAction = open => {
+export const drawerToggleAction = (open) => {
     return {
         type: "DRAWER_TOGGLE",
-        open: open
+        open: open,
     };
 };
 
@@ -38,20 +38,20 @@ export const dragAndDrop = (source, target) => {
     return {
         type: "DRAG_AND_DROP",
         source: source,
-        target: target
+        target: target,
     };
 };
 
-export const changeViewMethod = method => {
+export const changeViewMethod = (method) => {
     return {
         type: "CHANGE_VIEW_METHOD",
-        method: method
+        method: method,
     };
 };
 
 export const toggleDaylightMode = () => {
     return {
-        type: "TOGGLE_DAYLIGHT_MODE"
+        type: "TOGGLE_DAYLIGHT_MODE",
     };
 };
 
@@ -59,14 +59,14 @@ export const changeContextMenu = (type, open) => {
     return {
         type: "CHANGE_CONTEXT_MENU",
         menuType: type,
-        open: open
+        open: open,
     };
 };
 
-export const setNavigatorLoadingStatus = status => {
+export const setNavigatorLoadingStatus = (status) => {
     return {
         type: "SET_NAVIGATOR_LOADING_STATUE",
-        status: status
+        status: status,
     };
 };
 
@@ -74,133 +74,133 @@ export const setNavigatorError = (status, msg) => {
     return {
         type: "SET_NAVIGATOR_ERROR",
         status: status,
-        msg: msg
+        msg: msg,
     };
 };
 
 export const openCreateFolderDialog = () => {
     return {
-        type: "OPEN_CREATE_FOLDER_DIALOG"
+        type: "OPEN_CREATE_FOLDER_DIALOG",
     };
 };
 
 export const openCreateFileDialog = () => {
     return {
-        type: "OPEN_CREATE_FILE_DIALOG"
+        type: "OPEN_CREATE_FILE_DIALOG",
     };
 };
 
-export const setUserPopover = anchor => {
+export const setUserPopover = (anchor) => {
     return {
         type: "SET_USER_POPOVER",
-        anchor: anchor
+        anchor: anchor,
     };
 };
 
-export const setShareUserPopover = anchor => {
+export const setShareUserPopover = (anchor) => {
     return {
         type: "SET_SHARE_USER_POPOVER",
-        anchor: anchor
+        anchor: anchor,
     };
 };
 
 export const openRenameDialog = () => {
     return {
-        type: "OPEN_RENAME_DIALOG"
+        type: "OPEN_RENAME_DIALOG",
     };
 };
 
-export const openResaveDialog = key => {
+export const openResaveDialog = (key) => {
     return {
         type: "OPEN_RESAVE_DIALOG",
-        key: key
+        key: key,
     };
 };
 
 export const openMoveDialog = () => {
     return {
-        type: "OPEN_MOVE_DIALOG"
+        type: "OPEN_MOVE_DIALOG",
     };
 };
 
 export const openRemoveDialog = () => {
     return {
-        type: "OPEN_REMOVE_DIALOG"
+        type: "OPEN_REMOVE_DIALOG",
     };
 };
 
 export const openShareDialog = () => {
     return {
-        type: "OPEN_SHARE_DIALOG"
+        type: "OPEN_SHARE_DIALOG",
     };
 };
 
-export const applyThemes = theme => {
+export const applyThemes = (theme) => {
     return {
         type: "APPLY_THEME",
-        theme: theme
+        theme: theme,
     };
 };
 
-export const setSessionStatus = status => {
+export const setSessionStatus = (status) => {
     return {
         type: "SET_SESSION_STATUS",
-        status: status
+        status: status,
     };
 };
 
 export const openMusicDialog = () => {
     return {
-        type: "OPEN_MUSIC_DIALOG"
+        type: "OPEN_MUSIC_DIALOG",
     };
 };
 
 export const openRemoteDownloadDialog = () => {
     return {
-        type: "OPEN_REMOTE_DOWNLOAD_DIALOG"
+        type: "OPEN_REMOTE_DOWNLOAD_DIALOG",
     };
 };
 
 export const openTorrentDownloadDialog = () => {
     return {
-        type: "OPEN_TORRENT_DOWNLOAD_DIALOG"
+        type: "OPEN_TORRENT_DOWNLOAD_DIALOG",
     };
 };
 
 export const openDecompressDialog = () => {
     return {
-        type: "OPEN_DECOMPRESS_DIALOG"
+        type: "OPEN_DECOMPRESS_DIALOG",
     };
 };
 
 export const openCompressDialog = () => {
     return {
-        type: "OPEN_COMPRESS_DIALOG"
+        type: "OPEN_COMPRESS_DIALOG",
     };
 };
 
 export const openGetSourceDialog = () => {
     return {
-        type: "OPEN_GET_SOURCE_DIALOG"
+        type: "OPEN_GET_SOURCE_DIALOG",
     };
 };
 
 export const openCopyDialog = () => {
     return {
-        type: "OPEN_COPY_DIALOG"
+        type: "OPEN_COPY_DIALOG",
     };
 };
 
-export const openLoadingDialog = text => {
+export const openLoadingDialog = (text) => {
     return {
         type: "OPEN_LOADING_DIALOG",
-        text: text
+        text: text,
     };
 };
 
 export const closeAllModals = () => {
     return {
-        type: "CLOSE_ALL_MODALS"
+        type: "CLOSE_ALL_MODALS",
     };
 };
 
@@ -210,58 +210,58 @@ export const toggleSnackbar = (vertical, horizontal, msg, color) => {
         vertical: vertical,
         horizontal: horizontal,
         msg: msg,
-        color: color
+        color: color,
     };
 };
 
 export const enableLoadUploader = () => {
     return {
-        type: "ENABLE_LOAD_UPLOADER"
+        type: "ENABLE_LOAD_UPLOADER",
     };
 };
 
-export const setModalsLoading = status => {
+export const setModalsLoading = (status) => {
     return {
         type: "SET_MODALS_LOADING",
-        status: status
+        status: status,
     };
 };
 
 export const refreshFileList = () => {
     return {
-        type: "REFRESH_FILE_LIST"
+        type: "REFRESH_FILE_LIST",
     };
 };
 
-export const searchMyFile = keywords => {
+export const searchMyFile = (keywords) => {
     return {
         type: "SEARCH_MY_FILE",
-        keywords: keywords
+        keywords: keywords,
     };
 };
 
-export const showImgPreivew = first => {
+export const showImgPreivew = (first) => {
     return {
         type: "SHOW_IMG_PREIVEW",
-        first: first
+        first: first,
     };
 };
 
 export const refreshStorage = () => {
     return {
-        type: "REFRESH_STORAGE"
+        type: "REFRESH_STORAGE",
     };
 };
 
 export const saveFile = () => {
     return {
-        type: "SAVE_FILE"
+        type: "SAVE_FILE",
     };
 };
 
-export const setSiteConfig = config => {
+export const setSiteConfig = (config) => {
     return {
         type: "SET_SITE_CONFIG",
-        config: config
+        config: config,
     };
 };

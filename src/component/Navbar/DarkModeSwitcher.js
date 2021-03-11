@@ -11,15 +11,17 @@ import classNames from "classnames";
 const useStyles = makeStyles(() => ({
     icon: {
         color: "rgb(255, 255, 255)",
-        opacity: "0.54"
-    }
+        opacity: "0.54",
+    },
 }));
 
 const DarkModeSwitcher = ({ position }) => {
-    const ThemeType = useSelector(state => state.siteConfig.theme.palette.type);
+    const ThemeType = useSelector(
+        (state) => state.siteConfig.theme.palette.type
+    );
     const dispatch = useDispatch();
     const ToggleThemeMode = useCallback(() => dispatch(toggleDaylightMode()), [
-        dispatch
+        dispatch,
     ]);
     const isDayLight = (ThemeType && ThemeType === "light") || !ThemeType;
     const isDark = ThemeType && ThemeType === "dark";
@@ -35,7 +37,7 @@ const DarkModeSwitcher = ({ position }) => {
         >
             <IconButton
                 className={classNames({
-                    [classes.icon]: "left" === position
+                    [classes.icon]: "left" === position,
                 })}
                 onClick={toggleMode}
                 color="inherit"

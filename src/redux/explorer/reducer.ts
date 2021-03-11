@@ -40,7 +40,7 @@ export const initState: ExplorerState = {
     selectProps: {
         isMultiple: false,
         withFolder: false,
-        withFile: false
+        withFile: false,
     },
     lastSelect: {
         file: {
@@ -48,9 +48,9 @@ export const initState: ExplorerState = {
             name: "",
             size: 0,
             type: "file",
-            date: ""
+            date: "",
         },
-        index: -1
+        index: -1,
     },
     shiftSelectedIds: [],
     imgPreview: {
@@ -59,20 +59,20 @@ export const initState: ExplorerState = {
             name: "",
             size: 0,
             type: "file",
-            date: ""
+            date: "",
         },
-        other: []
+        other: [],
     },
     keywords: "",
     fileSave: false,
-    sideBarOpen: false
+    sideBarOpen: false,
 };
 
 const checkSelectedProps = (selected: CloudreveFile[]): SelectProps => {
     const isMultiple = selected.length > 1;
     let withFolder = false;
     let withFile = false;
-    selected.forEach(value => {
+    selected.forEach((value) => {
         if (value.type === "dir") {
             withFolder = true;
         } else if (value.type === "file") {
@@ -82,7 +82,7 @@ const checkSelectedProps = (selected: CloudreveFile[]): SelectProps => {
     return {
         isMultiple,
         withFolder,
-        withFile
+        withFile,
     };
 };
 
@@ -95,36 +95,36 @@ const explorer = (
             return Object.assign({}, state, {
                 dndSignal: !state.dndSignal,
                 dndTarget: action.target,
-                dndSource: action.source
+                dndSource: action.source,
             });
         case "SET_FILE_LIST":
             return Object.assign({}, state, {
-                fileList: action.list
+                fileList: action.list,
             });
         case "SET_DIR_LIST":
             return Object.assign({}, state, {
-                dirList: action.list
+                dirList: action.list,
             });
         case "ADD_SELECTED_TARGETS":
             const addedSelected = [...state.selected, ...action.targets];
             return Object.assign({}, state, {
                 selected: addedSelected,
-                selectProps: checkSelectedProps(addedSelected)
+                selectProps: checkSelectedProps(addedSelected),
             });
         case "SET_SELECTED_TARGET":
             const newSelected = action.targets;
             return Object.assign({}, state, {
                 selected: newSelected,
-                selectProps: checkSelectedProps(newSelected)
+                selectProps: checkSelectedProps(newSelected),
             });
         case "RMOVE_SELECTED_TARGETS":
             const { fileIds } = action;
-            const filteredSelected = state.selected.filter(file => {
+            const filteredSelected = state.selected.filter((file) => {
                 return !fileIds.includes(file.id);
             });
             return Object.assign({}, state, {
                 selected: filteredSelected,
-                selectProps: checkSelectedProps(filteredSelected)
+                selectProps: checkSelectedProps(filteredSelected),
             });
         case "REFRESH_FILE_LIST":
             return Object.assign({}, state, {
@@ -132,8 +132,8 @@ const explorer = (
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: false
-                }
+                    withFile: false,
+                },
             });
         case "SEARCH_MY_FILE":
             return Object.assign({}, state, {
@@ -141,21 +141,21 @@ const explorer = (
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: false
+                    withFile: false,
                 },
-                keywords: action.keywords
+                keywords: action.keywords,
             });
         case "SHOW_IMG_PREIVEW":
             return Object.assign({}, state, {
                 imgPreview: {
                     first: action.first,
-                    other: state.fileList
-                }
+                    other: state.fileList,
+                },
             });
         case "SAVE_FILE":
             return {
                 ...state,
-                fileSave: !state.fileSave
+                fileSave: !state.fileSave,
             };
         case "SET_LAST_SELECT":
             const { file, index } = action;
@@ -163,14 +163,14 @@ const explorer = (
                 ...state,
                 lastSelect: {
                     file,
-                    index
-                }
+                    index,
+                },
             };
         case "SET_SHIFT_SELECTED_IDS":
             const { shiftSelectedIds } = action;
             return {
                 ...state,
-                shiftSelectedIds
+                shiftSelectedIds,
             };
         case "SET_NAVIGATOR":
             return {
@@ -179,14 +179,14 @@ const explorer = (
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: false
+                    withFile: false,
                 },
-                keywords: ""
+                keywords: "",
             };
         case "SET_SIDE_BAR":
             return {
                 ...state,
-                sideBarOpen: action.open
+                sideBarOpen: action.open,
             };
         default:
             return state;

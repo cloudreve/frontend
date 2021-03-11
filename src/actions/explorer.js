@@ -6,29 +6,29 @@ import {
     openLoadingDialog,
     openMusicDialog,
     showImgPreivew,
-    toggleSnackbar
+    toggleSnackbar,
 } from "./index";
 import { isPreviewable } from "../config";
 import { push } from "connected-react-router";
 
-export const removeSelectedTargets = fileIds => {
+export const removeSelectedTargets = (fileIds) => {
     return {
         type: "RMOVE_SELECTED_TARGETS",
-        fileIds
+        fileIds,
     };
 };
 
-export const addSelectedTargets = targets => {
+export const addSelectedTargets = (targets) => {
     return {
         type: "ADD_SELECTED_TARGETS",
-        targets
+        targets,
     };
 };
 
-export const setSelectedTarget = targets => {
+export const setSelectedTarget = (targets) => {
     return {
         type: "SET_SELECTED_TARGET",
-        targets
+        targets,
     };
 };
 
@@ -36,14 +36,14 @@ export const setLastSelect = (file, index) => {
     return {
         type: "SET_LAST_SELECT",
         file,
-        index
+        index,
     };
 };
 
-export const setShiftSelectedIds = shiftSelectedIds => {
+export const setShiftSelectedIds = (shiftSelectedIds) => {
     return {
         type: "SET_SHIFT_SELECTED_IDS",
-        shiftSelectedIds
+        shiftSelectedIds,
     };
 };
 
@@ -52,8 +52,8 @@ export const openPreview = () => {
         const {
             explorer: { selected },
             router: {
-                location: { pathname }
-            }
+                location: { pathname },
+            },
         } = getState();
         const isShare = pathHelper.isSharePage(pathname);
         if (isShare) {
@@ -214,7 +214,7 @@ export const selectFile = (file, event, fileIndex) => {
         ) {
             // shift 多选
             // 取消原有选择
-            dispatch(removeSelectedTargets(selected.map(v => v.id)));
+            dispatch(removeSelectedTargets(selected.map((v) => v.id)));
             // 添加新选择
             const begin = Math.min(lastSelect.index, fileIndex);
             const end = Math.max(lastSelect.index, fileIndex);
@@ -226,7 +226,7 @@ export const selectFile = (file, event, fileIndex) => {
         dispatch(setShiftSelectedIds([]));
         if ((ctrlKey && !isMacbook) || (metaKey && isMacbook)) {
             // Ctrl/Command 单击添加/删除
-            const presentIndex = selected.findIndex(value => {
+            const presentIndex = selected.findIndex((value) => {
                 return value.id === file.id;
             });
             if (presentIndex !== -1) {

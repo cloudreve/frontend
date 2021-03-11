@@ -9,12 +9,12 @@ import FinishedCard from "./FinishedCard";
 import RemoteDownloadButton from "../Dial/Aria2";
 import Auth from "../../middleware/Auth";
 
-const styles = theme => ({
+const styles = (theme) => ({
     actions: {
-        display: "flex"
+        display: "flex",
     },
     title: {
-        marginTop: "20px"
+        marginTop: "20px",
     },
     layout: {
         width: "auto",
@@ -24,48 +24,48 @@ const styles = theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 700,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     shareTitle: {
-        maxWidth: "200px"
+        maxWidth: "200px",
     },
     avatarFile: {
-        backgroundColor: theme.palette.primary.light
+        backgroundColor: theme.palette.primary.light,
     },
     avatarFolder: {
-        backgroundColor: theme.palette.secondary.light
+        backgroundColor: theme.palette.secondary.light,
     },
     gird: {
-        marginTop: "30px"
+        marginTop: "30px",
     },
     hide: {
-        display: "none"
+        display: "none",
     },
     loadingAnimation: {
-        borderRadius: "6px 6px 0 0"
+        borderRadius: "6px 6px 0 0",
     },
     shareFix: {
-        marginLeft: "20px"
+        marginLeft: "20px",
     },
     loadMore: {
         textAlign: "center",
         marginTop: "20px",
-        marginBottom: "20px"
+        marginBottom: "20px",
     },
     margin: {
-        marginTop: theme.spacing(2)
-    }
+        marginTop: theme.spacing(2),
+    },
 });
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
@@ -77,7 +77,7 @@ class DownloadComponent extends Component {
         downloading: [],
         loading: false,
         finishedList: [],
-        continue: true
+        continue: true,
     };
 
     componentDidMount = () => {
@@ -91,13 +91,13 @@ class DownloadComponent extends Component {
 
     loadDownloading = () => {
         this.setState({
-            loading: true
+            loading: true,
         });
         API.get("/aria2/downloading")
-            .then(response => {
+            .then((response) => {
                 this.setState({
                     downloading: response.data,
-                    loading: false
+                    loading: false,
                 });
                 // 设定自动更新
                 clearTimeout(this.interval);
@@ -108,7 +108,7 @@ class DownloadComponent extends Component {
                     );
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -120,23 +120,23 @@ class DownloadComponent extends Component {
 
     loadMore = () => {
         this.setState({
-            loading: true
+            loading: true,
         });
         API.get("/aria2/finished?page=" + ++this.page)
-            .then(response => {
+            .then((response) => {
                 this.setState({
                     finishedList: [
                         ...this.state.finishedList,
-                        ...response.data
+                        ...response.data,
                     ],
                     loading: false,
-                    continue: response.data.length >= 10
+                    continue: response.data.length >= 10,
                 });
             })
             .catch(() => {
                 this.props.toggleSnackbar("top", "right", "加载失败", "error");
                 this.setState({
-                    loading: false
+                    loading: false,
                 });
             });
     };

@@ -13,11 +13,11 @@ import {
     InputLabel,
     Paper,
     Avatar,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import { useLocation } from "react-router";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "110px",
@@ -26,9 +26,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             width: 400,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 110
+        marginBottom: 110,
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -37,21 +37,21 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
             3
-        )}px`
+        )}px`,
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     submit: {
-        marginTop: theme.spacing(3)
+        marginTop: theme.spacing(3),
     },
     link: {
         marginTop: "20px",
         display: "flex",
         width: "100%",
-        justifyContent: "space-between"
-    }
+        justifyContent: "space-between",
+    },
 }));
 
 function useQuery() {
@@ -62,13 +62,13 @@ function ResetForm() {
     const query = useQuery();
     const [input, setInput] = useState({
         password: "",
-        password_repeat: ""
+        password_repeat: "",
     });
     const [loading, setLoading] = useState(false);
-    const handleInputChange = name => e => {
+    const handleInputChange = (name) => (e) => {
         setInput({
             ...input,
-            [name]: e.target.value
+            [name]: e.target.value,
         });
     };
     const dispatch = useDispatch();
@@ -79,7 +79,7 @@ function ResetForm() {
     );
     const history = useHistory();
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         if (input.password !== input.password_repeat) {
             ToggleSnackbar("top", "right", "两次密码输入不一致", "warning");
@@ -89,14 +89,14 @@ function ResetForm() {
         API.patch("/user/reset", {
             secret: query.get("sign"),
             id: query.get("id"),
-            Password: input.password
+            Password: input.password,
         })
             .then(() => {
                 setLoading(false);
                 history.push("/login");
                 ToggleSnackbar("top", "right", "密码已重设", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
             });

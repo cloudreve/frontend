@@ -9,14 +9,14 @@ import { basename, pathJoin } from "../../utils";
 
 let loaded = false;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         path: state.navigator.path,
-        keywords: state.explorer.keywords
+        keywords: state.explorer.keywords,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         refreshFileList: () => {
             dispatch(refreshFileList());
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => {
         },
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
@@ -34,7 +34,7 @@ class UploaderComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            queued: 0
+            queued: 0,
         };
     }
 
@@ -65,14 +65,14 @@ class UploaderComponent extends Component {
             window.fileList["openFileList"]();
             const enqueFiles = files
                 // 不上传Mac下的布局文件 .DS_Store
-                .filter(file => {
+                .filter((file) => {
                     const isDsStore = file.name.toLowerCase() === ".ds_store";
                     if (isDsStore) {
                         up.removeFile(file);
                     }
                     return !isDsStore;
                 })
-                .map(file => {
+                .map((file) => {
                     const source = file.getSource();
                     if (source.relativePath && source.relativePath !== "") {
                         file.path = basename(
@@ -89,7 +89,7 @@ class UploaderComponent extends Component {
                 });
             window.fileList["enQueue"](enqueFiles);
         } else {
-            window.plupload.each(files, files => {
+            window.plupload.each(files, (files) => {
                 up.removeFile(files);
             });
         }
@@ -125,9 +125,9 @@ class UploaderComponent extends Component {
                                           title: "files",
                                           extensions: user.policy.allowedType.join(
                                               ","
-                                          )
-                                      }
-                                  ]
+                                          ),
+                                      },
+                                  ],
                     },
                     // iOS不能多选？
                     multi_selection: true,
@@ -142,8 +142,8 @@ class UploaderComponent extends Component {
                         FilesAdded: this.fileAdd,
 
                         // eslint-disable-next-line @typescript-eslint/no-empty-function
-                        BeforeUpload: function() {},
-                        QueueChanged: up => {
+                        BeforeUpload: function () {},
+                        QueueChanged: (up) => {
                             this.setState({ queued: up.total.queued });
                         },
                         UploadProgress: (up, file) => {
@@ -177,14 +177,14 @@ class UploaderComponent extends Component {
                             this.props.refreshStorage();
                         },
                         // eslint-disable-next-line @typescript-eslint/no-empty-function
-                        FileUploaded: function() {},
+                        FileUploaded: function () {},
                         Error: (up, err, errTip) => {
                             window.fileList["openFileList"]();
                             window.fileList["setError"](err.file, errTip);
                         },
                         // eslint-disable-next-line @typescript-eslint/no-empty-function
-                        FilesRemoved: () => {}
-                    }
+                        FilesRemoved: () => {},
+                    },
                 });
                 // this.fileList["openFileList"]();
             } else this.onError();
@@ -217,7 +217,7 @@ class UploaderComponent extends Component {
 }
 
 const Uploader = connect(mapStateToProps, mapDispatchToProps, null, {
-    forwardRef: true
+    forwardRef: true,
 })(uploaderLoader()(UploaderComponent));
 
 export default Uploader;

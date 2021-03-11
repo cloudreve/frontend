@@ -7,7 +7,7 @@ import API from "../../middleware/Api";
 import { Button, Paper, Avatar, Typography } from "@material-ui/core";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
 import { useLocation } from "react-router";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "110px",
@@ -16,9 +16,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             width: 400,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 110
+        marginBottom: 110,
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -27,15 +27,15 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
             3
-        )}px`
+        )}px`,
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     submit: {
-        marginTop: theme.spacing(3)
-    }
+        marginTop: theme.spacing(3),
+    },
 }));
 
 function useQuery() {
@@ -63,11 +63,11 @@ function Activation() {
         API.get(
             "/user/activate/" + query.get("id") + "?sign=" + query.get("sign")
         )
-            .then(response => {
+            .then((response) => {
                 setEmail(response.data);
                 setSuccess(true);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "warning");
                 history.push("/login");
             });

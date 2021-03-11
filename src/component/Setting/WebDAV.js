@@ -20,7 +20,7 @@ import { Delete } from "@material-ui/icons";
 import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "50px",
@@ -29,22 +29,22 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: "50px"
+        marginBottom: "50px",
     },
     content: {
-        marginTop: theme.spacing(4)
+        marginTop: theme.spacing(4),
     },
     cardContent: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     tableContainer: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     create: {
-        marginTop: theme.spacing(2)
-    }
+        marginTop: theme.spacing(2),
+    },
 }));
 
 export default function WebDAV() {
@@ -61,10 +61,10 @@ export default function WebDAV() {
 
     const loadList = () => {
         API.get("/webdav/accounts")
-            .then(response => {
+            .then((response) => {
                 setAccounts(response.data.accounts);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -73,7 +73,7 @@ export default function WebDAV() {
         // eslint-disable-next-line
     }, []);
 
-    const deleteAccount = id => {
+    const deleteAccount = (id) => {
         const account = accounts[id];
         API.delete("/webdav/accounts/" + account.ID)
             .then(() => {
@@ -83,30 +83,30 @@ export default function WebDAV() {
                 });
                 setAccounts(accountCopy);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
 
-    const addAccount = account => {
+    const addAccount = (account) => {
         setCreate(false);
         API.post("/webdav/accounts", {
             path: account.path,
-            name: account.name
+            name: account.name,
         })
-            .then(response => {
+            .then((response) => {
                 setAccounts([
                     {
                         ID: response.data.id,
                         Password: response.data.password,
                         CreatedAt: response.data.created_at,
                         Name: account.name,
-                        Root: account.path
+                        Root: account.path,
                     },
-                    ...accounts
+                    ...accounts,
                 ]);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };

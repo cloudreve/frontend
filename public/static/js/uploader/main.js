@@ -67,13 +67,13 @@
 //                 $('#success').hide();
 //                 $('#info_box').hide();
 
-//                   $.cookie('path', decodeURI(getCookieByString("path_tmp"))); 
+//                   $.cookie('path', decodeURI(getCookieByString("path_tmp")));
 //                 plupload.each(files, function(file) {
 //                     var progress = new FileProgress(file, 'fsUploadProgress');
 //                     progress.setStatus("等待...");
 //                     progress.bindUploadCancel(up);
 //                 });
-            
+
 //             },
 //             'BeforeUpload': function(up, file) {
 //                 var progress = new FileProgress(file, 'fsUploadProgress');
@@ -138,8 +138,6 @@
 //         e.stopPropagation();
 //     });
 
-
-
 //     $('#show_code').on('click', function() {
 //         $('#myModal-code').modal();
 //         $('pre code').each(function(i, e) {
@@ -147,11 +145,9 @@
 //         });
 //     });
 
-
 //     $('body').on('click', 'table button.btn', function() {
 //         $(this).parents('tr').next().toggle();
 //     });
-
 
 //     var getRotate = function(url) {
 //         if (!url) {
@@ -254,8 +250,6 @@
 //                 });
 //             }
 //         });
-
-
 
 //         var newUrl = Qiniu.pipeline(fopArr, key);
 

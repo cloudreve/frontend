@@ -16,23 +16,23 @@ import API from "../../../middleware/Api";
 import AlertDialog from "../Dialogs/Alert";
 import Link from "@material-ui/core/Link";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
-    }
+            padding: "0px 24px 0 24px",
+        },
+    },
 }));
 
 export default function Access() {
@@ -48,28 +48,28 @@ export default function Access() {
         authn_enabled: "0",
         captcha_IsUseReCaptcha: "0",
         captcha_ReCaptchaKey: "defaultKey",
-        captcha_ReCaptchaSecret: "defaultSecret"
+        captcha_ReCaptchaSecret: "defaultSecret",
     });
     const [siteURL, setSiteURL] = useState("");
     const [groups, setGroups] = useState([]);
     const [httpAlert, setHttpAlert] = useState(false);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         let value = event.target.value;
         if (event.target.checked !== undefined) {
             value = event.target.checked ? "1" : "0";
         }
         setOptions({
             ...options,
-            [name]: value
+            [name]: value,
         });
     };
 
-    const handleInputChange = name => event => {
+    const handleInputChange = (name) => (event) => {
         const value = event.target.value;
         setOptions({
             ...options,
-            [name]: value
+            [name]: value,
         });
     };
 
@@ -82,44 +82,44 @@ export default function Access() {
 
     useEffect(() => {
         API.post("/admin/setting", {
-            keys: [...Object.keys(options), "siteURL"]
+            keys: [...Object.keys(options), "siteURL"],
         })
-            .then(response => {
+            .then((response) => {
                 setSiteURL(response.data.siteURL);
                 delete response.data.siteURL;
                 setOptions(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
 
         API.get("/admin/groups")
-            .then(response => {
+            .then((response) => {
                 setGroups(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line
     }, []);
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k => {
+        Object.keys(options).forEach((k) => {
             option.push({
                 key: k,
-                value: options[k]
+                value: options[k],
             });
         });
         API.patch("/admin/setting", {
-            options: option
+            options: option,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -336,7 +336,7 @@ export default function Access() {
                                             checked={
                                                 options.authn_enabled === "1"
                                             }
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 if (
                                                     !siteURL.startsWith(
                                                         "https://"
@@ -372,7 +372,7 @@ export default function Access() {
                                     )}
                                     required
                                 >
-                                    {groups.map(v => {
+                                    {groups.map((v) => {
                                         if (v.ID === 3) {
                                             return null;
                                         }

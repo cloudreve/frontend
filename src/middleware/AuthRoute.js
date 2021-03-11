@@ -13,7 +13,7 @@ function AuthRoute({ children, ...rest }) {
                     <Redirect
                         to={{
                             pathname: "/login",
-                            state: { from: location }
+                            state: { from: location },
                         }}
                     />
                 )

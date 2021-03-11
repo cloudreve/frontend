@@ -13,68 +13,68 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useHistory } from "react-router";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     cardContainer: {
-        display: "flex"
+        display: "flex",
     },
     cover: {
         width: 100,
-        height: 60
+        height: 60,
     },
     card: {},
     content: {
-        flex: "1 0 auto"
+        flex: "1 0 auto",
     },
     bg: {
         backgroundColor: theme.palette.background.default,
-        padding: "24px 24px"
+        padding: "24px 24px",
     },
     dialogFooter: {
-        justifyContent: "space-between"
-    }
+        justifyContent: "space-between",
+    },
 }));
 
 const policies = [
     {
         name: "本机存储",
         img: "local.png",
-        path: "/admin/policy/add/local"
+        path: "/admin/policy/add/local",
     },
     {
         name: "从机存储",
         img: "remote.png",
-        path: "/admin/policy/add/remote"
+        path: "/admin/policy/add/remote",
     },
     {
         name: "七牛",
         img: "qiniu.png",
-        path: "/admin/policy/add/qiniu"
+        path: "/admin/policy/add/qiniu",
     },
     {
         name: "阿里云 OSS",
         img: "oss.png",
-        path: "/admin/policy/add/oss"
+        path: "/admin/policy/add/oss",
     },
     {
         name: "又拍云",
         img: "upyun.png",
-        path: "/admin/policy/add/upyun"
+        path: "/admin/policy/add/upyun",
     },
     {
         name: "腾讯云 COS",
         img: "cos.png",
-        path: "/admin/policy/add/cos"
+        path: "/admin/policy/add/cos",
     },
     {
         name: "OneDrive",
         img: "onedrive.png",
-        path: "/admin/policy/add/onedrive"
+        path: "/admin/policy/add/onedrive",
     },
     {
         name: "Amazon S3",
         img: "s3.png",
-        path: "/admin/policy/add/s3"
-    }
+        path: "/admin/policy/add/s3",
+    },
 ];
 
 export default function AddPolicy({ open, onClose }) {
@@ -94,7 +94,7 @@ export default function AddPolicy({ open, onClose }) {
             <DialogTitle id="alert-dialog-title">选择存储方式</DialogTitle>
             <DialogContent dividers className={classes.bg}>
                 <Grid container spacing={2}>
-                    {policies.map(v => (
+                    {policies.map((v) => (
                         <Grid item sm={12} md={6} key={v.path}>
                             <Card className={classes.card}>
                                 <CardActionArea

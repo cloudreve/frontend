@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const proxy = require("http-proxy-middleware");
-module.exports = function(app) {
+module.exports = function (app) {
     app.use(
         "/api",
         proxy({
             target: "http://localhost:5212",
-            changeOrigin: true
+            changeOrigin: true,
         })
     );
 
@@ -13,7 +13,7 @@ module.exports = function(app) {
         "/custom",
         proxy({
             target: "http://localhost:5212",
-            changeOrigin: true
+            changeOrigin: true,
         })
     );
 };

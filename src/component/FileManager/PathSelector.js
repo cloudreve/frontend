@@ -14,51 +14,51 @@ import {
     ListItemIcon,
     ListItemText,
     withStyles,
-    ListItemSecondaryAction
+    ListItemSecondaryAction,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        keywords: state.explorer.keywords
+        keywords: state.explorer.keywords,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
     iconWhite: {
-        color: theme.palette.common.white
+        color: theme.palette.common.white,
     },
     selected: {
         backgroundColor: theme.palette.primary.main + "!important",
         "& $primary, & $icon": {
-            color: theme.palette.common.white
-        }
+            color: theme.palette.common.white,
+        },
     },
     primary: {},
     icon: {},
     buttonIcon: {},
     selector: {
-        minWidth: "300px"
+        minWidth: "300px",
     },
     container: {
         maxHeight: "330px",
-        overflowY: " auto"
-    }
+        overflowY: " auto",
+    },
 });
 
 class PathSelectorCompoment extends Component {
     state = {
         presentPath: "/",
         dirList: [],
-        selectedTarget: null
+        selectedTarget: null,
     };
 
     componentDidMount = () => {
@@ -73,16 +73,16 @@ class PathSelectorCompoment extends Component {
         this.enterFolder(toBeLoad === "" ? "/" : toBeLoad);
     };
 
-    enterFolder = toBeLoad => {
+    enterFolder = (toBeLoad) => {
         API.get(
             (this.props.api ? this.props.api : "/directory") +
                 encodeURIComponent(toBeLoad)
         )
-            .then(response => {
-                const dirList = response.data.objects.filter(x => {
+            .then((response) => {
+                const dirList = response.data.objects.filter((x) => {
                     return (
                         x.type === "dir" &&
-                        this.props.selected.findIndex(value => {
+                        this.props.selected.findIndex((value) => {
                             return (
                                 value.name === x.name && value.path === x.path
                             );
@@ -95,10 +95,10 @@ class PathSelectorCompoment extends Component {
                 this.setState({
                     presentPath: toBeLoad,
                     dirList: dirList,
-                    selectedTarget: null
+                    selectedTarget: null,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -108,7 +108,7 @@ class PathSelectorCompoment extends Component {
             });
     };
 
-    handleSelect = index => {
+    handleSelect = (index) => {
         this.setState({ selectedTarget: index });
         this.props.onSelect(this.state.dirList[index]);
     };
@@ -130,7 +130,7 @@ class PathSelectorCompoment extends Component {
                     {this.state.dirList.map((value, index) => (
                         <MenuItem
                             classes={{
-                                selected: classes.selected
+                                selected: classes.selected,
                             }}
                             key={index}
                             selected={this.state.selectedTarget === index}
@@ -143,7 +143,7 @@ class PathSelectorCompoment extends Component {
                                 classes={{ primary: classes.primary }}
                                 primary={value.name}
                                 primaryTypographyProps={{
-                                    style: { whiteSpace: "normal" }
+                                    style: { whiteSpace: "normal" },
                                 }}
                             />
                             {value.name !== "/" && (
@@ -154,7 +154,7 @@ class PathSelectorCompoment extends Component {
                                         className={classNames({
                                             [classes.iconWhite]:
                                                 this.state.selectedTarget ===
-                                                index
+                                                index,
                                         })}
                                         onClick={() =>
                                             this.enterFolder(
@@ -181,7 +181,7 @@ class PathSelectorCompoment extends Component {
 PathSelectorCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
     presentPath: PropTypes.string.isRequired,
-    selected: PropTypes.array.isRequired
+    selected: PropTypes.array.isRequired,
 };
 
 export default connect(

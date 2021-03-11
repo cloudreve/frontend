@@ -2,18 +2,18 @@ import React from "react";
 import { Facebook } from "react-content-loader";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     loader: {
         width: "80%",
         [theme.breakpoints.up("md")]: {
-            width: " 50%"
+            width: " 50%",
         },
 
-        marginTop: 30
-    }
+        marginTop: 30,
+    },
 }));
 
-const MyLoader = props => {
+const MyLoader = (props) => {
     return (
         <Facebook
             backgroundColor={props.dark ? "#333" : "#f5f6f7"}
@@ -30,7 +30,7 @@ function PageLoading() {
     return (
         <div
             style={{
-                textAlign: "center"
+                textAlign: "center",
             }}
         >
             <MyLoader

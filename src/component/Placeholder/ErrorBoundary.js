@@ -4,11 +4,11 @@ import { withStyles } from "@material-ui/core";
 const styles = {
     h1: {
         color: "#a4a4a4",
-        margin: "5px 0px"
+        margin: "5px 0px",
     },
     h2: {
-        margin: "15px 0px"
-    }
+        margin: "15px 0px",
+    },
 };
 
 class ErrorBoundary extends React.Component {
@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component {
     componentDidCatch(error, errorInfo) {
         this.setState({
             error: error,
-            errorInfo: errorInfo
+            errorInfo: errorInfo,
         });
     }
 

@@ -10,11 +10,11 @@ import Auth from "../../../middleware/Auth";
 import { changeViewMethod, setShareUserPopover } from "../../../actions";
 import { changeSortMethod } from "../../../redux/explorer/action";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     sideButton: {
         padding: "8px",
-        marginRight: "5px"
-    }
+        marginRight: "5px",
+    },
 }));
 
 const sortOptions = ["A-Z", "Z-A", "最早", "最新", "最小", "最大"];
@@ -22,23 +22,23 @@ const sortOptions = ["A-Z", "Z-A", "最早", "最新", "最小", "最大"];
 export default function SubActions({ isSmall, share, inherit }) {
     const dispatch = useDispatch();
     const viewMethod = useSelector(
-        state => state.viewUpdate.explorerViewMethod
+        (state) => state.viewUpdate.explorerViewMethod
     );
     const OpenLoadingDialog = useCallback(
-        method => dispatch(changeViewMethod(method)),
+        (method) => dispatch(changeViewMethod(method)),
         [dispatch]
     );
     const ChangeSortMethod = useCallback(
-        method => dispatch(changeSortMethod(method)),
+        (method) => dispatch(changeSortMethod(method)),
         [dispatch]
     );
     const SetShareUserPopover = useCallback(
-        e => dispatch(setShareUserPopover(e)),
+        (e) => dispatch(setShareUserPopover(e)),
         [dispatch]
     );
     const [anchorSort, setAnchorSort] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const showSortOptions = e => {
+    const showSortOptions = (e) => {
         setAnchorSort(e.currentTarget);
     };
     const handleMenuItemClick = (e, index) => {
@@ -49,7 +49,7 @@ export default function SubActions({ isSmall, share, inherit }) {
             2: "timePos",
             3: "timeRev",
             4: "sizePos",
-            5: "sizeRes"
+            5: "sizeRes",
         };
         ChangeSortMethod(optionsTable[index]);
         setAnchorSort(null);
@@ -121,7 +121,7 @@ export default function SubActions({ isSmall, share, inherit }) {
                     <MenuItem
                         key={option}
                         selected={index === selectedIndex}
-                        onClick={event => handleMenuItemClick(event, index)}
+                        onClick={(event) => handleMenuItemClick(event, index)}
                     >
                         {option}
                     </MenuItem>
@@ -131,7 +131,7 @@ export default function SubActions({ isSmall, share, inherit }) {
                 <IconButton
                     title={"由 " + share.creator.nick + " 创建"}
                     className={classes.sideButton}
-                    onClick={e => SetShareUserPopover(e.currentTarget)}
+                    onClick={(e) => SetShareUserPopover(e.currentTarget)}
                     style={{ padding: 5 }}
                 >
                     <Avatar

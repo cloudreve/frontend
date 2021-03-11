@@ -47,7 +47,7 @@ import {
     refreshStorage,
     saveFile,
     setLastSelect,
-    setShiftSelectedIds
+    setShiftSelectedIds,
 } from "../actions/index";
 import { changeSubTitle, setSubtitle } from "../redux/viewUpdate/action";
 import {
@@ -55,13 +55,13 @@ import {
     setFileList,
     setDirList,
     setSortMethod,
-    changeSortMethod
+    changeSortMethod,
 } from "../redux/explorer/action";
 
 const initState = {
     ...cloudreveState,
     viewUpdate: viewUpdateState,
-    explorer: explorerState
+    explorer: explorerState,
 };
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -83,8 +83,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                open: true
-            }
+                open: true,
+            },
         });
 
         const clossAction = drawerToggleAction(false);
@@ -92,8 +92,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                open: false
-            }
+                open: false,
+            },
         });
     });
 
@@ -103,8 +103,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                explorerViewMethod: "list"
-            }
+                explorerViewMethod: "list",
+            },
         });
     });
 
@@ -114,8 +114,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                sortMethod: "sizeRes"
-            }
+                sortMethod: "sizeRes",
+            },
         });
     });
 
@@ -126,49 +126,49 @@ describe("index reducer", () => {
                     type: "file",
                     name: "b",
                     size: 10,
-                    date: "2020/04/30"
+                    date: "2020/04/30",
                 },
                 {
                     type: "file",
                     name: "a",
                     size: 11,
-                    date: "2020/05/01"
+                    date: "2020/05/01",
                 },
                 {
                     type: "file",
                     name: "z",
                     size: 110,
-                    date: "2020/04/29"
-                }
+                    date: "2020/04/29",
+                },
             ],
             dirList: [
                 {
                     type: "dir",
                     name: "b_dir",
                     size: 10,
-                    date: "2020/04/30"
+                    date: "2020/04/30",
                 },
                 {
                     type: "dir",
                     name: "a_dir",
                     size: 11,
-                    date: "2020/05/01"
+                    date: "2020/05/01",
                 },
                 {
                     type: "dir",
                     name: "z_dir",
                     size: 110,
-                    date: "2020/04/29"
-                }
-            ]
+                    date: "2020/04/29",
+                },
+            ],
         };
 
         const state = {
             ...initState,
             explorer: {
                 ...initState.explorer,
-                ...explorerState
-            }
+                ...explorerState,
+            },
         };
         it("should handle sizePos", async () => {
             const action = changeSortMethod("sizePos");
@@ -182,7 +182,7 @@ describe("index reducer", () => {
             expect(store.getActions()).toEqual([
                 setSortMethod("sizePos"),
                 setDirList(dirList.sort(sortFunc)),
-                setFileList(fileList.sort(sortFunc))
+                setFileList(fileList.sort(sortFunc)),
             ]);
         });
 
@@ -198,7 +198,7 @@ describe("index reducer", () => {
             expect(store.getActions()).toEqual([
                 setSortMethod("sizePos"),
                 setDirList(dirList.sort(sortFunc)),
-                setFileList(fileList.sort(sortFunc))
+                setFileList(fileList.sort(sortFunc)),
             ]);
         });
 
@@ -214,7 +214,7 @@ describe("index reducer", () => {
             expect(store.getActions()).toEqual([
                 setSortMethod("namePos"),
                 setDirList(dirList.sort(sortFunc)),
-                setFileList(fileList.sort(sortFunc))
+                setFileList(fileList.sort(sortFunc)),
             ]);
         });
 
@@ -230,7 +230,7 @@ describe("index reducer", () => {
             expect(store.getActions()).toEqual([
                 setSortMethod("nameRev"),
                 setDirList(dirList.sort(sortFunc)),
-                setFileList(fileList.sort(sortFunc))
+                setFileList(fileList.sort(sortFunc)),
             ]);
         });
 
@@ -246,7 +246,7 @@ describe("index reducer", () => {
             expect(store.getActions()).toEqual([
                 setSortMethod("timePos"),
                 setDirList(dirList.sort(sortFunc)),
-                setFileList(fileList.sort(sortFunc))
+                setFileList(fileList.sort(sortFunc)),
             ]);
         });
 
@@ -262,7 +262,7 @@ describe("index reducer", () => {
             expect(store.getActions()).toEqual([
                 setSortMethod("timeRev"),
                 setDirList(dirList.sort(sortFunc)),
-                setFileList(fileList.sort(sortFunc))
+                setFileList(fileList.sort(sortFunc)),
             ]);
         });
     });
@@ -274,8 +274,8 @@ describe("index reducer", () => {
             viewUpdate: {
                 ...initState.viewUpdate,
                 contextOpen: false,
-                contextType: "empty"
-            }
+                contextType: "empty",
+            },
         });
         const action2 = changeContextMenu("aa", true);
         expect(cloudreveApp(initState, action2)).toEqual({
@@ -283,8 +283,8 @@ describe("index reducer", () => {
             viewUpdate: {
                 ...initState.viewUpdate,
                 contextOpen: true,
-                contextType: "aa"
-            }
+                contextType: "aa",
+            },
         });
     });
 
@@ -296,8 +296,8 @@ describe("index reducer", () => {
                 ...initState.explorer,
                 dndSignal: true,
                 dndTarget: "target",
-                dndSource: "source"
-            }
+                dndSource: "source",
+            },
         });
     });
 
@@ -307,8 +307,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                navigatorLoading: true
-            }
+                navigatorLoading: true,
+            },
         });
     });
 
@@ -319,8 +319,8 @@ describe("index reducer", () => {
             viewUpdate: {
                 ...initState.viewUpdate,
                 navigatorError: true,
-                navigatorErrorMsg: "Error Message"
-            }
+                navigatorErrorMsg: "Error Message",
+            },
         });
     });
 
@@ -330,40 +330,40 @@ describe("index reducer", () => {
                 type: "file",
                 name: "b",
                 size: 10,
-                date: "2020/04/30"
+                date: "2020/04/30",
             },
             {
                 type: "file",
                 name: "a",
                 size: 11,
-                date: "2020/05/01"
+                date: "2020/05/01",
             },
             {
                 type: "file",
                 name: "z",
                 size: 110,
-                date: "2020/04/29"
-            }
+                date: "2020/04/29",
+            },
         ];
         const dirList = [
             {
                 type: "dir",
                 name: "b_dir",
                 size: 10,
-                date: "2020/04/30"
+                date: "2020/04/30",
             },
             {
                 type: "dir",
                 name: "a_dir",
                 size: 11,
-                date: "2020/05/01"
+                date: "2020/05/01",
             },
             {
                 type: "dir",
                 name: "z_dir",
                 size: 110,
-                date: "2020/04/29"
-            }
+                date: "2020/04/29",
+            },
         ];
         const updateAction = updateFileList([...fileList, ...dirList]);
         it("should handle sizePos", async () => {
@@ -374,14 +374,14 @@ describe("index reducer", () => {
                 ...initState,
                 viewUpdate: {
                     ...initState.viewUpdate,
-                    sortMethod: "sizePos"
-                }
+                    sortMethod: "sizePos",
+                },
             };
             const store = mockStore(state);
             await store.dispatch(updateAction);
             expect(store.getActions()).toEqual([
                 setDirList(dirList.sort(sortFun)),
-                setFileList(fileList.sort(sortFun))
+                setFileList(fileList.sort(sortFun)),
             ]);
         });
 
@@ -393,14 +393,14 @@ describe("index reducer", () => {
                 ...initState,
                 viewUpdate: {
                     ...initState.viewUpdate,
-                    sortMethod: "sizeRes"
-                }
+                    sortMethod: "sizeRes",
+                },
             };
             const store = mockStore(state);
             await store.dispatch(updateAction);
             expect(store.getActions()).toEqual([
                 setDirList(dirList.sort(sortFun)),
-                setFileList(fileList.sort(sortFun))
+                setFileList(fileList.sort(sortFun)),
             ]);
         });
 
@@ -412,14 +412,14 @@ describe("index reducer", () => {
                 ...initState,
                 viewUpdate: {
                     ...initState.viewUpdate,
-                    sortMethod: "namePos"
-                }
+                    sortMethod: "namePos",
+                },
             };
             const store = mockStore(state);
             await store.dispatch(updateAction);
             expect(store.getActions()).toEqual([
                 setDirList(dirList.sort(sortFun)),
-                setFileList(fileList.sort(sortFun))
+                setFileList(fileList.sort(sortFun)),
             ]);
         });
 
@@ -431,14 +431,14 @@ describe("index reducer", () => {
                 ...initState,
                 viewUpdate: {
                     ...initState.viewUpdate,
-                    sortMethod: "nameRev"
-                }
+                    sortMethod: "nameRev",
+                },
             };
             const store = mockStore(state);
             await store.dispatch(updateAction);
             expect(store.getActions()).toEqual([
                 setDirList(dirList.sort(sortFun)),
-                setFileList(fileList.sort(sortFun))
+                setFileList(fileList.sort(sortFun)),
             ]);
         });
 
@@ -450,14 +450,14 @@ describe("index reducer", () => {
                 ...initState,
                 viewUpdate: {
                     ...initState.viewUpdate,
-                    sortMethod: "timePos"
-                }
+                    sortMethod: "timePos",
+                },
             };
             const store = mockStore(state);
             await store.dispatch(updateAction);
             expect(store.getActions()).toEqual([
                 setDirList(dirList.sort(sortFun)),
-                setFileList(fileList.sort(sortFun))
+                setFileList(fileList.sort(sortFun)),
             ]);
         });
 
@@ -469,14 +469,14 @@ describe("index reducer", () => {
                 ...initState,
                 viewUpdate: {
                     ...initState.viewUpdate,
-                    sortMethod: "timeRev"
-                }
+                    sortMethod: "timeRev",
+                },
             };
             const store = mockStore(state);
             await store.dispatch(updateAction);
             expect(store.getActions()).toEqual([
                 setDirList(dirList.sort(sortFun)),
-                setFileList(fileList.sort(sortFun))
+                setFileList(fileList.sort(sortFun)),
             ]);
         });
     });
@@ -485,12 +485,12 @@ describe("index reducer", () => {
         const action = setFileList([
             {
                 type: "file",
-                id: "a"
+                id: "a",
             },
             {
                 type: "file",
-                id: "b"
-            }
+                id: "b",
+            },
         ]);
         expect(
             cloudreveApp(
@@ -498,8 +498,8 @@ describe("index reducer", () => {
                     ...initState,
                     explorer: {
                         ...initState.explorer,
-                        fileList: [{ type: "file", id: "test" }]
-                    }
+                        fileList: [{ type: "file", id: "test" }],
+                    },
                 },
                 action
             )
@@ -510,14 +510,14 @@ describe("index reducer", () => {
                 fileList: [
                     {
                         type: "file",
-                        id: "a"
+                        id: "a",
                     },
                     {
                         type: "file",
-                        id: "b"
-                    }
-                ]
-            }
+                        id: "b",
+                    },
+                ],
+            },
         });
     });
 
@@ -525,12 +525,12 @@ describe("index reducer", () => {
         const action = setDirList([
             {
                 type: "dir",
-                id: "a"
+                id: "a",
             },
             {
                 type: "dir",
-                id: "b"
-            }
+                id: "b",
+            },
         ]);
         expect(
             cloudreveApp(
@@ -538,8 +538,8 @@ describe("index reducer", () => {
                     ...initState,
                     explorer: {
                         ...initState.explorer,
-                        dirList: [{ type: "dir", id: "test" }]
-                    }
+                        dirList: [{ type: "dir", id: "test" }],
+                    },
                 },
                 action
             )
@@ -550,25 +550,25 @@ describe("index reducer", () => {
                 dirList: [
                     {
                         type: "dir",
-                        id: "a"
+                        id: "a",
                     },
                     {
                         type: "dir",
-                        id: "b"
-                    }
-                ]
-            }
+                        id: "b",
+                    },
+                ],
+            },
         });
     });
 
     it("should handle ADD_SELECTED_TARGETS", () => {
         const newSelect = [
             {
-                type: "file"
+                type: "file",
             },
             {
-                type: "dir"
-            }
+                type: "dir",
+            },
         ];
         const action = addSelectedTargets(newSelect);
         expect(
@@ -577,8 +577,8 @@ describe("index reducer", () => {
                     ...initState,
                     explorer: {
                         ...initState.explorer,
-                        selected: [{ type: "file" }]
-                    }
+                        selected: [{ type: "file" }],
+                    },
                 },
                 action
             )
@@ -590,20 +590,20 @@ describe("index reducer", () => {
                 selectProps: {
                     isMultiple: true,
                     withFolder: true,
-                    withFile: true
-                }
-            }
+                    withFile: true,
+                },
+            },
         });
     });
 
     it("should handle SET_SELECTED_TARGET", () => {
         const newSelect = [
             {
-                type: "file"
+                type: "file",
             },
             {
-                type: "dir"
-            }
+                type: "dir",
+            },
         ];
         const action = setSelectedTarget(newSelect);
         expect(
@@ -612,8 +612,8 @@ describe("index reducer", () => {
                     ...initState,
                     explorer: {
                         ...initState.explorer,
-                        selected: [{ type: "file" }]
-                    }
+                        selected: [{ type: "file" }],
+                    },
                 },
                 action
             )
@@ -625,9 +625,9 @@ describe("index reducer", () => {
                 selectProps: {
                     isMultiple: true,
                     withFolder: true,
-                    withFile: true
-                }
-            }
+                    withFile: true,
+                },
+            },
         });
     });
 
@@ -642,9 +642,9 @@ describe("index reducer", () => {
                         ...initState.explorer,
                         selected: [
                             { id: "1", type: "file" },
-                            { id: "2", type: "file" }
-                        ]
-                    }
+                            { id: "2", type: "file" },
+                        ],
+                    },
                 },
                 action
             )
@@ -656,9 +656,9 @@ describe("index reducer", () => {
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: true
-                }
-            }
+                    withFile: true,
+                },
+            },
         });
     });
 
@@ -674,8 +674,8 @@ describe("index reducer", () => {
             ...initState,
             navigator: {
                 ...initState.navigator,
-                path: "/to/somewhere"
-            }
+                path: "/to/somewhere",
+            },
         };
         const store = mockStore(navState);
         const action = navigateUp();
@@ -688,21 +688,21 @@ describe("index reducer", () => {
             ...initState,
             navigator: {
                 ...initState.navigator,
-                path: "/to/somewhere"
-            }
+                path: "/to/somewhere",
+            },
         };
         const action = setNavigator("/newpath", true);
         expect(cloudreveApp(navState, action)).toEqual({
             ...initState,
             navigator: {
                 ...initState.navigator,
-                path: "/newpath"
+                path: "/newpath",
             },
             viewUpdate: {
                 ...initState.viewUpdate,
                 contextOpen: false,
                 navigatorError: false,
-                navigatorLoading: true
+                navigatorLoading: true,
             },
             explorer: {
                 ...initState.explorer,
@@ -710,10 +710,10 @@ describe("index reducer", () => {
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: false
+                    withFile: false,
                 },
-                keywords: ""
-            }
+                keywords: "",
+            },
         });
         expect(window.currntPath).toEqual("/newpath");
     });
@@ -728,10 +728,10 @@ describe("index reducer", () => {
                     ...initState.siteConfig.theme,
                     palette: {
                         ...initState.siteConfig.theme.palette,
-                        type: "dark"
-                    }
-                }
-            }
+                        type: "dark",
+                    },
+                },
+            },
         };
         const lightState = {
             ...initState,
@@ -741,10 +741,10 @@ describe("index reducer", () => {
                     ...initState.siteConfig.theme,
                     palette: {
                         ...initState.siteConfig.theme.palette,
-                        type: "light"
-                    }
-                }
-            }
+                        type: "light",
+                    },
+                },
+            },
         };
         expect(cloudreveApp(initState, action)).toEqual(darkState);
         expect(cloudreveApp(darkState, action)).toEqual(lightState);
@@ -756,15 +756,15 @@ describe("index reducer", () => {
             ...initState,
             siteConfig: {
                 ...initState.siteConfig,
-                themes: JSON.stringify({ foo: "bar" })
-            }
+                themes: JSON.stringify({ foo: "bar" }),
+            },
         };
         expect(cloudreveApp(stateWithThemes, action)).toEqual({
             ...stateWithThemes,
             siteConfig: {
                 ...stateWithThemes.siteConfig,
-                theme: "bar"
-            }
+                theme: "bar",
+            },
         });
     });
 
@@ -776,10 +776,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    createNewFolder: true
+                    createNewFolder: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -791,10 +791,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    rename: true
+                    rename: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -806,10 +806,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    remove: true
+                    remove: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -821,10 +821,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    move: true
+                    move: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -836,10 +836,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    resave: true
+                    resave: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -850,8 +850,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                userPopoverAnchorEl: "anchor"
-            }
+                userPopoverAnchorEl: "anchor",
+            },
         });
     });
 
@@ -862,8 +862,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                shareUserPopoverAnchorEl: "anchor"
-            }
+                shareUserPopoverAnchorEl: "anchor",
+            },
         });
     });
 
@@ -876,10 +876,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    share: true
+                    share: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -889,8 +889,8 @@ describe("index reducer", () => {
         expect(cloudreveApp(initState, action)).toEqual({
             ...initState,
             siteConfig: {
-                foo: "bar"
-            }
+                foo: "bar",
+            },
         });
     });
 
@@ -900,8 +900,8 @@ describe("index reducer", () => {
         expect(cloudreveApp(initState, action)).toEqual({
             ...initState,
             siteConfig: {
-                foo: "bar"
-            }
+                foo: "bar",
+            },
         });
     });
 
@@ -913,10 +913,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    music: true
+                    music: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -928,10 +928,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    remoteDownload: true
+                    remoteDownload: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -943,10 +943,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    torrentDownload: true
+                    torrentDownload: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -958,10 +958,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    decompress: true
+                    decompress: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -973,10 +973,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    compress: true
+                    compress: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -988,10 +988,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    getSource: true
+                    getSource: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -1003,10 +1003,10 @@ describe("index reducer", () => {
                 ...initState.viewUpdate,
                 modals: {
                     ...initState.viewUpdate.modals,
-                    copy: true
+                    copy: true,
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -1019,10 +1019,10 @@ describe("index reducer", () => {
                 modals: {
                     ...initState.viewUpdate.modals,
                     loading: true,
-                    loadingText: "loading"
+                    loadingText: "loading",
                 },
-                contextOpen: false
-            }
+                contextOpen: false,
+            },
         });
     });
 
@@ -1047,9 +1047,9 @@ describe("index reducer", () => {
                     copy: false,
                     loading: false,
                     compress: false,
-                    decompress: false
-                }
-            }
+                    decompress: false,
+                },
+            },
         });
     });
 
@@ -1067,8 +1067,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                subTitle: "test sub title 2"
-            }
+                subTitle: "test sub title 2",
+            },
         });
     });
 
@@ -1088,9 +1088,9 @@ describe("index reducer", () => {
                     vertical: "top",
                     horizontal: "right",
                     msg: "something wrong",
-                    color: "error"
-                }
-            }
+                    color: "error",
+                },
+            },
         });
     });
 
@@ -1100,8 +1100,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                modalsLoading: "test loading status"
-            }
+                modalsLoading: "test loading status",
+            },
         });
     });
 
@@ -1111,8 +1111,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                isLogin: true
-            }
+                isLogin: true,
+            },
         });
     });
 
@@ -1122,8 +1122,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                loadUploader: true
-            }
+                loadUploader: true,
+            },
         });
     });
 
@@ -1133,7 +1133,7 @@ describe("index reducer", () => {
             ...initState,
             navigator: {
                 ...initState.navigator,
-                refresh: false
+                refresh: false,
             },
             explorer: {
                 ...initState.explorer,
@@ -1141,9 +1141,9 @@ describe("index reducer", () => {
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: false
-                }
-            }
+                    withFile: false,
+                },
+            },
         });
     });
 
@@ -1154,13 +1154,13 @@ describe("index reducer", () => {
             navigator: {
                 ...initState.navigator,
                 path: "/搜索结果",
-                refresh: true
+                refresh: true,
             },
             viewUpdate: {
                 ...initState.viewUpdate,
                 contextOpen: false,
                 navigatorError: false,
-                navigatorLoading: true
+                navigatorLoading: true,
             },
             explorer: {
                 ...initState.explorer,
@@ -1168,10 +1168,10 @@ describe("index reducer", () => {
                 selectProps: {
                     isMultiple: false,
                     withFolder: false,
-                    withFile: false
+                    withFile: false,
                 },
-                keywords: "keyword"
-            }
+                keywords: "keyword",
+            },
         });
     });
 
@@ -1181,8 +1181,8 @@ describe("index reducer", () => {
             ...initState,
             explorer: {
                 ...initState.explorer,
-                fileList: [{ type: "file" }, { type: "dir" }]
-            }
+                fileList: [{ type: "file" }, { type: "dir" }],
+            },
         };
         expect(cloudreveApp(showImgState, action)).toEqual({
             ...showImgState,
@@ -1191,9 +1191,9 @@ describe("index reducer", () => {
                 imgPreview: {
                     ...showImgState.explorer.imgPreview,
                     first: { type: "file" },
-                    other: [{ type: "file" }, { type: "dir" }]
-                }
-            }
+                    other: [{ type: "file" }, { type: "dir" }],
+                },
+            },
         });
     });
 
@@ -1204,8 +1204,8 @@ describe("index reducer", () => {
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
-                storageRefresh: true
-            }
+                storageRefresh: true,
+            },
         });
     });
 
@@ -1215,8 +1215,8 @@ describe("index reducer", () => {
             ...initState,
             explorer: {
                 ...initState.explorer,
-                fileSave: true
-            }
+                fileSave: true,
+            },
         });
     });
 
@@ -1228,9 +1228,9 @@ describe("index reducer", () => {
                 ...initState.explorer,
                 lastSelect: {
                     file: { type: "file" },
-                    index: 1
-                }
-            }
+                    index: 1,
+                },
+            },
         });
     });
 
@@ -1240,8 +1240,8 @@ describe("index reducer", () => {
             ...initState,
             explorer: {
                 ...initState.explorer,
-                shiftSelectedIds: ["1", "2"]
-            }
+                shiftSelectedIds: ["1", "2"],
+            },
         });
     });
 });

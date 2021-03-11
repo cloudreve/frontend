@@ -7,24 +7,24 @@ import {
     DialogContent,
     DialogTitle,
     DialogContentText,
-    CircularProgress
+    CircularProgress,
 } from "@material-ui/core";
 import {
     toggleSnackbar,
     setModalsLoading,
-    refreshFileList
+    refreshFileList,
 } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     contentFix: {
-        padding: "10px 24px 0px 24px"
+        padding: "10px 24px 0px 24px",
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
@@ -32,8 +32,8 @@ const useStyles = makeStyles(theme => ({
         top: "50%",
         left: "50%",
         marginTop: -12,
-        marginLeft: -12
-    }
+        marginLeft: -12,
+    },
 }));
 
 export default function CopyDialog(props) {
@@ -47,7 +47,7 @@ export default function CopyDialog(props) {
         [dispatch]
     );
     const SetModalsLoading = useCallback(
-        status => {
+        (status) => {
             dispatch(setModalsLoading(status));
         },
         [dispatch]
@@ -56,7 +56,7 @@ export default function CopyDialog(props) {
         dispatch(refreshFileList());
     }, [dispatch]);
 
-    const setMoveTarget = folder => {
+    const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
@@ -65,7 +65,7 @@ export default function CopyDialog(props) {
         setSelectedPathName(folder.name);
     };
 
-    const submitMove = e => {
+    const submitMove = (e) => {
         if (e != null) {
             e.preventDefault();
         }
@@ -84,16 +84,16 @@ export default function CopyDialog(props) {
             src_dir: props.selected[0].path,
             src: {
                 dirs: dirs,
-                items: items
+                items: items,
             },
-            dst: selectedPath === "//" ? "/" : selectedPath
+            dst: selectedPath === "//" ? "/" : selectedPath,
         })
             .then(() => {
                 props.onClose();
                 RefreshFileList();
                 SetModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
                 SetModalsLoading(false);
             });

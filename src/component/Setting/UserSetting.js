@@ -16,7 +16,7 @@ import {
     applyThemes,
     changeViewMethod,
     toggleDaylightMode,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions";
 import axios from "axios";
 import FingerprintIcon from "@material-ui/icons/Fingerprint";
@@ -41,7 +41,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Switch
+    Switch,
 } from "@material-ui/core";
 import { blue, green, yellow } from "@material-ui/core/colors";
 import API from "../../middleware/Api";
@@ -52,7 +52,7 @@ import { Brightness3, ListAlt, PermContactCalendar } from "@material-ui/icons";
 import { transformTime } from "../../utils";
 import Authn from "./Authn";
 
-const styles = theme => ({
+const styles = (theme) => ({
     layout: {
         width: "auto",
         marginLeft: theme.spacing(3),
@@ -60,116 +60,116 @@ const styles = theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 700,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     sectionTitle: {
         paddingBottom: "10px",
-        paddingTop: "30px"
+        paddingTop: "30px",
     },
     rightIcon: {
         marginTop: "4px",
         marginRight: "10px",
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     uploadFromFile: {
         backgroundColor: blue[100],
-        color: blue[600]
+        color: blue[600],
     },
     userGravatar: {
         backgroundColor: yellow[100],
-        color: yellow[800]
+        color: yellow[800],
     },
     policySelected: {
         backgroundColor: green[100],
-        color: green[800]
+        color: green[800],
     },
     infoText: {
-        marginRight: "17px"
+        marginRight: "17px",
     },
     infoTextWithIcon: {
         marginRight: "17px",
-        marginTop: "1px"
+        marginTop: "1px",
     },
     rightIconWithText: {
         marginTop: "0px",
         marginRight: "10px",
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     iconFix: {
         marginRight: "11px",
         marginLeft: "7px",
-        minWidth: 40
+        minWidth: 40,
     },
     flexContainer: {
-        display: "flex"
+        display: "flex",
     },
     desenList: {
         paddingTop: 0,
-        paddingBottom: 0
+        paddingBottom: 0,
     },
     flexContainerResponse: {
         display: "flex",
         [theme.breakpoints.down("sm")]: {
-            display: "initial"
-        }
+            display: "initial",
+        },
     },
     desText: {
-        marginTop: "10px"
+        marginTop: "10px",
     },
     secondColor: {
         height: "20px",
         width: "20px",
         backgroundColor: theme.palette.secondary.main,
         borderRadius: "50%",
-        marginRight: "17px"
+        marginRight: "17px",
     },
     firstColor: {
         height: "20px",
         width: "20px",
         backgroundColor: theme.palette.primary.main,
         borderRadius: "50%",
-        marginRight: "6px"
+        marginRight: "6px",
     },
     themeBlock: {
         height: "20px",
-        width: "20px"
+        width: "20px",
     },
     paddingBottom: {
-        marginBottom: "30px"
+        marginBottom: "30px",
     },
     paddingText: {
-        paddingRight: theme.spacing(2)
+        paddingRight: theme.spacing(2),
     },
     qrcode: {
         width: 128,
         marginTop: 16,
-        marginRight: 16
-    }
+        marginRight: 16,
+    },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         title: state.siteConfig.title,
         authn: state.siteConfig.authn,
-        viewMethod: state.viewUpdate.explorerViewMethod
+        viewMethod: state.viewUpdate.explorerViewMethod,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        applyThemes: color => {
+        applyThemes: (color) => {
             dispatch(applyThemes(color));
         },
         toggleDaylightMode: () => {
             dispatch(toggleDaylightMode());
         },
-        changeView: method => {
+        changeView: (method) => {
             dispatch(changeViewMethod(method));
-        }
+        },
     };
 };
 
@@ -203,9 +203,9 @@ class UserSettingCompoment extends Component {
             policy: {
                 current: {
                     name: "-",
-                    id: ""
+                    id: "",
                 },
-                options: []
+                options: [],
             },
             qq: "",
             homepage: true,
@@ -213,8 +213,8 @@ class UserSettingCompoment extends Component {
             two_fa_secret: "",
             prefer_theme: "",
             themes: {},
-            authn: []
-        }
+            authn: [],
+        },
     };
 
     handleClose = () => {
@@ -229,7 +229,7 @@ class UserSettingCompoment extends Component {
             showWebDavUserName: false,
             changeWebDavPwd: false,
             groupBackModal: false,
-            changePolicy: false
+            changePolicy: false,
         });
     };
 
@@ -250,14 +250,14 @@ class UserSettingCompoment extends Component {
 
     loadSetting = () => {
         API.get("/user/setting")
-            .then(response => {
+            .then((response) => {
                 const theme = JSON.parse(response.data.themes);
                 response.data.themes = theme;
                 this.setState({
-                    settings: response.data
+                    settings: response.data,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -269,7 +269,7 @@ class UserSettingCompoment extends Component {
 
     useGravatar = () => {
         this.setState({
-            loading: "gravatar"
+            loading: "gravatar",
         });
         API.put("/user/setting/avatar")
             .then(() => {
@@ -280,10 +280,10 @@ class UserSettingCompoment extends Component {
                     "success"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -291,17 +291,17 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
 
     changeNick = () => {
         this.setState({
-            loading: "nick"
+            loading: "nick",
         });
         API.patch("/user/setting/nick", {
-            nick: this.state.nick
+            nick: this.state.nick,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -311,11 +311,11 @@ class UserSettingCompoment extends Component {
                     "success"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
                 this.handleClose();
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -323,21 +323,21 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
 
     uploadAvatar = () => {
         this.setState({
-            loading: "avatar"
+            loading: "avatar",
         });
         const formData = new FormData();
         formData.append("avatar", this.fileInput.current.files[0]);
         API.post("/user/setting/avatar", formData, {
             headers: {
-                "Content-Type": "multipart/form-data"
-            }
+                "Content-Type": "multipart/form-data",
+            },
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -347,10 +347,10 @@ class UserSettingCompoment extends Component {
                     "success"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -358,14 +358,14 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
 
     handleToggle = () => {
         API.patch("/user/setting/homepage", {
-            status: !this.state.settings.homepage
+            status: !this.state.settings.homepage,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -377,11 +377,11 @@ class UserSettingCompoment extends Component {
                 this.setState({
                     settings: {
                         ...this.state.settings,
-                        homepage: !this.state.settings.homepage
-                    }
+                        homepage: !this.state.settings.homepage,
+                    },
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -402,11 +402,11 @@ class UserSettingCompoment extends Component {
             return;
         }
         this.setState({
-            loading: "changePassword"
+            loading: "changePassword",
         });
         API.patch("/user/setting/password", {
             old: this.state.oldPwd,
-            new: this.state.newPwd
+            new: this.state.newPwd,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -416,11 +416,11 @@ class UserSettingCompoment extends Component {
                     "success"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
                 this.handleClose();
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -428,17 +428,17 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
 
     changeTheme = () => {
         this.setState({
-            loading: "changeTheme"
+            loading: "changeTheme",
         });
         API.patch("/user/setting/theme", {
-            theme: this.state.chosenTheme
+            theme: this.state.chosenTheme,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -449,10 +449,10 @@ class UserSettingCompoment extends Component {
                 );
                 this.props.applyThemes(this.state.chosenTheme);
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -460,20 +460,20 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
 
     changheWebdavPwd = () => {
         this.setState({
-            loading: "changheWebdavPwd"
+            loading: "changheWebdavPwd",
         });
         axios
             .post("/Member/setWebdavPwd", {
-                pwd: this.state.webdavPwd
+                pwd: this.state.webdavPwd,
             })
-            .then(response => {
+            .then((response) => {
                 if (response.data.error === "1") {
                     this.props.toggleSnackbar(
                         "top",
@@ -482,7 +482,7 @@ class UserSettingCompoment extends Component {
                         "error"
                     );
                     this.setState({
-                        loading: ""
+                        loading: "",
                     });
                 } else {
                     this.props.toggleSnackbar(
@@ -493,11 +493,11 @@ class UserSettingCompoment extends Component {
                     );
                     this.setState({
                         loading: "",
-                        changeWebDavPwd: false
+                        changeWebDavPwd: false,
                     });
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -505,7 +505,7 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
@@ -516,13 +516,13 @@ class UserSettingCompoment extends Component {
             return;
         }
         API.get("/user/setting/2fa")
-            .then(response => {
+            .then((response) => {
                 this.setState({
                     two_fa_secret: response.data,
-                    twoFactor: true
+                    twoFactor: true,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -534,10 +534,10 @@ class UserSettingCompoment extends Component {
 
     twoFactor = () => {
         this.setState({
-            loading: "twoFactor"
+            loading: "twoFactor",
         });
         API.patch("/user/setting/2fa", {
-            code: this.state.authCode
+            code: this.state.authCode,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -550,12 +550,12 @@ class UserSettingCompoment extends Component {
                     loading: "",
                     settings: {
                         ...this.state.settings,
-                        two_factor: !this.state.settings.two_factor
-                    }
+                        two_factor: !this.state.settings.two_factor,
+                    },
                 });
                 this.handleClose();
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -563,18 +563,18 @@ class UserSettingCompoment extends Component {
                     "error"
                 );
                 this.setState({
-                    loading: ""
+                    loading: "",
                 });
             });
     };
 
-    handleChange = name => event => {
+    handleChange = (name) => (event) => {
         this.setState({ [name]: event.target.value });
     };
 
     handleAlignment = (event, chosenTheme) => this.setState({ chosenTheme });
 
-    toggleThemeMode = current => {
+    toggleThemeMode = (current) => {
         if (current !== null) {
             this.props.toggleDaylightMode();
             Auth.SetPreference("theme_mode", null);
@@ -781,27 +781,27 @@ class UserSettingCompoment extends Component {
 
                     <Authn
                         list={this.state.settings.authn}
-                        add={credential => {
+                        add={(credential) => {
                             this.setState({
                                 settings: {
                                     ...this.state.settings,
                                     authn: [
                                         ...this.state.settings.authn,
-                                        credential
-                                    ]
-                                }
+                                        credential,
+                                    ],
+                                },
                             });
                         }}
-                        remove={id => {
+                        remove={(id) => {
                             let credentials = [...this.state.settings.authn];
-                            credentials = credentials.filter(v => {
+                            credentials = credentials.filter((v) => {
                                 return v.id !== id;
                             });
                             this.setState({
                                 settings: {
                                     ...this.state.settings,
-                                    authn: credentials
-                                }
+                                    authn: credentials,
+                                },
                             });
                         }}
                     />
@@ -905,7 +905,7 @@ class UserSettingCompoment extends Component {
                                         button
                                         onClick={() =>
                                             this.setState({
-                                                showWebDavUrl: true
+                                                showWebDavUrl: true,
                                             })
                                         }
                                     >
@@ -929,7 +929,7 @@ class UserSettingCompoment extends Component {
                                         button
                                         onClick={() =>
                                             this.setState({
-                                                showWebDavUserName: true
+                                                showWebDavUserName: true,
                                             })
                                         }
                                     >

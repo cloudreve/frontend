@@ -15,12 +15,12 @@ import {
     withStyles,
     SnackbarContent,
     Snackbar,
-    IconButton
+    IconButton,
 } from "@material-ui/core";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        snackbar: state.viewUpdate.snackbar
+        snackbar: state.viewUpdate.snackbar,
     };
 };
 
@@ -32,33 +32,33 @@ const variantIcon = {
     success: CheckCircleIcon,
     warning: WarningIcon,
     error: ErrorIcon,
-    info: InfoIcon
+    info: InfoIcon,
 };
 
-const styles1 = theme => ({
+const styles1 = (theme) => ({
     success: {
-        backgroundColor: green[600]
+        backgroundColor: green[600],
     },
     error: {
-        backgroundColor: theme.palette.error.dark
+        backgroundColor: theme.palette.error.dark,
     },
     info: {
-        backgroundColor: theme.palette.primary.dark
+        backgroundColor: theme.palette.primary.dark,
     },
     warning: {
-        backgroundColor: amber[700]
+        backgroundColor: amber[700],
     },
     icon: {
-        fontSize: 20
+        fontSize: 20,
     },
     iconVariant: {
         opacity: 0.9,
-        marginRight: theme.spacing(1)
+        marginRight: theme.spacing(1),
     },
     message: {
         display: "flex",
-        alignItems: "center"
-    }
+        alignItems: "center",
+    },
 });
 
 function MySnackbarContent(props) {
@@ -89,7 +89,7 @@ function MySnackbarContent(props) {
                     onClick={onClose}
                 >
                     <CloseIcon className={classes.icon} />
-                </IconButton>
+                </IconButton>,
             ]}
             {...other}
         />
@@ -100,21 +100,22 @@ MySnackbarContent.propTypes = {
     className: PropTypes.string,
     message: PropTypes.node,
     onClose: PropTypes.func,
-    variant: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired
+    variant: PropTypes.oneOf(["success", "warning", "error", "info"])
+        .isRequired,
 };
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
-const styles = theme => ({
+const styles = (theme) => ({
     margin: {
-        margin: theme.spacing(1)
-    }
+        margin: theme.spacing(1),
+    },
 });
 class SnackbarCompoment extends Component {
     state = {
-        open: false
+        open: false,
     };
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (nextProps.snackbar.toggle !== this.props.snackbar.toggle) {
             this.setState({ open: true });
         }
@@ -129,7 +130,7 @@ class SnackbarCompoment extends Component {
             <Snackbar
                 anchorOrigin={{
                     vertical: this.props.snackbar.vertical,
-                    horizontal: this.props.snackbar.horizontal
+                    horizontal: this.props.snackbar.horizontal,
                 }}
                 open={this.state.open}
                 autoHideDuration={6000}

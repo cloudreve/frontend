@@ -16,7 +16,7 @@ import API from "../../../middleware/Api";
 export default function UserFilter({ setFilter, setSearch, open, onClose }) {
     const [input, setInput] = useState({
         group_id: "all",
-        status: "all"
+        status: "all",
     });
     const [groups, setGroups] = useState([]);
     const [keywords, setKeywords] = useState("");
@@ -28,23 +28,23 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
         [dispatch]
     );
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setInput({ ...input, [name]: event.target.value });
     };
 
     useEffect(() => {
         API.get("/admin/groups")
-            .then(response => {
+            .then((response) => {
                 setGroups(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, []);
 
     const submit = () => {
         const res = {};
-        Object.keys(input).forEach(v => {
+        Object.keys(input).forEach((v) => {
             if (input[v] !== "all") {
                 res[v] = input[v];
             }
@@ -53,7 +53,7 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
         if (keywords !== "") {
             setSearch({
                 nick: keywords,
-                email: keywords
+                email: keywords,
             });
         } else {
             setSearch({});
@@ -83,7 +83,7 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
                         onChange={handleChange("group_id")}
                     >
                         <MenuItem value={"all"}>全部</MenuItem>
-                        {groups.map(v => {
+                        {groups.map((v) => {
                             if (v.ID === 3) {
                                 return null;
                             }
@@ -115,7 +115,7 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
                 <FormControl fullWidth style={{ marginTop: 16 }}>
                     <TextField
                         value={keywords}
-                        onChange={e => setKeywords(e.target.value)}
+                        onChange={(e) => setKeywords(e.target.value)}
                         id="standard-basic"
                         label="搜索 昵称 / 用户名"
                     />

@@ -52,7 +52,7 @@ function getCookieByString(cookieName) {
             },
             removeItem: function (key) {
                 createCookie(key, "", -1);
-            }
+            },
         };
     }
 
@@ -74,7 +74,7 @@ function getCookieByString(cookieName) {
             while (
                 ((div.innerHTML =
                     "<!--[if gt IE " + v + "]><i></i><![endif]-->"),
-                    all[0])
+                all[0])
             ) {
                 v++;
             }
@@ -89,7 +89,7 @@ function getCookieByString(cookieName) {
             INFO: 4,
             DEBUG: 5,
             TRACE: 6,
-            level: 0
+            level: 0,
         };
 
         function log(type, args) {
@@ -158,12 +158,12 @@ function getCookieByString(cookieName) {
             }
             var qiniuUploadUrls = [
                 "http://upload.qiniu.com",
-                "http://up.qiniu.com"
+                "http://up.qiniu.com",
             ];
 
             var qiniuUpHosts = {
                 http: ["http://upload.qiniu.com", "http://up.qiniu.com"],
-                https: ["https://up.qbox.me"]
+                https: ["https://up.qbox.me"],
             };
             //TODO 优化写法
         } else if (
@@ -178,7 +178,7 @@ function getCookieByString(cookieName) {
             var qiniuUploadUrls = [uploadConfig.upUrl];
             var qiniuUpHosts = {
                 http: [uploadConfig.upUrl],
-                https: [uploadConfig.upUrl]
+                https: [uploadConfig.upUrl],
             };
         }
 
@@ -570,8 +570,8 @@ function getCookieByString(cookieName) {
                             if (obj.hasOwnProperty(property)) {
                                 string.push(
                                     that.stringifyJSON(property) +
-                                    ":" +
-                                    that.stringifyJSON(obj[property])
+                                        ":" +
+                                        that.stringifyJSON(obj[property])
                                 );
                             }
                         }
@@ -785,13 +785,13 @@ function getCookieByString(cookieName) {
                     ajax.open(
                         "GET",
                         that.uptoken_url +
-                        "?path=" +
-                        encodeURIComponent(window.pathCache[file.id]) +
-                        "&size=" +
-                        file.size +
-                        "&name=" +
-                        encodeURIComponent(file.name) +
-                        "&type=s3",
+                            "?path=" +
+                            encodeURIComponent(window.pathCache[file.id]) +
+                            "&size=" +
+                            file.size +
+                            "&name=" +
+                            encodeURIComponent(file.name) +
+                            "&type=s3",
                         true
                     );
                     ajax.setRequestHeader("If-Modified-Since", "0");
@@ -805,7 +805,7 @@ function getCookieByString(cookieName) {
                                     response: ajax.responseText,
                                     file: file,
                                     message: res.msg,
-                                    code: 402
+                                    code: 402,
                                 });
                                 callback();
                                 return;
@@ -813,7 +813,10 @@ function getCookieByString(cookieName) {
                             that.policy = res.data.policy;
                             that.callback = res.data.callback;
                             that.credential = res.data.ak;
-                            that.key = res.data.path.replace("${filename}", file.name);
+                            that.key = res.data.path.replace(
+                                "${filename}",
+                                file.name
+                            );
                             that.sign = res.data.token;
                             that.x_amz_date = res.data.key_time;
                         } else {
@@ -821,7 +824,7 @@ function getCookieByString(cookieName) {
                                 status: 402,
                                 response: ajax.responseText,
                                 file: file,
-                                code: 402
+                                code: 402,
                             });
                         }
                         callback();
@@ -832,7 +835,7 @@ function getCookieByString(cookieName) {
                             status: 402,
                             response: ajax.responseText,
                             file: file,
-                            code: 402
+                            code: 402,
                         });
                         callback();
                         logger.error("get uptoken error: ", ajax.responseText);
@@ -915,8 +918,8 @@ function getCookieByString(cookieName) {
             var _FileUploaded_Handler = op.init && op.init.FileUploaded;
 
             // replace the handler for intercept
-            op.init.Error = function () { };
-            op.init.FileUploaded = function () { };
+            op.init.Error = function () {};
+            op.init.FileUploaded = function () {};
 
             that.uptoken_url = op.uptoken_url;
             that.token = "";
@@ -930,7 +933,7 @@ function getCookieByString(cookieName) {
                 isResumeUpload: false,
                 resumeFilesize: 0,
                 startTime: "",
-                currentTime: ""
+                currentTime: "",
             };
 
             reset_chunk_size();
@@ -939,7 +942,7 @@ function getCookieByString(cookieName) {
 
             var defaultSetting = {
                 url: qiniuUploadUrl,
-                multipart_params: {}
+                multipart_params: {},
             };
             var ie = that.detectIEVersion();
             // case IE 9-
@@ -985,7 +988,6 @@ function getCookieByString(cookieName) {
                     auto_start || (up.settings && up.settings.auto_start);
                 logger.debug("auto_start: ", auto_start);
                 logger.debug("files: ", files);
-
 
                 // detect is iOS
                 var is_ios = function () {
@@ -1038,13 +1040,13 @@ function getCookieByString(cookieName) {
                     var multipart_params_obj;
                     if (op.save_key) {
                         multipart_params_obj = {
-                            token: that.token
+                            token: that.token,
                         };
                     } else {
                         multipart_params_obj = {
-                            "policy": that.policy,
-                            "key": that.key,
-                            "success_action_redirect": that.callback,
+                            policy: that.policy,
+                            key: that.key,
+                            success_action_redirect: that.callback,
                             "x-amz-algorithm": "AWS4-HMAC-SHA256",
                             "x-amz-credential": that.credential,
                             "x-amz-signature": that.sign,
@@ -1084,7 +1086,6 @@ function getCookieByString(cookieName) {
                         }
                     }
 
-
                     up.setOption({
                         url: qiniuUploadUrl,
                         multipart: true,
@@ -1094,9 +1095,8 @@ function getCookieByString(cookieName) {
                         multipart_params: multipart_params_obj,
                         headers: {
                             "X-Oss-Forbid-Overwrite": true,
-                        }
+                        },
                     });
-
                 };
 
                 // detect is weixin or qq inner browser
@@ -1174,7 +1174,7 @@ function getCookieByString(cookieName) {
                                             // set block size
                                             if (
                                                 localFileInfo.offset +
-                                                blockSize >
+                                                    blockSize >
                                                 file.size
                                             ) {
                                                 blockSize =
@@ -1216,9 +1216,9 @@ function getCookieByString(cookieName) {
                                     chunk_size: chunk_size,
                                     required_features: "chunks",
                                     headers: {
-                                        Authorization: getUptoken(file)
+                                        Authorization: getUptoken(file),
                                     },
-                                    multipart_params: multipart_params_obj
+                                    multipart_params: multipart_params_obj,
                                 });
                             } else {
                                 up.setOption({
@@ -1228,9 +1228,9 @@ function getCookieByString(cookieName) {
                                     required_features: "chunks",
                                     headers: {
                                         Authorization:
-                                            "UpToken " + getUptoken(file)
+                                            "UpToken " + getUptoken(file),
                                     },
-                                    multipart_params: multipart_params_obj
+                                    multipart_params: multipart_params_obj,
                                 });
                             }
                         }
@@ -1285,11 +1285,11 @@ function getCookieByString(cookieName) {
                     chunk_size || (up.settings && up.settings.chunk_size);
                 if (leftSize < chunk_size) {
                     up.setOption({
-                        url: qiniuUploadUrl + "/mkblk/" + leftSize
+                        url: qiniuUploadUrl + "/mkblk/" + leftSize,
                     });
                     if (uploadConfig.saveType == "remote") {
                         up.setOption({
-                            url: qiniuUploadUrl + "chunk.php"
+                            url: qiniuUploadUrl + "chunk.php",
                         });
                     }
                     logger.debug(
@@ -1300,14 +1300,14 @@ function getCookieByString(cookieName) {
                 if (uploadConfig.saveType == "remote") {
                     up.setOption({
                         headers: {
-                            Authorization: getUptoken(file)
-                        }
+                            Authorization: getUptoken(file),
+                        },
                     });
                 } else {
                     up.setOption({
                         headers: {
-                            Authorization: "UpToken " + getUptoken(file)
-                        }
+                            Authorization: "UpToken " + getUptoken(file),
+                        },
                     });
                 }
                 localStorage.setItem(
@@ -1317,7 +1317,7 @@ function getCookieByString(cookieName) {
                         percent: file.percent,
                         total: info.total,
                         offset: info.offset,
-                        time: new Date().getTime()
+                        time: new Date().getTime(),
                     })
                 );
             });
@@ -1402,7 +1402,6 @@ function getCookieByString(cookieName) {
                                                 "：" +
                                                 errorText +
                                                 ")";
-
                                         } catch (e) {
                                             errTip = err.message;
                                             errorText = "Error";
@@ -1506,16 +1505,16 @@ function getCookieByString(cookieName) {
                                                 response:
                                                     ajax_downtoken.responseText,
                                                 file: file,
-                                                code: plupload.HTTP_ERROR
+                                                code: plupload.HTTP_ERROR,
                                             });
                                         }
                                     }
                                 };
                                 ajax_downtoken.send(
                                     "key=" +
-                                    that.parseJSON(info).key +
-                                    "&domain=" +
-                                    op.domain
+                                        that.parseJSON(info).key +
+                                        "&domain=" +
+                                        op.domain
                                 );
                             } else if (_FileUploaded_Handler) {
                                 _FileUploaded_Handler(up, file, info);
@@ -1563,13 +1562,13 @@ function getCookieByString(cookieName) {
                                 fname =
                                     "" + that.URLSafeBase64Encode(file.name);
                                 op.x_vars = {
-                                    path: file.path
+                                    path: file.path,
                                 };
                             }
                             logger.debug("op.x_vars: ", op.x_vars);
                             if (uploadConfig.saveType == "qiniu") {
                                 op.x_vars = {
-                                    path: file.path
+                                    path: file.path,
                                 };
                             }
                             var x_vars = op.x_vars,
@@ -1680,7 +1679,7 @@ function getCookieByString(cookieName) {
                                             response: ajax.responseText,
                                             file: file,
                                             code: -200,
-                                            responseHeaders: ajax.getAllResponseHeaders()
+                                            responseHeaders: ajax.getAllResponseHeaders(),
                                         };
                                         logger.debug("mkfile is error: ", info);
                                         uploader.trigger("Error", info);

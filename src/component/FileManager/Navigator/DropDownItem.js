@@ -5,10 +5,10 @@ import { MenuItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { useDrop } from "react-dnd";
 import classNames from "classnames";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     active: {
-        border: "2px solid " + theme.palette.primary.light
-    }
+        border: "2px solid " + theme.palette.primary.light,
+    },
 }));
 
 export default function DropDownItem(props) {
@@ -19,14 +19,14 @@ export default function DropDownItem(props) {
                 folder: {
                     id: -1,
                     path: props.path,
-                    name: props.folder === "/" ? "" : props.folder
-                }
+                    name: props.folder === "/" ? "" : props.folder,
+                },
             });
         },
-        collect: monitor => ({
+        collect: (monitor) => ({
             isOver: monitor.isOver(),
-            canDrop: monitor.canDrop()
-        })
+            canDrop: monitor.canDrop(),
+        }),
     });
 
     const isActive = canDrop && isOver;
@@ -41,9 +41,9 @@ export default function DropDownItem(props) {
         <MenuItem
             ref={drop}
             className={classNames({
-                [classes.active]: isActive
+                [classes.active]: isActive,
             })}
-            onClick={e => props.navigateTo(e, props.id)}
+            onClick={(e) => props.navigateTo(e, props.id)}
         >
             <ListItemIcon>
                 <FolderIcon />

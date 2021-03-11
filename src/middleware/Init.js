@@ -2,13 +2,13 @@ import {
     setSiteConfig,
     toggleSnackbar,
     enableLoadUploader,
-    changeViewMethod
+    changeViewMethod,
 } from "../actions/index";
 import API from "./Api";
 import Auth from "./Auth";
 import pathHelper from "../utils/page";
 
-const initUserConfig = siteConfig => {
+const initUserConfig = (siteConfig) => {
     if (siteConfig.user !== undefined && !siteConfig.user.anonymous) {
         const themes = JSON.parse(siteConfig.themes);
         const user = siteConfig.user;
@@ -31,7 +31,7 @@ const initUserConfig = siteConfig => {
     return siteConfig;
 };
 
-export const InitSiteConfig = rawStore => {
+export const InitSiteConfig = (rawStore) => {
     // 从缓存获取默认配置
     const configCache = JSON.parse(localStorage.getItem("siteConfigCache"));
     if (configCache != null) {
@@ -59,7 +59,7 @@ export function enableUploaderLoad() {
 
 export async function UpdateSiteConfig(store) {
     API.get("/site/config")
-        .then(function(response) {
+        .then(function (response) {
             const themes = JSON.parse(response.data.themes);
             response.data.theme = themes[response.data.defaultTheme];
             response.data = initUserConfig(response.data);
@@ -85,7 +85,7 @@ export async function UpdateSiteConfig(store) {
                 }
             }
         })
-        .catch(function(error) {
+        .catch(function (error) {
             store.dispatch(
                 toggleSnackbar(
                     "top",
@@ -95,7 +95,7 @@ export async function UpdateSiteConfig(store) {
                 )
             );
         })
-        .then(function() {
+        .then(function () {
             enableUploaderLoad(store);
             store.dispatch(enableLoadUploader());
         });

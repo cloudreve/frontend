@@ -22,18 +22,18 @@ import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import MagicVar from "../../Dialogs/MagicVar";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     stepContent: {
-        padding: "16px 32px 16px 32px"
+        padding: "16px 32px 16px 32px",
     },
     form: {
         maxWidth: 400,
-        marginTop: 20
+        marginTop: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
+            padding: "0px 24px 0 24px",
+        },
     },
     subStepContainer: {
         display: "flex",
@@ -41,11 +41,11 @@ const useStyles = makeStyles(theme => ({
         padding: 10,
         transition: theme.transitions.create("background-color", {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
+            duration: theme.transitions.duration.leavingScreen,
         }),
         "&:focus-within": {
-            backgroundColor: theme.palette.background.default
-        }
+            backgroundColor: theme.palette.background.default,
+        },
     },
     stepNumber: {
         width: 20,
@@ -53,40 +53,40 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: lighten(theme.palette.secondary.light, 0.2),
         color: theme.palette.secondary.contrastText,
         textAlign: "center",
-        borderRadius: " 50%"
+        borderRadius: " 50%",
     },
     stepNumberContainer: {
-        marginRight: 10
+        marginRight: 10,
     },
     stepFooter: {
-        marginTop: 32
+        marginTop: 32,
     },
     button: {
-        marginRight: theme.spacing(1)
-    }
+        marginRight: theme.spacing(1),
+    },
 }));
 
 const steps = [
     {
         title: "存储空间",
-        optional: false
+        optional: false,
     },
     {
         title: "上传路径",
-        optional: false
+        optional: false,
     },
     {
         title: "直链设置",
-        optional: false
+        optional: false,
     },
     {
         title: "上传限制",
-        optional: false
+        optional: false,
     },
     {
         title: "完成",
-        optional: false
-    }
+        optional: false,
+    },
 ];
 
 export default function RemoteGuide(props) {
@@ -115,29 +115,29 @@ export default function RemoteGuide(props) {
                   MaxSize: "0",
                   OptionsSerialized: {
                       file_type: "",
-                      mimetype: ""
-                  }
+                      mimetype: "",
+                  },
               }
     );
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setPolicy({
             ...policy,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleOptionChange = name => event => {
+    const handleOptionChange = (name) => (event) => {
         setPolicy({
             ...policy,
             OptionsSerialized: {
                 ...policy.OptionsSerialized,
-                [name]: event.target.value
-            }
+                [name]: event.target.value,
+            },
         });
     };
 
-    const isStepSkipped = step => {
+    const isStepSkipped = (step) => {
         return skipped.has(step);
     };
 
@@ -148,7 +148,7 @@ export default function RemoteGuide(props) {
         [dispatch]
     );
 
-    const submitPolicy = e => {
+    const submitPolicy = (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -172,7 +172,7 @@ export default function RemoteGuide(props) {
         }
 
         API.post("/admin/policy", {
-            policy: policyCopy
+            policy: policyCopy,
         })
             .then(() => {
                 ToggleSnackbar(
@@ -183,7 +183,7 @@ export default function RemoteGuide(props) {
                 );
                 setActiveStep(5);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -221,7 +221,7 @@ export default function RemoteGuide(props) {
             {activeStep === 0 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(1);
                     }}
@@ -387,7 +387,7 @@ export default function RemoteGuide(props) {
             {activeStep === 1 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(2);
                     }}
@@ -404,7 +404,7 @@ export default function RemoteGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={e => {
+                                    onClick={(e) => {
                                         e.preventDefault();
                                         setMagicVar("path");
                                     }}
@@ -439,7 +439,7 @@ export default function RemoteGuide(props) {
                                 可用魔法变量可参考{" "}
                                 <Link
                                     color={"secondary"}
-                                    onClick={e => {
+                                    onClick={(e) => {
                                         e.preventDefault();
                                         setMagicVar("file");
                                     }}
@@ -519,7 +519,7 @@ export default function RemoteGuide(props) {
             {activeStep === 2 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(3);
                     }}
@@ -540,7 +540,7 @@ export default function RemoteGuide(props) {
                                     <RadioGroup
                                         required
                                         value={policy.IsOriginLinkEnable}
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (
                                                 policy.IsPrivate === "true" &&
                                                 e.target.value === "true"
@@ -602,7 +602,7 @@ export default function RemoteGuide(props) {
             {activeStep === 3 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(4);
                     }}
@@ -625,16 +625,16 @@ export default function RemoteGuide(props) {
                                                 ? "false"
                                                 : "true"
                                         }
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "10485760"
+                                                    MaxSize: "10485760",
                                                 });
                                             } else {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "0"
+                                                    MaxSize: "0",
                                                 });
                                             }
                                         }}
@@ -703,23 +703,23 @@ export default function RemoteGuide(props) {
                                                 ? "false"
                                                 : "true"
                                         }
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
                                                         file_type:
-                                                            "jpg,png,mp4,zip,rar"
-                                                    }
+                                                            "jpg,png,mp4,zip,rar",
+                                                    },
                                                 });
                                             } else {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        file_type: ""
-                                                    }
+                                                        file_type: "",
+                                                    },
                                                 });
                                             }
                                         }}
@@ -782,7 +782,7 @@ export default function RemoteGuide(props) {
                             <div className={classes.stepNumber}>
                                 {getNumber(3, [
                                     policy.MaxSize !== "0",
-                                    policy.OptionsSerialized.file_type !== ""
+                                    policy.OptionsSerialized.file_type !== "",
                                 ])}
                             </div>
                         </div>
@@ -801,22 +801,22 @@ export default function RemoteGuide(props) {
                                                 ? "false"
                                                 : "true"
                                         }
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        mimetype: "image/*"
-                                                    }
+                                                        mimetype: "image/*",
+                                                    },
                                                 });
                                             } else {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        mimetype: ""
-                                                    }
+                                                        mimetype: "",
+                                                    },
                                                 });
                                             }
                                         }}
@@ -849,7 +849,7 @@ export default function RemoteGuide(props) {
                                     {getNumber(4, [
                                         policy.MaxSize !== "0",
                                         policy.OptionsSerialized.file_type !==
-                                            ""
+                                            "",
                                     ])}
                                 </div>
                             </div>

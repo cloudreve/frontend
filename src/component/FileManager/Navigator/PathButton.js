@@ -6,16 +6,16 @@ import { useDrop } from "react-dnd";
 import classNames from "classnames";
 import MoreIcon from "@material-ui/icons/MoreHoriz";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     expandMore: {
-        color: "#8d8d8d"
+        color: "#8d8d8d",
     },
     active: {
-        boxShadow: "0 0 0 2px " + theme.palette.primary.light
+        boxShadow: "0 0 0 2px " + theme.palette.primary.light,
     },
     button: {
-        textTransform: "none"
-    }
+        textTransform: "none",
+    },
 }));
 
 export default function PathButton(props) {
@@ -31,15 +31,15 @@ export default function PathButton(props) {
                     folder: {
                         id: -1,
                         path: props.path,
-                        name: props.folder === "/" ? "" : props.folder
-                    }
+                        name: props.folder === "/" ? "" : props.folder,
+                    },
                 };
             }
         },
-        collect: monitor => ({
+        collect: (monitor) => ({
             isOver: monitor.isOver(),
-            canDrop: monitor.canDrop()
-        })
+            canDrop: monitor.canDrop(),
+        }),
     });
 
     const isActive = canDrop && isOver;
@@ -58,7 +58,7 @@ export default function PathButton(props) {
                 ref={drop}
                 className={classNames(
                     {
-                        [classes.active]: isActive
+                        [classes.active]: isActive,
                     },
                     classes.button
                 )}

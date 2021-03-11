@@ -7,34 +7,34 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { FolderOpenOutlined, LabelOutlined } from "@material-ui/icons";
 import PathSelector from "../FileManager/PathSelector";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     formGroup: {
         display: "flex",
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     formIcon: {
         marginTop: 21,
         marginRight: 19,
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     input: {
-        width: 250
+        width: 250,
     },
     dialogContent: {
         paddingTop: 24,
         paddingRight: 24,
         paddingBottom: 8,
-        paddingLeft: 24
+        paddingLeft: 24,
     },
     button: {
-        marginTop: 8
-    }
+        marginTop: 8,
+    },
 }));
 
 export default function CreateWebDAVAccount(props) {
     const [value, setValue] = useState({
         name: "",
-        path: "/"
+        path: "/",
     });
     const [pathSelectDialog, setPathSelectDialog] = React.useState(false);
     const [selectedPath, setSelectedPath] = useState("");
@@ -42,7 +42,7 @@ export default function CreateWebDAVAccount(props) {
     const [selectedPathName, setSelectedPathName] = useState("");
     const classes = useStyles();
 
-    const setMoveTarget = folder => {
+    const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
@@ -51,17 +51,17 @@ export default function CreateWebDAVAccount(props) {
         setSelectedPathName(folder.name);
     };
 
-    const handleInputChange = name => e => {
+    const handleInputChange = (name) => (e) => {
         setValue({
             ...value,
-            [name]: e.target.value
+            [name]: e.target.value,
         });
     };
 
     const selectPath = () => {
         setValue({
             ...value,
-            path: selectedPath === "//" ? "/" : selectedPath
+            path: selectedPath === "//" ? "/" : selectedPath,
         });
         setPathSelectDialog(false);
     };

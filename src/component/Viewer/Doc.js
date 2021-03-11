@@ -10,15 +10,15 @@ import pathHelper from "../../utils/page";
 const useStyles = makeStyles(() => ({
     layout: {
         width: "auto",
-        marginTop: "-48px"
+        marginTop: "-48px",
     },
 
     container: {
         border: "none",
         width: "100%",
         height: "calc(100vh - 18px)",
-        marginBottom: -3
-    }
+        marginBottom: -3,
+    },
 }));
 
 function useQuery() {
@@ -34,9 +34,10 @@ export default function DocViewer() {
 
     const dispatch = useDispatch();
 
-    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
-        dispatch
-    ]);
+    const SetSubTitle = useCallback(
+        (title) => dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -64,10 +65,10 @@ export default function DocViewer() {
             }
         }
         API.get(requestURL)
-            .then(response => {
+            .then((response) => {
                 setURL(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line

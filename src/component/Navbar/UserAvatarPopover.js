@@ -6,12 +6,12 @@ import {
     HomeAccount,
     DesktopMacDashboard,
     AccountArrowRight,
-    AccountPlus
+    AccountPlus,
 } from "mdi-material-ui";
 import {
     setSessionStatus,
     setUserPopover,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
@@ -23,53 +23,53 @@ import {
     Chip,
     ListItemIcon,
     MenuItem,
-    Divider
+    Divider,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import pathHelper from "../../utils/page";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        anchorEl: state.viewUpdate.userPopoverAnchorEl
+        anchorEl: state.viewUpdate.userPopoverAnchorEl,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        setUserPopover: anchor => {
+        setUserPopover: (anchor) => {
             dispatch(setUserPopover(anchor));
         },
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        setSessionStatus: status => {
+        setSessionStatus: (status) => {
             dispatch(setSessionStatus(status));
-        }
+        },
     };
 };
 const styles = () => ({
     avatar: {
         width: "30px",
-        height: "30px"
+        height: "30px",
     },
     header: {
         display: "flex",
-        padding: "20px 20px 20px 20px"
+        padding: "20px 20px 20px 20px",
     },
     largeAvatar: {
         height: "90px",
-        width: "90px"
+        width: "90px",
     },
     info: {
         marginLeft: "10px",
-        width: "139px"
+        width: "139px",
     },
     badge: {
-        marginTop: "10px"
+        marginTop: "10px",
     },
     visitorMenu: {
-        width: 200
-    }
+        width: 200,
+    },
 });
 
 class UserAvatarPopoverCompoment extends Component {
@@ -77,7 +77,7 @@ class UserAvatarPopoverCompoment extends Component {
         this.props.setUserPopover(null);
     };
 
-    openURL = url => {
+    openURL = (url) => {
         window.location.href = url;
     };
 
@@ -94,7 +94,7 @@ class UserAvatarPopoverCompoment extends Component {
                 window.location.reload();
                 this.props.setSessionStatus(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -121,11 +121,11 @@ class UserAvatarPopoverCompoment extends Component {
                 anchorEl={this.props.anchorEl}
                 anchorOrigin={{
                     vertical: "bottom",
-                    horizontal: "right"
+                    horizontal: "right",
                 }}
                 transformOrigin={{
                     vertical: "top",
-                    horizontal: "right"
+                    horizontal: "right",
                 }}
             >
                 {!Auth.Check() && (
@@ -165,7 +165,7 @@ class UserAvatarPopoverCompoment extends Component {
                                 <Typography
                                     color="textSecondary"
                                     style={{
-                                        fontSize: "0.875rem"
+                                        fontSize: "0.875rem",
                                     }}
                                     noWrap
                                 >
@@ -187,7 +187,7 @@ class UserAvatarPopoverCompoment extends Component {
                             {!isAdminPage && (
                                 <MenuItem
                                     style={{
-                                        padding: " 11px 16px 11px 16px"
+                                        padding: " 11px 16px 11px 16px",
                                     }}
                                     onClick={() => {
                                         this.handleClose();
@@ -205,7 +205,7 @@ class UserAvatarPopoverCompoment extends Component {
                             {user.group.id === 1 && (
                                 <MenuItem
                                     style={{
-                                        padding: " 11px 16px 11px 16px"
+                                        padding: " 11px 16px 11px 16px",
                                     }}
                                     onClick={() => {
                                         this.handleClose();
@@ -221,7 +221,7 @@ class UserAvatarPopoverCompoment extends Component {
 
                             <MenuItem
                                 style={{
-                                    padding: " 11px 16px 11px 16px"
+                                    padding: " 11px 16px 11px 16px",
                                 }}
                                 onClick={this.sigOut}
                             >
@@ -239,7 +239,7 @@ class UserAvatarPopoverCompoment extends Component {
 }
 
 UserAvatarPopoverCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const UserAvatarPopover = connect(

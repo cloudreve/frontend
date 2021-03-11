@@ -15,25 +15,25 @@ import { ThemeProvider } from "@material-ui/styles";
 import React, { useCallback, useState } from "react";
 import { CompactPicker } from "react-color";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     picker: {
         "& div": {
-            boxShadow: "none !important"
+            boxShadow: "none !important",
         },
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     "@global": {
         ".compact-picker:parent ": {
-            boxShadow: "none !important"
-        }
+            boxShadow: "none !important",
+        },
     },
     statusBar: {
         height: 24,
-        width: "100%"
+        width: "100%",
     },
     fab: {
-        textAlign: "right"
-    }
+        textAlign: "right",
+    },
 }));
 
 export default function CreateTheme({ open, onClose, onSubmit }) {
@@ -42,13 +42,13 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
         palette: {
             primary: {
                 main: "#3f51b5",
-                contrastText: "#fff"
+                contrastText: "#fff",
             },
             secondary: {
                 main: "#d81b60",
-                contrastText: "#fff"
-            }
-        }
+                contrastText: "#fff",
+            },
+        },
     });
 
     const subTheme = useCallback(() => {
@@ -66,16 +66,16 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                             </Typography>
                             <TextField
                                 value={theme.palette.primary.main}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setTheme({
                                         ...theme,
                                         palette: {
                                             ...theme.palette,
                                             primary: {
                                                 ...theme.palette.primary,
-                                                main: e.target.value
-                                            }
-                                        }
+                                                main: e.target.value,
+                                            },
+                                        },
                                     });
                                 }}
                                 fullWidth
@@ -118,19 +118,19 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                                         "#0C797D",
                                         "#0062B1",
                                         "#673ab7",
-                                        "#9c27b0"
+                                        "#9c27b0",
                                     ]}
                                     color={theme.palette.primary.main}
-                                    onChangeComplete={c => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
                                                 ...theme.palette,
                                                 primary: {
                                                     ...theme.palette.primary,
-                                                    main: c.hex
-                                                }
-                                            }
+                                                    main: c.hex,
+                                                },
+                                            },
                                         });
                                     }}
                                 />
@@ -142,16 +142,16 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                             </Typography>
                             <TextField
                                 value={theme.palette.secondary.main}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setTheme({
                                         ...theme,
                                         palette: {
                                             ...theme.palette,
                                             secondary: {
                                                 ...theme.palette.secondary,
-                                                main: e.target.value
-                                            }
-                                        }
+                                                main: e.target.value,
+                                            },
+                                        },
                                     });
                                 }}
                                 fullWidth
@@ -194,19 +194,19 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                                         "#0C797D",
                                         "#3d5afe",
                                         "#651fff",
-                                        "#d500f9"
+                                        "#d500f9",
                                     ]}
                                     color={theme.palette.secondary.main}
-                                    onChangeComplete={c => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
                                                 ...theme.palette,
                                                 secondary: {
                                                     ...theme.palette.secondary,
-                                                    main: c.hex
-                                                }
-                                            }
+                                                    main: c.hex,
+                                                },
+                                            },
                                         });
                                     }}
                                 />
@@ -218,16 +218,16 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                             </Typography>
                             <TextField
                                 value={theme.palette.primary.contrastText}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setTheme({
                                         ...theme,
                                         palette: {
                                             ...theme.palette,
                                             primary: {
                                                 ...theme.palette.primary,
-                                                contrastText: e.target.value
-                                            }
-                                        }
+                                                contrastText: e.target.value,
+                                            },
+                                        },
                                     });
                                 }}
                                 fullWidth
@@ -235,16 +235,16 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                             <div className={classes.picker}>
                                 <CompactPicker
                                     color={theme.palette.primary.contrastText}
-                                    onChangeComplete={c => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
                                                 ...theme.palette,
                                                 primary: {
                                                     ...theme.palette.primary,
-                                                    contrastText: c.hex
-                                                }
-                                            }
+                                                    contrastText: c.hex,
+                                                },
+                                            },
                                         });
                                     }}
                                 />
@@ -256,16 +256,16 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                             </Typography>
                             <TextField
                                 value={theme.palette.secondary.contrastText}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setTheme({
                                         ...theme,
                                         palette: {
                                             ...theme.palette,
                                             secondary: {
                                                 ...theme.palette.secondary,
-                                                contrastText: e.target.value
-                                            }
-                                        }
+                                                contrastText: e.target.value,
+                                            },
+                                        },
                                     });
                                 }}
                                 fullWidth
@@ -273,16 +273,16 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                             <div className={classes.picker}>
                                 <CompactPicker
                                     color={theme.palette.secondary.contrastText}
-                                    onChangeComplete={c => {
+                                    onChangeComplete={(c) => {
                                         setTheme({
                                             ...theme,
                                             palette: {
                                                 ...theme.palette,
                                                 secondary: {
                                                     ...theme.palette.secondary,
-                                                    contrastText: c.hex
-                                                }
-                                            }
+                                                    contrastText: c.hex,
+                                                },
+                                            },
                                         });
                                     }}
                                 />
@@ -295,7 +295,7 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                                 className={classes.statusBar}
                                 style={{
                                     backgroundColor: subTheme().palette.primary
-                                        .dark
+                                        .dark,
                                 }}
                             />
                             <AppBar position="static">

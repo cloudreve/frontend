@@ -20,20 +20,20 @@ export default function EditPro(props) {
     const [, setLoading] = useState(false);
     const [policy, setPolicy] = useState(props.policy);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setPolicy({
             ...policy,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleOptionChange = name => event => {
+    const handleOptionChange = (name) => (event) => {
         setPolicy({
             ...policy,
             OptionsSerialized: {
                 ...policy.OptionsSerialized,
-                [name]: event.target.value
-            }
+                [name]: event.target.value,
+            },
         });
     };
 
@@ -44,7 +44,7 @@ export default function EditPro(props) {
         [dispatch]
     );
 
-    const submitPolicy = e => {
+    const submitPolicy = (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -68,7 +68,7 @@ export default function EditPro(props) {
         }
 
         API.post("/admin/policy", {
-            policy: policyCopy
+            policy: policyCopy,
         })
             .then(() => {
                 ToggleSnackbar(
@@ -78,7 +78,7 @@ export default function EditPro(props) {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -250,7 +250,7 @@ export default function EditPro(props) {
                                             type={"number"}
                                             inputProps={{
                                                 min: 0,
-                                                step: 1
+                                                step: 1,
                                             }}
                                             value={policy.MaxSize}
                                             onChange={handleChange("MaxSize")}

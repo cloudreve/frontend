@@ -13,7 +13,7 @@ import {
     ListItemText,
     makeStyles,
     Paper,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
@@ -22,28 +22,28 @@ import { Add, Fingerprint, HighlightOff } from "@material-ui/icons";
 import API from "../../middleware/Api";
 import { bufferDecode, bufferEncode } from "../../utils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     sectionTitle: {
         paddingBottom: "10px",
-        paddingTop: "30px"
+        paddingTop: "30px",
     },
     rightIcon: {
         marginTop: "4px",
         marginRight: "10px",
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     desenList: {
         paddingTop: 0,
-        paddingBottom: 0
+        paddingBottom: 0,
     },
     iconFix: {
         marginRight: "11px",
         marginLeft: "7px",
-        minWidth: 40
+        minWidth: 40,
     },
     flexContainer: {
-        display: "flex"
-    }
+        display: "flex",
+    },
 }));
 
 export default function Authn(props) {
@@ -56,15 +56,15 @@ export default function Authn(props) {
         [dispatch]
     );
 
-    const deleteCredential = id => {
+    const deleteCredential = (id) => {
         API.patch("/user/setting/authn", {
-            id: id
+            id: id,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "凭证已删除", "success");
                 props.remove(id);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -81,7 +81,7 @@ export default function Authn(props) {
             return;
         }
         API.put("/user/authn", {})
-            .then(response => {
+            .then((response) => {
                 const credentialCreationOptions = response.data;
                 credentialCreationOptions.publicKey.challenge = bufferDecode(
                     credentialCreationOptions.publicKey.challenge
@@ -107,10 +107,10 @@ export default function Authn(props) {
                 }
 
                 return navigator.credentials.create({
-                    publicKey: credentialCreationOptions.publicKey
+                    publicKey: credentialCreationOptions.publicKey,
                 });
             })
-            .then(credential => {
+            .then((credential) => {
                 const attestationObject = credential.response.attestationObject;
                 const clientDataJSON = credential.response.clientDataJSON;
                 const rawId = credential.rawId;
@@ -122,17 +122,17 @@ export default function Authn(props) {
                         type: credential.type,
                         response: {
                             attestationObject: bufferEncode(attestationObject),
-                            clientDataJSON: bufferEncode(clientDataJSON)
-                        }
+                            clientDataJSON: bufferEncode(clientDataJSON),
+                        },
                     })
                 );
             })
-            .then(response => {
+            .then((response) => {
                 props.add(response.data);
                 ToggleSnackbar("top", "right", "验证器已添加", "success");
                 return;
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
                 ToggleSnackbar("top", "right", error.message, "error");
             });
@@ -161,12 +161,12 @@ export default function Authn(props) {
             </Typography>
             <Paper>
                 <List className={classes.desenList}>
-                    {props.list.map(v => (
+                    {props.list.map((v) => (
                         <>
                             <ListItem
                                 button
                                 style={{
-                                    paddingRight: 60
+                                    paddingRight: 60,
                                 }}
                                 onClick={() => {
                                     setConfirm(true);

@@ -3,7 +3,7 @@ import {
     Checkbox,
     FormControl,
     makeStyles,
-    TextField
+    TextField,
 } from "@material-ui/core";
 import {
     Button,
@@ -11,7 +11,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    CircularProgress
+    CircularProgress,
 } from "@material-ui/core";
 import { toggleSnackbar } from "../../actions/index";
 import { useDispatch } from "react-redux";
@@ -41,30 +41,30 @@ import Select from "@material-ui/core/Select";
 import EyeIcon from "@material-ui/icons/RemoveRedEye";
 import ToggleIcon from "material-ui-toggle-icon";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     widthAnimation: {},
     shareUrl: {
-        minWidth: "400px"
+        minWidth: "400px",
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
         position: "absolute",
         top: "50%",
-        left: "50%"
+        left: "50%",
     },
     flexCenter: {
-        alignItems: "center"
+        alignItems: "center",
     },
     noFlex: {
-        display: "block"
+        display: "block",
     },
     scoreCalc: {
-        marginTop: 10
-    }
+        marginTop: 10,
+    },
 }));
 
 const ExpansionPanel = withStyles({
@@ -72,38 +72,38 @@ const ExpansionPanel = withStyles({
         border: "0px solid rgba(0, 0, 0, .125)",
         boxShadow: "none",
         "&:not(:last-child)": {
-            borderBottom: 0
+            borderBottom: 0,
         },
         "&:before": {
-            display: "none"
+            display: "none",
         },
         "&$expanded": {
-            margin: "auto"
-        }
+            margin: "auto",
+        },
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
     root: {
         padding: 0,
-        "&$expanded": {}
+        "&$expanded": {},
     },
     content: {
         margin: 0,
         display: "initial",
         "&$expanded": {
-            margin: "0 0"
-        }
+            margin: "0 0",
+        },
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanelSummary);
 
-const ExpansionPanelDetails = withStyles(theme => ({
+const ExpansionPanelDetails = withStyles((theme) => ({
     root: {
         padding: 24,
-        backgroundColor: theme.palette.background.default
-    }
+        backgroundColor: theme.palette.background.default,
+    },
 }))(MuiExpansionPanelDetails);
 
 export default function CreatShare(props) {
@@ -122,15 +122,15 @@ export default function CreatShare(props) {
         password: "",
         downloads: 1,
         expires: 24 * 3600,
-        showPassword: false
+        showPassword: false,
     });
     const [shareOption, setShareOption] = React.useState({
         password: false,
         expire: false,
-        preview: true
+        preview: true,
     });
 
-    const handleChange = prop => event => {
+    const handleChange = (prop) => (event) => {
         // 输入密码
         if (prop === "password") {
             if (event.target.value === "") {
@@ -147,7 +147,7 @@ export default function CreatShare(props) {
         setValues({ ...values, showPassword: !values.showPassword });
     };
 
-    const handleMouseDownPassword = event => {
+    const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
 
@@ -155,26 +155,23 @@ export default function CreatShare(props) {
         setShareOption({ ...shareOption, password: true });
         setValues({
             ...values,
-            password: Math.random()
-                .toString(36)
-                .substr(2)
-                .slice(2, 8),
-            showPassword: true
+            password: Math.random().toString(36).substr(2).slice(2, 8),
+            showPassword: true,
         });
     };
 
-    const handleExpand = panel => (event, isExpanded) => {
+    const handleExpand = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    const handleCheck = prop => () => {
+    const handleCheck = (prop) => () => {
         if (!shareOption[prop]) {
             handleExpand(prop)(null, true);
         }
         if (prop === "password" && shareOption[prop]) {
             setValues({
                 ...values,
-                password: ""
+                password: "",
             });
         }
         setShareOption({ ...shareOption, [prop]: !shareOption[prop] });
@@ -187,7 +184,7 @@ export default function CreatShare(props) {
         }, 500);
     };
 
-    const submitShare = e => {
+    const submitShare = (e) => {
         e.preventDefault();
         props.setModalsLoading(true);
         const submitFormBody = {
@@ -196,31 +193,31 @@ export default function CreatShare(props) {
             password: values.password,
             downloads: shareOption.expire ? values.downloads : -1,
             expire: values.expires,
-            preview: shareOption.preview
+            preview: shareOption.preview,
         };
 
         API.post("/share", submitFormBody)
-            .then(response => {
+            .then((response) => {
                 setShareURL(response.data);
                 setValues({
                     password: "",
                     downloads: 1,
                     expires: 24 * 3600,
-                    showPassword: false
+                    showPassword: false,
                 });
                 setShareOption({
                     password: false,
-                    expire: false
+                    expire: false,
                 });
                 props.setModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
                 props.setModalsLoading(false);
             });
     };
 
-    const handleFocus = event => event.target.select();
+    const handleFocus = (event) => event.target.select();
 
     return (
         <Dialog
@@ -339,7 +336,7 @@ export default function CreatShare(props) {
                             >
                                 <FormControl
                                     style={{
-                                        marginRight: 10
+                                        marginRight: 10,
                                     }}
                                 >
                                     <Select
@@ -368,7 +365,7 @@ export default function CreatShare(props) {
                                 <FormControl
                                     style={{
                                         marginRight: 10,
-                                        marginLeft: 10
+                                        marginLeft: 10,
                                     }}
                                 >
                                     <Select

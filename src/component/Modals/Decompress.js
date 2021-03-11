@@ -7,7 +7,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogContentText,
-    CircularProgress
+    CircularProgress,
 } from "@material-ui/core";
 import { toggleSnackbar, setModalsLoading } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
@@ -15,13 +15,13 @@ import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import { filePath } from "../../utils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     contentFix: {
-        padding: "10px 24px 0px 24px"
+        padding: "10px 24px 0px 24px",
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
@@ -29,8 +29,8 @@ const useStyles = makeStyles(theme => ({
         top: "50%",
         left: "50%",
         marginTop: -12,
-        marginLeft: -12
-    }
+        marginLeft: -12,
+    },
 }));
 
 export default function DecompressDialog(props) {
@@ -44,13 +44,13 @@ export default function DecompressDialog(props) {
         [dispatch]
     );
     const SetModalsLoading = useCallback(
-        status => {
+        (status) => {
             dispatch(setModalsLoading(status));
         },
         [dispatch]
     );
 
-    const setMoveTarget = folder => {
+    const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
@@ -59,21 +59,21 @@ export default function DecompressDialog(props) {
         setSelectedPathName(folder.name);
     };
 
-    const submitMove = e => {
+    const submitMove = (e) => {
         if (e != null) {
             e.preventDefault();
         }
         SetModalsLoading(true);
         API.post("/file/decompress", {
             src: filePath(props.selected[0]),
-            dst: selectedPath === "//" ? "/" : selectedPath
+            dst: selectedPath === "//" ? "/" : selectedPath,
         })
             .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "解压缩任务已创建", "success");
                 SetModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
                 SetModalsLoading(false);
             });

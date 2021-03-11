@@ -5,7 +5,7 @@ import {
     IconButton,
     makeStyles,
     Typography,
-    useTheme
+    useTheme,
 } from "@material-ui/core";
 import { sizeToString } from "../../utils";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
@@ -35,14 +35,14 @@ const ExpansionPanel = withStyles({
         maxWidth: "100%",
         boxShadow: "none",
         "&:not(:last-child)": {
-            borderBottom: 0
+            borderBottom: 0,
         },
         "&:before": {
-            display: "none"
+            display: "none",
         },
-        "&$expanded": {}
+        "&$expanded": {},
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
@@ -51,31 +51,31 @@ const ExpansionPanelSummary = withStyles({
         padding: 0,
 
         "&$expanded": {
-            minHeight: 56
-        }
+            minHeight: 56,
+        },
     },
     content: {
         maxWidth: "100%",
         margin: 0,
         display: "flex",
         "&$expanded": {
-            margin: "0"
-        }
+            margin: "0",
+        },
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanelSummary);
 
-const ExpansionPanelDetails = withStyles(theme => ({
+const ExpansionPanelDetails = withStyles((theme) => ({
     root: {
         display: "block",
-        padding: theme.spacing(0)
-    }
+        padding: theme.spacing(0),
+    },
 }))(MuiExpansionPanelDetails);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         marginTop: "20px",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     iconContainer: {
         width: "90px",
@@ -83,67 +83,67 @@ const useStyles = makeStyles(theme => ({
         padding: " 35px 29px 29px 29px",
         paddingLeft: "35px",
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     content: {
         width: "100%",
         minWidth: 0,
         [theme.breakpoints.up("sm")]: {
-            borderInlineStart: "1px " + theme.palette.divider + " solid"
+            borderInlineStart: "1px " + theme.palette.divider + " solid",
         },
-        textAlign: "left"
+        textAlign: "left",
     },
     contentSide: {
         minWidth: 0,
         paddingTop: "24px",
         paddingRight: "28px",
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     iconBig: {
-        fontSize: "30px"
+        fontSize: "30px",
     },
     iconMultiple: {
         fontSize: "30px",
-        color: "#607D8B"
+        color: "#607D8B",
     },
     progress: {
         marginTop: 8,
-        marginBottom: 4
+        marginBottom: 4,
     },
     expand: {
-        transition: ".15s transform ease-in-out"
+        transition: ".15s transform ease-in-out",
     },
     expanded: {
-        transform: "rotate(180deg)"
+        transform: "rotate(180deg)",
     },
     subFileName: {
-        display: "flex"
+        display: "flex",
     },
     subFileIcon: {
-        marginRight: "20px"
+        marginRight: "20px",
     },
     scroll: {
-        overflowY: "auto"
+        overflowY: "auto",
     },
     action: {
         padding: theme.spacing(2),
-        textAlign: "right"
+        textAlign: "right",
     },
     actionButton: {
-        marginLeft: theme.spacing(1)
+        marginLeft: theme.spacing(1),
     },
     info: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     infoTitle: {
-        fontWeight: 700
+        fontWeight: 700,
     },
     infoValue: {
-        color: theme.palette.text.secondary
-    }
+        color: theme.palette.text.secondary,
+    },
 }));
 
 export default function FinishedCard(props) {
@@ -178,7 +178,7 @@ export default function FinishedCard(props) {
             .then(() => {
                 ToggleSnackbar("top", "right", "删除成功", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -191,7 +191,7 @@ export default function FinishedCard(props) {
     }, [props.task.name]);
 
     const activeFiles = useCallback(() => {
-        return props.task.files.filter(v => v.selected === "true");
+        return props.task.files.filter((v) => v.selected === "true");
     }, [props.task.files]);
 
     const getIcon = useCallback(() => {
@@ -211,7 +211,7 @@ export default function FinishedCard(props) {
         }
     }, [props.task, classes]);
 
-    const getTaskError = error => {
+    const getTaskError = (error) => {
         try {
             const res = JSON.parse(error);
             return res.msg + "：" + res.error;
@@ -266,7 +266,7 @@ export default function FinishedCard(props) {
                                 <Typography
                                     variant="body2"
                                     style={{
-                                        color: theme.palette.success.main
+                                        color: theme.palette.success.main,
                                     }}
                                     noWrap
                                 >
@@ -278,7 +278,7 @@ export default function FinishedCard(props) {
                                 <Typography
                                     variant="body2"
                                     style={{
-                                        color: theme.palette.success.light
+                                        color: theme.palette.success.light,
                                     }}
                                     noWrap
                                 >
@@ -290,7 +290,7 @@ export default function FinishedCard(props) {
                                 <Typography
                                     variant="body2"
                                     style={{
-                                        color: theme.palette.success.light
+                                        color: theme.palette.success.light,
                                     }}
                                     noWrap
                                 >
@@ -313,7 +313,7 @@ export default function FinishedCard(props) {
                             <ExpandMore
                                 className={classNames(
                                     {
-                                        [classes.expanded]: expanded
+                                        [classes.expanded]: expanded,
                                     },
                                     classes.expand
                                 )}
@@ -327,7 +327,7 @@ export default function FinishedCard(props) {
                         <div className={classes.scroll}>
                             <Table>
                                 <TableBody>
-                                    {activeFiles().map(value => {
+                                    {activeFiles().map((value) => {
                                         return (
                                             <TableRow key={value.index}>
                                                 <TableCell

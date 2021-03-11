@@ -1,4 +1,4 @@
-export const sizeToString = bytes => {
+export const sizeToString = (bytes) => {
     if (bytes === 0 || bytes === "0") return "0 B";
     const k = 1024;
     const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
@@ -6,7 +6,7 @@ export const sizeToString = bytes => {
     return (bytes / Math.pow(k, i)).toFixed(1) + " " + sizes[i];
 };
 
-export const fixUrlHash = path => {
+export const fixUrlHash = (path) => {
     return path;
 };
 
@@ -55,21 +55,21 @@ export const allowSharePreview = () => {
     }
 };
 
-export const checkGetParameters = field => {
+export const checkGetParameters = (field) => {
     const url = window.location.href;
     if (url.indexOf("?" + field + "=") !== -1) return true;
     else if (url.indexOf("&" + field + "=") !== -1) return true;
     return false;
 };
 
-export const changeThemeColor = color => {
+export const changeThemeColor = (color) => {
     const metaThemeColor = window.document.querySelector(
         "meta[name=theme-color]"
     );
     metaThemeColor.setAttribute("content", color);
 };
 
-export const decode = c => {
+export const decode = (c) => {
     let e = c.height,
         a = c.width,
         b = document.createElement("canvas");
@@ -105,7 +105,7 @@ export const decode = c => {
     return e;
 };
 export function bufferDecode(value) {
-    return Uint8Array.from(atob(value), c => c.charCodeAt(0));
+    return Uint8Array.from(atob(value), (c) => c.charCodeAt(0));
 }
 
 // ArrayBuffer to URLBase64
@@ -131,9 +131,7 @@ export function filePath(file) {
 }
 
 export function hex2bin(hex) {
-    return parseInt(hex, 16)
-        .toString(2)
-        .padStart(8, "0");
+    return parseInt(hex, 16).toString(2).padStart(8, "0");
 }
 
 export function pathJoin(parts, sep) {
@@ -190,7 +188,7 @@ export function randomStr(length) {
 }
 
 export function getNumber(base, conditions) {
-    conditions.forEach(v => {
+    conditions.forEach((v) => {
         if (v) {
             base++;
         }

@@ -20,9 +20,9 @@ export default function EditGroupPreload() {
     useEffect(() => {
         setGroup({});
         API.get("/admin/group/" + id)
-            .then(response => {
+            .then((response) => {
                 // 布尔值转换
-                ["ShareEnabled", "WebDAVEnabled"].forEach(v => {
+                ["ShareEnabled", "WebDAVEnabled"].forEach((v) => {
                     response.data[v] = response.data[v] ? "true" : "false";
                 });
                 [
@@ -30,8 +30,8 @@ export default function EditGroupPreload() {
                     "archive_task",
                     "one_time_download",
                     "share_download",
-                    "aria2"
-                ].forEach(v => {
+                    "aria2",
+                ].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
                         response.data.OptionsSerialized[v] = response.data
                             .OptionsSerialized[v]
@@ -41,10 +41,10 @@ export default function EditGroupPreload() {
                 });
 
                 // 整型转换
-                ["MaxStorage", "SpeedLimit"].forEach(v => {
+                ["MaxStorage", "SpeedLimit"].forEach((v) => {
                     response.data[v] = response.data[v].toString();
                 });
-                ["compress_size", "decompress_size"].forEach(v => {
+                ["compress_size", "decompress_size"].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
                         response.data.OptionsSerialized[
                             v
@@ -75,7 +75,7 @@ export default function EditGroupPreload() {
                 }
                 setGroup(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, [id]);

@@ -30,12 +30,12 @@ import {
     openRenameDialog,
     openLoadingDialog,
     setSessionStatus,
-    openPreview
+    openPreview,
 } from "../../actions";
 import {
     allowSharePreview,
     checkGetParameters,
-    changeThemeColor
+    changeThemeColor,
 } from "../../utils";
 import Uploader from "../Upload/Uploader.js";
 import { sizeToString, vhCheck } from "../../utils";
@@ -61,7 +61,7 @@ import {
     ListItemText,
     List,
     Grow,
-    Tooltip
+    Tooltip,
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
@@ -74,7 +74,7 @@ vhCheck();
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         desktopOpen: state.viewUpdate.open,
         selected: state.explorer.selected,
@@ -86,19 +86,19 @@ const mapStateToProps = state => {
         title: state.siteConfig.title,
         subTitle: state.viewUpdate.subTitle,
         loadUploader: state.viewUpdate.loadUploader,
-        isLogin: state.viewUpdate.isLogin
+        isLogin: state.viewUpdate.isLogin,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        handleDesktopToggle: open => {
+        handleDesktopToggle: (open) => {
             dispatch(drawerToggleAction(open));
         },
-        setSelectedTarget: targets => {
+        setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
         },
-        navigateTo: path => {
+        navigateTo: (path) => {
             dispatch(navigateTo(path));
         },
         openCreateFolderDialog: () => {
@@ -107,7 +107,7 @@ const mapDispatchToProps = dispatch => {
         changeContextMenu: (type, open) => {
             dispatch(changeContextMenu(type, open));
         },
-        searchMyFile: keywords => {
+        searchMyFile: (keywords) => {
             dispatch(searchMyFile(keywords));
         },
         saveFile: () => {
@@ -116,7 +116,7 @@ const mapDispatchToProps = dispatch => {
         openMusicDialog: () => {
             dispatch(openMusicDialog());
         },
-        showImgPreivew: first => {
+        showImgPreivew: (first) => {
             dispatch(showImgPreivew(first));
         },
         toggleSnackbar: (vertical, horizontal, msg, color) => {
@@ -134,7 +134,7 @@ const mapDispatchToProps = dispatch => {
         openShareDialog: () => {
             dispatch(openShareDialog());
         },
-        openLoadingDialog: text => {
+        openLoadingDialog: (text) => {
             dispatch(openLoadingDialog(text));
         },
         setSessionStatus: () => {
@@ -142,146 +142,146 @@ const mapDispatchToProps = dispatch => {
         },
         openPreview: () => {
             dispatch(openPreview());
-        }
+        },
     };
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
     appBar: {
         marginLeft: drawerWidth,
         [theme.breakpoints.down("xs")]: {
-            marginLeft: drawerWidthMobile
+            marginLeft: drawerWidthMobile,
         },
         zIndex: theme.zIndex.drawer + 1,
-        transition: " background-color 250ms"
+        transition: " background-color 250ms",
     },
 
     drawer: {
         width: 0,
-        flexShrink: 0
+        flexShrink: 0,
     },
     drawerDesktop: {
         width: drawerWidth,
-        flexShrink: 0
+        flexShrink: 0,
     },
     icon: {
-        marginRight: theme.spacing(2)
+        marginRight: theme.spacing(2),
     },
     menuButton: {
         marginRight: 20,
         [theme.breakpoints.up("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     menuButtonDesktop: {
         marginRight: 20,
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     menuIcon: {
-        marginRight: 20
+        marginRight: 20,
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
-        width: drawerWidthMobile
+        width: drawerWidthMobile,
     },
     upDrawer: {
-        overflowX: "hidden"
+        overflowX: "hidden",
     },
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     drawerClose: {
         transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
+            duration: theme.transitions.duration.leavingScreen,
         }),
         overflowX: "hidden",
-        width: 0
+        width: 0,
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3)
+        padding: theme.spacing(3),
     },
     grow: {
-        flexGrow: 1
+        flexGrow: 1,
     },
     badge: {
         top: 1,
-        right: -15
+        right: -15,
     },
     nested: {
-        paddingLeft: theme.spacing(4)
+        paddingLeft: theme.spacing(4),
     },
     sectionForFile: {
-        display: "flex"
+        display: "flex",
     },
     extendedIcon: {
-        marginRight: theme.spacing(1)
+        marginRight: theme.spacing(1),
     },
     addButton: {
         marginLeft: "40px",
         marginTop: "25px",
-        marginBottom: "15px"
+        marginBottom: "15px",
     },
     fabButton: {
-        borderRadius: "100px"
+        borderRadius: "100px",
     },
     badgeFix: {
-        right: "10px"
+        right: "10px",
     },
     iconFix: {
-        marginLeft: "16px"
+        marginLeft: "16px",
     },
     dividerFix: {
-        marginTop: "8px"
+        marginTop: "8px",
     },
     folderShareIcon: {
         verticalAlign: "sub",
-        marginRight: "5px"
+        marginRight: "5px",
     },
     shareInfoContainer: {
         display: "flex",
         marginTop: "15px",
         marginBottom: "20px",
         marginLeft: "28px",
-        textDecoration: "none"
+        textDecoration: "none",
     },
     shareAvatar: {
         width: "40px",
-        height: "40px"
+        height: "40px",
     },
     stickFooter: {
         bottom: "0px",
         position: "absolute",
         backgroundColor: theme.palette.background.paper,
-        width: "100%"
+        width: "100%",
     },
     ownerInfo: {
         marginLeft: "10px",
-        width: "150px"
+        width: "150px",
     },
     minStickDrawer: {
         overflowY: "auto",
         [theme.breakpoints.up("sm")]: {
-            height: "calc(var(--vh, 100vh) - 145px)"
+            height: "calc(var(--vh, 100vh) - 145px)",
         },
 
         [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(var(--vh, 100vh) - 360px)"
-        }
-    }
+            minHeight: "calc(var(--vh, 100vh) - 360px)",
+        },
+    },
 });
 class NavbarCompoment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mobileOpen: false
+            mobileOpen: false,
         };
         this.UploaderRef = React.createRef();
     }
@@ -304,7 +304,7 @@ class NavbarCompoment extends Component {
         );
     }
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (
             (this.props.selected.length <= 1 &&
                 !(!this.props.isMultiple && this.props.withFile)) !==
@@ -325,7 +325,7 @@ class NavbarCompoment extends Component {
     };
 
     handleDrawerToggle = () => {
-        this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+        this.setState((state) => ({ mobileOpen: !state.mobileOpen }));
     };
 
     loadUploader = () => {
@@ -370,7 +370,7 @@ class NavbarCompoment extends Component {
                 window.location.reload();
                 this.props.setSessionStatus(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -895,7 +895,7 @@ class NavbarCompoment extends Component {
                         container={this.props.container}
                         variant="temporary"
                         classes={{
-                            paper: classes.drawerPaper
+                            paper: classes.drawerPaper,
                         }}
                         anchor="left"
                         open={this.state.mobileOpen}
@@ -905,7 +905,7 @@ class NavbarCompoment extends Component {
                         }
                         disableDiscovery={iOS}
                         ModalProps={{
-                            keepMounted: true // Better open performance on mobile.
+                            keepMounted: true, // Better open performance on mobile.
                         }}
                     >
                         {drawer}
@@ -916,12 +916,12 @@ class NavbarCompoment extends Component {
                         classes={{
                             paper: classNames({
                                 [classes.drawerOpen]: this.props.desktopOpen,
-                                [classes.drawerClose]: !this.props.desktopOpen
-                            })
+                                [classes.drawerClose]: !this.props.desktopOpen,
+                            }),
                         }}
                         className={classNames(classes.drawer, {
                             [classes.drawerOpen]: this.props.desktopOpen,
-                            [classes.drawerClose]: !this.props.desktopOpen
+                            [classes.drawerClose]: !this.props.desktopOpen,
                         })}
                         variant="persistent"
                         anchor="left"
@@ -937,7 +937,7 @@ class NavbarCompoment extends Component {
 }
 NavbarCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired
+    theme: PropTypes.object.isRequired,
 };
 
 const Navbar = connect(

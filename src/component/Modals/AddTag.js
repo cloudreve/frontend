@@ -6,7 +6,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    CircularProgress
+    CircularProgress,
 } from "@material-ui/core";
 import { toggleSnackbar } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
@@ -33,16 +33,16 @@ import {
     RhombusOutline,
     Square,
     SquareOutline,
-    Triangle
+    Triangle,
 } from "mdi-material-ui";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     contentFix: {
-        padding: "10px 24px 0px 24px"
+        padding: "10px 24px 0px 24px",
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
@@ -50,29 +50,29 @@ const useStyles = makeStyles(theme => ({
         top: "50%",
         left: "50%",
         marginTop: -12,
-        marginLeft: -12
+        marginLeft: -12,
     },
     content: {
         padding: 0,
-        marginTop: 0
+        marginTop: 0,
     },
     marginTop: {
         marginTop: theme.spacing(2),
-        display: "block"
+        display: "block",
     },
     textField: {
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     scroll: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     dialogContent: {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(2),
     },
     pathSelect: {
         marginTop: theme.spacing(2),
-        display: "flex"
-    }
+        display: "flex",
+    },
 }));
 
 const icons = {
@@ -88,7 +88,7 @@ const icons = {
     RhombusOutline: <RhombusOutline />,
     Square: <Square />,
     SquareOutline: <SquareOutline />,
-    Triangle: <Triangle />
+    Triangle: <Triangle />,
 };
 
 export default function AddTag(props) {
@@ -101,13 +101,13 @@ export default function AddTag(props) {
     const [input, setInput] = React.useState({
         filename: "",
         tagName: "",
-        path: "/"
+        path: "/",
     });
     const [pathSelectDialog, setPathSelectDialog] = React.useState(false);
     const [selectedPath, setSelectedPath] = useState("");
     // eslint-disable-next-line
     const [selectedPathName, setSelectedPathName] = useState("");
-    const setMoveTarget = folder => {
+    const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
@@ -132,10 +132,10 @@ export default function AddTag(props) {
         }
     };
 
-    const handleInputChange = name => event => {
+    const handleInputChange = (name) => (event) => {
         setInput({
             ...input,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
@@ -151,9 +151,9 @@ export default function AddTag(props) {
 
         API.post("/tag/link", {
             path: input.path,
-            name: input.tagName
+            name: input.tagName,
         })
-            .then(response => {
+            .then((response) => {
                 setLoading(false);
                 props.onClose();
                 props.onSuccess({
@@ -162,10 +162,10 @@ export default function AddTag(props) {
                     expression: input.path,
                     color: theme.palette.text.secondary,
                     icon: "FolderHeartOutline",
-                    id: response.data
+                    id: response.data,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -180,9 +180,9 @@ export default function AddTag(props) {
             expression: input.filename,
             name: input.tagName,
             color: color,
-            icon: alignment
+            icon: alignment,
         })
-            .then(response => {
+            .then((response) => {
                 setLoading(false);
                 props.onClose();
                 props.onSuccess({
@@ -190,10 +190,10 @@ export default function AddTag(props) {
                     name: input.tagName,
                     color: color,
                     icon: alignment,
-                    id: response.data
+                    id: response.data,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -210,7 +210,7 @@ export default function AddTag(props) {
     const selectPath = () => {
         setInput({
             ...input,
-            path: selectedPath === "//" ? "/" : selectedPath
+            path: selectedPath === "//" ? "/" : selectedPath,
         });
         setPathSelectDialog(false);
     };
@@ -331,7 +331,7 @@ export default function AddTag(props) {
                                 "#ff5722",
                                 "#795548",
                                 "#9e9e9e",
-                                "#607d8b"
+                                "#607d8b",
                             ].map((key, index) => (
                                 <ToggleButton key={index} value={key}>
                                     <Circle style={{ color: key }} />
@@ -364,7 +364,7 @@ export default function AddTag(props) {
                             onClick={() => setPathSelectDialog(true)}
                             style={{
                                 marginLeft: theme.spacing(1),
-                                alignSelf: "flex-end"
+                                alignSelf: "flex-end",
                             }}
                             color="primary"
                             variant="outlined"

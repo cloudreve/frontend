@@ -18,27 +18,27 @@ import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     container: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     tableContainer: {
-        marginTop: 16
+        marginTop: 16,
     },
     header: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
-    headerRight: {}
+    headerRight: {},
 }));
 
 const columns = [
@@ -49,20 +49,20 @@ const columns = [
         id: "count",
         label: "下属用户数",
         minWidth: 50,
-        align: "right"
+        align: "right",
     },
     {
         id: "size",
         label: "最大容量",
         minWidth: 100,
-        align: "right"
+        align: "right",
     },
     {
         id: "action",
         label: "操作",
         minWidth: 170,
-        align: "right"
-    }
+        align: "right",
+    },
 ];
 
 function useQuery() {
@@ -93,15 +93,15 @@ export default function Group() {
         API.post("/admin/group/list", {
             page: page,
             page_size: pageSize,
-            order_by: "id desc"
+            order_by: "id desc",
         })
-            .then(response => {
+            .then((response) => {
                 setGroups(response.data.items);
                 setStatics(response.data.statics);
                 setTotal(response.data.total);
                 setPolicies(response.data.policies);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -123,13 +123,13 @@ export default function Group() {
         loadList();
     }, [page, pageSize]);
 
-    const deletePolicy = id => {
+    const deletePolicy = (id) => {
         API.delete("/admin/group/" + id)
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户组已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -160,7 +160,7 @@ export default function Group() {
                     <Table aria-label="sticky table" size={"small"}>
                         <TableHead>
                             <TableRow style={{ height: 52 }}>
-                                {columns.map(column => (
+                                {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
@@ -172,7 +172,7 @@ export default function Group() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {groups.map(row => (
+                            {groups.map((row) => (
                                 <TableRow hover key={row.ID}>
                                     <TableCell>{row.ID}</TableCell>
                                     <TableCell>{row.Name}</TableCell>
@@ -237,7 +237,7 @@ export default function Group() {
                     rowsPerPage={pageSize}
                     page={page - 1}
                     onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={e => {
+                    onChangeRowsPerPage={(e) => {
                         setPageSize(e.target.value);
                         setPage(1);
                     }}

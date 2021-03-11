@@ -18,26 +18,26 @@ import API from "../../../middleware/Api";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
+            padding: "0px 24px 0 24px",
+        },
     },
     buttonMargin: {
-        marginLeft: 8
-    }
+        marginLeft: 8,
+    },
 }));
 
 export default function Mail() {
@@ -56,24 +56,24 @@ export default function Mail() {
         smtpEncryption: "",
         mail_keepalive: "30",
         mail_activation_template: "",
-        mail_reset_pwd_template: ""
+        mail_reset_pwd_template: "",
     });
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setOptions({
             ...options,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleCheckChange = name => event => {
+    const handleCheckChange = (name) => (event) => {
         let value = event.target.value;
         if (event.target.checked !== undefined) {
             value = event.target.checked ? "1" : "0";
         }
         setOptions({
             ...options,
-            [name]: value
+            [name]: value,
         });
     };
 
@@ -86,12 +86,12 @@ export default function Mail() {
 
     useEffect(() => {
         API.post("/admin/setting", {
-            keys: Object.keys(options)
+            keys: Object.keys(options),
         })
-            .then(response => {
+            .then((response) => {
                 setOptions(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line
@@ -100,12 +100,12 @@ export default function Mail() {
     const sendTestMail = () => {
         setLoading(true);
         API.post("/admin/mailTest", {
-            to: tesInput
+            to: tesInput,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "测试邮件已发送", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -117,31 +117,31 @@ export default function Mail() {
         API.get("/admin/reload/email")
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             .then(() => {})
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             .then(() => {});
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k => {
+        Object.keys(options).forEach((k) => {
             option.push({
                 key: k,
-                value: options[k]
+                value: options[k],
             });
         });
         API.patch("/admin/setting", {
-            options: option
+            options: option,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
                 reload();
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -173,7 +173,7 @@ export default function Mail() {
                         id="name"
                         label="收件人地址"
                         value={tesInput}
-                        onChange={e => setTestInput(e.target.value)}
+                        onChange={(e) => setTestInput(e.target.value)}
                         type="email"
                         fullWidth
                     />

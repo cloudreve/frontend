@@ -16,7 +16,7 @@ import {
     openCreateFolderDialog,
     openShareDialog,
     drawerToggleAction,
-    openCompressDialog
+    openCompressDialog,
 } from "../../../actions/index";
 import explorer from "../../../redux/explorer";
 import API from "../../../middleware/Api";
@@ -26,7 +26,7 @@ import {
     Divider,
     Menu,
     MenuItem,
-    ListItemIcon
+    ListItemIcon,
 } from "@material-ui/core";
 import PathButton from "./PathButton";
 import DropDown from "./DropDown";
@@ -39,20 +39,20 @@ import { FilePlus } from "mdi-material-ui";
 import { openCreateFileDialog } from "../../../actions";
 import SubActions from "./SubActions";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         path: state.navigator.path,
         refresh: state.navigator.refresh,
         drawerDesktopOpen: state.viewUpdate.open,
         viewMethod: state.viewUpdate.explorerViewMethod,
         keywords: state.explorer.keywords,
-        sortMethod: state.viewUpdate.sortMethod
+        sortMethod: state.viewUpdate.sortMethod,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        navigateToPath: path => {
+        navigateToPath: (path) => {
             dispatch(navigateTo(path));
         },
         navigateUp: () => {
@@ -61,16 +61,16 @@ const mapDispatchToProps = dispatch => {
         setNavigatorError: (status, msg) => {
             dispatch(setNavigatorError(status, msg));
         },
-        updateFileList: list => {
+        updateFileList: (list) => {
             dispatch(explorer.actions.updateFileList(list));
         },
-        setNavigatorLoadingStatus: status => {
+        setNavigatorLoadingStatus: (status) => {
             dispatch(setNavigatorLoadingStatus(status));
         },
         refreshFileList: () => {
             dispatch(refreshFileList());
         },
-        setSelectedTarget: target => {
+        setSelectedTarget: (target) => {
             dispatch(setSelectedTarget(target));
         },
         openCreateFolderDialog: () => {
@@ -82,50 +82,50 @@ const mapDispatchToProps = dispatch => {
         openShareDialog: () => {
             dispatch(openShareDialog());
         },
-        handleDesktopToggle: open => {
+        handleDesktopToggle: (open) => {
             dispatch(drawerToggleAction(open));
         },
         openCompressDialog: () => {
             dispatch(openCompressDialog());
-        }
+        },
     };
 };
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const styles = theme => ({
+const styles = (theme) => ({
     container: {
         [theme.breakpoints.down("xs")]: {
-            display: "none"
+            display: "none",
         },
         height: "49px",
         overflow: "hidden",
-        backgroundColor: theme.palette.background.paper
+        backgroundColor: theme.palette.background.paper,
     },
     navigatorContainer: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     nav: {
         height: "48px",
         padding: "5px 15px",
-        display: "flex"
+        display: "flex",
     },
     optionContainer: {
         paddingTop: "6px",
-        marginRight: "10px"
+        marginRight: "10px",
     },
     rightIcon: {
         marginTop: "6px",
         verticalAlign: "top",
-        color: "#868686"
+        color: "#868686",
     },
     expandMore: {
-        color: "#8d8d8d"
+        color: "#8d8d8d",
     },
     roundBorder: {
-        borderRadius: "4px 4px 0 0"
-    }
+        borderRadius: "4px 4px 0 0",
+    },
 });
 
 class NavigatorComponent extends Component {
@@ -138,7 +138,7 @@ class NavigatorComponent extends Component {
         folders: [],
         anchorEl: null,
         hiddenMode: false,
-        anchorHidden: null
+        anchorHidden: null,
     };
 
     constructor(props) {
@@ -172,7 +172,7 @@ class NavigatorComponent extends Component {
             folders:
                 path !== null
                     ? path.substr(1).split("/")
-                    : this.props.path.substr(1).split("/")
+                    : this.props.path.substr(1).split("/"),
         });
         let newPath = path !== null ? path : this.props.path;
         const apiURL = this.props.share
@@ -183,7 +183,7 @@ class NavigatorComponent extends Component {
         newPath = this.keywords === "" ? newPath : this.keywords;
 
         API.get(apiURL + encodeURIComponent(newPath))
-            .then(response => {
+            .then((response) => {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
@@ -196,20 +196,20 @@ class NavigatorComponent extends Component {
                     setGetParameter("path", encodeURIComponent(newPath));
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.setNavigatorError(true, error);
             });
 
         this.checkOverFlow(true);
     };
 
-    redresh = path => {
+    redresh = (path) => {
         this.props.setNavigatorLoadingStatus(true);
         this.props.setNavigatorError(false, "error");
         this.renderPath(path);
     };
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (this.props.keywords !== nextProps.keywords) {
             this.keywords = nextProps.keywords;
         }
@@ -234,7 +234,7 @@ class NavigatorComponent extends Component {
         }
     };
 
-    checkOverFlow = force => {
+    checkOverFlow = (force) => {
         if (this.overflowInitLock && !force) {
             return;
         }
@@ -280,11 +280,11 @@ class NavigatorComponent extends Component {
         this.setState({ anchorEl: null, anchorHidden: null, anchorSort: null });
     };
 
-    showHiddenPath = e => {
+    showHiddenPath = (e) => {
         this.setState({ anchorHidden: e.currentTarget });
     };
 
-    performAction = e => {
+    performAction = (e) => {
         this.handleClose();
         if (e === "refresh") {
             this.redresh();
@@ -296,8 +296,8 @@ class NavigatorComponent extends Component {
                 id: this.currentID,
                 type: "dir",
                 name: presentPath.pop(),
-                path: presentPath.length === 1 ? "/" : presentPath.join("/")
-            }
+                path: presentPath.length === 1 ? "/" : presentPath.join("/"),
+            },
         ];
         //this.props.navitateUp();
         switch (e) {
@@ -382,7 +382,7 @@ class NavigatorComponent extends Component {
             <div
                 className={classNames(
                     {
-                        [classes.roundBorder]: this.props.isShare
+                        [classes.roundBorder]: this.props.isShare,
                     },
                     classes.container
                 )}
@@ -393,7 +393,7 @@ class NavigatorComponent extends Component {
                             <PathButton
                                 folder="/"
                                 path="/"
-                                onClick={e => this.navigateTo(e, -1)}
+                                onClick={(e) => this.navigateTo(e, -1)}
                             />
                             <RightIcon className={classes.rightIcon} />
                         </span>
@@ -434,7 +434,7 @@ class NavigatorComponent extends Component {
                                             .join("/")
                                     }
                                     last={true}
-                                    onClick={e =>
+                                    onClick={(e) =>
                                         this.navigateTo(
                                             e,
                                             this.state.folders.length - 1
@@ -458,7 +458,7 @@ class NavigatorComponent extends Component {
                                                         .join("/")
                                                 }
                                                 last={id === folders.length - 1}
-                                                onClick={e =>
+                                                onClick={(e) =>
                                                     this.navigateTo(e, id)
                                                 }
                                             />
@@ -488,7 +488,7 @@ class NavigatorComponent extends Component {
 
 NavigatorComponent.propTypes = {
     classes: PropTypes.object.isRequired,
-    path: PropTypes.string.isRequired
+    path: PropTypes.string.isRequired,
 };
 
 const Navigator = connect(

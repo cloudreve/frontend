@@ -16,7 +16,7 @@ import API from "../../../middleware/Api";
 export default function FileFilter({ setFilter, setSearch, open, onClose }) {
     const [input, setInput] = useState({
         policy_id: "all",
-        user_id: ""
+        user_id: "",
     });
     const [policies, setPolicies] = useState([]);
     const [keywords, setKeywords] = useState("");
@@ -28,7 +28,7 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
         [dispatch]
     );
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setInput({ ...input, [name]: event.target.value });
     };
 
@@ -37,19 +37,19 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
             page: 1,
             page_size: 10000,
             order_by: "id asc",
-            conditions: {}
+            conditions: {},
         })
-            .then(response => {
+            .then((response) => {
                 setPolicies(response.data.items);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, []);
 
     const submit = () => {
         const res = {};
-        Object.keys(input).forEach(v => {
+        Object.keys(input).forEach((v) => {
             if (input[v] !== "all" && input[v] !== "") {
                 res[v] = input[v];
             }
@@ -57,7 +57,7 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
         setFilter(res);
         if (keywords !== "") {
             setSearch({
-                name: keywords
+                name: keywords,
             });
         } else {
             setSearch({});
@@ -87,7 +87,7 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
                         onChange={handleChange("policy_id")}
                     >
                         <MenuItem value={"all"}>全部</MenuItem>
-                        {policies.map(v => {
+                        {policies.map((v) => {
                             if (v.ID === 3) {
                                 return null;
                             }
@@ -110,7 +110,7 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
                 <FormControl fullWidth style={{ marginTop: 16 }}>
                     <TextField
                         value={keywords}
-                        onChange={e => setKeywords(e.target.value)}
+                        onChange={(e) => setKeywords(e.target.value)}
                         id="standard-basic"
                         label="搜索 文件名"
                     />

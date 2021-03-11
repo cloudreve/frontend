@@ -7,7 +7,7 @@ const loadedScript = [];
 const pendingScripts = {};
 let failedScript = [];
 
-const addCache = entry => {
+const addCache = (entry) => {
     if (loadedScript.indexOf(entry) < 0) {
         loadedScript.push(entry);
     }
@@ -15,7 +15,7 @@ const addCache = entry => {
 
 const removeFailedScript = () => {
     if (failedScript.length > 0) {
-        failedScript.forEach(script => {
+        failedScript.forEach((script) => {
             const node = document.querySelector(`script[src='${script}']`);
             if (node != null) {
                 node.parentNode.removeChild(node);
@@ -28,23 +28,23 @@ const removeFailedScript = () => {
 
 export function startLoadingScripts(scripts, onComplete = noop) {
     // sequence load
-    const loadNewScript = script => {
+    const loadNewScript = (script) => {
         const src = typeof script === "object" ? script.src : script;
         if (loadedScript.indexOf(src) < 0) {
-            return taskComplete => {
+            return (taskComplete) => {
                 const callbacks = pendingScripts[src] || [];
                 callbacks.push(taskComplete);
                 pendingScripts[src] = callbacks;
                 if (callbacks.length === 1) {
-                    return newScript(script)(err => {
-                        pendingScripts[src].forEach(cb => cb(err, src));
+                    return newScript(script)((err) => {
+                        pendingScripts[src].forEach((cb) => cb(err, src));
                         delete pendingScripts[src];
                     });
                 }
             };
         }
     };
-    const tasks = scripts.map(src => {
+    const tasks = scripts.map((src) => {
         if (Array.isArray(src)) {
             return src.map(loadNewScript);
         } else return loadNewScript(src);
@@ -58,20 +58,20 @@ export function startLoadingScripts(scripts, onComplete = noop) {
                 src.forEach(addCache);
             } else addCache(src);
         }
-    })(err => {
+    })((err) => {
         removeFailedScript();
         onComplete(err);
     });
 }
 
-const uploaderLoader = () => WrappedComponent => {
+const uploaderLoader = () => (WrappedComponent) => {
     class ScriptLoader extends Component {
         static propTypes = {
-            onScriptLoaded: PropTypes.func
+            onScriptLoaded: PropTypes.func,
         };
 
         static defaultProps = {
-            onScriptLoaded: noop
+            onScriptLoaded: noop,
         };
 
         constructor(props, context) {
@@ -79,7 +79,7 @@ const uploaderLoader = () => WrappedComponent => {
 
             this.state = {
                 isScriptLoaded: false,
-                isScriptLoadSucceed: false
+                isScriptLoadSucceed: false,
             };
 
             this._isMounted = false;
@@ -92,14 +92,14 @@ const uploaderLoader = () => WrappedComponent => {
                 ["/static/js/uploader/plupload.dev.js"],
                 ["/static/js/uploader/i18n/zh_CN.js"],
                 ["/static/js/uploader/ui.js"],
-                ["/static/js/uploader/uploader_" + window.policyType + ".js"]
+                ["/static/js/uploader/uploader_" + window.policyType + ".js"],
             ];
-            startLoadingScripts(scripts, err => {
+            startLoadingScripts(scripts, (err) => {
                 if (this._isMounted) {
                     this.setState(
                         {
                             isScriptLoaded: true,
-                            isScriptLoadSucceed: !err
+                            isScriptLoadSucceed: !err,
                         },
                         () => {
                             if (!err) {
@@ -123,7 +123,7 @@ const uploaderLoader = () => WrappedComponent => {
             const props = {
                 ...this.props,
                 ...this.state,
-                ref: "wrappedInstance"
+                ref: "wrappedInstance",
             };
 
             return <WrappedComponent {...props} />;

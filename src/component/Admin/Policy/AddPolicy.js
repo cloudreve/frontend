@@ -11,16 +11,16 @@ import RemoteGuide from "./Guid/RemoteGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
 import S3Guide from "./Guid/S3Guide";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
-    }
+        padding: theme.spacing(2),
+    },
 }));
 
 export default function AddPolicyParent() {

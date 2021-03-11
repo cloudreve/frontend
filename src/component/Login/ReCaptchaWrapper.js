@@ -74,7 +74,7 @@ export default class ReCAPTCHA extends React.Component {
                 size: this.props.size,
                 stoken: this.props.stoken,
                 hl: this.props.hl,
-                badge: this.props.badge
+                badge: this.props.badge,
             });
             this.captcha.appendChild(wrapper);
         }
@@ -160,7 +160,7 @@ ReCAPTCHA.propTypes = {
     size: PropTypes.oneOf(["compact", "normal", "invisible"]),
     stoken: PropTypes.string,
     hl: PropTypes.string,
-    badge: PropTypes.oneOf(["bottomright", "bottomleft", "inline"])
+    badge: PropTypes.oneOf(["bottomright", "bottomleft", "inline"]),
 };
 ReCAPTCHA.defaultProps = {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -169,5 +169,5 @@ ReCAPTCHA.defaultProps = {
     type: "image",
     tabindex: 0,
     size: "normal",
-    badge: "bottomright"
+    badge: "bottomright",
 };

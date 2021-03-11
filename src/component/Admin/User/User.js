@@ -26,36 +26,36 @@ import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import UserFilter from "../Dialogs/UserFilter";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     container: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     tableContainer: {
-        marginTop: 16
+        marginTop: 16,
     },
     header: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     headerRight: {},
     highlight:
         theme.palette.type === "light"
             ? {
                   color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
               }
             : {
                   color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark
+                  backgroundColor: theme.palette.secondary.dark,
               },
     visuallyHidden: {
         border: 0,
@@ -66,8 +66,8 @@ const useStyles = makeStyles(theme => ({
         padding: 0,
         position: "absolute",
         top: 20,
-        width: 1
-    }
+        width: 1,
+    },
 }));
 
 export default function Group() {
@@ -99,14 +99,14 @@ export default function Group() {
             page_size: pageSize,
             order_by: orderBy.join(" "),
             conditions: filter,
-            searches: search
+            searches: search,
         })
-            .then(response => {
+            .then((response) => {
                 setUsers(response.data.items);
                 setTotal(response.data.total);
                 setSelected([]);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -115,14 +115,14 @@ export default function Group() {
         loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
-    const deletePolicy = id => {
+    const deletePolicy = (id) => {
         setLoading(true);
         API.post("/admin/user/delete", { id: [id] })
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "用户已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -137,7 +137,7 @@ export default function Group() {
                 loadList();
                 ToggleSnackbar("top", "right", "用户已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -145,12 +145,12 @@ export default function Group() {
             });
     };
 
-    const block = id => {
+    const block = (id) => {
         setLoading(true);
         API.patch("/admin/user/ban/" + id)
-            .then(response => {
+            .then((response) => {
                 setUsers(
-                    users.map(v => {
+                    users.map((v) => {
                         if (v.ID === id) {
                             const newUser = { ...v, Status: response.data };
                             return newUser;
@@ -159,7 +159,7 @@ export default function Group() {
                     })
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -167,9 +167,9 @@ export default function Group() {
             });
     };
 
-    const handleSelectAllClick = event => {
+    const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = users.map(n => n.ID);
+            const newSelecteds = users.map((n) => n.ID);
             setSelected(newSelecteds);
             return;
         }
@@ -196,7 +196,7 @@ export default function Group() {
         setSelected(newSelected);
     };
 
-    const isSelected = id => selected.indexOf(id) !== -1;
+    const isSelected = (id) => selected.indexOf(id) !== -1;
 
     return (
         <div>
@@ -281,7 +281,7 @@ export default function Group() {
                                         }
                                         onChange={handleSelectAllClick}
                                         inputProps={{
-                                            "aria-label": "select all desserts"
+                                            "aria-label": "select all desserts",
                                         }}
                                     />
                                 </TableCell>
@@ -294,7 +294,7 @@ export default function Group() {
                                                 "id",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -321,7 +321,7 @@ export default function Group() {
                                                 "nick",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -348,7 +348,7 @@ export default function Group() {
                                                 "email",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -384,7 +384,7 @@ export default function Group() {
                                                 "storage",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -408,7 +408,7 @@ export default function Group() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users.map(row => (
+                            {users.map((row) => (
                                 <TableRow
                                     hover
                                     key={row.ID}
@@ -417,7 +417,7 @@ export default function Group() {
                                 >
                                     <TableCell padding="checkbox">
                                         <Checkbox
-                                            onClick={event =>
+                                            onClick={(event) =>
                                                 handleClick(event, row.ID)
                                             }
                                             checked={isSelected(row.ID)}
@@ -442,7 +442,7 @@ export default function Group() {
                                                 style={{
                                                     color:
                                                         theme.palette.success
-                                                            .main
+                                                            .main,
                                                 }}
                                                 variant={"body2"}
                                             >
@@ -524,7 +524,7 @@ export default function Group() {
                     rowsPerPage={pageSize}
                     page={page - 1}
                     onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={e => {
+                    onChangeRowsPerPage={(e) => {
                         setPageSize(e.target.value);
                         setPage(1);
                     }}

@@ -24,36 +24,36 @@ import { getTaskProgress, getTaskStatus, getTaskType } from "../../../config";
 import API from "../../../middleware/Api";
 import ShareFilter from "../Dialogs/ShareFilter";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     container: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     tableContainer: {
-        marginTop: 16
+        marginTop: 16,
     },
     header: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     headerRight: {},
     highlight:
         theme.palette.type === "light"
             ? {
                   color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
               }
             : {
                   color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark
+                  backgroundColor: theme.palette.secondary.dark,
               },
     visuallyHidden: {
         border: 0,
@@ -64,8 +64,8 @@ const useStyles = makeStyles(theme => ({
         padding: 0,
         position: "absolute",
         top: 20,
-        width: 1
-    }
+        width: 1,
+    },
 }));
 
 export default function Task() {
@@ -95,15 +95,15 @@ export default function Task() {
             page_size: pageSize,
             order_by: orderBy.join(" "),
             conditions: filter,
-            searches: search
+            searches: search,
         })
-            .then(response => {
+            .then((response) => {
                 setUsers(response.data.users);
                 setTasks(response.data.items);
                 setTotal(response.data.total);
                 setSelected([]);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -112,14 +112,14 @@ export default function Task() {
         loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
-    const deletePolicy = id => {
+    const deletePolicy = (id) => {
         setLoading(true);
         API.post("/admin/task/delete", { id: [id] })
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "任务已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -134,7 +134,7 @@ export default function Task() {
                 loadList();
                 ToggleSnackbar("top", "right", "任务已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -142,9 +142,9 @@ export default function Task() {
             });
     };
 
-    const handleSelectAllClick = event => {
+    const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = tasks.map(n => n.ID);
+            const newSelecteds = tasks.map((n) => n.ID);
             setSelected(newSelecteds);
             return;
         }
@@ -171,7 +171,7 @@ export default function Task() {
         setSelected(newSelected);
     };
 
-    const getError = error => {
+    const getError = (error) => {
         if (error === "") {
             return "-";
         }
@@ -183,7 +183,7 @@ export default function Task() {
         }
     };
 
-    const isSelected = id => selected.indexOf(id) !== -1;
+    const isSelected = (id) => selected.indexOf(id) !== -1;
 
     return (
         <div>
@@ -243,7 +243,7 @@ export default function Task() {
                                         }
                                         onChange={handleSelectAllClick}
                                         inputProps={{
-                                            "aria-label": "select all desserts"
+                                            "aria-label": "select all desserts",
                                         }}
                                     />
                                 </TableCell>
@@ -256,7 +256,7 @@ export default function Task() {
                                                 "id",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -298,7 +298,7 @@ export default function Task() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tasks.map(row => (
+                            {tasks.map((row) => (
                                 <TableRow
                                     hover
                                     key={row.ID}
@@ -307,7 +307,7 @@ export default function Task() {
                                 >
                                     <TableCell padding="checkbox">
                                         <Checkbox
-                                            onClick={event =>
+                                            onClick={(event) =>
                                                 handleClick(event, row.ID)
                                             }
                                             checked={isSelected(row.ID)}
@@ -376,7 +376,7 @@ export default function Task() {
                     rowsPerPage={pageSize}
                     page={page - 1}
                     onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={e => {
+                    onChangeRowsPerPage={(e) => {
                         setPageSize(e.target.value);
                         setPage(1);
                     }}

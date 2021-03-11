@@ -2,18 +2,18 @@ import React from "react";
 import { BulletList } from "react-content-loader";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     loader: {
-        width: "100%"
+        width: "100%",
         // padding: 40,
         // [theme.breakpoints.down("md")]: {
         //     width: "100%",
         //     padding: 10
         // }
-    }
+    },
 }));
 
-const MyLoader = props => (
+const MyLoader = (props) => (
     <BulletList
         backgroundColor={props.dark ? "#333" : "#f5f6f7"}
         foregroundColor={props.dark ? "#636363" : "#eee"}

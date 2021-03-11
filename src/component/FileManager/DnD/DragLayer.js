@@ -9,7 +9,7 @@ const layerStyles = {
     left: 0,
     top: 0,
     width: "100%",
-    height: "100%"
+    height: "100%",
 };
 
 function getItemStyles(
@@ -20,7 +20,7 @@ function getItemStyles(
 ) {
     if (!initialOffset || !currentOffset) {
         return {
-            display: "none"
+            display: "none",
         };
     }
     let { x, y } = currentOffset;
@@ -32,27 +32,27 @@ function getItemStyles(
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
-        WebkitTransform: transform
+        WebkitTransform: transform,
     };
 }
-const CustomDragLayer = props => {
+const CustomDragLayer = (props) => {
     const {
         itemType,
         isDragging,
         item,
         initialOffset,
         currentOffset,
-        pointerOffset
-    } = useDragLayer(monitor => ({
+        pointerOffset,
+    } = useDragLayer((monitor) => ({
         item: monitor.getItem(),
         itemType: monitor.getItemType(),
         initialOffset: monitor.getInitialSourceClientOffset(),
         currentOffset: monitor.getSourceClientOffset(),
         pointerOffset: monitor.getInitialClientOffset(),
-        isDragging: monitor.isDragging()
+        isDragging: monitor.isDragging(),
     }));
     const viewMethod = useSelector(
-        state => state.viewUpdate.explorerViewMethod
+        (state) => state.viewUpdate.explorerViewMethod
     );
     function renderItem() {
         switch (itemType) {

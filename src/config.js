@@ -5,7 +5,7 @@ export const imgPreviewSuffix = [
     "jpg",
     "jpeg",
     "svg",
-    "webp"
+    "webp",
 ];
 export const msDocPreviewSuffix = [
     "ppt",
@@ -14,7 +14,7 @@ export const msDocPreviewSuffix = [
     "doc",
     "docx",
     "xlsx",
-    "xls"
+    "xls",
 ];
 export const audioPreviewSuffix = ["mp3", "ogg"];
 export const videoPreviewSuffix = ["mp4", "mkv", "webm"];
@@ -41,7 +41,7 @@ export const codePreviewSuffix = {
     sh: "shell",
     sql: "sql",
     xml: "xml",
-    yaml: "yaml"
+    yaml: "yaml",
 };
 export const mediaType = {
     audio: ["mp3", "flac", "ape", "wav", "acc", "ogg"],
@@ -61,7 +61,7 @@ export const mediaType = {
     python: ["py"],
     cpp: ["cpp"],
     c: ["c"],
-    js: ["js", "jsx"]
+    js: ["js", "jsx"],
 };
 export const policyTypeMap = {
     local: "本机",
@@ -71,13 +71,10 @@ export const policyTypeMap = {
     oss: "阿里云 OSS",
     cos: "腾讯云",
     onedrive: "OneDrive",
-    s3: "Amazon S3"
+    s3: "Amazon S3",
 };
-export const isPreviewable = name => {
-    const suffix = name
-        .split(".")
-        .pop()
-        .toLowerCase();
+export const isPreviewable = (name) => {
+    const suffix = name.split(".").pop().toLowerCase();
     if (imgPreviewSuffix.indexOf(suffix) !== -1) {
         return "img";
     } else if (msDocPreviewSuffix.indexOf(suffix) !== -1) {
@@ -95,22 +92,16 @@ export const isPreviewable = name => {
     }
     return false;
 };
-export const isTorrent = name => {
-    const suffix = name
-        .split(".")
-        .pop()
-        .toLowerCase();
+export const isTorrent = (name) => {
+    const suffix = name.split(".").pop().toLowerCase();
     if (mediaType.torrent.indexOf(suffix) !== -1) {
         return true;
     }
     return false;
 };
 
-export const isCompressFile = name => {
-    const suffix = name
-        .split(".")
-        .pop()
-        .toLowerCase();
+export const isCompressFile = (name) => {
+    const suffix = name.split(".").pop().toLowerCase();
     return suffix === "zip";
 };
 
@@ -123,14 +114,14 @@ const taskProgress = [
     "下载中",
     "转存中",
     "索引中",
-    "插入中"
+    "插入中",
 ];
 
-export const getTaskStatus = status => {
+export const getTaskStatus = (status) => {
     return taskStatus[status];
 };
 
-export const getTaskType = status => {
+export const getTaskType = (status) => {
     return taskType[status];
 };
 

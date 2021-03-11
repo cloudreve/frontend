@@ -6,7 +6,7 @@ import {
     setSelectedTarget,
     setShareUserPopover,
     showImgPreivew,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions";
 import { withStyles, Typography } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
@@ -16,7 +16,7 @@ import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import pathHelper from "../../utils/page";
-const styles = theme => ({
+const styles = (theme) => ({
     layout: {
         width: "auto",
         marginTop: 30,
@@ -26,29 +26,29 @@ const styles = theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
         [theme.breakpoints.down("sm")]: {
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(1),
-            marginRight: theme.spacing(1)
-        }
+            marginRight: theme.spacing(1),
+        },
     },
     managerContainer: {
-        overflowY: "auto"
-    }
+        overflowY: "auto",
+    },
 });
 
 const ReadMe = React.lazy(() => import("./ReadMe"));
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         anchorEl: state.viewUpdate.shareUserPopoverAnchorEl,
-        fileList: state.explorer.fileList
+        fileList: state.explorer.fileList,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
@@ -56,18 +56,18 @@ const mapDispatchToProps = dispatch => {
         openMusicDialog: () => {
             dispatch(openMusicDialog());
         },
-        setSelectedTarget: targets => {
+        setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
         },
-        showImgPreivew: first => {
+        showImgPreivew: (first) => {
             dispatch(showImgPreivew(first));
         },
-        openResave: key => {
+        openResave: (key) => {
             dispatch(openResaveDialog(key));
         },
-        setShareUserPopover: e => {
+        setShareUserPopover: (e) => {
             dispatch(setShareUserPopover(e));
-        }
+        },
     };
 };
 
@@ -102,7 +102,7 @@ class SharedFolderComponent extends Component {
                     </Paper>
                 </ClickAwayListener>
                 {/* eslint-disable-next-line */}
-                {this.props.fileList.map(value => {
+                {this.props.fileList.map((value) => {
                     if (
                         (value.name.toLowerCase() === "readme.md" ||
                             value.name.toLowerCase() === "readme.txt") &&
@@ -119,11 +119,11 @@ class SharedFolderComponent extends Component {
                     onClose={() => this.props.setShareUserPopover(null)}
                     anchorOrigin={{
                         vertical: "bottom",
-                        horizontal: "center"
+                        horizontal: "center",
                     }}
                     transformOrigin={{
                         vertical: "top",
-                        horizontal: "center"
+                        horizontal: "center",
                     }}
                 >
                     <Typography>

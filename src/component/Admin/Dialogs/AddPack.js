@@ -14,8 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
     formContainer: {
-        margin: "8px 0 8px 0"
-    }
+        margin: "8px 0 8px 0",
+    },
 }));
 
 export default function AddPack({ open, onClose, onSubmit }) {
@@ -25,17 +25,17 @@ export default function AddPack({ open, onClose, onSubmit }) {
         size: "1073741824",
         time: "",
         price: "",
-        score: ""
+        score: "",
     });
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setPack({
             ...pack,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         const packCopy = { ...pack };
         packCopy.size = parseInt(packCopy.size);
@@ -99,7 +99,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={pack.time}
                                     onChange={handleChange("time")}
@@ -120,7 +120,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     type={"number"}
                                     inputProps={{
                                         min: 0.01,
-                                        step: 0.01
+                                        step: 0.01,
                                     }}
                                     value={pack.price}
                                     onChange={handleChange("price")}
@@ -141,7 +141,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     type={"number"}
                                     inputProps={{
                                         min: 0,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={pack.score}
                                     onChange={handleChange("score")}

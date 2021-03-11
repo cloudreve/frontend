@@ -13,17 +13,17 @@ import React, { useState } from "react";
 export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
     const [input, setInput] = useState({
         is_dir: "all",
-        user_id: ""
+        user_id: "",
     });
     const [keywords, setKeywords] = useState("");
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setInput({ ...input, [name]: event.target.value });
     };
 
     const submit = () => {
         const res = {};
-        Object.keys(input).forEach(v => {
+        Object.keys(input).forEach((v) => {
             if (input[v] !== "all" && input[v] !== "") {
                 res[v] = input[v];
             }
@@ -31,7 +31,7 @@ export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
         setFilter(res);
         if (keywords !== "") {
             setSearch({
-                source_name: keywords
+                source_name: keywords,
             });
         } else {
             setSearch({});
@@ -76,7 +76,7 @@ export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
                 <FormControl fullWidth style={{ marginTop: 16 }}>
                     <TextField
                         value={keywords}
-                        onChange={e => setKeywords(e.target.value)}
+                        onChange={(e) => setKeywords(e.target.value)}
                         id="standard-basic"
                         label="搜索 文件名"
                     />

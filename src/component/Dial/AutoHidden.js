@@ -9,7 +9,7 @@ function AutoHidden({ children, enable }) {
     const show = 50;
 
     useEffect(() => {
-        const handleNavigation = e => {
+        const handleNavigation = (e) => {
             const window = e.currentTarget;
 
             if (prev > window.scrollY) {
@@ -26,7 +26,7 @@ function AutoHidden({ children, enable }) {
             prev = window.scrollY;
         };
         if (enable) {
-            window.addEventListener("scroll", e => handleNavigation(e));
+            window.addEventListener("scroll", (e) => handleNavigation(e));
         }
         // eslint-disable-next-line
     }, [enable]);

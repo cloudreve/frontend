@@ -18,7 +18,7 @@ import {
     MagnetOn,
     ScriptText,
     WindowRestore,
-    ZipBox
+    ZipBox,
 } from "mdi-material-ui";
 import FileShowIcon from "@material-ui/icons/InsertDriveFile";
 import { lighten } from "@material-ui/core/styles";
@@ -28,80 +28,80 @@ import { Avatar } from "@material-ui/core";
 const icons = {
     audio: {
         color: "#651fff",
-        icon: AudioIcon
+        icon: AudioIcon,
     },
     video: {
         color: "#d50000",
-        icon: VideoIcon
+        icon: VideoIcon,
     },
     image: {
         color: "#d32f2f",
-        icon: ImageIcon
+        icon: ImageIcon,
     },
     pdf: {
         color: "#f44336",
-        icon: PdfIcon
+        icon: PdfIcon,
     },
     word: {
         color: "#538ce5",
-        icon: FileWordBox
+        icon: FileWordBox,
     },
     ppt: {
         color: "rgb(239, 99, 63)",
-        icon: FilePowerpointBox
+        icon: FilePowerpointBox,
     },
     excel: {
         color: "#4caf50",
-        icon: FileExcelBox
+        icon: FileExcelBox,
     },
     text: {
         color: "#607d8b",
-        icon: ScriptText
+        icon: ScriptText,
     },
     torrent: {
         color: "#5c6bc0",
-        icon: MagnetOn
+        icon: MagnetOn,
     },
     zip: {
         color: "#f9a825",
-        icon: ZipBox
+        icon: ZipBox,
     },
     excute: {
         color: "#1a237e",
-        icon: WindowRestore
+        icon: WindowRestore,
     },
     android: {
         color: "#8bc34a",
-        icon: Android
+        icon: Android,
     },
     file: {
         color: "#607d8b",
-        icon: FileShowIcon
+        icon: FileShowIcon,
     },
     php: {
         color: "#777bb3",
-        icon: LanguagePhp
+        icon: LanguagePhp,
     },
     go: {
         color: "#16b3da",
-        icon: LanguageGo
+        icon: LanguageGo,
     },
     python: {
         color: "#3776ab",
-        icon: LanguagePython
+        icon: LanguagePython,
     },
     c: {
         color: "#a8b9cc",
-        icon: LanguageC
+        icon: LanguageC,
     },
     cpp: {
         color: "#004482",
-        icon: LanguageCpp
+        icon: LanguageCpp,
     },
     js: {
         color: "#f4d003",
-        icon: LanguageJavascript
-    }
+        icon: LanguageJavascript,
+    },
 };
 
 const getColor = (theme, color) =>
@@ -109,15 +109,12 @@ const getColor = (theme, color) =>
 
 let color;
 
-const TypeIcon = props => {
+const TypeIcon = (props) => {
     const theme = useTheme();
 
-    const fileSuffix = props.fileName
-        .split(".")
-        .pop()
-        .toLowerCase();
+    const fileSuffix = props.fileName.split(".").pop().toLowerCase();
     let fileType = "file";
-    Object.keys(mediaType).forEach(k => {
+    Object.keys(mediaType).forEach((k) => {
         if (mediaType[k].indexOf(fileSuffix) !== -1) {
             fileType = k;
         }
@@ -134,13 +131,13 @@ const TypeIcon = props => {
                 <Avatar
                     className={props.className}
                     style={{
-                        backgroundColor: color
+                        backgroundColor: color,
                     }}
                 >
                     <IconComponent
                         className={props.iconClassName}
                         style={{
-                            color: theme.palette.background.paper
+                            color: theme.palette.background.paper,
                         }}
                     />
                 </Avatar>
@@ -149,7 +146,7 @@ const TypeIcon = props => {
                 <IconComponent
                     className={props.className}
                     style={{
-                        color: color
+                        color: color,
                     }}
                 />
             )}

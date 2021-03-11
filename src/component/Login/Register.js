@@ -15,11 +15,11 @@ import {
     InputLabel,
     Paper,
     Avatar,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
 import ReCaptcha from "./ReCaptcha";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "110px",
@@ -28,9 +28,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             width: 400,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 110
+        marginBottom: 110,
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -39,46 +39,46 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
             3
-        )}px`
+        )}px`,
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     submit: {
-        marginTop: theme.spacing(3)
+        marginTop: theme.spacing(3),
     },
     link: {
         marginTop: "20px",
         display: "flex",
         width: "100%",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     captchaContainer: {
         display: "flex",
         marginTop: "10px",
         [theme.breakpoints.down("sm")]: {
-            display: "block"
-        }
+            display: "block",
+        },
     },
     captchaPlaceholder: {
-        width: 200
+        width: 200,
     },
     buttonContainer: {
-        display: "flex"
+        display: "flex",
     },
     authnLink: {
         textAlign: "center",
-        marginTop: 16
+        marginTop: 16,
     },
     avatarSuccess: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main
-    }
+        backgroundColor: theme.palette.primary.main,
+    },
 }));
 
 function Register() {
@@ -86,19 +86,19 @@ function Register() {
         email: "",
         password: "",
         password_repeat: "",
-        captcha: ""
+        captcha: "",
     });
     const [loading, setLoading] = useState(false);
     const [emailActive, setEmailActive] = useState(false);
     const [captchaData, setCaptchaData] = useState(null);
 
-    const title = useSelector(state => state.siteConfig.title);
-    const regCaptcha = useSelector(state => state.siteConfig.regCaptcha);
+    const title = useSelector((state) => state.siteConfig.title);
+    const regCaptcha = useSelector((state) => state.siteConfig.regCaptcha);
     const useReCaptcha = useSelector(
-        state => state.siteConfig.captcha_IsUseReCaptcha
+        (state) => state.siteConfig.captcha_IsUseReCaptcha
     );
     const reCaptchaKey = useSelector(
-        state => state.siteConfig.captcha_ReCaptchaKey
+        (state) => state.siteConfig.captcha_ReCaptchaKey
     );
 
     const dispatch = useDispatch();
@@ -109,10 +109,10 @@ function Register() {
     );
     const history = useHistory();
 
-    const handleInputChange = name => e => {
+    const handleInputChange = (name) => (e) => {
         setInput({
             ...input,
-            [name]: e.target.value
+            [name]: e.target.value,
         });
     };
 
@@ -120,10 +120,10 @@ function Register() {
 
     const refreshCaptcha = useCallback(() => {
         API.get("/site/captcha")
-            .then(response => {
+            .then((response) => {
                 setCaptchaData(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -133,7 +133,7 @@ function Register() {
             });
     }, []);
 
-    const register = e => {
+    const register = (e) => {
         e.preventDefault();
 
         if (input.password !== input.password_repeat) {
@@ -145,9 +145,9 @@ function Register() {
         API.post("/user", {
             userName: input.email,
             Password: input.password,
-            captchaCode: input.captcha
+            captchaCode: input.captcha,
         })
-            .then(response => {
+            .then((response) => {
                 setLoading(false);
                 if (response.rawData.code === 203) {
                     setEmailActive(true);
@@ -156,7 +156,7 @@ function Register() {
                     ToggleSnackbar("top", "right", "注册成功", "success");
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
                 if (!useReCaptcha) {
@@ -276,10 +276,10 @@ function Register() {
                                         <ReCaptcha
                                             style={{ display: "inline-block" }}
                                             sitekey={reCaptchaKey}
-                                            onChange={value =>
+                                            onChange={(value) =>
                                                 setInput({
                                                     ...input,
-                                                    captcha: value
+                                                    captcha: value,
                                                 })
                                             }
                                             id="captcha"

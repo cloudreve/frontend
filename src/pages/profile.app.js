@@ -6,16 +6,16 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import Profile from "../component/Setting/Profile";
 import { CssBaseline, withStyles, MuiThemeProvider } from "@material-ui/core";
 const theme = createMuiTheme(window.colorTheme);
-const styles = theme => ({
+const styles = (theme) => ({
     root: {
-        display: "flex"
+        display: "flex",
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(0),
-        minWidth: 0
+        minWidth: 0,
     },
-    toolbar: theme.mixins.toolbar
+    toolbar: theme.mixins.toolbar,
 });
 
 class ProfileApp extends Component {
@@ -40,7 +40,7 @@ class ProfileApp extends Component {
 }
 
 ProfileApp.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ProfileApp);

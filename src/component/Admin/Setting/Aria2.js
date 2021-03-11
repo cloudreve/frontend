@@ -12,23 +12,23 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
-    }
+            padding: "0px 24px 0 24px",
+        },
+    },
 }));
 
 export default function Aria2() {
@@ -40,13 +40,13 @@ export default function Aria2() {
         aria2_temp_path: "",
         aria2_options: "",
         aria2_interval: "0",
-        aria2_call_timeout: "0"
+        aria2_call_timeout: "0",
     });
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setOptions({
             ...options,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
@@ -59,12 +59,12 @@ export default function Aria2() {
 
     useEffect(() => {
         API.post("/admin/setting", {
-            keys: Object.keys(options)
+            keys: Object.keys(options),
         })
-            .then(response => {
+            .then((response) => {
                 setOptions(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line
@@ -74,7 +74,7 @@ export default function Aria2() {
         API.get("/admin/reload/aria2")
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             .then(() => {})
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -85,9 +85,9 @@ export default function Aria2() {
         setLoading(true);
         API.post("/admin/aria2/test", {
             server: options.aria2_rpcurl,
-            token: options.aria2_token
+            token: options.aria2_token,
         })
-            .then(response => {
+            .then((response) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -95,7 +95,7 @@ export default function Aria2() {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -103,24 +103,24 @@ export default function Aria2() {
             });
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k => {
+        Object.keys(options).forEach((k) => {
             option.push({
                 key: k,
-                value: options[k]
+                value: options[k],
             });
         });
         API.patch("/admin/setting", {
-            options: option
+            options: option,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
                 reload();
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -224,7 +224,7 @@ export default function Aria2() {
                                     type={"number"}
                                     inputProps={{
                                         step: 1,
-                                        min: 1
+                                        min: 1,
                                     }}
                                     required
                                     value={options.aria2_interval}
@@ -245,7 +245,7 @@ export default function Aria2() {
                                     type={"number"}
                                     inputProps={{
                                         step: 1,
-                                        min: 1
+                                        min: 1,
                                     }}
                                     required
                                     value={options.aria2_call_timeout}

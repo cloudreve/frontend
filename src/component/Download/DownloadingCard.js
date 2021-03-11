@@ -7,7 +7,7 @@ import {
     LinearProgress,
     makeStyles,
     Typography,
-    useTheme
+    useTheme,
 } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
@@ -39,14 +39,14 @@ const ExpansionPanel = withStyles({
         maxWidth: "100%",
         boxShadow: "none",
         "&:not(:last-child)": {
-            borderBottom: 0
+            borderBottom: 0,
         },
         "&:before": {
-            display: "none"
+            display: "none",
         },
-        "&$expanded": {}
+        "&$expanded": {},
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
@@ -55,31 +55,31 @@ const ExpansionPanelSummary = withStyles({
         padding: 0,
 
         "&$expanded": {
-            minHeight: 56
-        }
+            minHeight: 56,
+        },
     },
     content: {
         maxWidth: "100%",
         margin: 0,
         display: "flex",
         "&$expanded": {
-            margin: "0"
-        }
+            margin: "0",
+        },
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanelSummary);
 
-const ExpansionPanelDetails = withStyles(theme => ({
+const ExpansionPanelDetails = withStyles((theme) => ({
     root: {
         display: "block",
-        padding: theme.spacing(0)
-    }
+        padding: theme.spacing(0),
+    },
 }))(MuiExpansionPanelDetails);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         marginTop: "20px",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     iconContainer: {
         width: "90px",
@@ -87,71 +87,71 @@ const useStyles = makeStyles(theme => ({
         padding: " 35px 29px 29px 29px",
         paddingLeft: "35px",
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     content: {
         width: "100%",
         minWidth: 0,
         [theme.breakpoints.up("sm")]: {
-            borderInlineStart: "1px " + theme.palette.divider + " solid"
-        }
+            borderInlineStart: "1px " + theme.palette.divider + " solid",
+        },
     },
     contentSide: {
         minWidth: 0,
         paddingTop: "24px",
         paddingRight: "28px",
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     iconBig: {
-        fontSize: "30px"
+        fontSize: "30px",
     },
     iconMultiple: {
         fontSize: "30px",
-        color: "#607D8B"
+        color: "#607D8B",
     },
     progress: {
         marginTop: 8,
-        marginBottom: 4
+        marginBottom: 4,
     },
     expand: {
-        transition: ".15s transform ease-in-out"
+        transition: ".15s transform ease-in-out",
     },
     expanded: {
-        transform: "rotate(180deg)"
+        transform: "rotate(180deg)",
     },
     subFileName: {
-        display: "flex"
+        display: "flex",
     },
     subFileIcon: {
-        marginRight: "20px"
+        marginRight: "20px",
     },
     scroll: {
-        overflowY: "auto"
+        overflowY: "auto",
     },
     action: {
         padding: theme.spacing(2),
-        textAlign: "right"
+        textAlign: "right",
     },
     actionButton: {
-        marginLeft: theme.spacing(1)
+        marginLeft: theme.spacing(1),
     },
     info: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     infoTitle: {
-        fontWeight: 700
+        fontWeight: 700,
     },
     infoValue: {
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     bitmap: {
         width: "100%",
         height: "50px",
-        backgroundColor: theme.palette.background.default
-    }
+        backgroundColor: theme.palette.background.default,
+    },
 }));
 
 export default function DownloadingCard(props) {
@@ -166,7 +166,7 @@ export default function DownloadingCard(props) {
     const [selectDialogOpen, setSelectDialogOpen] = React.useState(false);
     const [selectFileOption, setSelectFileOption] = React.useState([]);
 
-    const handleChange = panel => (event, newExpanded) => {
+    const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
 
@@ -186,7 +186,7 @@ export default function DownloadingCard(props) {
             return;
         }
         let result = "";
-        task.info.bitfield.match(/.{1,2}/g).forEach(str => {
+        task.info.bitfield.match(/.{1,2}/g).forEach((str) => {
             result += hex2bin(str);
         });
         const canvas = canvasRef.current;
@@ -217,43 +217,43 @@ export default function DownloadingCard(props) {
     };
 
     const activeFiles = useCallback(() => {
-        return task.info.files.filter(v => v.selected === "true");
+        return task.info.files.filter((v) => v.selected === "true");
     }, [task.info.files]);
 
-    const deleteFile = index => {
+    const deleteFile = (index) => {
         setLoading(true);
         const current = activeFiles();
         const newIndex = [];
         const newFiles = [];
         // eslint-disable-next-line
-        current.map(v => {
+        current.map((v) => {
             if (v.index !== index && v.selected) {
                 newIndex.push(parseInt(v.index));
                 newFiles.push({
                     ...v,
-                    selected: "true"
+                    selected: "true",
                 });
             } else {
                 newFiles.push({
                     ...v,
-                    selected: "false"
+                    selected: "false",
                 });
             }
         });
         API.put("/aria2/select/" + task.info.gid, {
-            indexes: newIndex
+            indexes: newIndex,
         })
             .then(() => {
                 setTask({
                     ...task,
                     info: {
                         ...task.info,
-                        files: newFiles
-                    }
+                        files: newFiles,
+                    },
                 });
                 ToggleSnackbar("top", "right", "文件已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -297,7 +297,7 @@ export default function DownloadingCard(props) {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -305,10 +305,10 @@ export default function DownloadingCard(props) {
             });
     };
 
-    const changeSelectedFile = fileIndex => {
+    const changeSelectedFile = (fileIndex) => {
         setLoading(true);
         API.put("/aria2/select/" + task.info.gid, {
-            indexes: fileIndex
+            indexes: fileIndex,
         })
             .then(() => {
                 ToggleSnackbar(
@@ -319,7 +319,7 @@ export default function DownloadingCard(props) {
                 );
                 setSelectDialogOpen(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -392,7 +392,7 @@ export default function DownloadingCard(props) {
                                 className={classNames(
                                     {
                                         [classes.expanded]:
-                                            expanded === task.info.gid
+                                            expanded === task.info.gid,
                                     },
                                     classes.expand
                                 )}
@@ -406,7 +406,7 @@ export default function DownloadingCard(props) {
                         <div className={classes.scroll}>
                             <Table size="small">
                                 <TableBody>
-                                    {activeFiles().map(value => {
+                                    {activeFiles().map((value) => {
                                         return (
                                             <TableRow
                                                 key={value.index}
@@ -458,7 +458,7 @@ export default function DownloadingCard(props) {
                                                         "%," +
                                                         theme.palette.background
                                                             .paper +
-                                                        " 100%)"
+                                                        " 100%)",
                                                 }}
                                             >
                                                 <TableCell
@@ -550,7 +550,7 @@ export default function DownloadingCard(props) {
                                 onClick={() => {
                                     setSelectDialogOpen(true);
                                     setSelectFileOption([
-                                        ...props.task.info.files
+                                        ...props.task.info.files,
                                     ]);
                                 }}
                             >
@@ -622,7 +622,7 @@ export default function DownloadingCard(props) {
                                             sm={10}
                                             xs={8}
                                             style={{
-                                                wordBreak: "break-all"
+                                                wordBreak: "break-all",
                                             }}
                                             className={classes.infoValue}
                                         >

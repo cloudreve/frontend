@@ -9,28 +9,28 @@ import {
     ListItemIcon,
     ListItemText,
     List,
-    Hidden
+    Hidden,
 } from "@material-ui/core";
 const drawerWidth = 240;
-const styles = theme => ({
+const styles = (theme) => ({
     drawer: {
         [theme.breakpoints.up("sm")]: {
             width: drawerWidth,
-            flexShrink: 0
-        }
+            flexShrink: 0,
+        },
     },
     drawerPaper: {
-        width: drawerWidth
+        width: drawerWidth,
     },
-    toolbar: theme.mixins.toolbar
+    toolbar: theme.mixins.toolbar,
 });
 class SideDrawer extends Component {
     state = {
-        mobileOpen: false
+        mobileOpen: false,
     };
 
     handleDrawerToggle = () => {
-        this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+        this.setState((state) => ({ mobileOpen: !state.mobileOpen }));
     };
 
     upload() {
@@ -63,13 +63,13 @@ class SideDrawer extends Component {
                         container={this.props.container}
                         variant="temporary"
                         classes={{
-                            paper: classes.drawerPaper
+                            paper: classes.drawerPaper,
                         }}
                         anchor="left"
                         open={this.state.mobileOpen}
                         onClose={this.handleDrawerToggle}
                         ModalProps={{
-                            keepMounted: true // Better open performance on mobile.
+                            keepMounted: true, // Better open performance on mobile.
                         }}
                     >
                         {drawer}
@@ -78,7 +78,7 @@ class SideDrawer extends Component {
                 <Hidden xsDown implementation="css">
                     <Drawer
                         classes={{
-                            paper: classes.drawerPaper
+                            paper: classes.drawerPaper,
                         }}
                         variant="permanent"
                         open
@@ -91,7 +91,7 @@ class SideDrawer extends Component {
     }
 }
 SideDrawer.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(SideDrawer);

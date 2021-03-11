@@ -10,7 +10,7 @@ import Editor from "for-editor";
 import SaveButton from "../Dial/Save";
 import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "30px",
@@ -19,22 +19,22 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 50
+        marginBottom: 50,
     },
     player: {
-        borderRadius: "4px"
+        borderRadius: "4px",
     },
     root: {
         backgroundColor: "white",
-        borderRadius: "8px"
+        borderRadius: "8px",
     },
     "@global": {
         ".for-toolbar": {
-            overflowX: "auto!important"
-        }
-    }
+            overflowX: "auto!important",
+        },
+    },
 }));
 
 function useQuery() {
@@ -52,9 +52,10 @@ export default function TextViewer() {
     const { id } = useParams();
 
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
-        dispatch
-    ]);
+    const SetSubTitle = useCallback(
+        (title) => dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
@@ -83,12 +84,12 @@ export default function TextViewer() {
 
         setLoading(true);
         API.get(requestURL, { responseType: "arraybuffer" })
-            .then(response => {
+            .then((response) => {
                 const buffer = new Buffer(response.rawData, "binary");
                 const textdata = buffer.toString(); // for string
                 setContent(textdata);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -102,12 +103,12 @@ export default function TextViewer() {
         // eslint-disable-next-line
     }, [math.params[0]]);
 
-    const toBase64 = file =>
+    const toBase64 = (file) =>
         new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            reader.onerror = (error) => reject(error);
         });
 
     const save = () => {
@@ -117,13 +118,13 @@ export default function TextViewer() {
                 setStatus("success");
                 setTimeout(() => setStatus(""), 2000);
             })
-            .catch(error => {
+            .catch((error) => {
                 setStatus("");
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
 
-    const addImg = async $file => {
+    const addImg = async ($file) => {
         $vm.current.$img2Url($file.name, await toBase64($file));
         console.log($file);
     };
@@ -138,8 +139,8 @@ export default function TextViewer() {
                         ref={$vm}
                         value={content}
                         onSave={() => save()}
-                        addImg={$file => addImg($file)}
-                        onChange={value => setContent(value)}
+                        addImg={($file) => addImg($file)}
+                        onChange={(value) => setContent(value)}
                         toolbar={{
                             h1: true, // h1
                             h2: true, // h2
@@ -155,7 +156,7 @@ export default function TextViewer() {
                             redo: true, // 重做
                             save: false, // 保存
                             /* v0.2.3 */
-                            subfield: true // 单双栏模式
+                            subfield: true, // 单双栏模式
                         }}
                     />
                 )}

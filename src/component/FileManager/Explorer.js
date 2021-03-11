@@ -8,7 +8,7 @@ import {
     TableHead,
     TableRow,
     Typography,
-    withStyles
+    withStyles,
 } from "@material-ui/core";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
@@ -24,7 +24,7 @@ import {
     navigateTo,
     navigateUp,
     openRemoveDialog,
-    setSelectedTarget
+    setSelectedTarget,
 } from "../../actions/index";
 import explorer from "../../redux/explorer";
 import { isMac } from "../../utils";
@@ -33,12 +33,12 @@ import ContextMenu from "./ContextMenu";
 import ImgPreivew from "./ImgPreview";
 import ObjectIcon from "./ObjectIcon";
 
-const styles = theme => ({
+const styles = (theme) => ({
     paper: {
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        margin: "10px"
+        margin: "10px",
     },
     root: {
         flexGrow: 1,
@@ -47,38 +47,38 @@ const styles = theme => ({
         height: "calc(100vh - 113px)",
         [theme.breakpoints.up("sm")]: {
             overflowY: "auto",
-            height: "calc(100vh - 113px)"
+            height: "calc(100vh - 113px)",
         },
         [theme.breakpoints.down("sm")]: {
-            height: "100%"
-        }
+            height: "100%",
+        },
     },
     rootTable: {
         padding: "0px",
         backgroundColor: theme.palette.background.paper.white,
         [theme.breakpoints.up("sm")]: {
             overflowY: "auto",
-            height: "calc(100vh - 113px)"
+            height: "calc(100vh - 113px)",
         },
         [theme.breakpoints.down("sm")]: {
-            height: "100%"
-        }
+            height: "100%",
+        },
     },
     typeHeader: {
         margin: "10px 25px",
         color: "#6b6b6b",
-        fontWeight: "500"
+        fontWeight: "500",
     },
     loading: {
         justifyContent: "center",
         display: "flex",
-        marginTop: "40px"
+        marginTop: "40px",
     },
     errorBox: {
-        padding: theme.spacing(4)
+        padding: theme.spacing(4),
     },
     errorMsg: {
-        marginTop: "10px"
+        marginTop: "10px",
     },
     emptyContainer: {
         bottom: "0",
@@ -87,38 +87,38 @@ const styles = theme => ({
         width: "300px",
         color: theme.palette.text.disabled,
         textAlign: "center",
-        paddingTop: "20px"
+        paddingTop: "20px",
     },
     emptyIcon: {
-        fontSize: "160px"
+        fontSize: "160px",
     },
     emptyInfoBig: {
         fontSize: "25px",
-        color: theme.palette.text.disabled
+        color: theme.palette.text.disabled,
     },
     emptyInfoSmall: {
-        color: theme.palette.text.hint
+        color: theme.palette.text.hint,
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     flexFix: {
-        minWidth: 0
+        minWidth: 0,
     },
     upButton: {
         marginLeft: "20px",
         marginTop: "10px",
-        marginBottom: "10px"
+        marginBottom: "10px",
     },
     clickAway: {
         height: "100%",
-        width: "100%"
+        width: "100%",
     },
     rootShare: {
         height: "100%",
-        minHeight: 500
+        minHeight: 500,
     },
     visuallyHidden: {
         border: 0,
@@ -129,11 +129,11 @@ const styles = theme => ({
         padding: 0,
         position: "absolute",
         top: 20,
-        width: 1
-    }
+        width: 1,
+    },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         path: state.navigator.path,
         drawerDesktopOpen: state.viewUpdate.open,
@@ -145,13 +145,13 @@ const mapStateToProps = state => {
         navigatorError: state.viewUpdate.navigatorError,
         navigatorErrorMsg: state.viewUpdate.navigatorErrorMsg,
         keywords: state.explorer.keywords,
-        selected: state.explorer.selected
+        selected: state.explorer.selected,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        navigateToPath: path => {
+        navigateToPath: (path) => {
             dispatch(navigateTo(path));
         },
 
@@ -161,15 +161,15 @@ const mapDispatchToProps = dispatch => {
         navigateUp: () => {
             dispatch(navigateUp());
         },
-        setSelectedTarget: targets => {
+        setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
         },
         openRemoveDialog: () => {
             dispatch(openRemoveDialog());
         },
-        changeSort: method => {
+        changeSort: (method) => {
             dispatch(explorer.actions.changeSortMethod(method));
-        }
+        },
     };
 };
 
@@ -178,7 +178,7 @@ class ExplorerCompoment extends Component {
         super();
         this.keyMap = {
             DELETE_FILE: "del",
-            SELECT_ALL: `${isMac() ? "command" : "ctrl"}+a`
+            SELECT_ALL: `${isMac() ? "command" : "ctrl"}+a`,
         };
 
         this.handlers = {
@@ -187,7 +187,7 @@ class ExplorerCompoment extends Component {
                     this.props.openRemoveDialog();
                 }
             },
-            SELECT_ALL: e => {
+            SELECT_ALL: (e) => {
                 e.preventDefault();
                 if (
                     this.props.selected.length >=
@@ -197,18 +197,18 @@ class ExplorerCompoment extends Component {
                 } else {
                     this.props.setSelectedTarget([
                         ...this.props.dirList,
-                        ...this.props.fileList
+                        ...this.props.fileList,
                     ]);
                 }
-            }
+            },
         };
 
         configure({
-            ignoreTags: ["input", "select", "textarea"]
+            ignoreTags: ["input", "select", "textarea"],
         });
     }
 
-    contextMenu = e => {
+    contextMenu = (e) => {
         e.preventDefault();
         if (
             this.props.keywords === "" &&
@@ -224,7 +224,7 @@ class ExplorerCompoment extends Component {
         this.away = 0;
     }
 
-    ClickAway = e => {
+    ClickAway = (e) => {
         const element = e.target;
         if (element.dataset.clickaway) {
             this.props.setSelectedTarget([]);
@@ -340,7 +340,7 @@ class ExplorerCompoment extends Component {
                         <ObjectIcon
                             file={{
                                 type: "up",
-                                name: "上级目录"
+                                name: "上级目录",
                             }}
                         />
                     )}
@@ -435,7 +435,7 @@ class ExplorerCompoment extends Component {
                     {
                         [classes.root]: this.props.viewMethod !== "list",
                         [classes.rootTable]: this.props.viewMethod === "list",
-                        [classes.rootShare]: this.props.share
+                        [classes.rootShare]: this.props.share,
                     },
                     classes.button
                 )}
@@ -504,7 +504,7 @@ class ExplorerCompoment extends Component {
 
 ExplorerCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
-    path: PropTypes.string.isRequired
+    path: PropTypes.string.isRequired,
 };
 
 const Explorer = connect(

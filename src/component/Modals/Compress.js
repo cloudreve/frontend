@@ -7,7 +7,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogContentText,
-    CircularProgress
+    CircularProgress,
 } from "@material-ui/core";
 import { toggleSnackbar, setModalsLoading } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
@@ -15,14 +15,14 @@ import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import TextField from "@material-ui/core/TextField";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     contentFix: {
         padding: "10px 24px 0px 24px",
-        backgroundColor: theme.palette.background.default
+        backgroundColor: theme.palette.background.default,
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
@@ -30,8 +30,8 @@ const useStyles = makeStyles(theme => ({
         top: "50%",
         left: "50%",
         marginTop: -12,
-        marginLeft: -12
-    }
+        marginLeft: -12,
+    },
 }));
 
 export default function CompressDialog(props) {
@@ -49,13 +49,13 @@ export default function CompressDialog(props) {
     );
 
     const SetModalsLoading = useCallback(
-        status => {
+        (status) => {
             dispatch(setModalsLoading(status));
         },
         [dispatch]
     );
 
-    const setMoveTarget = folder => {
+    const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
@@ -64,7 +64,7 @@ export default function CompressDialog(props) {
         setSelectedPathName(folder.name);
     };
 
-    const submitMove = e => {
+    const submitMove = (e) => {
         if (e != null) {
             e.preventDefault();
         }
@@ -73,7 +73,7 @@ export default function CompressDialog(props) {
         const dirs = [],
             items = [];
         // eslint-disable-next-line
-        props.selected.map(value => {
+        props.selected.map((value) => {
             if (value.type === "dir") {
                 dirs.push(value.id);
             } else {
@@ -84,17 +84,17 @@ export default function CompressDialog(props) {
         API.post("/file/compress", {
             src: {
                 dirs: dirs,
-                items: items
+                items: items,
             },
             name: fileName,
-            dst: selectedPath === "//" ? "/" : selectedPath
+            dst: selectedPath === "//" ? "/" : selectedPath,
         })
             .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "压缩任务已创建", "success");
                 SetModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
                 SetModalsLoading(false);
             });
@@ -119,7 +119,7 @@ export default function CompressDialog(props) {
                 <DialogContent className={classes.contentFix}>
                     <DialogContentText>
                         <TextField
-                            onChange={e => setFileName(e.target.value)}
+                            onChange={(e) => setFileName(e.target.value)}
                             value={fileName}
                             fullWidth
                             autoFocus

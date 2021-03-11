@@ -15,7 +15,7 @@ export default function DropDown(props) {
             clearTimeout(timer);
         } else {
             let shouldClose = true;
-            status.forEach(element => {
+            status.forEach((element) => {
                 if (element) {
                     shouldClose = false;
                 }

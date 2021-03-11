@@ -2,7 +2,7 @@ const navigator = (state = [], action) => {
     switch (action.type) {
         case "NAVIGATOR_TO":
             return Object.assign({}, state, {
-                path: action.path
+                path: action.path,
             });
         default:
             return state;

@@ -16,46 +16,46 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import pathHelper from "../../utils/page";
 import { HotKeys, configure } from "react-hotkeys";
 
 configure({
-    ignoreTags: []
+    ignoreTags: [],
 });
 
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        searchMyFile: keywords => {
+        searchMyFile: (keywords) => {
             dispatch(searchMyFile(keywords));
-        }
+        },
     };
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
     search: {
         [theme.breakpoints.down("sm")]: {
-            display: "none"
+            display: "none",
         },
         position: "relative",
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         "&:hover": {
-            backgroundColor: fade(theme.palette.common.white, 0.25)
+            backgroundColor: fade(theme.palette.common.white, 0.25),
         },
         marginRight: theme.spacing(2),
         marginLeft: 0,
         width: "100%",
         [theme.breakpoints.up("sm")]: {
             marginLeft: theme.spacing(7.2),
-            width: "auto"
-        }
+            width: "auto",
+        },
     },
     searchIcon: {
         width: theme.spacing(9),
@@ -64,11 +64,11 @@ const styles = theme => ({
         pointerEvents: "none",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
     },
     inputRoot: {
         color: "inherit",
-        width: "100%"
+        width: "100%",
     },
     inputInput: {
         paddingTop: theme.spacing(1),
@@ -80,18 +80,18 @@ const styles = theme => ({
         [theme.breakpoints.up("md")]: {
             width: 200,
             "&:focus": {
-                width: 300
-            }
-        }
+                width: 300,
+            },
+        },
     },
     suggestBox: {
         zIndex: "9999",
-        width: 364
-    }
+        width: 364,
+    },
 });
 
 const keyMap = {
-    SEARCH: "enter"
+    SEARCH: "enter",
 };
 
 class SearchBarCompoment extends Component {
@@ -99,33 +99,33 @@ class SearchBarCompoment extends Component {
         super(props);
         this.state = {
             anchorEl: null,
-            input: ""
+            input: "",
         };
     }
 
     handlers = {
-        SEARCH: e => {
+        SEARCH: (e) => {
             if (pathHelper.isHomePage(this.props.location.pathname)) {
                 this.searchMyFile();
             } else {
                 this.searchShare();
             }
             e.target.blur();
-        }
+        },
     };
 
-    handleChange = event => {
+    handleChange = (event) => {
         const { currentTarget } = event;
         this.input = event.target.value;
         this.setState({
             anchorEl: currentTarget,
-            input: event.target.value
+            input: event.target.value,
         });
     };
 
     cancelSuggest = () => {
         this.setState({
-            input: ""
+            input: "",
         });
     };
 
@@ -155,7 +155,7 @@ class SearchBarCompoment extends Component {
                         placeholder="搜索..."
                         classes={{
                             root: classes.inputRoot,
-                            input: classes.inputInput
+                            input: classes.inputInput,
                         }}
                         onChange={this.handleChange}
                         onBlur={this.cancelSuggest}
@@ -179,7 +179,7 @@ class SearchBarCompoment extends Component {
                                         </ListItemIcon>
                                         <ListItemText
                                             classes={{
-                                                primary: classes.primary
+                                                primary: classes.primary,
                                             }}
                                             primary={
                                                 <Typography noWrap>
@@ -219,7 +219,7 @@ class SearchBarCompoment extends Component {
 }
 
 SearchBarCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const SearchBar = connect(

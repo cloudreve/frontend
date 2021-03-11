@@ -18,8 +18,8 @@ import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(() => ({
     formContainer: {
-        margin: "8px 0 8px 0"
-    }
+        margin: "8px 0 8px 0",
+    },
 }));
 
 export default function AddGroup({ open, onClose, onSubmit }) {
@@ -32,13 +32,13 @@ export default function AddGroup({ open, onClose, onSubmit }) {
         price: "",
         score: "",
         des: "",
-        highlight: false
+        highlight: false,
     });
 
     useEffect(() => {
         if (open && groups.length === 0) {
             API.get("/admin/groups")
-                .then(response => {
+                .then((response) => {
                     setGroups(response.data);
                 })
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -47,21 +47,21 @@ export default function AddGroup({ open, onClose, onSubmit }) {
         // eslint-disable-next-line
     }, [open]);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setGroup({
             ...group,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleCheckChange = name => event => {
+    const handleCheckChange = (name) => (event) => {
         setGroup({
             ...group,
-            [name]: event.target.checked
+            [name]: event.target.checked,
         });
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         const groupCopy = { ...group };
         groupCopy.time = parseInt(groupCopy.time) * 86400;
@@ -113,7 +113,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     onChange={handleChange("group_id")}
                                     required
                                 >
-                                    {groups.map(v => {
+                                    {groups.map((v) => {
                                         if (v.ID !== 3) {
                                             return (
                                                 <MenuItem value={v.ID}>
@@ -139,7 +139,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={group.time}
                                     onChange={handleChange("time")}
@@ -160,7 +160,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     type={"number"}
                                     inputProps={{
                                         min: 0.01,
-                                        step: 0.01
+                                        step: 0.01,
                                     }}
                                     value={group.price}
                                     onChange={handleChange("price")}
@@ -181,7 +181,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     type={"number"}
                                     inputProps={{
                                         min: 0,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={group.score}
                                     onChange={handleChange("score")}

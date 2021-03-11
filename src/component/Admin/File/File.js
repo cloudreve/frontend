@@ -26,37 +26,37 @@ import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import FileFilter from "../Dialogs/FileFilter";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     container: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     tableContainer: {
-        marginTop: 16
+        marginTop: 16,
     },
     header: {
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "flex-start"
+        alignItems: "flex-start",
     },
     headerRight: {},
     highlight:
         theme.palette.type === "light"
             ? {
                   color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
               }
             : {
                   color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark
+                  backgroundColor: theme.palette.secondary.dark,
               },
     visuallyHidden: {
         border: 0,
@@ -67,8 +67,8 @@ const useStyles = makeStyles(theme => ({
         padding: 0,
         position: "absolute",
         top: 20,
-        width: 1
-    }
+        width: 1,
+    },
 }));
 
 export default function File() {
@@ -99,15 +99,15 @@ export default function File() {
             page_size: pageSize,
             order_by: orderBy.join(" "),
             conditions: filter,
-            searches: search
+            searches: search,
         })
-            .then(response => {
+            .then((response) => {
                 setFiles(response.data.items);
                 setTotal(response.data.total);
                 setSelected([]);
                 setUsers(response.data.users);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -116,7 +116,7 @@ export default function File() {
         loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
-    const deletePolicy = id => {
+    const deletePolicy = (id) => {
         setLoading(true);
         API.post("/admin/file/delete", { id: [id] })
             .then(() => {
@@ -128,7 +128,7 @@ export default function File() {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -136,7 +136,7 @@ export default function File() {
             });
     };
 
-    const deleteBatch = force => () => {
+    const deleteBatch = (force) => () => {
         setLoading(true);
         API.post("/admin/file/delete", { id: selected, force: force })
             .then(() => {
@@ -148,7 +148,7 @@ export default function File() {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -156,9 +156,9 @@ export default function File() {
             });
     };
 
-    const handleSelectAllClick = event => {
+    const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = files.map(n => n.ID);
+            const newSelecteds = files.map((n) => n.ID);
             setSelected(newSelecteds);
             return;
         }
@@ -185,7 +185,7 @@ export default function File() {
         setSelected(newSelected);
     };
 
-    const isSelected = id => selected.indexOf(id) !== -1;
+    const isSelected = (id) => selected.indexOf(id) !== -1;
 
     return (
         <div>
@@ -202,7 +202,7 @@ export default function File() {
                     onClick={() => history.push("/admin/file/import")}
                     variant={"contained"}
                     style={{
-                        alignSelf: "center"
+                        alignSelf: "center",
                     }}
                 >
                     从外部导入
@@ -281,7 +281,7 @@ export default function File() {
                                         }
                                         onChange={handleSelectAllClick}
                                         inputProps={{
-                                            "aria-label": "select all desserts"
+                                            "aria-label": "select all desserts",
                                         }}
                                     />
                                 </TableCell>
@@ -294,7 +294,7 @@ export default function File() {
                                                 "id",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -321,7 +321,7 @@ export default function File() {
                                                 "name",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -351,7 +351,7 @@ export default function File() {
                                                 "size",
                                                 orderBy[1] === "asc"
                                                     ? "desc"
-                                                    : "asc"
+                                                    : "asc",
                                             ])
                                         }
                                     >
@@ -381,7 +381,7 @@ export default function File() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {files.map(row => (
+                            {files.map((row) => (
                                 <TableRow
                                     hover
                                     key={row.ID}
@@ -390,7 +390,7 @@ export default function File() {
                                 >
                                     <TableCell padding="checkbox">
                                         <Checkbox
-                                            onClick={event =>
+                                            onClick={(event) =>
                                                 handleClick(event, row.ID)
                                             }
                                             checked={isSelected(row.ID)}
@@ -457,7 +457,7 @@ export default function File() {
                     rowsPerPage={pageSize}
                     page={page - 1}
                     onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={e => {
+                    onChangeRowsPerPage={(e) => {
                         setPageSize(e.target.value);
                         setPage(1);
                     }}

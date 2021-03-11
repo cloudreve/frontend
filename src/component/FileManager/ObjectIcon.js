@@ -9,7 +9,7 @@ import {
     openMusicDialog,
     toggleSnackbar,
     dragAndDrop,
-    openLoadingDialog
+    openLoadingDialog,
 } from "../../actions/index";
 import statusHelper from "../../utils/page";
 import FileIcon from "./FileIcon";
@@ -28,23 +28,23 @@ import { openPreview } from "../../actions";
 
 const useStyles = makeStyles(() => ({
     container: {
-        padding: "7px"
+        padding: "7px",
     },
     fixFlex: {
-        minWidth: 0
+        minWidth: 0,
     },
     dragging: {
-        opacity: 0.4
-    }
+        opacity: 0.4,
+    },
 }));
 
 export default function ObjectIcon(props) {
-    const path = useSelector(state => state.navigator.path);
-    const selected = useSelector(state => state.explorer.selected);
+    const path = useSelector((state) => state.navigator.path);
+    const selected = useSelector((state) => state.explorer.selected);
     const viewMethod = useSelector(
-        state => state.viewUpdate.explorerViewMethod
+        (state) => state.viewUpdate.explorerViewMethod
     );
-    const navigatorPath = useSelector(state => state.navigator.path);
+    const navigatorPath = useSelector((state) => state.navigator.path);
     const location = useLocation();
 
     const dispatch = useDispatch();
@@ -53,12 +53,12 @@ export default function ObjectIcon(props) {
         [dispatch]
     );
     const SetSelectedTarget = useCallback(
-        targets => dispatch(setSelectedTarget(targets)),
+        (targets) => dispatch(setSelectedTarget(targets)),
         [dispatch]
     );
 
-    const NavitateTo = useCallback(targets => dispatch(navigateTo(targets)), [
-        dispatch
+    const NavitateTo = useCallback((targets) => dispatch(navigateTo(targets)), [
+        dispatch,
     ]);
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -70,20 +70,20 @@ export default function ObjectIcon(props) {
         [dispatch]
     );
     const OpenLoadingDialog = useCallback(
-        text => dispatch(openLoadingDialog(text)),
+        (text) => dispatch(openLoadingDialog(text)),
         [dispatch]
     );
     const OpenPreview = useCallback(() => dispatch(openPreview()), [dispatch]);
 
     const classes = useStyles();
 
-    const contextMenu = e => {
+    const contextMenu = (e) => {
         if (props.file.type === "up") {
             return;
         }
         e.preventDefault();
         if (
-            selected.findIndex(value => {
+            selected.findIndex((value) => {
                 return value === props.file;
             }) === -1
         ) {
@@ -92,7 +92,7 @@ export default function ObjectIcon(props) {
         ContextMenu("file", true);
     };
 
-    const selectFile = e => {
+    const selectFile = (e) => {
         dispatch(selectFileAction(props.file, e, props.index));
     };
     const enterFolder = () => {
@@ -100,7 +100,7 @@ export default function ObjectIcon(props) {
             path === "/" ? path + props.file.name : path + "/" + props.file.name
         );
     };
-    const handleClick = e => {
+    const handleClick = (e) => {
         if (props.file.type === "up") {
             NavitateTo(pathBack(navigatorPath));
         }
@@ -142,7 +142,7 @@ export default function ObjectIcon(props) {
         OpenPreview();
     };
 
-    const handleIconClick = e => {
+    const handleIconClick = (e) => {
         if (statusHelper.isMobile()) {
             e.stopPropagation();
             e.ctrlKey = true;
@@ -156,7 +156,7 @@ export default function ObjectIcon(props) {
             object: props.file,
             type: "object",
             selected: [...selected],
-            viewMethod: viewMethod
+            viewMethod: viewMethod,
         },
         end: (item, monitor) => {
             const dropResult = monitor.getDropResult();
@@ -177,9 +177,9 @@ export default function ObjectIcon(props) {
                 statusHelper.isHomePage(location.pathname)
             );
         },
-        collect: monitor => ({
-            isDragging: monitor.isDragging()
-        })
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
     });
 
     useEffect(() => {
@@ -195,7 +195,7 @@ export default function ObjectIcon(props) {
                         isListView={true}
                         pref={drag}
                         className={classNames(classes.container, {
-                            [classes.dragging]: isDragging
+                            [classes.dragging]: isDragging,
                         })}
                         onIconClick={handleIconClick}
                         contextMenu={contextMenu}
@@ -208,7 +208,7 @@ export default function ObjectIcon(props) {
                     <TableItem
                         pref={drag}
                         className={classNames(classes.container, {
-                            [classes.dragging]: isDragging
+                            [classes.dragging]: isDragging,
                         })}
                         onIconClick={handleIconClick}
                         contextMenu={contextMenu}
@@ -226,7 +226,7 @@ export default function ObjectIcon(props) {
             ref={drag}
             className={classNames({
                 [classes.container]: viewMethod !== "list",
-                [classes.dragging]: isDragging
+                [classes.dragging]: isDragging,
             })}
         >
             <div

@@ -18,7 +18,7 @@ const MonacoEditor = React.lazy(() =>
     import(/* webpackChunkName: "codeEditor" */ "react-monaco-editor")
 );
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "30px",
@@ -27,24 +27,24 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 50
+        marginBottom: 50,
     },
     editor: {
-        borderRadius: "4px"
+        borderRadius: "4px",
     },
     "@global": {
         ".overflow-guard": {
-            borderRadius: "4px!important"
-        }
+            borderRadius: "4px!important",
+        },
     },
     formControl: {
-        margin: "8px 16px 8px 16px"
+        margin: "8px 16px 8px 16px",
     },
     toobar: {
-        textAlign: "right"
-    }
+        textAlign: "right",
+    },
 }));
 
 function useQuery() {
@@ -64,9 +64,10 @@ export default function CodeViewer() {
     const theme = useTheme();
 
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
-        dispatch
-    ]);
+    const SetSubTitle = useCallback(
+        (title) => dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
@@ -99,12 +100,12 @@ export default function CodeViewer() {
 
         setLoading(true);
         API.get(requestURL, { responseType: "arraybuffer" })
-            .then(response => {
+            .then((response) => {
                 const buffer = new Buffer(response.rawData, "binary");
                 const textdata = buffer.toString(); // for string
                 setContent(textdata);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -125,7 +126,7 @@ export default function CodeViewer() {
                 setStatus("success");
                 setTimeout(() => setStatus(""), 2000);
             })
-            .catch(error => {
+            .catch((error) => {
                 setStatus("");
                 ToggleSnackbar("top", "right", error.message, "error");
             });
@@ -142,11 +143,11 @@ export default function CodeViewer() {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={suffix}
-                            onChange={e => setSuffix(e.target.value)}
+                            onChange={(e) => setSuffix(e.target.value)}
                         >
                             {Array.from(
                                 new Set(
-                                    Object.keys(codePreviewSuffix).map(k => {
+                                    Object.keys(codePreviewSuffix).map((k) => {
                                         return codePreviewSuffix[k];
                                     })
                                 )
@@ -171,9 +172,9 @@ export default function CodeViewer() {
                             value={content}
                             options={{
                                 readOnly: isSharePage,
-                                extraEditorClassName: classes.editor
+                                extraEditorClassName: classes.editor,
                             }}
-                            onChange={value => setContent(value)}
+                            onChange={(value) => setContent(value)}
                         />
                     </Suspense>
                 )}

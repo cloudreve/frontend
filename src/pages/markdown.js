@@ -8,7 +8,7 @@ import MarkdownApp from "./markdown.app";
 const defaultStatus = {
     navigator: {
         path: window.path,
-        refresh: true
+        refresh: true,
     },
     viewUpdate: {
         open: window.isHomePage,
@@ -29,15 +29,15 @@ const defaultStatus = {
             share: false,
             music: false,
             remoteDownload: false,
-            torrentDownload: false
+            torrentDownload: false,
         },
         snackbar: {
             toggle: false,
             vertical: "top",
             horizontal: "center",
             msg: "",
-            color: ""
-        }
+            color: "",
+        },
     },
     explorer: {
         fileList: [],
@@ -47,14 +47,14 @@ const defaultStatus = {
         selectProps: {
             isMultiple: false,
             withFolder: false,
-            withFile: true
+            withFile: true,
         },
         imgPreview: {
             first: null,
-            other: []
+            other: [],
         },
-        keywords: null
-    }
+        keywords: null,
+    },
 };
 
 const store = createStore(cloureveApp, defaultStatus);

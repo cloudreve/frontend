@@ -10,7 +10,7 @@ export const getBaseURL = () => {
 const instance = axios.create({
     baseURL: getBaseURL(),
     withCredentials: true,
-    crossDomain: true
+    crossDomain: true,
 });
 
 function AppError(message, code, error) {
@@ -23,7 +23,7 @@ AppError.prototype = Object.create(Error.prototype);
 AppError.prototype.constructor = AppError;
 
 instance.interceptors.response.use(
-    function(response) {
+    function (response) {
         response.rawData = response.data;
         response.data = response.data.data;
         if (
@@ -49,7 +49,7 @@ instance.interceptors.response.use(
         }
         return response;
     },
-    function(error) {
+    function (error) {
         return Promise.reject(error);
     }
 );

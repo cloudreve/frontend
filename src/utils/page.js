@@ -13,6 +13,6 @@ const statusHelper = {
     },
     isMobile() {
         return window.innerWidth < 600;
-    }
+    },
 };
 export default statusHelper;

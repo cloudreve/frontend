@@ -1,9 +1,9 @@
-export const isDefined = val => val != null;
-export const isFunction = val => typeof val === "function";
+export const isDefined = (val) => val != null;
+export const isFunction = (val) => typeof val === "function";
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
 
-export const newScript = src => cb => {
+export const newScript = (src) => (cb) => {
     const scriptElem = document.createElement("script");
     if (typeof src === "object") {
         // copy every property to the element
@@ -22,7 +22,7 @@ export const newScript = src => cb => {
     return scriptElem;
 };
 
-const keyIterator = cols => {
+const keyIterator = (cols) => {
     const keys = Object.keys(cols);
     let i = -1;
     return {
@@ -30,12 +30,12 @@ const keyIterator = cols => {
             i++; // inc
             if (i >= keys.length) return null;
             else return keys[i];
-        }
+        },
     };
 };
 
 // tasks should be a collection of thunk
-export const parallel = (...tasks) => each => cb => {
+export const parallel = (...tasks) => (each) => (cb) => {
     let hasError = false;
     let successed = 0;
     const ret = [];
@@ -67,8 +67,8 @@ export const parallel = (...tasks) => each => cb => {
 };
 
 // tasks should be a collection of thunk
-export const series = (...tasks) => each => cb => {
-    tasks = tasks.filter(val => val != null);
+export const series = (...tasks) => (each) => (cb) => {
+    tasks = tasks.filter((val) => val != null);
     const nextKey = keyIterator(tasks);
     const nextThunk = () => {
         const key = nextKey.next();

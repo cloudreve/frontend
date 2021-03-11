@@ -10,7 +10,7 @@ export interface ActionSetFileList extends AnyAction {
 export const setFileList = (list: CloudreveFile[]): ActionSetFileList => {
     return {
         type: "SET_FILE_LIST",
-        list
+        list,
     };
 };
 
@@ -21,7 +21,7 @@ export interface ActionSetDirList extends AnyAction {
 export const setDirList = (list: CloudreveFile[]): ActionSetDirList => {
     return {
         type: "SET_DIR_LIST",
-        list
+        list,
     };
 };
 
@@ -32,14 +32,14 @@ export interface ActionSetSortMethod extends AnyAction {
 export const setSortMethod = (method: SortMethod): ActionSetSortMethod => {
     return {
         type: "SET_SORT_METHOD",
-        method
+        method,
     };
 };
 
 export const setSideBar = (open: boolean) => {
     return {
         type: "SET_SIDE_BAR",
-        open
+        open,
     };
 };
 
@@ -70,7 +70,7 @@ const sortMethodFuncs: Record<SortMethod, SortFunc> = {
     },
     timeRev: (a: CloudreveFile, b: CloudreveFile) => {
         return Date.parse(b.date) - Date.parse(a.date);
-    }
+    },
 };
 
 export const updateFileList = (
@@ -80,10 +80,10 @@ export const updateFileList = (
         const state = getState();
         // TODO: define state type
         const { sortMethod } = state.viewUpdate;
-        const dirList = list.filter(x => {
+        const dirList = list.filter((x) => {
             return x.type === "dir";
         });
-        const fileList = list.filter(x => {
+        const fileList = list.filter((x) => {
             return x.type === "file";
         });
         const sortFunc = sortMethodFuncs[sortMethod as SortMethod];

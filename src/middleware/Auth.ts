@@ -41,7 +41,7 @@ const Auth = {
             return preference[key];
         }
         return null;
-    }
+    },
 };
 
 export default Auth;

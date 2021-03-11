@@ -13,7 +13,7 @@ import TimeAgo from "timeago-react";
 import { getTaskProgress, getTaskStatus, getTaskType } from "../../config";
 import Pagination from "@material-ui/lab/Pagination";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "50px",
@@ -22,29 +22,29 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: "50px"
+        marginBottom: "50px",
     },
     content: {
         marginTop: theme.spacing(4),
-        overflowX: "auto"
+        overflowX: "auto",
     },
     cardContent: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     tableContainer: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     create: {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(2),
     },
     noWrap: {
-        wordBreak: "keepAll"
+        wordBreak: "keepAll",
     },
     footer: {
-        padding: theme.spacing(2)
-    }
+        padding: theme.spacing(2),
+    },
 }));
 
 export default function Tasks() {
@@ -59,13 +59,13 @@ export default function Tasks() {
         [dispatch]
     );
 
-    const loadList = page => {
+    const loadList = (page) => {
         API.get("/user/setting/tasks?page=" + page)
-            .then(response => {
+            .then((response) => {
                 setTasks(response.data.tasks);
                 setTotal(response.data.total);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -75,7 +75,7 @@ export default function Tasks() {
         // eslint-disable-next-line
     }, [page]);
 
-    const getError = error => {
+    const getError = (error) => {
         if (error === "") {
             return "-";
         }

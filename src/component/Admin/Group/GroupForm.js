@@ -17,23 +17,23 @@ import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import SizeInput from "../Common/SizeInput";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
-    }
+            padding: "0px 24px 0 24px",
+        },
+    },
 }));
 
 // function getStyles(name, personName, theme) {
@@ -64,8 +64,8 @@ export default function GroupForm(props) {
                       share_download: "true",
                       aria2_options: "{}", // json decode
                       compress_size: "0",
-                      decompress_size: "0"
-                  }
+                      decompress_size: "0",
+                  },
               }
     );
     const [policies, setPolicies] = useState({});
@@ -84,65 +84,65 @@ export default function GroupForm(props) {
             page: 1,
             page_size: 10000,
             order_by: "id asc",
-            conditions: {}
+            conditions: {},
         })
-            .then(response => {
+            .then((response) => {
                 const res = {};
-                response.data.items.forEach(v => {
+                response.data.items.forEach((v) => {
                     res[v.ID] = v.Name;
                 });
                 setPolicies(res);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, []);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setGroup({
             ...group,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleCheckChange = name => event => {
+    const handleCheckChange = (name) => (event) => {
         const value = event.target.checked ? "true" : "false";
         setGroup({
             ...group,
-            [name]: value
+            [name]: value,
         });
     };
 
-    const handleOptionCheckChange = name => event => {
+    const handleOptionCheckChange = (name) => (event) => {
         const value = event.target.checked ? "true" : "false";
         setGroup({
             ...group,
             OptionsSerialized: {
                 ...group.OptionsSerialized,
-                [name]: value
-            }
+                [name]: value,
+            },
         });
     };
 
-    const handleOptionChange = name => event => {
+    const handleOptionChange = (name) => (event) => {
         setGroup({
             ...group,
             OptionsSerialized: {
                 ...group.OptionsSerialized,
-                [name]: event.target.value
-            }
+                [name]: event.target.value,
+            },
         });
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         const groupCopy = {
             ...group,
-            OptionsSerialized: { ...group.OptionsSerialized }
+            OptionsSerialized: { ...group.OptionsSerialized },
         };
 
         // 布尔值转换
-        ["ShareEnabled", "WebDAVEnabled"].forEach(v => {
+        ["ShareEnabled", "WebDAVEnabled"].forEach((v) => {
             groupCopy[v] = groupCopy[v] === "true";
         });
         [
@@ -150,8 +150,8 @@ export default function GroupForm(props) {
             "archive_task",
             "one_time_download",
             "share_download",
-            "aria2"
-        ].forEach(v => {
+            "aria2",
+        ].forEach((v) => {
             if (groupCopy.OptionsSerialized[v] !== undefined) {
                 groupCopy.OptionsSerialized[v] =
                     groupCopy.OptionsSerialized[v] === "true";
@@ -159,10 +159,10 @@ export default function GroupForm(props) {
         });
 
         // 整型转换
-        ["MaxStorage", "SpeedLimit"].forEach(v => {
+        ["MaxStorage", "SpeedLimit"].forEach((v) => {
             groupCopy[v] = parseInt(groupCopy[v]);
         });
-        ["compress_size", "decompress_size"].forEach(v => {
+        ["compress_size", "decompress_size"].forEach((v) => {
             if (groupCopy.OptionsSerialized[v] !== undefined) {
                 groupCopy.OptionsSerialized[v] = parseInt(
                     groupCopy.OptionsSerialized[v]
@@ -182,7 +182,7 @@ export default function GroupForm(props) {
 
         setLoading(true);
         API.post("/admin/group", {
-            group: groupCopy
+            group: groupCopy,
         })
             .then(() => {
                 history.push("/admin/group");
@@ -193,7 +193,7 @@ export default function GroupForm(props) {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -245,11 +245,16 @@ export default function GroupForm(props) {
                                                 <Input id="select-multiple-chip" />
                                             }
                                         >
-                                            {Object.keys(policies).map(pid => (
-                                                <MenuItem key={pid} value={pid}>
-                                                    {policies[pid]}
-                                                </MenuItem>
-                                            ))}
+                                            {Object.keys(policies).map(
+                                                (pid) => (
+                                                    <MenuItem
+                                                        key={pid}
+                                                        value={pid}
+                                                    >
+                                                        {policies[pid]}
+                                                    </MenuItem>
+                                                )
+                                            )}
                                         </Select>
                                         <FormHelperText id="component-helper-text">
                                             指定用户组的存储策略。

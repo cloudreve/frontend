@@ -10,7 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { green } from "@material-ui/core/colors";
 import clsx from "clsx";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     fab: {
         margin: 0,
         top: "auto",
@@ -18,38 +18,38 @@ const useStyles = makeStyles(theme => ({
         bottom: 20,
         left: "auto",
         zIndex: 5,
-        position: "fixed"
+        position: "fixed",
     },
     badge: {
         position: "absolute",
         bottom: 26,
         top: "auto",
         zIndex: 9999,
-        right: 7
+        right: 7,
     },
     fabProgress: {
         color: green[500],
         position: "absolute",
         top: -6,
         left: -6,
-        zIndex: 1
+        zIndex: 1,
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonSuccess: {
         backgroundColor: green[500],
         "&:hover": {
-            backgroundColor: green[700]
-        }
-    }
+            backgroundColor: green[700],
+        },
+    },
 }));
 
 export default function SaveButton(props) {
     const classes = useStyles();
     const buttonClassname = clsx({
-        [classes.buttonSuccess]: props.status === "success"
+        [classes.buttonSuccess]: props.status === "success",
     });
 
     return (

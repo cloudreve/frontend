@@ -14,10 +14,10 @@ import {
     InputLabel,
     Paper,
     Avatar,
-    Typography
+    Typography,
 } from "@material-ui/core";
 
-const styles = theme => ({
+const styles = (theme) => ({
     layout: {
         width: "auto",
         marginTop: "110px",
@@ -26,8 +26,8 @@ const styles = theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 400,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -36,42 +36,42 @@ const styles = theme => ({
         alignItems: "center",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
             3
-        )}px`
+        )}px`,
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     submit: {
-        marginTop: theme.spacing(3)
+        marginTop: theme.spacing(3),
     },
     link: {
         marginTop: "10px",
         display: "flex",
         width: "100%",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     captchaContainer: {
         display: "flex",
         marginTop: "10px",
         [theme.breakpoints.down("sm")]: {
-            display: "block"
-        }
-    }
+            display: "block",
+        },
+    },
 });
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
@@ -79,10 +79,10 @@ class ResetPwdFormCompoment extends Component {
     state = {
         pwd: "",
         pwdRepeat: "",
-        loading: false
+        loading: false,
     };
 
-    login = e => {
+    login = (e) => {
         e.preventDefault();
         if (this.state.pwdRepeat !== this.state.pwd) {
             this.props.toggleSnackbar(
@@ -94,17 +94,17 @@ class ResetPwdFormCompoment extends Component {
             return;
         }
         this.setState({
-            loading: true
+            loading: true,
         });
         axios
             .post("/Member/Reset", {
                 pwd: this.state.pwd,
-                key: window.resetKey
+                key: window.resetKey,
             })
-            .then(response => {
+            .then((response) => {
                 if (response.data.code !== "200") {
                     this.setState({
-                        loading: false
+                        loading: false,
                     });
                     this.props.toggleSnackbar(
                         "top",
@@ -116,7 +116,7 @@ class ResetPwdFormCompoment extends Component {
                     this.setState({
                         loading: false,
                         pwd: "",
-                        pwdRepeat: ""
+                        pwdRepeat: "",
                     });
                     this.props.toggleSnackbar(
                         "top",
@@ -126,9 +126,9 @@ class ResetPwdFormCompoment extends Component {
                     );
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 this.setState({
-                    loading: false
+                    loading: false,
                 });
                 this.props.toggleSnackbar(
                     "top",
@@ -139,7 +139,7 @@ class ResetPwdFormCompoment extends Component {
             });
     };
 
-    handleChange = name => event => {
+    handleChange = (name) => (event) => {
         this.setState({ [name]: event.target.value });
     };
 

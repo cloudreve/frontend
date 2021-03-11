@@ -11,17 +11,17 @@ import {
     CardContent,
     CardActions,
     TextField,
-    Avatar
+    Avatar,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 
-const styles = theme => ({
+const styles = (theme) => ({
     card: {
         maxWidth: 400,
-        margin: "0 auto"
+        margin: "0 auto",
     },
     actions: {
-        display: "flex"
+        display: "flex",
     },
     layout: {
         width: "auto",
@@ -31,24 +31,24 @@ const styles = theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     continue: {
         marginLeft: "auto",
         marginRight: "10px",
-        marginRottom: "10px"
-    }
+        marginRottom: "10px",
+    },
 });
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
@@ -57,15 +57,15 @@ class LockedFileCompoment extends Component {
         super(props);
         const query = new URLSearchParams(this.props.location.search);
         this.state = {
-            pwd: query.get("password")
+            pwd: query.get("password"),
         };
     }
 
-    handleChange = name => event => {
+    handleChange = (name) => (event) => {
         this.setState({ [name]: event.target.value });
     };
 
-    submit = e => {
+    submit = (e) => {
         e.preventDefault();
         if (this.state.pwd === "") {
             return;

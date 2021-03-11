@@ -13,11 +13,11 @@ import {
     InputLabel,
     Paper,
     Avatar,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
 import ReCaptcha from "./ReCaptcha";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "110px",
@@ -26,9 +26,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             width: 400,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 110
+        marginBottom: 110,
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -37,43 +37,45 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
             3
-        )}px`
+        )}px`,
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     submit: {
-        marginTop: theme.spacing(3)
+        marginTop: theme.spacing(3),
     },
     captchaContainer: {
         display: "flex",
-        marginTop: "10px"
+        marginTop: "10px",
     },
     captchaPlaceholder: {
-        width: 200
+        width: 200,
     },
     link: {
         marginTop: "20px",
         display: "flex",
         width: "100%",
-        justifyContent: "space-between"
-    }
+        justifyContent: "space-between",
+    },
 }));
 
 function Reset() {
     const [input, setInput] = useState({
         email: "",
-        captcha: ""
+        captcha: "",
     });
     const [captchaData, setCaptchaData] = useState(null);
     const [loading, setLoading] = useState(false);
-    const forgetCaptcha = useSelector(state => state.siteConfig.forgetCaptcha);
+    const forgetCaptcha = useSelector(
+        (state) => state.siteConfig.forgetCaptcha
+    );
     const useReCaptcha = useSelector(
-        state => state.siteConfig.captcha_IsUseReCaptcha
+        (state) => state.siteConfig.captcha_IsUseReCaptcha
     );
     const reCaptchaKey = useSelector(
-        state => state.siteConfig.captcha_ReCaptchaKey
+        (state) => state.siteConfig.captcha_ReCaptchaKey
     );
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -81,19 +83,19 @@ function Reset() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    const handleInputChange = name => e => {
+    const handleInputChange = (name) => (e) => {
         setInput({
             ...input,
-            [name]: e.target.value
+            [name]: e.target.value,
         });
     };
 
     const refreshCaptcha = () => {
         API.get("/site/captcha")
-            .then(response => {
+            .then((response) => {
                 setCaptchaData(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -110,12 +112,12 @@ function Reset() {
         // eslint-disable-next-line
     }, [forgetCaptcha]);
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         API.post("/user/reset", {
             userName: input.email,
-            captchaCode: input.captcha
+            captchaCode: input.captcha,
         })
             .then(() => {
                 setLoading(false);
@@ -126,7 +128,7 @@ function Reset() {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
                 if (!useReCaptcha) {
@@ -196,10 +198,10 @@ function Reset() {
                                 <ReCaptcha
                                     style={{ display: "inline-block" }}
                                     sitekey={reCaptchaKey}
-                                    onChange={value =>
+                                    onChange={(value) =>
                                         setInput({
                                             ...input,
-                                            captcha: value
+                                            captcha: value,
                                         })
                                     }
                                     id="captcha"

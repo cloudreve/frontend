@@ -23,27 +23,27 @@ import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import AddPolicy from "../Dialogs/AddPolicy";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     container: {
-        overflowX: "auto"
+        overflowX: "auto",
     },
     tableContainer: {
-        marginTop: 16
+        marginTop: 16,
     },
     header: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
-    headerRight: {}
+    headerRight: {},
 }));
 
 const columns = [
@@ -54,20 +54,20 @@ const columns = [
         id: "count",
         label: "下属文件数",
         minWidth: 50,
-        align: "right"
+        align: "right",
     },
     {
         id: "size",
         label: "数据量",
         minWidth: 100,
-        align: "right"
+        align: "right",
     },
     {
         id: "action",
         label: "操作",
         minWidth: 170,
-        align: "right"
-    }
+        align: "right",
+    },
 ];
 
 function useQuery() {
@@ -92,7 +92,7 @@ export default function Policy() {
     const history = useHistory();
     const query = useQuery();
 
-    const handleClick = event => {
+    const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -125,14 +125,14 @@ export default function Policy() {
             page: page,
             page_size: pageSize,
             order_by: "id desc",
-            conditions: filter === "all" ? {} : { type: filter }
+            conditions: filter === "all" ? {} : { type: filter },
         })
-            .then(response => {
+            .then((response) => {
                 setPolicies(response.data.items);
                 setStatics(response.data.statics);
                 setTotal(response.data.total);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -141,13 +141,13 @@ export default function Policy() {
         loadList();
     }, [page, pageSize, filter]);
 
-    const deletePolicy = id => {
+    const deletePolicy = (id) => {
         API.delete("/admin/policy/" + id)
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", "存储策略已删除", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -168,10 +168,10 @@ export default function Policy() {
                 <div className={classes.headerRight}>
                     <Select
                         style={{
-                            marginRight: 8
+                            marginRight: 8,
                         }}
                         value={filter}
-                        onChange={e => setFilter(e.target.value)}
+                        onChange={(e) => setFilter(e.target.value)}
                     >
                         <MenuItem value={"all"}>全部</MenuItem>
                         <MenuItem value={"local"}>本机</MenuItem>
@@ -198,7 +198,7 @@ export default function Policy() {
                     <Table aria-label="sticky table" size={"small"}>
                         <TableHead>
                             <TableRow style={{ height: 52 }}>
-                                {columns.map(column => (
+                                {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
@@ -210,7 +210,7 @@ export default function Policy() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {policies.map(row => (
+                            {policies.map((row) => (
                                 <TableRow hover key={row.ID}>
                                     <TableCell>{row.ID}</TableCell>
                                     <TableCell>{row.Name}</TableCell>
@@ -240,7 +240,7 @@ export default function Policy() {
                                         </Tooltip>
                                         <Tooltip title={"编辑"}>
                                             <IconButton
-                                                onClick={e => {
+                                                onClick={(e) => {
                                                     setEditID(row.ID);
                                                     handleClick(e);
                                                 }}
@@ -262,7 +262,7 @@ export default function Policy() {
                     rowsPerPage={pageSize}
                     page={page - 1}
                     onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={e => {
+                    onChangeRowsPerPage={(e) => {
                         setPageSize(e.target.value);
                         setPage(1);
                     }}
@@ -275,7 +275,7 @@ export default function Policy() {
                 keepMounted
             >
                 <MenuItem
-                    onClick={e => {
+                    onClick={(e) => {
                         handleClose(e);
                         history.push("/admin/policy/edit/pro/" + editID);
                     }}
@@ -283,7 +283,7 @@ export default function Policy() {
                     专家模式编辑
                 </MenuItem>
                 <MenuItem
-                    onClick={e => {
+                    onClick={(e) => {
                         handleClose(e);
                         history.push("/admin/policy/edit/guide/" + editID);
                     }}

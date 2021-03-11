@@ -9,7 +9,7 @@ import cloureveApp from "../reducers";
 const defaultStatus = {
     navigator: {
         path: window.path,
-        refresh: true
+        refresh: true,
     },
     viewUpdate: {
         open: window.isHomePage,
@@ -31,15 +31,15 @@ const defaultStatus = {
             music: false,
             remoteDownload: false,
             torrentDownload: false,
-            resave: false
+            resave: false,
         },
         snackbar: {
             toggle: false,
             vertical: "top",
             horizontal: "center",
             msg: "",
-            color: ""
-        }
+            color: "",
+        },
     },
     explorer: {
         fileList: [],
@@ -48,14 +48,14 @@ const defaultStatus = {
         selectProps: {
             isMultiple: false,
             withFolder: false,
-            withFile: false
+            withFile: false,
         },
         imgPreview: {
             first: null,
-            other: []
+            other: [],
         },
-        keywords: null
-    }
+        keywords: null,
+    },
 };
 
 const store = createStore(cloureveApp, defaultStatus);

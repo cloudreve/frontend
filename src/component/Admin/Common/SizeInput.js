@@ -8,7 +8,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 
-const unitTransform = v => {
+const unitTransform = (v) => {
     if (v < 1024) {
         return [Math.round(v), 1];
     }
@@ -23,7 +23,7 @@ const unitTransform = v => {
     }
     return [
         Math.round(v / (1024 * 1024 * 1024 * 1024)),
-        1024 * 1024 * 1024 * 1024
+        1024 * 1024 * 1024 * 1024,
     ];
 };
 
@@ -34,7 +34,7 @@ export default function SizeInput({
     required,
     label,
     max,
-    suffix
+    suffix,
 }) {
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -63,12 +63,12 @@ export default function SizeInput({
                 value={transform()[0]}
                 type={"number"}
                 inputProps={{ min: min, step: 1 }}
-                onChange={e => {
+                onChange={(e) => {
                     if (e.target.value * unit < max) {
                         onChange({
                             target: {
-                                value: (e.target.value * unit).toString()
-                            }
+                                value: (e.target.value * unit).toString(),
+                            },
                         });
                     } else {
                         ToggleSnackbar(
@@ -86,14 +86,14 @@ export default function SizeInput({
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={unit}
-                            onChange={e => {
+                            onChange={(e) => {
                                 if (transform()[0] * e.target.value < max) {
                                     onChange({
                                         target: {
                                             value: (
                                                 transform()[0] * e.target.value
-                                            ).toString()
-                                        }
+                                            ).toString(),
+                                        },
                                     });
                                     setUnit(e.target.value);
                                 } else {

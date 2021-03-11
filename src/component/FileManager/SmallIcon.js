@@ -7,7 +7,7 @@ import {
     ButtonBase,
     Typography,
     Tooltip,
-    fade
+    fade,
 } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
@@ -16,26 +16,26 @@ import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
 import { Folder } from "@material-ui/icons";
 
-const styles = theme => ({
+const styles = (theme) => ({
     container: {
-        padding: "7px"
+        padding: "7px",
     },
 
     selected: {
         "&:hover": {
-            border: "1px solid #d0d0d0"
+            border: "1px solid #d0d0d0",
         },
         backgroundColor: fade(
             theme.palette.primary.main,
             theme.palette.type === "dark" ? 0.3 : 0.18
-        )
+        ),
     },
     notSelected: {
         "&:hover": {
             backgroundColor: theme.palette.background.default,
-            border: "1px solid #d0d0d0"
+            border: "1px solid #d0d0d0",
         },
-        backgroundColor: theme.palette.background.paper
+        backgroundColor: theme.palette.background.paper,
     },
 
     button: {
@@ -48,7 +48,7 @@ const styles = theme => ({
             "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         display: "flex",
         justifyContent: "left",
-        alignItems: "initial"
+        alignItems: "initial",
     },
     icon: {
         margin: "10px 10px 10px 16px",
@@ -57,31 +57,31 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         borderRadius: "90%",
         paddingTop: "3px",
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     folderNameSelected: {
         color:
             theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
-        fontWeight: "500"
+        fontWeight: "500",
     },
     folderNameNotSelected: {
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     folderName: {
         marginTop: "15px",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
         overflow: "hidden",
-        marginRight: "20px"
+        marginRight: "20px",
     },
     checkIcon: {
-        color: theme.palette.primary.main
-    }
+        color: theme.palette.primary.main,
+    },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        selected: state.explorer.selected
+        selected: state.explorer.selected,
     };
 };
 
@@ -95,7 +95,7 @@ class SmallIconCompoment extends Component {
     render() {
         const { classes } = this.props;
         const isSelected =
-            this.props.selected.findIndex(value => {
+            this.props.selected.findIndex((value) => {
                 return value === this.props.file;
             }) !== -1;
         const isMobile = statusHelper.isMobile();
@@ -106,7 +106,7 @@ class SmallIconCompoment extends Component {
                 className={classNames(
                     {
                         [classes.selected]: isSelected,
-                        [classes.notSelected]: !isSelected
+                        [classes.notSelected]: !isSelected,
                     },
                     classes.button
                 )}
@@ -115,7 +115,7 @@ class SmallIconCompoment extends Component {
                     onClick={this.props.onIconClick}
                     className={classNames(classes.icon, {
                         [classes.iconSelected]: isSelected,
-                        [classes.iconNotSelected]: !isSelected
+                        [classes.iconNotSelected]: !isSelected,
                     })}
                 >
                     {(!isSelected || !isMobile) && (
@@ -141,7 +141,7 @@ class SmallIconCompoment extends Component {
                     <Typography
                         className={classNames(classes.folderName, {
                             [classes.folderNameSelected]: isSelected,
-                            [classes.folderNameNotSelected]: !isSelected
+                            [classes.folderNameNotSelected]: !isSelected,
                         })}
                         variant="body2"
                     >
@@ -155,7 +155,7 @@ class SmallIconCompoment extends Component {
 
 SmallIconCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
-    file: PropTypes.object.isRequired
+    file: PropTypes.object.isRequired,
 };
 
 const SmallIcon = connect(

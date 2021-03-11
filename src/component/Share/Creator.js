@@ -4,25 +4,25 @@ import { Avatar, Typography } from "@material-ui/core";
 import { useHistory } from "react-router";
 import Link from "@material-ui/core/Link";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     boxHeader: {
         textAlign: "center",
-        padding: 24
+        padding: 24,
     },
     avatar: {
         backgroundColor: theme.palette.secondary.main,
         margin: "0 auto",
         width: 50,
         height: 50,
-        cursor: "pointer"
+        cursor: "pointer",
     },
     shareDes: {
-        marginTop: 12
+        marginTop: 12,
     },
     shareInfo: {
         color: theme.palette.text.disabled,
-        fontSize: 14
-    }
+        fontSize: 14,
+    },
 }));
 
 export default function Creator(props) {

@@ -24,7 +24,7 @@ import {
     DialogContent,
     DialogTitle,
     Button,
-    TextField
+    TextField,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import TypeIcon from "../FileManager/TypeIcon";
@@ -37,16 +37,16 @@ import FormControl from "@material-ui/core/FormControl";
 import { withRouter } from "react-router-dom";
 import ToggleIcon from "material-ui-toggle-icon";
 
-const styles = theme => ({
+const styles = (theme) => ({
     cardContainer: {
-        padding: theme.spacing(1)
+        padding: theme.spacing(1),
     },
     card: {
         maxWidth: 400,
-        margin: "0 auto"
+        margin: "0 auto",
     },
     actions: {
-        display: "flex"
+        display: "flex",
     },
     layout: {
         width: "auto",
@@ -56,44 +56,44 @@ const styles = theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     shareTitle: {
-        maxWidth: "200px"
+        maxWidth: "200px",
     },
     avatarFile: {
-        backgroundColor: theme.palette.primary.light
+        backgroundColor: theme.palette.primary.light,
     },
     avatarFolder: {
-        backgroundColor: theme.palette.secondary.light
+        backgroundColor: theme.palette.secondary.light,
     },
     gird: {
-        marginTop: "30px"
+        marginTop: "30px",
     },
     loadMore: {
         textAlign: "right",
         marginTop: "20px",
-        marginBottom: "40px"
+        marginBottom: "40px",
     },
     badge: {
         marginLeft: theme.spacing(1),
-        height: 17
+        height: 17,
     },
     orderSelect: {
         textAlign: "right",
-        marginTop: 5
-    }
+        marginTop: 5,
+    },
 });
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
@@ -103,14 +103,14 @@ class MyShareCompoment extends Component {
         total: 0,
         shareList: [],
         showPwd: null,
-        orderBy: "created_at DESC"
+        orderBy: "created_at DESC",
     };
 
     componentDidMount = () => {
         this.loadList(1, this.state.orderBy);
     };
 
-    showPwd = pwd => {
+    showPwd = (pwd) => {
         this.setState({ showPwd: pwd });
     };
 
@@ -118,16 +118,16 @@ class MyShareCompoment extends Component {
         this.setState({ showPwd: null });
     };
 
-    removeShare = id => {
+    removeShare = (id) => {
         API.delete("/share/" + id)
             .then(() => {
                 let oldList = this.state.shareList;
-                oldList = oldList.filter(value => {
+                oldList = oldList.filter((value) => {
                     return value.key !== id;
                 });
                 this.setState({
                     shareList: oldList,
-                    total: this.state.total - 1
+                    total: this.state.total - 1,
                 });
                 this.props.toggleSnackbar(
                     "top",
@@ -139,7 +139,7 @@ class MyShareCompoment extends Component {
                     this.loadList(1, this.state.orderBy);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -149,26 +149,23 @@ class MyShareCompoment extends Component {
             });
     };
 
-    changePermission = id => {
-        const newPwd = Math.random()
-            .toString(36)
-            .substr(2)
-            .slice(2, 8);
+    changePermission = (id) => {
+        const newPwd = Math.random().toString(36).substr(2).slice(2, 8);
         const oldList = this.state.shareList;
-        const shareIndex = oldList.findIndex(value => {
+        const shareIndex = oldList.findIndex((value) => {
             return value.key === id;
         });
         API.patch("/share/" + id, {
             prop: "password",
-            value: oldList[shareIndex].password === "" ? newPwd : ""
+            value: oldList[shareIndex].password === "" ? newPwd : "",
         })
-            .then(response => {
+            .then((response) => {
                 oldList[shareIndex].password = response.data;
                 this.setState({
-                    shareList: oldList
+                    shareList: oldList,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -178,22 +175,22 @@ class MyShareCompoment extends Component {
             });
     };
 
-    changePreviewOption = id => {
+    changePreviewOption = (id) => {
         const oldList = this.state.shareList;
-        const shareIndex = oldList.findIndex(value => {
+        const shareIndex = oldList.findIndex((value) => {
             return value.key === id;
         });
         API.patch("/share/" + id, {
             prop: "preview_enabled",
-            value: oldList[shareIndex].preview ? "false" : "true"
+            value: oldList[shareIndex].preview ? "false" : "true",
         })
-            .then(response => {
+            .then((response) => {
                 oldList[shareIndex].preview = response.data;
                 this.setState({
-                    shareList: oldList
+                    shareList: oldList,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -213,7 +210,7 @@ class MyShareCompoment extends Component {
                 "&order=" +
                 order[1]
         )
-            .then(response => {
+            .then((response) => {
                 if (response.data.items.length === 0) {
                     this.props.toggleSnackbar(
                         "top",
@@ -224,7 +221,7 @@ class MyShareCompoment extends Component {
                 }
                 this.setState({
                     total: response.data.total,
-                    shareList: response.data.items
+                    shareList: response.data.items,
                 });
             })
             .catch(() => {
@@ -234,19 +231,19 @@ class MyShareCompoment extends Component {
 
     handlePageChange = (event, value) => {
         this.setState({
-            page: value
+            page: value,
         });
         this.loadList(value, this.state.orderBy);
     };
 
-    handleOrderChange = event => {
+    handleOrderChange = (event) => {
         this.setState({
-            orderBy: event.target.value
+            orderBy: event.target.value,
         });
         this.loadList(this.state.page, event.target.value);
     };
 
-    isExpired = share => {
+    isExpired = (share) => {
         return share.expire < -1 || share.remain_downloads === 0;
     };
 
@@ -291,7 +288,7 @@ class MyShareCompoment extends Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={24} className={classes.gird}>
-                    {this.state.shareList.map(value => (
+                    {this.state.shareList.map((value) => (
                         <Grid
                             item
                             xs={12}
@@ -361,7 +358,7 @@ class MyShareCompoment extends Component {
                                     disableActionSpacing
                                     style={{
                                         display: "block",
-                                        textAlign: "right"
+                                        textAlign: "right",
                                     }}
                                 >
                                     <Tooltip placement="top" title="打开">

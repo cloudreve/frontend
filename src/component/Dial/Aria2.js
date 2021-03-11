@@ -15,8 +15,8 @@ const useStyles = makeStyles(() => ({
         bottom: 20,
         left: "auto",
         zIndex: 5,
-        position: "fixed"
-    }
+        position: "fixed",
+    },
 }));
 
 export default function RemoteDownloadButton() {

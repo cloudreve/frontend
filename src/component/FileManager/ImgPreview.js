@@ -13,18 +13,18 @@ import * as explorer from "../../redux/explorer/reducer";
 
 const styles = () => ({});
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         first: state.explorer.imgPreview.first,
-        other: state.explorer.imgPreview.other
+        other: state.explorer.imgPreview.other,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        showImgPreivew: first => {
+        showImgPreivew: (first) => {
             dispatch(showImgPreivew(first));
-        }
+        },
     };
 };
 
@@ -32,10 +32,10 @@ class ImagPreviewComponent extends Component {
     state = {
         items: [],
         photoIndex: 0,
-        isOpen: false
+        isOpen: false,
     };
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         const items = [];
         let firstOne = 0;
         if (nextProps.first.id !== "") {
@@ -45,23 +45,20 @@ class ImagPreviewComponent extends Component {
             ) {
                 const newImg = {
                     intro: nextProps.first.name,
-                    src: baseURL + "/share/preview/" + nextProps.first.key
+                    src: baseURL + "/share/preview/" + nextProps.first.key,
                 };
                 firstOne = 0;
                 items.push(newImg);
                 this.setState({
                     photoIndex: firstOne,
                     items: items,
-                    isOpen: true
+                    isOpen: true,
                 });
                 return;
             }
             // eslint-disable-next-line
-            nextProps.other.map(value => {
-                const fileType = value.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
+            nextProps.other.map((value) => {
+                const fileType = value.name.split(".").pop().toLowerCase();
                 if (imgPreviewSuffix.indexOf(fileType) !== -1) {
                     let src = "";
                     if (pathHelper.isSharePage(this.props.location.pathname)) {
@@ -79,7 +76,7 @@ class ImagPreviewComponent extends Component {
                     }
                     const newImg = {
                         intro: value.name,
-                        src: src
+                        src: src,
                     };
                     if (
                         value.path === nextProps.first.path &&
@@ -93,7 +90,7 @@ class ImagPreviewComponent extends Component {
             this.setState({
                 photoIndex: firstOne,
                 items: items,
-                isOpen: true
+                isOpen: true,
             });
         }
     };
@@ -101,7 +98,7 @@ class ImagPreviewComponent extends Component {
     handleClose = () => {
         this.props.showImgPreivew(explorer.initState.imgPreview.first);
         this.setState({
-            isOpen: false
+            isOpen: false,
         });
     };
 
@@ -116,9 +113,9 @@ class ImagPreviewComponent extends Component {
                         visible={isOpen}
                         onClose={() => this.handleClose()}
                         index={photoIndex}
-                        onIndexChange={n =>
+                        onIndexChange={(n) =>
                             this.setState({
-                                photoIndex: n
+                                photoIndex: n,
                             })
                         }
                     />
@@ -129,7 +126,7 @@ class ImagPreviewComponent extends Component {
 }
 
 ImagPreviewComponent.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const ImgPreivew = connect(

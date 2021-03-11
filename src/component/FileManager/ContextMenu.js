@@ -3,10 +3,10 @@ import {
     ListItemIcon,
     MenuItem,
     Typography,
-    withStyles
+    withStyles,
 } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
-import { Archive,InfoOutlined, Unarchive } from "@material-ui/icons";
+import { Archive, InfoOutlined, Unarchive } from "@material-ui/icons";
 import RenameIcon from "@material-ui/icons/BorderColor";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -26,7 +26,7 @@ import { withRouter } from "react-router-dom";
 import {
     openCompressDialog,
     openCreateFileDialog,
-    refreshFileList
+    refreshFileList,
 } from "../../actions";
 import {
     changeContextMenu,
@@ -46,7 +46,7 @@ import {
     setNavigatorLoadingStatus,
     setSelectedTarget,
     showImgPreivew,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions/index";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
@@ -56,24 +56,24 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { openPreview } from "../../actions";
 import {
     setSideBar,
-    toggleObjectInfoSidebar
+    toggleObjectInfoSidebar,
 } from "../../redux/explorer/action";
 
 const styles = () => ({
     propover: {},
     divider: {
         marginTop: 4,
-        marginBottom: 4
-    }
+        marginBottom: 4,
+    },
 });
 
 const StyledListItemIcon = withStyles({
     root: {
-        minWidth: 38
-    }
+        minWidth: 38,
+    },
 })(ListItemIcon);
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         menuType: state.viewUpdate.contextType,
         menuOpen: state.viewUpdate.contextOpen,
@@ -82,22 +82,22 @@ const mapStateToProps = state => {
         withFile: state.explorer.selectProps.withFile,
         path: state.navigator.path,
         selected: state.explorer.selected,
-        keywords: state.explorer.keywords
+        keywords: state.explorer.keywords,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         changeContextMenu: (type, open) => {
             dispatch(changeContextMenu(type, open));
         },
-        setNavigatorLoadingStatus: status => {
+        setNavigatorLoadingStatus: (status) => {
             dispatch(setNavigatorLoadingStatus(status));
         },
-        setSelectedTarget: targets => {
+        setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
         },
-        navigateTo: path => {
+        navigateTo: (path) => {
             dispatch(navigateTo(path));
         },
         openCreateFolderDialog: () => {
@@ -118,7 +118,7 @@ const mapDispatchToProps = dispatch => {
         openShareDialog: () => {
             dispatch(openShareDialog());
         },
-        showImgPreivew: first => {
+        showImgPreivew: (first) => {
             dispatch(showImgPreivew(first));
         },
         openMusicDialog: () => {
@@ -139,7 +139,7 @@ const mapDispatchToProps = dispatch => {
         openCopyDialog: () => {
             dispatch(openCopyDialog());
         },
-        openLoadingDialog: text => {
+        openLoadingDialog: (text) => {
             dispatch(openLoadingDialog(text));
         },
         openDecompressDialog: () => {
@@ -154,9 +154,9 @@ const mapDispatchToProps = dispatch => {
         openPreview: () => {
             dispatch(openPreview());
         },
-        toggleObjectInfoSidebar: open => {
+        toggleObjectInfoSidebar: (open) => {
             dispatch(toggleObjectInfoSidebar(open));
-        }
+        },
     };
 };
 
@@ -170,7 +170,7 @@ class ContextMenuCompoment extends Component {
         window.document.addEventListener("mousemove", this.setPoint);
     };
 
-    setPoint = e => {
+    setPoint = (e) => {
         this.Y = e.clientY;
         this.X = e.clientX;
     };
@@ -203,7 +203,7 @@ class ContextMenuCompoment extends Component {
         );
     };
 
-    clickUpload = id => {
+    clickUpload = (id) => {
         this.props.changeContextMenu("empty", false);
         const uploadButton = document.getElementsByClassName(id)[0];
         if (document.body.contains(uploadButton)) {
@@ -220,13 +220,13 @@ class ContextMenuCompoment extends Component {
 
     // 暂时只对空白处右键菜单使用这个函数，疑似有bug会导致的一个菜单被默认选中。
     // 相关issue： https://github.com/mui-org/material-ui/issues/23747
-    renderMenuItems = items => {
+    renderMenuItems = (items) => {
         const res = [];
         let key = 0;
 
-        ["top", "center", "bottom"].forEach(position => {
+        ["top", "center", "bottom"].forEach((position) => {
             let visibleCount = 0;
-            items[position].forEach(item => {
+            items[position].forEach((item) => {
                 if (item.condition) {
                     res.push(
                         <MenuItem dense key={key} onClick={item.onClick}>
@@ -267,43 +267,43 @@ class ContextMenuCompoment extends Component {
                         );
                     },
                     icon: <RefreshIcon />,
-                    text: "刷新"
-                }
+                    text: "刷新",
+                },
             ],
             center: [
                 {
                     condition: true,
                     onClick: () => this.clickUpload("uploadFileForm"),
                     icon: <UploadIcon />,
-                    text: "上传文件"
+                    text: "上传文件",
                 },
                 {
                     condition: true,
                     onClick: () => this.clickUpload("uploadFolderForm"),
                     icon: <FolderUpload />,
-                    text: "上传目录"
+                    text: "上传目录",
                 },
                 {
                     condition: user.group.allowRemoteDownload,
                     onClick: () => this.props.openRemoteDownloadDialog(),
                     icon: <DownloadIcon />,
-                    text: "离线下载"
-                }
+                    text: "离线下载",
+                },
             ],
             bottom: [
                 {
                     condition: true,
                     onClick: () => this.props.openCreateFolderDialog(),
                     icon: <NewFolderIcon />,
-                    text: "创建文件夹"
+                    text: "创建文件夹",
                 },
                 {
                     condition: true,
                     onClick: () => this.props.openCreateFileDialog(),
                     icon: <FilePlus />,
-                    text: "创建文件"
-                }
-            ]
+                    text: "创建文件",
+                },
+            ],
         };
 
         return (
@@ -318,11 +318,11 @@ class ContextMenuCompoment extends Component {
                     anchorPosition={{ top: this.Y, left: this.X }}
                     anchorOrigin={{
                         vertical: "top",
-                        horizontal: "left"
+                        horizontal: "left",
                     }}
                     transformOrigin={{
                         vertical: "top",
-                        horizontal: "left"
+                        horizontal: "left",
                     }}
                 >
                     {this.props.menuType === "empty" && (
@@ -675,7 +675,7 @@ class ContextMenuCompoment extends Component {
 
 ContextMenuCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
-    menuType: PropTypes.string.isRequired
+    menuType: PropTypes.string.isRequired,
 };
 
 const ContextMenu = connect(

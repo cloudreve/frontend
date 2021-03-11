@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core";
 import {
     toggleSnackbar,
     applyThemes,
-    setSessionStatus
+    setSessionStatus,
 } from "../../actions/index";
 import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
@@ -20,7 +20,7 @@ import {
     InputLabel,
     Paper,
     Avatar,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import { bufferDecode, bufferEncode } from "../../utils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
@@ -29,7 +29,7 @@ import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
 import ReCaptcha from "./ReCaptcha";
 import { ICPFooter } from "../Common/ICPFooter";
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "110px",
@@ -38,9 +38,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up("sm")]: {
             width: 400,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 110
+        marginBottom: 110,
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -49,42 +49,42 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
             3
-        )}px`
+        )}px`,
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
     },
     submit: {
-        marginTop: theme.spacing(3)
+        marginTop: theme.spacing(3),
     },
     link: {
         marginTop: "20px",
         display: "flex",
         width: "100%",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     captchaContainer: {
         display: "flex",
         marginTop: "10px",
         [theme.breakpoints.down("sm")]: {
-            display: "block"
-        }
+            display: "block",
+        },
     },
     captchaPlaceholder: {
-        width: 200
+        width: 200,
     },
     buttonContainer: {
-        display: "flex"
+        display: "flex",
     },
     authnLink: {
         textAlign: "center",
-        marginTop: 16
-    }
+        marginTop: 16,
+    },
 }));
 
 function useQuery() {
@@ -101,14 +101,14 @@ function LoginForm() {
     const [twoFA, setTwoFA] = useState(false);
     const [faCode, setFACode] = useState("");
 
-    const loginCaptcha = useSelector(state => state.siteConfig.loginCaptcha);
-    const title = useSelector(state => state.siteConfig.title);
-    const authn = useSelector(state => state.siteConfig.authn);
+    const loginCaptcha = useSelector((state) => state.siteConfig.loginCaptcha);
+    const title = useSelector((state) => state.siteConfig.title);
+    const authn = useSelector((state) => state.siteConfig.authn);
     const useReCaptcha = useSelector(
-        state => state.siteConfig.captcha_IsUseReCaptcha
+        (state) => state.siteConfig.captcha_IsUseReCaptcha
     );
     const reCaptchaKey = useSelector(
-        state => state.siteConfig.captcha_ReCaptchaKey
+        (state) => state.siteConfig.captcha_ReCaptchaKey
     );
 
     const dispatch = useDispatch();
@@ -117,11 +117,11 @@ function LoginForm() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    const ApplyThemes = useCallback(theme => dispatch(applyThemes(theme)), [
-        dispatch
+    const ApplyThemes = useCallback((theme) => dispatch(applyThemes(theme)), [
+        dispatch,
     ]);
     const SetSessionStatus = useCallback(
-        status => dispatch(setSessionStatus(status)),
+        (status) => dispatch(setSessionStatus(status)),
         [dispatch]
     );
 
@@ -133,10 +133,10 @@ function LoginForm() {
 
     const refreshCaptcha = useCallback(() => {
         API.get("/site/captcha")
-            .then(response => {
+            .then((response) => {
                 setCaptchaData(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -153,7 +153,7 @@ function LoginForm() {
         }
     }, [location, loginCaptcha]);
 
-    const afterLogin = data => {
+    const afterLogin = (data) => {
         Auth.authenticate(data);
 
         // 设置用户主题色
@@ -171,7 +171,7 @@ function LoginForm() {
         localStorage.removeItem("siteConfigCache");
     };
 
-    const authnLogin = e => {
+    const authnLogin = (e) => {
         e.preventDefault();
         if (!navigator.credentials) {
             ToggleSnackbar("top", "right", "当前浏览器或环境不支持", "warning");
@@ -182,23 +182,23 @@ function LoginForm() {
         setLoading(true);
 
         API.get("/user/authn/" + email)
-            .then(response => {
+            .then((response) => {
                 const credentialRequestOptions = response.data;
                 console.log(credentialRequestOptions);
                 credentialRequestOptions.publicKey.challenge = bufferDecode(
                     credentialRequestOptions.publicKey.challenge
                 );
                 credentialRequestOptions.publicKey.allowCredentials.forEach(
-                    function(listItem) {
+                    function (listItem) {
                         listItem.id = bufferDecode(listItem.id);
                     }
                 );
 
                 return navigator.credentials.get({
-                    publicKey: credentialRequestOptions.publicKey
+                    publicKey: credentialRequestOptions.publicKey,
                 });
             })
-            .then(assertion => {
+            .then((assertion) => {
                 const authData = assertion.response.authenticatorData;
                 const clientDataJSON = assertion.response.clientDataJSON;
                 const rawId = assertion.rawId;
@@ -215,15 +215,15 @@ function LoginForm() {
                             authenticatorData: bufferEncode(authData),
                             clientDataJSON: bufferEncode(clientDataJSON),
                             signature: bufferEncode(sig),
-                            userHandle: bufferEncode(userHandle)
-                        }
+                            userHandle: bufferEncode(userHandle),
+                        },
                     })
                 );
             })
-            .then(response => {
+            .then((response) => {
                 afterLogin(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
                 ToggleSnackbar("top", "right", error.message, "warning");
             })
@@ -232,15 +232,15 @@ function LoginForm() {
             });
     };
 
-    const login = e => {
+    const login = (e) => {
         e.preventDefault();
         setLoading(true);
         API.post("/user/session", {
             userName: email,
             Password: pwd,
-            captchaCode: captcha
+            captchaCode: captcha,
         })
-            .then(response => {
+            .then((response) => {
                 setLoading(false);
                 if (response.rawData.code === 203) {
                     setTwoFA(true);
@@ -248,7 +248,7 @@ function LoginForm() {
                     afterLogin(response.data);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
                 if (!useReCaptcha) {
@@ -257,17 +257,17 @@ function LoginForm() {
             });
     };
 
-    const twoFALogin = e => {
+    const twoFALogin = (e) => {
         e.preventDefault();
         setLoading(true);
         API.post("/user/2fa", {
-            code: faCode
+            code: faCode,
         })
-            .then(response => {
+            .then((response) => {
                 setLoading(false);
                 afterLogin(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
             });
@@ -294,7 +294,9 @@ function LoginForm() {
                                         id="email"
                                         type="email"
                                         name="email"
-                                        onChange={e => setEmail(e.target.value)}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                         autoComplete
                                         value={email}
                                         autoFocus
@@ -306,7 +308,7 @@ function LoginForm() {
                                     </InputLabel>
                                     <Input
                                         name="password"
-                                        onChange={e => setPwd(e.target.value)}
+                                        onChange={(e) => setPwd(e.target.value)}
                                         type="password"
                                         id="password"
                                         value={pwd}
@@ -325,7 +327,7 @@ function LoginForm() {
                                             </InputLabel>
                                             <Input
                                                 name="captcha"
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     setCaptcha(e.target.value)
                                                 }
                                                 type="text"
@@ -365,10 +367,10 @@ function LoginForm() {
                                             <div>
                                                 <ReCaptcha
                                                     style={{
-                                                        display: "inline-block"
+                                                        display: "inline-block",
                                                     }}
                                                     sitekey={reCaptchaKey}
-                                                    onChange={value =>
+                                                    onChange={(value) =>
                                                         setCaptcha(value)
                                                     }
                                                     id="captcha"
@@ -401,7 +403,9 @@ function LoginForm() {
                                         id="email"
                                         type="email"
                                         name="email"
-                                        onChange={e => setEmail(e.target.value)}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                         autoComplete
                                         value={email}
                                         autoFocus
@@ -443,7 +447,7 @@ function LoginForm() {
                                     <>
                                         <Fingerprint
                                             style={{
-                                                marginRight: 8
+                                                marginRight: 8,
                                             }}
                                         />
                                         使用外部验证器登录
@@ -453,7 +457,7 @@ function LoginForm() {
                                     <>
                                         <VpnKey
                                             style={{
-                                                marginRight: 8
+                                                marginRight: 8,
                                             }}
                                         />
                                         使用密码登录
@@ -481,7 +485,7 @@ function LoginForm() {
                                 id="code"
                                 type="number"
                                 name="code"
-                                onChange={event =>
+                                onChange={(event) =>
                                     setFACode(event.target.value)
                                 }
                                 autoComplete

@@ -20,14 +20,14 @@ export default function EditUserPreload() {
     useEffect(() => {
         setUser({});
         API.get("/admin/user/" + id)
-            .then(response => {
+            .then((response) => {
                 // 整型转换
-                ["Status", "GroupID"].forEach(v => {
+                ["Status", "GroupID"].forEach((v) => {
                     response.data[v] = response.data[v].toString();
                 });
                 setUser(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, [id]);

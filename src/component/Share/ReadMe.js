@@ -10,59 +10,59 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import Editor from "for-editor";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     readMeContainer: {
         marginTop: 30,
         [theme.breakpoints.down("sm")]: {
-            marginTop: theme.spacing(2)
-        }
+            marginTop: theme.spacing(2),
+        },
     },
     readMeHeader: {
         padding: "10px 16px",
         display: "flex",
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     readMeIcon: {
-        marginRight: 8
+        marginRight: 8,
     },
     content: {},
     "@global": {
         //如果嵌套主题，则应该定位[class * =“MuiButton-root”]。
         ".for-container": {
-            border: "none!important"
+            border: "none!important",
         },
         ".for-container .for-editor .for-editor-edit": {
-            height: "0!important"
+            height: "0!important",
         },
         ".for-container > div:first-child": {
             borderTopLeftRadius: "0!important",
-            borderTopRightRadius: "0!important"
+            borderTopRightRadius: "0!important",
         },
         ".for-container .for-editor .for-panel .for-preview": {
             backgroundColor: theme.palette.background.paper + "!important",
-            color: theme.palette.text.primary + "!important"
+            color: theme.palette.text.primary + "!important",
         },
         ".for-container .for-markdown-preview pre": {
             backgroundColor: theme.palette.background.default + "!important",
             color:
                 theme.palette.type === "dark"
                     ? "#fff !important"
-                    : "rgba(0, 0, 0, 0.87);!important"
+                    : "rgba(0, 0, 0, 0.87);!important",
         },
 
         ".for-container .for-markdown-preview code": {
-            backgroundColor: theme.palette.background.default + "!important"
+            backgroundColor: theme.palette.background.default + "!important",
         },
         ".for-container .for-markdown-preview a": {
             color:
                 theme.palette.type === "dark"
                     ? "#67aeff !important"
-                    : "#0366d6 !important"
+                    : "#0366d6 !important",
         },
         ".for-container .for-markdown-preview table th": {
-            backgroundColor: theme.palette.background.default + "!important"
-        }
-    }
+            backgroundColor: theme.palette.background.default + "!important",
+        },
+    },
 }));
 
 export default function ReadMe(props) {
@@ -93,10 +93,10 @@ export default function ReadMe(props) {
                 "?path=" +
                 encodeURIComponent(previewPath)
         )
-            .then(response => {
+            .then((response) => {
                 setContent(response.rawData.toString());
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -126,11 +126,11 @@ export default function ReadMe(props) {
                         style={{
                             boxShadow: "none",
                             borderRadius: 4,
-                            backgroundColor: theme.palette.background.paper
+                            backgroundColor: theme.palette.background.paper,
                         }}
                         height={"100%"}
                         value={content}
-                        onChange={value => setContent(value)}
+                        onChange={(value) => setContent(value)}
                         preview
                         toolbar={{}}
                     />

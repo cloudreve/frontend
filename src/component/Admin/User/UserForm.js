@@ -13,23 +13,23 @@ import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
-    }
+            padding: "0px 24px 0 24px",
+        },
+    },
 }));
 export default function UserForm(props) {
     const classes = useStyles();
@@ -43,7 +43,7 @@ export default function UserForm(props) {
                   Nick: "",
                   Password: "", // 为空时只读
                   Status: "0", // 转换类型
-                  GroupID: "2" // 转换类型
+                  GroupID: "2", // 转换类型
               }
     );
     const [groups, setGroups] = useState([]);
@@ -59,34 +59,34 @@ export default function UserForm(props) {
 
     useEffect(() => {
         API.get("/admin/groups")
-            .then(response => {
+            .then((response) => {
                 setGroups(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, []);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setUser({
             ...user,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         const userCopy = { ...user };
 
         // 整型转换
-        ["Status", "GroupID", "Score"].forEach(v => {
+        ["Status", "GroupID", "Score"].forEach((v) => {
             userCopy[v] = parseInt(userCopy[v]);
         });
 
         setLoading(true);
         API.post("/admin/user", {
             user: userCopy,
-            password: userCopy.Password
+            password: userCopy.Password,
         })
             .then(() => {
                 history.push("/admin/user");
@@ -97,7 +97,7 @@ export default function UserForm(props) {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -169,7 +169,7 @@ export default function UserForm(props) {
                                     onChange={handleChange("GroupID")}
                                     required
                                 >
-                                    {groups.map(v => {
+                                    {groups.map((v) => {
                                         if (v.ID === 3) {
                                             return null;
                                         }

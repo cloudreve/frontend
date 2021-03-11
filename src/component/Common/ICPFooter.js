@@ -8,12 +8,12 @@ const useStyles = makeStyles(() => ({
     icp: {
         padding: "8px 24px",
         position: "absolute",
-        bottom: 0
-    }
+        bottom: 0,
+    },
 }));
 
 export const ICPFooter = () => {
-    const siteICPId = useSelector(state => state.siteConfig.siteICPId);
+    const siteICPId = useSelector((state) => state.siteConfig.siteICPId);
     const classes = useStyles();
     const location = useLocation();
     const [show, setShow] = useState(true);

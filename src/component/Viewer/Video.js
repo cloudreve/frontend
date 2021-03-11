@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
         marginTop: "30px",
@@ -17,14 +17,14 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
         },
-        marginBottom: 50
+        marginBottom: 50,
     },
     player: {
         borderRadius: "4px",
-        maxHeight: 600
-    }
+        maxHeight: 600,
+    },
 }));
 
 function useQuery() {
@@ -37,9 +37,10 @@ export default function VideoViewer() {
     const query = useQuery();
     const { id } = useParams();
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
-        dispatch
-    ]);
+    const SetSubTitle = useCallback(
+        (title) => dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
             const path = query.get("p").split("/");
@@ -69,8 +70,8 @@ export default function VideoViewer() {
                                                 query.get("share_path")
                                             )
                                           : "")
-                                    : "/file/preview/" + query.get("id"))
-                        }
+                                    : "/file/preview/" + query.get("id")),
+                        },
                     }}
                 />
             </Paper>

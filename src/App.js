@@ -35,8 +35,8 @@ const PDFViewer = React.lazy(() =>
 );
 
 export default function App() {
-    const themeConfig = useSelector(state => state.siteConfig.theme);
-    const isLogin = useSelector(state => state.viewUpdate.isLogin);
+    const themeConfig = useSelector((state) => state.siteConfig.theme);
+    const isLogin = useSelector((state) => state.viewUpdate.isLogin);
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
     const theme = React.useMemo(() => {
@@ -54,9 +54,9 @@ export default function App() {
                     main:
                         themeConfig.palette.type === "dark"
                             ? lighten(themeConfig.palette.primary.main, 0.3)
-                            : themeConfig.palette.primary.main
-                }
-            }
+                            : themeConfig.palette.primary.main,
+                },
+            },
         });
         changeThemeColor(
             themeConfig.palette.type === "dark"
@@ -66,16 +66,16 @@ export default function App() {
         return theme;
     }, [prefersDarkMode, themeConfig]);
 
-    const useStyles = makeStyles(theme => ({
+    const useStyles = makeStyles((theme) => ({
         root: {
-            display: "flex"
+            display: "flex",
         },
         content: {
             flexGrow: 1,
             padding: theme.spacing(0),
-            minWidth: 0
+            minWidth: 0,
         },
-        toolbar: theme.mixins.toolbar
+        toolbar: theme.mixins.toolbar,
     }));
 
     const classes = useStyles();
@@ -94,7 +94,7 @@ export default function App() {
                             <AuthRoute exact path={path} isLogin={isLogin}>
                                 <Redirect
                                     to={{
-                                        pathname: "/home"
+                                        pathname: "/home",
                                     }}
                                 />
                             </AuthRoute>

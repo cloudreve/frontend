@@ -6,7 +6,7 @@ import {
     ListItemIcon,
     ListItemText,
     makeStyles,
-    withStyles
+    withStyles,
 } from "@material-ui/core";
 import { Clear, KeyboardArrowRight } from "@material-ui/icons";
 import classNames from "classnames";
@@ -40,7 +40,7 @@ import {
     Triangle,
     TriangleOutline,
     FolderHeartOutline,
-    TagPlus
+    TagPlus,
 } from "mdi-material-ui";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
@@ -51,14 +51,14 @@ const ExpansionPanel = withStyles({
         maxWidth: "100%",
         boxShadow: "none",
         "&:not(:last-child)": {
-            borderBottom: 0
+            borderBottom: 0,
         },
         "&:before": {
-            display: "none"
+            display: "none",
         },
-        "&$expanded": { margin: 0 }
+        "&$expanded": { margin: 0 },
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
@@ -67,50 +67,50 @@ const ExpansionPanelSummary = withStyles({
         padding: 0,
 
         "&$expanded": {
-            minHeight: 0
-        }
+            minHeight: 0,
+        },
     },
     content: {
         maxWidth: "100%",
         margin: 0,
         display: "block",
         "&$expanded": {
-            margin: "0"
-        }
+            margin: "0",
+        },
     },
-    expanded: {}
+    expanded: {},
 })(MuiExpansionPanelSummary);
 
-const ExpansionPanelDetails = withStyles(theme => ({
+const ExpansionPanelDetails = withStyles((theme) => ({
     root: {
         display: "block",
-        padding: theme.spacing(0)
-    }
+        padding: theme.spacing(0),
+    },
 }))(MuiExpansionPanelDetails);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     expand: {
         display: "none",
-        transition: ".15s all ease-in-out"
+        transition: ".15s all ease-in-out",
     },
     expanded: {
         display: "block",
-        transform: "rotate(90deg)"
+        transform: "rotate(90deg)",
     },
     iconFix: {
-        marginLeft: "16px"
+        marginLeft: "16px",
     },
     hiddenButton: {
-        display: "none"
+        display: "none",
     },
     subMenu: {
-        marginLeft: theme.spacing(2)
+        marginLeft: theme.spacing(2),
     },
     overFlow: {
         whiteSpace: "nowrap",
         overflow: "hidden",
-        textOverflow: "ellipsis"
-    }
+        textOverflow: "ellipsis",
+    },
 }));
 
 const icons = {
@@ -128,7 +128,7 @@ const icons = {
     SquareOutline: SquareOutline,
     Triangle: Triangle,
     TriangleOutline: TriangleOutline,
-    FolderHeartOutline: FolderHeartOutline
+    FolderHeartOutline: FolderHeartOutline,
 };
 
 const AddTag = React.lazy(() => import("../Modals/AddTag"));
@@ -149,10 +149,10 @@ export default function FileTag() {
     );
 
     const dispatch = useDispatch();
-    const SearchMyFile = useCallback(k => dispatch(searchMyFile(k)), [
-        dispatch
+    const SearchMyFile = useCallback((k) => dispatch(searchMyFile(k)), [
+        dispatch,
     ]);
-    const NavigateTo = useCallback(k => dispatch(navigateTo(k)), [dispatch]);
+    const NavigateTo = useCallback((k) => dispatch(navigateTo(k)), [dispatch]);
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -169,7 +169,7 @@ export default function FileTag() {
                     style={
                         color
                             ? {
-                                  color: color
+                                  color: color,
                               }
                             : {}
                     }
@@ -179,7 +179,7 @@ export default function FileTag() {
         return <Circle className={[classes.iconFix]} />;
     };
 
-    const submitSuccess = tag => {
+    const submitSuccess = (tag) => {
         const newTags = [...tags, tag];
         setTags(newTags);
         const user = Auth.GetUser();
@@ -187,10 +187,10 @@ export default function FileTag() {
         Auth.SetUser(user);
     };
 
-    const submitDelete = id => {
+    const submitDelete = (id) => {
         API.delete("/tag/" + id)
             .then(() => {
-                const newTags = tags.filter(v => {
+                const newTags = tags.filter((v) => {
                     return v.id !== id;
                 });
                 setTags(newTags);
@@ -198,7 +198,7 @@ export default function FileTag() {
                 user.tags = newTags;
                 Auth.SetUser(user);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     };
@@ -234,7 +234,7 @@ export default function FileTag() {
                                     {
                                         [classes.expanded]:
                                             tagOpen && isHomePage,
-                                        [classes.iconFix]: true
+                                        [classes.iconFix]: true,
                                     },
                                     classes.expand
                                 )}
@@ -278,10 +278,10 @@ export default function FileTag() {
                                     <VideoIcon
                                         className={[
                                             classes.iconFix,
-                                            classes.iconVideo
+                                            classes.iconVideo,
                                         ]}
                                     />
-                                )
+                                ),
                             },
                             {
                                 key: "图片",
@@ -290,10 +290,10 @@ export default function FileTag() {
                                     <ImageIcon
                                         className={[
                                             classes.iconFix,
-                                            classes.iconImg
+                                            classes.iconImg,
                                         ]}
                                     />
-                                )
+                                ),
                             },
                             {
                                 key: "音频",
@@ -302,10 +302,10 @@ export default function FileTag() {
                                     <MusicIcon
                                         className={[
                                             classes.iconFix,
-                                            classes.iconAudio
+                                            classes.iconAudio,
                                         ]}
                                     />
-                                )
+                                ),
                             },
                             {
                                 key: "文档",
@@ -314,12 +314,12 @@ export default function FileTag() {
                                     <DocIcon
                                         className={[
                                             classes.iconFix,
-                                            classes.iconDoc
+                                            classes.iconDoc,
                                         ]}
                                     />
-                                )
-                            }
-                        ].map(v => (
+                                ),
+                            },
+                        ].map((v) => (
                             <ListItem
                                 button
                                 key={v.key}
@@ -331,7 +331,7 @@ export default function FileTag() {
                                 <ListItemText primary={v.key} />
                             </ListItem>
                         ))}
-                        {tags.map(v => (
+                        {tags.map((v) => (
                             <ListItem
                                 button
                                 key={v.id}

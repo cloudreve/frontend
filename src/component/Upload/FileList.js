@@ -18,50 +18,50 @@ import {
     Slide,
     ListItemSecondaryAction,
     withWidth,
-    DialogContent
+    DialogContent,
 } from "@material-ui/core";
 import TypeIcon from "../FileManager/TypeIcon";
 import { withTheme } from "@material-ui/core/styles";
 
-const styles = theme => ({
+const styles = (theme) => ({
     appBar: {
-        position: "relative"
+        position: "relative",
     },
     flex: {
-        flex: 1
+        flex: 1,
     },
     progressBar: {
-        marginTop: 5
+        marginTop: 5,
     },
     minHight: {
         [theme.breakpoints.up("sm")]: {
-            minWidth: 500
+            minWidth: 500,
         },
-        padding: 0
+        padding: 0,
     },
     dialogContent: {
-        padding: 0
+        padding: 0,
     },
     successStatus: {
-        color: "#4caf50"
+        color: "#4caf50",
     },
     errorStatus: {
         color: "#ff5722",
-        wordBreak: "break-all"
+        wordBreak: "break-all",
     },
     listAction: {
         marginLeft: 20,
-        marginRight: 20
+        marginRight: 20,
     },
     delete: {
-        zIndex: 9
+        zIndex: 9,
     },
     progressContainer: {
-        position: "relative"
+        position: "relative",
     },
     progressContent: {
         position: "relative",
-        zIndex: 9
+        zIndex: 9,
     },
     progress: {
         transition: "width .4s linear",
@@ -69,49 +69,49 @@ const styles = theme => ({
         height: "100%",
         position: "absolute",
         left: 0,
-        top: 0
+        top: 0,
     },
     fileName: {
-        wordBreak: "break-all"
-    }
+        wordBreak: "break-all",
+    },
 });
 class FileList extends Component {
     state = {
         open: false,
-        files: []
+        files: [],
     };
 
     //入队
     enQueue(files) {
         this.setState({
-            files: [...this.state.files, ...files]
+            files: [...this.state.files, ...files],
         });
     }
 
     deQueue(file) {
         const filesNow = [...this.state.files];
-        const fileID = filesNow.findIndex(f => {
+        const fileID = filesNow.findIndex((f) => {
             return f.id === file.id;
         });
         if (fileID !== -1) {
             filesNow.splice(fileID, 1);
             this.setState({
                 files: filesNow,
-                open: filesNow.length !== 0
+                open: filesNow.length !== 0,
             });
         }
     }
 
     updateStatus(file) {
         const filesNow = [...this.state.files];
-        const fileID = filesNow.findIndex(f => {
+        const fileID = filesNow.findIndex((f) => {
             return f.id === file.id;
         });
         if (!file.errMsg || file.ignoreMsg) {
             if (filesNow[fileID] && filesNow[fileID].status !== 4) {
                 filesNow[fileID] = file;
                 this.setState({
-                    files: filesNow
+                    files: filesNow,
                 });
             }
         } else {
@@ -122,14 +122,14 @@ class FileList extends Component {
     setComplete(file) {
         console.log("setComplete");
         const filesNow = [...this.state.files];
-        const fileID = filesNow.findIndex(f => {
+        const fileID = filesNow.findIndex((f) => {
             return f.id === file.id;
         });
         if (fileID !== -1) {
             if (filesNow[fileID].status !== 4) {
                 filesNow[fileID].status = 5;
                 this.setState({
-                    files: filesNow
+                    files: filesNow,
                 });
             }
         }
@@ -137,7 +137,7 @@ class FileList extends Component {
 
     setError(file, errMsg) {
         const filesNow = [...this.state.files];
-        const fileID = filesNow.findIndex(f => {
+        const fileID = filesNow.findIndex((f) => {
             return f.id === file.id;
         });
         if (fileID !== -1) {
@@ -149,7 +149,7 @@ class FileList extends Component {
             filesNow.push(file);
         }
         this.setState({
-            files: filesNow
+            files: filesNow,
         });
     }
 
@@ -162,7 +162,7 @@ class FileList extends Component {
         }
     };
 
-    cancelUpload = file => {
+    cancelUpload = (file) => {
         this.props.cancelUpload(file);
         this.deQueue(file);
     };
@@ -190,7 +190,7 @@ class FileList extends Component {
             enQueue: this.enQueue.bind(this),
             updateStatus: this.updateStatus.bind(this),
             setComplete: this.setComplete.bind(this),
-            setError: this.setError.bind(this)
+            setError: this.setError.bind(this),
         });
 
         return (
@@ -229,7 +229,7 @@ class FileList extends Component {
                                     <div
                                         style={{
                                             backgroundColor: this.getProgressBackground(),
-                                            width: item.percent + "%"
+                                            width: item.percent + "%",
                                         }}
                                         className={classes.progress}
                                     />

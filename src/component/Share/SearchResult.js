@@ -12,7 +12,7 @@ import {
     CardHeader,
     Typography,
     Grid,
-    IconButton
+    IconButton,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import TypeIcon from "../FileManager/TypeIcon";
@@ -24,16 +24,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router";
 import TimeAgo from "timeago-react";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     cardContainer: {
-        padding: theme.spacing(1)
+        padding: theme.spacing(1),
     },
     card: {
         maxWidth: 400,
-        margin: "0 auto"
+        margin: "0 auto",
     },
     actions: {
-        display: "flex"
+        display: "flex",
     },
     layout: {
         width: "auto",
@@ -43,34 +43,34 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
             width: 1100,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     shareTitle: {
-        maxWidth: "200px"
+        maxWidth: "200px",
     },
     avatarFile: {
-        backgroundColor: theme.palette.primary.light
+        backgroundColor: theme.palette.primary.light,
     },
     avatarFolder: {
-        backgroundColor: theme.palette.secondary.light
+        backgroundColor: theme.palette.secondary.light,
     },
     gird: {
-        marginTop: "30px"
+        marginTop: "30px",
     },
     loadMore: {
         textAlign: "right",
         marginTop: "20px",
-        marginBottom: "40px"
+        marginBottom: "40px",
     },
     badge: {
         marginLeft: theme.spacing(1),
-        height: 17
+        height: 17,
     },
     orderSelect: {
         textAlign: "right",
-        marginTop: 5
-    }
+        marginTop: 5,
+    },
 }));
 
 function useQuery() {
@@ -108,7 +108,7 @@ export default function SearchResult() {
                 "&keywords=" +
                 encodeURIComponent(keywords)
         )
-            .then(response => {
+            .then((response) => {
                 if (response.data.items.length === 0) {
                     ToggleSnackbar(
                         "top",
@@ -140,7 +140,7 @@ export default function SearchResult() {
         search(keywords, value, orderBy);
     };
 
-    const handleOrderChange = event => {
+    const handleOrderChange = (event) => {
         setOrderBy(event.target.value);
         const keywords = query.get("keywords");
         search(keywords, page, event.target.value);
@@ -184,7 +184,7 @@ export default function SearchResult() {
                 </Grid>
             </Grid>
             <Grid container spacing={24} className={classes.gird}>
-                {shareList.map(value => (
+                {shareList.map((value) => (
                     <Grid
                         item
                         xs={12}

@@ -11,78 +11,78 @@ import {
     Grow,
     Avatar,
     IconButton,
-    Tooltip
+    Tooltip,
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import { Home } from "@material-ui/icons";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         selected: state.explorer.selected,
         isMultiple: state.explorer.selectProps.isMultiple,
         withFolder: state.explorer.selectProps.withFolder,
         withFile: state.explorer.selectProps.withFile,
-        isLogin: state.viewUpdate.isLogin
+        isLogin: state.viewUpdate.isLogin,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        setUserPopover: anchor => {
+        setUserPopover: (anchor) => {
             dispatch(setUserPopover(anchor));
-        }
+        },
     };
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
     mobileHidden: {
         [theme.breakpoints.down("xs")]: {
-            display: "none"
+            display: "none",
         },
-        whiteSpace: "nowrap"
+        whiteSpace: "nowrap",
     },
     avatar: {
         width: "30px",
-        height: "30px"
+        height: "30px",
     },
     header: {
         display: "flex",
-        padding: "20px 20px 20px 20px"
+        padding: "20px 20px 20px 20px",
     },
     largeAvatar: {
         height: "90px",
-        width: "90px"
+        width: "90px",
     },
     info: {
         marginLeft: "10px",
-        width: "139px"
+        width: "139px",
     },
     badge: {
-        marginTop: "10px"
+        marginTop: "10px",
     },
     visitorMenu: {
-        width: 200
-    }
+        width: 200,
+    },
 });
 
 class UserAvatarCompoment extends Component {
     state = {
-        anchorEl: null
+        anchorEl: null,
     };
 
-    showUserInfo = e => {
+    showUserInfo = (e) => {
         this.props.setUserPopover(e.currentTarget);
     };
 
     handleClose = () => {
         this.setState({
-            anchorEl: null
+            anchorEl: null,
         });
     };
 
-    openURL = url => {
+    openURL = (url) => {
         window.location.href = url;
     };
 
@@ -161,7 +161,7 @@ class UserAvatarCompoment extends Component {
 }
 
 UserAvatarCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const UserAvatar = connect(

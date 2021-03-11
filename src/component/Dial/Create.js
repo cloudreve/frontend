@@ -8,7 +8,7 @@ import PublishIcon from "@material-ui/icons/Publish";
 import {
     openCreateFileDialog,
     openCreateFolderDialog,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions";
 import { useDispatch } from "react-redux";
 import AutoHidden from "./AutoHidden";
@@ -24,20 +24,20 @@ const useStyles = makeStyles(() => ({
         bottom: 20,
         left: "auto",
         zIndex: 5,
-        position: "fixed"
+        position: "fixed",
     },
     badge: {
         position: "absolute",
         bottom: 26,
         top: "auto",
         zIndex: 9999,
-        right: 7
+        right: 7,
     },
     "@global": {
         ".MuiSpeedDialAction-staticTooltipLabel": {
-            width: 100
-        }
-    }
+            width: 100,
+        },
+    },
 }));
 
 export default function UploadButton(props) {
@@ -63,7 +63,7 @@ export default function UploadButton(props) {
         setQueued(props.Queued);
     }, [props.Queued]);
 
-    const openUpload = id => {
+    const openUpload = (id) => {
         const uploadButton = document.getElementsByClassName(id)[0];
         if (document.body.contains(uploadButton)) {
             uploadButton.click();
@@ -94,7 +94,7 @@ export default function UploadButton(props) {
             <Badge
                 badgeContent={queued}
                 classes={{
-                    badge: classes.badge // class name, e.g. `root-x`
+                    badge: classes.badge, // class name, e.g. `root-x`
                 }}
                 className={classes.fab}
                 invisible={queued === 0}
@@ -116,7 +116,7 @@ export default function UploadButton(props) {
                     FabProps={{
                         onClick: () =>
                             !statusHelper.isMobile() && uploadClicked(),
-                        color: "secondary"
+                        color: "secondary",
                     }}
                     onOpen={handleOpen}
                     open={open}

@@ -22,32 +22,32 @@ import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import CreateTheme from "../Dialogs/CreateTheme";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 500,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
+            padding: "0px 24px 0 24px",
+        },
     },
     colorContainer: {
-        display: "flex"
+        display: "flex",
     },
     colorDot: {
         width: 20,
         height: 20,
         borderRadius: "50%",
-        marginLeft: 6
-    }
+        marginLeft: 6,
+    },
 }));
 
 export default function Theme() {
@@ -58,7 +58,7 @@ export default function Theme() {
         themes: "{}",
         defaultTheme: "",
         home_view_method: "icon",
-        share_view_method: "list"
+        share_view_method: "list",
     });
     const [themeConfig, setThemeConfig] = useState({});
     const [themeConfigError, setThemeConfigError] = useState({});
@@ -71,7 +71,7 @@ export default function Theme() {
         [dispatch]
     );
 
-    const deleteTheme = color => {
+    const deleteTheme = (color) => {
         if (color === options.defaultTheme) {
             ToggleSnackbar("top", "right", "不能删除默认配色", "warning");
             return;
@@ -85,11 +85,11 @@ export default function Theme() {
         const resStr = JSON.stringify(themeCopy);
         setOptions({
             ...options,
-            themes: resStr
+            themes: resStr,
         });
     };
 
-    const addTheme = newTheme => {
+    const addTheme = (newTheme) => {
         setCreate(false);
         if (theme[newTheme.palette.primary.main] !== undefined) {
             ToggleSnackbar(
@@ -102,12 +102,12 @@ export default function Theme() {
         }
         const res = {
             ...theme,
-            [newTheme.palette.primary.main]: newTheme
+            [newTheme.palette.primary.main]: newTheme,
         };
         const resStr = JSON.stringify(res);
         setOptions({
             ...options,
-            themes: resStr
+            themes: resStr,
         });
     };
 
@@ -115,7 +115,7 @@ export default function Theme() {
         const res = JSON.parse(options.themes);
         const themeString = {};
 
-        Object.keys(res).forEach(k => {
+        Object.keys(res).forEach((k) => {
             themeString[k] = JSON.stringify(res[k]);
         });
 
@@ -123,43 +123,43 @@ export default function Theme() {
         setThemeConfig(themeString);
     }, [options.themes]);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setOptions({
             ...options,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
     useEffect(() => {
         API.post("/admin/setting", {
-            keys: Object.keys(options)
+            keys: Object.keys(options),
         })
-            .then(response => {
+            .then((response) => {
                 setOptions(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line
     }, []);
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k => {
+        Object.keys(options).forEach((k) => {
             option.push({
                 key: k,
-                value: options[k]
+                value: options[k],
             });
         });
         API.patch("/admin/setting", {
-            options: option
+            options: option,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -185,7 +185,7 @@ export default function Theme() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {Object.keys(theme).map(k => (
+                                    {Object.keys(theme).map((k) => (
                                         <TableRow key={k}>
                                             <TableCell
                                                 component="th"
@@ -201,7 +201,7 @@ export default function Theme() {
                                                             backgroundColor:
                                                                 theme[k].palette
                                                                     .primary
-                                                                    .main
+                                                                    .main,
                                                         }}
                                                         className={
                                                             classes.colorDot
@@ -212,7 +212,7 @@ export default function Theme() {
                                                             backgroundColor:
                                                                 theme[k].palette
                                                                     .secondary
-                                                                    .main
+                                                                    .main,
                                                         }}
                                                         className={
                                                             classes.colorDot
@@ -229,13 +229,13 @@ export default function Theme() {
                                                     }
                                                     fullWidth
                                                     multiline
-                                                    onChange={e => {
+                                                    onChange={(e) => {
                                                         setThemeConfig({
                                                             ...themeConfig,
-                                                            [k]: e.target.value
+                                                            [k]: e.target.value,
                                                         });
                                                     }}
-                                                    onBlur={e => {
+                                                    onBlur={(e) => {
                                                         try {
                                                             const res = JSON.parse(
                                                                 e.target.value
@@ -268,20 +268,20 @@ export default function Theme() {
                                                             }
                                                             setTheme({
                                                                 ...theme,
-                                                                [k]: res
+                                                                [k]: res,
                                                             });
                                                         } catch (e) {
                                                             setThemeConfigError(
                                                                 {
                                                                     ...themeConfigError,
-                                                                    [k]: true
+                                                                    [k]: true,
                                                                 }
                                                             );
                                                             return;
                                                         }
                                                         setThemeConfigError({
                                                             ...themeConfigError,
-                                                            [k]: false
+                                                            [k]: false,
                                                         });
                                                     }}
                                                     value={themeConfig[k]}
@@ -335,7 +335,7 @@ export default function Theme() {
                                     value={options.defaultTheme}
                                     onChange={handleChange("defaultTheme")}
                                 >
-                                    {Object.keys(theme).map(k => (
+                                    {Object.keys(theme).map((k) => (
                                         <MenuItem key={k} value={k}>
                                             <div
                                                 className={
@@ -346,7 +346,7 @@ export default function Theme() {
                                                     style={{
                                                         backgroundColor:
                                                             theme[k].palette
-                                                                .primary.main
+                                                                .primary.main,
                                                     }}
                                                     className={classes.colorDot}
                                                 />
@@ -354,7 +354,7 @@ export default function Theme() {
                                                     style={{
                                                         backgroundColor:
                                                             theme[k].palette
-                                                                .secondary.main
+                                                                .secondary.main,
                                                     }}
                                                     className={classes.colorDot}
                                                 />

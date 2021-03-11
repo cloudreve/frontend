@@ -41,12 +41,12 @@ export default function DomainInput({ onChange, value, required, label }) {
             <Input
                 error={error !== ""}
                 value={domain}
-                onChange={e => {
+                onChange={(e) => {
                     setDomain(e.target.value);
                     onChange({
                         target: {
-                            value: protocol + e.target.value
-                        }
+                            value: protocol + e.target.value,
+                        },
                     });
                 }}
                 required={required}
@@ -54,12 +54,12 @@ export default function DomainInput({ onChange, value, required, label }) {
                     <InputAdornment position="start">
                         <Select
                             value={protocol}
-                            onChange={e => {
+                            onChange={(e) => {
                                 setProtocol(e.target.value);
                                 onChange({
                                     target: {
-                                        value: e.target.value + domain
-                                    }
+                                        value: e.target.value + domain,
+                                    },
                                 });
                             }}
                         >

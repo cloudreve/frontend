@@ -25,18 +25,18 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import AlertDialog from "../../Dialogs/Alert";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     stepContent: {
-        padding: "16px 32px 16px 32px"
+        padding: "16px 32px 16px 32px",
     },
     form: {
         maxWidth: 400,
-        marginTop: 20
+        marginTop: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
+            padding: "0px 24px 0 24px",
+        },
     },
     subStepContainer: {
         display: "flex",
@@ -44,11 +44,11 @@ const useStyles = makeStyles(theme => ({
         padding: 10,
         transition: theme.transitions.create("background-color", {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen
+            duration: theme.transitions.duration.leavingScreen,
         }),
         "&:focus-within": {
-            backgroundColor: theme.palette.background.default
-        }
+            backgroundColor: theme.palette.background.default,
+        },
     },
     stepNumber: {
         width: 20,
@@ -56,16 +56,16 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: lighten(theme.palette.secondary.light, 0.2),
         color: theme.palette.secondary.contrastText,
         textAlign: "center",
-        borderRadius: " 50%"
+        borderRadius: " 50%",
     },
     stepNumberContainer: {
-        marginRight: 10
+        marginRight: 10,
     },
     stepFooter: {
-        marginTop: 32
+        marginTop: 32,
     },
     button: {
-        marginRight: theme.spacing(1)
+        marginRight: theme.spacing(1),
     },
     viewButtonLabel: { textTransform: "none" },
     "@global": {
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
             fontFamily:
                 ' Consolas, "Liberation Mono", Menlo, Courier, monospace',
             borderRadius: "2px",
-            backgroundColor: "rgba(255,229,100,0.1)"
+            backgroundColor: "rgba(255,229,100,0.1)",
         },
         pre: {
             margin: "24px 0",
@@ -85,36 +85,36 @@ const useStyles = makeStyles(theme => ({
             direction: "ltr",
             borderRadius: "4px",
             backgroundColor: "#272c34",
-            color: "#fff"
-        }
-    }
+            color: "#fff",
+        },
+    },
 }));
 
 const steps = [
     {
         title: "存储空间",
-        optional: false
+        optional: false,
     },
     {
         title: "上传路径",
-        optional: false
+        optional: false,
     },
     {
         title: "直链设置",
-        optional: false
+        optional: false,
     },
     {
         title: "上传限制",
-        optional: false
+        optional: false,
     },
     {
         title: "跨域策略",
-        optional: true
+        optional: true,
     },
     {
         title: "完成",
-        optional: false
-    }
+        optional: false,
+    },
 ];
 
 const regions = {
@@ -140,7 +140,7 @@ const regions = {
     "eu-west-3": "Europe (Paris)",
     "eu-north-1": "Europe (Stockholm)",
     "me-south-1": "Middle East (Bahrain)",
-    "sa-east-1": "South America (São Paulo)"
+    "sa-east-1": "South America (São Paulo)",
 };
 
 export default function S3Guide(props) {
@@ -171,32 +171,32 @@ export default function S3Guide(props) {
                   MaxSize: "0",
                   OptionsSerialized: {
                       file_type: "",
-                      region: "us-east-2"
-                  }
+                      region: "us-east-2",
+                  },
               }
     );
     const [policyID, setPolicyID] = useState(
         props.policy ? props.policy.ID : 0
     );
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setPolicy({
             ...policy,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleOptionChange = name => event => {
+    const handleOptionChange = (name) => (event) => {
         setPolicy({
             ...policy,
             OptionsSerialized: {
                 ...policy.OptionsSerialized,
-                [name]: event.target.value
-            }
+                [name]: event.target.value,
+            },
         });
     };
 
-    const isStepSkipped = step => {
+    const isStepSkipped = (step) => {
         return skipped.has(step);
     };
 
@@ -207,7 +207,7 @@ export default function S3Guide(props) {
         [dispatch]
     );
 
-    const submitPolicy = e => {
+    const submitPolicy = (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -235,9 +235,9 @@ export default function S3Guide(props) {
         }
 
         API.post("/admin/policy", {
-            policy: policyCopy
+            policy: policyCopy,
         })
-            .then(response => {
+            .then((response) => {
                 ToggleSnackbar(
                     "top",
                     "right",
@@ -247,7 +247,7 @@ export default function S3Guide(props) {
                 setActiveStep(4);
                 setPolicyID(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -260,13 +260,13 @@ export default function S3Guide(props) {
     const createCORS = () => {
         setLoading(true);
         API.post("/admin/policy/cors", {
-            id: policyID
+            id: policyID,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "跨域策略已添加", "success");
                 setActiveStep(5);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -310,7 +310,7 @@ export default function S3Guide(props) {
             {activeStep === 0 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(1);
                     }}
@@ -439,15 +439,15 @@ export default function S3Guide(props) {
                                         value={policy.OptionsSerialized.region}
                                         onInputChange={(_, value) =>
                                             handleOptionChange("region")({
-                                                target: { value: value }
+                                                target: { value: value },
                                             })
                                         }
-                                        renderOption={option => (
+                                        renderOption={(option) => (
                                             <React.Fragment>
                                                 {regions[option]}
                                             </React.Fragment>
                                         )}
-                                        renderInput={params => (
+                                        renderInput={(params) => (
                                             <TextField
                                                 style={{ width: "100%" }}
                                                 {...params}
@@ -472,7 +472,7 @@ export default function S3Guide(props) {
                                     <RadioGroup
                                         required
                                         value={useCDN}
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             setUseCDN(e.target.value);
                                         }}
                                         row
@@ -537,7 +537,7 @@ export default function S3Guide(props) {
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格"
+                                            title: "不能含有空格",
                                         }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
@@ -553,7 +553,7 @@ export default function S3Guide(props) {
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格"
+                                            title: "不能含有空格",
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -604,7 +604,7 @@ export default function S3Guide(props) {
             {activeStep === 1 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(2);
                     }}
@@ -732,7 +732,7 @@ export default function S3Guide(props) {
             {activeStep === 2 && (
                 <form
                     className={classes.stepContent}
-                    onSubmit={e => {
+                    onSubmit={(e) => {
                         e.preventDefault();
                         setActiveStep(3);
                     }}
@@ -753,7 +753,7 @@ export default function S3Guide(props) {
                                     <RadioGroup
                                         required
                                         value={policy.IsOriginLinkEnable}
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (
                                                 policy.IsPrivate === "true" &&
                                                 e.target.value === "true"
@@ -832,16 +832,16 @@ export default function S3Guide(props) {
                                                 ? "false"
                                                 : "true"
                                         }
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "10485760"
+                                                    MaxSize: "10485760",
                                                 });
                                             } else {
                                                 setPolicy({
                                                     ...policy,
-                                                    MaxSize: "0"
+                                                    MaxSize: "0",
                                                 });
                                             }
                                         }}
@@ -910,23 +910,23 @@ export default function S3Guide(props) {
                                                 ? "false"
                                                 : "true"
                                         }
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             if (e.target.value === "true") {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
                                                         file_type:
-                                                            "jpg,png,mp4,zip,rar"
-                                                    }
+                                                            "jpg,png,mp4,zip,rar",
+                                                    },
                                                 });
                                             } else {
                                                 setPolicy({
                                                     ...policy,
                                                     OptionsSerialized: {
                                                         ...policy.OptionsSerialized,
-                                                        file_type: ""
-                                                    }
+                                                        file_type: "",
+                                                    },
                                                 });
                                             }
                                         }}
@@ -1035,9 +1035,9 @@ export default function S3Guide(props) {
                             className={classes.button}
                             onClick={() => {
                                 setActiveStep(
-                                    prevActiveStep => prevActiveStep + 1
+                                    (prevActiveStep) => prevActiveStep + 1
                                 );
-                                setSkipped(prevSkipped => {
+                                setSkipped((prevSkipped) => {
                                     const newSkipped = new Set(
                                         prevSkipped.values()
                                     );

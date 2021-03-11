@@ -18,8 +18,8 @@ import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(() => ({
     formContainer: {
-        margin: "8px 0 8px 0"
-    }
+        margin: "8px 0 8px 0",
+    },
 }));
 
 export default function AddRedeem({ open, onClose, products, onSuccess }) {
@@ -27,7 +27,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
     const [input, setInput] = useState({
         num: 1,
         id: 0,
-        time: 1
+        time: 1,
     });
     const [loading, setLoading] = useState(false);
 
@@ -38,14 +38,14 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
         [dispatch]
     );
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setInput({
             ...input,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         input.num = parseInt(input.num);
@@ -64,11 +64,11 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
         }
 
         API.post("/admin/redeem", input)
-            .then(response => {
+            .then((response) => {
                 onSuccess(response.data);
                 onClose();
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -98,7 +98,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                                     inputProps={{
                                         step: 1,
                                         min: 1,
-                                        max: 100
+                                        max: 100,
                                     }}
                                     value={input.num}
                                     onChange={handleChange("num")}
@@ -117,11 +117,11 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                                 </InputLabel>
                                 <Select
                                     value={input.id}
-                                    onChange={e => {
+                                    onChange={(e) => {
                                         handleChange("id")(e);
                                     }}
                                 >
-                                    {products.map(v => (
+                                    {products.map((v) => (
                                         <MenuItem
                                             key={v.id}
                                             value={v.id}
@@ -144,7 +144,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                                     type={"number"}
                                     inputProps={{
                                         step: 1,
-                                        min: 1
+                                        min: 1,
                                     }}
                                     value={input.time}
                                     onChange={handleChange("time")}

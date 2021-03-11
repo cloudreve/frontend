@@ -18,9 +18,10 @@ export default function SharePreload() {
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
 
-    const SetSubTitle = useCallback(title => dispatch(changeSubTitle(title)), [
-        dispatch
-    ]);
+    const SetSubTitle = useCallback(
+        (title) => dispatch(changeSubTitle(title)),
+        [dispatch]
+    );
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -57,11 +58,11 @@ export default function SharePreload() {
             withPassword = "?password=" + password;
         }
         API.get("/share/info/" + id + withPassword)
-            .then(response => {
+            .then((response) => {
                 setShare(response.data);
                 setLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 if (error.code === 404) {
                     setShare(null);

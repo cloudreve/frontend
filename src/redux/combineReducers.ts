@@ -1,7 +1,7 @@
 import {
     combineReducers as combine,
     ReducersMapObject,
-    AnyAction
+    AnyAction,
 } from "redux";
 import invariant from "invariant";
 

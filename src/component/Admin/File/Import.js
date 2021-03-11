@@ -25,27 +25,27 @@ import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import PathSelector from "../../FileManager/PathSelector";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
+            padding: "0px 24px 0 24px",
+        },
     },
     userSelect: {
         width: 400,
-        borderRadius: 0
-    }
+        borderRadius: 0,
+    },
 }));
 
 function useDebounce(value, delay) {
@@ -71,7 +71,7 @@ export default function Import() {
         userInput: "",
         src: "",
         dst: "",
-        recursive: true
+        recursive: true,
     });
     const [anchorEl, setAnchorEl] = useState(null);
     const [policies, setPolicies] = useState({});
@@ -80,17 +80,17 @@ export default function Import() {
     const [selectRemote, setSelectRemote] = useState(false);
     const [selectLocal, setSelectLocal] = useState(false);
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setOptions({
             ...options,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
-    const handleCheckChange = name => event => {
+    const handleCheckChange = (name) => (event) => {
         setOptions({
             ...options,
-            [name]: event.target.checked
+            [name]: event.target.checked,
         });
     };
 
@@ -102,7 +102,7 @@ export default function Import() {
         [dispatch]
     );
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         if (user === null) {
             ToggleSnackbar("top", "right", "请先选择目标用户", "warning");
@@ -114,7 +114,7 @@ export default function Import() {
             policy_id: parseInt(options.policy),
             src: options.src,
             dst: options.dst,
-            recursive: options.recursive
+            recursive: options.recursive,
         })
             .then(() => {
                 setLoading(false);
@@ -126,7 +126,7 @@ export default function Import() {
                     "success"
                 );
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "error");
             });
@@ -142,13 +142,13 @@ export default function Import() {
                 order_by: "id asc",
                 searches: {
                     nick: debouncedSearchTerm,
-                    email: debouncedSearchTerm
-                }
+                    email: debouncedSearchTerm,
+                },
             })
-                .then(response => {
+                .then((response) => {
                     setUsers(response.data.items);
                 })
-                .catch(error => {
+                .catch((error) => {
                     ToggleSnackbar("top", "right", error.message, "error");
                 });
         }
@@ -159,30 +159,30 @@ export default function Import() {
             page: 1,
             page_size: 10000,
             order_by: "id asc",
-            conditions: {}
+            conditions: {},
         })
-            .then(response => {
+            .then((response) => {
                 const res = {};
-                response.data.items.forEach(v => {
+                response.data.items.forEach((v) => {
                     res[v.ID] = v;
                 });
                 setPolicies(res);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line
     }, []);
 
-    const selectUser = u => {
+    const selectUser = (u) => {
         setOptions({
             ...options,
-            userInput: ""
+            userInput: "",
         });
         setUser(u);
     };
 
-    const setMoveTarget = setter => folder => {
+    const setMoveTarget = (setter) => (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
@@ -190,7 +190,7 @@ export default function Import() {
         setter(path === "//" ? "/" : path);
     };
 
-    const openPathSelector = isSrcSelect => {
+    const openPathSelector = (isSrcSelect) => {
         if (isSrcSelect) {
             if (
                 !policies[options.policy] ||
@@ -227,10 +227,10 @@ export default function Import() {
                     presentPath="/"
                     api={"/admin/file/folders/policy/" + options.policy}
                     selected={[]}
-                    onSelect={setMoveTarget(p =>
+                    onSelect={setMoveTarget((p) =>
                         setOptions({
                             ...options,
-                            src: p
+                            src: p,
                         })
                     )}
                 />
@@ -257,10 +257,10 @@ export default function Import() {
                         (user === null ? 0 : user.ID)
                     }
                     selected={[]}
-                    onSelect={setMoveTarget(p =>
+                    onSelect={setMoveTarget((p) =>
                         setOptions({
                             ...options,
-                            dst: p
+                            dst: p,
                         })
                     )}
                 />
@@ -299,7 +299,7 @@ export default function Import() {
                                     onChange={handleChange("policy")}
                                     input={<Input id="select-multiple-chip" />}
                                 >
-                                    {Object.keys(policies).map(pid => (
+                                    {Object.keys(policies).map((pid) => (
                                         <MenuItem key={pid} value={pid}>
                                             {policies[pid].Name}
                                         </MenuItem>
@@ -317,7 +317,7 @@ export default function Import() {
                                 </InputLabel>
                                 <Input
                                     value={options.userInput}
-                                    onChange={e => {
+                                    onChange={(e) => {
                                         handleChange("userInput")(e);
                                         setAnchorEl(e.currentTarget);
                                     }}
@@ -353,7 +353,7 @@ export default function Import() {
                                             <Paper
                                                 className={classes.userSelect}
                                             >
-                                                {users.map(u => (
+                                                {users.map((u) => (
                                                     <MenuItem
                                                         key={u.Email}
                                                         onClick={() =>
@@ -382,7 +382,7 @@ export default function Import() {
 
                                 <Input
                                     value={options.src}
-                                    onChange={e => {
+                                    onChange={(e) => {
                                         handleChange("src")(e);
                                         setAnchorEl(e.currentTarget);
                                     }}
@@ -412,7 +412,7 @@ export default function Import() {
 
                                 <Input
                                     value={options.dst}
-                                    onChange={e => {
+                                    onChange={(e) => {
                                         handleChange("dst")(e);
                                         setAnchorEl(e.currentTarget);
                                     }}

@@ -7,12 +7,12 @@ import Folder from "../Folder";
 
 const useStyles = makeStyles(() => ({
     dragging: {
-        width: "200px"
+        width: "200px",
     },
     cardDragged: {
         position: "absolute",
-        "transform-origin": "bottom left"
-    }
+        "transform-origin": "bottom left",
+    },
 }));
 
 const diliverIcon = (object, viewMethod, classes) => {
@@ -42,10 +42,10 @@ const diliverIcon = (object, viewMethod, classes) => {
     }
 };
 
-const Preview = props => {
-    const selected = useSelector(state => state.explorer.selected);
+const Preview = (props) => {
+    const selected = useSelector((state) => state.explorer.selected);
     const viewMethod = useSelector(
-        state => state.viewUpdate.explorerViewMethod
+        (state) => state.viewUpdate.explorerViewMethod
     );
     const classes = useStyles();
     return (
@@ -60,7 +60,7 @@ const Preview = props => {
                             className={classes.cardDragged}
                             style={{
                                 zIndex: selected.length - i,
-                                transform: `rotateZ(${-i * 2.5}deg)`
+                                transform: `rotateZ(${-i * 2.5}deg)`,
                             }}
                         >
                             {diliverIcon(card, viewMethod, classes)}

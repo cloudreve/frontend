@@ -7,7 +7,7 @@ import {
     setModalsLoading,
     refreshFileList,
     refreshStorage,
-    openLoadingDialog
+    openLoadingDialog,
 } from "../../actions/index";
 import PathSelector from "./PathSelector";
 import API, { baseURL } from "../../middleware/Api";
@@ -20,7 +20,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogContentText,
-    CircularProgress
+    CircularProgress,
 } from "@material-ui/core";
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
@@ -30,10 +30,10 @@ import pathHelper from "../../utils/page";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
 
-const styles = theme => ({
+const styles = (theme) => ({
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
@@ -41,14 +41,14 @@ const styles = theme => ({
         top: "50%",
         left: "50%",
         marginTop: -12,
-        marginLeft: -12
+        marginLeft: -12,
     },
     contentFix: {
-        padding: "10px 24px 0px 24px"
-    }
+        padding: "10px 24px 0px 24px",
+    },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         path: state.navigator.path,
         selected: state.explorer.selected,
@@ -60,11 +60,11 @@ const mapStateToProps = state => {
         dndTarget: state.explorer.dndTarget,
         dndSource: state.explorer.dndSource,
         loading: state.viewUpdate.modals.loading,
-        loadingText: state.viewUpdate.modals.loadingText
+        loadingText: state.viewUpdate.modals.loadingText,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         closeAllModals: () => {
             dispatch(closeAllModals());
@@ -72,7 +72,7 @@ const mapDispatchToProps = dispatch => {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        setModalsLoading: status => {
+        setModalsLoading: (status) => {
             dispatch(setModalsLoading(status));
         },
         refreshFileList: () => {
@@ -81,9 +81,9 @@ const mapDispatchToProps = dispatch => {
         refreshStorage: () => {
             dispatch(refreshStorage());
         },
-        openLoadingDialog: text => {
+        openLoadingDialog: (text) => {
             dispatch(openLoadingDialog(text));
-        }
+        },
     };
 };
 
@@ -100,19 +100,19 @@ class ModalsCompoment extends Component {
         downloadURL: "",
         remoteDownloadPathSelect: false,
         source: "",
-        purchaseCallback: null
+        purchaseCallback: null,
     };
 
-    handleInputChange = e => {
+    handleInputChange = (e) => {
         this.setState({
-            [e.target.id]: e.target.value
+            [e.target.id]: e.target.value,
         });
     };
 
     newNameSuffix = "";
     downloaded = false;
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (this.props.dndSignale !== nextProps.dndSignale) {
             this.dragMove(nextProps.dndSource, nextProps.dndTarget);
             return;
@@ -147,7 +147,7 @@ class ModalsCompoment extends Component {
         if (this.props.modalsStatus.rename !== nextProps.modalsStatus.rename) {
             const name = nextProps.selected[0].name;
             this.setState({
-                newName: name
+                newName: name,
             });
             return;
         }
@@ -157,12 +157,12 @@ class ModalsCompoment extends Component {
             nextProps.modalsStatus.getSource === true
         ) {
             API.get("/file/source/" + this.props.selected[0].id)
-                .then(response => {
+                .then((response) => {
                     this.setState({
-                        source: response.data.url
+                        source: response.data.url,
                     });
                 })
-                .catch(error => {
+                .catch((error) => {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -173,7 +173,7 @@ class ModalsCompoment extends Component {
         }
     };
 
-    scoreHandler = callback => {
+    scoreHandler = (callback) => {
         callback();
     };
 
@@ -196,12 +196,12 @@ class ModalsCompoment extends Component {
         }
 
         API.put(reqURL)
-            .then(response => {
+            .then((response) => {
                 window.location.assign(response.data);
                 this.onClose();
                 this.downloaded = true;
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -215,7 +215,7 @@ class ModalsCompoment extends Component {
     archiveDownload = () => {
         const dirs = [],
             items = [];
-        this.props.selected.map(value => {
+        this.props.selected.map((value) => {
             if (value.type === "dir") {
                 dirs.push(value.id);
             } else {
@@ -227,7 +227,7 @@ class ModalsCompoment extends Component {
         let reqURL = "/file/archive";
         const postBody = {
             items: items,
-            dirs: dirs
+            dirs: dirs,
         };
         if (pathHelper.isSharePage(this.props.location.pathname)) {
             reqURL = "/share/archive/" + window.shareInfo.key;
@@ -235,7 +235,7 @@ class ModalsCompoment extends Component {
         }
 
         API.post(reqURL, postBody)
-            .then(response => {
+            .then((response) => {
                 if (response.rawData.code === 0) {
                     this.onClose();
                     window.location.assign(response.data);
@@ -250,7 +250,7 @@ class ModalsCompoment extends Component {
                 this.onClose();
                 this.props.refreshStorage();
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -261,13 +261,13 @@ class ModalsCompoment extends Component {
             });
     };
 
-    submitRemove = e => {
+    submitRemove = (e) => {
         e.preventDefault();
         this.props.setModalsLoading(true);
         const dirs = [],
             items = [];
         // eslint-disable-next-line
-        this.props.selected.map(value => {
+        this.props.selected.map((value) => {
             if (value.type === "dir") {
                 dirs.push(value.id);
             } else {
@@ -277,10 +277,10 @@ class ModalsCompoment extends Component {
         API.delete("/object", {
             data: {
                 items: items,
-                dirs: dirs
-            }
+                dirs: dirs,
+            },
         })
-            .then(response => {
+            .then((response) => {
                 if (response.rawData.code === 0) {
                     this.onClose();
                     setTimeout(this.props.refreshFileList, 500);
@@ -295,7 +295,7 @@ class ModalsCompoment extends Component {
                 this.props.setModalsLoading(false);
                 this.props.refreshStorage();
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -306,7 +306,7 @@ class ModalsCompoment extends Component {
             });
     };
 
-    submitMove = e => {
+    submitMove = (e) => {
         if (e != null) {
             e.preventDefault();
         }
@@ -314,7 +314,7 @@ class ModalsCompoment extends Component {
         const dirs = [],
             items = [];
         // eslint-disable-next-line
-        this.props.selected.map(value => {
+        this.props.selected.map((value) => {
             if (value.type === "dir") {
                 dirs.push(value.id);
             } else {
@@ -326,20 +326,20 @@ class ModalsCompoment extends Component {
             src_dir: this.props.selected[0].path,
             src: {
                 dirs: dirs,
-                items: items
+                items: items,
             },
             dst: this.DragSelectedPath
                 ? this.DragSelectedPath
                 : this.state.selectedPath === "//"
                 ? "/"
-                : this.state.selectedPath
+                : this.state.selectedPath,
         })
             .then(() => {
                 this.onClose();
                 this.props.refreshFileList();
                 this.props.setModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -360,7 +360,7 @@ class ModalsCompoment extends Component {
         let doMove = true;
 
         // eslint-disable-next-line
-        this.props.selected.map(value => {
+        this.props.selected.map((value) => {
             // 根据ID过滤
             if (value.id === target.id && value.type === target.type) {
                 doMove = false;
@@ -387,14 +387,14 @@ class ModalsCompoment extends Component {
         }
     };
 
-    submitRename = e => {
+    submitRename = (e) => {
         e.preventDefault();
         this.props.setModalsLoading(true);
         const newName = this.state.newName;
 
         const src = {
             dirs: [],
-            items: []
+            items: [],
         };
 
         if (this.props.selected[0].type === "dir") {
@@ -405,10 +405,10 @@ class ModalsCompoment extends Component {
 
         // 检查重名
         if (
-            this.props.dirList.findIndex(value => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === newName;
             }) !== -1 ||
-            this.props.fileList.findIndex(value => {
+            this.props.fileList.findIndex((value) => {
                 return value.name === newName;
             }) !== -1
         ) {
@@ -423,14 +423,14 @@ class ModalsCompoment extends Component {
             API.post("/object/rename", {
                 action: "rename",
                 src: src,
-                new_name: newName
+                new_name: newName,
             })
                 .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
                 })
-                .catch(error => {
+                .catch((error) => {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
@@ -442,11 +442,11 @@ class ModalsCompoment extends Component {
         }
     };
 
-    submitCreateNewFolder = e => {
+    submitCreateNewFolder = (e) => {
         e.preventDefault();
         this.props.setModalsLoading(true);
         if (
-            this.props.dirList.findIndex(value => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === this.state.newFolderName;
             }) !== -1
         ) {
@@ -462,14 +462,14 @@ class ModalsCompoment extends Component {
                 path:
                     (this.props.path === "/" ? "" : this.props.path) +
                     "/" +
-                    this.state.newFolderName
+                    this.state.newFolderName,
             })
                 .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
                 })
-                .catch(error => {
+                .catch((error) => {
                     this.props.setModalsLoading(false);
 
                     this.props.toggleSnackbar(
@@ -483,11 +483,11 @@ class ModalsCompoment extends Component {
         //this.props.toggleSnackbar();
     };
 
-    submitCreateNewFile = e => {
+    submitCreateNewFile = (e) => {
         e.preventDefault();
         this.props.setModalsLoading(true);
         if (
-            this.props.dirList.findIndex(value => {
+            this.props.dirList.findIndex((value) => {
                 return value.name === this.state.newFileName;
             }) !== -1
         ) {
@@ -503,14 +503,14 @@ class ModalsCompoment extends Component {
                 path:
                     (this.props.path === "/" ? "" : this.props.path) +
                     "/" +
-                    this.state.newFileName
+                    this.state.newFileName,
             })
                 .then(() => {
                     this.onClose();
                     this.props.refreshFileList();
                     this.props.setModalsLoading(false);
                 })
-                .catch(error => {
+                .catch((error) => {
                     this.props.setModalsLoading(false);
 
                     this.props.toggleSnackbar(
@@ -524,12 +524,14 @@ class ModalsCompoment extends Component {
         //this.props.toggleSnackbar();
     };
 
-    submitTorrentDownload = e => {
+    submitTorrentDownload = (e) => {
         e.preventDefault();
         this.props.setModalsLoading(true);
         API.post("/aria2/torrent/" + this.props.selected[0].id, {
             dst:
-                this.state.selectedPath === "//" ? "/" : this.state.selectedPath
+                this.state.selectedPath === "//"
+                    ? "/"
+                    : this.state.selectedPath,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -541,7 +543,7 @@ class ModalsCompoment extends Component {
                 this.onClose();
                 this.props.setModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -552,13 +554,15 @@ class ModalsCompoment extends Component {
             });
     };
 
-    submitDownload = e => {
+    submitDownload = (e) => {
         e.preventDefault();
         this.props.setModalsLoading(true);
         API.post("/aria2/url", {
             url: this.state.downloadURL,
             dst:
-                this.state.selectedPath === "//" ? "/" : this.state.selectedPath
+                this.state.selectedPath === "//"
+                    ? "/"
+                    : this.state.selectedPath,
         })
             .then(() => {
                 this.props.toggleSnackbar(
@@ -570,7 +574,7 @@ class ModalsCompoment extends Component {
                 this.onClose();
                 this.props.setModalsLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -581,21 +585,21 @@ class ModalsCompoment extends Component {
             });
     };
 
-    setMoveTarget = folder => {
+    setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
                 ? folder.path + folder.name
                 : folder.path + "/" + folder.name;
         this.setState({
             selectedPath: path,
-            selectedPathName: folder.name
+            selectedPathName: folder.name,
         });
     };
 
     remoteDownloadNext = () => {
         this.props.closeAllModals();
         this.setState({
-            remoteDownloadPathSelect: true
+            remoteDownloadPathSelect: true,
         });
     };
 
@@ -611,13 +615,13 @@ class ModalsCompoment extends Component {
             downloadURL: "",
             shareUrl: "",
             remoteDownloadPathSelect: false,
-            source: ""
+            source: "",
         });
         this.newNameSuffix = "";
         this.props.closeAllModals();
     };
 
-    handleChange = name => event => {
+    handleChange = (name) => (event) => {
         this.setState({ [name]: event.target.checked });
     };
 
@@ -669,7 +673,7 @@ class ModalsCompoment extends Component {
                                 label="文件夹名称"
                                 type="text"
                                 value={this.state.newFolderName}
-                                onChange={e => this.handleInputChange(e)}
+                                onChange={(e) => this.handleInputChange(e)}
                                 fullWidth
                             />
                         </form>
@@ -713,7 +717,7 @@ class ModalsCompoment extends Component {
                                 label="文件名称"
                                 type="text"
                                 value={this.state.newFileName}
-                                onChange={e => this.handleInputChange(e)}
+                                onChange={(e) => this.handleInputChange(e)}
                                 fullWidth
                             />
                         </form>
@@ -767,7 +771,7 @@ class ModalsCompoment extends Component {
                                 label="新名称"
                                 type="text"
                                 value={this.state.newName}
-                                onChange={e => this.handleInputChange(e)}
+                                onChange={(e) => this.handleInputChange(e)}
                                 fullWidth
                             />
                         </form>
@@ -1089,7 +1093,7 @@ class ModalsCompoment extends Component {
 }
 
 ModalsCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const Modals = connect(

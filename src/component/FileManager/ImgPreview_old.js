@@ -12,18 +12,18 @@ import { withRouter } from "react-router";
 
 const styles = () => ({});
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         first: state.explorer.imgPreview.first,
-        other: state.explorer.imgPreview.other
+        other: state.explorer.imgPreview.other,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        showImgPreivew: first => {
+        showImgPreivew: (first) => {
             dispatch(showImgPreivew(first));
-        }
+        },
     };
 };
 
@@ -31,10 +31,10 @@ class ImgPreviewCompoment extends Component {
     state = {
         items: [],
         photoIndex: 0,
-        isOpen: false
+        isOpen: false,
     };
 
-    UNSAFE_componentWillReceiveProps = nextProps => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         const items = [];
         let firstOne = 0;
         if (nextProps.first !== null) {
@@ -44,23 +44,20 @@ class ImgPreviewCompoment extends Component {
             ) {
                 const newImg = {
                     title: nextProps.first.name,
-                    src: baseURL + "/share/preview/" + nextProps.first.key
+                    src: baseURL + "/share/preview/" + nextProps.first.key,
                 };
                 firstOne = 0;
                 items.push(newImg);
                 this.setState({
                     photoIndex: firstOne,
                     items: items,
-                    isOpen: true
+                    isOpen: true,
                 });
                 return;
             }
             // eslint-disable-next-line
-            nextProps.other.map(value => {
-                const fileType = value.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
+            nextProps.other.map((value) => {
+                const fileType = value.name.split(".").pop().toLowerCase();
                 if (imgPreviewSuffix.indexOf(fileType) !== -1) {
                     let src = "";
                     if (pathHelper.isSharePage(this.props.location.pathname)) {
@@ -78,7 +75,7 @@ class ImgPreviewCompoment extends Component {
                     }
                     const newImg = {
                         title: value.name,
-                        src: src
+                        src: src,
                     };
                     if (
                         value.path === nextProps.first.path &&
@@ -92,7 +89,7 @@ class ImgPreviewCompoment extends Component {
             this.setState({
                 photoIndex: firstOne,
                 items: items,
-                isOpen: true
+                isOpen: true,
             });
         }
     };
@@ -100,7 +97,7 @@ class ImgPreviewCompoment extends Component {
     handleClose = () => {
         this.props.showImgPreivew(null);
         this.setState({
-            isOpen: false
+            isOpen: false,
         });
     };
 
@@ -126,17 +123,17 @@ class ImgPreviewCompoment extends Component {
                             this.setState({
                                 photoIndex:
                                     (photoIndex + items.length - 1) %
-                                    items.length
+                                    items.length,
                             })
                         }
                         reactModalStyle={{
                             overlay: {
-                                zIndex: 10000
-                            }
+                                zIndex: 10000,
+                            },
                         }}
                         onMoveNextRequest={() =>
                             this.setState({
-                                photoIndex: (photoIndex + 1) % items.length
+                                photoIndex: (photoIndex + 1) % items.length,
                             })
                         }
                     />
@@ -147,7 +144,7 @@ class ImgPreviewCompoment extends Component {
 }
 
 ImgPreviewCompoment.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 const ImgPreivew = connect(

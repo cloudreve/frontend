@@ -10,7 +10,7 @@ import {
     TableCell,
     TableRow,
     Typography,
-    fade
+    fade,
 } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
 import { lighten } from "@material-ui/core/styles";
@@ -21,65 +21,65 @@ import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
 
-const styles = theme => ({
+const styles = (theme) => ({
     selected: {
         "&:hover": {},
-        backgroundColor: fade(theme.palette.primary.main, 0.18)
+        backgroundColor: fade(theme.palette.primary.main, 0.18),
     },
 
     selectedShared: {
         "&:hover": {},
-        backgroundColor: fade(theme.palette.primary.main, 0.18)
+        backgroundColor: fade(theme.palette.primary.main, 0.18),
     },
 
     notSelected: {
         "&:hover": {
-            backgroundColor: theme.palette.background.default
-        }
+            backgroundColor: theme.palette.background.default,
+        },
     },
     icon: {
         verticalAlign: "middle",
         marginRight: "20px",
-        color: theme.palette.text.secondary
+        color: theme.palette.text.secondary,
     },
     tableIcon: {
         marginRight: "20px",
-        verticalAlign: "middle"
+        verticalAlign: "middle",
     },
     folderNameSelected: {
         color:
             theme.palette.type === "dark" ? "#fff" : theme.palette.primary.dark,
         fontWeight: "500",
-        userSelect: "none"
+        userSelect: "none",
     },
     folderNameNotSelected: {
         color: theme.palette.text.secondary,
-        userSelect: "none"
+        userSelect: "none",
     },
     folderName: {
         marginRight: "20px",
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     tableRow: {
-        padding: "10px 16px"
+        padding: "10px 16px",
     },
     checkIcon: {
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
     },
     active: {
-        backgroundColor: fade(theme.palette.primary.main, 0.1)
-    }
+        backgroundColor: fade(theme.palette.primary.main, 0.1),
+    },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        selected: state.explorer.selected
+        selected: state.explorer.selected,
     };
 };
 
@@ -108,7 +108,7 @@ class TableRowCompoment extends Component {
             );
         }
         const isSelected =
-            this.props.selected.findIndex(value => {
+            this.props.selected.findIndex((value) => {
                 return value === this.props.file;
             }) !== -1;
         const isMobile = statusHelper.isMobile();
@@ -123,7 +123,7 @@ class TableRowCompoment extends Component {
                     [classes.selected]: isSelected && !isShare,
                     [classes.selectedShared]: isSelected && isShare,
                     [classes.notSelected]: !isSelected,
-                    [classes.active]: this.props.isActive
+                    [classes.active]: this.props.isActive,
                 })}
             >
                 <TableCell
@@ -136,7 +136,7 @@ class TableRowCompoment extends Component {
                         variant="body2"
                         className={classNames(classes.folderName, {
                             [classes.folderNameSelected]: isSelected,
-                            [classes.folderNameNotSelected]: !isSelected
+                            [classes.folderNameNotSelected]: !isSelected,
                         })}
                     >
                         <div
@@ -168,7 +168,7 @@ class TableRowCompoment extends Component {
                         variant="body2"
                         className={classNames(classes.folderName, {
                             [classes.folderNameSelected]: isSelected,
-                            [classes.folderNameNotSelected]: !isSelected
+                            [classes.folderNameNotSelected]: !isSelected,
                         })}
                     >
                         {" "}
@@ -184,7 +184,7 @@ class TableRowCompoment extends Component {
                         variant="body2"
                         className={classNames(classes.folderName, {
                             [classes.folderNameSelected]: isSelected,
-                            [classes.folderNameNotSelected]: !isSelected
+                            [classes.folderNameNotSelected]: !isSelected,
                         })}
                     >
                         {" "}
@@ -198,7 +198,7 @@ class TableRowCompoment extends Component {
 
 TableRowCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
-    file: PropTypes.object.isRequired
+    file: PropTypes.object.isRequired,
 };
 
 const TableItem = connect(

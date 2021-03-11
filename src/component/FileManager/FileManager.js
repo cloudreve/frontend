@@ -7,7 +7,7 @@ import {
     closeAllModals,
     navigateTo,
     setSelectedTarget,
-    toggleSnackbar
+    toggleSnackbar,
 } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
@@ -19,12 +19,12 @@ import SideDrawer from "./Sidebar/SideDrawer";
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        changeSubTitle: text => {
+        changeSubTitle: (text) => {
             dispatch(changeSubTitle(text));
         },
-        setSelectedTarget: targets => {
+        setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
         },
         toggleSnackbar: (vertical, horizontal, msg, color) => {
@@ -33,9 +33,9 @@ const mapDispatchToProps = dispatch => {
         closeAllModals: () => {
             dispatch(closeAllModals());
         },
-        navigateTo: path => {
+        navigateTo: (path) => {
             dispatch(navigateTo(path));
-        }
+        },
     };
 };
 

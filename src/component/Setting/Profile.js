@@ -15,12 +15,12 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Grid
+    Grid,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import Pagination from "@material-ui/lab/Pagination";
 
-const styles = theme => ({
+const styles = (theme) => ({
     layout: {
         width: "auto",
         marginTop: "50px",
@@ -30,8 +30,8 @@ const styles = theme => ({
         [theme.breakpoints.up("sm")]: {
             width: 700,
             marginLeft: "auto",
-            marginRight: "auto"
-        }
+            marginRight: "auto",
+        },
     },
     userNav: {
         height: "270px",
@@ -64,7 +64,7 @@ const styles = theme => ({
             theme.palette.secondary.dark.replace("#", "%23") +
             "' points='943 900 1210 900 971 687'/%3E%3C/svg%3E\")",
         backgroundSize: "cover",
-        backgroundPosition: "bottom"
+        backgroundPosition: "bottom",
     },
     avatarContainer: {
         height: "80px",
@@ -74,7 +74,7 @@ const styles = theme => ({
         marginTop: "50px",
         boxShadow:
             "0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)",
-        border: "2px solid #fff"
+        border: "2px solid #fff",
     },
     nickName: {
         width: "200px",
@@ -83,46 +83,46 @@ const styles = theme => ({
         marginTop: "1px",
         fontSize: "25px",
         color: "#ffffff",
-        opacity: "0.81"
+        opacity: "0.81",
     },
     th: {
-        minWidth: "106px"
+        minWidth: "106px",
     },
     mobileHide: {
         [theme.breakpoints.down("md")]: {
-            display: "none"
-        }
+            display: "none",
+        },
     },
     tableLink: {
-        cursor: "pointer"
+        cursor: "pointer",
     },
     navigator: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
     pageInfo: {
         marginTop: "14px",
-        marginLeft: "23px"
+        marginLeft: "23px",
     },
     infoItem: {
         paddingLeft: "46px!important",
-        paddingBottom: "20px!important"
+        paddingBottom: "20px!important",
     },
     infoContainer: {
-        marginTop: "30px"
+        marginTop: "30px",
     },
     tableContainer: {
-        overflowX: "auto"
-    }
+        overflowX: "auto",
+    },
 });
 const mapStateToProps = () => {
     return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
-        }
+        },
     };
 };
 
@@ -132,7 +132,7 @@ class ProfileCompoment extends Component {
         shareList: [],
         page: 1,
         user: null,
-        total: 0
+        total: 0,
     };
 
     handleChange = (event, listType) => {
@@ -157,14 +157,14 @@ class ProfileCompoment extends Component {
                 "&type=" +
                 order
         )
-            .then(response => {
+            .then((response) => {
                 this.setState({
                     shareList: response.data.items,
                     user: response.data.user,
-                    total: response.data.total
+                    total: response.data.total,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
@@ -328,7 +328,7 @@ class ProfileCompoment extends Component {
                                                 <TableCell
                                                     className={[
                                                         classes.th,
-                                                        classes.mobileHide
+                                                        classes.mobileHide,
                                                     ]}
                                                 >
                                                     下载次数
@@ -336,7 +336,7 @@ class ProfileCompoment extends Component {
                                                 <TableCell
                                                     className={[
                                                         classes.th,
-                                                        classes.mobileHide
+                                                        classes.mobileHide,
                                                     ]}
                                                 >
                                                     浏览次数

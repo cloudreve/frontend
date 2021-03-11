@@ -32,23 +32,23 @@ import Download from "./component/Admin/Task/Download";
 import Task from "./component/Admin/Task/Task";
 import Import from "./component/Admin/File/Import";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
-        display: "flex"
+        display: "flex",
     },
     content: {
         flexGrow: 1,
         padding: 0,
-        minWidth: 0
+        minWidth: 0,
     },
-    toolbar: theme.mixins.toolbar
+    toolbar: theme.mixins.toolbar,
 }));
 
 const theme = createMuiTheme(
     {
         palette: {
-            background: {}
-        }
+            background: {},
+        },
     },
     zhCN
 );
@@ -80,7 +80,7 @@ export default function Admin() {
                     <AlertBar />
                     {show && (
                         <Dashboard
-                            content={path => (
+                            content={(path) => (
                                 <Switch>
                                     <Route path={`${path}/home`} exact>
                                         <Index />

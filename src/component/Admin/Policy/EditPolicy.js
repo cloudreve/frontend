@@ -15,16 +15,16 @@ import RemoteGuide from "./Guid/RemoteGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
 import S3Guide from "./Guid/S3Guide";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     content: {
-        padding: theme.spacing(2)
-    }
+        padding: theme.spacing(2),
+    },
 }));
 
 export default function EditPolicyPreload() {
@@ -44,7 +44,7 @@ export default function EditPolicyPreload() {
     useEffect(() => {
         setType("");
         API.get("/admin/policy/" + id)
-            .then(response => {
+            .then((response) => {
                 response.data.IsOriginLinkEnable = response.data
                     .IsOriginLinkEnable
                     ? "true"
@@ -63,7 +63,7 @@ export default function EditPolicyPreload() {
                 setPolicy(response.data);
                 setType(response.data.Type);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
     }, [id]);

@@ -13,7 +13,7 @@ function NoAuthRoute({ children, ...rest }) {
                     <Redirect
                         to={{
                             pathname: "/home",
-                            state: { from: location }
+                            state: { from: location },
                         }}
                     />
                 )

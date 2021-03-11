@@ -3,5 +3,5 @@ import * as reducers from "./reducer";
 
 export default {
     actions,
-    reducers
+    reducers,
 };

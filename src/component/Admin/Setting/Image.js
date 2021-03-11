@@ -13,23 +13,23 @@ import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import SizeInput from "../Common/SizeInput";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up("md")]: {
-            marginLeft: 100
+            marginLeft: 100,
         },
-        marginBottom: 40
+        marginBottom: 40,
     },
     form: {
         maxWidth: 400,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     formContainer: {
         [theme.breakpoints.up("md")]: {
-            padding: "0px 24px 0 24px"
-        }
-    }
+            padding: "0px 24px 0 24px",
+        },
+    },
 }));
 
 export default function ImageSetting() {
@@ -47,13 +47,13 @@ export default function ImageSetting() {
         captcha_height: "1",
         captcha_width: "1",
         captcha_mode: "3",
-        captcha_CaptchaLen: ""
+        captcha_CaptchaLen: "",
     });
 
-    const handleChange = name => event => {
+    const handleChange = (name) => (event) => {
         setOptions({
             ...options,
-            [name]: event.target.value
+            [name]: event.target.value,
         });
     };
 
@@ -66,34 +66,34 @@ export default function ImageSetting() {
 
     useEffect(() => {
         API.post("/admin/setting", {
-            keys: Object.keys(options)
+            keys: Object.keys(options),
         })
-            .then(response => {
+            .then((response) => {
                 setOptions(response.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
         // eslint-disable-next-line
     }, []);
 
-    const submit = e => {
+    const submit = (e) => {
         e.preventDefault();
         setLoading(true);
         const option = [];
-        Object.keys(options).forEach(k => {
+        Object.keys(options).forEach((k) => {
             option.push({
                 key: k,
-                value: options[k]
+                value: options[k],
             });
         });
         API.patch("/admin/setting", {
-            options: option
+            options: option,
         })
             .then(() => {
                 ToggleSnackbar("top", "right", "设置已更改", "success");
             })
-            .catch(error => {
+            .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
@@ -167,7 +167,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.avatar_size_s}
                                     onChange={handleChange("avatar_size_s")}
@@ -185,7 +185,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.avatar_size_m}
                                     onChange={handleChange("avatar_size_m")}
@@ -203,7 +203,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.avatar_size_l}
                                     onChange={handleChange("avatar_size_l")}
@@ -229,7 +229,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.thumb_width}
                                     onChange={handleChange("thumb_width")}
@@ -249,7 +249,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.thumb_height}
                                     onChange={handleChange("thumb_height")}
@@ -274,7 +274,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.captcha_width}
                                     onChange={handleChange("captcha_width")}
@@ -292,7 +292,7 @@ export default function ImageSetting() {
                                     type={"number"}
                                     inputProps={{
                                         min: 1,
-                                        step: 1
+                                        step: 1,
                                     }}
                                     value={options.captcha_height}
                                     onChange={handleChange("captcha_height")}
