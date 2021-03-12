@@ -468,6 +468,30 @@ export default function EditPro(props) {
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
+                                    OneDrive/SharePoint 驱动器资源标识
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            multiline
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .od_driver
+                                            }
+                                            onChange={handleOptionChange(
+                                                "od_driver"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    仅对 OneDrive
+                                    存储策略有效，留空则使用用户的默认 OneDrive
+                                    驱动器
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
                                     Amazon S3 Region
                                 </TableCell>
                                 <TableCell>
