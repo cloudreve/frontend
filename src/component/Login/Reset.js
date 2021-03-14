@@ -1,22 +1,22 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core";
-import { toggleSnackbar } from "../../actions/index";
-import Placeholder from "../Placeholder/Captcha";
-import API from "../../middleware/Api";
 import {
+    Avatar,
     Button,
-    FormControl,
     Divider,
-    Link,
+    FormControl,
     Input,
     InputLabel,
+    Link,
+    makeStyles,
     Paper,
-    Avatar,
     Typography,
 } from "@material-ui/core";
+import { toggleSnackbar } from "../../actions/index";
+import API from "../../middleware/Api";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
-import ReCaptcha from "./ReCaptcha";
+import { useCaptcha } from "../../hooks/useCaptcha";
+
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
@@ -64,18 +64,10 @@ const useStyles = makeStyles((theme) => ({
 function Reset() {
     const [input, setInput] = useState({
         email: "",
-        captcha: "",
     });
-    const [captchaData, setCaptchaData] = useState(null);
     const [loading, setLoading] = useState(false);
     const forgetCaptcha = useSelector(
         (state) => state.siteConfig.forgetCaptcha
-    );
-    const useReCaptcha = useSelector(
-        (state) => state.siteConfig.captcha_IsUseReCaptcha
-    );
-    const reCaptchaKey = useSelector(
-        (state) => state.siteConfig.captcha_ReCaptchaKey
     );
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -90,34 +82,25 @@ function Reset() {
         });
     };
 
-    const refreshCaptcha = () => {
-        API.get("/site/captcha")
-            .then((response) => {
-                setCaptchaData(response.data);
-            })
-            .catch((error) => {
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    "无法加载验证码：" + error.message,
-                    "error"
-                );
-            });
-    };
-
-    useEffect(() => {
-        if (forgetCaptcha && !useReCaptcha) {
-            refreshCaptcha();
-        }
-        // eslint-disable-next-line
-    }, [forgetCaptcha]);
+    const {
+        captchaLoading,
+        isValidate,
+        validate,
+        CaptchaRender,
+        captchaRefreshRef,
+        captchaParamsRef,
+    } = useCaptcha();
 
     const submit = (e) => {
         e.preventDefault();
         setLoading(true);
+        if (!isValidate.current.isValidate && forgetCaptcha) {
+            validate(() => submit(e), setLoading);
+            return;
+        }
         API.post("/user/reset", {
             userName: input.email,
-            captchaCode: input.captcha,
+            ...captchaParamsRef.current,
         })
             .then(() => {
                 setLoading(false);
@@ -131,9 +114,7 @@ function Reset() {
             .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                if (!useReCaptcha) {
-                    refreshCaptcha();
-                }
+                captchaRefreshRef.current();
             });
     };
 
@@ -161,61 +142,15 @@ function Reset() {
                             autoFocus
                         />
                     </FormControl>
-                    {forgetCaptcha && !useReCaptcha && (
-                        <div className={classes.captchaContainer}>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="captcha">
-                                    验证码
-                                </InputLabel>
-                                <Input
-                                    name="captcha"
-                                    onChange={handleInputChange("captcha")}
-                                    type="text"
-                                    id="captcha"
-                                    value={input.captcha}
-                                    autoComplete
-                                />
-                            </FormControl>{" "}
-                            <div>
-                                {captchaData === null && (
-                                    <div className={classes.captchaPlaceholder}>
-                                        <Placeholder />
-                                    </div>
-                                )}
-                                {captchaData !== null && (
-                                    <img
-                                        src={captchaData}
-                                        alt="captcha"
-                                        onClick={refreshCaptcha}
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    )}
-                    {forgetCaptcha && useReCaptcha && (
-                        <div className={classes.captchaContainer}>
-                            <FormControl margin="normal" required fullWidth>
-                                <ReCaptcha
-                                    style={{ display: "inline-block" }}
-                                    sitekey={reCaptchaKey}
-                                    onChange={(value) =>
-                                        setInput({
-                                            ...input,
-                                            captcha: value,
-                                        })
-                                    }
-                                    id="captcha"
-                                    name="captcha"
-                                />
-                            </FormControl>{" "}
-                        </div>
-                    )}
+                    {forgetCaptcha && <CaptchaRender />}
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
-                        disabled={loading}
+                        disabled={
+                            loading || (forgetCaptcha ? captchaLoading : false)
+                        }
                         className={classes.submit}
                     >
                         发送密码重置邮件

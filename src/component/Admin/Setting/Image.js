@@ -3,8 +3,6 @@ import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useEffect, useState } from "react";
@@ -44,10 +42,6 @@ export default function ImageSetting() {
         avatar_size_s: "",
         thumb_width: "",
         thumb_height: "",
-        captcha_height: "1",
-        captcha_width: "1",
-        captcha_mode: "3",
-        captcha_CaptchaLen: "",
     });
 
     const handleChange = (name) => (event) => {
@@ -255,70 +249,6 @@ export default function ImageSetting() {
                                     onChange={handleChange("thumb_height")}
                                     required
                                 />
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        验证码
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    宽度
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.captcha_width}
-                                    onChange={handleChange("captcha_width")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    高度
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.captcha_height}
-                                    onChange={handleChange("captcha_height")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    模式
-                                </InputLabel>
-                                <Select
-                                    value={options.captcha_mode}
-                                    onChange={handleChange("captcha_mode")}
-                                    required
-                                >
-                                    <MenuItem value={"0"}>数字</MenuItem>
-                                    <MenuItem value={"1"}>字母</MenuItem>
-                                    <MenuItem value={"2"}>算数</MenuItem>
-                                    <MenuItem value={"3"}>数字+字母</MenuItem>
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    验证码的形式
-                                </FormHelperText>
                             </FormControl>
                         </div>
                     </div>

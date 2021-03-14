@@ -1,34 +1,34 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { makeStyles } from "@material-ui/core";
 import {
-    toggleSnackbar,
+    Avatar,
+    Button,
+    Divider,
+    FormControl,
+    Input,
+    InputLabel,
+    Link,
+    makeStyles,
+    Paper,
+    Typography,
+} from "@material-ui/core";
+import {
     applyThemes,
     setSessionStatus,
+    toggleSnackbar,
 } from "../../actions/index";
-import Placeholder from "../Placeholder/Captcha";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
-import {
-    Button,
-    FormControl,
-    Divider,
-    Link,
-    Input,
-    InputLabel,
-    Paper,
-    Avatar,
-    Typography,
-} from "@material-ui/core";
 import { bufferDecode, bufferEncode } from "../../utils/index";
 import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
-import ReCaptcha from "./ReCaptcha";
 import { ICPFooter } from "../Common/ICPFooter";
+import { useCaptcha } from "../../hooks/useCaptcha";
+
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
@@ -94,22 +94,14 @@ function useQuery() {
 function LoginForm() {
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
-    const [captcha, setCaptcha] = useState("");
     const [loading, setLoading] = useState(false);
     const [useAuthn, setUseAuthn] = useState(false);
-    const [captchaData, setCaptchaData] = useState(null);
     const [twoFA, setTwoFA] = useState(false);
     const [faCode, setFACode] = useState("");
 
     const loginCaptcha = useSelector((state) => state.siteConfig.loginCaptcha);
     const title = useSelector((state) => state.siteConfig.title);
     const authn = useSelector((state) => state.siteConfig.authn);
-    const useReCaptcha = useSelector(
-        (state) => state.siteConfig.captcha_IsUseReCaptcha
-    );
-    const reCaptchaKey = useSelector(
-        (state) => state.siteConfig.captcha_ReCaptchaKey
-    );
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -127,31 +119,21 @@ function LoginForm() {
 
     const history = useHistory();
     const location = useLocation();
+    const {
+        captchaLoading,
+        isValidate,
+        validate,
+        CaptchaRender,
+        captchaRefreshRef,
+        captchaParamsRef,
+    } = useCaptcha();
     const query = useQuery();
 
     const classes = useStyles();
 
-    const refreshCaptcha = useCallback(() => {
-        API.get("/site/captcha")
-            .then((response) => {
-                setCaptchaData(response.data);
-            })
-            .catch((error) => {
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    "无法加载验证码：" + error.message,
-                    "error"
-                );
-            });
-    }, []);
-
     useEffect(() => {
         setEmail(query.get("username"));
-        if (loginCaptcha && !useReCaptcha) {
-            refreshCaptcha();
-        }
-    }, [location, loginCaptcha]);
+    }, [location]);
 
     const afterLogin = (data) => {
         Auth.authenticate(data);
@@ -235,10 +217,14 @@ function LoginForm() {
     const login = (e) => {
         e.preventDefault();
         setLoading(true);
+        if (!isValidate.current.isValidate && loginCaptcha) {
+            validate(() => login(e), setLoading);
+            return;
+        }
         API.post("/user/session", {
             userName: email,
             Password: pwd,
-            captchaCode: captcha,
+            ...captchaParamsRef.current,
         })
             .then((response) => {
                 setLoading(false);
@@ -251,9 +237,7 @@ function LoginForm() {
             .catch((error) => {
                 setLoading(false);
                 ToggleSnackbar("top", "right", error.message, "warning");
-                if (!useReCaptcha) {
-                    refreshCaptcha();
-                }
+                captchaRefreshRef.current();
             });
     };
 
@@ -315,78 +299,17 @@ function LoginForm() {
                                         autoComplete
                                     />
                                 </FormControl>
-                                {loginCaptcha && !useReCaptcha && (
-                                    <div className={classes.captchaContainer}>
-                                        <FormControl
-                                            margin="normal"
-                                            required
-                                            fullWidth
-                                        >
-                                            <InputLabel htmlFor="captcha">
-                                                验证码
-                                            </InputLabel>
-                                            <Input
-                                                name="captcha"
-                                                onChange={(e) =>
-                                                    setCaptcha(e.target.value)
-                                                }
-                                                type="text"
-                                                id="captcha"
-                                                value={captcha}
-                                                autoComplete
-                                            />
-                                        </FormControl>{" "}
-                                        <div>
-                                            {captchaData === null && (
-                                                <div
-                                                    className={
-                                                        classes.captchaPlaceholder
-                                                    }
-                                                >
-                                                    <Placeholder />
-                                                </div>
-                                            )}
-                                            {captchaData !== null && (
-                                                <img
-                                                    src={captchaData}
-                                                    alt="captcha"
-                                                    onClick={refreshCaptcha}
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {loginCaptcha && useReCaptcha && (
-                                    <div className={classes.captchaContainer}>
-                                        <FormControl
-                                            margin="normal"
-                                            required
-                                            fullWidth
-                                        >
-                                            <div>
-                                                <ReCaptcha
-                                                    style={{
-                                                        display: "inline-block",
-                                                    }}
-                                                    sitekey={reCaptchaKey}
-                                                    onChange={(value) =>
-                                                        setCaptcha(value)
-                                                    }
-                                                    id="captcha"
-                                                    name="captcha"
-                                                />
-                                            </div>
-                                        </FormControl>{" "}
-                                    </div>
-                                )}
+                                {loginCaptcha && <CaptchaRender />}
 
                                 <Button
                                     type="submit"
                                     fullWidth
                                     variant="contained"
                                     color="primary"
-                                    disabled={loading}
+                                    disabled={
+                                        loading ||
+                                        (loginCaptcha ? captchaLoading : false)
+                                    }
                                     className={classes.submit}
                                 >
                                     登录
