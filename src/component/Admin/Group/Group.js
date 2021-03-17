@@ -201,16 +201,6 @@ export default function Group() {
                                             sizeToString(row.MaxStorage)}
                                     </TableCell>
                                     <TableCell align={"right"}>
-                                        <Tooltip title={"删除"}>
-                                            <IconButton
-                                                onClick={() =>
-                                                    deletePolicy(row.ID)
-                                                }
-                                                size={"small"}
-                                            >
-                                                <Delete />
-                                            </IconButton>
-                                        </Tooltip>
                                         <Tooltip title={"编辑"}>
                                             <IconButton
                                                 onClick={() =>
@@ -222,6 +212,16 @@ export default function Group() {
                                                 size={"small"}
                                             >
                                                 <Edit />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={"删除"}>
+                                            <IconButton
+                                                onClick={() =>
+                                                    deletePolicy(row.ID)
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Delete />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>

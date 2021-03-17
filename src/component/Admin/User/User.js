@@ -478,17 +478,6 @@ export default function Group() {
                                         {sizeToString(row.Storage)}
                                     </TableCell>
                                     <TableCell>
-                                        <Tooltip title={"删除"}>
-                                            <IconButton
-                                                disabled={loading}
-                                                onClick={() =>
-                                                    deletePolicy(row.ID)
-                                                }
-                                                size={"small"}
-                                            >
-                                                <Delete />
-                                            </IconButton>
-                                        </Tooltip>
                                         <Tooltip title={"编辑"}>
                                             <IconButton
                                                 onClick={() =>
@@ -509,6 +498,17 @@ export default function Group() {
                                                 size={"small"}
                                             >
                                                 <Block />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={"删除"}>
+                                            <IconButton
+                                                disabled={loading}
+                                                onClick={() =>
+                                                    deletePolicy(row.ID)
+                                                }
+                                                size={"small"}
+                                            >
+                                                <Delete />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>
