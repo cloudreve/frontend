@@ -19,6 +19,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { Delete } from "@material-ui/icons";
 import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -45,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     create: {
         marginTop: theme.spacing(2),
     },
+    copy: {
+        marginLeft: 10,
+    },
 }));
 
 export default function WebDAV() {
@@ -58,6 +62,11 @@ export default function WebDAV() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text);
+        ToggleSnackbar("top", "center", "已复制到剪切板", "success");
+    };
 
     const loadList = () => {
         API.get("/webdav/accounts")
@@ -151,9 +160,7 @@ export default function WebDAV() {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>备注名</TableCell>
-                                            <TableCell align="right">
-                                                密码
-                                            </TableCell>
+                                            <TableCell>密码</TableCell>
                                             <TableCell align="right">
                                                 根目录
                                             </TableCell>
@@ -174,8 +181,19 @@ export default function WebDAV() {
                                                 >
                                                     {row.Name}
                                                 </TableCell>
-                                                <TableCell align="right">
+                                                <TableCell>
                                                     {row.Password}
+                                                    <Link
+                                                        className={classes.copy}
+                                                        onClick={() =>
+                                                            copyToClipboard(
+                                                                row.Password
+                                                            )
+                                                        }
+                                                        href={"javascript:void"}
+                                                    >
+                                                        复制
+                                                    </Link>
                                                 </TableCell>
                                                 <TableCell align="right">
                                                     {row.Root}
