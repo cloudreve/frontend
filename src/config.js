@@ -23,6 +23,7 @@ export const editSuffix = ["md", "txt"];
 export const codePreviewSuffix = {
     json: "json",
     php: "php",
+    py: "python",
     bat: "bat",
     cpp: "cpp",
     c: "cpp",

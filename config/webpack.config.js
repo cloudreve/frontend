@@ -534,7 +534,7 @@ module.exports = function(webpackEnv) {
       // Monaco 代码编辑器
       new MonacoWebpackPlugin({
         // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-        languages: ['json',"php","bat","cpp","csharp","css","dockerfile","go","html","ini","java","javascript","less","lua","shell","sql","xml","yaml"]
+        languages: ['json',"php","bat","cpp","csharp","css","dockerfile","go","html","ini","java","javascript","less","lua","shell","sql","xml","yaml","python"]
       }),
       // 写入版本文件
       new CopyPlugin([
