@@ -423,7 +423,7 @@ export default function Index() {
                                 <ListItemIcon style={{ color: "#ff789d" }}>
                                     <Favorite />
                                 </ListItemIcon>
-                                <ListItemText primary="捐助开发者" />
+                                <ListItemText primary="升级到捐助版" />
                                 <ListItemIcon className={classes.iconRight}>
                                     <Launch />
                                 </ListItemIcon>
