@@ -93,15 +93,18 @@ export default function useNormalCaptcha(captchaRefreshRef, setLoading) {
         captchaCode: "",
     });
 
-    const CaptchaRender = () => {
-        return (
-            <NormalCaptcha
-                captchaRef={captchaParamsRef}
-                ref={captchaRefreshRef}
-                setLoading={setLoading}
-            />
-        );
-    };
+    const CaptchaRender = useCallback(
+        function Normal() {
+            return (
+                <NormalCaptcha
+                    captchaRef={captchaParamsRef}
+                    ref={captchaRefreshRef}
+                    setLoading={setLoading}
+                />
+            );
+        },
+        [captchaParamsRef, captchaRefreshRef, setLoading]
+    );
 
     return {
         isValidate,

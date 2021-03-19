@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { FormControl } from "@material-ui/core";
 import ReCaptcha from "../component/Login/ReCaptcha";
@@ -47,11 +47,17 @@ export default function useRecaptcha(setLoading) {
         captchaCode: "",
     });
 
-    const CaptchaRender = () => {
-        return (
-            <Recaptcha captchaRef={captchaParamsRef} setLoading={setLoading} />
-        );
-    };
+    const CaptchaRender = useCallback(
+        function RecaptchaRender() {
+            return (
+                <Recaptcha
+                    captchaRef={captchaParamsRef}
+                    setLoading={setLoading}
+                />
+            );
+        },
+        [captchaParamsRef, setLoading]
+    );
 
     return {
         isValidate,

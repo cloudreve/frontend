@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef, useCallback, useRef } from "react";
 import Script from "react-load-script";
 import { useSelector } from "react-redux";
 
@@ -53,17 +53,20 @@ export default function useTCaptcha(setLoading) {
 
     const captchaRef = useRef();
 
-    const CaptchaRender = () => {
-        return (
-            <TCaptcha
-                captchaRef={captchaParamsRef}
-                setLoading={setLoading}
-                isValidateRef={isValidate}
-                submitRef={submitRef}
-                ref={captchaRef}
-            />
-        );
-    };
+    const CaptchaRender = useCallback(
+        function TCaptchaRender() {
+            return (
+                <TCaptcha
+                    captchaRef={captchaParamsRef}
+                    setLoading={setLoading}
+                    isValidateRef={isValidate}
+                    submitRef={submitRef}
+                    ref={captchaRef}
+                />
+            );
+        },
+        [captchaParamsRef, setLoading, isValidate, submitRef, captchaRef]
+    );
 
     return {
         isValidate: isValidate,
