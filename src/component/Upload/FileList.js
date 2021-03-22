@@ -108,7 +108,7 @@ class FileList extends Component {
             return f.id === file.id;
         });
         if (!file.errMsg || file.ignoreMsg) {
-            if (filesNow[fileID] && filesNow[fileID].status !== 4) {
+            if (filesNow[fileID] && !filesNow[fileID].errMsg) {
                 filesNow[fileID] = file;
                 this.setState({
                     files: filesNow,
@@ -120,7 +120,6 @@ class FileList extends Component {
     }
 
     setComplete(file) {
-        console.log("setComplete");
         const filesNow = [...this.state.files];
         const fileID = filesNow.findIndex((f) => {
             return f.id === file.id;
@@ -164,7 +163,7 @@ class FileList extends Component {
 
     cancelUpload = (file) => {
         this.props.cancelUpload(file);
-        this.deQueue(file);
+        // this.deQueue(file);
     };
 
     handleClose = () => {
