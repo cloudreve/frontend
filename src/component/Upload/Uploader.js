@@ -46,6 +46,16 @@ class UploaderComponent extends Component {
         this.uploader.removeFile(file);
     }
 
+    reQueue = (file) => {
+        this.uploader.addFile(file.getSource());
+        this.props.toggleSnackbar(
+            "top",
+            "right",
+            "文件已经重新加入上传队列",
+            "info"
+        );
+    };
+
     getChunkSize(policyType) {
         if (policyType === "qiniu") {
             return 4 * 1024 * 1024;
@@ -204,6 +214,7 @@ class UploaderComponent extends Component {
                 <FileList
                     inRef={this.setRef.bind(this)}
                     cancelUpload={this.cancelUpload.bind(this)}
+                    reQueue={this.reQueue.bind(this)}
                 />
                 {this.props.keywords === "" && (
                     <UploadButton

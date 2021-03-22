@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import { isWidthDown } from "@material-ui/core/withWidth";
 import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import {
@@ -19,6 +20,7 @@ import {
     ListItemSecondaryAction,
     withWidth,
     DialogContent,
+    Tooltip,
 } from "@material-ui/core";
 import TypeIcon from "../FileManager/TypeIcon";
 import { withTheme } from "@material-ui/core/styles";
@@ -352,14 +354,28 @@ class FileList extends Component {
                                     <ListItemSecondaryAction
                                         className={classes.delete}
                                     >
-                                        <IconButton
-                                            aria-label="Delete"
-                                            onClick={() =>
-                                                this.cancelUpload(item)
-                                            }
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
+                                        {item.status !== 4 && (
+                                            <IconButton
+                                                aria-label="Delete"
+                                                onClick={() =>
+                                                    this.cancelUpload(item)
+                                                }
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        )}
+                                        {item.status === 4 && (
+                                            <Tooltip title={"重试"}>
+                                                <IconButton
+                                                    aria-label="Delete"
+                                                    onClick={() =>
+                                                        this.reQueue(item)
+                                                    }
+                                                >
+                                                    <RefreshIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        )}
                                     </ListItemSecondaryAction>
                                 </ListItem>
                                 <Divider />
