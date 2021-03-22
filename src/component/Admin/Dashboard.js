@@ -10,12 +10,12 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Code from "@material-ui/icons/Code";
 import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {
     Assignment,
+    Category,
     CloudDownload,
     Contacts,
     Group,
@@ -223,7 +223,7 @@ const items = [
             {
                 title: "验证码",
                 path: "captcha",
-                icon: <Code />,
+                icon: <Category />,
             },
         ],
     },

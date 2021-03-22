@@ -107,28 +107,30 @@ export default function Captcha() {
                     <Typography variant="h6" gutterBottom>
                         验证码
                     </Typography>
-                    <div className={classes.form}>
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="component-helper">
-                                验证码类型
-                            </InputLabel>
-                            <Select
-                                value={options.captcha_type}
-                                onChange={handleChange("captcha_type")}
-                                required
-                            >
-                                <MenuItem value={"normal"}>普通</MenuItem>
-                                <MenuItem value={"recaptcha"}>
-                                    reCAPTCHA V2
-                                </MenuItem>
-                                <MenuItem value={"tcaptcha"}>
-                                    腾讯云验证码
-                                </MenuItem>
-                            </Select>
-                            <FormHelperText id="component-helper-text">
-                                验证码类型
-                            </FormHelperText>
-                        </FormControl>
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    验证码类型
+                                </InputLabel>
+                                <Select
+                                    value={options.captcha_type}
+                                    onChange={handleChange("captcha_type")}
+                                    required
+                                >
+                                    <MenuItem value={"normal"}>普通</MenuItem>
+                                    <MenuItem value={"recaptcha"}>
+                                        reCAPTCHA V2
+                                    </MenuItem>
+                                    <MenuItem value={"tcaptcha"}>
+                                        腾讯云验证码
+                                    </MenuItem>
+                                </Select>
+                                <FormHelperText id="component-helper-text">
+                                    验证码类型
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
                     </div>
                 </div>
 
