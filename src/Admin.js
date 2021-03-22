@@ -31,6 +31,7 @@ import Share from "./component/Admin/Share/Share";
 import Download from "./component/Admin/Task/Download";
 import Task from "./component/Admin/Task/Task";
 import Import from "./component/Admin/File/Import";
+import Captcha from "./component/Admin/Setting/Captcha";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -112,6 +113,10 @@ export default function Admin() {
 
                                     <Route path={`${path}/image`}>
                                         <ImageSetting />
+                                    </Route>
+
+                                    <Route path={`${path}/captcha`}>
+                                        <Captcha />
                                     </Route>
 
                                     <Route path={`${path}/policy`} exact>

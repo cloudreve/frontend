@@ -61,8 +61,9 @@ export const initState = {
                 },
             },
         },
-        captcha_IsUseReCaptcha: false,
         captcha_ReCaptchaKey: "defaultKey",
+        captcha_type: "normal",
+        tcaptcha_captcha_app_id: "",
     },
     navigator: {
         path: "/",

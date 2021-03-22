@@ -2,7 +2,6 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
@@ -14,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import AlertDialog from "../Dialogs/Alert";
-import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,9 +44,6 @@ export default function Access() {
         reg_captcha: "0",
         forget_captcha: "0",
         authn_enabled: "0",
-        captcha_IsUseReCaptcha: "0",
-        captcha_ReCaptchaKey: "defaultKey",
-        captcha_ReCaptchaSecret: "defaultSecret",
     });
     const [siteURL, setSiteURL] = useState("");
     const [groups, setGroups] = useState([]);
@@ -247,86 +242,6 @@ export default function Access() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
-
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.captcha_IsUseReCaptcha ===
-                                                "1"
-                                            }
-                                            onChange={handleChange(
-                                                "captcha_IsUseReCaptcha"
-                                            )}
-                                        />
-                                    }
-                                    label="使用 reCaptcha V2 验证码"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否使用 reCaptcha V2 验证码
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        {options.captcha_IsUseReCaptcha === "1" && (
-                            <>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            Site KEY
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={options.captcha_ReCaptchaKey}
-                                            onChange={handleInputChange(
-                                                "captcha_ReCaptchaKey"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://www.google.com/recaptcha/admin/create"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                应用管理页面
-                                            </Link>{" "}
-                                            获取到的的 网站密钥
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            Secret
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={
-                                                options.captcha_ReCaptchaSecret
-                                            }
-                                            onChange={handleInputChange(
-                                                "captcha_ReCaptchaSecret"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://www.google.com/recaptcha/admin/create"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                应用管理页面
-                                            </Link>{" "}
-                                            获取到的的 秘钥
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-                            </>
-                        )}
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
