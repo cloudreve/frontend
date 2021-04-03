@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Avatar, Typography } from "@material-ui/core";
 import { useHistory } from "react-router";
 import Link from "@material-ui/core/Link";
+import { formatLocalTime } from "../../utils/datetime";
 
 const useStyles = makeStyles((theme) => ({
     boxHeader: {
@@ -38,7 +39,7 @@ export default function Creator(props) {
             }
             return Math.round(props.share.expire / 3600) + " 小时后到期";
         }
-        return props.share.create_date;
+        return formatLocalTime(props.share.create_date, "YYYY-MM-DD H:mm:ss");
     };
 
     const userProfile = () => {

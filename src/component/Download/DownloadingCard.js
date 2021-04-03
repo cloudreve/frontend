@@ -585,7 +585,7 @@ export default function DownloadingCard(props) {
                                 </Grid>
                                 <Grid item xs={8} className={classes.infoValue}>
                                     <TimeAgo
-                                        datetime={parseInt(task.update + "000")}
+                                        datetime={task.update}
                                         locale="zh_CN"
                                     />
                                 </Grid>

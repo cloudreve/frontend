@@ -16,12 +16,12 @@ import { filename, sizeToString } from "../../../utils";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import TimeAgo from "timeago-react";
-import moment from "moment";
 import ListLoading from "../../Placeholder/ListLoading";
 import Hidden from "@material-ui/core/Hidden";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import AppBar from "@material-ui/core/AppBar";
+import { formatLocalTime } from "../../../utils/datetime";
 
 const drawerWidth = 350;
 
@@ -181,13 +181,12 @@ export default function SideDrawer() {
         {
             label: "修改于",
             value: (d, t) =>
-                moment.parseZone(d.updated_at).format("YYYY/MM/DD  H:mm:ss"),
+                formatLocalTime(d.updated_at, "YYYY/MM/DD  H:mm:ss"),
             show: (d) => true,
         },
         {
             label: "创建于",
-            value: (d) =>
-                moment.parseZone(d.created_at).format("YYYY/MM/DD  H:mm:ss"),
+            value: (d) => formatLocalTime(d.created_at, "YYYY/MM/DD  H:mm:ss"),
             show: (d) => true,
         },
     ];

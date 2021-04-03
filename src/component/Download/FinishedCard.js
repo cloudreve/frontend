@@ -29,6 +29,7 @@ import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 import { useHistory } from "react-router";
+import { formatLocalTime } from "../../utils/datetime";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -413,7 +414,10 @@ export default function FinishedCard(props) {
                                     创建日期：
                                 </Grid>
                                 <Grid item xs={8} className={classes.infoValue}>
-                                    {props.task.create}
+                                    {formatLocalTime(
+                                        props.task.create,
+                                        "YYYY-MM-DD H:mm:ss"
+                                    )}
                                 </Grid>
                             </Grid>
                             <Grid container xs={12} sm={6}>
@@ -421,7 +425,10 @@ export default function FinishedCard(props) {
                                     最后更新：
                                 </Grid>
                                 <Grid item xs={8} className={classes.infoValue}>
-                                    {props.task.update}
+                                    {formatLocalTime(
+                                        props.task.update,
+                                        "YYYY-MM-DD H:mm:ss"
+                                    )}
                                 </Grid>
                             </Grid>
                         </Grid>

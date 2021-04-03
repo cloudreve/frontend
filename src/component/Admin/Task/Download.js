@@ -23,6 +23,7 @@ import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import ShareFilter from "../Dialogs/ShareFilter";
+import { formatLocalTime } from "../../../utils/datetime";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -355,13 +356,10 @@ export default function Download() {
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        {new Date(
-                                            row.CreatedAt
-                                        ).toLocaleDateString() +
-                                            " " +
-                                            new Date(
-                                                row.CreatedAt
-                                            ).toLocaleTimeString()}
+                                        {formatLocalTime(
+                                            row.CreatedAt,
+                                            "YYYY-MM-DD H:mm:ss"
+                                        )}
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title={"删除"}>

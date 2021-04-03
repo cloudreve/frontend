@@ -159,21 +159,6 @@ export function filename(path) {
     return pathList.pop();
 }
 
-export function transformTime(timestamp = +new Date()) {
-    if (timestamp) {
-        const time = new Date(timestamp);
-        const y = time.getFullYear(); //getFullYear方法以四位数字返回年份
-        const M = time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        const d = time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        const h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        const m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        const s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-        return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
-    } else {
-        return "";
-    }
-}
-
 export function randomStr(length) {
     let result = "";
     const characters =

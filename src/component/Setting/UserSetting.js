@@ -48,9 +48,11 @@ import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import QRCode from "qrcode-react";
-import { Brightness3, ListAlt, PermContactCalendar } from "@material-ui/icons";
+import { Brightness3, ListAlt, PermContactCalendar,Schedule } from "@material-ui/icons";
 import { transformTime } from "../../utils";
 import Authn from "./Authn";
+import { formatLocalTime, timeZone } from "../../utils/datetime";
+import TimeZoneDialog from "../Modals/TimeZone";
 
 const styles = (theme) => ({
     layout: {
@@ -197,6 +199,7 @@ class UserSettingCompoment extends Component {
         changeWebDavPwd: false,
         groupBackModal: false,
         changePolicy: false,
+        changeTimeZone: false,
         settings: {
             uid: 0,
             group_expires: 0,
@@ -706,8 +709,9 @@ class UserSettingCompoment extends Component {
                                         className={classes.infoText}
                                         color="textSecondary"
                                     >
-                                        {transformTime(
-                                            parseInt(user.created_at + "000")
+                                        {formatLocalTime(
+                                            user.created_at,
+                                            "YYYY-MM-DD H:mm:ss"
                                         )}
                                     </Typography>
                                 </ListItemSecondaryAction>
@@ -889,6 +893,32 @@ class UserSettingCompoment extends Component {
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
+                            <Divider />
+                            <ListItem
+                                onClick={() =>
+                                    this.setState({ changeTimeZone: true })
+                                }
+                                button
+                            >
+                                <ListItemIcon className={classes.iconFix}>
+                                    <Schedule />
+                                </ListItemIcon>
+                                <ListItemText primary="时区" />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <Typography
+                                        className={classes.infoTextWithIcon}
+                                        color="textSecondary"
+                                    >
+                                        {timeZone}
+                                    </Typography>
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
                         </List>
                     </Paper>
                     {user.group.webdav && (
@@ -976,6 +1006,10 @@ class UserSettingCompoment extends Component {
                     )}
                     <div className={classes.paddingBottom}></div>
                 </div>
+                <TimeZoneDialog
+                    onClose={() => this.setState({ changeTimeZone: false })}
+                    open={this.state.changeTimeZone}
+                />
                 <Dialog
                     open={this.state.avatarModal}
                     onClose={this.handleClose}

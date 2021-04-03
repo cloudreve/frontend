@@ -20,6 +20,8 @@ import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
+import dayjs from "dayjs";
+import { formatLocalTime } from "../../utils/datetime";
 
 const styles = (theme) => ({
     selected: {
@@ -188,7 +190,10 @@ class TableRowCompoment extends Component {
                         })}
                     >
                         {" "}
-                        {this.props.file.date}
+                        {formatLocalTime(
+                            this.props.file.date,
+                            "YYYY-MM-DD H:mm:ss"
+                        )}
                     </Typography>
                 </TableCell>
             </TableRow>

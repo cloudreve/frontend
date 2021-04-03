@@ -36,6 +36,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { withRouter } from "react-router-dom";
 import ToggleIcon from "material-ui-toggle-icon";
+import { formatLocalTime } from "../../utils/datetime";
 
 const styles = (theme) => ({
     cardContainer: {
@@ -342,7 +343,10 @@ class MyShareCompoment extends Component {
                                     }
                                     subheader={
                                         <span>
-                                            {value.create_date}
+                                            {formatLocalTime(
+                                                value.create_date,
+                                                "YYYY-MM-DD H:mm:ss"
+                                            )}
                                             {this.isExpired(value) && (
                                                 <Chip
                                                     size="small"

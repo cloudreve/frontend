@@ -9,9 +9,9 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import API from "../../middleware/Api";
-import TimeAgo from "timeago-react";
 import { getTaskProgress, getTaskStatus, getTaskType } from "../../config";
 import Pagination from "@material-ui/lab/Pagination";
+import { formatLocalTime } from "../../utils/datetime";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -119,10 +119,10 @@ export default function Tasks() {
                                     component="th"
                                     scope="row"
                                 >
-                                    <TimeAgo
-                                        datetime={row.create_date}
-                                        locale="zh_CN"
-                                    />
+                                    {formatLocalTime(
+                                        row.create_date,
+                                        "YYYY-MM-DD H:mm:ss"
+                                    )}
                                 </TableCell>
                                 <TableCell nowrap="nowrap" align="right">
                                     {getTaskType(row.type)}
