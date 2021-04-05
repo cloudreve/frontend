@@ -162,10 +162,13 @@ class StorageBarCompoment extends Component {
                                         noWrap
                                         color="textSecondary"
                                     >
-                                        已使用{" "}
                                         {this.state.used === null
                                             ? " -- "
                                             : this.state.used}
+                                        {" / "}
+                                        {this.state.total === null
+                                            ? " -- "
+                                            : this.state.total}
                                     </Typography>
                                 </Tooltip>
                             </div>
