@@ -914,10 +914,7 @@ class NavbarCompoment extends Component {
                 <Hidden xsDown implementation="css">
                     <Drawer
                         classes={{
-                            paper: classNames({
-                                [classes.drawerOpen]: this.props.desktopOpen,
-                                [classes.drawerClose]: !this.props.desktopOpen,
-                            }),
+                            paper: classes.drawerPaper,
                         }}
                         className={classNames(classes.drawer, {
                             [classes.drawerOpen]: this.props.desktopOpen,
