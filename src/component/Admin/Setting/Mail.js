@@ -328,10 +328,13 @@ export default function Mail() {
                                             )}
                                         />
                                     }
-                                    label="使用加密连接"
+                                    label="强制使用 SSL 连接"
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    是否使用SSL加密连接
+                                    是否强制使用 SSL
+                                    加密连接。如果无法发送邮件，可关闭此项，
+                                    Cloudreve 会尝试使用 STARTTLS
+                                    并决定是否使用加密连接
                                 </FormHelperText>
                             </FormControl>
                         </div>
