@@ -186,6 +186,9 @@ const styles = (theme) => ({
     drawerPaper: {
         width: drawerWidthMobile,
     },
+    drawerPaperDesktop: {
+        width: drawerWidth,
+    },
     upDrawer: {
         overflowX: "hidden",
     },
@@ -914,7 +917,7 @@ class NavbarCompoment extends Component {
                 <Hidden xsDown implementation="css">
                     <Drawer
                         classes={{
-                            paper: classes.drawerPaper,
+                            paper: classes.drawerPaperDesktop,
                         }}
                         className={classNames(classes.drawer, {
                             [classes.drawerOpen]: this.props.desktopOpen,
