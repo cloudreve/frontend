@@ -168,6 +168,8 @@ class FileList extends Component {
         // this.deQueue(file);
     };
 
+    reQueue = this.props.reQueue;
+
     handleClose = () => {
         this.setState({ open: false });
     };
