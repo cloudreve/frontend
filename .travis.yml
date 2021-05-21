@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - 12.16.3
 before_script:
-  - yarn install
+  - npm install
 script:
-  - CI=false yarn run build
-  - yarn run test
+  - CI=false npm run build
+  - npm run test
