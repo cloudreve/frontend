@@ -1,5 +1,8 @@
 import axios from "axios";
 import Auth from "./Auth";
+import { createHashHistory } from "history";
+
+const history = createHashHistory();
 
 export const baseURL = "/api/v3";
 
@@ -34,12 +37,12 @@ instance.interceptors.response.use(
             // 登录过期
             if (response.rawData.code === 401) {
                 Auth.signout();
-                window.location.href = "/login";
+                history.push("/login");
             }
 
             // 非管理员
             if (response.rawData.code === 40008) {
-                window.location.href = "/home";
+                history.push("/home");
             }
             throw new AppError(
                 response.rawData.msg,

@@ -82,14 +82,6 @@ class UserAvatarCompoment extends Component {
         });
     };
 
-    openURL = (url) => {
-        window.location.href = url;
-    };
-
-    returnHome = () => {
-        window.location.href = "/home";
-    };
-
     render() {
         const { classes } = this.props;
         const loginCheck = Auth.Check(this.props.isLogin);
@@ -135,7 +127,9 @@ class UserAvatarCompoment extends Component {
                             <Tooltip title={"返回主页"} placement="bottom">
                                 <IconButton
                                     color="inherit"
-                                    onClick={this.returnHome}
+                                    onClick={() =>
+                                        this.props.history.push("/home")
+                                    }
                                 >
                                     <Home />
                                 </IconButton>

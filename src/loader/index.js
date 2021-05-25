@@ -88,11 +88,11 @@ const uploaderLoader = () => (WrappedComponent) => {
         componentDidMount() {
             this._isMounted = true;
             const scripts = [
-                ["/static/js/uploader/moxie.js"],
-                ["/static/js/uploader/plupload.dev.js"],
-                ["/static/js/uploader/i18n/zh_CN.js"],
-                ["/static/js/uploader/ui.js"],
-                ["/static/js/uploader/uploader_" + window.policyType + ".js"],
+                ["./static/js/uploader/moxie.js"],
+                ["./static/js/uploader/plupload.dev.js"],
+                ["./static/js/uploader/i18n/zh_CN.js"],
+                ["./static/js/uploader/ui.js"],
+                ["./static/js/uploader/uploader_" + window.policyType + ".js"],
             ];
             startLoadingScripts(scripts, (err) => {
                 if (this._isMounted) {

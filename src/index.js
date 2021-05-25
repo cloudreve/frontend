@@ -9,17 +9,17 @@ import App from "./App";
 import cloureveApp from "./reducers";
 import { UpdateSiteConfig } from "./middleware/Init";
 import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
-import { createBrowserHistory } from "history";
+import { createHashHistory } from "history";
 import { routerMiddleware } from "connected-react-router";
 import { ConnectedRouter } from "connected-react-router";
 const Admin = React.lazy(() => import("./Admin"));
 
-if (window.location.hash !== "") {
-    window.location.href = window.location.hash.split("#")[1];
-}
+// if (window.location.hash !== "") {
+//     window.location.href = window.location.hash.split("#")[1];
+// }
 
 serviceWorker.register();
-export const history = createBrowserHistory();
+export const history = createHashHistory();
 let reduxEnhance = applyMiddleware(routerMiddleware(history), thunk);
 if (
     process.env.NODE_ENV === "development" &&

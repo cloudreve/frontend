@@ -77,10 +77,6 @@ class UserAvatarPopoverCompoment extends Component {
         this.props.setUserPopover(null);
     };
 
-    openURL = (url) => {
-        window.location.href = url;
-    };
-
     sigOut = () => {
         API.delete("/user/session/")
             .then(() => {
