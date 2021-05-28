@@ -429,7 +429,7 @@ export default function Group() {
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/admin/group/edit/" +
+                                                "#/admin/group/edit/" +
                                                 row.Group.ID
                                             }
                                         >

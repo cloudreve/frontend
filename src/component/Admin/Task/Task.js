@@ -335,7 +335,7 @@ export default function Task() {
                                     <TableCell>
                                         <Link
                                             href={
-                                                "/admin/user/edit/" + row.UserID
+                                                "#/admin/user/edit/" + row.UserID
                                             }
                                         >
                                             {users[row.UserID]
