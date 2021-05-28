@@ -152,10 +152,10 @@ function ResetForm() {
                 <Divider />
                 <div className={classes.link}>
                     <div>
-                        <Link href={"/#/login"}>返回登录</Link>
+                        <Link href={"#/login"}>返回登录</Link>
                     </div>
                     <div>
-                        <Link href={"/#/signup"}>注册账号</Link>
+                        <Link href={"#/signup"}>注册账号</Link>
                     </div>
                 </div>
             </Paper>

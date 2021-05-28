@@ -350,10 +350,10 @@ function LoginForm() {
                         <Divider />
                         <div className={classes.link}>
                             <div>
-                                <Link href={"/forget"}>忘记密码</Link>
+                                <Link href={"#/forget"}>忘记密码</Link>
                             </div>
                             <div>
-                                <Link href={"/signup"}>注册账号</Link>
+                                <Link href={"#/signup"}>注册账号</Link>
                             </div>
                         </div>
 

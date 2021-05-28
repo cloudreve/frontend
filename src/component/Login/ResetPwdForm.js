@@ -194,10 +194,10 @@ class ResetPwdFormCompoment extends Component {
                     <Divider />
                     <div className={classes.link}>
                         <div>
-                            <Link href={"/Login"}>返回登录</Link>
+                            <Link href={"#/Login"}>返回登录</Link>
                         </div>
                         <div>
-                            <Link href={"/SignUp"}>注册账号</Link>
+                            <Link href={"#/SignUp"}>注册账号</Link>
                         </div>
                     </div>
                 </Paper>
