@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import { toggleSnackbar } from "../../actions/index";
 import { useHistory } from "react-router-dom";
@@ -78,6 +78,7 @@ function ResetForm() {
         [dispatch]
     );
     const history = useHistory();
+    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
 
     const submit = (e) => {
         e.preventDefault();
@@ -155,7 +156,7 @@ function ResetForm() {
                         <Link href={"/#/login"}>返回登录</Link>
                     </div>
                     <div>
-                        <Link href={"/#/signup"}>注册账号</Link>
+                        { registerEnabled ? <Link href={"/#/signup"}>注册账号</Link> : null  }
                     </div>
                 </div>
             </Paper>

@@ -31,6 +31,7 @@ import pathHelper from "../../utils/page";
 const mapStateToProps = (state) => {
     return {
         anchorEl: state.viewUpdate.userPopoverAnchorEl,
+        registerEnabled: state.siteConfig.registerEnabled,
     };
 };
 
@@ -139,14 +140,17 @@ class UserAvatarPopoverCompoment extends Component {
                             </ListItemIcon>
                             登录
                         </MenuItem>
-                        <MenuItem
+                        { this.props.registerEnabled ? 
+                            <MenuItem
                             onClick={() => this.props.history.push("/signup")}
-                        >
-                            <ListItemIcon>
-                                <AccountPlus />
-                            </ListItemIcon>
-                            注册
-                        </MenuItem>
+                            >
+                                <ListItemIcon>
+                                    <AccountPlus />
+                                </ListItemIcon>
+                                注册
+                            </MenuItem>
+                            : null
+                        }  
                     </div>
                 )}
                 {Auth.Check() && (

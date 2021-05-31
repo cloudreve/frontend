@@ -63,8 +63,10 @@ const styles = (theme) => ({
         },
     },
 });
-const mapStateToProps = () => {
-    return {};
+const mapStateToProps = (state) => {
+    return {
+        registerEnabled: state.siteConfig.registerEnabled
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -197,7 +199,7 @@ class ResetPwdFormCompoment extends Component {
                             <Link href={"/Login"}>返回登录</Link>
                         </div>
                         <div>
-                            <Link href={"/SignUp"}>注册账号</Link>
+                        { this.props.registerEnabled ? <Link href={"/signup"}>注册账号</Link> : null  }
                         </div>
                     </div>
                 </Paper>

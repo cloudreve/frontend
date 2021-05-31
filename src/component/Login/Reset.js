@@ -81,6 +81,7 @@ function Reset() {
             [name]: e.target.value,
         });
     };
+    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
 
     const {
         captchaLoading,
@@ -162,7 +163,7 @@ function Reset() {
                         <Link href={"/login"}>返回登录</Link>
                     </div>
                     <div>
-                        <Link href={"/signup"}>注册账号</Link>
+                    { registerEnabled ? <Link href={"/signup"}>注册账号</Link> : null  }
                     </div>
                 </div>
             </Paper>
