@@ -520,7 +520,7 @@ class NavbarCompoment extends Component {
                             </ListItemIcon>
                             <ListItemText primary="登录" />
                         </ListItem>
-                        { this.props.registerEnabled ? 
+                        { this.props.registerEnabled &&
                             <ListItem
                             button
                             key="注册"
@@ -531,7 +531,6 @@ class NavbarCompoment extends Component {
                                 </ListItemIcon>
                                 <ListItemText primary="注册" />
                             </ListItem>
-                            : null
                         }  
                     </div>
                 )}

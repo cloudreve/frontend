@@ -140,7 +140,7 @@ class UserAvatarPopoverCompoment extends Component {
                             </ListItemIcon>
                             登录
                         </MenuItem>
-                        { this.props.registerEnabled ? 
+                        { this.props.registerEnabled &&
                             <MenuItem
                             onClick={() => this.props.history.push("/signup")}
                             >
@@ -149,7 +149,6 @@ class UserAvatarPopoverCompoment extends Component {
                                 </ListItemIcon>
                                 注册
                             </MenuItem>
-                            : null
                         }  
                     </div>
                 )}

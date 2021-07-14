@@ -156,7 +156,7 @@ function ResetForm() {
                         <Link href={"/#/login"}>返回登录</Link>
                     </div>
                     <div>
-                        { registerEnabled ? <Link href={"/#/signup"}>注册账号</Link> : null  }
+                        { registerEnabled && <Link href={"/#/signup"}>注册账号</Link>  }
                     </div>
                 </div>
             </Paper>

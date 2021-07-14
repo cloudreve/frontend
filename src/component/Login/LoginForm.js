@@ -353,7 +353,7 @@ function LoginForm() {
                                 <Link href={"/forget"}>忘记密码</Link>
                             </div>
                             <div>
-                                { registerEnabled ? <Link href={"/signup"}>注册账号</Link> : null  }
+                                { registerEnabled && <Link href={"/signup"}>注册账号</Link>  }
                             </div>
                         </div>
 
