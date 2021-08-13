@@ -319,9 +319,9 @@ export default function Index() {
                 <Paper>
                     <div className={classes.logoContainer}>
                         <img
-                            alt="cloudreve"
+                            alt="MINIYUN"
                             className={classes.logo}
-                            src={"/static/img/cloudreve.svg"}
+                            src={"/static/img/miniyun.svg"}
                         />
                         <div className={classes.title}>
                             <Typography className={classes.cloudreve}>
