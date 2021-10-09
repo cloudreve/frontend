@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import SearchIcon from "@material-ui/icons/Search";
@@ -146,74 +147,74 @@ class SearchBarCompoment extends Component {
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
 
         return (
-            <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon />
-                </div>
-                <HotKeys keyMap={keyMap} handlers={this.handlers}>
-                    <InputBase
-                        placeholder="搜索..."
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                        onChange={this.handleChange}
-                        onBlur={this.cancelSuggest}
-                        value={this.state.input}
-                    />
-                </HotKeys>
-                <Popper
-                    id={id}
-                    open={this.state.input !== ""}
-                    anchorEl={anchorEl}
-                    className={classes.suggestBox}
-                    transition
-                >
-                    {({ TransitionProps }) => (
-                        <Fade {...TransitionProps} timeout={350}>
-                            <Paper square={true}>
-                                {isHomePage && (
-                                    <MenuItem onClick={this.searchMyFile}>
-                                        <ListItemIcon className={classes.icon}>
-                                            <FileIcon />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            classes={{
-                                                primary: classes.primary,
-                                            }}
-                                            primary={
-                                                <Typography noWrap>
-                                                    在我的文件中搜索{" "}
-                                                    <strong>
-                                                        {this.state.input}
-                                                    </strong>
-                                                </Typography>
-                                            }
-                                        />
-                                    </MenuItem>
-                                )}
-
-                                <MenuItem onClick={this.searchShare}>
-                                    <ListItemIcon className={classes.icon}>
-                                        <ShareIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        classes={{ primary: classes.primary }}
-                                        primary={
-                                            <Typography noWrap>
-                                                在全站分享中搜索{" "}
+          <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                  <SearchIcon />
+              </div>
+              <HotKeys keyMap={keyMap} handlers={this.handlers}>
+                  <InputBase
+                      placeholder={this.props.t('search...')}
+                      classes={{
+                          root: classes.inputRoot,
+                          input: classes.inputInput,
+                      }}
+                      onChange={this.handleChange}
+                      onBlur={this.cancelSuggest}
+                      value={this.state.input}
+                  />
+              </HotKeys>
+              <Popper
+                  id={id}
+                  open={this.state.input !== ""}
+                  anchorEl={anchorEl}
+                  className={classes.suggestBox}
+                  transition
+              >
+                  {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                          <Paper square={true}>
+                              {isHomePage && (
+                                  <MenuItem onClick={this.searchMyFile}>
+                                      <ListItemIcon className={classes.icon}>
+                                          <FileIcon />
+                                      </ListItemIcon>
+                                      <ListItemText
+                                          classes={{
+                                              primary: classes.primary,
+                                          }}
+                                          primary={
+                                              <Typography noWrap>
+                                                {this.props.t('Search in my files')}{" "}
                                                 <strong>
                                                     {this.state.input}
                                                 </strong>
-                                            </Typography>
-                                        }
-                                    />
-                                </MenuItem>
-                            </Paper>
-                        </Fade>
-                    )}
-                </Popper>
-            </div>
+                                              </Typography>
+                                          }
+                                      />
+                                  </MenuItem>
+                              )}
+
+                              <MenuItem onClick={this.searchShare}>
+                                  <ListItemIcon className={classes.icon}>
+                                      <ShareIcon />
+                                  </ListItemIcon>
+                                  <ListItemText
+                                      classes={{ primary: classes.primary }}
+                                      primary={
+                                          <Typography noWrap>
+                                            {this.props.t('Search in site-wide sharing')}{" "}
+                                            <strong>
+                                                {this.state.input}
+                                            </strong>
+                                          </Typography>
+                                      }
+                                  />
+                              </MenuItem>
+                          </Paper>
+                      </Fade>
+                  )}
+              </Popper>
+          </div>
         );
     }
 }
@@ -225,6 +226,6 @@ SearchBarCompoment.propTypes = {
 const SearchBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(SearchBarCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(SearchBarCompoment))));
 
 export default SearchBar;

@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import { Button, IconButton, Typography, withStyles } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import React, { Component } from "react";
@@ -134,7 +135,7 @@ class DownloadComponent extends Component {
                 });
             })
             .catch(() => {
-                this.props.toggleSnackbar("top", "right", "加载失败", "error");
+                this.props.toggleSnackbar("top", "right", this.props.t('Failed to load'), "error");
                 this.setState({
                     loading: false,
                 });
@@ -146,48 +147,48 @@ class DownloadComponent extends Component {
         const user = Auth.GetUser();
 
         return (
-            <div className={classes.layout}>
-                {user.group.allowRemoteDownload && <RemoteDownloadButton />}
-                <Typography
-                    color="textSecondary"
-                    variant="h4"
-                    className={classes.title}
+          <div className={classes.layout}>
+              {user.group.allowRemoteDownload && <RemoteDownloadButton />}
+              <Typography
+                  color="textSecondary"
+                  variant="h4"
+                  className={classes.title}
+              >
+                {this.props.t('in progress')}
+                <IconButton
+                    disabled={this.state.loading}
+                    onClick={this.loadDownloading}
                 >
-                    进行中
-                    <IconButton
-                        disabled={this.state.loading}
-                        onClick={this.loadDownloading}
-                    >
-                        <RefreshIcon />
-                    </IconButton>
-                </Typography>
-                {this.state.downloading.map((value, k) => (
-                    <DownloadingCard key={k} task={value} />
-                ))}
-                <Typography
-                    color="textSecondary"
-                    variant="h4"
-                    className={classes.title}
-                >
-                    已完成
-                </Typography>
-                <div className={classes.loadMore}>
-                    {this.state.finishedList.map((value, k) => {
-                        if (value.files) {
-                            return <FinishedCard key={k} task={value} />;
-                        }
-                        return null;
-                    })}
-                    <Button
-                        size="large"
-                        className={classes.margin}
-                        disabled={!this.state.continue}
-                        onClick={this.loadMore}
-                    >
-                        加载更多
-                    </Button>
-                </div>
-            </div>
+                    <RefreshIcon />
+                </IconButton>
+              </Typography>
+              {this.state.downloading.map((value, k) => (
+                  <DownloadingCard key={k} task={value} />
+              ))}
+              <Typography
+                  color="textSecondary"
+                  variant="h4"
+                  className={classes.title}
+              >
+                {this.props.t('completed')}
+              </Typography>
+              <div className={classes.loadMore}>
+                  {this.state.finishedList.map((value, k) => {
+                      if (value.files) {
+                          return <FinishedCard key={k} task={value} />;
+                      }
+                      return null;
+                  })}
+                  <Button
+                      size="large"
+                      className={classes.margin}
+                      disabled={!this.state.continue}
+                      onClick={this.loadMore}
+                  >
+                    {this.props.t('load more')}
+                  </Button>
+              </div>
+          </div>
         );
     }
 }
@@ -195,6 +196,6 @@ class DownloadComponent extends Component {
 const Download = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(DownloadComponent));
+)(withTranslation()(withStyles(styles)(DownloadComponent)));
 
 export default Download;

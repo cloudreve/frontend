@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { isMac } from "../utils";
 import pathHelper from "../utils/page";
 import Auth from "../middleware/Auth";
@@ -59,7 +60,7 @@ export const openPreview = () => {
         if (isShare) {
             const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
-                dispatch(toggleSnackbar("top", "right", "请先登录", "warning"));
+                dispatch(toggleSnackbar("top", "right", i18next.t('please log in first'), "warning"));
                 dispatch(changeContextMenu("file", false));
                 return;
             }
@@ -188,7 +189,7 @@ export const openPreview = () => {
                 );
                 return;
             default:
-                dispatch(openLoadingDialog("获取下载地址..."));
+                dispatch(openLoadingDialog(i18next.t('Get download address...')));
                 return;
         }
     };

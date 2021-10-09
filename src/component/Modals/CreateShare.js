@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback } from "react";
 import {
     Checkbox,
@@ -130,6 +131,8 @@ export default function CreatShare(props) {
         preview: true,
     });
 
+    const { t } = useTranslation();
+
     const handleChange = (prop) => (event) => {
         // 输入密码
         if (prop === "password") {
@@ -220,242 +223,242 @@ export default function CreatShare(props) {
     const handleFocus = (event) => event.target.select();
 
     return (
-        <Dialog
-            open={props.open}
-            onClose={onClose}
-            aria-labelledby="form-dialog-title"
-            className={classes.widthAnimation}
-            maxWidth="xs"
-            fullWidth
-        >
-            <DialogTitle id="form-dialog-title">创建分享链接</DialogTitle>
+      <Dialog
+          open={props.open}
+          onClose={onClose}
+          aria-labelledby="form-dialog-title"
+          className={classes.widthAnimation}
+          maxWidth="xs"
+          fullWidth
+      >
+          <DialogTitle id="form-dialog-title">{t('Create a share link')}</DialogTitle>
 
-            {shareURL === "" && (
-                <>
-                    <Divider />
-                    <List>
-                        <ExpansionPanel
-                            expanded={expanded === "password"}
-                            onChange={handleExpand("password")}
-                        >
-                            <ExpansionPanelSummary
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <LockIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="使用密码保护" />
-                                    <ListItemSecondaryAction>
-                                        <Checkbox
-                                            checked={shareOption.password}
-                                            onChange={handleCheck("password")}
-                                        />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <FormControl
-                                    variant="outlined"
-                                    color="secondary"
-                                    fullWidth
-                                >
-                                    <InputLabel htmlFor="filled-adornment-password">
-                                        分享密码
-                                    </InputLabel>
-                                    <OutlinedInput
-                                        fullWidth
-                                        id="outlined-adornment-password"
-                                        type={
-                                            values.showPassword
-                                                ? "text"
-                                                : "password"
-                                        }
-                                        value={values.password}
-                                        onChange={handleChange("password")}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <Tooltip title="随机生成">
-                                                    <IconButton
-                                                        aria-label="toggle password visibility"
-                                                        onClick={randomPassword}
-                                                        edge="end"
-                                                    >
-                                                        <CasinoIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={
-                                                        handleClickShowPassword
-                                                    }
-                                                    onMouseDown={
-                                                        handleMouseDownPassword
-                                                    }
-                                                    edge="end"
-                                                >
-                                                    <ToggleIcon
-                                                        on={values.showPassword}
-                                                        onIcon={<Visibility />}
-                                                        offIcon={
-                                                            <VisibilityOff />
-                                                        }
-                                                    />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        labelWidth={70}
-                                    />
-                                </FormControl>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                        <ExpansionPanel
-                            expanded={expanded === "expire"}
-                            onChange={handleExpand("expire")}
-                        >
-                            <ExpansionPanelSummary
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <TimerIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="自动过期" />
-                                    <ListItemSecondaryAction>
-                                        <Checkbox
-                                            checked={shareOption.expire}
-                                            onChange={handleCheck("expire")}
-                                        />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails
-                                className={classes.flexCenter}
-                            >
-                                <FormControl
-                                    style={{
-                                        marginRight: 10,
-                                    }}
-                                >
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={values.downloads}
-                                        onChange={handleChange("downloads")}
-                                    >
-                                        <MenuItem value={1}>1 次下载</MenuItem>
-                                        <MenuItem value={2}>2 次下载</MenuItem>
-                                        <MenuItem value={3}>3 次下载</MenuItem>
-                                        <MenuItem value={4}>4 次下载</MenuItem>
-                                        <MenuItem value={5}>5 次下载</MenuItem>
-                                        <MenuItem value={20}>
-                                            20 次下载
-                                        </MenuItem>
-                                        <MenuItem value={50}>
-                                            50 次下载
-                                        </MenuItem>
-                                        <MenuItem value={100}>
-                                            100 次下载
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <Typography>或者</Typography>
-                                <FormControl
-                                    style={{
-                                        marginRight: 10,
-                                        marginLeft: 10,
-                                    }}
-                                >
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={values.expires}
-                                        onChange={handleChange("expires")}
-                                    >
-                                        <MenuItem value={300}>5 分钟</MenuItem>
-                                        <MenuItem value={3600}>1 小时</MenuItem>
-                                        <MenuItem value={24 * 3600}>
-                                            1 天
-                                        </MenuItem>
-                                        <MenuItem value={7 * 24 * 3600}>
-                                            7 天
-                                        </MenuItem>
-                                        <MenuItem value={30 * 24 * 3600}>
-                                            30 天
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <Typography>后过期</Typography>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                        <ExpansionPanel
-                            expanded={expanded === "preview"}
-                            onChange={handleExpand("preview")}
-                        >
-                            <ExpansionPanelSummary
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <LockIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="允许预览" />
-                                    <ListItemSecondaryAction>
-                                        <Checkbox
-                                            checked={shareOption.preview}
-                                            onChange={handleCheck("preview")}
-                                        />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Typography>
-                                    是否允许在分享页面预览文件内容
-                                </Typography>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    </List>
-                    <Divider />
-                </>
-            )}
-            {shareURL !== "" && (
-                <DialogContent>
-                    <TextField
-                        onFocus={handleFocus}
-                        autoFocus
-                        inputProps={{ readonly: true }}
-                        label="分享链接"
-                        value={shareURL}
-                        variant="outlined"
-                        fullWidth
-                    />
-                </DialogContent>
-            )}
+          {shareURL === "" && (
+              <>
+                  <Divider />
+                  <List>
+                      <ExpansionPanel
+                          expanded={expanded === "password"}
+                          onChange={handleExpand("password")}
+                      >
+                          <ExpansionPanelSummary
+                              aria-controls="panel1a-content"
+                              id="panel1a-header"
+                          >
+                              <ListItem button>
+                                  <ListItemIcon>
+                                      <LockIcon />
+                                  </ListItemIcon>
+                                  <ListItemText primary={t('Use password protection')} />
+                                  <ListItemSecondaryAction>
+                                      <Checkbox
+                                          checked={shareOption.password}
+                                          onChange={handleCheck("password")}
+                                      />
+                                  </ListItemSecondaryAction>
+                              </ListItem>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                              <FormControl
+                                  variant="outlined"
+                                  color="secondary"
+                                  fullWidth
+                              >
+                                  <InputLabel htmlFor="filled-adornment-password">
+                                    {t('Share Password')}
+                                  </InputLabel>
+                                  <OutlinedInput
+                                      fullWidth
+                                      id="outlined-adornment-password"
+                                      type={
+                                          values.showPassword
+                                              ? "text"
+                                              : "password"
+                                      }
+                                      value={values.password}
+                                      onChange={handleChange("password")}
+                                      endAdornment={
+                                          <InputAdornment position="end">
+                                              <Tooltip title={t('Randomly Generated')}>
+                                                  <IconButton
+                                                      aria-label="toggle password visibility"
+                                                      onClick={randomPassword}
+                                                      edge="end"
+                                                  >
+                                                      <CasinoIcon />
+                                                  </IconButton>
+                                              </Tooltip>
+                                              <IconButton
+                                                  aria-label="toggle password visibility"
+                                                  onClick={
+                                                      handleClickShowPassword
+                                                  }
+                                                  onMouseDown={
+                                                      handleMouseDownPassword
+                                                  }
+                                                  edge="end"
+                                              >
+                                                  <ToggleIcon
+                                                      on={values.showPassword}
+                                                      onIcon={<Visibility />}
+                                                      offIcon={
+                                                          <VisibilityOff />
+                                                      }
+                                                  />
+                                              </IconButton>
+                                          </InputAdornment>
+                                      }
+                                      labelWidth={70}
+                                  />
+                              </FormControl>
+                          </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                      <ExpansionPanel
+                          expanded={expanded === "expire"}
+                          onChange={handleExpand("expire")}
+                      >
+                          <ExpansionPanelSummary
+                              aria-controls="panel1a-content"
+                              id="panel1a-header"
+                          >
+                              <ListItem button>
+                                  <ListItemIcon>
+                                      <TimerIcon />
+                                  </ListItemIcon>
+                                  <ListItemText primary={t('Automatically expire')} />
+                                  <ListItemSecondaryAction>
+                                      <Checkbox
+                                          checked={shareOption.expire}
+                                          onChange={handleCheck("expire")}
+                                      />
+                                  </ListItemSecondaryAction>
+                              </ListItem>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails
+                              className={classes.flexCenter}
+                          >
+                              <FormControl
+                                  style={{
+                                      marginRight: 10,
+                                  }}
+                              >
+                                  <Select
+                                      labelId="demo-simple-select-label"
+                                      id="demo-simple-select"
+                                      value={values.downloads}
+                                      onChange={handleChange("downloads")}
+                                  >
+                                      <MenuItem value={1}>{t('1 download')}</MenuItem>
+                                      <MenuItem value={2}>{t('2 downloads')}</MenuItem>
+                                      <MenuItem value={3}>{t('3 downloads')}</MenuItem>
+                                      <MenuItem value={4}>{t('4 downloads')}</MenuItem>
+                                      <MenuItem value={5}>{t('5 downloads')}</MenuItem>
+                                      <MenuItem value={20}>
+                                        {t('20 downloads')}
+                                      </MenuItem>
+                                      <MenuItem value={50}>
+                                        {t('50 downloads')}
+                                      </MenuItem>
+                                      <MenuItem value={100}>
+                                        {t('100 downloads')}
+                                      </MenuItem>
+                                  </Select>
+                              </FormControl>
+                              <Typography>{t('or')}</Typography>
+                              <FormControl
+                                  style={{
+                                      marginRight: 10,
+                                      marginLeft: 10,
+                                  }}
+                              >
+                                  <Select
+                                      labelId="demo-simple-select-label"
+                                      id="demo-simple-select"
+                                      value={values.expires}
+                                      onChange={handleChange("expires")}
+                                  >
+                                      <MenuItem value={300}>{t('5 minutes')}</MenuItem>
+                                      <MenuItem value={3600}>{t('1 hour')}</MenuItem>
+                                      <MenuItem value={24 * 3600}>
+                                        {t('1 day')}
+                                      </MenuItem>
+                                      <MenuItem value={7 * 24 * 3600}>
+                                        {t('7 days')}
+                                      </MenuItem>
+                                      <MenuItem value={30 * 24 * 3600}>
+                                        {t('30 days')}
+                                      </MenuItem>
+                                  </Select>
+                              </FormControl>
+                              <Typography>{t('Expires later')}</Typography>
+                          </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                      <ExpansionPanel
+                          expanded={expanded === "preview"}
+                          onChange={handleExpand("preview")}
+                      >
+                          <ExpansionPanelSummary
+                              aria-controls="panel1a-content"
+                              id="panel1a-header"
+                          >
+                              <ListItem button>
+                                  <ListItemIcon>
+                                      <LockIcon />
+                                  </ListItemIcon>
+                                  <ListItemText primary={t('Allow preview')} />
+                                  <ListItemSecondaryAction>
+                                      <Checkbox
+                                          checked={shareOption.preview}
+                                          onChange={handleCheck("preview")}
+                                      />
+                                  </ListItemSecondaryAction>
+                              </ListItem>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                              <Typography>
+                                {t('Whether it is allowed to preview the content of the file on the sharing page')}
+                              </Typography>
+                          </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                  </List>
+                  <Divider />
+              </>
+          )}
+          {shareURL !== "" && (
+              <DialogContent>
+                  <TextField
+                      onFocus={handleFocus}
+                      autoFocus
+                      inputProps={{ readonly: true }}
+                      label={t('Share Link')}
+                      value={shareURL}
+                      variant="outlined"
+                      fullWidth
+                  />
+              </DialogContent>
+          )}
 
-            <DialogActions>
-                <Button onClick={onClose}>关闭</Button>
+          <DialogActions>
+              <Button onClick={onClose}>{t('Close')}</Button>
 
-                {shareURL === "" && (
-                    <div className={classes.wrapper}>
-                        <Button
-                            onClick={submitShare}
-                            color="secondary"
-                            disabled={props.modalsLoading}
-                        >
-                            创建分享链接
-                            {props.modalsLoading && (
-                                <CircularProgress
-                                    size={24}
-                                    className={classes.buttonProgress}
-                                />
-                            )}
-                        </Button>
-                    </div>
-                )}
-            </DialogActions>
-        </Dialog>
+              {shareURL === "" && (
+                  <div className={classes.wrapper}>
+                      <Button
+                          onClick={submitShare}
+                          color="secondary"
+                          disabled={props.modalsLoading}
+                      >
+                        {t('Create a share link')}
+                        {props.modalsLoading && (
+                            <CircularProgress
+                                size={24}
+                                className={classes.buttonProgress}
+                            />
+                        )}
+                      </Button>
+                  </div>
+              )}
+          </DialogActions>
+      </Dialog>
     );
 }

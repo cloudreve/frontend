@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
@@ -74,32 +75,34 @@ function Activation() {
         // eslint-disable-next-line
     }, [location]);
 
+    const { t } = useTranslation();
+
     return (
-        <div className={classes.layout}>
-            {success && (
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <EmailIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        激活成功
-                    </Typography>
-                    <Typography style={{ marginTop: "20px" }}>
-                        您的账号已被成功激活。
-                    </Typography>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={() => history.push("/login?username=" + email)}
-                    >
-                        返回登录
-                    </Button>
-                </Paper>
-            )}
-        </div>
+      <div className={classes.layout}>
+          {success && (
+              <Paper className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                      <EmailIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    {t('Activated successfully')}
+                  </Typography>
+                  <Typography style={{ marginTop: "20px" }}>
+                    {t('Your account has been successfully activated.')}
+                  </Typography>
+                  <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={() => history.push("/login?username=" + email)}
+                  >
+                    {t('Return to login')}
+                  </Button>
+              </Paper>
+          )}
+      </div>
     );
 }
 

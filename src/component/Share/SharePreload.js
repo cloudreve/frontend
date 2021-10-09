@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import PageLoading from "../Placeholder/PageLoading";
 import { useParams } from "react-router";
@@ -29,12 +30,14 @@ export default function SharePreload() {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         if (share) {
             if (share.locked) {
-                SetSubTitle(share.creator.nick + "的加密分享");
+                SetSubTitle(share.creator.nick + t('\'S encrypted sharing"'));
                 if (password !== "") {
-                    ToggleSnackbar("top", "right", "密码不正确", "warning");
+                    ToggleSnackbar("top", "right", t('Incorrect password'), "warning");
                 }
             } else {
                 SetSubTitle(share.source.name);
@@ -73,22 +76,22 @@ export default function SharePreload() {
     }, [id, password, ToggleSnackbar]);
 
     return (
-        <Suspense fallback={<PageLoading />}>
-            {share === undefined && <PageLoading />}
-            {share === null && <Notice msg={"分享不存在或已过期"} />}
-            {share && share.locked && (
-                <LockedFile
-                    loading={loading}
-                    setPassowrd={setPassword}
-                    share={share}
-                />
-            )}
-            {share && !share.locked && !share.is_dir && (
-                <SharedFile share={share} />
-            )}
-            {share && !share.locked && share.is_dir && (
-                <SharedFolder share={share} />
-            )}
-        </Suspense>
+      <Suspense fallback={<PageLoading />}>
+          {share === undefined && <PageLoading />}
+          {share === null && <Notice msg={t('Share does not exist or has expired')} />}
+          {share && share.locked && (
+              <LockedFile
+                  loading={loading}
+                  setPassowrd={setPassword}
+                  share={share}
+              />
+          )}
+          {share && !share.locked && !share.is_dir && (
+              <SharedFile share={share} />
+          )}
+          {share && !share.locked && share.is_dir && (
+              <SharedFolder share={share} />
+          )}
+      </Suspense>
     );
 }

@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import {
     setSiteConfig,
     toggleSnackbar,
@@ -90,7 +91,7 @@ export async function UpdateSiteConfig(store) {
                 toggleSnackbar(
                     "top",
                     "right",
-                    "无法加载站点配置：" + error.message,
+                    i18next.t('Unable to load site configuration:') + error.message,
                     "error"
                 )
             );

@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -334,44 +335,44 @@ class NavigatorComponent extends Component {
                 disableAutoFocusItem={true}
             >
                 <MenuItem onClick={() => this.performAction("refresh")}>
-                    <ListItemIcon>
-                        <RefreshIcon />
-                    </ListItemIcon>
-                    刷新
+                  <ListItemIcon>
+                      <RefreshIcon />
+                  </ListItemIcon>
+                  {this.props.t('Refresh')}
                 </MenuItem>
                 {this.props.keywords === "" && isHomePage && (
                     <div>
                         <Divider />
                         <MenuItem onClick={() => this.performAction("share")}>
-                            <ListItemIcon>
-                                <ShareIcon />
-                            </ListItemIcon>
-                            分享
+                          <ListItemIcon>
+                              <ShareIcon />
+                          </ListItemIcon>
+                          {this.props.t('share')}
                         </MenuItem>
                         {user.group.compress && (
-                            <MenuItem
+                            (<MenuItem
                                 onClick={() => this.performAction("compress")}
                             >
-                                <ListItemIcon>
-                                    <Archive />
-                                </ListItemIcon>
-                                压缩
-                            </MenuItem>
+                              <ListItemIcon>
+                                  <Archive />
+                              </ListItemIcon>
+                              {this.props.t('compression')}
+                            </MenuItem>)
                         )}
                         <Divider />
                         <MenuItem
                             onClick={() => this.performAction("newfolder")}
                         >
-                            <ListItemIcon>
-                                <NewFolderIcon />
-                            </ListItemIcon>
-                            创建文件夹
+                          <ListItemIcon>
+                              <NewFolderIcon />
+                          </ListItemIcon>
+                          {this.props.t('Create Folder')}
                         </MenuItem>
                         <MenuItem onClick={() => this.performAction("newFile")}>
-                            <ListItemIcon>
-                                <FilePlus />
-                            </ListItemIcon>
-                            创建文件
+                          <ListItemIcon>
+                              <FilePlus />
+                          </ListItemIcon>
+                          {this.props.t('Create a file')}
                         </MenuItem>
                     </div>
                 )}
@@ -379,109 +380,109 @@ class NavigatorComponent extends Component {
         );
 
         return (
-            <div
-                className={classNames(
-                    {
-                        [classes.roundBorder]: this.props.isShare,
-                    },
-                    classes.container
-                )}
-            >
-                <div className={classes.navigatorContainer}>
-                    <div className={classes.nav} ref={this.element}>
-                        <span>
-                            <PathButton
-                                folder="/"
-                                path="/"
-                                onClick={(e) => this.navigateTo(e, -1)}
-                            />
-                            <RightIcon className={classes.rightIcon} />
-                        </span>
-                        {this.state.hiddenMode && (
-                            <span>
-                                <PathButton
-                                    more
-                                    title="显示路径"
-                                    onClick={this.showHiddenPath}
-                                />
-                                <Menu
-                                    id="hiddenPathMenu"
-                                    anchorEl={this.state.anchorHidden}
-                                    open={Boolean(this.state.anchorHidden)}
-                                    onClose={this.handleClose}
-                                    disableAutoFocusItem={true}
-                                >
-                                    <DropDown
-                                        onClose={this.handleClose}
-                                        folders={this.state.folders.slice(
-                                            0,
-                                            -1
-                                        )}
-                                        navigateTo={this.navigateTo}
-                                    />
-                                </Menu>
-                                <RightIcon className={classes.rightIcon} />
-                                {/* <Button component="span" onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)}>
-                                    {this.state.folders.slice(-1)}  
-                                    <ExpandMore className={classes.expandMore}/>
-                                </Button> */}
-                                <PathButton
-                                    folder={this.state.folders.slice(-1)}
-                                    path={
-                                        "/" +
-                                        this.state.folders
-                                            .slice(0, -1)
-                                            .join("/")
-                                    }
-                                    last={true}
-                                    onClick={(e) =>
-                                        this.navigateTo(
-                                            e,
-                                            this.state.folders.length - 1
-                                        )
-                                    }
-                                />
-                                {presentFolderMenu}
-                            </span>
-                        )}
-                        {!this.state.hiddenMode &&
-                            this.state.folders.map((folder, id, folders) => (
-                                <span key={id}>
-                                    {folder !== "" && (
-                                        <span>
-                                            <PathButton
-                                                folder={folder}
-                                                path={
-                                                    "/" +
-                                                    folders
-                                                        .slice(0, id)
-                                                        .join("/")
-                                                }
-                                                last={id === folders.length - 1}
-                                                onClick={(e) =>
-                                                    this.navigateTo(e, id)
-                                                }
-                                            />
-                                            {id === folders.length - 1 &&
-                                                presentFolderMenu}
-                                            {id !== folders.length - 1 && (
-                                                <RightIcon
-                                                    className={
-                                                        classes.rightIcon
-                                                    }
-                                                />
-                                            )}
-                                        </span>
-                                    )}
-                                </span>
-                            ))}
-                    </div>
-                    <div className={classes.optionContainer}>
-                        <SubActions isSmall share={this.props.share} />
-                    </div>
-                </div>
-                <Divider />
-            </div>
+          <div
+              className={classNames(
+                  {
+                      [classes.roundBorder]: this.props.isShare,
+                  },
+                  classes.container
+              )}
+          >
+              <div className={classes.navigatorContainer}>
+                  <div className={classes.nav} ref={this.element}>
+                      <span>
+                          <PathButton
+                              folder="/"
+                              path="/"
+                              onClick={(e) => this.navigateTo(e, -1)}
+                          />
+                          <RightIcon className={classes.rightIcon} />
+                      </span>
+                      {this.state.hiddenMode && (
+                          <span>
+                              <PathButton
+                                  more
+                                  title={this.props.t('Display Path')}
+                                  onClick={this.showHiddenPath}
+                              />
+                              <Menu
+                                  id="hiddenPathMenu"
+                                  anchorEl={this.state.anchorHidden}
+                                  open={Boolean(this.state.anchorHidden)}
+                                  onClose={this.handleClose}
+                                  disableAutoFocusItem={true}
+                              >
+                                  <DropDown
+                                      onClose={this.handleClose}
+                                      folders={this.state.folders.slice(
+                                          0,
+                                          -1
+                                      )}
+                                      navigateTo={this.navigateTo}
+                                  />
+                              </Menu>
+                              <RightIcon className={classes.rightIcon} />
+                              {/* <Button component="span" onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)}>
+                                  {this.state.folders.slice(-1)}  
+                                  <ExpandMore className={classes.expandMore}/>
+                              </Button> */}
+                              <PathButton
+                                  folder={this.state.folders.slice(-1)}
+                                  path={
+                                      "/" +
+                                      this.state.folders
+                                          .slice(0, -1)
+                                          .join("/")
+                                  }
+                                  last={true}
+                                  onClick={(e) =>
+                                      this.navigateTo(
+                                          e,
+                                          this.state.folders.length - 1
+                                      )
+                                  }
+                              />
+                              {presentFolderMenu}
+                          </span>
+                      )}
+                      {!this.state.hiddenMode &&
+                          this.state.folders.map((folder, id, folders) => (
+                              <span key={id}>
+                                  {folder !== "" && (
+                                      <span>
+                                          <PathButton
+                                              folder={folder}
+                                              path={
+                                                  "/" +
+                                                  folders
+                                                      .slice(0, id)
+                                                      .join("/")
+                                              }
+                                              last={id === folders.length - 1}
+                                              onClick={(e) =>
+                                                  this.navigateTo(e, id)
+                                              }
+                                          />
+                                          {id === folders.length - 1 &&
+                                              presentFolderMenu}
+                                          {id !== folders.length - 1 && (
+                                              <RightIcon
+                                                  className={
+                                                      classes.rightIcon
+                                                  }
+                                              />
+                                          )}
+                                      </span>
+                                  )}
+                              </span>
+                          ))}
+                  </div>
+                  <div className={classes.optionContainer}>
+                      <SubActions isSmall share={this.props.share} />
+                  </div>
+              </div>
+              <Divider />
+          </div>
         );
     }
 }
@@ -494,6 +495,6 @@ NavigatorComponent.propTypes = {
 const Navigator = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(NavigatorComponent)));
+)(withTranslation()(withStyles(styles)(withRouter(NavigatorComponent))));
 
 export default Navigator;

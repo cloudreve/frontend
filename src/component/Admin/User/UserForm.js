@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -67,6 +68,8 @@ export default function UserForm(props) {
             });
     }, []);
 
+    const { t } = useTranslation();
+
     const handleChange = (name) => (event) => {
         setUser({
             ...user,
@@ -93,7 +96,7 @@ export default function UserForm(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "用户已" + (props.user ? "保存" : "添加"),
+                    t('User Already') + (props.user ? t('save') : t('Add to')),
                     "success"
                 );
             })
@@ -106,121 +109,121 @@ export default function UserForm(props) {
     };
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        {user.ID === 0 && "创建用户"}
-                        {user.ID !== 0 && "编辑 " + user.Nick}
-                    </Typography>
+      <div>
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                      {user.ID === 0 && t('Create User')}
+                      {user.ID !== 0 && t('edit ') + user.Nick}
+                  </Typography>
 
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    邮箱
-                                </InputLabel>
-                                <Input
-                                    value={user.Email}
-                                    type={"email"}
-                                    onChange={handleChange("Email")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('E-mail')}
+                              </InputLabel>
+                              <Input
+                                  value={user.Email}
+                                  type={"email"}
+                                  onChange={handleChange("Email")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    昵称
-                                </InputLabel>
-                                <Input
-                                    value={user.Nick}
-                                    onChange={handleChange("Nick")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Nickname')}
+                              </InputLabel>
+                              <Input
+                                  value={user.Nick}
+                                  onChange={handleChange("Nick")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    密码
-                                </InputLabel>
-                                <Input
-                                    type={"password"}
-                                    value={user.Password}
-                                    onChange={handleChange("Password")}
-                                    required={user.ID === 0}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    {user.ID !== 0 && "留空表示不修改"}
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Password')}
+                              </InputLabel>
+                              <Input
+                                  type={"password"}
+                                  value={user.Password}
+                                  onChange={handleChange("Password")}
+                                  required={user.ID === 0}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                  {user.ID !== 0 && t('Leave blank means not to modify')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    用户组
-                                </InputLabel>
-                                <Select
-                                    value={user.GroupID}
-                                    onChange={handleChange("GroupID")}
-                                    required
-                                >
-                                    {groups.map((v) => {
-                                        if (v.ID === 3) {
-                                            return null;
-                                        }
-                                        return (
-                                            <MenuItem
-                                                key={v.ID}
-                                                value={v.ID.toString()}
-                                            >
-                                                {v.Name}
-                                            </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    用户所属用户组
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('User group')}
+                              </InputLabel>
+                              <Select
+                                  value={user.GroupID}
+                                  onChange={handleChange("GroupID")}
+                                  required
+                              >
+                                  {groups.map((v) => {
+                                      if (v.ID === 3) {
+                                          return null;
+                                      }
+                                      return (
+                                          <MenuItem
+                                              key={v.ID}
+                                              value={v.ID.toString()}
+                                          >
+                                              {v.Name}
+                                          </MenuItem>
+                                      );
+                                  })}
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('User group to which the user belongs')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    状态
-                                </InputLabel>
-                                <Select
-                                    value={user.Status}
-                                    onChange={handleChange("Status")}
-                                    required
-                                >
-                                    <MenuItem value={"0"}>正常</MenuItem>
-                                    <MenuItem value={"1"}>未激活</MenuItem>
-                                    <MenuItem value={"2"}>被封禁</MenuItem>
-                                    <MenuItem value={"3"}>
-                                        超额使用被封禁
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
-        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('state')}
+                              </InputLabel>
+                              <Select
+                                  value={user.Status}
+                                  onChange={handleChange("Status")}
+                                  required
+                              >
+                                  <MenuItem value={"0"}>{t('normal')}</MenuItem>
+                                  <MenuItem value={"1"}>{t('inactivated')}</MenuItem>
+                                  <MenuItem value={"2"}>{t('Blocked')}</MenuItem>
+                                  <MenuItem value={"3"}>
+                                    {t('Excessive use is banned')}
+                                  </MenuItem>
+                              </Select>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
+      </div>
     );
 }

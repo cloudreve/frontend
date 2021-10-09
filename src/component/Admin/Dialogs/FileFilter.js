@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -27,6 +28,8 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+
+    const { t } = useTranslation();
 
     const handleChange = (name) => (event) => {
         setInput({ ...input, [name]: event.target.value });
@@ -66,64 +69,64 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
     };
 
     return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth
-            maxWidth={"xs"}
-        >
-            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
-            <DialogContent>
-                <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                        存储策略
-                    </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={input.policy_id}
-                        onChange={handleChange("policy_id")}
-                    >
-                        <MenuItem value={"all"}>全部</MenuItem>
-                        {policies.map((v) => {
-                            if (v.ID === 3) {
-                                return null;
-                            }
-                            return (
-                                <MenuItem key={v.ID} value={v.ID.toString()}>
-                                    {v.Name}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                </FormControl>
-                <FormControl fullWidth style={{ marginTop: 16 }}>
-                    <TextField
-                        value={input.user_id}
-                        onChange={handleChange("user_id")}
-                        id="standard-basic"
-                        label="上传者ID"
-                    />
-                </FormControl>
-                <FormControl fullWidth style={{ marginTop: 16 }}>
-                    <TextField
-                        value={keywords}
-                        onChange={(e) => setKeywords(e.target.value)}
-                        id="standard-basic"
-                        label="搜索 文件名"
-                    />
-                </FormControl>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} color="default">
-                    取消
-                </Button>
-                <Button onClick={submit} color="primary">
-                    应用
-                </Button>
-            </DialogActions>
-        </Dialog>
+      <Dialog
+          open={open}
+          onClose={onClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth
+          maxWidth={"xs"}
+      >
+          <DialogTitle id="alert-dialog-title">{t('Filter Conditions')}</DialogTitle>
+          <DialogContent>
+              <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    {t('Storage Strategy')}
+                  </InputLabel>
+                  <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={input.policy_id}
+                      onChange={handleChange("policy_id")}
+                  >
+                      <MenuItem value={"all"}>{t('all')}</MenuItem>
+                      {policies.map((v) => {
+                          if (v.ID === 3) {
+                              return null;
+                          }
+                          return (
+                              <MenuItem key={v.ID} value={v.ID.toString()}>
+                                  {v.Name}
+                              </MenuItem>
+                          );
+                      })}
+                  </Select>
+              </FormControl>
+              <FormControl fullWidth style={{ marginTop: 16 }}>
+                  <TextField
+                      value={input.user_id}
+                      onChange={handleChange("user_id")}
+                      id="standard-basic"
+                      label={t('Uploader ID')}
+                  />
+              </FormControl>
+              <FormControl fullWidth style={{ marginTop: 16 }}>
+                  <TextField
+                      value={keywords}
+                      onChange={(e) => setKeywords(e.target.value)}
+                      id="standard-basic"
+                      label={t('Search file name')}
+                  />
+              </FormControl>
+          </DialogContent>
+          <DialogActions>
+              <Button onClick={onClose} color="default">
+                {t('Cancel')}
+              </Button>
+              <Button onClick={submit} color="primary">
+                {t('application')}
+              </Button>
+          </DialogActions>
+      </Dialog>
     );
 }

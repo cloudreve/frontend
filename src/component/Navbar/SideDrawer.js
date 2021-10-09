@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import UploadIcon from "@material-ui/icons/CloudUpload";
@@ -44,11 +45,11 @@ class SideDrawer extends Component {
             <div>
                 <div className={classes.toolbar} />
                 <List>
-                    <ListItem button key="上传文d件" onClick={this.upload}>
+                    <ListItem button key={this.props.t('Upload documents')} onClick={this.upload}>
                         <ListItemIcon>
                             <UploadIcon />
                         </ListItemIcon>
-                        <ListItemText primary="上传文d件" />
+                        <ListItemText primary={this.props.t('Upload documents')} />
                     </ListItem>
                 </List>
                 <Divider />
@@ -94,4 +95,4 @@ SideDrawer.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SideDrawer);
+export default withTranslation()(withStyles(styles)(SideDrawer));

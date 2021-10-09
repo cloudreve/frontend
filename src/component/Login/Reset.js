@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -91,6 +92,8 @@ function Reset() {
         captchaParamsRef,
     } = useCaptcha();
 
+    const { t } = useTranslation();
+
     const submit = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -107,7 +110,7 @@ function Reset() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "密码重置邮件已发送，请注意查收",
+                    t('The password reset email has been sent, please check it'),
                     "success"
                 );
             })
@@ -121,52 +124,52 @@ function Reset() {
     const classes = useStyles();
 
     return (
-        <div className={classes.layout}>
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <KeyIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    找回密码
-                </Typography>
-                <form className={classes.form} onSubmit={submit}>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">注册邮箱</InputLabel>
-                        <Input
-                            id="email"
-                            type="email"
-                            name="email"
-                            onChange={handleInputChange("email")}
-                            autoComplete
-                            value={input.email}
-                            autoFocus
-                        />
-                    </FormControl>
-                    {forgetCaptcha && <CaptchaRender />}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        disabled={
-                            loading || (forgetCaptcha ? captchaLoading : false)
-                        }
-                        className={classes.submit}
-                    >
-                        发送密码重置邮件
-                    </Button>{" "}
-                </form>{" "}
-                <Divider />
-                <div className={classes.link}>
-                    <div>
-                        <Link href={"/login"}>返回登录</Link>
-                    </div>
-                    <div>
-                        <Link href={"/signup"}>注册账号</Link>
-                    </div>
-                </div>
-            </Paper>
-        </div>
+      <div className={classes.layout}>
+          <Paper className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                  <KeyIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                {t('Retrieve Password')}
+              </Typography>
+              <form className={classes.form} onSubmit={submit}>
+                  <FormControl margin="normal" required fullWidth>
+                      <InputLabel htmlFor="email">{t('register e-mail')}</InputLabel>
+                      <Input
+                          id="email"
+                          type="email"
+                          name="email"
+                          onChange={handleInputChange("email")}
+                          autoComplete
+                          value={input.email}
+                          autoFocus
+                      />
+                  </FormControl>
+                  {forgetCaptcha && <CaptchaRender />}
+                  <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      disabled={
+                          loading || (forgetCaptcha ? captchaLoading : false)
+                      }
+                      className={classes.submit}
+                  >
+                    {t('Send password reset email')}
+                  </Button>{" "}
+              </form>{" "}
+              <Divider />
+              <div className={classes.link}>
+                  <div>
+                      <Link href={"/login"}>{t('Return to login')}</Link>
+                  </div>
+                  <div>
+                      <Link href={"/signup"}>{t('Create an account')}</Link>
+                  </div>
+              </div>
+          </Paper>
+      </div>
     );
 }
 

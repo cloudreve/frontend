@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useState, Suspense } from "react";
 import {
     Divider,
@@ -160,6 +161,8 @@ export default function FileTag() {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const getIcon = (icon, color) => {
         if (icons[icon]) {
             const IconComponent = icons[icon];
@@ -203,186 +206,184 @@ export default function FileTag() {
             });
     };
 
-    return (
-        <>
-            <Suspense fallback={""}>
-                <AddTag
-                    onSuccess={submitSuccess}
-                    open={addTagModal}
-                    onClose={() => setAddTagModal(false)}
-                />
-            </Suspense>
-            <ExpansionPanel
-                square
-                expanded={tagOpen && isHomePage}
-                onChange={() => isHomePage && setTagOpen(!tagOpen)}
+    return <>
+        <Suspense fallback={""}>
+            <AddTag
+                onSuccess={submitSuccess}
+                open={addTagModal}
+                onClose={() => setAddTagModal(false)}
+            />
+        </Suspense>
+        <ExpansionPanel
+            square
+            expanded={tagOpen && isHomePage}
+            onChange={() => isHomePage && setTagOpen(!tagOpen)}
+        >
+            <ExpansionPanelSummary
+                aria-controls="panel1d-content"
+                id="panel1d-header"
             >
-                <ExpansionPanelSummary
-                    aria-controls="panel1d-content"
-                    id="panel1d-header"
+                <ListItem
+                    button
+                    key={t('My files')}
+                    onClick={() =>
+                        !isHomePage && history.push("/home?path=%2F")
+                    }
                 >
+                    <ListItemIcon>
+                        <KeyboardArrowRight
+                            className={classNames(
+                                {
+                                    [classes.expanded]:
+                                        tagOpen && isHomePage,
+                                    [classes.iconFix]: true,
+                                },
+                                classes.expand
+                            )}
+                        />
+                        {!(tagOpen && isHomePage) && (
+                            <FolderShared className={classes.iconFix} />
+                        )}
+                    </ListItemIcon>
+                    <ListItemText primary={t('My files')} />
+                </ListItem>
+                <Divider />
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+                <List onMouseLeave={() => setTagHover(null)}>
                     <ListItem
                         button
-                        key="我的文件"
-                        onClick={() =>
-                            !isHomePage && history.push("/home?path=%2F")
-                        }
+                        id="pickfiles"
+                        className={classes.hiddenButton}
                     >
                         <ListItemIcon>
-                            <KeyboardArrowRight
-                                className={classNames(
-                                    {
-                                        [classes.expanded]:
-                                            tagOpen && isHomePage,
-                                        [classes.iconFix]: true,
-                                    },
-                                    classes.expand
-                                )}
-                            />
-                            {!(tagOpen && isHomePage) && (
-                                <FolderShared className={classes.iconFix} />
-                            )}
+                            <UploadIcon />
                         </ListItemIcon>
-                        <ListItemText primary="我的文件" />
+                        <ListItemText />
                     </ListItem>
-                    <Divider />
-                </ExpansionPanelSummary>
-
-                <ExpansionPanelDetails>
-                    <List onMouseLeave={() => setTagHover(null)}>
-                        <ListItem
-                            button
-                            id="pickfiles"
-                            className={classes.hiddenButton}
-                        >
-                            <ListItemIcon>
-                                <UploadIcon />
-                            </ListItemIcon>
-                            <ListItemText />
-                        </ListItem>
-                        <ListItem
-                            button
-                            id="pickfolder"
-                            className={classes.hiddenButton}
-                        >
-                            <ListItemIcon>
-                                <UploadIcon />
-                            </ListItemIcon>
-                            <ListItemText />
-                        </ListItem>
-                        {[
-                            {
-                                key: "视频",
-                                id: "video",
-                                icon: (
-                                    <VideoIcon
-                                        className={[
-                                            classes.iconFix,
-                                            classes.iconVideo,
-                                        ]}
-                                    />
-                                ),
-                            },
-                            {
-                                key: "图片",
-                                id: "image",
-                                icon: (
-                                    <ImageIcon
-                                        className={[
-                                            classes.iconFix,
-                                            classes.iconImg,
-                                        ]}
-                                    />
-                                ),
-                            },
-                            {
-                                key: "音频",
-                                id: "audio",
-                                icon: (
-                                    <MusicIcon
-                                        className={[
-                                            classes.iconFix,
-                                            classes.iconAudio,
-                                        ]}
-                                    />
-                                ),
-                            },
-                            {
-                                key: "文档",
-                                id: "doc",
-                                icon: (
-                                    <DocIcon
-                                        className={[
-                                            classes.iconFix,
-                                            classes.iconDoc,
-                                        ]}
-                                    />
-                                ),
-                            },
-                        ].map((v) => (
-                            <ListItem
-                                button
-                                key={v.key}
-                                onClick={() => SearchMyFile(v.id + "/internal")}
-                            >
-                                <ListItemIcon className={classes.subMenu}>
-                                    {v.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={v.key} />
-                            </ListItem>
-                        ))}
-                        {tags.map((v) => (
-                            <ListItem
-                                button
-                                key={v.id}
-                                onMouseEnter={() => setTagHover(v.id)}
-                                onClick={() => {
-                                    if (v.type === 0) {
-                                        SearchMyFile("tag/" + v.id);
-                                    } else {
-                                        NavigateTo(v.expression);
-                                    }
-                                }}
-                            >
-                                <ListItemIcon className={classes.subMenu}>
-                                    {getIcon(
-                                        v.type === 0
-                                            ? v.icon
-                                            : "FolderHeartOutline",
-                                        v.type === 0 ? v.color : null
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText
-                                    className={classes.overFlow}
-                                    primary={v.name}
+                    <ListItem
+                        button
+                        id="pickfolder"
+                        className={classes.hiddenButton}
+                    >
+                        <ListItemIcon>
+                            <UploadIcon />
+                        </ListItemIcon>
+                        <ListItemText />
+                    </ListItem>
+                    {[
+                        {
+                            key: t('Video'),
+                            id: "video",
+                            icon: (
+                                <VideoIcon
+                                    className={[
+                                        classes.iconFix,
+                                        classes.iconVideo,
+                                    ]}
                                 />
-
-                                {tagHover === v.id && (
-                                    <ListItemSecondaryAction
-                                        onClick={() => submitDelete(v.id)}
-                                    >
-                                        <IconButton
-                                            size={"small"}
-                                            edge="end"
-                                            aria-label="delete"
-                                        >
-                                            <Clear />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                )}
-                            </ListItem>
-                        ))}
-
-                        <ListItem button onClick={() => setAddTagModal(true)}>
+                            ),
+                        },
+                        {
+                            key: t('Pictures'),
+                            id: "image",
+                            icon: (
+                                <ImageIcon
+                                    className={[
+                                        classes.iconFix,
+                                        classes.iconImg,
+                                    ]}
+                                />
+                            ),
+                        },
+                        {
+                            key: t('Audio'),
+                            id: "audio",
+                            icon: (
+                                <MusicIcon
+                                    className={[
+                                        classes.iconFix,
+                                        classes.iconAudio,
+                                    ]}
+                                />
+                            ),
+                        },
+                        {
+                            key: t('Documents'),
+                            id: "doc",
+                            icon: (
+                                <DocIcon
+                                    className={[
+                                        classes.iconFix,
+                                        classes.iconDoc,
+                                    ]}
+                                />
+                            ),
+                        },
+                    ].map((v) => (
+                        <ListItem
+                            button
+                            key={v.key}
+                            onClick={() => SearchMyFile(v.id + "/internal")}
+                        >
                             <ListItemIcon className={classes.subMenu}>
-                                <TagPlus className={classes.iconFix} />
+                                {v.icon}
                             </ListItemIcon>
-                            <ListItemText primary={"添加标签..."} />
+                            <ListItemText primary={v.key} />
                         </ListItem>
-                    </List>{" "}
-                    <Divider />
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        </>
-    );
+                    ))}
+                    {tags.map((v) => (
+                        <ListItem
+                            button
+                            key={v.id}
+                            onMouseEnter={() => setTagHover(v.id)}
+                            onClick={() => {
+                                if (v.type === 0) {
+                                    SearchMyFile("tag/" + v.id);
+                                } else {
+                                    NavigateTo(v.expression);
+                                }
+                            }}
+                        >
+                            <ListItemIcon className={classes.subMenu}>
+                                {getIcon(
+                                    v.type === 0
+                                        ? v.icon
+                                        : "FolderHeartOutline",
+                                    v.type === 0 ? v.color : null
+                                )}
+                            </ListItemIcon>
+                            <ListItemText
+                                className={classes.overFlow}
+                                primary={v.name}
+                            />
+
+                            {tagHover === v.id && (
+                                <ListItemSecondaryAction
+                                    onClick={() => submitDelete(v.id)}
+                                >
+                                    <IconButton
+                                        size={"small"}
+                                        edge="end"
+                                        aria-label="delete"
+                                    >
+                                        <Clear />
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            )}
+                        </ListItem>
+                    ))}
+
+                    <ListItem button onClick={() => setAddTagModal(true)}>
+                        <ListItemIcon className={classes.subMenu}>
+                            <TagPlus className={classes.iconFix} />
+                        </ListItemIcon>
+                        <ListItemText primary={t('Add tag...')} />
+                    </ListItem>
+                </List>{" "}
+                <Divider />
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
+    </>;
 }

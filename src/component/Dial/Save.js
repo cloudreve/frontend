@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
@@ -52,33 +53,35 @@ export default function SaveButton(props) {
         [classes.buttonSuccess]: props.status === "success",
     });
 
+    const { t } = useTranslation();
+
     return (
-        <AutoHidden enable={statusHelper.isMobile()}>
-            <div className={classes.fab}>
-                <div className={classes.wrapper}>
-                    <Tooltip title={"保存"} placement={"left"}>
-                        <Fab
-                            onClick={props.onClick}
-                            color="primary"
-                            className={buttonClassname}
-                            disabled={props.status === "loading"}
-                            aria-label="add"
-                        >
-                            {props.status === "success" ? (
-                                <CheckIcon />
-                            ) : (
-                                <SaveIcon />
-                            )}
-                        </Fab>
-                    </Tooltip>
-                    {props.status === "loading" && (
-                        <CircularProgress
-                            size={68}
-                            className={classes.fabProgress}
-                        />
-                    )}
-                </div>
-            </div>
-        </AutoHidden>
+      <AutoHidden enable={statusHelper.isMobile()}>
+          <div className={classes.fab}>
+              <div className={classes.wrapper}>
+                  <Tooltip title={t('save')} placement={"left"}>
+                      <Fab
+                          onClick={props.onClick}
+                          color="primary"
+                          className={buttonClassname}
+                          disabled={props.status === "loading"}
+                          aria-label="add"
+                      >
+                          {props.status === "success" ? (
+                              <CheckIcon />
+                          ) : (
+                              <SaveIcon />
+                          )}
+                      </Fab>
+                  </Tooltip>
+                  {props.status === "loading" && (
+                      <CircularProgress
+                          size={68}
+                          className={classes.fabProgress}
+                      />
+                  )}
+              </div>
+          </div>
+      </AutoHidden>
     );
 }

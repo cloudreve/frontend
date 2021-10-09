@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 export const imgPreviewSuffix = [
     "bmp",
     "png",
@@ -65,12 +66,12 @@ export const mediaType = {
     js: ["js", "jsx"],
 };
 export const policyTypeMap = {
-    local: "本机",
-    remote: "从机",
-    qiniu: "七牛",
-    upyun: "又拍云",
-    oss: "阿里云 OSS",
-    cos: "腾讯云",
+    local: i18next.t('Local'),
+    remote: i18next.t('Slave'),
+    qiniu: i18next.t('Qiniu'),
+    upyun: i18next.t('UpYun'),
+    oss: i18next.t('Alibaba Cloud OSS'),
+    cos: i18next.t('Tencent Cloud'),
     onedrive: "OneDrive",
     s3: "Amazon S3",
 };
@@ -106,16 +107,16 @@ export const isCompressFile = (name) => {
     return suffix === "zip";
 };
 
-const taskStatus = ["排队中", "处理中", "失败", "取消", "已完成"];
-const taskType = ["压缩", "解压缩", "文件中转", "导入外部目录"];
+const taskStatus = [i18next.t('in the line'), i18next.t('Processing'), i18next.t('fail'), i18next.t('Cancel'), i18next.t('completed')];
+const taskType = [i18next.t('compression'), i18next.t('unzip'), i18next.t('File transfer'), i18next.t('Import external directory')];
 const taskProgress = [
-    "等待中",
-    "压缩中",
-    "解压缩中",
-    "下载中",
-    "转存中",
-    "索引中",
-    "插入中",
+    i18next.t('Waiting'),
+    i18next.t('Compressing'),
+    i18next.t('Unzipping'),
+    i18next.t('downloading'),
+    i18next.t('Transferring'),
+    i18next.t('In the index'),
+    i18next.t('Insert'),
 ];
 
 export const getTaskStatus = (status) => {
@@ -128,7 +129,7 @@ export const getTaskType = (status) => {
 
 export const getTaskProgress = (type, status) => {
     if (type === 2) {
-        return "已完成 " + (status + 1) + " 个文件";
+        return i18next.t('completed ') + (status + 1) + i18next.t('Files');
     }
     return taskProgress[status];
 };

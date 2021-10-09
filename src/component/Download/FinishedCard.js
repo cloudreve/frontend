@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback } from "react";
 import {
     Card,
@@ -162,6 +163,8 @@ export default function FinishedCard(props) {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const handleChange = () => (event, newExpanded) => {
         setExpanded(!!newExpanded);
     };
@@ -177,7 +180,7 @@ export default function FinishedCard(props) {
         setLoading(true);
         API.delete("/aria2/task/" + props.task.gid)
             .then(() => {
-                ToggleSnackbar("top", "right", "删除成功", "success");
+                ToggleSnackbar("top", "right", t('successfully deleted'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -188,7 +191,7 @@ export default function FinishedCard(props) {
     };
 
     const getDownloadName = useCallback(() => {
-        return props.task.name === "." ? "[未知]" : props.task.name;
+        return props.task.name === "." ? t('[unknown]') : props.task.name;
     }, [props.task.name]);
 
     const activeFiles = useCallback(() => {
@@ -215,226 +218,226 @@ export default function FinishedCard(props) {
     const getTaskError = (error) => {
         try {
             const res = JSON.parse(error);
-            return res.msg + "：" + res.error;
+            return res.msg + t('：') + res.error;
         } catch (e) {
-            return "文件转存失败";
+            return t('File transfer failed');
         }
     };
 
     return (
-        <Card className={classes.card}>
-            <ExpansionPanel
-                square
-                expanded={expanded}
-                onChange={handleChange("")}
-            >
-                <ExpansionPanelSummary
-                    aria-controls="panel1d-content"
-                    id="panel1d-header"
-                >
-                    <div className={classes.iconContainer}>{getIcon()}</div>
-                    <CardContent className={classes.content}>
-                        <Typography color="primary" noWrap>
-                            <Tooltip title={getDownloadName()}>
-                                <span>{getDownloadName()}</span>
-                            </Tooltip>
-                        </Typography>
-                        {props.task.status === 3 && (
-                            <Tooltip title={props.task.error}>
-                                <Typography
-                                    variant="body2"
-                                    color="error"
-                                    noWrap
-                                >
-                                    下载出错：{props.task.error}
-                                </Typography>
-                            </Tooltip>
-                        )}
-                        {props.task.status === 5 && (
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                noWrap
-                            >
-                                已取消
-                                {props.task.error !== "" && (
-                                    <span>：{props.task.error}</span>
-                                )}
-                            </Typography>
-                        )}
-                        {props.task.status === 4 &&
-                            props.task.task_status === 4 && (
-                                <Typography
-                                    variant="body2"
-                                    style={{
-                                        color: theme.palette.success.main,
-                                    }}
-                                    noWrap
-                                >
-                                    已完成
-                                </Typography>
+      <Card className={classes.card}>
+          <ExpansionPanel
+              square
+              expanded={expanded}
+              onChange={handleChange("")}
+          >
+              <ExpansionPanelSummary
+                  aria-controls="panel1d-content"
+                  id="panel1d-header"
+              >
+                  <div className={classes.iconContainer}>{getIcon()}</div>
+                  <CardContent className={classes.content}>
+                      <Typography color="primary" noWrap>
+                          <Tooltip title={getDownloadName()}>
+                              <span>{getDownloadName()}</span>
+                          </Tooltip>
+                      </Typography>
+                      {props.task.status === 3 && (
+                          <Tooltip title={props.task.error}>
+                              <Typography
+                                  variant="body2"
+                                  color="error"
+                                  noWrap
+                              >
+                                {t('Download error:')}{props.task.error}
+                              </Typography>
+                          </Tooltip>
+                      )}
+                      {props.task.status === 5 && (
+                          (<Typography
+                              variant="body2"
+                              color="textSecondary"
+                              noWrap
+                          >
+                            {t('Cancelled')}
+                            {props.task.error !== "" && (
+                                (<span>{t('：')}{props.task.error}</span>)
                             )}
-                        {props.task.status === 4 &&
-                            props.task.task_status === 0 && (
-                                <Typography
-                                    variant="body2"
-                                    style={{
-                                        color: theme.palette.success.light,
-                                    }}
-                                    noWrap
-                                >
-                                    已完成，转存排队中
-                                </Typography>
-                            )}
-                        {props.task.status === 4 &&
-                            props.task.task_status === 1 && (
-                                <Typography
-                                    variant="body2"
-                                    style={{
-                                        color: theme.palette.success.light,
-                                    }}
-                                    noWrap
-                                >
-                                    已完成，转存处理中
-                                </Typography>
-                            )}
-                        {props.task.status === 4 &&
-                            props.task.task_status === 2 && (
-                                <Typography
-                                    variant="body2"
-                                    color={"error"}
-                                    noWrap
-                                >
-                                    {getTaskError(props.task.task_error)}
-                                </Typography>
-                            )}
-                    </CardContent>
-                    <CardContent className={classes.contentSide}>
-                        <IconButton>
-                            <ExpandMore
-                                className={classNames(
-                                    {
-                                        [classes.expanded]: expanded,
-                                    },
-                                    classes.expand
-                                )}
-                            />
-                        </IconButton>
-                    </CardContent>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Divider />
-                    {props.task.files.length > 1 && (
-                        <div className={classes.scroll}>
-                            <Table>
-                                <TableBody>
-                                    {activeFiles().map((value) => {
-                                        return (
-                                            <TableRow key={value.index}>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography
-                                                        className={
-                                                            classes.subFileName
-                                                        }
-                                                    >
-                                                        <TypeIcon
-                                                            className={
-                                                                classes.subFileIcon
-                                                            }
-                                                            fileName={
-                                                                value.path
-                                                            }
-                                                        />
-                                                        {value.path}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {" "}
-                                                        {sizeToString(
-                                                            value.length
-                                                        )}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(2)}
-                                                        %
-                                                    </Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
+                          </Typography>)
+                      )}
+                      {props.task.status === 4 &&
+                          props.task.task_status === 4 && (
+                              (<Typography
+                                  variant="body2"
+                                  style={{
+                                      color: theme.palette.success.main,
+                                  }}
+                                  noWrap
+                              >
+                                {t('completed')}
+                              </Typography>)
+                          )}
+                      {props.task.status === 4 &&
+                          props.task.task_status === 0 && (
+                              (<Typography
+                                  variant="body2"
+                                  style={{
+                                      color: theme.palette.success.light,
+                                  }}
+                                  noWrap
+                              >
+                                {t('Completed, transfer to queue')}
+                              </Typography>)
+                          )}
+                      {props.task.status === 4 &&
+                          props.task.task_status === 1 && (
+                              (<Typography
+                                  variant="body2"
+                                  style={{
+                                      color: theme.palette.success.light,
+                                  }}
+                                  noWrap
+                              >
+                                {t('Completed, transfer processing')}
+                              </Typography>)
+                          )}
+                      {props.task.status === 4 &&
+                          props.task.task_status === 2 && (
+                              <Typography
+                                  variant="body2"
+                                  color={"error"}
+                                  noWrap
+                              >
+                                  {getTaskError(props.task.task_error)}
+                              </Typography>
+                          )}
+                  </CardContent>
+                  <CardContent className={classes.contentSide}>
+                      <IconButton>
+                          <ExpandMore
+                              className={classNames(
+                                  {
+                                      [classes.expanded]: expanded,
+                                  },
+                                  classes.expand
+                              )}
+                          />
+                      </IconButton>
+                  </CardContent>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                  <Divider />
+                  {props.task.files.length > 1 && (
+                      <div className={classes.scroll}>
+                          <Table>
+                              <TableBody>
+                                  {activeFiles().map((value) => {
+                                      return (
+                                          <TableRow key={value.index}>
+                                              <TableCell
+                                                  component="th"
+                                                  scope="row"
+                                              >
+                                                  <Typography
+                                                      className={
+                                                          classes.subFileName
+                                                      }
+                                                  >
+                                                      <TypeIcon
+                                                          className={
+                                                              classes.subFileIcon
+                                                          }
+                                                          fileName={
+                                                              value.path
+                                                          }
+                                                      />
+                                                      {value.path}
+                                                  </Typography>
+                                              </TableCell>
+                                              <TableCell
+                                                  component="th"
+                                                  scope="row"
+                                              >
+                                                  <Typography noWrap>
+                                                      {" "}
+                                                      {sizeToString(
+                                                          value.length
+                                                      )}
+                                                  </Typography>
+                                              </TableCell>
+                                              <TableCell
+                                                  component="th"
+                                                  scope="row"
+                                              >
+                                                  <Typography noWrap>
+                                                      {getPercent(
+                                                          value.completedLength,
+                                                          value.length
+                                                      ).toFixed(2)}
+                                                      %
+                                                  </Typography>
+                                              </TableCell>
+                                          </TableRow>
+                                      );
+                                  })}
+                              </TableBody>
+                          </Table>
+                      </div>
+                  )}
 
-                    <div className={classes.action}>
-                        <Button
-                            className={classes.actionButton}
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() =>
-                                history.push(
-                                    "/#/home?path=" +
-                                        encodeURIComponent(props.task.dst)
-                                )
-                            }
-                        >
-                            打开存放目录
-                        </Button>
-                        <Button
-                            className={classes.actionButton}
-                            onClick={cancel}
-                            variant="contained"
-                            color="secondary"
-                            disabled={loading}
-                        >
-                            删除记录
-                        </Button>
-                    </div>
-                    <Divider />
-                    <div className={classes.info}>
-                        <Grid container>
-                            <Grid container xs={12} sm={6}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    创建日期：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    {formatLocalTime(
-                                        props.task.create,
-                                        "YYYY-MM-DD H:mm:ss"
-                                    )}
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={6}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    最后更新：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    {formatLocalTime(
-                                        props.task.update,
-                                        "YYYY-MM-DD H:mm:ss"
-                                    )}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </div>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        </Card>
+                  <div className={classes.action}>
+                      <Button
+                          className={classes.actionButton}
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() =>
+                              history.push(
+                                  "/#/home?path=" +
+                                      encodeURIComponent(props.task.dst)
+                              )
+                          }
+                      >
+                        {t('Open storage directory')}
+                      </Button>
+                      <Button
+                          className={classes.actionButton}
+                          onClick={cancel}
+                          variant="contained"
+                          color="secondary"
+                          disabled={loading}
+                      >
+                        {t('Delete Record')}
+                      </Button>
+                  </div>
+                  <Divider />
+                  <div className={classes.info}>
+                      <Grid container>
+                          <Grid container xs={12} sm={6}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('Created Date：')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  {formatLocalTime(
+                                      props.task.create,
+                                      "YYYY-MM-DD H:mm:ss"
+                                  )}
+                              </Grid>
+                          </Grid>
+                          <Grid container xs={12} sm={6}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('latest update：')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  {formatLocalTime(
+                                      props.task.update,
+                                      "YYYY-MM-DD H:mm:ss"
+                                  )}
+                              </Grid>
+                          </Grid>
+                      </Grid>
+                  </div>
+              </ExpansionPanelDetails>
+          </ExpansionPanel>
+      </Card>
     );
 }

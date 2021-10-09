@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -117,63 +118,63 @@ class PathSelectorCompoment extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.container}>
-                <MenuList className={classes.selector}>
-                    {this.state.presentPath !== "/" && (
-                        <MenuItem onClick={this.back}>
-                            <ListItemIcon>
-                                <UpIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="返回上一层" />
-                        </MenuItem>
-                    )}
-                    {this.state.dirList.map((value, index) => (
-                        <MenuItem
-                            classes={{
-                                selected: classes.selected,
-                            }}
-                            key={index}
-                            selected={this.state.selectedTarget === index}
-                            onClick={() => this.handleSelect(index)}
-                        >
-                            <ListItemIcon className={classes.icon}>
-                                <FolderIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                classes={{ primary: classes.primary }}
-                                primary={value.name}
-                                primaryTypographyProps={{
-                                    style: { whiteSpace: "normal" },
-                                }}
-                            />
-                            {value.name !== "/" && (
-                                <ListItemSecondaryAction
-                                    className={classes.buttonIcon}
-                                >
-                                    <IconButton
-                                        className={classNames({
-                                            [classes.iconWhite]:
-                                                this.state.selectedTarget ===
-                                                index,
-                                        })}
-                                        onClick={() =>
-                                            this.enterFolder(
-                                                value.path === "/"
-                                                    ? value.path + value.name
-                                                    : value.path +
-                                                          "/" +
-                                                          value.name
-                                            )
-                                        }
-                                    >
-                                        <RightIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            )}
-                        </MenuItem>
-                    ))}
-                </MenuList>
-            </div>
+          <div className={classes.container}>
+              <MenuList className={classes.selector}>
+                  {this.state.presentPath !== "/" && (
+                      <MenuItem onClick={this.back}>
+                          <ListItemIcon>
+                              <UpIcon />
+                          </ListItemIcon>
+                          <ListItemText primary={this.props.t('Return to the previous level')} />
+                      </MenuItem>
+                  )}
+                  {this.state.dirList.map((value, index) => (
+                      <MenuItem
+                          classes={{
+                              selected: classes.selected,
+                          }}
+                          key={index}
+                          selected={this.state.selectedTarget === index}
+                          onClick={() => this.handleSelect(index)}
+                      >
+                          <ListItemIcon className={classes.icon}>
+                              <FolderIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                              classes={{ primary: classes.primary }}
+                              primary={value.name}
+                              primaryTypographyProps={{
+                                  style: { whiteSpace: "normal" },
+                              }}
+                          />
+                          {value.name !== "/" && (
+                              <ListItemSecondaryAction
+                                  className={classes.buttonIcon}
+                              >
+                                  <IconButton
+                                      className={classNames({
+                                          [classes.iconWhite]:
+                                              this.state.selectedTarget ===
+                                              index,
+                                      })}
+                                      onClick={() =>
+                                          this.enterFolder(
+                                              value.path === "/"
+                                                  ? value.path + value.name
+                                                  : value.path +
+                                                        "/" +
+                                                        value.name
+                                          )
+                                      }
+                                  >
+                                      <RightIcon />
+                                  </IconButton>
+                              </ListItemSecondaryAction>
+                          )}
+                      </MenuItem>
+                  ))}
+              </MenuList>
+          </div>
         );
     }
 }
@@ -187,4 +188,4 @@ PathSelectorCompoment.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(PathSelectorCompoment));
+)(withTranslation()(withStyles(styles)(PathSelectorCompoment)));

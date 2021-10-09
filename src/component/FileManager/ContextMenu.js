@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import {
     Divider,
     ListItemIcon,
@@ -177,7 +178,7 @@ class ContextMenuCompoment extends Component {
 
     openArchiveDownload = () => {
         this.props.changeContextMenu("file", false);
-        this.props.openLoadingDialog("打包中...");
+        this.props.openLoadingDialog(this.props.t('Packing...'));
     };
 
     openDownload = () => {
@@ -185,14 +186,14 @@ class ContextMenuCompoment extends Component {
             this.props.toggleSnackbar(
                 "top",
                 "right",
-                "未登录用户无法预览",
+                this.props.t('Users who are not logged in cannot preview'),
                 "warning"
             );
             this.props.changeContextMenu("file", false);
             return;
         }
         this.props.changeContextMenu("file", false);
-        this.props.openLoadingDialog("获取下载地址...");
+        this.props.openLoadingDialog(this.props.t('Get download address...'));
     };
 
     enterFolder = () => {
@@ -212,7 +213,7 @@ class ContextMenuCompoment extends Component {
             this.props.toggleSnackbar(
                 "top",
                 "right",
-                "上传组件还未加载完成",
+                this.props.t('The upload component has not been loaded yet'),
                 "warning"
             );
         }
@@ -267,7 +268,7 @@ class ContextMenuCompoment extends Component {
                         );
                     },
                     icon: <RefreshIcon />,
-                    text: "刷新",
+                    text: this.props.t('Refresh'),
                 },
             ],
             center: [
@@ -275,19 +276,19 @@ class ContextMenuCompoment extends Component {
                     condition: true,
                     onClick: () => this.clickUpload("uploadFileForm"),
                     icon: <UploadIcon />,
-                    text: "上传文件",
+                    text: this.props.t('upload files'),
                 },
                 {
                     condition: true,
                     onClick: () => this.clickUpload("uploadFolderForm"),
                     icon: <FolderUpload />,
-                    text: "上传目录",
+                    text: this.props.t('Upload directory'),
                 },
                 {
                     condition: user.group.allowRemoteDownload,
                     onClick: () => this.props.openRemoteDownloadDialog(),
                     icon: <DownloadIcon />,
-                    text: "离线下载",
+                    text: this.props.t('Offline download'),
                 },
             ],
             bottom: [
@@ -295,380 +296,380 @@ class ContextMenuCompoment extends Component {
                     condition: true,
                     onClick: () => this.props.openCreateFolderDialog(),
                     icon: <NewFolderIcon />,
-                    text: "创建文件夹",
+                    text: this.props.t('Create Folder'),
                 },
                 {
                     condition: true,
                     onClick: () => this.props.openCreateFileDialog(),
                     icon: <FilePlus />,
-                    text: "创建文件",
+                    text: this.props.t('Create a file'),
                 },
             ],
         };
 
         return (
-            <div>
-                <Menu
-                    keepMounted
-                    open={this.props.menuOpen}
-                    onClose={() =>
-                        this.props.changeContextMenu(this.props.menuType, false)
-                    }
-                    anchorReference="anchorPosition"
-                    anchorPosition={{ top: this.Y, left: this.X }}
-                    anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "left",
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "left",
-                    }}
-                >
-                    {this.props.menuType === "empty" && (
-                        <div>
-                            <MenuItem
-                                dense
-                                onClick={() => {
-                                    this.props.refreshFileList();
-                                    this.props.changeContextMenu(
-                                        this.props.menuType,
-                                        false
-                                    );
-                                }}
-                            >
-                                <StyledListItemIcon>
-                                    <RefreshIcon />
-                                </StyledListItemIcon>
-                                <Typography variant="inherit">刷新</Typography>
-                            </MenuItem>
-                            <Divider className={classes.divider} />
-                            <MenuItem
-                                dense
-                                onClick={() =>
-                                    this.clickUpload("uploadFileForm")
-                                }
-                            >
-                                <StyledListItemIcon>
-                                    <UploadIcon />
-                                </StyledListItemIcon>
-                                <Typography variant="inherit">
-                                    上传文件
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem
-                                dense
-                                onClick={() =>
-                                    this.clickUpload("uploadFolderForm")
-                                }
-                            >
-                                <StyledListItemIcon>
-                                    <FolderUpload />
-                                </StyledListItemIcon>
-                                <Typography variant="inherit">
-                                    上传目录
-                                </Typography>
-                            </MenuItem>
-                            {user.group.allowRemoteDownload && (
-                                <MenuItem
-                                    dense
-                                    onClick={() =>
-                                        this.props.openRemoteDownloadDialog()
-                                    }
-                                >
-                                    <StyledListItemIcon>
-                                        <DownloadIcon />
-                                    </StyledListItemIcon>
-                                    <Typography variant="inherit">
-                                        离线下载
-                                    </Typography>
-                                </MenuItem>
-                            )}
+          <div>
+              <Menu
+                  keepMounted
+                  open={this.props.menuOpen}
+                  onClose={() =>
+                      this.props.changeContextMenu(this.props.menuType, false)
+                  }
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: this.Y, left: this.X }}
+                  anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                  }}
+                  transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                  }}
+              >
+                  {this.props.menuType === "empty" && (
+                      <div>
+                          <MenuItem
+                              dense
+                              onClick={() => {
+                                  this.props.refreshFileList();
+                                  this.props.changeContextMenu(
+                                      this.props.menuType,
+                                      false
+                                  );
+                              }}
+                          >
+                              <StyledListItemIcon>
+                                  <RefreshIcon />
+                              </StyledListItemIcon>
+                              <Typography variant="inherit">{this.props.t('Refresh')}</Typography>
+                          </MenuItem>
+                          <Divider className={classes.divider} />
+                          <MenuItem
+                              dense
+                              onClick={() =>
+                                  this.clickUpload("uploadFileForm")
+                              }
+                          >
+                              <StyledListItemIcon>
+                                  <UploadIcon />
+                              </StyledListItemIcon>
+                              <Typography variant="inherit">
+                                {this.props.t('upload files')}
+                              </Typography>
+                          </MenuItem>
+                          <MenuItem
+                              dense
+                              onClick={() =>
+                                  this.clickUpload("uploadFolderForm")
+                              }
+                          >
+                              <StyledListItemIcon>
+                                  <FolderUpload />
+                              </StyledListItemIcon>
+                              <Typography variant="inherit">
+                                {this.props.t('Upload directory')}
+                              </Typography>
+                          </MenuItem>
+                          {user.group.allowRemoteDownload && (
+                              <MenuItem
+                                  dense
+                                  onClick={() =>
+                                      this.props.openRemoteDownloadDialog()
+                                  }
+                              >
+                                  <StyledListItemIcon>
+                                      <DownloadIcon />
+                                  </StyledListItemIcon>
+                                  <Typography variant="inherit">
+                                    {this.props.t('Offline download')}
+                                  </Typography>
+                              </MenuItem>
+                          )}
 
-                            <Divider className={classes.divider} />
-                            <MenuItem
-                                dense
-                                onClick={() =>
-                                    this.props.openCreateFolderDialog()
-                                }
-                            >
-                                <StyledListItemIcon>
-                                    <NewFolderIcon />
-                                </StyledListItemIcon>
-                                <Typography variant="inherit">
-                                    创建文件夹
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem
-                                dense
-                                onClick={() =>
-                                    this.props.openCreateFileDialog()
-                                }
-                            >
-                                <StyledListItemIcon>
-                                    <FilePlus />
-                                </StyledListItemIcon>
-                                <Typography variant="inherit">
-                                    创建文件
-                                </Typography>
-                            </MenuItem>
-                        </div>
-                    )}
-                    {this.props.menuType !== "empty" && (
-                        <div>
-                            {!this.props.isMultiple && this.props.withFolder && (
-                                <div>
-                                    <MenuItem dense onClick={this.enterFolder}>
-                                        <StyledListItemIcon>
-                                            <OpenFolderIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            进入
-                                        </Typography>
-                                    </MenuItem>
-                                    {isHomePage && (
-                                        <Divider className={classes.divider} />
-                                    )}
-                                </div>
-                            )}
-                            {!this.props.isMultiple &&
-                                this.props.withFile &&
-                                (!this.props.share ||
-                                    this.props.share.preview) &&
-                                isPreviewable(this.props.selected[0].name) && (
-                                    <div>
-                                        <MenuItem
-                                            dense
-                                            onClick={() =>
-                                                this.props.openPreview()
-                                            }
-                                        >
-                                            <StyledListItemIcon>
-                                                <OpenIcon />
-                                            </StyledListItemIcon>
-                                            <Typography variant="inherit">
-                                                打开
-                                            </Typography>
-                                        </MenuItem>
-                                    </div>
-                                )}
+                          <Divider className={classes.divider} />
+                          <MenuItem
+                              dense
+                              onClick={() =>
+                                  this.props.openCreateFolderDialog()
+                              }
+                          >
+                              <StyledListItemIcon>
+                                  <NewFolderIcon />
+                              </StyledListItemIcon>
+                              <Typography variant="inherit">
+                                {this.props.t('Create Folder')}
+                              </Typography>
+                          </MenuItem>
+                          <MenuItem
+                              dense
+                              onClick={() =>
+                                  this.props.openCreateFileDialog()
+                              }
+                          >
+                              <StyledListItemIcon>
+                                  <FilePlus />
+                              </StyledListItemIcon>
+                              <Typography variant="inherit">
+                                {this.props.t('Create a file')}
+                              </Typography>
+                          </MenuItem>
+                      </div>
+                  )}
+                  {this.props.menuType !== "empty" && (
+                      <div>
+                          {!this.props.isMultiple && this.props.withFolder && (
+                              <div>
+                                  <MenuItem dense onClick={this.enterFolder}>
+                                      <StyledListItemIcon>
+                                          <OpenFolderIcon />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('Enter')}
+                                      </Typography>
+                                  </MenuItem>
+                                  {isHomePage && (
+                                      <Divider className={classes.divider} />
+                                  )}
+                              </div>
+                          )}
+                          {!this.props.isMultiple &&
+                              this.props.withFile &&
+                              (!this.props.share ||
+                                  this.props.share.preview) &&
+                              isPreviewable(this.props.selected[0].name) && (
+                                  <div>
+                                      <MenuItem
+                                          dense
+                                          onClick={() =>
+                                              this.props.openPreview()
+                                          }
+                                      >
+                                          <StyledListItemIcon>
+                                              <OpenIcon />
+                                          </StyledListItemIcon>
+                                          <Typography variant="inherit">
+                                            {this.props.t('Open')}
+                                          </Typography>
+                                      </MenuItem>
+                                  </div>
+                              )}
 
-                            {!this.props.isMultiple && this.props.withFile && (
-                                <div>
-                                    <MenuItem
-                                        dense
-                                        onClick={() => this.openDownload()}
-                                    >
-                                        <StyledListItemIcon>
-                                            <DownloadIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            下载
-                                        </Typography>
-                                    </MenuItem>
-                                    {isHomePage && (
-                                        <Divider className={classes.divider} />
-                                    )}
-                                </div>
-                            )}
+                          {!this.props.isMultiple && this.props.withFile && (
+                              <div>
+                                  <MenuItem
+                                      dense
+                                      onClick={() => this.openDownload()}
+                                  >
+                                      <StyledListItemIcon>
+                                          <DownloadIcon />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('download')}
+                                      </Typography>
+                                  </MenuItem>
+                                  {isHomePage && (
+                                      <Divider className={classes.divider} />
+                                  )}
+                              </div>
+                          )}
 
-                            {(this.props.isMultiple || this.props.withFolder) &&
-                                (user.group.allowArchiveDownload ||
-                                    !isHomePage) && (
-                                    <MenuItem
-                                        dense
-                                        onClick={() =>
-                                            this.openArchiveDownload()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <DownloadIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            打包下载
-                                        </Typography>
-                                    </MenuItem>
-                                )}
+                          {(this.props.isMultiple || this.props.withFolder) &&
+                              (user.group.allowArchiveDownload ||
+                                  !isHomePage) && (
+                                  <MenuItem
+                                      dense
+                                      onClick={() =>
+                                          this.openArchiveDownload()
+                                      }
+                                  >
+                                      <StyledListItemIcon>
+                                          <DownloadIcon />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('Download package')}
+                                      </Typography>
+                                  </MenuItem>
+                              )}
 
-                            {!this.props.isMultiple &&
-                                this.props.withFile &&
-                                isHomePage &&
-                                user.policy.allowSource && (
-                                    <MenuItem
-                                        dense
-                                        onClick={() =>
-                                            this.props.openGetSourceDialog()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <LinkIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            获取外链
-                                        </Typography>
-                                    </MenuItem>
-                                )}
+                          {!this.props.isMultiple &&
+                              this.props.withFile &&
+                              isHomePage &&
+                              user.policy.allowSource && (
+                                  <MenuItem
+                                      dense
+                                      onClick={() =>
+                                          this.props.openGetSourceDialog()
+                                      }
+                                  >
+                                      <StyledListItemIcon>
+                                          <LinkIcon />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('Get External Links')}
+                                      </Typography>
+                                  </MenuItem>
+                              )}
 
-                            {!this.props.isMultiple &&
-                                isHomePage &&
-                                user.group.allowRemoteDownload &&
-                                this.props.withFile &&
-                                isTorrent(this.props.selected[0].name) && (
-                                    <MenuItem
-                                        dense
-                                        onClick={() =>
-                                            this.props.openTorrentDownloadDialog()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <MagnetOn />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            创建离线下载任务
-                                        </Typography>
-                                    </MenuItem>
-                                )}
-                            {!this.props.isMultiple &&
-                                isHomePage &&
-                                user.group.compress &&
-                                this.props.withFile &&
-                                isCompressFile(this.props.selected[0].name) && (
-                                    <MenuItem
-                                        dense
-                                        onClick={() =>
-                                            this.props.openDecompressDialog()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <Unarchive />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            解压缩
-                                        </Typography>
-                                    </MenuItem>
-                                )}
+                          {!this.props.isMultiple &&
+                              isHomePage &&
+                              user.group.allowRemoteDownload &&
+                              this.props.withFile &&
+                              isTorrent(this.props.selected[0].name) && (
+                                  <MenuItem
+                                      dense
+                                      onClick={() =>
+                                          this.props.openTorrentDownloadDialog()
+                                      }
+                                  >
+                                      <StyledListItemIcon>
+                                          <MagnetOn />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('Create offline download task')}
+                                      </Typography>
+                                  </MenuItem>
+                              )}
+                          {!this.props.isMultiple &&
+                              isHomePage &&
+                              user.group.compress &&
+                              this.props.withFile &&
+                              isCompressFile(this.props.selected[0].name) && (
+                                  <MenuItem
+                                      dense
+                                      onClick={() =>
+                                          this.props.openDecompressDialog()
+                                      }
+                                  >
+                                      <StyledListItemIcon>
+                                          <Unarchive />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('unzip')}
+                                      </Typography>
+                                  </MenuItem>
+                              )}
 
-                            {isHomePage && user.group.compress && (
-                                <MenuItem
-                                    dense
-                                    onClick={() =>
-                                        this.props.openCompressDialog()
-                                    }
-                                >
-                                    <StyledListItemIcon>
-                                        <Archive />
-                                    </StyledListItemIcon>
-                                    <Typography variant="inherit">
-                                        创建压缩文件
-                                    </Typography>
-                                </MenuItem>
-                            )}
+                          {isHomePage && user.group.compress && (
+                              <MenuItem
+                                  dense
+                                  onClick={() =>
+                                      this.props.openCompressDialog()
+                                  }
+                              >
+                                  <StyledListItemIcon>
+                                      <Archive />
+                                  </StyledListItemIcon>
+                                  <Typography variant="inherit">
+                                    {this.props.t('Create compressed file')}
+                                  </Typography>
+                              </MenuItem>
+                          )}
 
-                            {!this.props.isMultiple && isHomePage && (
-                                <MenuItem
-                                    dense
-                                    onClick={() => this.props.openShareDialog()}
-                                >
-                                    <StyledListItemIcon>
-                                        <ShareIcon />
-                                    </StyledListItemIcon>
-                                    <Typography variant="inherit">
-                                        创建分享链接
-                                    </Typography>
-                                </MenuItem>
-                            )}
+                          {!this.props.isMultiple && isHomePage && (
+                              <MenuItem
+                                  dense
+                                  onClick={() => this.props.openShareDialog()}
+                              >
+                                  <StyledListItemIcon>
+                                      <ShareIcon />
+                                  </StyledListItemIcon>
+                                  <Typography variant="inherit">
+                                    {this.props.t('Create a share link')}
+                                  </Typography>
+                              </MenuItem>
+                          )}
 
-                            {!this.props.isMultiple && isHomePage && (
-                                <MenuItem
-                                    dense
-                                    onClick={() =>
-                                        this.props.toggleObjectInfoSidebar(true)
-                                    }
-                                >
-                                    <StyledListItemIcon>
-                                        <InfoOutlined />
-                                    </StyledListItemIcon>
-                                    <Typography variant="inherit">
-                                        详细信息
-                                    </Typography>
-                                </MenuItem>
-                            )}
+                          {!this.props.isMultiple && isHomePage && (
+                              <MenuItem
+                                  dense
+                                  onClick={() =>
+                                      this.props.toggleObjectInfoSidebar(true)
+                                  }
+                              >
+                                  <StyledListItemIcon>
+                                      <InfoOutlined />
+                                  </StyledListItemIcon>
+                                  <Typography variant="inherit">
+                                    {this.props.t('details')}
+                                  </Typography>
+                              </MenuItem>
+                          )}
 
-                            {!this.props.isMultiple && isHomePage && (
-                                <Divider className={classes.divider} />
-                            )}
+                          {!this.props.isMultiple && isHomePage && (
+                              <Divider className={classes.divider} />
+                          )}
 
-                            {!this.props.isMultiple && isHomePage && (
-                                <div>
-                                    <MenuItem
-                                        dense
-                                        onClick={() =>
-                                            this.props.openRenameDialog()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <RenameIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            重命名
-                                        </Typography>
-                                    </MenuItem>
-                                    {this.props.keywords === "" && (
-                                        <MenuItem
-                                            dense
-                                            onClick={() =>
-                                                this.props.openCopyDialog()
-                                            }
-                                        >
-                                            <StyledListItemIcon>
-                                                <FileCopyIcon />
-                                            </StyledListItemIcon>
-                                            <Typography variant="inherit">
-                                                复制
-                                            </Typography>
-                                        </MenuItem>
-                                    )}
-                                </div>
-                            )}
-                            {isHomePage && (
-                                <div>
-                                    {this.props.keywords === "" && (
-                                        <MenuItem
-                                            dense
-                                            onClick={() =>
-                                                this.props.openMoveDialog()
-                                            }
-                                        >
-                                            <StyledListItemIcon>
-                                                <MoveIcon />
-                                            </StyledListItemIcon>
-                                            <Typography variant="inherit">
-                                                移动
-                                            </Typography>
-                                        </MenuItem>
-                                    )}
+                          {!this.props.isMultiple && isHomePage && (
+                              <div>
+                                  <MenuItem
+                                      dense
+                                      onClick={() =>
+                                          this.props.openRenameDialog()
+                                      }
+                                  >
+                                      <StyledListItemIcon>
+                                          <RenameIcon />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('Rename')}
+                                      </Typography>
+                                  </MenuItem>
+                                  {this.props.keywords === "" && (
+                                      <MenuItem
+                                          dense
+                                          onClick={() =>
+                                              this.props.openCopyDialog()
+                                          }
+                                      >
+                                          <StyledListItemIcon>
+                                              <FileCopyIcon />
+                                          </StyledListItemIcon>
+                                          <Typography variant="inherit">
+                                            {this.props.t('copy')}
+                                          </Typography>
+                                      </MenuItem>
+                                  )}
+                              </div>
+                          )}
+                          {isHomePage && (
+                              <div>
+                                  {this.props.keywords === "" && (
+                                      <MenuItem
+                                          dense
+                                          onClick={() =>
+                                              this.props.openMoveDialog()
+                                          }
+                                      >
+                                          <StyledListItemIcon>
+                                              <MoveIcon />
+                                          </StyledListItemIcon>
+                                          <Typography variant="inherit">
+                                            {this.props.t('move')}
+                                          </Typography>
+                                      </MenuItem>
+                                  )}
 
-                                    <Divider className={classes.divider} />
-                                    <MenuItem
-                                        dense
-                                        className={classes.propover}
-                                        onClick={() =>
-                                            this.props.openRemoveDialog()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <DeleteIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            删除
-                                        </Typography>
-                                    </MenuItem>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </Menu>
-            </div>
+                                  <Divider className={classes.divider} />
+                                  <MenuItem
+                                      dense
+                                      className={classes.propover}
+                                      onClick={() =>
+                                          this.props.openRemoveDialog()
+                                      }
+                                  >
+                                      <StyledListItemIcon>
+                                          <DeleteIcon />
+                                      </StyledListItemIcon>
+                                      <Typography variant="inherit">
+                                        {this.props.t('delete')}
+                                      </Typography>
+                                  </MenuItem>
+                              </div>
+                          )}
+                      </div>
+                  )}
+              </Menu>
+          </div>
         );
     }
 }
@@ -681,6 +682,6 @@ ContextMenuCompoment.propTypes = {
 const ContextMenu = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ContextMenuCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(ContextMenuCompoment))));
 
 export default ContextMenu;

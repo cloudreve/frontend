@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
     Card,
     CardContent,
@@ -209,6 +210,8 @@ export default function DownloadingCard(props) {
         // eslint-disable-next-line
     }, [task.info.bitfield, task.info.numPieces, theme]);
 
+    const { t } = useTranslation();
+
     const getPercent = (completed, total) => {
         if (total === 0) {
             return 0;
@@ -251,7 +254,7 @@ export default function DownloadingCard(props) {
                         files: newFiles,
                     },
                 });
-                ToggleSnackbar("top", "right", "文件已删除", "success");
+                ToggleSnackbar("top", "right", t('File has been deleted'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -265,7 +268,7 @@ export default function DownloadingCard(props) {
         if (task.info.bittorrent.info.name !== "") {
             return task.info.bittorrent.info.name;
         }
-        return task.name === "." ? "[未知]" : task.name;
+        return task.name === "." ? t('[unknown]') : task.name;
     }, [task]);
 
     const getIcon = useCallback(() => {
@@ -293,7 +296,7 @@ export default function DownloadingCard(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "任务已取消，状态会在稍后更新",
+                    t('Task has been cancelled, status will be updated later'),
                     "success"
                 );
             })
@@ -314,7 +317,7 @@ export default function DownloadingCard(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "操作成功，状态会在稍后更新",
+                    t('The operation is successful, the status will be updated later'),
                     "success"
                 );
                 setSelectDialogOpen(false);
@@ -328,363 +331,363 @@ export default function DownloadingCard(props) {
     };
 
     return (
-        <Card className={classes.card}>
-            <SelectFileDialog
-                open={selectDialogOpen}
-                onClose={() => setSelectDialogOpen(false)}
-                modalsLoading={loading}
-                files={selectFileOption}
-                onSubmit={changeSelectedFile}
-            />
-            <ExpansionPanel
-                square
-                expanded={expanded === task.info.gid}
-                onChange={handleChange(task.info.gid)}
-            >
-                <ExpansionPanelSummary
-                    aria-controls="panel1d-content"
-                    id="panel1d-header"
-                >
-                    <div className={classes.iconContainer}>{getIcon()}</div>
-                    <CardContent className={classes.content}>
-                        <Typography color="primary" noWrap>
-                            <Tooltip title={getDownloadName()}>
-                                <span>{getDownloadName()}</span>
-                            </Tooltip>
-                        </Typography>
-                        <LinearProgress
-                            color="secondary"
-                            variant="determinate"
-                            className={classes.progress}
-                            value={getPercent(task.downloaded, task.total)}
-                        />
-                        <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            noWrap
-                        >
-                            {task.total > 0 && (
-                                <span>
-                                    {getPercent(
-                                        task.downloaded,
-                                        task.total
-                                    ).toFixed(2)}
-                                    % -{" "}
-                                    {task.downloaded === 0
-                                        ? "0Bytes"
-                                        : sizeToString(task.downloaded)}
-                                    /
-                                    {task.total === 0
-                                        ? "0Bytes"
-                                        : sizeToString(task.total)}{" "}
-                                    -{" "}
-                                    {task.speed === "0"
-                                        ? "0B/s"
-                                        : sizeToString(task.speed) + "/s"}
-                                </span>
-                            )}
-                            {task.total === 0 && <span> - </span>}
-                        </Typography>
-                    </CardContent>
-                    <CardContent className={classes.contentSide}>
-                        <IconButton>
-                            <ExpandMore
-                                className={classNames(
-                                    {
-                                        [classes.expanded]:
-                                            expanded === task.info.gid,
-                                    },
-                                    classes.expand
-                                )}
-                            />
-                        </IconButton>
-                    </CardContent>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Divider />
-                    {task.info.bittorrent.mode === "multi" && (
-                        <div className={classes.scroll}>
-                            <Table size="small">
-                                <TableBody>
-                                    {activeFiles().map((value) => {
-                                        return (
-                                            <TableRow
-                                                key={value.index}
-                                                style={{
-                                                    background:
-                                                        "linear-gradient(to right, " +
-                                                        (theme.palette.type ===
-                                                        "dark"
-                                                            ? darken(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.4
-                                                              )
-                                                            : lighten(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.85
-                                                              )) +
-                                                        " 0%," +
-                                                        (theme.palette.type ===
-                                                        "dark"
-                                                            ? darken(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.4
-                                                              )
-                                                            : lighten(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.85
-                                                              )) +
-                                                        " " +
-                                                        getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(0) +
-                                                        "%," +
-                                                        theme.palette.background
-                                                            .paper +
-                                                        " " +
-                                                        getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(0) +
-                                                        "%," +
-                                                        theme.palette.background
-                                                            .paper +
-                                                        " 100%)",
-                                                }}
-                                            >
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography
-                                                        className={
-                                                            classes.subFileName
-                                                        }
-                                                    >
-                                                        <TypeIcon
-                                                            className={
-                                                                classes.subFileIcon
-                                                            }
-                                                            fileName={
-                                                                value.path
-                                                            }
-                                                        />
-                                                        {value.path}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {" "}
-                                                        {sizeToString(
-                                                            value.length
-                                                        )}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(2)}
-                                                        %
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Tooltip title="删除此文件">
-                                                        <IconButton
-                                                            onClick={() =>
-                                                                deleteFile(
-                                                                    value.index
-                                                                )
-                                                            }
-                                                            disabled={loading}
-                                                            size={"small"}
-                                                        >
-                                                            <HighlightOff />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-
-                    <div className={classes.action}>
-                        <Button
-                            className={classes.actionButton}
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() =>
-                                history.push(
-                                    "/#/home?path=" +
-                                        encodeURIComponent(task.dst)
-                                )
-                            }
-                        >
-                            打开存放目录
-                        </Button>
-                        {task.info.bittorrent.mode === "multi" && (
-                            <Button
-                                className={classes.actionButton}
-                                variant="outlined"
-                                color="secondary"
-                                disabled={loading}
-                                onClick={() => {
-                                    setSelectDialogOpen(true);
-                                    setSelectFileOption([
-                                        ...props.task.info.files,
-                                    ]);
-                                }}
-                            >
-                                选择要下载的文件
-                            </Button>
-                        )}
-                        <Button
-                            className={classes.actionButton}
-                            onClick={cancel}
-                            variant="contained"
-                            color="secondary"
-                            disabled={loading}
-                        >
-                            取消任务
-                        </Button>
-                    </div>
-                    <Divider />
-                    <div className={classes.info}>
-                        {task.info.bitfield !== "" && (
-                            <canvas
-                                width={"700"}
-                                height={"100"}
-                                ref={canvasRef}
-                                className={classes.bitmap}
-                            />
-                        )}
-
-                        <Grid container>
-                            <Grid container xs={12} sm={4}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    更新于：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    <TimeAgo
-                                        datetime={task.update}
-                                        locale="zh_CN"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={4}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    上传大小：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    {sizeToString(task.info.uploadLength)}
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={4}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    上传速度：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    {sizeToString(task.info.uploadSpeed)} / s
-                                </Grid>
-                            </Grid>
-                            {task.info.bittorrent.mode !== "" && (
-                                <>
-                                    <Grid container xs={12} sm={8}>
-                                        <Grid
-                                            item
-                                            sm={2}
-                                            xs={4}
-                                            className={classes.infoTitle}
-                                        >
-                                            InfoHash：
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            sm={10}
-                                            xs={8}
+      <Card className={classes.card}>
+          <SelectFileDialog
+              open={selectDialogOpen}
+              onClose={() => setSelectDialogOpen(false)}
+              modalsLoading={loading}
+              files={selectFileOption}
+              onSubmit={changeSelectedFile}
+          />
+          <ExpansionPanel
+              square
+              expanded={expanded === task.info.gid}
+              onChange={handleChange(task.info.gid)}
+          >
+              <ExpansionPanelSummary
+                  aria-controls="panel1d-content"
+                  id="panel1d-header"
+              >
+                  <div className={classes.iconContainer}>{getIcon()}</div>
+                  <CardContent className={classes.content}>
+                      <Typography color="primary" noWrap>
+                          <Tooltip title={getDownloadName()}>
+                              <span>{getDownloadName()}</span>
+                          </Tooltip>
+                      </Typography>
+                      <LinearProgress
+                          color="secondary"
+                          variant="determinate"
+                          className={classes.progress}
+                          value={getPercent(task.downloaded, task.total)}
+                      />
+                      <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          noWrap
+                      >
+                          {task.total > 0 && (
+                              <span>
+                                  {getPercent(
+                                      task.downloaded,
+                                      task.total
+                                  ).toFixed(2)}
+                                  % -{" "}
+                                  {task.downloaded === 0
+                                      ? "0Bytes"
+                                      : sizeToString(task.downloaded)}
+                                  /
+                                  {task.total === 0
+                                      ? "0Bytes"
+                                      : sizeToString(task.total)}{" "}
+                                  -{" "}
+                                  {task.speed === "0"
+                                      ? "0B/s"
+                                      : sizeToString(task.speed) + "/s"}
+                              </span>
+                          )}
+                          {task.total === 0 && <span> - </span>}
+                      </Typography>
+                  </CardContent>
+                  <CardContent className={classes.contentSide}>
+                      <IconButton>
+                          <ExpandMore
+                              className={classNames(
+                                  {
+                                      [classes.expanded]:
+                                          expanded === task.info.gid,
+                                  },
+                                  classes.expand
+                              )}
+                          />
+                      </IconButton>
+                  </CardContent>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                  <Divider />
+                  {task.info.bittorrent.mode === "multi" && (
+                      <div className={classes.scroll}>
+                          <Table size="small">
+                              <TableBody>
+                                  {activeFiles().map((value) => {
+                                      return (
+                                        <TableRow
+                                            key={value.index}
                                             style={{
-                                                wordBreak: "break-all",
+                                                background:
+                                                    "linear-gradient(to right, " +
+                                                    (theme.palette.type ===
+                                                    "dark"
+                                                        ? darken(
+                                                              theme.palette
+                                                                  .primary
+                                                                  .main,
+                                                              0.4
+                                                          )
+                                                        : lighten(
+                                                              theme.palette
+                                                                  .primary
+                                                                  .main,
+                                                              0.85
+                                                          )) +
+                                                    " 0%," +
+                                                    (theme.palette.type ===
+                                                    "dark"
+                                                        ? darken(
+                                                              theme.palette
+                                                                  .primary
+                                                                  .main,
+                                                              0.4
+                                                          )
+                                                        : lighten(
+                                                              theme.palette
+                                                                  .primary
+                                                                  .main,
+                                                              0.85
+                                                          )) +
+                                                    " " +
+                                                    getPercent(
+                                                        value.completedLength,
+                                                        value.length
+                                                    ).toFixed(0) +
+                                                    "%," +
+                                                    theme.palette.background
+                                                        .paper +
+                                                    " " +
+                                                    getPercent(
+                                                        value.completedLength,
+                                                        value.length
+                                                    ).toFixed(0) +
+                                                    "%," +
+                                                    theme.palette.background
+                                                        .paper +
+                                                    " 100%)",
                                             }}
-                                            className={classes.infoValue}
                                         >
-                                            {task.info.infoHash}
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container xs={12} sm={4}>
-                                        <Grid
-                                            item
-                                            xs={4}
-                                            className={classes.infoTitle}
-                                        >
-                                            做种者：
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            xs={8}
-                                            className={classes.infoValue}
-                                        >
-                                            {task.info.numSeeders}
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container xs={12} sm={4}>
-                                        <Grid
-                                            item
-                                            xs={4}
-                                            className={classes.infoTitle}
-                                        >
-                                            做种中：
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            xs={8}
-                                            className={classes.infoValue}
-                                        >
-                                            {task.info.seeder === "true"
-                                                ? "是"
-                                                : "否"}
-                                        </Grid>
-                                    </Grid>
-                                </>
-                            )}
-                            <Grid container xs={12} sm={4}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    分片大小：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    {sizeToString(task.info.pieceLength)}
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={4}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    分片数量：
-                                </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
-                                    {task.info.numPieces}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </div>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        </Card>
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                            >
+                                                <Typography
+                                                    className={
+                                                        classes.subFileName
+                                                    }
+                                                >
+                                                    <TypeIcon
+                                                        className={
+                                                            classes.subFileIcon
+                                                        }
+                                                        fileName={
+                                                            value.path
+                                                        }
+                                                    />
+                                                    {value.path}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                            >
+                                                <Typography noWrap>
+                                                    {" "}
+                                                    {sizeToString(
+                                                        value.length
+                                                    )}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                            >
+                                                <Typography noWrap>
+                                                    {getPercent(
+                                                        value.completedLength,
+                                                        value.length
+                                                    ).toFixed(2)}
+                                                    %
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Tooltip title={t('Delete this file')}>
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            deleteFile(
+                                                                value.index
+                                                            )
+                                                        }
+                                                        disabled={loading}
+                                                        size={"small"}
+                                                    >
+                                                        <HighlightOff />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                      );
+                                  })}
+                              </TableBody>
+                          </Table>
+                      </div>
+                  )}
+
+                  <div className={classes.action}>
+                      <Button
+                          className={classes.actionButton}
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() =>
+                              history.push(
+                                  "/#/home?path=" +
+                                      encodeURIComponent(task.dst)
+                              )
+                          }
+                      >
+                        {t('Open storage directory')}
+                      </Button>
+                      {task.info.bittorrent.mode === "multi" && (
+                          (<Button
+                              className={classes.actionButton}
+                              variant="outlined"
+                              color="secondary"
+                              disabled={loading}
+                              onClick={() => {
+                                  setSelectDialogOpen(true);
+                                  setSelectFileOption([
+                                      ...props.task.info.files,
+                                  ]);
+                              }}
+                          >
+                            {t('Select the file to download')}
+                          </Button>)
+                      )}
+                      <Button
+                          className={classes.actionButton}
+                          onClick={cancel}
+                          variant="contained"
+                          color="secondary"
+                          disabled={loading}
+                      >
+                        {t('Cancel task')}
+                      </Button>
+                  </div>
+                  <Divider />
+                  <div className={classes.info}>
+                      {task.info.bitfield !== "" && (
+                          <canvas
+                              width={"700"}
+                              height={"100"}
+                              ref={canvasRef}
+                              className={classes.bitmap}
+                          />
+                      )}
+
+                      <Grid container>
+                          <Grid container xs={12} sm={4}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('Updated at：')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  <TimeAgo
+                                      datetime={task.update}
+                                      locale="zh_CN"
+                                  />
+                              </Grid>
+                          </Grid>
+                          <Grid container xs={12} sm={4}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('Upload size:')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  {sizeToString(task.info.uploadLength)}
+                              </Grid>
+                          </Grid>
+                          <Grid container xs={12} sm={4}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('Upload speed:')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  {sizeToString(task.info.uploadSpeed)} / s
+                              </Grid>
+                          </Grid>
+                          {task.info.bittorrent.mode !== "" && (
+                              <>
+                                  <Grid container xs={12} sm={8}>
+                                      <Grid
+                                          item
+                                          sm={2}
+                                          xs={4}
+                                          className={classes.infoTitle}
+                                      >
+                                        {t('InfoHash：')}
+                                      </Grid>
+                                      <Grid
+                                          item
+                                          sm={10}
+                                          xs={8}
+                                          style={{
+                                              wordBreak: "break-all",
+                                          }}
+                                          className={classes.infoValue}
+                                      >
+                                          {task.info.infoHash}
+                                      </Grid>
+                                  </Grid>
+                                  <Grid container xs={12} sm={4}>
+                                      <Grid
+                                          item
+                                          xs={4}
+                                          className={classes.infoTitle}
+                                      >
+                                        {t('Seeder:')}
+                                      </Grid>
+                                      <Grid
+                                          item
+                                          xs={8}
+                                          className={classes.infoValue}
+                                      >
+                                          {task.info.numSeeders}
+                                      </Grid>
+                                  </Grid>
+                                  <Grid container xs={12} sm={4}>
+                                      <Grid
+                                          item
+                                          xs={4}
+                                          className={classes.infoTitle}
+                                      >
+                                        {t('During seeding:')}
+                                      </Grid>
+                                      <Grid
+                                          item
+                                          xs={8}
+                                          className={classes.infoValue}
+                                      >
+                                          {task.info.seeder === "true"
+                                              ? t('Yes')
+                                              : t('no')}
+                                      </Grid>
+                                  </Grid>
+                              </>
+                          )}
+                          <Grid container xs={12} sm={4}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('Shard size:')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  {sizeToString(task.info.pieceLength)}
+                              </Grid>
+                          </Grid>
+                          <Grid container xs={12} sm={4}>
+                              <Grid item xs={4} className={classes.infoTitle}>
+                                {t('Number of shards:')}
+                              </Grid>
+                              <Grid item xs={8} className={classes.infoValue}>
+                                  {task.info.numPieces}
+                              </Grid>
+                          </Grid>
+                      </Grid>
+                  </div>
+              </ExpansionPanelDetails>
+          </ExpansionPanel>
+      </Card>
     );
 }

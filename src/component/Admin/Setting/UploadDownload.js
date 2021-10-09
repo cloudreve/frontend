@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -55,6 +56,8 @@ export default function UploadDownload() {
         onedrive_source_timeout: "0",
     });
 
+    const { t } = useTranslation();
+
     const handleCheckChange = (name) => (event) => {
         const value = event.target.checked ? "1" : "0";
         setOptions({
@@ -104,7 +107,7 @@ export default function UploadDownload() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t('Settings have been changed'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -115,390 +118,393 @@ export default function UploadDownload() {
     };
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        存储与传输
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    Worker 数量
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.max_worker_num}
-                                    onChange={handleChange("max_worker_num")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    任务队列最多并行执行的任务数，保存后需要重启
-                                    Cloudreve 生效
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+      <div>
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Storage and Transmission')}
+                  </Typography>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Number of Workers')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.max_worker_num}
+                                  onChange={handleChange("max_worker_num")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The maximum number of tasks executed in parallel in the task queue. After saving, you need to restart\nCloudreve to take effect')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    中转并行传输
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.max_parallel_transfer}
-                                    onChange={handleChange(
-                                        "max_parallel_transfer"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    任务队列中转任务传输时，最大并行协程数
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Transit Parallel Transmission')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.max_parallel_transfer}
+                                  onChange={handleChange(
+                                      "max_parallel_transfer"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The maximum number of parallel coroutines when transferring tasks in the task queue')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    临时目录
-                                </InputLabel>
-                                <Input
-                                    value={options.temp_path}
-                                    onChange={handleChange("temp_path")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    用于存放打包下载、解压缩、压缩等任务产生的临时文件的目录路径
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Temporary Directory')}
+                              </InputLabel>
+                              <Input
+                                  value={options.temp_path}
+                                  onChange={handleChange("temp_path")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The directory path used to store temporary files generated by tasks such as package download, decompression, compression, etc.')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <SizeInput
-                                    value={options.maxEditSize}
-                                    onChange={handleChange("maxEditSize")}
-                                    required
-                                    min={0}
-                                    max={2147483647}
-                                    label={"文本文件在线编辑大小"}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    文本文件可在线编辑的最大大小，超出此大小的文件无法在线编辑
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <SizeInput
+                                  value={options.maxEditSize}
+                                  onChange={handleChange("maxEditSize")}
+                                  required
+                                  min={0}
+                                  max={2147483647}
+                                  label={t('Online edit size of text file')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The maximum size of a text file that can be edited online. Files beyond this size cannot be edited online')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 分片错误重试
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 0,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_chunk_retries}
-                                    onChange={handleChange(
-                                        "onedrive_chunk_retries"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    OneDrive
-                                    存储策略分片上传失败后重试的最大次数，只适用于服务端上传或中转
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('OneDrive fragmentation error retry')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 0,
+                                      step: 1,
+                                  }}
+                                  value={options.onedrive_chunk_retries}
+                                  onChange={handleChange(
+                                      "onedrive_chunk_retries"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t(
+                                  'OneDrive\nThe maximum number of retries after a failed upload of storage policy fragments, only applicable to server uploads or transfers'
+                                )}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.reset_after_upload_failed ===
-                                                "1"
-                                            }
-                                            onChange={handleCheckChange(
-                                                "reset_after_upload_failed"
-                                            )}
-                                        />
-                                    }
-                                    label="上传校验失败时强制重置连接"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    开启后，如果本次策略、头像等数据上传校验失败，服务器会强制重置连接
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.reset_after_upload_failed ===
+                                              "1"
+                                          }
+                                          onChange={handleCheckChange(
+                                              "reset_after_upload_failed"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Forcibly reset the connection when upload verification fails')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('When enabled, if the data upload verification of this policy, avatar, etc. fails, the server will forcibly reset the connection')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        有效期 (秒)
-                    </Typography>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Validity period (seconds)')}
+                  </Typography>
 
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    打包下载
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.archive_timeout}
-                                    onChange={handleChange("archive_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Download package')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.archive_timeout}
+                                  onChange={handleChange("archive_timeout")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    下载会话
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.download_timeout}
-                                    onChange={handleChange("download_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Download Session')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.download_timeout}
+                                  onChange={handleChange("download_timeout")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    预览链接
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.preview_timeout}
-                                    onChange={handleChange("preview_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Preview link')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.preview_timeout}
+                                  onChange={handleChange("preview_timeout")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    Office 文档预览连接
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.doc_preview_timeout}
-                                    onChange={handleChange(
-                                        "doc_preview_timeout"
-                                    )}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Office Document Preview Connection')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.doc_preview_timeout}
+                                  onChange={handleChange(
+                                      "doc_preview_timeout"
+                                  )}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    上传凭证
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.upload_credential_timeout}
-                                    onChange={handleChange(
-                                        "upload_credential_timeout"
-                                    )}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('upload certificate')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.upload_credential_timeout}
+                                  onChange={handleChange(
+                                      "upload_credential_timeout"
+                                  )}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    上传会话
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.upload_session_timeout}
-                                    onChange={handleChange(
-                                        "upload_session_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    超出后不再处理此上传的回调请求
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Upload session')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.upload_session_timeout}
+                                  onChange={handleChange(
+                                      "upload_session_timeout"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('After exceeding this upload callback request will not be processed')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    从机API请求
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.slave_api_timeout}
-                                    onChange={handleChange("slave_api_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Slave API request')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.slave_api_timeout}
+                                  onChange={handleChange("slave_api_timeout")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    分享下载会话
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={
-                                        options.share_download_session_timeout
-                                    }
-                                    onChange={handleChange(
-                                        "share_download_session_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    设定时间内重复下载分享文件，不会被记入总下载次数
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Share download session')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={
+                                      options.share_download_session_timeout
+                                  }
+                                  onChange={handleChange(
+                                      "share_download_session_timeout"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Repetitive downloading of shared files within the set time will not be counted in the total number of downloads')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 客户端上传监控间隔
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_monitor_timeout}
-                                    onChange={handleChange(
-                                        "onedrive_monitor_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    每间隔所设定时间，Cloudreve 会向 OneDrive
-                                    请求检查客户端上传情况已确保客户端上传可控
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('OneDrive client upload monitoring interval')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.onedrive_monitor_timeout}
+                                  onChange={handleChange(
+                                      "onedrive_monitor_timeout"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t(
+                                  'Every set time interval, Cloudreve will ask OneDrive\nto check the customer The client upload situation has ensured that the client upload is controllable'
+                                )}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 回调等待
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_callback_check}
-                                    onChange={handleChange(
-                                        "onedrive_callback_check"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    OneDrive
-                                    客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('OneDrive callback waiting')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.onedrive_callback_check}
+                                  onChange={handleChange(
+                                      "onedrive_callback_check"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t(
+                                  'OneDrive\nThe maximum time to wait for the callback after the client upload is completed, if it exceeds, the upload will be considered failed'
+                                )}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 下载请求缓存
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        max: 3659,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_source_timeout}
-                                    onChange={handleChange(
-                                        "onedrive_source_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    OneDrive 获取文件下载 URL
-                                    后可将结果缓存，减轻热门文件下载API请求频率
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('OneDrive download request cache')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      max: 3659,
+                                      step: 1,
+                                  }}
+                                  value={options.onedrive_source_timeout}
+                                  onChange={handleChange(
+                                      "onedrive_source_timeout"
+                                  )}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t(
+                                  'OneDrive can cache the results after obtaining the file download URL\n, reducing the frequency of popular file download API requests'
+                                )}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
-        </div>
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
+      </div>
     );
 }

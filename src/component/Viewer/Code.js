@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { Paper, useTheme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -88,6 +89,8 @@ export default function CodeViewer() {
         // eslint-disable-next-line
     }, [math.params[0], location]);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         let requestURL = "/file/content/" + query.get("id");
         if (pathHelper.isSharePage(location.pathname)) {
@@ -109,7 +112,7 @@ export default function CodeViewer() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法读取文件内容，" + error.message,
+                    t('Unable to read the contents of the file, ') + error.message,
                     "error"
                 );
             })

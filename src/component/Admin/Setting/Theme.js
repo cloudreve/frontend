@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -71,13 +72,15 @@ export default function Theme() {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const deleteTheme = (color) => {
         if (color === options.defaultTheme) {
-            ToggleSnackbar("top", "right", "不能删除默认配色", "warning");
+            ToggleSnackbar("top", "right", t('Cannot delete the default color scheme'), "warning");
             return;
         }
         if (Object.keys(theme).length <= 1) {
-            ToggleSnackbar("top", "right", "请至少保留一个配色方案", "warning");
+            ToggleSnackbar("top", "right", t('Please keep at least one color scheme'), "warning");
             return;
         }
         const themeCopy = { ...theme };
@@ -95,7 +98,7 @@ export default function Theme() {
             ToggleSnackbar(
                 "top",
                 "right",
-                "主色调不能与已有配色重复",
+                t('The main color cannot be repeated with the existing color matching'),
                 "warning"
             );
             return;
@@ -157,7 +160,7 @@ export default function Theme() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t('Settings have been changed'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -168,279 +171,279 @@ export default function Theme() {
     };
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        主题配色
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <Table aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>关键色</TableCell>
-                                        <TableCell>色彩配置</TableCell>
-                                        <TableCell>操作</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {Object.keys(theme).map((k) => (
-                                        <TableRow key={k}>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                            >
-                                                <div
-                                                    className={
-                                                        classes.colorContainer
-                                                    }
-                                                >
-                                                    <div
-                                                        style={{
-                                                            backgroundColor:
-                                                                theme[k].palette
-                                                                    .primary
-                                                                    .main,
-                                                        }}
-                                                        className={
-                                                            classes.colorDot
-                                                        }
-                                                    />
-                                                    <div
-                                                        style={{
-                                                            backgroundColor:
-                                                                theme[k].palette
-                                                                    .secondary
-                                                                    .main,
-                                                        }}
-                                                        className={
-                                                            classes.colorDot
-                                                        }
-                                                    />
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField
-                                                    error={themeConfigError[k]}
-                                                    helperText={
-                                                        themeConfigError[k] &&
-                                                        "格式不正确"
-                                                    }
-                                                    fullWidth
-                                                    multiline
-                                                    onChange={(e) => {
-                                                        setThemeConfig({
-                                                            ...themeConfig,
-                                                            [k]: e.target.value,
-                                                        });
-                                                    }}
-                                                    onBlur={(e) => {
-                                                        try {
-                                                            const res = JSON.parse(
-                                                                e.target.value
-                                                            );
-                                                            if (
-                                                                !(
-                                                                    "palette" in
-                                                                    res
-                                                                ) ||
-                                                                !(
-                                                                    "primary" in
-                                                                    res.palette
-                                                                ) ||
-                                                                !(
-                                                                    "main" in
-                                                                    res.palette
-                                                                        .primary
-                                                                ) ||
-                                                                !(
-                                                                    "secondary" in
-                                                                    res.palette
-                                                                ) ||
-                                                                !(
-                                                                    "main" in
-                                                                    res.palette
-                                                                        .secondary
-                                                                )
-                                                            ) {
-                                                                throw e;
-                                                            }
-                                                            setTheme({
-                                                                ...theme,
-                                                                [k]: res,
-                                                            });
-                                                        } catch (e) {
-                                                            setThemeConfigError(
-                                                                {
-                                                                    ...themeConfigError,
-                                                                    [k]: true,
-                                                                }
-                                                            );
-                                                            return;
-                                                        }
-                                                        setThemeConfigError({
-                                                            ...themeConfigError,
-                                                            [k]: false,
-                                                        });
-                                                    }}
-                                                    value={themeConfig[k]}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    onClick={() =>
-                                                        deleteTheme(k)
-                                                    }
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                            <div>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    style={{ marginTop: 8 }}
-                                    onClick={() => setCreate(true)}
+      <div>
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Theme Colors')}
+                  </Typography>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <Table aria-label="simple table">
+                              <TableHead>
+                                  <TableRow>
+                                      <TableCell>{t('Key Color')}</TableCell>
+                                      <TableCell>{t('Color Configuration')}</TableCell>
+                                      <TableCell>{t('Action')}</TableCell>
+                                  </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                  {Object.keys(theme).map((k) => (
+                                      <TableRow key={k}>
+                                          <TableCell
+                                              component="th"
+                                              scope="row"
+                                          >
+                                              <div
+                                                  className={
+                                                      classes.colorContainer
+                                                  }
+                                              >
+                                                  <div
+                                                      style={{
+                                                          backgroundColor:
+                                                              theme[k].palette
+                                                                  .primary
+                                                                  .main,
+                                                      }}
+                                                      className={
+                                                          classes.colorDot
+                                                      }
+                                                  />
+                                                  <div
+                                                      style={{
+                                                          backgroundColor:
+                                                              theme[k].palette
+                                                                  .secondary
+                                                                  .main,
+                                                      }}
+                                                      className={
+                                                          classes.colorDot
+                                                      }
+                                                  />
+                                              </div>
+                                          </TableCell>
+                                          <TableCell>
+                                              <TextField
+                                                  error={themeConfigError[k]}
+                                                  helperText={
+                                                      themeConfigError[k] &&
+                                                      t('Incorrect format')
+                                                  }
+                                                  fullWidth
+                                                  multiline
+                                                  onChange={(e) => {
+                                                      setThemeConfig({
+                                                          ...themeConfig,
+                                                          [k]: e.target.value,
+                                                      });
+                                                  }}
+                                                  onBlur={(e) => {
+                                                      try {
+                                                          const res = JSON.parse(
+                                                              e.target.value
+                                                          );
+                                                          if (
+                                                              !(
+                                                                  "palette" in
+                                                                  res
+                                                              ) ||
+                                                              !(
+                                                                  "primary" in
+                                                                  res.palette
+                                                              ) ||
+                                                              !(
+                                                                  "main" in
+                                                                  res.palette
+                                                                      .primary
+                                                              ) ||
+                                                              !(
+                                                                  "secondary" in
+                                                                  res.palette
+                                                              ) ||
+                                                              !(
+                                                                  "main" in
+                                                                  res.palette
+                                                                      .secondary
+                                                              )
+                                                          ) {
+                                                              throw e;
+                                                          }
+                                                          setTheme({
+                                                              ...theme,
+                                                              [k]: res,
+                                                          });
+                                                      } catch (e) {
+                                                          setThemeConfigError(
+                                                              {
+                                                                  ...themeConfigError,
+                                                                  [k]: true,
+                                                              }
+                                                          );
+                                                          return;
+                                                      }
+                                                      setThemeConfigError({
+                                                          ...themeConfigError,
+                                                          [k]: false,
+                                                      });
+                                                  }}
+                                                  value={themeConfig[k]}
+                                              />
+                                          </TableCell>
+                                          <TableCell>
+                                              <IconButton
+                                                  onClick={() =>
+                                                      deleteTheme(k)
+                                                  }
+                                              >
+                                                  <Delete />
+                                              </IconButton>
+                                          </TableCell>
+                                      </TableRow>
+                                  ))}
+                              </TableBody>
+                          </Table>
+                          <div>
+                              <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  style={{ marginTop: 8 }}
+                                  onClick={() => setCreate(true)}
+                              >
+                                {t('New color scheme')}
+                              </Button>
+                          </div>
+                          <Alert severity="info" style={{ marginTop: 8 }}>
+                              <Typography variant="body2">
+                                {t('The complete configuration items are available in ')}{" "}
+                                <Link
+                                    href={
+                                        "https://material-ui.com/zh/customization/default-theme/"
+                                    }
+                                    target={"_blank"}
                                 >
-                                    新建配色方案
-                                </Button>
-                            </div>
-                            <Alert severity="info" style={{ marginTop: 8 }}>
-                                <Typography variant="body2">
-                                    完整的配置项可在{" "}
-                                    <Link
-                                        href={
-                                            "https://material-ui.com/zh/customization/default-theme/"
-                                        }
-                                        target={"_blank"}
-                                    >
-                                        默认主题 - Material-UI
-                                    </Link>{" "}
-                                    查阅。
-                                </Typography>
-                            </Alert>
-                        </div>
+                                  {t('Default Theme-Material-UI')}
+                                </Link>{" "}
+                                {t('View.')}
+                              </Typography>
+                          </Alert>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    默认配色
-                                </InputLabel>
-                                <Select
-                                    value={options.defaultTheme}
-                                    onChange={handleChange("defaultTheme")}
-                                >
-                                    {Object.keys(theme).map((k) => (
-                                        <MenuItem key={k} value={k}>
-                                            <div
-                                                className={
-                                                    classes.colorContainer
-                                                }
-                                            >
-                                                <div
-                                                    style={{
-                                                        backgroundColor:
-                                                            theme[k].palette
-                                                                .primary.main,
-                                                    }}
-                                                    className={classes.colorDot}
-                                                />
-                                                <div
-                                                    style={{
-                                                        backgroundColor:
-                                                            theme[k].palette
-                                                                .secondary.main,
-                                                    }}
-                                                    className={classes.colorDot}
-                                                />
-                                            </div>
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    用户未指定偏好配色时，站点默认使用的配色方案
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Default color scheme')}
+                              </InputLabel>
+                              <Select
+                                  value={options.defaultTheme}
+                                  onChange={handleChange("defaultTheme")}
+                              >
+                                  {Object.keys(theme).map((k) => (
+                                      <MenuItem key={k} value={k}>
+                                          <div
+                                              className={
+                                                  classes.colorContainer
+                                              }
+                                          >
+                                              <div
+                                                  style={{
+                                                      backgroundColor:
+                                                          theme[k].palette
+                                                              .primary.main,
+                                                  }}
+                                                  className={classes.colorDot}
+                                              />
+                                              <div
+                                                  style={{
+                                                      backgroundColor:
+                                                          theme[k].palette
+                                                              .secondary.main,
+                                                  }}
+                                                  className={classes.colorDot}
+                                              />
+                                          </div>
+                                      </MenuItem>
+                                  ))}
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('When the user does not specify a color preference, the color scheme used by the site by default')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        界面
-                    </Typography>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Interface')}
+                  </Typography>
 
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    个人文件列表默认样式
-                                </InputLabel>
-                                <Select
-                                    value={options.home_view_method}
-                                    onChange={handleChange("home_view_method")}
-                                    required
-                                >
-                                    <MenuItem value={"icon"}>大图标</MenuItem>
-                                    <MenuItem value={"smallIcon"}>
-                                        小图标
-                                    </MenuItem>
-                                    <MenuItem value={"list"}>列表</MenuItem>
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    用户未指定偏好样式时，个人文件页面列表默认样式
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Personal file list default style')}
+                              </InputLabel>
+                              <Select
+                                  value={options.home_view_method}
+                                  onChange={handleChange("home_view_method")}
+                                  required
+                              >
+                                  <MenuItem value={"icon"}>{t('Large Icon')}</MenuItem>
+                                  <MenuItem value={"smallIcon"}>
+                                    {t('Small Icon')}
+                                  </MenuItem>
+                                  <MenuItem value={"list"}>{t('List')}</MenuItem>
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('When the user does not specify a preferred style, the default style of the personal file page list')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
 
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    目录分享页列表默认样式
-                                </InputLabel>
-                                <Select
-                                    value={options.share_view_method}
-                                    onChange={handleChange("share_view_method")}
-                                    required
-                                >
-                                    <MenuItem value={"icon"}>大图标</MenuItem>
-                                    <MenuItem value={"smallIcon"}>
-                                        小图标
-                                    </MenuItem>
-                                    <MenuItem value={"list"}>列表</MenuItem>
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    用户未指定偏好样式时，目录分享页面的默认样式
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('The default style of the directory sharing page list')}
+                              </InputLabel>
+                              <Select
+                                  value={options.share_view_method}
+                                  onChange={handleChange("share_view_method")}
+                                  required
+                              >
+                                  <MenuItem value={"icon"}>{t('Large Icon')}</MenuItem>
+                                  <MenuItem value={"smallIcon"}>
+                                    {t('Small Icon')}
+                                  </MenuItem>
+                                  <MenuItem value={"list"}>{t('List')}</MenuItem>
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('When the user does not specify a preferred style, the default style of the directory sharing page')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
 
-            <CreateTheme
-                onSubmit={addTheme}
-                open={create}
-                onClose={() => setCreate(false)}
-            />
-        </div>
+          <CreateTheme
+              onSubmit={addTheme}
+              open={create}
+              onClose={() => setCreate(false)}
+          />
+      </div>
     );
 }

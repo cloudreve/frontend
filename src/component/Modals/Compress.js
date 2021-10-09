@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
 import {
@@ -55,6 +56,8 @@ export default function CompressDialog(props) {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
@@ -91,7 +94,7 @@ export default function CompressDialog(props) {
         })
             .then(() => {
                 props.onClose();
-                ToggleSnackbar("top", "right", "压缩任务已创建", "success");
+                ToggleSnackbar("top", "right", t('Compression task has been created'), "success");
                 SetModalsLoading(false);
             })
             .catch((error) => {
@@ -103,54 +106,54 @@ export default function CompressDialog(props) {
     const classes = useStyles();
 
     return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-            aria-labelledby="form-dialog-title"
-        >
-            <DialogTitle id="form-dialog-title">存放到</DialogTitle>
-            <PathSelector
-                presentPath={props.presentPath}
-                selected={props.selected}
-                onSelect={setMoveTarget}
-            />
+      <Dialog
+          open={props.open}
+          onClose={props.onClose}
+          aria-labelledby="form-dialog-title"
+      >
+          <DialogTitle id="form-dialog-title">{t('Save to')}</DialogTitle>
+          <PathSelector
+              presentPath={props.presentPath}
+              selected={props.selected}
+              onSelect={setMoveTarget}
+          />
 
-            {selectedPath !== "" && (
-                <DialogContent className={classes.contentFix}>
-                    <DialogContentText>
-                        <TextField
-                            onChange={(e) => setFileName(e.target.value)}
-                            value={fileName}
-                            fullWidth
-                            autoFocus
-                            id="standard-basic"
-                            label="压缩文件名"
+          {selectedPath !== "" && (
+              <DialogContent className={classes.contentFix}>
+                  <DialogContentText>
+                      <TextField
+                          onChange={(e) => setFileName(e.target.value)}
+                          value={fileName}
+                          fullWidth
+                          autoFocus
+                          id="standard-basic"
+                          label={t('Compressed file name')}
+                      />
+                  </DialogContentText>
+              </DialogContent>
+          )}
+          <DialogActions>
+              <Button onClick={props.onClose}>{t('Cancel')}</Button>
+              <div className={classes.wrapper}>
+                  <Button
+                      onClick={submitMove}
+                      color="primary"
+                      disabled={
+                          selectedPath === "" ||
+                          fileName === "" ||
+                          props.modalsLoading
+                      }
+                  >
+                    {t('Ok')}
+                    {props.modalsLoading && (
+                        <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
                         />
-                    </DialogContentText>
-                </DialogContent>
-            )}
-            <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
-                <div className={classes.wrapper}>
-                    <Button
-                        onClick={submitMove}
-                        color="primary"
-                        disabled={
-                            selectedPath === "" ||
-                            fileName === "" ||
-                            props.modalsLoading
-                        }
-                    >
-                        确定
-                        {props.modalsLoading && (
-                            <CircularProgress
-                                size={24}
-                                className={classes.buttonProgress}
-                            />
-                        )}
-                    </Button>
-                </div>
-            </DialogActions>
-        </Dialog>
+                    )}
+                  </Button>
+              </div>
+          </DialogActions>
+      </Dialog>
     );
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import {
@@ -41,6 +42,8 @@ export default function SelectFileDialog(props) {
         setFiles(props.files);
     }, [props.files]);
 
+    const { t } = useTranslation();
+
     const handleChange = (index) => (event) => {
         const filesCopy = [...files];
         // eslint-disable-next-line
@@ -69,50 +72,50 @@ export default function SelectFileDialog(props) {
     const classes = useStyles();
 
     return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-            aria-labelledby="form-dialog-title"
-        >
-            <DialogTitle id="form-dialog-title">选择要下载的文件</DialogTitle>
-            <DialogContent dividers={"paper"} className={classes.content}>
-                {files.map((v, k) => {
-                    return (
-                        <MenuItem key={k}>
-                            <FormGroup row>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            onChange={handleChange(v.index)}
-                                            checked={v.selected === "true"}
-                                            value="checkedA"
-                                        />
-                                    }
-                                    label={v.path}
-                                />
-                            </FormGroup>
-                        </MenuItem>
-                    );
-                })}
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
-                <div className={classes.wrapper}>
-                    <Button
-                        color="primary"
-                        onClick={submit}
-                        disabled={props.modalsLoading}
-                    >
-                        确定
-                        {props.modalsLoading && (
-                            <CircularProgress
-                                size={24}
-                                className={classes.buttonProgress}
-                            />
-                        )}
-                    </Button>
-                </div>
-            </DialogActions>
-        </Dialog>
+      <Dialog
+          open={props.open}
+          onClose={props.onClose}
+          aria-labelledby="form-dialog-title"
+      >
+          <DialogTitle id="form-dialog-title">{t('Select the file to download')}</DialogTitle>
+          <DialogContent dividers={"paper"} className={classes.content}>
+              {files.map((v, k) => {
+                  return (
+                      <MenuItem key={k}>
+                          <FormGroup row>
+                              <FormControlLabel
+                                  control={
+                                      <Checkbox
+                                          onChange={handleChange(v.index)}
+                                          checked={v.selected === "true"}
+                                          value="checkedA"
+                                      />
+                                  }
+                                  label={v.path}
+                              />
+                          </FormGroup>
+                      </MenuItem>
+                  );
+              })}
+          </DialogContent>
+          <DialogActions>
+              <Button onClick={props.onClose}>{t('Cancel')}</Button>
+              <div className={classes.wrapper}>
+                  <Button
+                      color="primary"
+                      onClick={submit}
+                      disabled={props.modalsLoading}
+                  >
+                    {t('Ok')}
+                    {props.modalsLoading && (
+                        <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
+                        />
+                    )}
+                  </Button>
+              </div>
+          </DialogActions>
+      </Dialog>
     );
 }

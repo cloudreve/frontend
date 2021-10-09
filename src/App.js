@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import AuthRoute from "./middleware/AuthRoute";
 import Navbar from "./component/Navbar/Navbar.js";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -30,6 +30,7 @@ import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
 import PageLoading from "./component/Placeholder/PageLoading";
 import CodeViewer from "./component/Viewer/Code";
+import { useTranslation } from "react-i18next";
 const PDFViewer = React.lazy(() =>
     import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
 );
@@ -38,6 +39,7 @@ export default function App() {
     const themeConfig = useSelector((state) => state.siteConfig.theme);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+    const { t } = useTranslation();
 
     const theme = React.useMemo(() => {
         themeConfig.palette.type = prefersDarkMode ? "dark" : "light";
@@ -82,133 +84,133 @@ export default function App() {
 
     const { path } = useRouteMatch();
     return (
-        <React.Fragment>
-            <ThemeProvider theme={theme}>
-                <div className={classes.root} id="container">
-                    <CssBaseline />
-                    <AlertBar />
-                    <Navbar />
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                        <Switch>
-                            <AuthRoute exact path={path} isLogin={isLogin}>
-                                <Redirect
-                                    to={{
-                                        pathname: "/home",
-                                    }}
-                                />
-                            </AuthRoute>
+      <React.Fragment>
+          <ThemeProvider theme={theme}>
+              <div className={classes.root} id="container">
+                  <CssBaseline />
+                  <AlertBar />
+                  <Navbar />
+                  <main className={classes.content}>
+                      <div className={classes.toolbar} />
+                      <Switch>
+                          <AuthRoute exact path={path} isLogin={isLogin}>
+                              <Redirect
+                                  to={{
+                                      pathname: "/home",
+                                  }}
+                              />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}home`} isLogin={isLogin}>
-                                <FileManager />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}home`} isLogin={isLogin}>
+                              <FileManager />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}video`} isLogin={isLogin}>
-                                <VideoPreview />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}video`} isLogin={isLogin}>
+                              <VideoPreview />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}text`} isLogin={isLogin}>
-                                <TextViewer />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}text`} isLogin={isLogin}>
+                              <TextViewer />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}doc`} isLogin={isLogin}>
-                                <DocViewer />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}doc`} isLogin={isLogin}>
+                              <DocViewer />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
-                                    <PDFViewer />
-                                </Suspense>
-                            </AuthRoute>
+                          <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
+                              <Suspense fallback={<PageLoading />}>
+                                  <PDFViewer />
+                              </Suspense>
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}code`} isLogin={isLogin}>
-                                <CodeViewer />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}code`} isLogin={isLogin}>
+                              <CodeViewer />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
-                                <Download />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
+                              <Download />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}shares`} isLogin={isLogin}>
-                                <MyShare />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}shares`} isLogin={isLogin}>
+                              <MyShare />
+                          </AuthRoute>
 
-                            <Route path={`${path}search`} isLogin={isLogin}>
-                                <SearchResult />
-                            </Route>
+                          <Route path={`${path}search`} isLogin={isLogin}>
+                              <SearchResult />
+                          </Route>
 
-                            <Route path={`${path}setting`} isLogin={isLogin}>
-                                <UserSetting />
-                            </Route>
+                          <Route path={`${path}setting`} isLogin={isLogin}>
+                              <UserSetting />
+                          </Route>
 
-                            <AuthRoute
-                                path={`${path}profile/:id`}
-                                isLogin={isLogin}
-                            >
-                                <Profile />
-                            </AuthRoute>
+                          <AuthRoute
+                              path={`${path}profile/:id`}
+                              isLogin={isLogin}
+                          >
+                              <Profile />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
-                                <WebDAV />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
+                              <WebDAV />
+                          </AuthRoute>
 
-                            <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
-                                <Tasks />
-                            </AuthRoute>
+                          <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
+                              <Tasks />
+                          </AuthRoute>
 
-                            <Route path={`${path}login`} exact>
-                                <LoginForm />
-                            </Route>
+                          <Route path={`${path}login`} exact>
+                              <LoginForm />
+                          </Route>
 
-                            <Route path={`${path}signup`} exact>
-                                <Register />
-                            </Route>
+                          <Route path={`${path}signup`} exact>
+                              <Register />
+                          </Route>
 
-                            <Route path={`${path}activate`} exact>
-                                <Activation />
-                            </Route>
+                          <Route path={`${path}activate`} exact>
+                              <Activation />
+                          </Route>
 
-                            <Route path={`${path}reset`} exact>
-                                <ResetForm />
-                            </Route>
+                          <Route path={`${path}reset`} exact>
+                              <ResetForm />
+                          </Route>
 
-                            <Route path={`${path}forget`} exact>
-                                <Reset />
-                            </Route>
+                          <Route path={`${path}forget`} exact>
+                              <Reset />
+                          </Route>
 
-                            <Route exact path={`${path}s/:id`}>
-                                <SharePreload />
-                            </Route>
+                          <Route exact path={`${path}s/:id`}>
+                              <SharePreload />
+                          </Route>
 
-                            <Route path={`${path}s/:id/video(/)*`}>
-                                <VideoPreview />
-                            </Route>
+                          <Route path={`${path}s/:id/video(/)*`}>
+                              <VideoPreview />
+                          </Route>
 
-                            <Route path={`${path}s/:id/doc(/)*`}>
-                                <DocViewer />
-                            </Route>
+                          <Route path={`${path}s/:id/doc(/)*`}>
+                              <DocViewer />
+                          </Route>
 
-                            <Route path={`${path}s/:id/text(/)*`}>
-                                <TextViewer />
-                            </Route>
+                          <Route path={`${path}s/:id/text(/)*`}>
+                              <TextViewer />
+                          </Route>
 
-                            <Route path={`${path}s/:id/pdf(/)*`}>
-                                <Suspense fallback={<PageLoading />}>
-                                    <PDFViewer />
-                                </Suspense>
-                            </Route>
+                          <Route path={`${path}s/:id/pdf(/)*`}>
+                              <Suspense fallback={<PageLoading />}>
+                                  <PDFViewer />
+                              </Suspense>
+                          </Route>
 
-                            <Route path={`${path}s/:id/code(/)*`}>
-                                <CodeViewer />
-                            </Route>
+                          <Route path={`${path}s/:id/code(/)*`}>
+                              <CodeViewer />
+                          </Route>
 
-                            <Route path="*">
-                                <NotFound msg={"页面不存在"} />
-                            </Route>
-                        </Switch>
-                    </main>
-                </div>
-            </ThemeProvider>
-        </React.Fragment>
+                          <Route path="*">
+                              <NotFound msg={t('Page does not exist')} />
+                          </Route>
+                      </Switch>
+                  </main>
+              </div>
+          </ThemeProvider>
+      </React.Fragment>
     );
 }

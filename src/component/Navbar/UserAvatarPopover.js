@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -87,7 +88,7 @@ class UserAvatarPopoverCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "您已退出登录",
+                    this.props.t('You have logged out'),
                     "success"
                 );
                 Auth.signout();
@@ -115,125 +116,125 @@ class UserAvatarPopoverCompoment extends Component {
         );
 
         return (
-            <Popover
-                open={this.props.anchorEl !== null}
-                onClose={this.handleClose}
-                anchorEl={this.props.anchorEl}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-            >
-                {!Auth.Check() && (
-                    <div className={classes.visitorMenu}>
-                        <Divider />
-                        <MenuItem
-                            onClick={() => this.props.history.push("/login")}
-                        >
-                            <ListItemIcon>
-                                <AccountArrowRight />
-                            </ListItemIcon>
-                            登录
-                        </MenuItem>
-                        <MenuItem
-                            onClick={() => this.props.history.push("/signup")}
-                        >
-                            <ListItemIcon>
-                                <AccountPlus />
-                            </ListItemIcon>
-                            注册
-                        </MenuItem>
-                    </div>
-                )}
-                {Auth.Check() && (
-                    <div>
-                        <div className={classes.header}>
-                            <div className={classes.largeAvatarContainer}>
-                                <Avatar
-                                    className={classes.largeAvatar}
-                                    src={
-                                        "/api/v3/user/avatar/" + user.id + "/l"
-                                    }
-                                />
-                            </div>
-                            <div className={classes.info}>
-                                <Typography noWrap>{user.nickname}</Typography>
-                                <Typography
-                                    color="textSecondary"
-                                    style={{
-                                        fontSize: "0.875rem",
-                                    }}
-                                    noWrap
-                                >
-                                    {user.user_name}
-                                </Typography>
-                                <Chip
-                                    className={classes.badge}
-                                    color={
-                                        user.group.id === 1
-                                            ? "secondary"
-                                            : "default"
-                                    }
-                                    label={user.group.name}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <Divider />
-                            {!isAdminPage && (
-                                <MenuItem
-                                    style={{
-                                        padding: " 11px 16px 11px 16px",
-                                    }}
-                                    onClick={() => {
-                                        this.handleClose();
-                                        this.props.history.push(
-                                            "/profile/" + user.id
-                                        );
-                                    }}
-                                >
-                                    <ListItemIcon>
-                                        <HomeAccount />
-                                    </ListItemIcon>
-                                    个人主页
-                                </MenuItem>
-                            )}
-                            {user.group.id === 1 && (
-                                <MenuItem
-                                    style={{
-                                        padding: " 11px 16px 11px 16px",
-                                    }}
-                                    onClick={() => {
-                                        this.handleClose();
-                                        this.props.history.push("/admin/home");
-                                    }}
-                                >
-                                    <ListItemIcon>
-                                        <DesktopMacDashboard />
-                                    </ListItemIcon>
-                                    管理面板
-                                </MenuItem>
-                            )}
-
-                            <MenuItem
-                                style={{
-                                    padding: " 11px 16px 11px 16px",
-                                }}
-                                onClick={this.sigOut}
-                            >
+          <Popover
+              open={this.props.anchorEl !== null}
+              onClose={this.handleClose}
+              anchorEl={this.props.anchorEl}
+              anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+              }}
+              transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+              }}
+          >
+              {!Auth.Check() && (
+                  <div className={classes.visitorMenu}>
+                      <Divider />
+                      <MenuItem
+                          onClick={() => this.props.history.push("/login")}
+                      >
+                        <ListItemIcon>
+                            <AccountArrowRight />
+                        </ListItemIcon>
+                        {this.props.t('Log in')}
+                      </MenuItem>
+                      <MenuItem
+                          onClick={() => this.props.history.push("/signup")}
+                      >
+                        <ListItemIcon>
+                            <AccountPlus />
+                        </ListItemIcon>
+                        {this.props.t('Register')}
+                      </MenuItem>
+                  </div>
+              )}
+              {Auth.Check() && (
+                  <div>
+                      <div className={classes.header}>
+                          <div className={classes.largeAvatarContainer}>
+                              <Avatar
+                                  className={classes.largeAvatar}
+                                  src={
+                                      "/api/v3/user/avatar/" + user.id + "/l"
+                                  }
+                              />
+                          </div>
+                          <div className={classes.info}>
+                              <Typography noWrap>{user.nickname}</Typography>
+                              <Typography
+                                  color="textSecondary"
+                                  style={{
+                                      fontSize: "0.875rem",
+                                  }}
+                                  noWrap
+                              >
+                                  {user.user_name}
+                              </Typography>
+                              <Chip
+                                  className={classes.badge}
+                                  color={
+                                      user.group.id === 1
+                                          ? "secondary"
+                                          : "default"
+                                  }
+                                  label={user.group.name}
+                              />
+                          </div>
+                      </div>
+                      <div>
+                          <Divider />
+                          {!isAdminPage && (
+                              (<MenuItem
+                                  style={{
+                                      padding: " 11px 16px 11px 16px",
+                                  }}
+                                  onClick={() => {
+                                      this.handleClose();
+                                      this.props.history.push(
+                                          "/profile/" + user.id
+                                      );
+                                  }}
+                              >
                                 <ListItemIcon>
-                                    <LogoutVariant />
+                                    <HomeAccount />
                                 </ListItemIcon>
-                                退出登录
-                            </MenuItem>
-                        </div>
-                    </div>
-                )}
-            </Popover>
+                                {this.props.t('Homepage')}
+                              </MenuItem>)
+                          )}
+                          {user.group.id === 1 && (
+                              (<MenuItem
+                                  style={{
+                                      padding: " 11px 16px 11px 16px",
+                                  }}
+                                  onClick={() => {
+                                      this.handleClose();
+                                      this.props.history.push("/admin/home");
+                                  }}
+                              >
+                                <ListItemIcon>
+                                    <DesktopMacDashboard />
+                                </ListItemIcon>
+                                {this.props.t('Admin Panel')}
+                              </MenuItem>)
+                          )}
+
+                          <MenuItem
+                              style={{
+                                  padding: " 11px 16px 11px 16px",
+                              }}
+                              onClick={this.sigOut}
+                          >
+                            <ListItemIcon>
+                                <LogoutVariant />
+                            </ListItemIcon>
+                            {this.props.t('Sign out')}
+                          </MenuItem>
+                      </div>
+                  </div>
+              )}
+          </Popover>
         );
     }
 }
@@ -245,6 +246,6 @@ UserAvatarPopoverCompoment.propTypes = {
 const UserAvatarPopover = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(UserAvatarPopoverCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(UserAvatarPopoverCompoment))));
 
 export default UserAvatarPopover;

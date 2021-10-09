@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
@@ -192,232 +193,232 @@ class ProfileCompoment extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.layout}>
-                {this.state.user === null && <div></div>}
-                {this.state.user !== null && (
-                    <Paper square>
-                        <div className={classes.userNav}>
-                            <div>
-                                <Avatar
-                                    className={classes.avatarContainer}
-                                    src={
-                                        "/api/v3/user/avatar/" +
-                                        this.state.user.id +
-                                        "/l"
-                                    }
-                                />
-                            </div>
-                            <div>
-                                <Typography className={classes.nickName} noWrap>
-                                    {this.state.user.nick}
-                                </Typography>
-                            </div>
-                        </div>
-                        <Tabs
-                            value={this.state.listType}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={this.handleChange}
-                            centered
-                        >
-                            <Tab label="全部分享" />
-                            <Tab label="热门分享" />
-                            <Tab label="个人资料" />
-                        </Tabs>
-                        {this.state.listType === 2 && (
-                            <div className={classes.infoContainer}>
-                                <Grid container spacing={24}>
-                                    <Grid
-                                        item
-                                        md={4}
-                                        xs={12}
-                                        className={classes.infoItem}
-                                    >
-                                        <Typography
-                                            color="textSecondary"
-                                            variant="h6"
-                                        >
-                                            UID
-                                        </Typography>
-                                        <Typography>
-                                            {this.state.user.id}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        md={4}
-                                        xs={12}
-                                        className={classes.infoItem}
-                                    >
-                                        <Typography
-                                            color="textSecondary"
-                                            variant="h6"
-                                        >
-                                            昵称
-                                        </Typography>
-                                        <Typography>
-                                            {this.state.user.nick}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        md={4}
-                                        xs={12}
-                                        className={classes.infoItem}
-                                    >
-                                        <Typography
-                                            color="textSecondary"
-                                            variant="h6"
-                                        >
-                                            用户组
-                                        </Typography>
-                                        <Typography>
-                                            {this.state.user.group}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        md={4}
-                                        xs={12}
-                                        className={classes.infoItem}
-                                    >
-                                        <Typography
-                                            color="textSecondary"
-                                            variant="h6"
-                                        >
-                                            分享总数
-                                        </Typography>
-                                        <Typography>
-                                            {this.state.total}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid
-                                        item
-                                        md={4}
-                                        xs={12}
-                                        className={classes.infoItem}
-                                    >
-                                        <Typography
-                                            color="textSecondary"
-                                            variant="h6"
-                                        >
-                                            注册日期
-                                        </Typography>
-                                        <Typography>
-                                            {this.state.user.date}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        )}
-                        {(this.state.listType === 0 ||
-                            this.state.listType === 1) && (
-                            <div>
-                                <div className={classes.tableContainer}>
-                                    <Table className={classes.table}>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>文件名</TableCell>
-                                                <TableCell
-                                                    className={
-                                                        classes.mobileHide
-                                                    }
-                                                >
-                                                    分享日期
-                                                </TableCell>
-                                                <TableCell
-                                                    className={[
-                                                        classes.th,
-                                                        classes.mobileHide,
-                                                    ]}
-                                                >
-                                                    下载次数
-                                                </TableCell>
-                                                <TableCell
-                                                    className={[
-                                                        classes.th,
-                                                        classes.mobileHide,
-                                                    ]}
-                                                >
-                                                    浏览次数
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {this.state.shareList.map(
-                                                (row, id) => (
-                                                    <TableRow
-                                                        key={id}
-                                                        className={
-                                                            classes.tableLink
-                                                        }
-                                                        onClick={() =>
-                                                            this.props.history.push(
-                                                                "/s/" + row.key
-                                                            )
-                                                        }
-                                                    >
-                                                        <TableCell>
-                                                            <Typography>
-                                                                {row.source
-                                                                    ? row.source
-                                                                          .name
-                                                                    : "[已失效]"}
-                                                            </Typography>
-                                                        </TableCell>
-                                                        <TableCell
-                                                            nowrap={"nowrap"}
-                                                            className={
-                                                                classes.mobileHide
-                                                            }
-                                                        >
-                                                            {row.create_date}
-                                                        </TableCell>
-                                                        <TableCell
-                                                            className={
-                                                                classes.mobileHide
-                                                            }
-                                                        >
-                                                            {row.downloads}
-                                                        </TableCell>
-                                                        <TableCell
-                                                            className={
-                                                                classes.mobileHide
-                                                            }
-                                                        >
-                                                            {row.views}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            )}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                                {this.state.shareList.length !== 0 &&
-                                    this.state.listType === 0 && (
-                                        <div className={classes.navigator}>
-                                            <Pagination
-                                                count={Math.ceil(
-                                                    this.state.total / 10
-                                                )}
-                                                onChange={(e, v) =>
-                                                    this.loadList(
-                                                        v,
-                                                        this.state.listType ===
-                                                            0
-                                                            ? "default"
-                                                            : "hot"
-                                                    )
-                                                }
-                                                color="secondary"
-                                            />
-                                        </div>
-                                    )}
-                            </div>
-                        )}
-                    </Paper>
-                )}
-            </div>
+          <div className={classes.layout}>
+              {this.state.user === null && <div></div>}
+              {this.state.user !== null && (
+                  <Paper square>
+                      <div className={classes.userNav}>
+                          <div>
+                              <Avatar
+                                  className={classes.avatarContainer}
+                                  src={
+                                      "/api/v3/user/avatar/" +
+                                      this.state.user.id +
+                                      "/l"
+                                  }
+                              />
+                          </div>
+                          <div>
+                              <Typography className={classes.nickName} noWrap>
+                                  {this.state.user.nick}
+                              </Typography>
+                          </div>
+                      </div>
+                      <Tabs
+                          value={this.state.listType}
+                          indicatorColor="primary"
+                          textColor="primary"
+                          onChange={this.handleChange}
+                          centered
+                      >
+                          <Tab label={this.props.t('Share all')} />
+                          <Tab label={this.props.t('Popular Shares')} />
+                          <Tab label={this.props.t('personal information')} />
+                      </Tabs>
+                      {this.state.listType === 2 && (
+                          <div className={classes.infoContainer}>
+                              <Grid container spacing={24}>
+                                  <Grid
+                                      item
+                                      md={4}
+                                      xs={12}
+                                      className={classes.infoItem}
+                                  >
+                                      <Typography
+                                          color="textSecondary"
+                                          variant="h6"
+                                      >
+                                          UID
+                                      </Typography>
+                                      <Typography>
+                                          {this.state.user.id}
+                                      </Typography>
+                                  </Grid>
+                                  <Grid
+                                      item
+                                      md={4}
+                                      xs={12}
+                                      className={classes.infoItem}
+                                  >
+                                      <Typography
+                                          color="textSecondary"
+                                          variant="h6"
+                                      >
+                                        {this.props.t('Nickname')}
+                                      </Typography>
+                                      <Typography>
+                                          {this.state.user.nick}
+                                      </Typography>
+                                  </Grid>
+                                  <Grid
+                                      item
+                                      md={4}
+                                      xs={12}
+                                      className={classes.infoItem}
+                                  >
+                                      <Typography
+                                          color="textSecondary"
+                                          variant="h6"
+                                      >
+                                        {this.props.t('User group')}
+                                      </Typography>
+                                      <Typography>
+                                          {this.state.user.group}
+                                      </Typography>
+                                  </Grid>
+                                  <Grid
+                                      item
+                                      md={4}
+                                      xs={12}
+                                      className={classes.infoItem}
+                                  >
+                                      <Typography
+                                          color="textSecondary"
+                                          variant="h6"
+                                      >
+                                        {this.props.t('Total Shares')}
+                                      </Typography>
+                                      <Typography>
+                                          {this.state.total}
+                                      </Typography>
+                                  </Grid>
+                                  <Grid
+                                      item
+                                      md={4}
+                                      xs={12}
+                                      className={classes.infoItem}
+                                  >
+                                      <Typography
+                                          color="textSecondary"
+                                          variant="h6"
+                                      >
+                                        {this.props.t('Registration Date')}
+                                      </Typography>
+                                      <Typography>
+                                          {this.state.user.date}
+                                      </Typography>
+                                  </Grid>
+                              </Grid>
+                          </div>
+                      )}
+                      {(this.state.listType === 0 ||
+                          this.state.listType === 1) && (
+                          <div>
+                              <div className={classes.tableContainer}>
+                                  <Table className={classes.table}>
+                                      <TableHead>
+                                          <TableRow>
+                                              <TableCell>{this.props.t('File name')}</TableCell>
+                                              <TableCell
+                                                  className={
+                                                      classes.mobileHide
+                                                  }
+                                              >
+                                                {this.props.t('Share Date')}
+                                              </TableCell>
+                                              <TableCell
+                                                  className={[
+                                                      classes.th,
+                                                      classes.mobileHide,
+                                                  ]}
+                                              >
+                                                {this.props.t('download times')}
+                                              </TableCell>
+                                              <TableCell
+                                                  className={[
+                                                      classes.th,
+                                                      classes.mobileHide,
+                                                  ]}
+                                              >
+                                                {this.props.t('Views')}
+                                              </TableCell>
+                                          </TableRow>
+                                      </TableHead>
+                                      <TableBody>
+                                          {this.state.shareList.map(
+                                              (row, id) => (
+                                                  <TableRow
+                                                      key={id}
+                                                      className={
+                                                          classes.tableLink
+                                                      }
+                                                      onClick={() =>
+                                                          this.props.history.push(
+                                                              "/s/" + row.key
+                                                          )
+                                                      }
+                                                  >
+                                                      <TableCell>
+                                                          <Typography>
+                                                              {row.source
+                                                                  ? row.source
+                                                                        .name
+                                                                  : this.props.t('[expired]')}
+                                                          </Typography>
+                                                      </TableCell>
+                                                      <TableCell
+                                                          nowrap={"nowrap"}
+                                                          className={
+                                                              classes.mobileHide
+                                                          }
+                                                      >
+                                                          {row.create_date}
+                                                      </TableCell>
+                                                      <TableCell
+                                                          className={
+                                                              classes.mobileHide
+                                                          }
+                                                      >
+                                                          {row.downloads}
+                                                      </TableCell>
+                                                      <TableCell
+                                                          className={
+                                                              classes.mobileHide
+                                                          }
+                                                      >
+                                                          {row.views}
+                                                      </TableCell>
+                                                  </TableRow>
+                                              )
+                                          )}
+                                      </TableBody>
+                                  </Table>
+                              </div>
+                              {this.state.shareList.length !== 0 &&
+                                  this.state.listType === 0 && (
+                                      <div className={classes.navigator}>
+                                          <Pagination
+                                              count={Math.ceil(
+                                                  this.state.total / 10
+                                              )}
+                                              onChange={(e, v) =>
+                                                  this.loadList(
+                                                      v,
+                                                      this.state.listType ===
+                                                          0
+                                                          ? "default"
+                                                          : "hot"
+                                                  )
+                                              }
+                                              color="secondary"
+                                          />
+                                      </div>
+                                  )}
+                          </div>
+                      )}
+                  </Paper>
+              )}
+          </div>
         );
     }
 }
@@ -425,6 +426,6 @@ class ProfileCompoment extends Component {
 const Profile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ProfileCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(ProfileCompoment))));
 
 export default Profile;

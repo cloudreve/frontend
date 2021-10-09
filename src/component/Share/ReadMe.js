@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { MenuBook } from "@material-ui/icons";
@@ -81,6 +82,8 @@ export default function ReadMe(props) {
 
     const $vm = React.createRef();
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         setLoading(true);
         const previewPath =
@@ -100,7 +103,7 @@ export default function ReadMe(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法读取 README 内容，" + error.message,
+                    t('Unable to read README content, ') + error.message,
                     "error"
                 );
             })

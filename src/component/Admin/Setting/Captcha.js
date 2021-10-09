@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -49,6 +50,8 @@ export default function Captcha() {
         captcha_TCaptcha_SecretKey: "",
     });
 
+    const { t } = useTranslation();
+
     const handleChange = (name) => (event) => {
         setOptions({
             ...options,
@@ -90,7 +93,7 @@ export default function Captcha() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t('Settings have been changed'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -101,308 +104,308 @@ export default function Captcha() {
     };
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        验证码
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    验证码类型
-                                </InputLabel>
-                                <Select
-                                    value={options.captcha_type}
-                                    onChange={handleChange("captcha_type")}
-                                    required
-                                >
-                                    <MenuItem value={"normal"}>普通</MenuItem>
-                                    <MenuItem value={"recaptcha"}>
-                                        reCAPTCHA V2
-                                    </MenuItem>
-                                    <MenuItem value={"tcaptcha"}>
-                                        腾讯云验证码
-                                    </MenuItem>
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    验证码类型
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+      <div>
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Verification Code')}
+                  </Typography>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Verification Code Type')}
+                              </InputLabel>
+                              <Select
+                                  value={options.captcha_type}
+                                  onChange={handleChange("captcha_type")}
+                                  required
+                              >
+                                  <MenuItem value={"normal"}>{t('ordinary')}</MenuItem>
+                                  <MenuItem value={"recaptcha"}>
+                                      reCAPTCHA V2
+                                  </MenuItem>
+                                  <MenuItem value={"tcaptcha"}>
+                                    {t('Tencent Cloud Verification Code')}
+                                  </MenuItem>
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('Verification Code Type')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                {options.captcha_type === "normal" && (
-                    <div className={classes.root}>
-                        <Typography variant="h6" gutterBottom>
-                            普通验证码
-                        </Typography>
-                        <div className={classes.formContainer}>
-                            <div className={classes.form}>
-                                <FormControl>
-                                    <InputLabel htmlFor="component-helper">
-                                        宽度
-                                    </InputLabel>
-                                    <Input
-                                        type={"number"}
-                                        inputProps={{
-                                            min: 1,
-                                            step: 1,
-                                        }}
-                                        value={options.captcha_width}
-                                        onChange={handleChange("captcha_width")}
-                                        required
-                                    />
-                                </FormControl>
-                            </div>
+              {options.captcha_type === "normal" && (
+                  <div className={classes.root}>
+                      <Typography variant="h6" gutterBottom>
+                        {t('General Verification Code')}
+                      </Typography>
+                      <div className={classes.formContainer}>
+                          <div className={classes.form}>
+                              <FormControl>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('width')}
+                                  </InputLabel>
+                                  <Input
+                                      type={"number"}
+                                      inputProps={{
+                                          min: 1,
+                                          step: 1,
+                                      }}
+                                      value={options.captcha_width}
+                                      onChange={handleChange("captcha_width")}
+                                      required
+                                  />
+                              </FormControl>
+                          </div>
 
-                            <div className={classes.form}>
-                                <FormControl>
-                                    <InputLabel htmlFor="component-helper">
-                                        高度
-                                    </InputLabel>
-                                    <Input
-                                        type={"number"}
-                                        inputProps={{
-                                            min: 1,
-                                            step: 1,
-                                        }}
-                                        value={options.captcha_height}
-                                        onChange={handleChange(
-                                            "captcha_height"
-                                        )}
-                                        required
-                                    />
-                                </FormControl>
-                            </div>
+                          <div className={classes.form}>
+                              <FormControl>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('high')}
+                                  </InputLabel>
+                                  <Input
+                                      type={"number"}
+                                      inputProps={{
+                                          min: 1,
+                                          step: 1,
+                                      }}
+                                      value={options.captcha_height}
+                                      onChange={handleChange(
+                                          "captcha_height"
+                                      )}
+                                      required
+                                  />
+                              </FormControl>
+                          </div>
 
-                            <div className={classes.form}>
-                                <FormControl>
-                                    <InputLabel htmlFor="component-helper">
-                                        模式
-                                    </InputLabel>
-                                    <Select
-                                        value={options.captcha_mode}
-                                        onChange={handleChange("captcha_mode")}
-                                        required
-                                    >
-                                        <MenuItem value={"0"}>数字</MenuItem>
-                                        <MenuItem value={"1"}>字母</MenuItem>
-                                        <MenuItem value={"2"}>算数</MenuItem>
-                                        <MenuItem value={"3"}>
-                                            数字+字母
-                                        </MenuItem>
-                                    </Select>
-                                    <FormHelperText id="component-helper-text">
-                                        验证码的形式
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                          <div className={classes.form}>
+                              <FormControl>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('model')}
+                                  </InputLabel>
+                                  <Select
+                                      value={options.captcha_mode}
+                                      onChange={handleChange("captcha_mode")}
+                                      required
+                                  >
+                                      <MenuItem value={"0"}>{t('number')}</MenuItem>
+                                      <MenuItem value={"1"}>{t('letter')}</MenuItem>
+                                      <MenuItem value={"2"}>{t('count')}</MenuItem>
+                                      <MenuItem value={"3"}>
+                                        {t('Numbers + Letters')}
+                                      </MenuItem>
+                                  </Select>
+                                  <FormHelperText id="component-helper-text">
+                                    {t('Verification code form')}
+                                  </FormHelperText>
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
+              )}
 
-                {options.captcha_type === "recaptcha" && (
-                    <div className={classes.root}>
-                        <Typography variant="h6" gutterBottom>
-                            reCAPTCHA V2
-                        </Typography>
-                        <div className={classes.formContainer}>
-                            <div className={classes.form}>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            Site KEY
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={options.captcha_ReCaptchaKey}
-                                            onChange={handleChange(
-                                                "captcha_ReCaptchaKey"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://www.google.com/recaptcha/admin/create"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                应用管理页面
-                                            </Link>{" "}
-                                            获取到的的 网站密钥
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            Secret
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={
-                                                options.captcha_ReCaptchaSecret
+              {options.captcha_type === "recaptcha" && (
+                  <div className={classes.root}>
+                      <Typography variant="h6" gutterBottom>
+                          reCAPTCHA V2
+                      </Typography>
+                      <div className={classes.formContainer}>
+                          <div className={classes.form}>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                          Site KEY
+                                      </InputLabel>
+                                      <Input
+                                          required
+                                          value={options.captcha_ReCaptchaKey}
+                                          onChange={handleChange(
+                                              "captcha_ReCaptchaKey"
+                                          )}
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        <Link
+                                            href={
+                                                "https://www.google.com/recaptcha/admin/create"
                                             }
-                                            onChange={handleChange(
-                                                "captcha_ReCaptchaSecret"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://www.google.com/recaptcha/admin/create"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                应用管理页面
-                                            </Link>{" "}
-                                            获取到的的 秘钥
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                                            target={"_blank"}
+                                        >
+                                          {t('Application Management Page')}
+                                        </Link>{" "}
+                                        {t('The obtained website key')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
 
-                {options.captcha_type === "tcaptcha" && (
-                    <div className={classes.root}>
-                        <Typography variant="h6" gutterBottom>
-                            腾讯云验证码
-                        </Typography>
-                        <div className={classes.formContainer}>
-                            <div className={classes.form}>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            SecretId
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={
-                                                options.captcha_TCaptcha_SecretId
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                          Secret
+                                      </InputLabel>
+                                      <Input
+                                          required
+                                          value={
+                                              options.captcha_ReCaptchaSecret
+                                          }
+                                          onChange={handleChange(
+                                              "captcha_ReCaptchaSecret"
+                                          )}
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        <Link
+                                            href={
+                                                "https://www.google.com/recaptcha/admin/create"
                                             }
-                                            onChange={handleChange(
-                                                "captcha_TCaptcha_SecretId"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://console.cloud.tencent.com/capi"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                访问密钥页面
-                                            </Link>{" "}
-                                            获取到的的 SecretId
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
+                                            target={"_blank"}
+                                        >
+                                          {t('Application Management Page')}
+                                        </Link>{" "}
+                                        {t('The obtained secret key')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              )}
 
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            SecretKey
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={
-                                                options.captcha_TCaptcha_SecretKey
+              {options.captcha_type === "tcaptcha" && (
+                  <div className={classes.root}>
+                      <Typography variant="h6" gutterBottom>
+                        {t('Tencent Cloud Verification Code')}
+                      </Typography>
+                      <div className={classes.formContainer}>
+                          <div className={classes.form}>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                          SecretId
+                                      </InputLabel>
+                                      <Input
+                                          required
+                                          value={
+                                              options.captcha_TCaptcha_SecretId
+                                          }
+                                          onChange={handleChange(
+                                              "captcha_TCaptcha_SecretId"
+                                          )}
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        <Link
+                                            href={
+                                                "https://console.cloud.tencent.com/capi"
                                             }
-                                            onChange={handleChange(
-                                                "captcha_TCaptcha_SecretKey"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://console.cloud.tencent.com/capi"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                访问密钥页面
-                                            </Link>{" "}
-                                            获取到的的 SecretKey
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
+                                            target={"_blank"}
+                                        >
+                                          {t('Access Key Page')}
+                                        </Link>{" "}
+                                        {t('The obtained SecretId')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
 
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            APPID
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={
-                                                options.captcha_TCaptcha_CaptchaAppId
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                          SecretKey
+                                      </InputLabel>
+                                      <Input
+                                          required
+                                          value={
+                                              options.captcha_TCaptcha_SecretKey
+                                          }
+                                          onChange={handleChange(
+                                              "captcha_TCaptcha_SecretKey"
+                                          )}
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        <Link
+                                            href={
+                                                "https://console.cloud.tencent.com/capi"
                                             }
-                                            onChange={handleChange(
-                                                "captcha_TCaptcha_CaptchaAppId"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://console.cloud.tencent.com/captcha/graphical"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                图形验证页面
-                                            </Link>{" "}
-                                            获取到的的 APPID
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
+                                            target={"_blank"}
+                                        >
+                                          {t('Access Key Page')}
+                                        </Link>{" "}
+                                        {t('The obtained SecretKey')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
 
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            App Secret Key
-                                        </InputLabel>
-                                        <Input
-                                            required
-                                            value={
-                                                options.captcha_TCaptcha_AppSecretKey
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                          APPID
+                                      </InputLabel>
+                                      <Input
+                                          required
+                                          value={
+                                              options.captcha_TCaptcha_CaptchaAppId
+                                          }
+                                          onChange={handleChange(
+                                              "captcha_TCaptcha_CaptchaAppId"
+                                          )}
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        <Link
+                                            href={
+                                                "https://console.cloud.tencent.com/captcha/graphical"
                                             }
-                                            onChange={handleChange(
-                                                "captcha_TCaptcha_AppSecretKey"
-                                            )}
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            <Link
-                                                href={
-                                                    "https://console.cloud.tencent.com/captcha/graphical"
-                                                }
-                                                target={"_blank"}
-                                            >
-                                                图形验证页面
-                                            </Link>{" "}
-                                            获取到的的 App Secret Key
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                                            target={"_blank"}
+                                        >
+                                          {t('Graphic verification page')}
+                                        </Link>{" "}
+                                        {t('The obtained APPID')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
 
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
-        </div>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                          App Secret Key
+                                      </InputLabel>
+                                      <Input
+                                          required
+                                          value={
+                                              options.captcha_TCaptcha_AppSecretKey
+                                          }
+                                          onChange={handleChange(
+                                              "captcha_TCaptcha_AppSecretKey"
+                                          )}
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        <Link
+                                            href={
+                                                "https://console.cloud.tencent.com/captcha/graphical"
+                                            }
+                                            target={"_blank"}
+                                        >
+                                          {t('Graphic verification page')}
+                                        </Link>{" "}
+                                        {t('The obtained App Secret Key')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              )}
+
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
+      </div>
     );
 }

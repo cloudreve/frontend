@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import cloudreveApp, { initState as cloudreveState } from "./index";
@@ -1153,7 +1154,7 @@ describe("index reducer", () => {
             ...initState,
             navigator: {
                 ...initState.navigator,
-                path: "/搜索结果",
+                path: i18next.t('/search results'),
                 refresh: true,
             },
             viewUpdate: {

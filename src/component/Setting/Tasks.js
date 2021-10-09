@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback, useEffect } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
@@ -59,6 +60,8 @@ export default function Tasks() {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const loadList = (page) => {
         API.get("/user/setting/tasks?page=" + page)
             .then((response) => {
@@ -83,71 +86,71 @@ export default function Tasks() {
             const res = JSON.parse(error);
             return res.msg;
         } catch (e) {
-            return "未知";
+            return t('unknown');
         }
     };
 
     const classes = useStyles();
 
     return (
-        <div className={classes.layout}>
-            <Typography color="textSecondary" variant="h4">
-                任务队列
-            </Typography>
-            <Paper elevation={3} className={classes.content}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell nowrap="nowrap">创建于</TableCell>
-                            <TableCell nowrap="nowrap" align="right">
-                                任务类型
-                            </TableCell>
-                            <TableCell nowrap="nowrap" align="right">
-                                状态
-                            </TableCell>
-                            <TableCell nowrap="nowrap" align="right">
-                                最后进度
-                            </TableCell>
-                            <TableCell nowrap="nowrap">错误信息</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {tasks.map((row, id) => (
-                            <TableRow key={id}>
-                                <TableCell
-                                    nowrap="nowrap"
-                                    component="th"
-                                    scope="row"
-                                >
-                                    {formatLocalTime(
-                                        row.create_date,
-                                        "YYYY-MM-DD H:mm:ss"
-                                    )}
-                                </TableCell>
-                                <TableCell nowrap="nowrap" align="right">
-                                    {getTaskType(row.type)}
-                                </TableCell>
-                                <TableCell nowrap="nowrap" align="right">
-                                    {getTaskStatus(row.status)}
-                                </TableCell>
-                                <TableCell nowrap="nowrap" align="right">
-                                    {getTaskProgress(row.type, row.progress)}
-                                </TableCell>
-                                <TableCell className={classes.noWrap}>
-                                    {getError(row.error)}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <div className={classes.footer}>
-                    <Pagination
-                        count={Math.ceil(total / 10)}
-                        onChange={(e, v) => setPage(v)}
-                        color="secondary"
-                    />
-                </div>
-            </Paper>
-        </div>
+      <div className={classes.layout}>
+          <Typography color="textSecondary" variant="h4">
+            {t('Task Queue')}
+          </Typography>
+          <Paper elevation={3} className={classes.content}>
+              <Table className={classes.table} aria-label="simple table">
+                  <TableHead>
+                      <TableRow>
+                          <TableCell nowrap="nowrap">{t('Built in')}</TableCell>
+                          <TableCell nowrap="nowrap" align="right">
+                            {t('Task Type')}
+                          </TableCell>
+                          <TableCell nowrap="nowrap" align="right">
+                            {t('state')}
+                          </TableCell>
+                          <TableCell nowrap="nowrap" align="right">
+                            {t('Final Progress')}
+                          </TableCell>
+                          <TableCell nowrap="nowrap">{t('Error Message')}</TableCell>
+                      </TableRow>
+                  </TableHead>
+                  <TableBody>
+                      {tasks.map((row, id) => (
+                          <TableRow key={id}>
+                              <TableCell
+                                  nowrap="nowrap"
+                                  component="th"
+                                  scope="row"
+                              >
+                                  {formatLocalTime(
+                                      row.create_date,
+                                      "YYYY-MM-DD H:mm:ss"
+                                  )}
+                              </TableCell>
+                              <TableCell nowrap="nowrap" align="right">
+                                  {getTaskType(row.type)}
+                              </TableCell>
+                              <TableCell nowrap="nowrap" align="right">
+                                  {getTaskStatus(row.status)}
+                              </TableCell>
+                              <TableCell nowrap="nowrap" align="right">
+                                  {getTaskProgress(row.type, row.progress)}
+                              </TableCell>
+                              <TableCell className={classes.noWrap}>
+                                  {getError(row.error)}
+                              </TableCell>
+                          </TableRow>
+                      ))}
+                  </TableBody>
+              </Table>
+              <div className={classes.footer}>
+                  <Pagination
+                      count={Math.ceil(total / 10)}
+                      onChange={(e, v) => setPage(v)}
+                      color="secondary"
+                  />
+              </div>
+          </Paper>
+      </div>
     );
 }

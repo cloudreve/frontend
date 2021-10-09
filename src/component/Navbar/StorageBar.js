@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import StorageIcon from "@material-ui/icons/Storage";
@@ -107,7 +108,7 @@ class StorageBarCompoment extends Component {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        "您的已用容量已超过容量配额，请尽快删除多余文件或购买容量",
+                        this.props.t('Your used capacity has exceeded the capacity quota, please delete extra files or purchase capacity as soon as possible'),
                         "warning"
                     );
                 } else {
@@ -126,56 +127,56 @@ class StorageBarCompoment extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div
-                onMouseEnter={() => this.setState({ showExpand: true })}
-                onMouseLeave={() => this.setState({ showExpand: false })}
-                className={classes.stickFooter}
-            >
-                <Divider />
-                <ButtonBase>
-                    <div className={classes.storageContainer}>
-                        <StorageIcon className={classes.iconFix} />
-                        <div className={classes.detail}>
-                            存储空间{"   "}
-                            <LinearProgress
-                                className={classes.bar}
-                                color="secondary"
-                                variant="determinate"
-                                value={this.state.percent}
-                            />
-                            <div className={classes.info}>
-                                <Tooltip
-                                    title={
-                                        "已使用 " +
-                                        (this.state.used === null
-                                            ? " -- "
-                                            : this.state.used) +
-                                        ", 共 " +
-                                        (this.state.total === null
-                                            ? " -- "
-                                            : this.state.total)
-                                    }
-                                    placement="top"
+          <div
+              onMouseEnter={() => this.setState({ showExpand: true })}
+              onMouseLeave={() => this.setState({ showExpand: false })}
+              className={classes.stickFooter}
+          >
+              <Divider />
+              <ButtonBase>
+                  <div className={classes.storageContainer}>
+                      <StorageIcon className={classes.iconFix} />
+                      <div className={classes.detail}>
+                        {this.props.t('Storage')}{"   "}
+                        <LinearProgress
+                            className={classes.bar}
+                            color="secondary"
+                            variant="determinate"
+                            value={this.state.percent}
+                        />
+                        <div className={classes.info}>
+                            <Tooltip
+                                title={
+                                    this.props.t('Used ') +
+                                    (this.state.used === null
+                                        ? " -- "
+                                        : this.state.used) +
+                                    this.props.t(', common ') +
+                                    (this.state.total === null
+                                        ? " -- "
+                                        : this.state.total)
+                                }
+                                placement="top"
+                            >
+                                <Typography
+                                    variant="caption"
+                                    noWrap
+                                    color="textSecondary"
                                 >
-                                    <Typography
-                                        variant="caption"
-                                        noWrap
-                                        color="textSecondary"
-                                    >
-                                        {this.state.used === null
-                                            ? " -- "
-                                            : this.state.used}
-                                        {" / "}
-                                        {this.state.total === null
-                                            ? " -- "
-                                            : this.state.total}
-                                    </Typography>
-                                </Tooltip>
-                            </div>
+                                    {this.state.used === null
+                                        ? " -- "
+                                        : this.state.used}
+                                    {" / "}
+                                    {this.state.total === null
+                                        ? " -- "
+                                        : this.state.total}
+                                </Typography>
+                            </Tooltip>
                         </div>
-                    </div>
-                </ButtonBase>
-            </div>
+                      </div>
+                  </div>
+              </ButtonBase>
+          </div>
         );
     }
 }
@@ -187,6 +188,6 @@ StorageBarCompoment.propTypes = {
 const StorageBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(StorageBarCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(StorageBarCompoment))));
 
 export default StorageBar;

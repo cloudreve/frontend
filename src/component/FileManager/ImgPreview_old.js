@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -105,40 +106,40 @@ class ImgPreviewCompoment extends Component {
         const { photoIndex, isOpen, items } = this.state;
 
         return (
-            <div>
-                {isOpen && (
-                    <Lightbox
-                        mainSrc={items[photoIndex].src}
-                        nextSrc={items[(photoIndex + 1) % items.length].src}
-                        prevSrc={
-                            items[
-                                (photoIndex + items.length - 1) % items.length
-                            ].src
-                        }
-                        onCloseRequest={() => this.handleClose()}
-                        imageLoadErrorMessage="无法加载此图像"
-                        imageCrossOrigin="anonymous"
-                        imageTitle={items[photoIndex].title}
-                        onMovePrevRequest={() =>
-                            this.setState({
-                                photoIndex:
-                                    (photoIndex + items.length - 1) %
-                                    items.length,
-                            })
-                        }
-                        reactModalStyle={{
-                            overlay: {
-                                zIndex: 10000,
-                            },
-                        }}
-                        onMoveNextRequest={() =>
-                            this.setState({
-                                photoIndex: (photoIndex + 1) % items.length,
-                            })
-                        }
-                    />
-                )}
-            </div>
+          <div>
+              {isOpen && (
+                  <Lightbox
+                      mainSrc={items[photoIndex].src}
+                      nextSrc={items[(photoIndex + 1) % items.length].src}
+                      prevSrc={
+                          items[
+                              (photoIndex + items.length - 1) % items.length
+                          ].src
+                      }
+                      onCloseRequest={() => this.handleClose()}
+                      imageLoadErrorMessage={this.props.t('Unable to load this image')}
+                      imageCrossOrigin="anonymous"
+                      imageTitle={items[photoIndex].title}
+                      onMovePrevRequest={() =>
+                          this.setState({
+                              photoIndex:
+                                  (photoIndex + items.length - 1) %
+                                  items.length,
+                          })
+                      }
+                      reactModalStyle={{
+                          overlay: {
+                              zIndex: 10000,
+                          },
+                      }}
+                      onMoveNextRequest={() =>
+                          this.setState({
+                              photoIndex: (photoIndex + 1) % items.length,
+                          })
+                      }
+                  />
+              )}
+          </div>
         );
     }
 }
@@ -150,6 +151,6 @@ ImgPreviewCompoment.propTypes = {
 const ImgPreivew = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ImgPreviewCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(ImgPreviewCompoment))));
 
 export default ImgPreivew;

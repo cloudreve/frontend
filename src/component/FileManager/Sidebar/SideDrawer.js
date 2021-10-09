@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
@@ -133,59 +134,61 @@ export default function SideDrawer() {
         }
     }, [selected, sideBarOpen]);
 
+    const { t } = useTranslation();
+
     const classes = useStyles();
     const propsItem = [
         {
-            label: "大小",
+            label: t('Size'),
             value: (d, t) =>
                 sizeToString(d.size) +
                 "  (" +
                 d.size.toLocaleString() +
-                " 字节)",
+                t('Bytes)'),
             show: (d) => true,
         },
         {
-            label: "存储策略",
+            label: t('Storage Strategy'),
             value: (d, t) => d.policy,
             show: (d) => d.type === "file",
         },
         {
-            label: "包含目录",
-            value: (d, t) => d.child_folder_num.toLocaleString() + " " + "个",
+            label: t('Include directory'),
+            value: (d, t) => d.child_folder_num.toLocaleString() + " " + t('individual'),
             show: (d) => d.type === "dir",
         },
         {
-            label: "包含文件",
-            value: (d, t) => d.child_file_num.toLocaleString() + " " + "个",
+            label: t('Include file'),
+            value: (d, t) => d.child_file_num.toLocaleString() + " " + t('individual'),
             show: (d) => d.type === "dir",
         },
         {
-            label: "所在目录",
+            label: t('Directory'),
             // eslint-disable-next-line react/display-name
             value: (d, t) => {
                 const path = d.path === "" ? t.path : d.path;
                 const name = filename(path);
                 return (
-                    <Tooltip title={path}>
-                        <Link
-                            href={"javascript:void"}
-                            onClick={() => NavigateTo(path)}
-                        >
-                            {name === "" ? "根目录" : name}
-                        </Link>
-                    </Tooltip>
+                  <Tooltip title={path}>
+                      <Link
+                          href={"javascript:void"}
+                          onClick={() => NavigateTo(path)}
+                      >
+                          {name === "" ? t('Root directory') : name}
+                      </Link>
+                  </Tooltip>
                 );
             },
             show: (d) => true,
         },
         {
-            label: "修改于",
+            label: t('Modified at'),
             value: (d, t) =>
                 formatLocalTime(d.updated_at, "YYYY/MM/DD  H:mm:ss"),
             show: (d) => true,
         },
         {
-            label: "创建于",
+            label: t('Built in'),
             value: (d) => formatLocalTime(d.created_at, "YYYY/MM/DD  H:mm:ss"),
             show: (d) => true,
         },
@@ -218,13 +221,13 @@ export default function SideDrawer() {
                         }
                     })}
                     {target.type === "dir" && (
-                        <Grid item xs={12} className={classes.propsTime}>
-                            统计于{" "}
-                            <TimeAgo
-                                datetime={details.query_date}
-                                locale="zh_CN"
-                            />
-                        </Grid>
+                        (<Grid item xs={12} className={classes.propsTime}>
+                          {t('Statistics on')}{" "}
+                          <TimeAgo
+                              datetime={details.query_date}
+                              locale="zh_CN"
+                          />
+                        </Grid>)
                     )}
                 </>
             )}

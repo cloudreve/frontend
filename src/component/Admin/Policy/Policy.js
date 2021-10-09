@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
@@ -48,23 +50,23 @@ const useStyles = makeStyles((theme) => ({
 
 const columns = [
     { id: "#", label: "#", minWidth: 50 },
-    { id: "name", label: "名称", minWidth: 170 },
-    { id: "type", label: "类型", minWidth: 170 },
+    { id: "name", label: i18next.t('Name'), minWidth: 170 },
+    { id: "type", label: i18next.t('Type'), minWidth: 170 },
     {
         id: "count",
-        label: "下属文件数",
+        label: i18next.t('Number of Subordinate Files'),
         minWidth: 50,
         align: "right",
     },
     {
         id: "size",
-        label: "数据量",
+        label: i18next.t('Filesize'),
         minWidth: 100,
         align: "right",
     },
     {
         id: "action",
-        label: "操作",
+        label: i18next.t('Action'),
         minWidth: 170,
         align: "right",
     },
@@ -92,6 +94,8 @@ export default function Policy() {
     const history = useHistory();
     const query = useQuery();
 
+    const { t } = useTranslation();
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -109,7 +113,7 @@ export default function Policy() {
 
     useEffect(() => {
         if (query.get("code") === "0") {
-            ToggleSnackbar("top", "right", "授权成功", "success");
+            ToggleSnackbar("top", "right", t('Authorization succeeded'), "success");
         } else if (query.get("msg") && query.get("msg") !== "") {
             ToggleSnackbar(
                 "top",
@@ -145,7 +149,7 @@ export default function Policy() {
         API.delete("/admin/policy/" + id)
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "存储策略已删除", "success");
+                ToggleSnackbar("top", "right", t('Storage policy has been deleted'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -155,142 +159,142 @@ export default function Policy() {
     const open = Boolean(anchorEl);
 
     return (
-        <div>
-            <AddPolicy open={addDialog} onClose={() => setAddDialog(false)} />
-            <div className={classes.header}>
-                <Button
-                    color={"primary"}
-                    onClick={() => setAddDialog(true)}
-                    variant={"contained"}
-                >
-                    添加存储策略
-                </Button>
-                <div className={classes.headerRight}>
-                    <Select
-                        style={{
-                            marginRight: 8,
-                        }}
-                        value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
-                    >
-                        <MenuItem value={"all"}>全部</MenuItem>
-                        <MenuItem value={"local"}>本机</MenuItem>
-                        <MenuItem value={"remote"}>从机</MenuItem>
-                        <MenuItem value={"qiniu"}>七牛</MenuItem>
-                        <MenuItem value={"upyun"}>又拍云</MenuItem>
-                        <MenuItem value={"oss"}>阿里云 OSS</MenuItem>
-                        <MenuItem value={"cos"}>腾讯云 COS</MenuItem>
-                        <MenuItem value={"onedrive"}>OneDrive</MenuItem>
-                        <MenuItem value={"s3"}>Amazon S3</MenuItem>
-                    </Select>
-                    <Button
-                        color={"primary"}
-                        onClick={() => loadList()}
-                        variant={"outlined"}
-                    >
-                        刷新
-                    </Button>
-                </div>
-            </div>
+      <div>
+          <AddPolicy open={addDialog} onClose={() => setAddDialog(false)} />
+          <div className={classes.header}>
+              <Button
+                  color={"primary"}
+                  onClick={() => setAddDialog(true)}
+                  variant={"contained"}
+              >
+                {t('Add Storage Policy')}
+              </Button>
+              <div className={classes.headerRight}>
+                  <Select
+                      style={{
+                          marginRight: 8,
+                      }}
+                      value={filter}
+                      onChange={(e) => setFilter(e.target.value)}
+                  >
+                      <MenuItem value={"all"}>{t('all')}</MenuItem>
+                      <MenuItem value={"local"}>{t('Local')}</MenuItem>
+                      <MenuItem value={"remote"}>{t('Slave')}</MenuItem>
+                      <MenuItem value={"qiniu"}>{t('Qiniu')}</MenuItem>
+                      <MenuItem value={"upyun"}>{t('UpYun')}</MenuItem>
+                      <MenuItem value={"oss"}>{t('Alibaba Cloud OSS')}</MenuItem>
+                      <MenuItem value={"cos"}>{t('Tencent Cloud COS')}</MenuItem>
+                      <MenuItem value={"onedrive"}>OneDrive</MenuItem>
+                      <MenuItem value={"s3"}>Amazon S3</MenuItem>
+                  </Select>
+                  <Button
+                      color={"primary"}
+                      onClick={() => loadList()}
+                      variant={"outlined"}
+                  >
+                    {t('Refresh')}
+                  </Button>
+              </div>
+          </div>
 
-            <Paper square className={classes.tableContainer}>
-                <TableContainer className={classes.container}>
-                    <Table aria-label="sticky table" size={"small"}>
-                        <TableHead>
-                            <TableRow style={{ height: 52 }}>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {policies.map((row) => (
-                                <TableRow hover key={row.ID}>
-                                    <TableCell>{row.ID}</TableCell>
-                                    <TableCell>{row.Name}</TableCell>
-                                    <TableCell>
-                                        {policyTypeMap[row.Type] !==
-                                            undefined &&
-                                            policyTypeMap[row.Type]}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {statics[row.ID] !== undefined &&
-                                            statics[row.ID][0].toLocaleString()}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {statics[row.ID] !== undefined &&
-                                            sizeToString(statics[row.ID][1])}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        <Tooltip title={"删除"}>
-                                            <IconButton
-                                                onClick={() =>
-                                                    deletePolicy(row.ID)
-                                                }
-                                                size={"small"}
-                                            >
-                                                <Delete />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title={"编辑"}>
-                                            <IconButton
-                                                onClick={(e) => {
-                                                    setEditID(row.ID);
-                                                    handleClick(e);
-                                                }}
-                                                size={"small"}
-                                            >
-                                                <Edit />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={total}
-                    rowsPerPage={pageSize}
-                    page={page - 1}
-                    onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={(e) => {
-                        setPageSize(e.target.value);
-                        setPage(1);
-                    }}
-                />
-            </Paper>
-            <Menu
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                keepMounted
-            >
-                <MenuItem
-                    onClick={(e) => {
-                        handleClose(e);
-                        history.push("/admin/policy/edit/pro/" + editID);
-                    }}
-                >
-                    专家模式编辑
-                </MenuItem>
-                <MenuItem
-                    onClick={(e) => {
-                        handleClose(e);
-                        history.push("/admin/policy/edit/guide/" + editID);
-                    }}
-                >
-                    向导模式编辑
-                </MenuItem>
-            </Menu>
-        </div>
+          <Paper square className={classes.tableContainer}>
+              <TableContainer className={classes.container}>
+                  <Table aria-label="sticky table" size={"small"}>
+                      <TableHead>
+                          <TableRow style={{ height: 52 }}>
+                              {columns.map((column) => (
+                                  <TableCell
+                                      key={column.id}
+                                      align={column.align}
+                                      style={{ minWidth: column.minWidth }}
+                                  >
+                                      {column.label}
+                                  </TableCell>
+                              ))}
+                          </TableRow>
+                      </TableHead>
+                      <TableBody>
+                          {policies.map((row) => (
+                              <TableRow hover key={row.ID}>
+                                  <TableCell>{row.ID}</TableCell>
+                                  <TableCell>{row.Name}</TableCell>
+                                  <TableCell>
+                                      {policyTypeMap[row.Type] !==
+                                          undefined &&
+                                          policyTypeMap[row.Type]}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      {statics[row.ID] !== undefined &&
+                                          statics[row.ID][0].toLocaleString()}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      {statics[row.ID] !== undefined &&
+                                          sizeToString(statics[row.ID][1])}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      <Tooltip title={t('delete')}>
+                                          <IconButton
+                                              onClick={() =>
+                                                  deletePolicy(row.ID)
+                                              }
+                                              size={"small"}
+                                          >
+                                              <Delete />
+                                          </IconButton>
+                                      </Tooltip>
+                                      <Tooltip title={t('edit')}>
+                                          <IconButton
+                                              onClick={(e) => {
+                                                  setEditID(row.ID);
+                                                  handleClick(e);
+                                              }}
+                                              size={"small"}
+                                          >
+                                              <Edit />
+                                          </IconButton>
+                                      </Tooltip>
+                                  </TableCell>
+                              </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+              </TableContainer>
+              <TablePagination
+                  rowsPerPageOptions={[10, 25, 100]}
+                  component="div"
+                  count={total}
+                  rowsPerPage={pageSize}
+                  page={page - 1}
+                  onChangePage={(e, p) => setPage(p + 1)}
+                  onChangeRowsPerPage={(e) => {
+                      setPageSize(e.target.value);
+                      setPage(1);
+                  }}
+              />
+          </Paper>
+          <Menu
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              keepMounted
+          >
+              <MenuItem
+                  onClick={(e) => {
+                      handleClose(e);
+                      history.push("/admin/policy/edit/pro/" + editID);
+                  }}
+              >
+                {t('Expert mode editing')}
+              </MenuItem>
+              <MenuItem
+                  onClick={(e) => {
+                      handleClose(e);
+                      history.push("/admin/policy/edit/guide/" + editID);
+                  }}
+              >
+                {t('Wizard mode editing')}
+              </MenuItem>
+          </Menu>
+      </div>
     );
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { lighten } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
@@ -90,6 +91,9 @@ export default function Share() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+
+    const { t } = useTranslation();
+    
     const loadList = () => {
         API.post("/admin/share/list", {
             page: page,
@@ -119,7 +123,7 @@ export default function Share() {
         API.post("/admin/share/delete", { id: [id] })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "分享已删除", "success");
+                ToggleSnackbar("top", "right", t('Share deleted'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -134,7 +138,7 @@ export default function Share() {
         API.post("/admin/share/delete", { id: selected })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "分享已删除", "success");
+                ToggleSnackbar("top", "right", t('Share deleted'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -176,312 +180,312 @@ export default function Share() {
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     return (
-        <div>
-            <ShareFilter
-                filter={filter}
-                open={filterDialog}
-                onClose={() => setFilterDialog(false)}
-                setSearch={setSearch}
-                setFilter={setFilter}
-            />
-            <div className={classes.header}>
-                <div className={classes.headerRight}>
-                    <Tooltip title="过滤">
-                        <IconButton
-                            style={{ marginRight: 8 }}
-                            onClick={() => setFilterDialog(true)}
-                        >
-                            <Badge
-                                color="secondary"
-                                variant="dot"
-                                invisible={
-                                    Object.keys(search).length === 0 &&
-                                    Object.keys(filter).length === 0
-                                }
-                            >
-                                <FilterList />
-                            </Badge>
-                        </IconButton>
-                    </Tooltip>
-                    <Button
-                        color={"primary"}
-                        onClick={() => loadList()}
-                        variant={"outlined"}
-                    >
-                        刷新
-                    </Button>
-                </div>
-            </div>
+      <div>
+          <ShareFilter
+              filter={filter}
+              open={filterDialog}
+              onClose={() => setFilterDialog(false)}
+              setSearch={setSearch}
+              setFilter={setFilter}
+          />
+          <div className={classes.header}>
+              <div className={classes.headerRight}>
+                  <Tooltip title={t('filter')}>
+                      <IconButton
+                          style={{ marginRight: 8 }}
+                          onClick={() => setFilterDialog(true)}
+                      >
+                          <Badge
+                              color="secondary"
+                              variant="dot"
+                              invisible={
+                                  Object.keys(search).length === 0 &&
+                                  Object.keys(filter).length === 0
+                              }
+                          >
+                              <FilterList />
+                          </Badge>
+                      </IconButton>
+                  </Tooltip>
+                  <Button
+                      color={"primary"}
+                      onClick={() => loadList()}
+                      variant={"outlined"}
+                  >
+                    {t('Refresh')}
+                  </Button>
+              </div>
+          </div>
 
-            <Paper square className={classes.tableContainer}>
-                {selected.length > 0 && (
-                    <Toolbar className={classes.highlight}>
-                        <Typography
-                            style={{ flex: "1 1 100%" }}
-                            color="inherit"
-                            variant="subtitle1"
-                        >
-                            已选择 {selected.length} 个对象
-                        </Typography>
-                        <Tooltip title="删除">
-                            <IconButton
-                                onClick={deleteBatch}
-                                disabled={loading}
-                                aria-label="delete"
-                            >
-                                <Delete />
-                            </IconButton>
-                        </Tooltip>
-                    </Toolbar>
-                )}
-                <TableContainer className={classes.container}>
-                    <Table aria-label="sticky table" size={"small"}>
-                        <TableHead>
-                            <TableRow style={{ height: 52 }}>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        indeterminate={
-                                            selected.length > 0 &&
-                                            selected.length < shares.length
-                                        }
-                                        checked={
-                                            shares.length > 0 &&
-                                            selected.length === shares.length
-                                        }
-                                        onChange={handleSelectAllClick}
-                                        inputProps={{
-                                            "aria-label": "select all desserts",
-                                        }}
-                                    />
-                                </TableCell>
-                                <TableCell style={{ minWidth: 10 }}>
-                                    <TableSortLabel
-                                        active={orderBy[0] === "id"}
-                                        direction={orderBy[1]}
-                                        onClick={() =>
-                                            setOrderBy([
-                                                "id",
-                                                orderBy[1] === "asc"
-                                                    ? "desc"
-                                                    : "asc",
-                                            ])
-                                        }
-                                    >
-                                        #
-                                        {orderBy[0] === "id" ? (
-                                            <span
-                                                className={
-                                                    classes.visuallyHidden
-                                                }
-                                            >
-                                                {orderBy[1] === "desc"
-                                                    ? "sorted descending"
-                                                    : "sorted ascending"}
-                                            </span>
-                                        ) : null}
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell style={{ minWidth: 200 }}>
-                                    <TableSortLabel
-                                        active={orderBy[0] === "source_name"}
-                                        direction={orderBy[1]}
-                                        onClick={() =>
-                                            setOrderBy([
-                                                "source_name",
-                                                orderBy[1] === "asc"
-                                                    ? "desc"
-                                                    : "asc",
-                                            ])
-                                        }
-                                    >
-                                        对象名
-                                        {orderBy[0] === "source_name" ? (
-                                            <span
-                                                className={
-                                                    classes.visuallyHidden
-                                                }
-                                            >
-                                                {orderBy[1] === "desc"
-                                                    ? "sorted descending"
-                                                    : "sorted ascending"}
-                                            </span>
-                                        ) : null}
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell style={{ minWidth: 70 }}>
-                                    类型
-                                </TableCell>
-                                <TableCell
-                                    style={{ minWidth: 100 }}
-                                    align={"right"}
-                                >
-                                    <TableSortLabel
-                                        active={orderBy[0] === "views"}
-                                        direction={orderBy[1]}
-                                        onClick={() =>
-                                            setOrderBy([
-                                                "views",
-                                                orderBy[1] === "asc"
-                                                    ? "desc"
-                                                    : "asc",
-                                            ])
-                                        }
-                                    >
-                                        浏览
-                                        {orderBy[0] === "views" ? (
-                                            <span
-                                                className={
-                                                    classes.visuallyHidden
-                                                }
-                                            >
-                                                {orderBy[1] === "desc"
-                                                    ? "sorted descending"
-                                                    : "sorted ascending"}
-                                            </span>
-                                        ) : null}
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell
-                                    style={{ minWidth: 100 }}
-                                    align={"right"}
-                                >
-                                    <TableSortLabel
-                                        active={orderBy[0] === "downloads"}
-                                        direction={orderBy[1]}
-                                        onClick={() =>
-                                            setOrderBy([
-                                                "downloads",
-                                                orderBy[1] === "asc"
-                                                    ? "desc"
-                                                    : "asc",
-                                            ])
-                                        }
-                                    >
-                                        下载
-                                        {orderBy[0] === "downloads" ? (
-                                            <span
-                                                className={
-                                                    classes.visuallyHidden
-                                                }
-                                            >
-                                                {orderBy[1] === "desc"
-                                                    ? "sorted descending"
-                                                    : "sorted ascending"}
-                                            </span>
-                                        ) : null}
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell style={{ minWidth: 120 }}>
-                                    自动过期
-                                </TableCell>
-                                <TableCell style={{ minWidth: 120 }}>
-                                    分享者
-                                </TableCell>
-                                <TableCell style={{ minWidth: 150 }}>
-                                    分享于
-                                </TableCell>
-                                <TableCell style={{ minWidth: 100 }}>
-                                    操作
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {shares.map((row) => (
-                                <TableRow
-                                    hover
-                                    key={row.ID}
-                                    role="checkbox"
-                                    selected={isSelected(row.ID)}
-                                >
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                            onClick={(event) =>
-                                                handleClick(event, row.ID)
-                                            }
-                                            checked={isSelected(row.ID)}
-                                        />
-                                    </TableCell>
-                                    <TableCell>{row.ID}</TableCell>
-                                    <TableCell
-                                        style={{ wordBreak: "break-all" }}
-                                    >
-                                        <Link
-                                            target={"_blank"}
-                                            color="inherit"
-                                            href={
-                                                "/s/" +
-                                                ids[row.ID] +
-                                                (row.Password === ""
-                                                    ? ""
-                                                    : "?password=" +
-                                                      row.Password)
+          <Paper square className={classes.tableContainer}>
+              {selected.length > 0 && (
+                  <Toolbar className={classes.highlight}>
+                      <Typography
+                          style={{ flex: "1 1 100%" }}
+                          color="inherit"
+                          variant="subtitle1"
+                      >
+                        {t('selected')} {selected.length} {t('Objects')}
+                      </Typography>
+                      <Tooltip title={t('delete')}>
+                          <IconButton
+                              onClick={deleteBatch}
+                              disabled={loading}
+                              aria-label="delete"
+                          >
+                              <Delete />
+                          </IconButton>
+                      </Tooltip>
+                  </Toolbar>
+              )}
+              <TableContainer className={classes.container}>
+                  <Table aria-label="sticky table" size={"small"}>
+                      <TableHead>
+                          <TableRow style={{ height: 52 }}>
+                              <TableCell padding="checkbox">
+                                  <Checkbox
+                                      indeterminate={
+                                          selected.length > 0 &&
+                                          selected.length < shares.length
+                                      }
+                                      checked={
+                                          shares.length > 0 &&
+                                          selected.length === shares.length
+                                      }
+                                      onChange={handleSelectAllClick}
+                                      inputProps={{
+                                          "aria-label": "select all desserts",
+                                      }}
+                                  />
+                              </TableCell>
+                              <TableCell style={{ minWidth: 10 }}>
+                                  <TableSortLabel
+                                      active={orderBy[0] === "id"}
+                                      direction={orderBy[1]}
+                                      onClick={() =>
+                                          setOrderBy([
+                                              "id",
+                                              orderBy[1] === "asc"
+                                                  ? "desc"
+                                                  : "asc",
+                                          ])
+                                      }
+                                  >
+                                      #
+                                      {orderBy[0] === "id" ? (
+                                          <span
+                                              className={
+                                                  classes.visuallyHidden
+                                              }
+                                          >
+                                              {orderBy[1] === "desc"
+                                                  ? "sorted descending"
+                                                  : "sorted ascending"}
+                                          </span>
+                                      ) : null}
+                                  </TableSortLabel>
+                              </TableCell>
+                              <TableCell style={{ minWidth: 200 }}>
+                                  <TableSortLabel
+                                      active={orderBy[0] === "source_name"}
+                                      direction={orderBy[1]}
+                                      onClick={() =>
+                                          setOrderBy([
+                                              "source_name",
+                                              orderBy[1] === "asc"
+                                                  ? "desc"
+                                                  : "asc",
+                                          ])
+                                      }
+                                  >
+                                    {t('Object name')}
+                                    {orderBy[0] === "source_name" ? (
+                                        <span
+                                            className={
+                                                classes.visuallyHidden
                                             }
                                         >
-                                            {row.SourceName}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        {row.Password === "" ? "公开" : "私密"}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {row.Views}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {row.Downloads}
-                                    </TableCell>
-                                    <TableCell>
-                                        {row.RemainDownloads > -1 &&
-                                            row.RemainDownloads + " 次下载后"}
-                                        {row.RemainDownloads === -1 && "无"}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Link
-                                            href={
-                                                "/admin/user/edit/" + row.UserID
+                                            {orderBy[1] === "desc"
+                                                ? "sorted descending"
+                                                : "sorted ascending"}
+                                        </span>
+                                    ) : null}
+                                  </TableSortLabel>
+                              </TableCell>
+                              <TableCell style={{ minWidth: 70 }}>
+                                {t('Type')}
+                              </TableCell>
+                              <TableCell
+                                  style={{ minWidth: 100 }}
+                                  align={"right"}
+                              >
+                                  <TableSortLabel
+                                      active={orderBy[0] === "views"}
+                                      direction={orderBy[1]}
+                                      onClick={() =>
+                                          setOrderBy([
+                                              "views",
+                                              orderBy[1] === "asc"
+                                                  ? "desc"
+                                                  : "asc",
+                                          ])
+                                      }
+                                  >
+                                    {t('Browse')}
+                                    {orderBy[0] === "views" ? (
+                                        <span
+                                            className={
+                                                classes.visuallyHidden
                                             }
                                         >
-                                            {users[row.UserID]
-                                                ? users[row.UserID].Nick
-                                                : "未知"}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        {formatLocalTime(
-                                            row.CreatedAt,
-                                            "YYYY-MM-DD H:mm:ss"
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Tooltip title={"删除"}>
-                                            <IconButton
-                                                disabled={loading}
-                                                onClick={() =>
-                                                    deletePolicy(row.ID)
-                                                }
-                                                size={"small"}
-                                            >
-                                                <Delete />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 50, 100]}
-                    component="div"
-                    count={total}
-                    rowsPerPage={pageSize}
-                    page={page - 1}
-                    onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={(e) => {
-                        setPageSize(e.target.value);
-                        setPage(1);
-                    }}
-                />
-            </Paper>
-        </div>
+                                            {orderBy[1] === "desc"
+                                                ? "sorted descending"
+                                                : "sorted ascending"}
+                                        </span>
+                                    ) : null}
+                                  </TableSortLabel>
+                              </TableCell>
+                              <TableCell
+                                  style={{ minWidth: 100 }}
+                                  align={"right"}
+                              >
+                                  <TableSortLabel
+                                      active={orderBy[0] === "downloads"}
+                                      direction={orderBy[1]}
+                                      onClick={() =>
+                                          setOrderBy([
+                                              "downloads",
+                                              orderBy[1] === "asc"
+                                                  ? "desc"
+                                                  : "asc",
+                                          ])
+                                      }
+                                  >
+                                    {t('download')}
+                                    {orderBy[0] === "downloads" ? (
+                                        <span
+                                            className={
+                                                classes.visuallyHidden
+                                            }
+                                        >
+                                            {orderBy[1] === "desc"
+                                                ? "sorted descending"
+                                                : "sorted ascending"}
+                                        </span>
+                                    ) : null}
+                                  </TableSortLabel>
+                              </TableCell>
+                              <TableCell style={{ minWidth: 120 }}>
+                                {t('Automatically expire')}
+                              </TableCell>
+                              <TableCell style={{ minWidth: 120 }}>
+                                {t('Sharer')}
+                              </TableCell>
+                              <TableCell style={{ minWidth: 150 }}>
+                                {t('Share on')}
+                              </TableCell>
+                              <TableCell style={{ minWidth: 100 }}>
+                                {t('Action')}
+                              </TableCell>
+                          </TableRow>
+                      </TableHead>
+                      <TableBody>
+                          {shares.map((row) => (
+                              <TableRow
+                                  hover
+                                  key={row.ID}
+                                  role="checkbox"
+                                  selected={isSelected(row.ID)}
+                              >
+                                  <TableCell padding="checkbox">
+                                      <Checkbox
+                                          onClick={(event) =>
+                                              handleClick(event, row.ID)
+                                          }
+                                          checked={isSelected(row.ID)}
+                                      />
+                                  </TableCell>
+                                  <TableCell>{row.ID}</TableCell>
+                                  <TableCell
+                                      style={{ wordBreak: "break-all" }}
+                                  >
+                                      <Link
+                                          target={"_blank"}
+                                          color="inherit"
+                                          href={
+                                              "/s/" +
+                                              ids[row.ID] +
+                                              (row.Password === ""
+                                                  ? ""
+                                                  : "?password=" +
+                                                    row.Password)
+                                          }
+                                      >
+                                          {row.SourceName}
+                                      </Link>
+                                  </TableCell>
+                                  <TableCell>
+                                      {row.Password === "" ? t('public') : t('Private')}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      {row.Views}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      {row.Downloads}
+                                  </TableCell>
+                                  <TableCell>
+                                      {row.RemainDownloads > -1 &&
+                                          row.RemainDownloads + t('After downloads')}
+                                      {row.RemainDownloads === -1 && t('without')}
+                                  </TableCell>
+                                  <TableCell>
+                                      <Link
+                                          href={
+                                              "/admin/user/edit/" + row.UserID
+                                          }
+                                      >
+                                          {users[row.UserID]
+                                              ? users[row.UserID].Nick
+                                              : t('unknown')}
+                                      </Link>
+                                  </TableCell>
+                                  <TableCell>
+                                      {formatLocalTime(
+                                          row.CreatedAt,
+                                          "YYYY-MM-DD H:mm:ss"
+                                      )}
+                                  </TableCell>
+                                  <TableCell>
+                                      <Tooltip title={t('delete')}>
+                                          <IconButton
+                                              disabled={loading}
+                                              onClick={() =>
+                                                  deletePolicy(row.ID)
+                                              }
+                                              size={"small"}
+                                          >
+                                              <Delete />
+                                          </IconButton>
+                                      </Tooltip>
+                                  </TableCell>
+                              </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+              </TableContainer>
+              <TablePagination
+                  rowsPerPageOptions={[10, 25, 50, 100]}
+                  component="div"
+                  count={total}
+                  rowsPerPage={pageSize}
+                  page={page - 1}
+                  onChangePage={(e, p) => setPage(p + 1)}
+                  onChangeRowsPerPage={(e) => {
+                      setPageSize(e.target.value);
+                      setPage(1);
+                  }}
+              />
+          </Paper>
+      </div>
     );
 }

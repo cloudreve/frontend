@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React from "react";
 import { withStyles } from "@material-ui/core";
 
@@ -33,33 +34,31 @@ class ErrorBoundary extends React.Component {
         const { classes } = this.props;
         if (this.state.hasError) {
             // 你可以自定义降级后的 UI 并渲染
-            return (
-                <>
-                    <h1 className={classes.h1}>:(</h1>
-                    <h2 className={classes.h2}>
-                        页面渲染出现错误，请尝试刷新此页面。
-                    </h2>
-                    {this.state.error &&
-                        this.state.errorInfo &&
-                        this.state.errorInfo.componentStack && (
-                            <details>
-                                <summary>错误详情</summary>
-                                <pre>
-                                    <code>{this.state.error.toString()}</code>
-                                </pre>
-                                <pre>
-                                    <code>
-                                        {this.state.errorInfo.componentStack}
-                                    </code>
-                                </pre>
-                            </details>
-                        )}
-                </>
-            );
+            return <>
+                <h1 className={classes.h1}>:(</h1>
+                <h2 className={classes.h2}>
+                  {this.props.t('There was an error in page rendering, please try to refresh this page.')}
+                </h2>
+                {this.state.error &&
+                    this.state.errorInfo &&
+                    this.state.errorInfo.componentStack && (
+                        <details>
+                            <summary>{this.props.t('Error details')}</summary>
+                            <pre>
+                                <code>{this.state.error.toString()}</code>
+                            </pre>
+                            <pre>
+                                <code>
+                                    {this.state.errorInfo.componentStack}
+                                </code>
+                            </pre>
+                        </details>
+                    )}
+            </>;
         }
 
         return this.props.children;
     }
 }
 
-export default withStyles(styles)(ErrorBoundary);
+export default withTranslation()(withStyles(styles)(ErrorBoundary));

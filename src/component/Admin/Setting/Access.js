@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -48,6 +49,8 @@ export default function Access() {
     const [siteURL, setSiteURL] = useState("");
     const [groups, setGroups] = useState([]);
     const [httpAlert, setHttpAlert] = useState(false);
+
+    const { t } = useTranslation();
 
     const handleChange = (name) => (event) => {
         let value = event.target.value;
@@ -112,7 +115,7 @@ export default function Access() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t('Settings have been changed'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -123,203 +126,204 @@ export default function Access() {
     };
 
     return (
-        <div>
-            <AlertDialog
-                title={"提示"}
-                msg={
-                    "Web Authn 需要您的站点启用 HTTPS，并确认 参数设置 - 站点信息 - 站点URL 也使用了 HTTPS 后才能开启。"
-                }
-                onClose={() => setHttpAlert(false)}
-                open={httpAlert}
-            />
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        注册与登录
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.register_enabled === "1"
-                                            }
-                                            onChange={handleChange(
-                                                "register_enabled"
-                                            )}
-                                        />
-                                    }
-                                    label="允许新用户注册"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    关闭后，无法再通过前台注册新的用户
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+      <div>
+          <AlertDialog
+              title={t('hint')}
+              msg={
+                  t('Web Authn requires your site to enable HTTPS, and confirm the parameter settings-site information-site URL also uses HTTPS before it can be turned on.')
+              }
+              onClose={() => setHttpAlert(false)}
+              open={httpAlert}
+          />
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Registration and Login')}
+                  </Typography>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.register_enabled === "1"
+                                          }
+                                          onChange={handleChange(
+                                              "register_enabled"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Allow new users to register')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('When disabled, users can no longer register through the login page')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.email_active === "1"
-                                            }
-                                            onChange={handleChange(
-                                                "email_active"
-                                            )}
-                                        />
-                                    }
-                                    label="邮件激活"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    开启后，新用户注册需要点击邮件中的激活链接才能完成。请确认邮件发送设置是否正确，否则激活邮件无法送达
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.email_active === "1"
+                                          }
+                                          onChange={handleChange(
+                                              "email_active"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Mail activation')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('When enabled, the new user registration needs to click the activation link in the email to complete. Please confirm that the email sending settings are correct, otherwise the activation email will not be delivered')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.reg_captcha === "1"
-                                            }
-                                            onChange={handleChange(
-                                                "reg_captcha"
-                                            )}
-                                        />
-                                    }
-                                    label="注册验证码"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否启用注册表单验证码
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.reg_captcha === "1"
+                                          }
+                                          onChange={handleChange(
+                                              "reg_captcha"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Register Verification Code')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Whether to enable the registration form verification code')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.login_captcha === "1"
-                                            }
-                                            onChange={handleChange(
-                                                "login_captcha"
-                                            )}
-                                        />
-                                    }
-                                    label="登录验证码"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否启用登录表单验证码
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.login_captcha === "1"
+                                          }
+                                          onChange={handleChange(
+                                              "login_captcha"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Login Verification Code')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Whether to enable the login form verification code')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.forget_captcha === "1"
-                                            }
-                                            onChange={handleChange(
-                                                "forget_captcha"
-                                            )}
-                                        />
-                                    }
-                                    label="找回密码验证码"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否启用找回密码表单验证码
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.forget_captcha === "1"
+                                          }
+                                          onChange={handleChange(
+                                              "forget_captcha"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Retrieve password verification code')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Whether to enable the password recovery form verification code')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                options.authn_enabled === "1"
-                                            }
-                                            onChange={(e) => {
-                                                if (
-                                                    !siteURL.startsWith(
-                                                        "https://"
-                                                    )
-                                                ) {
-                                                    setHttpAlert(true);
-                                                    return;
-                                                }
-                                                handleChange("authn_enabled")(
-                                                    e
-                                                );
-                                            }}
-                                        />
-                                    }
-                                    label="Web Authn"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否允许用户使用绑定的外部验证器登录，站点必须启动
-                                    HTTPS 才能使用。
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              options.authn_enabled === "1"
+                                          }
+                                          onChange={(e) => {
+                                              if (
+                                                  !siteURL.startsWith(
+                                                      "https://"
+                                                  )
+                                              ) {
+                                                  setHttpAlert(true);
+                                                  return;
+                                              }
+                                              handleChange("authn_enabled")(
+                                                  e
+                                              );
+                                          }}
+                                      />
+                                  }
+                                  label="Web Authn"
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t(
+                                  'Whether the user is allowed to log in using the bound external authenticator, the site must use\nHTTPS before it can be used.'
+                                )}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    默认用户组
-                                </InputLabel>
-                                <Select
-                                    value={options.default_group}
-                                    onChange={handleInputChange(
-                                        "default_group"
-                                    )}
-                                    required
-                                >
-                                    {groups.map((v) => {
-                                        if (v.ID === 3) {
-                                            return null;
-                                        }
-                                        return (
-                                            <MenuItem
-                                                key={v.ID}
-                                                value={v.ID.toString()}
-                                            >
-                                                {v.Name}
-                                            </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    用户注册后的初始用户组
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Default User Group')}
+                              </InputLabel>
+                              <Select
+                                  value={options.default_group}
+                                  onChange={handleInputChange(
+                                      "default_group"
+                                  )}
+                                  required
+                              >
+                                  {groups.map((v) => {
+                                      if (v.ID === 3) {
+                                          return null;
+                                      }
+                                      return (
+                                          <MenuItem
+                                              key={v.ID}
+                                              value={v.ID.toString()}
+                                          >
+                                              {v.Name}
+                                          </MenuItem>
+                                      );
+                                  })}
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('Initial user group after user registration')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
-        </div>
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
+      </div>
     );
 }

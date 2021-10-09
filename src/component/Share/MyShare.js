@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
@@ -133,7 +134,7 @@ class MyShareCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "分享已取消",
+                    this.props.t('Sharing canceled'),
                     "success"
                 );
                 if (oldList.length === 0) {
@@ -216,7 +217,7 @@ class MyShareCompoment extends Component {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        "没有更多了",
+                        this.props.t('No more'),
                         "info"
                     );
                 }
@@ -226,7 +227,7 @@ class MyShareCompoment extends Component {
                 });
             })
             .catch(() => {
-                this.props.toggleSnackbar("top", "right", "加载失败", "error");
+                this.props.toggleSnackbar("top", "right", this.props.t('Failed to load'), "error");
             });
     };
 
@@ -252,252 +253,252 @@ class MyShareCompoment extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.layout}>
-                <Grid container>
-                    <Grid sm={6} xs={6}>
-                        <Typography color="textSecondary" variant="h4">
-                            我的分享
-                        </Typography>
-                    </Grid>
-                    <Grid sm={6} xs={6} className={classes.orderSelect}>
-                        <FormControl>
-                            <Select
-                                color={"secondary"}
-                                onChange={this.handleOrderChange}
-                                value={this.state.orderBy}
-                            >
-                                <MenuItem value={"created_at DESC"}>
-                                    创建日期由晚到早
-                                </MenuItem>
-                                <MenuItem value={"created_at ASC"}>
-                                    创建日期由早到晚
-                                </MenuItem>
-                                <MenuItem value={"downloads DESC"}>
-                                    下载次数由大到小
-                                </MenuItem>
-                                <MenuItem value={"downloads ASC"}>
-                                    下载次数由小到大
-                                </MenuItem>
-                                <MenuItem value={"views DESC"}>
-                                    浏览次数由大到小
-                                </MenuItem>
-                                <MenuItem value={"views ASC"}>
-                                    浏览次数由小到大
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={24} className={classes.gird}>
-                    {this.state.shareList.map((value) => (
-                        <Grid
-                            item
-                            xs={12}
-                            sm={4}
-                            key={value.id}
-                            className={classes.cardContainer}
-                        >
-                            <Card className={classes.card}>
-                                <CardHeader
-                                    avatar={
-                                        <div>
-                                            {!value.is_dir && (
-                                                <TypeIcon
-                                                    fileName={
-                                                        value.source
-                                                            ? value.source.name
-                                                            : ""
-                                                    }
-                                                    isUpload
-                                                />
-                                            )}{" "}
-                                            {value.is_dir && (
-                                                <Avatar
-                                                    className={
-                                                        classes.avatarFolder
-                                                    }
-                                                >
-                                                    <FolderIcon />
-                                                </Avatar>
-                                            )}
-                                        </div>
-                                    }
-                                    title={
-                                        <Tooltip
-                                            placement="top"
-                                            title={
-                                                value.source
-                                                    ? value.source.name
-                                                    : "[原始对象不存在]"
-                                            }
-                                        >
-                                            <Typography
-                                                noWrap
-                                                className={classes.shareTitle}
-                                            >
-                                                {value.source
-                                                    ? value.source.name
-                                                    : "[原始对象不存在]"}{" "}
-                                            </Typography>
-                                        </Tooltip>
-                                    }
-                                    subheader={
-                                        <span>
-                                            {formatLocalTime(
-                                                value.create_date,
-                                                "YYYY-MM-DD H:mm:ss"
-                                            )}
-                                            {this.isExpired(value) && (
-                                                <Chip
-                                                    size="small"
-                                                    className={classes.badge}
-                                                    label="已失效"
-                                                />
-                                            )}
-                                        </span>
-                                    }
-                                />
-                                <Divider />
-                                <CardActions
-                                    disableActionSpacing
-                                    style={{
-                                        display: "block",
-                                        textAlign: "right",
-                                    }}
-                                >
-                                    <Tooltip placement="top" title="打开">
-                                        <IconButton
-                                            onClick={() =>
-                                                this.props.history.push(
-                                                    "/s/" +
-                                                        value.key +
-                                                        (value.password === ""
-                                                            ? ""
-                                                            : "?password=" +
-                                                              value.password)
-                                                )
-                                            }
-                                        >
-                                            <OpenIcon fontSize={"small"} />
-                                        </IconButton>
-                                    </Tooltip>{" "}
-                                    {value.password !== "" && (
-                                        <>
-                                            <Tooltip
-                                                placement="top"
-                                                title="变更为公开分享"
-                                                onClick={() =>
-                                                    this.changePermission(
-                                                        value.key
-                                                    )
-                                                }
-                                            >
-                                                <IconButton>
-                                                    <LockIcon
-                                                        fontSize={"small"}
-                                                    />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip
-                                                placement="top"
-                                                title="查看密码"
-                                                onClick={() =>
-                                                    this.showPwd(value.password)
-                                                }
-                                            >
-                                                <IconButton>
-                                                    <VpnKey
-                                                        fontSize={"small"}
-                                                    />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </>
-                                    )}
-                                    {value.password === "" && (
-                                        <Tooltip
-                                            placement="top"
-                                            title="变更为私密分享"
-                                            onClick={() =>
-                                                this.changePermission(value.key)
-                                            }
-                                        >
-                                            <IconButton>
-                                                <UnlockIcon
-                                                    fontSize={"small"}
-                                                />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-                                    <Tooltip
-                                        placement="top"
-                                        title={
-                                            value.preview
-                                                ? "禁止预览"
-                                                : "允许预览"
-                                        }
-                                        onClick={() =>
-                                            this.changePreviewOption(value.key)
-                                        }
-                                    >
-                                        <IconButton>
-                                            <ToggleIcon
-                                                on={value.preview}
-                                                onIcon={
-                                                    <EyeIcon
-                                                        fontSize={"small"}
-                                                    />
-                                                }
-                                                offIcon={
-                                                    <VisibilityOff
-                                                        fontSize={"small"}
-                                                    />
-                                                }
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip
-                                        placement="top"
-                                        title="取消分享"
-                                        onClick={() =>
-                                            this.removeShare(value.key)
-                                        }
-                                    >
-                                        <IconButton>
-                                            <DeleteIcon fontSize={"small"} />
-                                        </IconButton>
-                                    </Tooltip>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
-                <div className={classes.loadMore}>
-                    <Pagination
-                        count={Math.ceil(this.state.total / 18)}
-                        onChange={this.handlePageChange}
-                        color="secondary"
-                    />
-                </div>{" "}
-                <Dialog
-                    open={this.state.showPwd !== null}
-                    onClose={this.handleClose}
-                >
-                    <DialogTitle> 分享密码 </DialogTitle>{" "}
-                    <DialogContent>
-                        <TextField
-                            id="standard-name"
-                            value={this.state.showPwd}
-                            margin="normal"
-                            autoFocus
-                        />
-                    </DialogContent>{" "}
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="default">
-                            关闭{" "}
-                        </Button>{" "}
-                    </DialogActions>{" "}
-                </Dialog>{" "}
-            </div>
+          <div className={classes.layout}>
+              <Grid container>
+                  <Grid sm={6} xs={6}>
+                      <Typography color="textSecondary" variant="h4">
+                        {this.props.t('My Share')}
+                      </Typography>
+                  </Grid>
+                  <Grid sm={6} xs={6} className={classes.orderSelect}>
+                      <FormControl>
+                          <Select
+                              color={"secondary"}
+                              onChange={this.handleOrderChange}
+                              value={this.state.orderBy}
+                          >
+                              <MenuItem value={"created_at DESC"}>
+                                {this.props.t('Created from late to early')}
+                              </MenuItem>
+                              <MenuItem value={"created_at ASC"}>
+                                {this.props.t('Created from early to late')}
+                              </MenuItem>
+                              <MenuItem value={"downloads DESC"}>
+                                {this.props.t('The number of downloads from large to small')}
+                              </MenuItem>
+                              <MenuItem value={"downloads ASC"}>
+                                {this.props.t('The number of downloads from small to large')}
+                              </MenuItem>
+                              <MenuItem value={"views DESC"}>
+                                {this.props.t('Browse times from large to small')}
+                              </MenuItem>
+                              <MenuItem value={"views ASC"}>
+                                {this.props.t('Views from small to large')}
+                              </MenuItem>
+                          </Select>
+                      </FormControl>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={24} className={classes.gird}>
+                  {this.state.shareList.map((value) => (
+                      <Grid
+                          item
+                          xs={12}
+                          sm={4}
+                          key={value.id}
+                          className={classes.cardContainer}
+                      >
+                          <Card className={classes.card}>
+                              <CardHeader
+                                  avatar={
+                                      <div>
+                                          {!value.is_dir && (
+                                              <TypeIcon
+                                                  fileName={
+                                                      value.source
+                                                          ? value.source.name
+                                                          : ""
+                                                  }
+                                                  isUpload
+                                              />
+                                          )}{" "}
+                                          {value.is_dir && (
+                                              <Avatar
+                                                  className={
+                                                      classes.avatarFolder
+                                                  }
+                                              >
+                                                  <FolderIcon />
+                                              </Avatar>
+                                          )}
+                                      </div>
+                                  }
+                                  title={
+                                      <Tooltip
+                                          placement="top"
+                                          title={
+                                              value.source
+                                                  ? value.source.name
+                                                  : this.props.t('[Original object does not exist]')
+                                          }
+                                      >
+                                          <Typography
+                                              noWrap
+                                              className={classes.shareTitle}
+                                          >
+                                              {value.source
+                                                  ? value.source.name
+                                                  : this.props.t('[Original object does not exist]')}{" "}
+                                          </Typography>
+                                      </Tooltip>
+                                  }
+                                  subheader={
+                                      <span>
+                                          {formatLocalTime(
+                                              value.create_date,
+                                              "YYYY-MM-DD H:mm:ss"
+                                          )}
+                                          {this.isExpired(value) && (
+                                              <Chip
+                                                  size="small"
+                                                  className={classes.badge}
+                                                  label={this.props.t('expired')}
+                                              />
+                                          )}
+                                      </span>
+                                  }
+                              />
+                              <Divider />
+                              <CardActions
+                                  disableActionSpacing
+                                  style={{
+                                      display: "block",
+                                      textAlign: "right",
+                                  }}
+                              >
+                                  <Tooltip placement="top" title={this.props.t('Open')}>
+                                      <IconButton
+                                          onClick={() =>
+                                              this.props.history.push(
+                                                  "/s/" +
+                                                      value.key +
+                                                      (value.password === ""
+                                                          ? ""
+                                                          : "?password=" +
+                                                            value.password)
+                                              )
+                                          }
+                                      >
+                                          <OpenIcon fontSize={"small"} />
+                                      </IconButton>
+                                  </Tooltip>{" "}
+                                  {value.password !== "" && (
+                                      <>
+                                          <Tooltip
+                                              placement="top"
+                                              title={this.props.t('Change to public sharing')}
+                                              onClick={() =>
+                                                  this.changePermission(
+                                                      value.key
+                                                  )
+                                              }
+                                          >
+                                              <IconButton>
+                                                  <LockIcon
+                                                      fontSize={"small"}
+                                                  />
+                                              </IconButton>
+                                          </Tooltip>
+                                          <Tooltip
+                                              placement="top"
+                                              title={this.props.t('View Password')}
+                                              onClick={() =>
+                                                  this.showPwd(value.password)
+                                              }
+                                          >
+                                              <IconButton>
+                                                  <VpnKey
+                                                      fontSize={"small"}
+                                                  />
+                                              </IconButton>
+                                          </Tooltip>
+                                      </>
+                                  )}
+                                  {value.password === "" && (
+                                      <Tooltip
+                                          placement="top"
+                                          title={this.props.t('Change to private sharing')}
+                                          onClick={() =>
+                                              this.changePermission(value.key)
+                                          }
+                                      >
+                                          <IconButton>
+                                              <UnlockIcon
+                                                  fontSize={"small"}
+                                              />
+                                          </IconButton>
+                                      </Tooltip>
+                                  )}
+                                  <Tooltip
+                                      placement="top"
+                                      title={
+                                          value.preview
+                                              ? this.props.t('Preview prohibited')
+                                              : this.props.t('Allow preview')
+                                      }
+                                      onClick={() =>
+                                          this.changePreviewOption(value.key)
+                                      }
+                                  >
+                                      <IconButton>
+                                          <ToggleIcon
+                                              on={value.preview}
+                                              onIcon={
+                                                  <EyeIcon
+                                                      fontSize={"small"}
+                                                  />
+                                              }
+                                              offIcon={
+                                                  <VisibilityOff
+                                                      fontSize={"small"}
+                                                  />
+                                              }
+                                          />
+                                      </IconButton>
+                                  </Tooltip>
+                                  <Tooltip
+                                      placement="top"
+                                      title={this.props.t('Cancel sharing')}
+                                      onClick={() =>
+                                          this.removeShare(value.key)
+                                      }
+                                  >
+                                      <IconButton>
+                                          <DeleteIcon fontSize={"small"} />
+                                      </IconButton>
+                                  </Tooltip>
+                              </CardActions>
+                          </Card>
+                      </Grid>
+                  ))}
+              </Grid>
+              <div className={classes.loadMore}>
+                  <Pagination
+                      count={Math.ceil(this.state.total / 18)}
+                      onChange={this.handlePageChange}
+                      color="secondary"
+                  />
+              </div>{" "}
+              <Dialog
+                  open={this.state.showPwd !== null}
+                  onClose={this.handleClose}
+              >
+                  <DialogTitle> {this.props.t('Share Password')} </DialogTitle>{" "}
+                  <DialogContent>
+                      <TextField
+                          id="standard-name"
+                          value={this.state.showPwd}
+                          margin="normal"
+                          autoFocus
+                      />
+                  </DialogContent>{" "}
+                  <DialogActions>
+                      <Button onClick={this.handleClose} color="default">
+                        {this.props.t('Close')}{" "}
+                      </Button>{" "}
+                  </DialogActions>{" "}
+              </Dialog>{" "}
+          </div>
         );
     }
 }
@@ -505,6 +506,6 @@ class MyShareCompoment extends Component {
 const MyShare = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(MyShareCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(MyShareCompoment))));
 
 export default MyShare;

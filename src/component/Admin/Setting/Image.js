@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -44,6 +45,8 @@ export default function ImageSetting() {
         thumb_height: "",
     });
 
+    const { t } = useTranslation();
+
     const handleChange = (name) => (event) => {
         setOptions({
             ...options,
@@ -85,7 +88,7 @@ export default function ImageSetting() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t('Settings have been changed'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -96,175 +99,175 @@ export default function ImageSetting() {
     };
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        头像
-                    </Typography>
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    Gravatar 服务器
-                                </InputLabel>
-                                <Input
-                                    type={"url"}
-                                    value={options.gravatar_server}
-                                    onChange={handleChange("gravatar_server")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    Gravatar 服务器地址，可选择使用国内镜像
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+      <div>
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Avatar')}
+                  </Typography>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Gravatar Server')}
+                              </InputLabel>
+                              <Input
+                                  type={"url"}
+                                  value={options.gravatar_server}
+                                  onChange={handleChange("gravatar_server")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Gravatar server address, you can choose to use domestic mirror')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    头像存储路径
-                                </InputLabel>
-                                <Input
-                                    value={options.avatar_path}
-                                    onChange={handleChange("avatar_path")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    用户上传自定义头像的存储路径
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Portrait storage path')}
+                              </InputLabel>
+                              <Input
+                                  value={options.avatar_path}
+                                  onChange={handleChange("avatar_path")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The storage path of the user uploaded custom avatar')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <SizeInput
-                                    value={options.avatar_size}
-                                    onChange={handleChange("avatar_size")}
-                                    required
-                                    min={0}
-                                    max={2147483647}
-                                    label={"头像文件大小限制"}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    用户可上传头像文件的最大大小
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <SizeInput
+                                  value={options.avatar_size}
+                                  onChange={handleChange("avatar_size")}
+                                  required
+                                  min={0}
+                                  max={2147483647}
+                                  label={t('Picture file size limit')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The maximum size of the avatar file that the user can upload')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    小头像尺寸
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.avatar_size_s}
-                                    onChange={handleChange("avatar_size_s")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Small avatar size')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.avatar_size_s}
+                                  onChange={handleChange("avatar_size_s")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    中头像尺寸
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.avatar_size_m}
-                                    onChange={handleChange("avatar_size_m")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Medium avatar size')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.avatar_size_m}
+                                  onChange={handleChange("avatar_size_m")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    大头像尺寸
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.avatar_size_l}
-                                    onChange={handleChange("avatar_size_l")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Large Avatar Size')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.avatar_size_l}
+                                  onChange={handleChange("avatar_size_l")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        缩略图
-                    </Typography>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                    {t('Thumbnail')}
+                  </Typography>
 
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    宽度
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.thumb_width}
-                                    onChange={handleChange("thumb_width")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-                    </div>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('width')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.thumb_width}
+                                  onChange={handleChange("thumb_width")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
+                  </div>
 
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    高度
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.thumb_height}
-                                    onChange={handleChange("thumb_height")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
+                  <div className={classes.formContainer}>
+                      <div className={classes.form}>
+                          <FormControl>
+                              <InputLabel htmlFor="component-helper">
+                                {t('high')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={options.thumb_height}
+                                  onChange={handleChange("thumb_height")}
+                                  required
+                              />
+                          </FormControl>
+                      </div>
+                  </div>
+              </div>
 
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
-        </div>
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
+      </div>
     );
 }
