@@ -1,4 +1,3 @@
-import i18next from "i18next";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import cloudreveApp, { initState as cloudreveState } from "./index";
@@ -67,20 +66,47 @@ const initState = {
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
+jest.mock('connected-react-router',  () => ({
+    connectRouter: () => {
+        return {};
+    },
+}));
+
+jest.mock('react-i18next', () => ({
+    withTranslation: () => Component => {
+        Component.defaultProps = { ...Component.defaultProps, t: () => '' };
+        return Component;
+    },
+    useTranslation: () => {
+        return {
+            t: (str) => str,
+            i18n: {
+                changeLanguage: () => new Promise(() => {
+                    return {};
+                }),
+            },
+        };
+    },
+}));
+
+jest.mock('i18next', () => ({
+    t: (str) => '',
+}));
+
 describe("index reducer", () => {
     it("should return the initial state", () => {
-        expect(cloudreveApp(undefined, { type: "@@INIT" })).toEqual(initState);
+        expect(cloudreveApp()(undefined, { type: "@@INIT" })).toEqual(initState);
     });
 
     it("should handle redux init", () => {
-        expect(cloudreveApp(undefined, { type: "@@redux/INIT" })).toEqual(
+        expect(cloudreveApp()(undefined, { type: "@@redux/INIT" })).toEqual(
             initState
         );
     });
 
     it("should handle DRAWER_TOGGLE", () => {
         const openAction = drawerToggleAction(true);
-        expect(cloudreveApp(initState, openAction)).toEqual({
+        expect(cloudreveApp()(initState, openAction)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -89,7 +115,7 @@ describe("index reducer", () => {
         });
 
         const clossAction = drawerToggleAction(false);
-        expect(cloudreveApp(initState, clossAction)).toEqual({
+        expect(cloudreveApp()(initState, clossAction)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -100,7 +126,7 @@ describe("index reducer", () => {
 
     it("should handle CHANGE_VIEW_METHOD", () => {
         const action = changeViewMethod("list");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -111,7 +137,7 @@ describe("index reducer", () => {
 
     it("should handle SET_SORT_METHOD", () => {
         const action = setSortMethod("sizeRes");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -270,7 +296,7 @@ describe("index reducer", () => {
 
     it("should handle CHANGE_CONTEXT_MENU", () => {
         const action1 = changeContextMenu("empty", false);
-        expect(cloudreveApp(initState, action1)).toEqual({
+        expect(cloudreveApp()(initState, action1)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -279,7 +305,7 @@ describe("index reducer", () => {
             },
         });
         const action2 = changeContextMenu("aa", true);
-        expect(cloudreveApp(initState, action2)).toEqual({
+        expect(cloudreveApp()(initState, action2)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -291,7 +317,7 @@ describe("index reducer", () => {
 
     it("should handle DRAG_AND_DROP", () => {
         const action = dragAndDrop("source", "target");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             explorer: {
                 ...initState.explorer,
@@ -304,7 +330,7 @@ describe("index reducer", () => {
 
     it("should handle SET_NAVIGATOR_LOADING_STATUE", () => {
         const action = setNavigatorLoadingStatus(true);
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -315,7 +341,7 @@ describe("index reducer", () => {
 
     it("should handle SET_NAVIGATOR_ERROR", () => {
         const action = setNavigatorError(true, "Error Message");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -494,7 +520,7 @@ describe("index reducer", () => {
             },
         ]);
         expect(
-            cloudreveApp(
+            cloudreveApp()(
                 {
                     ...initState,
                     explorer: {
@@ -534,7 +560,7 @@ describe("index reducer", () => {
             },
         ]);
         expect(
-            cloudreveApp(
+            cloudreveApp()(
                 {
                     ...initState,
                     explorer: {
@@ -573,7 +599,7 @@ describe("index reducer", () => {
         ];
         const action = addSelectedTargets(newSelect);
         expect(
-            cloudreveApp(
+            cloudreveApp()(
                 {
                     ...initState,
                     explorer: {
@@ -608,7 +634,7 @@ describe("index reducer", () => {
         ];
         const action = setSelectedTarget(newSelect);
         expect(
-            cloudreveApp(
+            cloudreveApp()(
                 {
                     ...initState,
                     explorer: {
@@ -636,7 +662,7 @@ describe("index reducer", () => {
         const remove = ["1"];
         const action = removeSelectedTargets(remove);
         expect(
-            cloudreveApp(
+            cloudreveApp()(
                 {
                     ...initState,
                     explorer: {
@@ -693,7 +719,7 @@ describe("index reducer", () => {
             },
         };
         const action = setNavigator("/newpath", true);
-        expect(cloudreveApp(navState, action)).toEqual({
+        expect(cloudreveApp()(navState, action)).toEqual({
             ...initState,
             navigator: {
                 ...initState.navigator,
@@ -747,8 +773,8 @@ describe("index reducer", () => {
                 },
             },
         };
-        expect(cloudreveApp(initState, action)).toEqual(darkState);
-        expect(cloudreveApp(darkState, action)).toEqual(lightState);
+        expect(cloudreveApp()(initState, action)).toEqual(darkState);
+        expect(cloudreveApp()(darkState, action)).toEqual(lightState);
     });
 
     it("should handle APPLY_THEME", () => {
@@ -760,7 +786,7 @@ describe("index reducer", () => {
                 themes: JSON.stringify({ foo: "bar" }),
             },
         };
-        expect(cloudreveApp(stateWithThemes, action)).toEqual({
+        expect(cloudreveApp()(stateWithThemes, action)).toEqual({
             ...stateWithThemes,
             siteConfig: {
                 ...stateWithThemes.siteConfig,
@@ -771,7 +797,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_CREATE_FOLDER_DIALOG", () => {
         const action = openCreateFolderDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -786,7 +812,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_RENAME_DIALOG", () => {
         const action = openRenameDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -801,7 +827,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_REMOVE_DIALOG", () => {
         const action = openRemoveDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -816,7 +842,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_MOVE_DIALOG", () => {
         const action = openMoveDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -831,7 +857,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_RESAVE_DIALOG", () => {
         const action = openResaveDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -847,7 +873,7 @@ describe("index reducer", () => {
     it("should handle SET_USER_POPOVER", () => {
         // TODO: update to real anchor
         const action = setUserPopover("anchor");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -859,7 +885,7 @@ describe("index reducer", () => {
     it("should handle SET_SHARE_USER_POPOVER", () => {
         // TODO: update to real anchor
         const action = setShareUserPopover("anchor");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -871,7 +897,7 @@ describe("index reducer", () => {
     it("should handle OPEN_SHARE_DIALOG", () => {
         // TODO: update to real anchor
         const action = openShareDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -887,7 +913,7 @@ describe("index reducer", () => {
     it("should handle SET_SITE_CONFIG", () => {
         // TODO: update to real anchor
         const action = setSiteConfig({ foo: "bar" });
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             siteConfig: {
                 foo: "bar",
@@ -898,7 +924,7 @@ describe("index reducer", () => {
     it("should handle SET_SITE_CONFIG", () => {
         // TODO: update to real anchor
         const action = setSiteConfig({ foo: "bar" });
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             siteConfig: {
                 foo: "bar",
@@ -908,7 +934,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_MUSIC_DIALOG", () => {
         const action = openMusicDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -923,7 +949,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_REMOTE_DOWNLOAD_DIALOG", () => {
         const action = openRemoteDownloadDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -938,7 +964,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_TORRENT_DOWNLOAD_DIALOG", () => {
         const action = openTorrentDownloadDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -953,7 +979,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_DECOMPRESS_DIALOG", () => {
         const action = openDecompressDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -968,7 +994,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_COMPRESS_DIALOG", () => {
         const action = openCompressDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -983,7 +1009,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_GET_SOURCE_DIALOG", () => {
         const action = openGetSourceDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -998,7 +1024,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_COPY_DIALOG", () => {
         const action = openCopyDialog();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1013,7 +1039,7 @@ describe("index reducer", () => {
 
     it("should handle OPEN_LOADING_DIALOG", () => {
         const action = openLoadingDialog("loading");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1029,7 +1055,7 @@ describe("index reducer", () => {
 
     it("should handle CLOSE_ALL_MODALS", () => {
         const action = closeAllModals();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1055,6 +1081,7 @@ describe("index reducer", () => {
     });
 
     it("should handle CHANGE_SUB_TITLE", async () => {
+        initState.siteConfig.title = 'Cloudreve';
         const store = mockStore(initState);
         const action = changeSubTitle("test sub title");
         await store.dispatch(action);
@@ -1064,7 +1091,7 @@ describe("index reducer", () => {
 
     it("should handle SET_SUBTITLE", () => {
         const action = setSubtitle("test sub title 2");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1080,7 +1107,7 @@ describe("index reducer", () => {
             "something wrong",
             "error"
         );
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1097,7 +1124,7 @@ describe("index reducer", () => {
 
     it("should handle SET_MODALS_LOADING", () => {
         const action = setModalsLoading("test loading status");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1108,7 +1135,7 @@ describe("index reducer", () => {
 
     it("should handle SET_SESSION_STATUS", () => {
         const action = setSessionStatus(true);
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1119,7 +1146,7 @@ describe("index reducer", () => {
 
     it("should handle ENABLE_LOAD_UPLOADER", () => {
         const action = enableLoadUploader();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1130,7 +1157,7 @@ describe("index reducer", () => {
 
     it("should handle REFRESH_FILE_LIST", () => {
         const action = refreshFileList();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             navigator: {
                 ...initState.navigator,
@@ -1150,11 +1177,11 @@ describe("index reducer", () => {
 
     it("should handle SEARCH_MY_FILE", () => {
         const action = searchMyFile("keyword");
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             navigator: {
                 ...initState.navigator,
-                path: i18next.t('/search results'),
+                path: '',
                 refresh: true,
             },
             viewUpdate: {
@@ -1185,7 +1212,7 @@ describe("index reducer", () => {
                 fileList: [{ type: "file" }, { type: "dir" }],
             },
         };
-        expect(cloudreveApp(showImgState, action)).toEqual({
+        expect(cloudreveApp()(showImgState, action)).toEqual({
             ...showImgState,
             explorer: {
                 ...showImgState.explorer,
@@ -1201,7 +1228,7 @@ describe("index reducer", () => {
     it("should handle REFRESH_STORAGE", () => {
         const action = refreshStorage();
 
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             viewUpdate: {
                 ...initState.viewUpdate,
@@ -1212,7 +1239,7 @@ describe("index reducer", () => {
 
     it("should handle SAVE_FILE", () => {
         const action = saveFile();
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             explorer: {
                 ...initState.explorer,
@@ -1223,7 +1250,7 @@ describe("index reducer", () => {
 
     it("should handle SET_LAST_SELECT", () => {
         const action = setLastSelect({ type: "file" }, 1);
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             explorer: {
                 ...initState.explorer,
@@ -1237,7 +1264,7 @@ describe("index reducer", () => {
 
     it("should handle SET_SHIFT_SELECTED_IDS", () => {
         const action = setShiftSelectedIds(["1", "2"]);
-        expect(cloudreveApp(initState, action)).toEqual({
+        expect(cloudreveApp()(initState, action)).toEqual({
             ...initState,
             explorer: {
                 ...initState.explorer,
