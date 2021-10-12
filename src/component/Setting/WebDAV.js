@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback, useEffect } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
@@ -63,9 +64,11 @@ export default function WebDAV() {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
-        ToggleSnackbar("top", "center", "已复制到剪切板", "success");
+        ToggleSnackbar("top", "center", t('Copied to clipboard'), "success");
     };
 
     const loadList = () => {
@@ -124,113 +127,113 @@ export default function WebDAV() {
     const user = Auth.GetUser();
 
     return (
-        <div className={classes.layout}>
-            <CreateWebDAVAccount
-                callback={addAccount}
-                open={create}
-                onClose={() => setCreate(false)}
-            />
-            <Typography color="textSecondary" variant="h4">
-                WebDAV
-            </Typography>
-            <Paper elevation={3} className={classes.content}>
-                <Tabs
-                    value={tab}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    onChange={(event, newValue) => setTab(newValue)}
-                    aria-label="disabled tabs example"
-                >
-                    <Tab label="账号管理" />
-                </Tabs>
-                <div className={classes.cardContent}>
-                    {tab === 0 && (
-                        <div>
-                            <Alert severity="info">
-                                WebDAV的地址为：
-                                {window.location.origin + "/dav"}
-                                ；登陆用户名统一为：{user.user_name}{" "}
-                                ；密码为所创建账号的密码。
-                            </Alert>
-                            <TableContainer className={classes.tableContainer}>
-                                <Table
-                                    className={classes.table}
-                                    aria-label="simple table"
-                                >
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>备注名</TableCell>
-                                            <TableCell>密码</TableCell>
-                                            <TableCell align="right">
-                                                根目录
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                创建日期
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                操作
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {accounts.map((row, id) => (
-                                            <TableRow key={id}>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    {row.Name}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {row.Password}
-                                                    <Link
-                                                        className={classes.copy}
-                                                        onClick={() =>
-                                                            copyToClipboard(
-                                                                row.Password
-                                                            )
-                                                        }
-                                                        href={"javascript:void"}
-                                                    >
-                                                        复制
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {row.Root}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <TimeAgo
-                                                        datetime={row.CreatedAt}
-                                                        locale="zh_CN"
-                                                    />
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <IconButton
-                                                        size={"small"}
-                                                        onClick={() =>
-                                                            deleteAccount(id)
-                                                        }
-                                                    >
-                                                        <Delete />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <Button
-                                onClick={() => setCreate(true)}
-                                className={classes.create}
-                                variant="contained"
-                                color="secondary"
-                            >
-                                创建新账号
-                            </Button>
-                        </div>
-                    )}
-                </div>
-            </Paper>
-        </div>
+      <div className={classes.layout}>
+          <CreateWebDAVAccount
+              callback={addAccount}
+              open={create}
+              onClose={() => setCreate(false)}
+          />
+          <Typography color="textSecondary" variant="h4">
+              WebDAV
+          </Typography>
+          <Paper elevation={3} className={classes.content}>
+              <Tabs
+                  value={tab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={(event, newValue) => setTab(newValue)}
+                  aria-label="disabled tabs example"
+              >
+                  <Tab label={t('Account Management')} />
+              </Tabs>
+              <div className={classes.cardContent}>
+                  {tab === 0 && (
+                      <div>
+                          <Alert severity="info">
+                            {t('The address of WebDAV is: ')}
+                            {window.location.origin + "/dav"}
+                            {t('; The login user name is unified as: ')}{user.user_name}{" "}
+                            {t(';The password is the password of the created account.')}
+                          </Alert>
+                          <TableContainer className={classes.tableContainer}>
+                              <Table
+                                  className={classes.table}
+                                  aria-label="simple table"
+                              >
+                                  <TableHead>
+                                      <TableRow>
+                                          <TableCell>{t('Label')}</TableCell>
+                                          <TableCell>{t('Password')}</TableCell>
+                                          <TableCell align="right">
+                                            {t('Root directory')}
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            {t('Created Date')}
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            {t('Action')}
+                                          </TableCell>
+                                      </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                      {accounts.map((row, id) => (
+                                          <TableRow key={id}>
+                                              <TableCell
+                                                  component="th"
+                                                  scope="row"
+                                              >
+                                                  {row.Name}
+                                              </TableCell>
+                                              <TableCell>
+                                                  {row.Password}
+                                                  <Link
+                                                      className={classes.copy}
+                                                      onClick={() =>
+                                                          copyToClipboard(
+                                                              row.Password
+                                                          )
+                                                      }
+                                                      href={"javascript:void"}
+                                                  >
+                                                    {t('copy')}
+                                                  </Link>
+                                              </TableCell>
+                                              <TableCell align="right">
+                                                  {row.Root}
+                                              </TableCell>
+                                              <TableCell align="right">
+                                                  <TimeAgo
+                                                      datetime={row.CreatedAt}
+                                                      locale="zh_CN"
+                                                  />
+                                              </TableCell>
+                                              <TableCell align="right">
+                                                  <IconButton
+                                                      size={"small"}
+                                                      onClick={() =>
+                                                          deleteAccount(id)
+                                                      }
+                                                  >
+                                                      <Delete />
+                                                  </IconButton>
+                                              </TableCell>
+                                          </TableRow>
+                                      ))}
+                                  </TableBody>
+                              </Table>
+                          </TableContainer>
+                          <Button
+                              onClick={() => setCreate(true)}
+                              className={classes.create}
+                              variant="contained"
+                              color="secondary"
+                          >
+                            {t('Create a new account')}
+                          </Button>
+                      </div>
+                  )}
+              </div>
+          </Paper>
+      </div>
     );
 }

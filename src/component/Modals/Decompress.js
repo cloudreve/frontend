@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
 import {
@@ -50,6 +51,8 @@ export default function DecompressDialog(props) {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
@@ -70,7 +73,7 @@ export default function DecompressDialog(props) {
         })
             .then(() => {
                 props.onClose();
-                ToggleSnackbar("top", "right", "解压缩任务已创建", "success");
+                ToggleSnackbar("top", "right", t('Decompression task has been created'), "success");
                 SetModalsLoading(false);
             })
             .catch((error) => {
@@ -82,43 +85,43 @@ export default function DecompressDialog(props) {
     const classes = useStyles();
 
     return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-            aria-labelledby="form-dialog-title"
-        >
-            <DialogTitle id="form-dialog-title">解压送至</DialogTitle>
-            <PathSelector
-                presentPath={props.presentPath}
-                selected={props.selected}
-                onSelect={setMoveTarget}
-            />
+      <Dialog
+          open={props.open}
+          onClose={props.onClose}
+          aria-labelledby="form-dialog-title"
+      >
+          <DialogTitle id="form-dialog-title">{t('Unzip and send to')}</DialogTitle>
+          <PathSelector
+              presentPath={props.presentPath}
+              selected={props.selected}
+              onSelect={setMoveTarget}
+          />
 
-            {selectedPath !== "" && (
-                <DialogContent className={classes.contentFix}>
-                    <DialogContentText>
-                        解压送至 <strong>{selectedPathName}</strong>
-                    </DialogContentText>
-                </DialogContent>
-            )}
-            <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
-                <div className={classes.wrapper}>
-                    <Button
-                        onClick={submitMove}
-                        color="primary"
-                        disabled={selectedPath === "" || props.modalsLoading}
-                    >
-                        确定
-                        {props.modalsLoading && (
-                            <CircularProgress
-                                size={24}
-                                className={classes.buttonProgress}
-                            />
-                        )}
-                    </Button>
-                </div>
-            </DialogActions>
-        </Dialog>
+          {selectedPath !== "" && (
+              <DialogContent className={classes.contentFix}>
+                  <DialogContentText>
+                    {t('Unzip and send to')} <strong>{selectedPathName}</strong>
+                  </DialogContentText>
+              </DialogContent>
+          )}
+          <DialogActions>
+              <Button onClick={props.onClose}>{t('Cancel')}</Button>
+              <div className={classes.wrapper}>
+                  <Button
+                      onClick={submitMove}
+                      color="primary"
+                      disabled={selectedPath === "" || props.modalsLoading}
+                  >
+                    {t('Ok')}
+                    {props.modalsLoading && (
+                        <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
+                        />
+                    )}
+                  </Button>
+              </div>
+          </DialogActions>
+      </Dialog>
     );
 }

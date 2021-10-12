@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -135,6 +136,8 @@ function LoginForm() {
         setEmail(query.get("username"));
     }, [location]);
 
+    const { t } = useTranslation();
+
     const afterLogin = (data) => {
         Auth.authenticate(data);
 
@@ -148,7 +151,7 @@ function LoginForm() {
         SetSessionStatus(true);
 
         history.push("/home");
-        ToggleSnackbar("top", "right", "登录成功", "success");
+        ToggleSnackbar("top", "right", t('Login successful'), "success");
 
         localStorage.removeItem("siteConfigCache");
     };
@@ -156,7 +159,7 @@ function LoginForm() {
     const authnLogin = (e) => {
         e.preventDefault();
         if (!navigator.credentials) {
-            ToggleSnackbar("top", "right", "当前浏览器或环境不支持", "warning");
+            ToggleSnackbar("top", "right", t('The current browser or environment does not support'), "warning");
 
             return;
         }
@@ -258,179 +261,179 @@ function LoginForm() {
     };
 
     return (
-        <div className={classes.layout}>
-            {!twoFA && (
-                <>
-                    <Paper className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            登录 {title}
-                        </Typography>
-                        {!useAuthn && (
-                            <form className={classes.form} onSubmit={login}>
-                                <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="email">
-                                        电子邮箱
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        name="email"
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                        autoComplete
-                                        value={email}
-                                        autoFocus
-                                    />
-                                </FormControl>
-                                <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="password">
-                                        密码
-                                    </InputLabel>
-                                    <Input
-                                        name="password"
-                                        onChange={(e) => setPwd(e.target.value)}
-                                        type="password"
-                                        id="password"
-                                        value={pwd}
-                                        autoComplete
-                                    />
-                                </FormControl>
-                                {loginCaptcha && <CaptchaRender />}
+      <div className={classes.layout}>
+          {!twoFA && (
+              <>
+                  <Paper className={classes.paper}>
+                      <Avatar className={classes.avatar}>
+                          <LockOutlinedIcon />
+                      </Avatar>
+                      <Typography component="h1" variant="h5">
+                        {t('Log in')} {title}
+                      </Typography>
+                      {!useAuthn && (
+                          <form className={classes.form} onSubmit={login}>
+                              <FormControl margin="normal" required fullWidth>
+                                  <InputLabel htmlFor="email">
+                                    {t('E-mail')}
+                                  </InputLabel>
+                                  <Input
+                                      id="email"
+                                      type="email"
+                                      name="email"
+                                      onChange={(e) =>
+                                          setEmail(e.target.value)
+                                      }
+                                      autoComplete
+                                      value={email}
+                                      autoFocus
+                                  />
+                              </FormControl>
+                              <FormControl margin="normal" required fullWidth>
+                                  <InputLabel htmlFor="password">
+                                    {t('Password')}
+                                  </InputLabel>
+                                  <Input
+                                      name="password"
+                                      onChange={(e) => setPwd(e.target.value)}
+                                      type="password"
+                                      id="password"
+                                      value={pwd}
+                                      autoComplete
+                                  />
+                              </FormControl>
+                              {loginCaptcha && <CaptchaRender />}
 
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={
-                                        loading ||
-                                        (loginCaptcha ? captchaLoading : false)
-                                    }
-                                    className={classes.submit}
-                                >
-                                    登录
-                                </Button>
-                            </form>
-                        )}
-                        {useAuthn && (
-                            <form className={classes.form}>
-                                <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="email">
-                                        电子邮箱
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        name="email"
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                        autoComplete
-                                        value={email}
-                                        autoFocus
+                              <Button
+                                  type="submit"
+                                  fullWidth
+                                  variant="contained"
+                                  color="primary"
+                                  disabled={
+                                      loading ||
+                                      (loginCaptcha ? captchaLoading : false)
+                                  }
+                                  className={classes.submit}
+                              >
+                                {t('Log in')}
+                              </Button>
+                          </form>
+                      )}
+                      {useAuthn && (
+                          <form className={classes.form}>
+                              <FormControl margin="normal" required fullWidth>
+                                  <InputLabel htmlFor="email">
+                                    {t('E-mail')}
+                                  </InputLabel>
+                                  <Input
+                                      id="email"
+                                      type="email"
+                                      name="email"
+                                      onChange={(e) =>
+                                          setEmail(e.target.value)
+                                      }
+                                      autoComplete
+                                      value={email}
+                                      autoFocus
+                                  />
+                              </FormControl>
+                              <Button
+                                  type="submit"
+                                  fullWidth
+                                  variant="contained"
+                                  color="primary"
+                                  disabled={loading}
+                                  onClick={authnLogin}
+                                  className={classes.submit}
+                              >
+                                {t('Next step"')}
+                              </Button>
+                          </form>
+                      )}
+                      <Divider />
+                      <div className={classes.link}>
+                          <div>
+                              <Link href={"/forget"}>{t('Forgot password')}</Link>
+                          </div>
+                          <div>
+                              <Link href={"/signup"}>{t('Create an account')}</Link>
+                          </div>
+                      </div>
+
+                      <ICPFooter />
+                  </Paper>
+
+                  {authn && (
+                      <div className={classes.authnLink}>
+                          <Button
+                              color="primary"
+                              onClick={() => setUseAuthn(!useAuthn)}
+                          >
+                              {!useAuthn && (
+                                  (<>
+                                    <Fingerprint
+                                        style={{
+                                            marginRight: 8,
+                                        }}
                                     />
-                                </FormControl>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={loading}
-                                    onClick={authnLogin}
-                                    className={classes.submit}
-                                >
-                                    下一步
-                                </Button>
-                            </form>
-                        )}
-                        <Divider />
-                        <div className={classes.link}>
-                            <div>
-                                <Link href={"/forget"}>忘记密码</Link>
-                            </div>
-                            <div>
-                                <Link href={"/signup"}>注册账号</Link>
-                            </div>
-                        </div>
-
-                        <ICPFooter />
-                    </Paper>
-
-                    {authn && (
-                        <div className={classes.authnLink}>
-                            <Button
-                                color="primary"
-                                onClick={() => setUseAuthn(!useAuthn)}
-                            >
-                                {!useAuthn && (
-                                    <>
-                                        <Fingerprint
-                                            style={{
-                                                marginRight: 8,
-                                            }}
-                                        />
-                                        使用外部验证器登录
-                                    </>
-                                )}
-                                {useAuthn && (
-                                    <>
-                                        <VpnKey
-                                            style={{
-                                                marginRight: 8,
-                                            }}
-                                        />
-                                        使用密码登录
-                                    </>
-                                )}
-                            </Button>
-                        </div>
-                    )}
-                </>
-            )}
-            {twoFA && (
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <VpnIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        二步验证
-                    </Typography>
-                    <form className={classes.form} onSubmit={twoFALogin}>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="code">
-                                请输入六位二步验证代码
-                            </InputLabel>
-                            <Input
-                                id="code"
-                                type="number"
-                                name="code"
-                                onChange={(event) =>
-                                    setFACode(event.target.value)
-                                }
-                                autoComplete
-                                value={faCode}
-                                autoFocus
-                            />
-                        </FormControl>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={loading}
-                            className={classes.submit}
-                        >
-                            继续登录
-                        </Button>{" "}
-                    </form>{" "}
-                    <Divider />
-                </Paper>
-            )}
-        </div>
+                                    {t('Log in with external authenticator')}
+                                  </>)
+                              )}
+                              {useAuthn && (
+                                  (<>
+                                    <VpnKey
+                                        style={{
+                                            marginRight: 8,
+                                        }}
+                                    />
+                                    {t('Log in with password')}
+                                  </>)
+                              )}
+                          </Button>
+                      </div>
+                  )}
+              </>
+          )}
+          {twoFA && (
+              <Paper className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                      <VpnIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    {t('Two-step verification')}
+                  </Typography>
+                  <form className={classes.form} onSubmit={twoFALogin}>
+                      <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="code">
+                            {t('Please enter the six-digit two-step verification code')}
+                          </InputLabel>
+                          <Input
+                              id="code"
+                              type="number"
+                              name="code"
+                              onChange={(event) =>
+                                  setFACode(event.target.value)
+                              }
+                              autoComplete
+                              value={faCode}
+                              autoFocus
+                          />
+                      </FormControl>
+                      <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          disabled={loading}
+                          className={classes.submit}
+                      >
+                        {t('Continue to log in')}
+                      </Button>{" "}
+                  </form>{" "}
+                  <Divider />
+              </Paper>
+          )}
+      </div>
     );
 }
 

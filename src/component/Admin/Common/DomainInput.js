@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -11,6 +12,7 @@ export default function DomainInput({ onChange, value, required, label }) {
     const [domain, setDomain] = useState("");
     const [protocol, setProtocol] = useState("https://");
     const [error, setError] = useState();
+    const { t } = useTranslation();
 
     useState(() => {
         value = value ? value : "";
@@ -28,7 +30,7 @@ export default function DomainInput({ onChange, value, required, label }) {
     useEffect(() => {
         if (protocol === "http://" && window.location.protocol === "https:") {
             setError(
-                "您当前站点启用了 HTTPS ，此处选择 HTTP 可能会导致无法连接。"
+                t('HTTPS is enabled on your current site. Selecting HTTP here may cause connection failure.')
             );
         } else {
             setError("");

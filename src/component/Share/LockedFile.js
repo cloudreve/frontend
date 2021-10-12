@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleSnackbar } from "../../actions";
@@ -77,56 +78,56 @@ class LockedFileCompoment extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.layout}>
-                <Card className={classes.card}>
-                    <CardHeader
-                        avatar={
-                            <Avatar
-                                aria-label="Recipe"
-                                src={
-                                    "/api/v3/user/avatar/" +
-                                    this.props.share.creator.key +
-                                    "/l"
-                                }
-                            />
-                        }
-                        title={this.props.share.creator.nick + " 的加密分享"}
-                        subheader={this.props.share.create_date}
-                    />
-                    <Divider />
-                    <CardContent>
-                        <form onSubmit={this.submit}>
-                            <TextField
-                                id="pwd"
-                                label="输入分享密码"
-                                value={this.state.pwd}
-                                onChange={this.handleChange("pwd")}
-                                margin="normal"
-                                type="password"
-                                autoFocus
-                                fullWidth
-                                color="secondary"
-                            />
-                        </form>
-                    </CardContent>
-                    <CardActions
-                        className={classes.actions}
-                        disableActionSpacing
-                    >
-                        <Button
-                            onClick={this.submit}
-                            color="secondary"
-                            className={classes.continue}
-                            variant="contained"
-                            disabled={
-                                this.state.pwd === "" || this.props.loading
-                            }
-                        >
-                            继续
-                        </Button>
-                    </CardActions>
-                </Card>
-            </div>
+          <div className={classes.layout}>
+              <Card className={classes.card}>
+                  <CardHeader
+                      avatar={
+                          <Avatar
+                              aria-label="Recipe"
+                              src={
+                                  "/api/v3/user/avatar/" +
+                                  this.props.share.creator.key +
+                                  "/l"
+                              }
+                          />
+                      }
+                      title={this.props.share.creator.nick + this.props.t('\'S encrypted sharing')}
+                      subheader={this.props.share.create_date}
+                  />
+                  <Divider />
+                  <CardContent>
+                      <form onSubmit={this.submit}>
+                          <TextField
+                              id="pwd"
+                              label={this.props.t('Enter the sharing password"')}
+                              value={this.state.pwd}
+                              onChange={this.handleChange("pwd")}
+                              margin="normal"
+                              type="password"
+                              autoFocus
+                              fullWidth
+                              color="secondary"
+                          />
+                      </form>
+                  </CardContent>
+                  <CardActions
+                      className={classes.actions}
+                      disableActionSpacing
+                  >
+                      <Button
+                          onClick={this.submit}
+                          color="secondary"
+                          className={classes.continue}
+                          variant="contained"
+                          disabled={
+                              this.state.pwd === "" || this.props.loading
+                          }
+                      >
+                        {this.props.t('continue')}
+                      </Button>
+                  </CardActions>
+              </Card>
+          </div>
         );
     }
 }
@@ -134,6 +135,6 @@ class LockedFileCompoment extends Component {
 const LockedFile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(LockedFileCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(LockedFileCompoment))));
 
 export default LockedFile;

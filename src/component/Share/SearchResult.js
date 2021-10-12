@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
@@ -96,6 +97,8 @@ export default function SearchResult() {
     const [shareList, setShareList] = useState([]);
     const [orderBy, setOrderBy] = useState("created_at DESC");
 
+    const { t } = useTranslation();
+
     const search = useCallback((keywords, page, orderBy) => {
         const order = orderBy.split(" ");
         API.get(
@@ -113,7 +116,7 @@ export default function SearchResult() {
                     ToggleSnackbar(
                         "top",
                         "right",
-                        "找不到符合条件的分享",
+                        t('Cannot find a share that meets the conditions'),
                         "info"
                     );
                 }
@@ -121,7 +124,7 @@ export default function SearchResult() {
                 setShareList(response.data.items);
             })
             .catch(() => {
-                ToggleSnackbar("top", "right", "加载失败", "error");
+                ToggleSnackbar("top", "right", t('Failed to load'), "error");
             });
     }, []);
 
@@ -130,7 +133,7 @@ export default function SearchResult() {
         if (keywords) {
             search(keywords, page, orderBy);
         } else {
-            ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
+            ToggleSnackbar("top", "right", t('Enter search keywords'), "warning");
         }
     }, [location]);
 
@@ -147,125 +150,125 @@ export default function SearchResult() {
     };
 
     return (
-        <div className={classes.layout}>
-            <Grid container>
-                <Grid sm={6} xs={6}>
-                    <Typography color="textSecondary" variant="h4">
-                        搜索结果
-                    </Typography>
-                </Grid>
-                <Grid sm={6} xs={6} className={classes.orderSelect}>
-                    <FormControl>
-                        <Select
-                            color={"secondary"}
-                            onChange={handleOrderChange}
-                            value={orderBy}
-                        >
-                            <MenuItem value={"created_at DESC"}>
-                                创建日期由晚到早
-                            </MenuItem>
-                            <MenuItem value={"created_at ASC"}>
-                                创建日期由早到晚
-                            </MenuItem>
-                            <MenuItem value={"downloads DESC"}>
-                                下载次数由大到小
-                            </MenuItem>
-                            <MenuItem value={"downloads ASC"}>
-                                下载次数由小到大
-                            </MenuItem>
-                            <MenuItem value={"views DESC"}>
-                                浏览次数由大到小
-                            </MenuItem>
-                            <MenuItem value={"views ASC"}>
-                                浏览次数由小到大
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
-            <Grid container spacing={24} className={classes.gird}>
-                {shareList.map((value) => (
-                    <Grid
-                        item
-                        xs={12}
-                        sm={4}
-                        key={value.id}
-                        className={classes.cardContainer}
-                    >
-                        <Card className={classes.card}>
-                            <CardHeader
-                                avatar={
-                                    <div>
-                                        {!value.is_dir && (
-                                            <TypeIcon
-                                                fileName={
-                                                    value.source
-                                                        ? value.source.name
-                                                        : ""
-                                                }
-                                                isUpload
-                                            />
-                                        )}{" "}
-                                        {value.is_dir && (
-                                            <Avatar
-                                                className={classes.avatarFolder}
-                                            >
-                                                <FolderIcon />
-                                            </Avatar>
-                                        )}
-                                    </div>
-                                }
-                                action={
-                                    <Tooltip placement="top" title="打开">
-                                        <IconButton
-                                            onClick={() =>
-                                                history.push("/s/" + value.key)
-                                            }
-                                        >
-                                            <OpenIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                }
-                                title={
-                                    <Tooltip
-                                        placement="top"
-                                        title={
-                                            value.source
-                                                ? value.source.name
-                                                : "[原始对象不存在]"
-                                        }
-                                    >
-                                        <Typography
-                                            noWrap
-                                            className={classes.shareTitle}
-                                        >
-                                            {value.source
-                                                ? value.source.name
-                                                : "[原始对象不存在]"}{" "}
-                                        </Typography>
-                                    </Tooltip>
-                                }
-                                subheader={
-                                    <span>
-                                        分享于{" "}
-                                        <TimeAgo
-                                            datetime={value.create_date}
-                                            locale="zh_CN"
-                                        />
-                                    </span>
-                                }
-                            />
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-            <div className={classes.loadMore}>
-                <Pagination
-                    count={Math.ceil(total / 18)}
-                    onChange={handlePageChange}
-                    color="secondary"
-                />
-            </div>{" "}
-        </div>
+      <div className={classes.layout}>
+          <Grid container>
+              <Grid sm={6} xs={6}>
+                  <Typography color="textSecondary" variant="h4">
+                    {t('search results')}
+                  </Typography>
+              </Grid>
+              <Grid sm={6} xs={6} className={classes.orderSelect}>
+                  <FormControl>
+                      <Select
+                          color={"secondary"}
+                          onChange={handleOrderChange}
+                          value={orderBy}
+                      >
+                          <MenuItem value={"created_at DESC"}>
+                            {t('Created from late to early')}
+                          </MenuItem>
+                          <MenuItem value={"created_at ASC"}>
+                            {t('Created from early to late')}
+                          </MenuItem>
+                          <MenuItem value={"downloads DESC"}>
+                            {t('The number of downloads from large to small')}
+                          </MenuItem>
+                          <MenuItem value={"downloads ASC"}>
+                            {t('The number of downloads from small to large')}
+                          </MenuItem>
+                          <MenuItem value={"views DESC"}>
+                            {t('Browse times from large to small')}
+                          </MenuItem>
+                          <MenuItem value={"views ASC"}>
+                            {t('Views from small to large')}
+                          </MenuItem>
+                      </Select>
+                  </FormControl>
+              </Grid>
+          </Grid>
+          <Grid container spacing={24} className={classes.gird}>
+              {shareList.map((value) => (
+                  <Grid
+                      item
+                      xs={12}
+                      sm={4}
+                      key={value.id}
+                      className={classes.cardContainer}
+                  >
+                      <Card className={classes.card}>
+                          <CardHeader
+                              avatar={
+                                  <div>
+                                      {!value.is_dir && (
+                                          <TypeIcon
+                                              fileName={
+                                                  value.source
+                                                      ? value.source.name
+                                                      : ""
+                                              }
+                                              isUpload
+                                          />
+                                      )}{" "}
+                                      {value.is_dir && (
+                                          <Avatar
+                                              className={classes.avatarFolder}
+                                          >
+                                              <FolderIcon />
+                                          </Avatar>
+                                      )}
+                                  </div>
+                              }
+                              action={
+                                  <Tooltip placement="top" title={t('Open')}>
+                                      <IconButton
+                                          onClick={() =>
+                                              history.push("/s/" + value.key)
+                                          }
+                                      >
+                                          <OpenIcon />
+                                      </IconButton>
+                                  </Tooltip>
+                              }
+                              title={
+                                  <Tooltip
+                                      placement="top"
+                                      title={
+                                          value.source
+                                              ? value.source.name
+                                              : t('[Original object does not exist]')
+                                      }
+                                  >
+                                      <Typography
+                                          noWrap
+                                          className={classes.shareTitle}
+                                      >
+                                          {value.source
+                                              ? value.source.name
+                                              : t('[Original object does not exist]')}{" "}
+                                      </Typography>
+                                  </Tooltip>
+                              }
+                              subheader={
+                                  <span>
+                                    {t('Share on')}{" "}
+                                    <TimeAgo
+                                        datetime={value.create_date}
+                                        locale="zh_CN"
+                                    />
+                                  </span>
+                              }
+                          />
+                      </Card>
+                  </Grid>
+              ))}
+          </Grid>
+          <div className={classes.loadMore}>
+              <Pagination
+                  count={Math.ceil(total / 18)}
+                  onChange={handlePageChange}
+                  color="secondary"
+              />
+          </div>{" "}
+      </div>
     );
 }

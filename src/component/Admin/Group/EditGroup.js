@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import API from "../../../middleware/Api";
@@ -16,6 +17,8 @@ export default function EditGroupPreload() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         setGroup({});
@@ -67,7 +70,7 @@ export default function EditGroupPreload() {
                         ToggleSnackbar(
                             "top",
                             "right",
-                            "Aria2 设置项格式错误",
+                            t('Aria2 setting item format error'),
                             "warning"
                         );
                         return;

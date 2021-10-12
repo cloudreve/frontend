@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import axios from "axios";
 import Auth from "./Auth";
 
@@ -15,7 +16,7 @@ const instance = axios.create({
 
 function AppError(message, code, error) {
     this.code = code;
-    this.message = message || "未知错误";
+    this.message = message || i18next.t('unknown error');
     this.message += error ? " " + error : "";
     this.stack = new Error().stack;
 }

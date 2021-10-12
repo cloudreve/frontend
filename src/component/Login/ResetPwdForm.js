@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
@@ -88,7 +89,7 @@ class ResetPwdFormCompoment extends Component {
             this.props.toggleSnackbar(
                 "top",
                 "right",
-                "两次密码输入不一致",
+                this.props.t('The two password entries are inconsistent'),
                 "warning"
             );
             return;
@@ -121,7 +122,7 @@ class ResetPwdFormCompoment extends Component {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        "密码重设成功",
+                        this.props.t('Password reset successfully'),
                         "success"
                     );
                 }
@@ -147,61 +148,61 @@ class ResetPwdFormCompoment extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <KeyIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        找回密码
-                    </Typography>
-                    <form className={classes.form} onSubmit={this.login}>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">新密码</InputLabel>
-                            <Input
-                                id="pwd"
-                                type="password"
-                                name="pwd"
-                                onChange={this.handleChange("pwd")}
-                                autoComplete
-                                value={this.state.pwd}
-                                autoFocus
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">重复新密码</InputLabel>
-                            <Input
-                                id="pwdRepeat"
-                                type="password"
-                                name="pwdRepeat"
-                                onChange={this.handleChange("pwdRepeat")}
-                                autoComplete
-                                value={this.state.pwdRepeat}
-                                autoFocus
-                            />
-                        </FormControl>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={this.state.loading}
-                            className={classes.submit}
-                        >
-                            重设密码
-                        </Button>{" "}
-                    </form>{" "}
-                    <Divider />
-                    <div className={classes.link}>
-                        <div>
-                            <Link href={"/Login"}>返回登录</Link>
-                        </div>
-                        <div>
-                            <Link href={"/SignUp"}>注册账号</Link>
-                        </div>
-                    </div>
-                </Paper>
-            </div>
+          <div className={classes.layout}>
+              <Paper className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                      <KeyIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    {this.props.t('Retrieve Password')}
+                  </Typography>
+                  <form className={classes.form} onSubmit={this.login}>
+                      <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="email">{this.props.t('New password')}</InputLabel>
+                          <Input
+                              id="pwd"
+                              type="password"
+                              name="pwd"
+                              onChange={this.handleChange("pwd")}
+                              autoComplete
+                              value={this.state.pwd}
+                              autoFocus
+                          />
+                      </FormControl>
+                      <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="email">{this.props.t('Repeat new password')}</InputLabel>
+                          <Input
+                              id="pwdRepeat"
+                              type="password"
+                              name="pwdRepeat"
+                              onChange={this.handleChange("pwdRepeat")}
+                              autoComplete
+                              value={this.state.pwdRepeat}
+                              autoFocus
+                          />
+                      </FormControl>
+                      <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          disabled={this.state.loading}
+                          className={classes.submit}
+                      >
+                        {this.props.t('reset Password')}
+                      </Button>{" "}
+                  </form>{" "}
+                  <Divider />
+                  <div className={classes.link}>
+                      <div>
+                          <Link href={"/Login"}>{this.props.t('Return to login')}</Link>
+                      </div>
+                      <div>
+                          <Link href={"/SignUp"}>{this.props.t('Create an account')}</Link>
+                      </div>
+                  </div>
+              </Paper>
+          </div>
         );
     }
 }
@@ -209,6 +210,6 @@ class ResetPwdFormCompoment extends Component {
 const ResetPwdForm = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(ResetPwdFormCompoment));
+)(withTranslation()(withStyles(styles)(ResetPwdFormCompoment)));
 
 export default ResetPwdForm;

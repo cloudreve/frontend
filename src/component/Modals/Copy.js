@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
 import {
@@ -101,44 +102,46 @@ export default function CopyDialog(props) {
 
     const classes = useStyles();
 
-    return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-            aria-labelledby="form-dialog-title"
-        >
-            <DialogTitle id="form-dialog-title">复制到</DialogTitle>
-            <PathSelector
-                presentPath={props.presentPath}
-                selected={props.selected}
-                onSelect={setMoveTarget}
-            />
+    const { t } = useTranslation();
 
-            {selectedPath !== "" && (
-                <DialogContent className={classes.contentFix}>
-                    <DialogContentText>
-                        复制到 <strong>{selectedPathName}</strong>
-                    </DialogContentText>
-                </DialogContent>
-            )}
-            <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
-                <div className={classes.wrapper}>
-                    <Button
-                        onClick={submitMove}
-                        color="primary"
-                        disabled={selectedPath === "" || props.modalsLoading}
-                    >
-                        确定
-                        {props.modalsLoading && (
-                            <CircularProgress
-                                size={24}
-                                className={classes.buttonProgress}
-                            />
-                        )}
-                    </Button>
-                </div>
-            </DialogActions>
-        </Dialog>
+    return (
+      <Dialog
+          open={props.open}
+          onClose={props.onClose}
+          aria-labelledby="form-dialog-title"
+      >
+          <DialogTitle id="form-dialog-title">{t('copy to')}</DialogTitle>
+          <PathSelector
+              presentPath={props.presentPath}
+              selected={props.selected}
+              onSelect={setMoveTarget}
+          />
+
+          {selectedPath !== "" && (
+              <DialogContent className={classes.contentFix}>
+                  <DialogContentText>
+                    {t('copy to')} <strong>{selectedPathName}</strong>
+                  </DialogContentText>
+              </DialogContent>
+          )}
+          <DialogActions>
+              <Button onClick={props.onClose}>{t('Cancel')}</Button>
+              <div className={classes.wrapper}>
+                  <Button
+                      onClick={submitMove}
+                      color="primary"
+                      disabled={selectedPath === "" || props.modalsLoading}
+                  >
+                    {t('Ok')}
+                    {props.modalsLoading && (
+                        <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
+                        />
+                    )}
+                  </Button>
+              </div>
+          </DialogActions>
+      </Dialog>
     );
 }

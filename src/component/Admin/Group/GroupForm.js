@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import FormControl from "@material-ui/core/FormControl";
@@ -98,6 +99,8 @@ export default function GroupForm(props) {
             });
     }, []);
 
+    const { t } = useTranslation();
+
     const handleChange = (name) => (event) => {
         setGroup({
             ...group,
@@ -176,7 +179,7 @@ export default function GroupForm(props) {
                 groupCopy.OptionsSerialized.aria2_options
             );
         } catch (e) {
-            ToggleSnackbar("top", "right", "Aria2 设置项格式错误", "warning");
+            ToggleSnackbar("top", "right", t('Aria2 setting item format error'), "warning");
             return;
         }
 
@@ -189,7 +192,7 @@ export default function GroupForm(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "用户组已" + (props.group ? "保存" : "添加"),
+                    t('User Group Already') + (props.group ? t('save') : t('Add to')),
                     "success"
                 );
             })
@@ -202,352 +205,349 @@ export default function GroupForm(props) {
     };
 
     return (
-        <div>
-            <form onSubmit={submit}>
-                <div className={classes.root}>
-                    <Typography variant="h6" gutterBottom>
-                        {group.ID === 0 && "新建用户组"}
-                        {group.ID !== 0 && "编辑 " + group.Name}
-                    </Typography>
+      <div>
+          <form onSubmit={submit}>
+              <div className={classes.root}>
+                  <Typography variant="h6" gutterBottom>
+                      {group.ID === 0 && t('New User Group')}
+                      {group.ID !== 0 && t('edit ') + group.Name}
+                  </Typography>
 
-                    <div className={classes.formContainer}>
-                        {group.ID !== 3 && (
-                            <>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            用户组名
-                                        </InputLabel>
-                                        <Input
-                                            value={group.Name}
-                                            onChange={handleChange("Name")}
-                                            required
-                                        />
-                                        <FormHelperText id="component-helper-text">
-                                            用户组的名称
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
+                  <div className={classes.formContainer}>
+                      {group.ID !== 3 && (
+                          <>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                        {t('User group name')}
+                                      </InputLabel>
+                                      <Input
+                                          value={group.Name}
+                                          onChange={handleChange("Name")}
+                                          required
+                                      />
+                                      <FormHelperText id="component-helper-text">
+                                        {t('The name of the user group')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
 
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            存储策略
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-mutiple-chip-label"
-                                            id="demo-mutiple-chip"
-                                            value={group.PolicyList}
-                                            onChange={handleChange(
-                                                "PolicyList"
-                                            )}
-                                            input={
-                                                <Input id="select-multiple-chip" />
-                                            }
-                                        >
-                                            {Object.keys(policies).map(
-                                                (pid) => (
-                                                    <MenuItem
-                                                        key={pid}
-                                                        value={pid}
-                                                    >
-                                                        {policies[pid]}
-                                                    </MenuItem>
-                                                )
-                                            )}
-                                        </Select>
-                                        <FormHelperText id="component-helper-text">
-                                            指定用户组的存储策略。
-                                        </FormHelperText>
-                                    </FormControl>
-                                </div>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                        {t('Storage Strategy')}
+                                      </InputLabel>
+                                      <Select
+                                          labelId="demo-mutiple-chip-label"
+                                          id="demo-mutiple-chip"
+                                          value={group.PolicyList}
+                                          onChange={handleChange(
+                                              "PolicyList"
+                                          )}
+                                          input={
+                                              <Input id="select-multiple-chip" />
+                                          }
+                                      >
+                                          {Object.keys(policies).map(
+                                              (pid) => (
+                                                  <MenuItem
+                                                      key={pid}
+                                                      value={pid}
+                                                  >
+                                                      {policies[pid]}
+                                                  </MenuItem>
+                                              )
+                                          )}
+                                      </Select>
+                                      <FormHelperText id="component-helper-text">
+                                        {t('Specify the storage policy of the user group.')}
+                                      </FormHelperText>
+                                  </FormControl>
+                              </div>
 
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <SizeInput
-                                            value={group.MaxStorage}
-                                            onChange={handleChange(
-                                                "MaxStorage"
-                                            )}
-                                            min={0}
-                                            max={9223372036854775807}
-                                            label={"初始容量"}
-                                            required
-                                        />
-                                    </FormControl>
-                                    <FormHelperText id="component-helper-text">
-                                        用户组下的用户初始可用最大容量
-                                    </FormHelperText>
-                                </div>
-                            </>
-                        )}
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <SizeInput
+                                          value={group.MaxStorage}
+                                          onChange={handleChange(
+                                              "MaxStorage"
+                                          )}
+                                          min={0}
+                                          max={9223372036854775807}
+                                          label={t('Initial capacity')}
+                                          required
+                                      />
+                                  </FormControl>
+                                  <FormHelperText id="component-helper-text">
+                                    {t('The initial available maximum capacity of users under the user group')}
+                                  </FormHelperText>
+                              </div>
+                          </>
+                      )}
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <SizeInput
-                                    value={group.SpeedLimit}
-                                    onChange={handleChange("SpeedLimit")}
-                                    min={0}
-                                    max={9223372036854775807}
-                                    label={"下载限速"}
-                                    suffix={"/s"}
-                                    required
-                                />
-                            </FormControl>
-                            <FormHelperText id="component-helper-text">
-                                填写为 0 表示不限制。开启限制后，
-                                此用户组下的用户下载所有支持限速的存储策略下的文件时，下载最大速度会被限制。
-                            </FormHelperText>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <SizeInput
+                                  value={group.SpeedLimit}
+                                  onChange={handleChange("SpeedLimit")}
+                                  min={0}
+                                  max={9223372036854775807}
+                                  label={t('Download speed limit')}
+                                  suffix={"/s"}
+                                  required
+                              />
+                          </FormControl>
+                          <FormHelperText id="component-helper-text">
+                            {t(
+                              'Fill in 0 means no limit. When the limit is turned on,\nwhen users under this user group download all files under the storage policy that supports the speed limit, the maximum download speed will be limited.'
+                            )}
+                          </FormHelperText>
+                      </div>
 
-                        {group.ID !== 3 && (
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                checked={
-                                                    group.ShareEnabled ===
-                                                    "true"
-                                                }
-                                                onChange={handleCheckChange(
-                                                    "ShareEnabled"
-                                                )}
-                                            />
-                                        }
-                                        label="允许创建分享"
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        关闭后，用户无法创建分享链接
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        )}
+                      {group.ID !== 3 && (
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <FormControlLabel
+                                      control={
+                                          <Switch
+                                              checked={
+                                                  group.ShareEnabled ===
+                                                  "true"
+                                              }
+                                              onChange={handleCheckChange(
+                                                  "ShareEnabled"
+                                              )}
+                                          />
+                                      }
+                                      label={t('Allow to create shares')}
+                                  />
+                                  <FormHelperText id="component-helper-text">
+                                    {t('When disabled, users cannot create sharing links')}
+                                  </FormHelperText>
+                              </FormControl>
+                          </div>
+                      )}
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.OptionsSerialized
-                                                    .share_download === "true"
-                                            }
-                                            onChange={handleOptionCheckChange(
-                                                "share_download"
-                                            )}
-                                        />
-                                    }
-                                    label="允许下载分享"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    关闭后，用户无法下载别人创建的文件分享
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              group.OptionsSerialized
+                                                  .share_download === "true"
+                                          }
+                                          onChange={handleOptionCheckChange(
+                                              "share_download"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Allow download and share')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('When disabled, users cannot download files created by others to share')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        {group.ID !== 3 && (
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                checked={
-                                                    group.WebDAVEnabled ===
-                                                    "true"
-                                                }
-                                                onChange={handleCheckChange(
-                                                    "WebDAVEnabled"
-                                                )}
-                                            />
-                                        }
-                                        label="WebDAV"
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        关闭后，用户无法通过 WebDAV
-                                        协议连接至网盘
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        )}
+                      {group.ID !== 3 && (
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <FormControlLabel
+                                      control={
+                                          <Switch
+                                              checked={
+                                                  group.WebDAVEnabled ===
+                                                  "true"
+                                              }
+                                              onChange={handleCheckChange(
+                                                  "WebDAVEnabled"
+                                              )}
+                                          />
+                                      }
+                                      label="WebDAV"
+                                  />
+                                  <FormHelperText id="component-helper-text">
+                                    {t('When disabled, users cannot connect to the network disk through the WebDAV\nprotocol')}
+                                  </FormHelperText>
+                              </FormControl>
+                          </div>
+                      )}
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.OptionsSerialized
-                                                    .one_time_download ===
-                                                "true"
-                                            }
-                                            onChange={handleOptionCheckChange(
-                                                "one_time_download"
-                                            )}
-                                        />
-                                    }
-                                    label="禁止多次下载请求"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    只针对本机存储策略有效。开启后，用户无法使用多线程下载工具。
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              group.OptionsSerialized
+                                                  .one_time_download ===
+                                              "true"
+                                          }
+                                          onChange={handleOptionCheckChange(
+                                              "one_time_download"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Multiple download requests are prohibited')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Only valid for the native storage strategy. When enabled, users cannot use the multi-threaded download tool.')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        {group.ID !== 3 && (
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                checked={
-                                                    group.OptionsSerialized
-                                                        .aria2 === "true"
-                                                }
-                                                onChange={handleOptionCheckChange(
-                                                    "aria2"
-                                                )}
-                                            />
-                                        }
-                                        label="离线下载"
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        是否允许用户创建离线下载任务
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        )}
+                      {group.ID !== 3 && (
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <FormControlLabel
+                                      control={
+                                          <Switch
+                                              checked={
+                                                  group.OptionsSerialized
+                                                      .aria2 === "true"
+                                              }
+                                              onChange={handleOptionCheckChange(
+                                                  "aria2"
+                                              )}
+                                          />
+                                      }
+                                      label={t('Offline download')}
+                                  />
+                                  <FormHelperText id="component-helper-text">
+                                    {t('Whether users are allowed to create offline download tasks')}
+                                  </FormHelperText>
+                              </FormControl>
+                          </div>
+                      )}
 
-                        <Collapse in={group.OptionsSerialized.aria2 === "true"}>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        Aria2 任务参数
-                                    </InputLabel>
-                                    <Input
-                                        multiline
-                                        value={
-                                            group.OptionsSerialized
-                                                .aria2_options
-                                        }
-                                        onChange={handleOptionChange(
-                                            "aria2_options"
-                                        )}
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        此用户组创建离线下载任务时额外携带的参数，以
-                                        JSON
-                                        编码后的格式书写，您可也可以将这些设置写在
-                                        Aria2 配置文件里，可用参数请查阅官方文档
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        </Collapse>
+                      <Collapse in={group.OptionsSerialized.aria2 === "true"}>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('Aria2 Task Parameters')}
+                                  </InputLabel>
+                                  <Input
+                                      multiline
+                                      value={
+                                          group.OptionsSerialized
+                                              .aria2_options
+                                      }
+                                      onChange={handleOptionChange(
+                                          "aria2_options"
+                                      )}
+                                  />
+                                  <FormHelperText id="component-helper-text">
+                                    {t(
+                                      'The additional parameters that this user group carries when creating offline download tasks are written in\nJSON\nencoded format. You can also write these settings in the\nAria2 configuration file. For available parameters, please refer to the official Document'
+                                    )}
+                                  </FormHelperText>
+                              </FormControl>
+                          </div>
+                      </Collapse>
 
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={
-                                                group.OptionsSerialized
-                                                    .archive_download === "true"
-                                            }
-                                            onChange={handleOptionCheckChange(
-                                                "archive_download"
-                                            )}
-                                        />
-                                    }
-                                    label="打包下载"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    是否允许用户多选文件打包下载
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.form}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={
+                                              group.OptionsSerialized
+                                                  .archive_download === "true"
+                                          }
+                                          onChange={handleOptionCheckChange(
+                                              "archive_download"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Download package')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Whether to allow users to select multiple files to package and download')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        {group.ID !== 3 && (
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                checked={
-                                                    group.OptionsSerialized
-                                                        .archive_task === "true"
-                                                }
-                                                onChange={handleOptionCheckChange(
-                                                    "archive_task"
-                                                )}
-                                            />
-                                        }
-                                        label="压缩/解压缩 任务"
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        是否用户创建 压缩/解压缩 任务
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        )}
+                      {group.ID !== 3 && (
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <FormControlLabel
+                                      control={
+                                          <Switch
+                                              checked={
+                                                  group.OptionsSerialized
+                                                      .archive_task === "true"
+                                              }
+                                              onChange={handleOptionCheckChange(
+                                                  "archive_task"
+                                              )}
+                                          />
+                                      }
+                                      label={t('Compress/Decompress Tasks')}
+                                  />
+                                  <FormHelperText id="component-helper-text">
+                                    {t('Whether users create compression/decompression tasks')}
+                                  </FormHelperText>
+                              </FormControl>
+                          </div>
+                      )}
 
-                        <Collapse
-                            in={group.OptionsSerialized.archive_task === "true"}
-                        >
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <SizeInput
-                                        value={
-                                            group.OptionsSerialized
-                                                .compress_size
-                                        }
-                                        onChange={handleOptionChange(
-                                            "compress_size"
-                                        )}
-                                        min={0}
-                                        max={9223372036854775807}
-                                        label={"待压缩文件最大大小"}
-                                    />
-                                </FormControl>
-                                <FormHelperText id="component-helper-text">
-                                    用户可创建的压缩任务的文件最大总大小，填写为
-                                    0 表示不限制
-                                </FormHelperText>
-                            </div>
+                      <Collapse
+                          in={group.OptionsSerialized.archive_task === "true"}
+                      >
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <SizeInput
+                                      value={
+                                          group.OptionsSerialized
+                                              .compress_size
+                                      }
+                                      onChange={handleOptionChange(
+                                          "compress_size"
+                                      )}
+                                      min={0}
+                                      max={9223372036854775807}
+                                      label={t('Maximum size of files to be compressed')}
+                                  />
+                              </FormControl>
+                              <FormHelperText id="component-helper-text">
+                                {t('The maximum total file size of the compression task that can be created by the user, filled in as\n0 means unlimited')}
+                              </FormHelperText>
+                          </div>
 
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <SizeInput
-                                        value={
-                                            group.OptionsSerialized
-                                                .decompress_size
-                                        }
-                                        onChange={handleOptionChange(
-                                            "decompress_size"
-                                        )}
-                                        min={0}
-                                        max={9223372036854775807}
-                                        label={"待解压文件最大大小"}
-                                    />
-                                </FormControl>
-                                <FormHelperText id="component-helper-text">
-                                    用户可创建的解压缩任务的文件最大总大小，填写为
-                                    0 表示不限制
-                                </FormHelperText>
-                            </div>
-                        </Collapse>
-                    </div>
-                </div>
-                <div className={classes.root}>
-                    <Button
-                        disabled={loading}
-                        type={"submit"}
-                        variant={"contained"}
-                        color={"primary"}
-                    >
-                        保存
-                    </Button>
-                </div>
-            </form>
-        </div>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <SizeInput
+                                      value={
+                                          group.OptionsSerialized
+                                              .decompress_size
+                                      }
+                                      onChange={handleOptionChange(
+                                          "decompress_size"
+                                      )}
+                                      min={0}
+                                      max={9223372036854775807}
+                                      label={t('Maximum size of the file to be decompressed')}
+                                  />
+                              </FormControl>
+                              <FormHelperText id="component-helper-text">
+                                {t('The maximum total file size of the decompression task that can be created by the user, filled in as\n0 means unlimited')}
+                              </FormHelperText>
+                          </div>
+                      </Collapse>
+                  </div>
+              </div>
+              <div className={classes.root}>
+                  <Button
+                      disabled={loading}
+                      type={"submit"}
+                      variant={"contained"}
+                      color={"primary"}
+                  >
+                    {t('save')}
+                  </Button>
+              </div>
+          </form>
+      </div>
     );
 }

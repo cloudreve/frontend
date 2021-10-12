@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import uploaderLoader from "../../loader";
 import { connect } from "react-redux";
@@ -51,7 +52,7 @@ class UploaderComponent extends Component {
         this.props.toggleSnackbar(
             "top",
             "right",
-            "文件已经重新加入上传队列",
+            this.props.t('The file has been re-added to the upload queue'),
             "info"
         );
     };
@@ -229,6 +230,6 @@ class UploaderComponent extends Component {
 
 const Uploader = connect(mapStateToProps, mapDispatchToProps, null, {
     forwardRef: true,
-})(uploaderLoader()(UploaderComponent));
+})(withTranslation()(uploaderLoader()(UploaderComponent)));
 
 export default Uploader;

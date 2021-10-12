@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useState } from "react";
 import Stepper from "@material-ui/core/Stepper";
@@ -92,27 +94,27 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "存储空间",
+        title: i18next.t('Storage'),
         optional: false,
     },
     {
-        title: "上传路径",
+        title: i18next.t('Upload Path'),
         optional: false,
     },
     {
-        title: "直链设置",
+        title: i18next.t('Straight link settings'),
         optional: false,
     },
     {
-        title: "上传限制",
+        title: i18next.t('Upload limit'),
         optional: false,
     },
     {
-        title: "跨域策略",
+        title: i18next.t('Cross Domain Policy'),
         optional: true,
     },
     {
-        title: "完成",
+        title: i18next.t('Finish'),
         optional: false,
     },
 ];
@@ -140,7 +142,7 @@ const regions = {
     "eu-west-3": "Europe (Paris)",
     "eu-north-1": "Europe (Stockholm)",
     "me-south-1": "Middle East (Bahrain)",
-    "sa-east-1": "South America (São Paulo)",
+    "sa-east-1": i18next.t('South America (São Paulo)'),
 };
 
 export default function S3Guide(props) {
@@ -178,6 +180,8 @@ export default function S3Guide(props) {
     const [policyID, setPolicyID] = useState(
         props.policy ? props.policy.ID : 0
     );
+
+    const { t } = useTranslation();
 
     const handleChange = (name) => (event) => {
         setPolicy({
@@ -241,7 +245,7 @@ export default function S3Guide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    t('Storage Policy Already') + (props.policy ? t('save') : t('Add to')),
                     "success"
                 );
                 setActiveStep(4);
@@ -263,7 +267,7 @@ export default function S3Guide(props) {
             id: policyID,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "跨域策略已添加", "success");
+                ToggleSnackbar("top", "right", t('Cross-domain policy has been added'), "success");
                 setActiveStep(5);
             })
             .catch((error) => {
@@ -275,814 +279,811 @@ export default function S3Guide(props) {
     };
 
     return (
-        <div>
-            <AlertDialog
-                open={alertOpen}
-                onClose={() => setAlertOpen(false)}
-                title={"警告"}
-                msg={
-                    "S3 类型存储策略目前仅可用于自己使用，或者是给受信任的用户组使用。"
-                }
-            />
-            <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"} Amazon S3 存储策略
-            </Typography>
-            <Stepper activeStep={activeStep}>
-                {steps.map((label, index) => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    if (label.optional) {
-                        labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
-                        );
-                    }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
-                    return (
-                        <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
+      <div>
+          <AlertDialog
+              open={alertOpen}
+              onClose={() => setAlertOpen(false)}
+              title={t('warn')}
+              msg={
+                  t('S3 type storage policy is currently only available for self-use, or for trusted user groups.')
+              }
+          />
+          <Typography variant={"h6"}>
+            {props.policy ? t('Revise') : t('Add to')} {t('Amazon S3 Storage Policy')}
+          </Typography>
+          <Stepper activeStep={activeStep}>
+              {steps.map((label, index) => {
+                  const stepProps = {};
+                  const labelProps = {};
+                  if (label.optional) {
+                      labelProps.optional = (
+                          (<Typography variant="caption">{t('Optional')}</Typography>)
+                      );
+                  }
+                  if (isStepSkipped(index)) {
+                      stepProps.completed = false;
+                  }
+                  return (
+                      <Step key={label.title} {...stepProps}>
+                          <StepLabel {...labelProps}>{label.title}</StepLabel>
+                      </Step>
+                  );
+              })}
+          </Stepper>
 
-            {activeStep === 0 && (
-                <form
-                    className={classes.stepContent}
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        setActiveStep(1);
-                    }}
-                >
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>0</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                Cloudreve 主站需要启用 CORS 支持，具体步骤如下：
+          {activeStep === 0 && (
+              <form
+                  className={classes.stepContent}
+                  onSubmit={(e) => {
+                      e.preventDefault();
+                      setActiveStep(1);
+                  }}
+              >
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>0</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('The Cloudreve master site needs to enable CORS support, the specific steps are as follows:')}
+                            <br />
+                            {t(
+                              'Modify the Cloudreve configuration file, add the following CORS\nconfiguration items, save and restart Cloudreve.'
+                            )}
+                            <pre>
+                                [CORS]
                                 <br />
-                                修改 Cloudreve 配置文件，新增以下 CORS
-                                配置项，保存并重启 Cloudreve。
-                                <pre>
-                                    [CORS]
-                                    <br />
-                                    AllowOrigins = *<br />
-                                    AllowMethods = OPTIONS,GET,POST
-                                    <br />
-                                    AllowHeaders = *<br />
-                                </pre>
-                            </Typography>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>1</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                前往 AWS S3
-                                控制台创建存储桶，在下方填写您创建存储桶时指定的
-                                <code>存储桶名称</code>：
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        存储桶名称
-                                    </InputLabel>
-                                    <Input
-                                        required
-                                        value={policy.BucketName}
-                                        onChange={handleChange("BucketName")}
-                                    />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>2</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                在下方选择您创建的空间的公共访问权限类型，推荐选择“私有”以获得更高的安全性，私有空间无法开启“获取直链”功能。
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        required
-                                        value={policy.IsPrivate}
-                                        onChange={handleChange("IsPrivate")}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="阻止全部公共访问权限"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="允许公共读取"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>3</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                (可选) 指定存储桶的 EndPoint（地域节点），
-                                填写为完整的 URL 格式，比如{" "}
-                                <code>https://bucket.region.example.com</code>。
-                                留空则将使用系统生成的默认接入点。
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        EndPoint
-                                    </InputLabel>
-                                    <Input
-                                        value={policy.Server}
-                                        onChange={handleChange("Server")}
-                                    />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>4</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                选择存储桶所在的区域，或者手动输入区域代码
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <Autocomplete
-                                        options={Object.keys(regions)}
-                                        freeSolo
-                                        value={policy.OptionsSerialized.region}
-                                        onInputChange={(_, value) =>
-                                            handleOptionChange("region")({
-                                                target: { value: value },
-                                            })
-                                        }
-                                        renderOption={(option) => (
-                                            <React.Fragment>
-                                                {regions[option]}
-                                            </React.Fragment>
-                                        )}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                style={{ width: "100%" }}
-                                                {...params}
-                                            />
-                                        )}
-                                    />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>5</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                是否要使用 CDN 加速访问？
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        required
-                                        value={useCDN}
-                                        onChange={(e) => {
-                                            setUseCDN(e.target.value);
-                                        }}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="使用"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="不使用"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <Collapse in={useCDN === "true"}>
-                        <div className={classes.subStepContainer}>
-                            <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>6</div>
-                            </div>
-                            <div className={classes.subStepContent}>
-                                <Typography variant={"body2"}>
-                                    CDN 加速域名
-                                </Typography>
-                                <div className={classes.form}>
-                                    <DomainInput
-                                        value={policy.BaseURL}
-                                        onChange={handleChange("BaseURL")}
-                                        required={useCDN === "true"}
-                                        label={"CDN 加速域名"}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </Collapse>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>
-                                {getNumber(6, [useCDN === "true"])}
-                            </div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                获取访问密钥，并填写在下方。
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        AccessKey
-                                    </InputLabel>
-                                    <Input
-                                        required
-                                        inputProps={{
-                                            pattern: "\\S+",
-                                            title: "不能含有空格",
-                                        }}
-                                        value={policy.AccessKey}
-                                        onChange={handleChange("AccessKey")}
-                                    />
-                                </FormControl>
-                            </div>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        SecretKey
-                                    </InputLabel>
-                                    <Input
-                                        required
-                                        inputProps={{
-                                            pattern: "\\S+",
-                                            title: "不能含有空格",
-                                        }}
-                                        value={policy.SecretKey}
-                                        onChange={handleChange("SecretKey")}
-                                    />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>
-                                {getNumber(7, [useCDN === "true"])}
-                            </div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                为此存储策略命名：
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        存储策略名
-                                    </InputLabel>
-                                    <Input
-                                        required
-                                        value={policy.Name}
-                                        onChange={handleChange("Name")}
-                                    />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.stepFooter}>
-                        <Button
-                            disabled={loading}
-                            type={"submit"}
-                            variant={"contained"}
-                            color={"primary"}
-                        >
-                            下一步
-                        </Button>
-                    </div>
-                </form>
-            )}
-
-            {activeStep === 1 && (
-                <form
-                    className={classes.stepContent}
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        setActiveStep(2);
-                    }}
-                >
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>1</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("path")}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        存储目录
-                                    </InputLabel>
-                                    <Input
-                                        required
-                                        value={policy.DirNameRule}
-                                        onChange={handleChange("DirNameRule")}
-                                    />
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>2</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("file")}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
-                            </Typography>
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        aria-label="gender"
-                                        name="gender1"
-                                        value={policy.AutoRename}
-                                        onChange={handleChange("AutoRename")}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="开启重命名"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="不开启"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-
-                            <Collapse in={policy.AutoRename === "true"}>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            命名规则
-                                        </InputLabel>
-                                        <Input
-                                            required={
-                                                policy.AutoRename === "true"
-                                            }
-                                            value={policy.FileNameRule}
-                                            onChange={handleChange(
-                                                "FileNameRule"
-                                            )}
-                                        />
-                                    </FormControl>
-                                </div>
-                            </Collapse>
-                        </div>
-                    </div>
-
-                    <div className={classes.stepFooter}>
-                        <Button
-                            color={"default"}
-                            className={classes.button}
-                            onClick={() => setActiveStep(0)}
-                        >
-                            上一步
-                        </Button>
-                        <Button
-                            disabled={loading}
-                            type={"submit"}
-                            variant={"contained"}
-                            color={"primary"}
-                        >
-                            下一步
-                        </Button>
-                    </div>
-                </form>
-            )}
-
-            {activeStep === 2 && (
-                <form
-                    className={classes.stepContent}
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        setActiveStep(3);
-                    }}
-                >
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>1</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                AllowOrigins = *<br />
+                                AllowMethods = OPTIONS,GET,POST
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
-                            </Typography>
+                                AllowHeaders = *<br />
+                            </pre>
+                          </Typography>
+                      </div>
+                  </div>
 
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        required
-                                        value={policy.IsOriginLinkEnable}
-                                        onChange={(e) => {
-                                            if (
-                                                policy.IsPrivate === "true" &&
-                                                e.target.value === "true"
-                                            ) {
-                                                ToggleSnackbar(
-                                                    "top",
-                                                    "right",
-                                                    "私有空间无法开启此功能",
-                                                    "warning"
-                                                );
-                                                return;
-                                            }
-                                            handleChange("IsOriginLinkEnable")(
-                                                e
-                                            );
-                                        }}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="允许"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="禁止"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>1</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Go to the AWS S3\nconsole to create a bucket, and fill in the  specified when you created the bucket below')}
+                            <code>{t('Bucket name')}</code>{t('：')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('Bucket name')}
+                                  </InputLabel>
+                                  <Input
+                                      required
+                                      value={policy.BucketName}
+                                      onChange={handleChange("BucketName")}
+                                  />
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-                    <div className={classes.stepFooter}>
-                        <Button
-                            color={"default"}
-                            className={classes.button}
-                            onClick={() => setActiveStep(1)}
-                        >
-                            上一步
-                        </Button>{" "}
-                        <Button
-                            disabled={loading}
-                            type={"submit"}
-                            variant={"contained"}
-                            color={"primary"}
-                        >
-                            下一步
-                        </Button>
-                    </div>
-                </form>
-            )}
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>2</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Select the type of public access permissions for the space you created below. It is recommended to select "Private" for higher security. Private spaces cannot enable the "Get direct link" function.')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl required component="fieldset">
+                                  <RadioGroup
+                                      required
+                                      value={policy.IsPrivate}
+                                      onChange={handleChange("IsPrivate")}
+                                      row
+                                  >
+                                      <FormControlLabel
+                                          value={"true"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('Block all public access rights')}
+                                      />
+                                      <FormControlLabel
+                                          value={"false"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('Allow public reading')}
+                                      />
+                                  </RadioGroup>
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-            {activeStep === 3 && (
-                <form className={classes.stepContent} onSubmit={submitPolicy}>
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>1</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
-                            </Typography>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>3</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t(
+                              '(Optional) Specify the EndPoint (regional node) of the bucket, fill in\nas a complete URL format, such as '
+                            )}{" "}
+                            <code>https://bucket.region.example.com</code>{t('.\nLeave blank to use the default access point generated by the system.')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                      EndPoint
+                                  </InputLabel>
+                                  <Input
+                                      value={policy.Server}
+                                      onChange={handleChange("Server")}
+                                  />
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        required
-                                        value={
-                                            policy.MaxSize === "0"
-                                                ? "false"
-                                                : "true"
-                                        }
-                                        onChange={(e) => {
-                                            if (e.target.value === "true") {
-                                                setPolicy({
-                                                    ...policy,
-                                                    MaxSize: "10485760",
-                                                });
-                                            } else {
-                                                setPolicy({
-                                                    ...policy,
-                                                    MaxSize: "0",
-                                                });
-                                            }
-                                        }}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="限制"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="不限制"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>4</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Select the region where the bucket is located, or manually enter the region code')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <Autocomplete
+                                      options={Object.keys(regions)}
+                                      freeSolo
+                                      value={policy.OptionsSerialized.region}
+                                      onInputChange={(_, value) =>
+                                          handleOptionChange("region")({
+                                              target: { value: value },
+                                          })
+                                      }
+                                      renderOption={(option) => (
+                                          <React.Fragment>
+                                              {regions[option]}
+                                          </React.Fragment>
+                                      )}
+                                      renderInput={(params) => (
+                                          <TextField
+                                              style={{ width: "100%" }}
+                                              {...params}
+                                          />
+                                      )}
+                                  />
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-                    <Collapse in={policy.MaxSize !== "0"}>
-                        <div className={classes.subStepContainer}>
-                            <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>2</div>
-                            </div>
-                            <div className={classes.subStepContent}>
-                                <Typography variant={"body2"}>
-                                    输入限制：
-                                </Typography>
-                                <div className={classes.form}>
-                                    <SizeInput
-                                        value={policy.MaxSize}
-                                        onChange={handleChange("MaxSize")}
-                                        min={0}
-                                        max={9223372036854775807}
-                                        label={"单文件大小限制"}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </Collapse>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>5</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Do you want to use CDN to accelerate access?')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl required component="fieldset">
+                                  <RadioGroup
+                                      required
+                                      value={useCDN}
+                                      onChange={(e) => {
+                                          setUseCDN(e.target.value);
+                                      }}
+                                      row
+                                  >
+                                      <FormControlLabel
+                                          value={"true"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('use')}
+                                      />
+                                      <FormControlLabel
+                                          value={"false"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('Do not use')}
+                                      />
+                                  </RadioGroup>
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>
-                                {policy.MaxSize !== "0" ? "3" : "2"}
-                            </div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
-                            </Typography>
+                  <Collapse in={useCDN === "true"}>
+                      <div className={classes.subStepContainer}>
+                          <div className={classes.stepNumberContainer}>
+                              <div className={classes.stepNumber}>6</div>
+                          </div>
+                          <div className={classes.subStepContent}>
+                              <Typography variant={"body2"}>
+                                {t('CDN accelerated domain name')}
+                              </Typography>
+                              <div className={classes.form}>
+                                  <DomainInput
+                                      value={policy.BaseURL}
+                                      onChange={handleChange("BaseURL")}
+                                      required={useCDN === "true"}
+                                      label={t('CDN accelerated domain name')}
+                                  />
+                              </div>
+                          </div>
+                      </div>
+                  </Collapse>
 
-                            <div className={classes.form}>
-                                <FormControl required component="fieldset">
-                                    <RadioGroup
-                                        required
-                                        value={
-                                            policy.OptionsSerialized
-                                                .file_type === ""
-                                                ? "false"
-                                                : "true"
-                                        }
-                                        onChange={(e) => {
-                                            if (e.target.value === "true") {
-                                                setPolicy({
-                                                    ...policy,
-                                                    OptionsSerialized: {
-                                                        ...policy.OptionsSerialized,
-                                                        file_type:
-                                                            "jpg,png,mp4,zip,rar",
-                                                    },
-                                                });
-                                            } else {
-                                                setPolicy({
-                                                    ...policy,
-                                                    OptionsSerialized: {
-                                                        ...policy.OptionsSerialized,
-                                                        file_type: "",
-                                                    },
-                                                });
-                                            }
-                                        }}
-                                        row
-                                    >
-                                        <FormControlLabel
-                                            value={"true"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="限制"
-                                        />
-                                        <FormControlLabel
-                                            value={"false"}
-                                            control={
-                                                <Radio color={"primary"} />
-                                            }
-                                            label="不限制"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </div>
-                        </div>
-                    </div>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>
+                              {getNumber(6, [useCDN === "true"])}
+                          </div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Get the access key and fill it in below.')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                      AccessKey
+                                  </InputLabel>
+                                  <Input
+                                      required
+                                      inputProps={{
+                                          pattern: "\\S+",
+                                          title: t('Cannot contain spaces'),
+                                      }}
+                                      value={policy.AccessKey}
+                                      onChange={handleChange("AccessKey")}
+                                  />
+                              </FormControl>
+                          </div>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                      SecretKey
+                                  </InputLabel>
+                                  <Input
+                                      required
+                                      inputProps={{
+                                          pattern: "\\S+",
+                                          title: t('Cannot contain spaces'),
+                                      }}
+                                      value={policy.SecretKey}
+                                      onChange={handleChange("SecretKey")}
+                                  />
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-                    <Collapse in={policy.OptionsSerialized.file_type !== ""}>
-                        <div className={classes.subStepContainer}>
-                            <div className={classes.stepNumberContainer}>
-                                <div className={classes.stepNumber}>
-                                    {policy.MaxSize !== "0" ? "4" : "3"}
-                                </div>
-                            </div>
-                            <div className={classes.subStepContent}>
-                                <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
-                                </Typography>
-                                <div className={classes.form}>
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="component-helper">
-                                            扩展名列表
-                                        </InputLabel>
-                                        <Input
-                                            value={
-                                                policy.OptionsSerialized
-                                                    .file_type
-                                            }
-                                            onChange={handleOptionChange(
-                                                "file_type"
-                                            )}
-                                        />
-                                    </FormControl>
-                                </div>
-                            </div>
-                        </div>
-                    </Collapse>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>
+                              {getNumber(7, [useCDN === "true"])}
+                          </div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Name this storage policy:')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('Storage Policy Name')}
+                                  </InputLabel>
+                                  <Input
+                                      required
+                                      value={policy.Name}
+                                      onChange={handleChange("Name")}
+                                  />
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-                    <div className={classes.stepFooter}>
-                        <Button
-                            color={"default"}
-                            className={classes.button}
-                            onClick={() => setActiveStep(2)}
-                        >
-                            上一步
-                        </Button>{" "}
-                        <Button
-                            disabled={loading}
-                            type={"submit"}
-                            variant={"contained"}
-                            color={"primary"}
-                        >
-                            下一步
-                        </Button>
-                    </div>
-                </form>
-            )}
+                  <div className={classes.stepFooter}>
+                      <Button
+                          disabled={loading}
+                          type={"submit"}
+                          variant={"contained"}
+                          color={"primary"}
+                      >
+                        {t('Next step"')}
+                      </Button>
+                  </div>
+              </form>
+          )}
 
-            {activeStep === 4 && (
-                <form className={classes.stepContent} onSubmit={submitPolicy}>
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer} />
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                S3 Bucket 需要正确配置跨域策略后才能使用 Web
-                                端上传文件，Cloudreve
-                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此
-                                Bucket 的跨域策略，此步骤可以跳过。
-                            </Typography>
-                            <div className={classes.form}>
-                                <Button
-                                    disabled={loading}
-                                    color={"secondary"}
-                                    variant={"contained"}
-                                    className={classes.button}
-                                    onClick={() => createCORS()}
-                                    classes={{ label: classes.viewButtonLabel }}
-                                >
-                                    让 Cloudreve 帮我设置
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={classes.stepFooter}>
-                        <Button
-                            color={"default"}
-                            className={classes.button}
-                            onClick={() => {
-                                setActiveStep(
-                                    (prevActiveStep) => prevActiveStep + 1
-                                );
-                                setSkipped((prevSkipped) => {
-                                    const newSkipped = new Set(
-                                        prevSkipped.values()
-                                    );
-                                    newSkipped.add(activeStep);
-                                    return newSkipped;
-                                });
-                            }}
-                        >
-                            跳过
-                        </Button>{" "}
-                    </div>
-                </form>
-            )}
+          {activeStep === 1 && (
+              <form
+                  className={classes.stepContent}
+                  onSubmit={(e) => {
+                      e.preventDefault();
+                      setActiveStep(2);
+                  }}
+              >
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>1</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t(
+                              'Please keep at least one color scheme'
+                            )}{" "}
+                            <Link
+                                color={"secondary"}
+                                href={"javascript:void()"}
+                                onClick={() => setMagicVar("path")}
+                            >
+                              {t('Path Magic Variable List')}
+                            </Link>{" "}
+                            {t('。')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl fullWidth>
+                                  <InputLabel htmlFor="component-helper">
+                                    {t('Storage Directory')}
+                                  </InputLabel>
+                                  <Input
+                                      required
+                                      value={policy.DirNameRule}
+                                      onChange={handleChange("DirNameRule")}
+                                  />
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
 
-            {activeStep === 5 && (
-                <>
-                    <form className={classes.stepContent}>
-                        <Typography>
-                            存储策略已{props.policy ? "保存" : "添加"}！
-                        </Typography>
-                        <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
-                        </Typography>
-                    </form>
-                    <div className={classes.stepFooter}>
-                        <Button
-                            color={"primary"}
-                            className={classes.button}
-                            onClick={() => history.push("/admin/policy")}
-                        >
-                            返回存储策略列表
-                        </Button>
-                    </div>
-                </>
-            )}
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>2</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t(
+                              'Does the stored physical file need to be renamed? The renaming here will not affect the\nfile name that is finally presented to the user. The file name can also use magic variables,\ncan refer to the available magic variables'
+                            )}{" "}
+                            <Link
+                                color={"secondary"}
+                                href={"javascript:void()"}
+                                onClick={() => setMagicVar("file")}
+                            >
+                              {t('File name magic variable list')}
+                            </Link>{" "}
+                            {t('。')}
+                          </Typography>
+                          <div className={classes.form}>
+                              <FormControl required component="fieldset">
+                                  <RadioGroup
+                                      aria-label="gender"
+                                      name="gender1"
+                                      value={policy.AutoRename}
+                                      onChange={handleChange("AutoRename")}
+                                      row
+                                  >
+                                      <FormControlLabel
+                                          value={"true"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('Turn on rename')}
+                                      />
+                                      <FormControlLabel
+                                          value={"false"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('Do not open')}
+                                      />
+                                  </RadioGroup>
+                              </FormControl>
+                          </div>
 
-            <MagicVar
-                open={magicVar === "file"}
-                isFile
-                onClose={() => setMagicVar("")}
-            />
-            <MagicVar
-                open={magicVar === "path"}
-                onClose={() => setMagicVar("")}
-            />
-        </div>
+                          <Collapse in={policy.AutoRename === "true"}>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                        {t('Naming Rules')}
+                                      </InputLabel>
+                                      <Input
+                                          required={
+                                              policy.AutoRename === "true"
+                                          }
+                                          value={policy.FileNameRule}
+                                          onChange={handleChange(
+                                              "FileNameRule"
+                                          )}
+                                      />
+                                  </FormControl>
+                              </div>
+                          </Collapse>
+                      </div>
+                  </div>
+
+                  <div className={classes.stepFooter}>
+                      <Button
+                          color={"default"}
+                          className={classes.button}
+                          onClick={() => setActiveStep(0)}
+                      >
+                        {t('Previous')}
+                      </Button>
+                      <Button
+                          disabled={loading}
+                          type={"submit"}
+                          variant={"contained"}
+                          color={"primary"}
+                      >
+                        {t('Next step"')}
+                      </Button>
+                  </div>
+              </form>
+          )}
+
+          {activeStep === 2 && (
+              <form
+                  className={classes.stepContent}
+                  onSubmit={(e) => {
+                      e.preventDefault();
+                      setActiveStep(3);
+                  }}
+              >
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>1</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Are you allowed to obtain permanent direct links to files?')}
+                            <br />
+                            {t('When enabled, the user can request a direct link that can directly access the content of the file, suitable for image bed applications or personal use.')}
+                          </Typography>
+
+                          <div className={classes.form}>
+                              <FormControl required component="fieldset">
+                                  <RadioGroup
+                                      required
+                                      value={policy.IsOriginLinkEnable}
+                                      onChange={(e) => {
+                                          if (
+                                              policy.IsPrivate === "true" &&
+                                              e.target.value === "true"
+                                          ) {
+                                              ToggleSnackbar(
+                                                  "top",
+                                                  "right",
+                                                  t('Private space cannot open this function'),
+                                                  "warning"
+                                              );
+                                              return;
+                                          }
+                                          handleChange("IsOriginLinkEnable")(
+                                              e
+                                          );
+                                      }}
+                                      row
+                                  >
+                                      <FormControlLabel
+                                          value={"true"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('allow')}
+                                      />
+                                      <FormControlLabel
+                                          value={"false"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('prohibit')}
+                                      />
+                                  </RadioGroup>
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div className={classes.stepFooter}>
+                      <Button
+                          color={"default"}
+                          className={classes.button}
+                          onClick={() => setActiveStep(1)}
+                      >
+                        {t('Previous')}
+                      </Button>{" "}
+                      <Button
+                          disabled={loading}
+                          type={"submit"}
+                          variant={"contained"}
+                          color={"primary"}
+                      >
+                        {t('Next step"')}
+                      </Button>
+                  </div>
+              </form>
+          )}
+
+          {activeStep === 3 && (
+              <form className={classes.stepContent} onSubmit={submitPolicy}>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>1</div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Do you want to limit the size of the uploaded single file?')}
+                          </Typography>
+
+                          <div className={classes.form}>
+                              <FormControl required component="fieldset">
+                                  <RadioGroup
+                                      required
+                                      value={
+                                          policy.MaxSize === "0"
+                                              ? "false"
+                                              : "true"
+                                      }
+                                      onChange={(e) => {
+                                          if (e.target.value === "true") {
+                                              setPolicy({
+                                                  ...policy,
+                                                  MaxSize: "10485760",
+                                              });
+                                          } else {
+                                              setPolicy({
+                                                  ...policy,
+                                                  MaxSize: "0",
+                                              });
+                                          }
+                                      }}
+                                      row
+                                  >
+                                      <FormControlLabel
+                                          value={"true"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('limit')}
+                                      />
+                                      <FormControlLabel
+                                          value={"false"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('not limited')}
+                                      />
+                                  </RadioGroup>
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
+
+                  <Collapse in={policy.MaxSize !== "0"}>
+                      <div className={classes.subStepContainer}>
+                          <div className={classes.stepNumberContainer}>
+                              <div className={classes.stepNumber}>2</div>
+                          </div>
+                          <div className={classes.subStepContent}>
+                              <Typography variant={"body2"}>
+                                {t('Input limit:')}
+                              </Typography>
+                              <div className={classes.form}>
+                                  <SizeInput
+                                      value={policy.MaxSize}
+                                      onChange={handleChange("MaxSize")}
+                                      min={0}
+                                      max={9223372036854775807}
+                                      label={t('Single file size limit')}
+                                  />
+                              </div>
+                          </div>
+                      </div>
+                  </Collapse>
+
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer}>
+                          <div className={classes.stepNumber}>
+                              {policy.MaxSize !== "0" ? "3" : "2"}
+                          </div>
+                      </div>
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t('Do you want to restrict uploading file extensions?')}
+                          </Typography>
+
+                          <div className={classes.form}>
+                              <FormControl required component="fieldset">
+                                  <RadioGroup
+                                      required
+                                      value={
+                                          policy.OptionsSerialized
+                                              .file_type === ""
+                                              ? "false"
+                                              : "true"
+                                      }
+                                      onChange={(e) => {
+                                          if (e.target.value === "true") {
+                                              setPolicy({
+                                                  ...policy,
+                                                  OptionsSerialized: {
+                                                      ...policy.OptionsSerialized,
+                                                      file_type:
+                                                          "jpg,png,mp4,zip,rar",
+                                                  },
+                                              });
+                                          } else {
+                                              setPolicy({
+                                                  ...policy,
+                                                  OptionsSerialized: {
+                                                      ...policy.OptionsSerialized,
+                                                      file_type: "",
+                                                  },
+                                              });
+                                          }
+                                      }}
+                                      row
+                                  >
+                                      <FormControlLabel
+                                          value={"true"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('limit')}
+                                      />
+                                      <FormControlLabel
+                                          value={"false"}
+                                          control={
+                                              <Radio color={"primary"} />
+                                          }
+                                          label={t('not limited')}
+                                      />
+                                  </RadioGroup>
+                              </FormControl>
+                          </div>
+                      </div>
+                  </div>
+
+                  <Collapse in={policy.OptionsSerialized.file_type !== ""}>
+                      <div className={classes.subStepContainer}>
+                          <div className={classes.stepNumberContainer}>
+                              <div className={classes.stepNumber}>
+                                  {policy.MaxSize !== "0" ? "4" : "3"}
+                              </div>
+                          </div>
+                          <div className={classes.subStepContent}>
+                              <Typography variant={"body2"}>
+                                {t('Enter the file extensions allowed to upload, please use a comma for more than one file,\nseparated')}
+                              </Typography>
+                              <div className={classes.form}>
+                                  <FormControl fullWidth>
+                                      <InputLabel htmlFor="component-helper">
+                                        {t('List of extensions')}
+                                      </InputLabel>
+                                      <Input
+                                          value={
+                                              policy.OptionsSerialized
+                                                  .file_type
+                                          }
+                                          onChange={handleOptionChange(
+                                              "file_type"
+                                          )}
+                                      />
+                                  </FormControl>
+                              </div>
+                          </div>
+                      </div>
+                  </Collapse>
+
+                  <div className={classes.stepFooter}>
+                      <Button
+                          color={"default"}
+                          className={classes.button}
+                          onClick={() => setActiveStep(2)}
+                      >
+                        {t('Previous')}
+                      </Button>{" "}
+                      <Button
+                          disabled={loading}
+                          type={"submit"}
+                          variant={"contained"}
+                          color={"primary"}
+                      >
+                        {t('Next step"')}
+                      </Button>
+                  </div>
+              </form>
+          )}
+
+          {activeStep === 4 && (
+              <form className={classes.stepContent} onSubmit={submitPolicy}>
+                  <div className={classes.subStepContainer}>
+                      <div className={classes.stepNumberContainer} />
+                      <div className={classes.subStepContent}>
+                          <Typography variant={"body2"}>
+                            {t(
+                              'S3 Bucket needs to configure the cross-domain policy correctly before you can upload files on the Web\nside. Cloudreve\ncan automatically set it for you, or you can set it manually by referring to the document steps. If you have already set this\nBucket Cross-domain policy, this step can be skipped.'
+                            )}
+                          </Typography>
+                          <div className={classes.form}>
+                              <Button
+                                  disabled={loading}
+                                  color={"secondary"}
+                                  variant={"contained"}
+                                  className={classes.button}
+                                  onClick={() => createCORS()}
+                                  classes={{ label: classes.viewButtonLabel }}
+                              >
+                                {t('Let Cloudreve set it up for me')}
+                              </Button>
+                          </div>
+                      </div>
+                  </div>
+                  <div className={classes.stepFooter}>
+                      <Button
+                          color={"default"}
+                          className={classes.button}
+                          onClick={() => {
+                              setActiveStep(
+                                  (prevActiveStep) => prevActiveStep + 1
+                              );
+                              setSkipped((prevSkipped) => {
+                                  const newSkipped = new Set(
+                                      prevSkipped.values()
+                                  );
+                                  newSkipped.add(activeStep);
+                                  return newSkipped;
+                              });
+                          }}
+                      >
+                        {t('jump over')}
+                      </Button>{" "}
+                  </div>
+              </form>
+          )}
+
+          {activeStep === 5 && (
+              <>
+                  <form className={classes.stepContent}>
+                      <Typography>
+                        {t('Storage Policy Already')}{props.policy ? t('save') : t('Add to')}{t('！')}
+                      </Typography>
+                      <Typography variant={"body2"} color={"textSecondary"}>
+                        {t('To use this storage policy, please go to the user group management page and bind this storage policy to the corresponding user group.')}
+                      </Typography>
+                  </form>
+                  <div className={classes.stepFooter}>
+                      <Button
+                          color={"primary"}
+                          className={classes.button}
+                          onClick={() => history.push("/admin/policy")}
+                      >
+                        {t('Return to storage policy list')}
+                      </Button>
+                  </div>
+              </>
+          )}
+
+          <MagicVar
+              open={magicVar === "file"}
+              isFile
+              onClose={() => setMagicVar("")}
+          />
+          <MagicVar
+              open={magicVar === "path"}
+              onClose={() => setMagicVar("")}
+          />
+      </div>
     );
 }

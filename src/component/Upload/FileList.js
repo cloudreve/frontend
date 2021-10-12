@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
@@ -195,198 +196,197 @@ class FileList extends Component {
         });
 
         return (
-            <Dialog
-                fullScreen={isWidthDown("sm", width)}
-                open={this.state.open}
-                onClose={this.handleClose}
-                TransitionComponent={this.Transition}
-            >
-                <AppBar className={classes.appBar}>
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            onClick={this.handleClose}
-                            aria-label="Close"
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography
-                            variant="h6"
-                            color="inherit"
-                            className={classes.flex}
-                        >
-                            上传队列
-                        </Typography>
-                        <IconButton color="inherit" onClick={this.addNewFile}>
-                            <AddIcon />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <DialogContent className={classes.dialogContent}>
-                    <List className={classes.minHight}>
-                        {this.state.files.map((item, i) => (
-                            <div key={i} className={classes.progressContainer}>
-                                {item.status === 2 && (
-                                    <div
-                                        style={{
-                                            backgroundColor: this.getProgressBackground(),
-                                            width: item.percent + "%",
-                                        }}
-                                        className={classes.progress}
-                                    />
-                                )}
-                                <ListItem
-                                    className={classes.progressContent}
-                                    button
-                                >
-                                    <TypeIcon fileName={item.name} isUpload />
-                                    {item.status === 1 && (
-                                        <ListItemText
-                                            className={classes.listAction}
-                                            primary={
-                                                <span
-                                                    className={classes.fileName}
-                                                >
-                                                    {item.name}
-                                                </span>
-                                            }
-                                            secondary={<div>排队中...</div>}
-                                        />
-                                    )}
-                                    {item.status === 2 && (
-                                        <ListItemText
-                                            className={classes.listAction}
-                                            primary={
-                                                <span
-                                                    className={classes.fileName}
-                                                >
-                                                    {item.name}
-                                                </span>
-                                            }
-                                            secondary={
-                                                <div>
-                                                    {item.percent <= 99 && (
-                                                        <>
-                                                            {window.plupload
-                                                                .formatSize(
-                                                                    item.speed
-                                                                )
-                                                                .toUpperCase()}
-                                                            /s 已上传{" "}
-                                                            {window.plupload
-                                                                .formatSize(
-                                                                    item.loaded
-                                                                )
-                                                                .toUpperCase()}{" "}
-                                                            , 共{" "}
-                                                            {window.plupload
-                                                                .formatSize(
-                                                                    item.size
-                                                                )
-                                                                .toUpperCase()}{" "}
-                                                            - {item.percent}%{" "}
-                                                        </>
-                                                    )}
-                                                    {item.percent > 99 && (
-                                                        <div>处理中...</div>
-                                                    )}
-                                                </div>
-                                            }
-                                        />
-                                    )}
-                                    {item.status === 3 && (
-                                        <ListItemText
-                                            className={classes.listAction}
-                                            primary={
-                                                <span
-                                                    className={classes.fileName}
-                                                >
-                                                    {item.name}
-                                                </span>
-                                            }
-                                            secondary={item.status}
-                                        />
-                                    )}
-                                    {item.status === 4 && (
-                                        <ListItemText
-                                            className={classes.listAction}
-                                            primary={
-                                                <span
-                                                    className={classes.fileName}
-                                                >
-                                                    {item.name}
-                                                </span>
-                                            }
-                                            secondary={
-                                                <div
-                                                    className={
-                                                        classes.errorStatus
-                                                    }
-                                                >
-                                                    {item.errMsg}
-                                                    <br />
-                                                </div>
-                                            }
-                                        />
-                                    )}
-                                    {item.status === 5 && (
-                                        <ListItemText
-                                            className={classes.listAction}
-                                            primary={
-                                                <span
-                                                    className={classes.fileName}
-                                                >
-                                                    {item.name}
-                                                </span>
-                                            }
-                                            secondary={
-                                                <div
-                                                    className={
-                                                        classes.successStatus
-                                                    }
-                                                >
-                                                    已完成
-                                                    <br />
-                                                </div>
-                                            }
-                                        />
-                                    )}
-                                    <ListItemSecondaryAction
-                                        className={classes.delete}
-                                    >
-                                        {item.status !== 4 && (
-                                            <IconButton
-                                                aria-label="Delete"
-                                                onClick={() =>
-                                                    this.cancelUpload(item)
-                                                }
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        )}
-                                        {item.status === 4 && (
-                                            <Tooltip title={"重试"}>
-                                                <IconButton
-                                                    aria-label="Delete"
-                                                    onClick={() =>
-                                                        this.reQueue(item)
-                                                    }
-                                                >
-                                                    <RefreshIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        )}
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                                <Divider />
-                            </div>
-                        ))}
-                    </List>
-                </DialogContent>
-            </Dialog>
+          <Dialog
+              fullScreen={isWidthDown("sm", width)}
+              open={this.state.open}
+              onClose={this.handleClose}
+              TransitionComponent={this.Transition}
+          >
+              <AppBar className={classes.appBar}>
+                  <Toolbar>
+                      <IconButton
+                          color="inherit"
+                          onClick={this.handleClose}
+                          aria-label="Close"
+                      >
+                          <CloseIcon />
+                      </IconButton>
+                      <Typography
+                          variant="h6"
+                          color="inherit"
+                          className={classes.flex}
+                      >
+                        {this.props.t('Upload Queue')}
+                      </Typography>
+                      <IconButton color="inherit" onClick={this.addNewFile}>
+                          <AddIcon />
+                      </IconButton>
+                  </Toolbar>
+              </AppBar>
+              <DialogContent className={classes.dialogContent}>
+                  <List className={classes.minHight}>
+                      {this.state.files.map((item, i) => (
+                          <div key={i} className={classes.progressContainer}>
+                              {item.status === 2 && (
+                                  <div
+                                      style={{
+                                          backgroundColor: this.getProgressBackground(),
+                                          width: item.percent + "%",
+                                      }}
+                                      className={classes.progress}
+                                  />
+                              )}
+                              <ListItem
+                                  className={classes.progressContent}
+                                  button
+                              >
+                                  <TypeIcon fileName={item.name} isUpload />
+                                  {item.status === 1 && (
+                                      <ListItemText
+                                          className={classes.listAction}
+                                          primary={
+                                              <span
+                                                  className={classes.fileName}
+                                              >
+                                                  {item.name}
+                                              </span>
+                                          }
+                                          secondary={<div>{this.props.t('in the line...')}</div>}
+                                      />
+                                  )}
+                                  {item.status === 2 && (
+                                      <ListItemText
+                                          className={classes.listAction}
+                                          primary={
+                                              <span
+                                                  className={classes.fileName}
+                                              >
+                                                  {item.name}
+                                              </span>
+                                          }
+                                          secondary={
+                                              <div>
+                                                  {item.percent <= 99 && (
+                                                      (<>
+                                                        {window.plupload
+                                                            .formatSize(
+                                                                item.speed
+                                                            )
+                                                            .toUpperCase()}
+                                                        {this.props.t('/s uploaded')}{" "}
+                                                        {window.plupload
+                                                            .formatSize(
+                                                                item.loaded
+                                                            )
+                                                            .toUpperCase()}{" "}
+                                                        {this.props.t(', common')}{" "}
+                                                        {window.plupload
+                                                            .formatSize(
+                                                                item.size
+                                                            )
+                                                            .toUpperCase()}{" "}-{item.percent}%{" "}
+                                                      </>)
+                                                  )}
+                                                  {item.percent > 99 && (
+                                                      (<div>{this.props.t('Processing...')}</div>)
+                                                  )}
+                                              </div>
+                                          }
+                                      />
+                                  )}
+                                  {item.status === 3 && (
+                                      <ListItemText
+                                          className={classes.listAction}
+                                          primary={
+                                              <span
+                                                  className={classes.fileName}
+                                              >
+                                                  {item.name}
+                                              </span>
+                                          }
+                                          secondary={item.status}
+                                      />
+                                  )}
+                                  {item.status === 4 && (
+                                      <ListItemText
+                                          className={classes.listAction}
+                                          primary={
+                                              <span
+                                                  className={classes.fileName}
+                                              >
+                                                  {item.name}
+                                              </span>
+                                          }
+                                          secondary={
+                                              <div
+                                                  className={
+                                                      classes.errorStatus
+                                                  }
+                                              >
+                                                  {item.errMsg}
+                                                  <br />
+                                              </div>
+                                          }
+                                      />
+                                  )}
+                                  {item.status === 5 && (
+                                      <ListItemText
+                                          className={classes.listAction}
+                                          primary={
+                                              <span
+                                                  className={classes.fileName}
+                                              >
+                                                  {item.name}
+                                              </span>
+                                          }
+                                          secondary={
+                                              <div
+                                                  className={
+                                                      classes.successStatus
+                                                  }
+                                              >
+                                                {this.props.t('completed')}
+                                                <br />
+                                              </div>
+                                          }
+                                      />
+                                  )}
+                                  <ListItemSecondaryAction
+                                      className={classes.delete}
+                                  >
+                                      {item.status !== 4 && (
+                                          <IconButton
+                                              aria-label="Delete"
+                                              onClick={() =>
+                                                  this.cancelUpload(item)
+                                              }
+                                          >
+                                              <DeleteIcon />
+                                          </IconButton>
+                                      )}
+                                      {item.status === 4 && (
+                                          <Tooltip title={this.props.t('Retry')}>
+                                              <IconButton
+                                                  aria-label="Delete"
+                                                  onClick={() =>
+                                                      this.reQueue(item)
+                                                  }
+                                              >
+                                                  <RefreshIcon />
+                                              </IconButton>
+                                          </Tooltip>
+                                      )}
+                                  </ListItemSecondaryAction>
+                              </ListItem>
+                              <Divider />
+                          </div>
+                      ))}
+                  </List>
+              </DialogContent>
+          </Dialog>
         );
     }
 }
 FileList.propTypes = {};
 
-export default withStyles(styles)(withWidth()(withTheme(FileList)));
+export default withTranslation()(withStyles(styles)(withWidth()(withTheme(FileList))));

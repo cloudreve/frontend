@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useState, useEffect } from "react";
 import { makeStyles, Badge } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
@@ -63,12 +64,14 @@ export default function UploadButton(props) {
         setQueued(props.Queued);
     }, [props.Queued]);
 
+    const { t } = useTranslation();
+
     const openUpload = (id) => {
         const uploadButton = document.getElementsByClassName(id)[0];
         if (document.body.contains(uploadButton)) {
             uploadButton.click();
         } else {
-            ToggleSnackbar("top", "right", "上传组件还未加载完成", "warning");
+            ToggleSnackbar("top", "right", t('The upload component has not been loaded yet'), "warning");
         }
     };
     const uploadClicked = () => {
@@ -90,75 +93,75 @@ export default function UploadButton(props) {
     };
 
     return (
-        <AutoHidden enable>
-            <Badge
-                badgeContent={queued}
-                classes={{
-                    badge: classes.badge, // class name, e.g. `root-x`
-                }}
-                className={classes.fab}
-                invisible={queued === 0}
-                color="primary"
-            >
-                <Backdrop open={open && statusHelper.isMobile()} />
-                <SpeedDial
-                    ariaLabel="SpeedDial openIcon example"
-                    hidden={false}
-                    tooltipTitle="上传文件"
-                    icon={
-                        <SpeedDialIcon
-                            openIcon={
-                                !statusHelper.isMobile() && <PublishIcon />
-                            }
-                        />
-                    }
-                    onClose={handleClose}
-                    FabProps={{
-                        onClick: () =>
-                            !statusHelper.isMobile() && uploadClicked(),
-                        color: "secondary",
-                    }}
-                    onOpen={handleOpen}
-                    open={open}
-                >
-                    {statusHelper.isMobile() && (
-                        <SpeedDialAction
-                            key="UploadFile"
-                            icon={<PublishIcon />}
-                            tooltipOpen
-                            tooltipTitle="上传文件"
-                            onClick={() => uploadClicked()}
-                            title={"上传文件"}
-                        />
-                    )}
-                    {!statusHelper.isMobile() && (
-                        <SpeedDialAction
-                            key="UploadFolder"
-                            icon={<FolderUpload />}
-                            tooltipOpen
-                            tooltipTitle="上传目录"
-                            onClick={() => openUpload("uploadFolderForm")}
-                            title={"上传目录"}
-                        />
-                    )}
-                    <SpeedDialAction
-                        key="NewFolder"
-                        icon={<CreateNewFolderIcon />}
-                        tooltipOpen
-                        tooltipTitle="新建目录"
-                        onClick={() => OpenNewFolderDialog()}
-                        title={"新建目录"}
-                    />
-                    <SpeedDialAction
-                        key="NewFile"
-                        icon={<FilePlus />}
-                        tooltipOpen
-                        tooltipTitle="新建文件"
-                        onClick={() => OpenNewFileDialog()}
-                        title={"新建文件"}
-                    />
-                </SpeedDial>
-            </Badge>
-        </AutoHidden>
+      <AutoHidden enable>
+          <Badge
+              badgeContent={queued}
+              classes={{
+                  badge: classes.badge, // class name, e.g. `root-x`
+              }}
+              className={classes.fab}
+              invisible={queued === 0}
+              color="primary"
+          >
+              <Backdrop open={open && statusHelper.isMobile()} />
+              <SpeedDial
+                  ariaLabel="SpeedDial openIcon example"
+                  hidden={false}
+                  tooltipTitle={t('upload files')}
+                  icon={
+                      <SpeedDialIcon
+                          openIcon={
+                              !statusHelper.isMobile() && <PublishIcon />
+                          }
+                      />
+                  }
+                  onClose={handleClose}
+                  FabProps={{
+                      onClick: () =>
+                          !statusHelper.isMobile() && uploadClicked(),
+                      color: "secondary",
+                  }}
+                  onOpen={handleOpen}
+                  open={open}
+              >
+                  {statusHelper.isMobile() && (
+                      <SpeedDialAction
+                          key="UploadFile"
+                          icon={<PublishIcon />}
+                          tooltipOpen
+                          tooltipTitle={t('upload files')}
+                          onClick={() => uploadClicked()}
+                          title={t('upload files')}
+                      />
+                  )}
+                  {!statusHelper.isMobile() && (
+                      <SpeedDialAction
+                          key="UploadFolder"
+                          icon={<FolderUpload />}
+                          tooltipOpen
+                          tooltipTitle={t('Upload directory')}
+                          onClick={() => openUpload("uploadFolderForm")}
+                          title={t('Upload directory')}
+                      />
+                  )}
+                  <SpeedDialAction
+                      key="NewFolder"
+                      icon={<CreateNewFolderIcon />}
+                      tooltipOpen
+                      tooltipTitle={t('New Directory')}
+                      onClick={() => OpenNewFolderDialog()}
+                      title={t('New Directory')}
+                  />
+                  <SpeedDialAction
+                      key="NewFile"
+                      icon={<FilePlus />}
+                      tooltipOpen
+                      tooltipTitle={t('New file')}
+                      onClick={() => OpenNewFileDialog()}
+                      title={t('New file')}
+                  />
+              </SpeedDial>
+          </Badge>
+      </AutoHidden>
     );
 }

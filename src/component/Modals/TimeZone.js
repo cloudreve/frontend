@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback, useEffect } from "react";
 import { FormLabel, makeStyles } from "@material-ui/core";
 import {
@@ -35,9 +36,11 @@ export default function TimeZoneDialog(props) {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const saveZoneInfo = () => {
         if (!validateTimeZone(timeZoneValue)) {
-            ToggleSnackbar("top", "right", "无效的时区名称", "warning");
+            ToggleSnackbar("top", "right", t('Invalid time zone name'), "warning");
             return;
         }
         Auth.SetPreference("timeZone", timeZoneValue);
@@ -48,41 +51,41 @@ export default function TimeZoneDialog(props) {
     const classes = useStyles();
 
     return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-            aria-labelledby="form-dialog-title"
-        >
-            <DialogTitle id="form-dialog-title">更改时区</DialogTitle>
+      <Dialog
+          open={props.open}
+          onClose={props.onClose}
+          aria-labelledby="form-dialog-title"
+      >
+          <DialogTitle id="form-dialog-title">{t('Change time zone')}</DialogTitle>
 
-            <DialogContent>
-                <FormControl>
-                    <TextField
-                        label={"IANA 时区名称标识"}
-                        value={timeZoneValue}
-                        onChange={(e) => setTimeZoneValue(e.target.value)}
-                    />
-                </FormControl>
-            </DialogContent>
+          <DialogContent>
+              <FormControl>
+                  <TextField
+                      label={t('IANA Time Zone Name Identification')}
+                      value={timeZoneValue}
+                      onChange={(e) => setTimeZoneValue(e.target.value)}
+                  />
+              </FormControl>
+          </DialogContent>
 
-            <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
-                <div className={classes.wrapper}>
-                    <Button
-                        color="primary"
-                        disabled={timeZoneValue === ""}
-                        onClick={() => saveZoneInfo()}
-                    >
-                        确定
-                        {props.modalsLoading && (
-                            <CircularProgress
-                                size={24}
-                                className={classes.buttonProgress}
-                            />
-                        )}
-                    </Button>
-                </div>
-            </DialogActions>
-        </Dialog>
+          <DialogActions>
+              <Button onClick={props.onClose}>{t('Cancel')}</Button>
+              <div className={classes.wrapper}>
+                  <Button
+                      color="primary"
+                      disabled={timeZoneValue === ""}
+                      onClick={() => saveZoneInfo()}
+                  >
+                    {t('Ok')}
+                    {props.modalsLoading && (
+                        <CircularProgress
+                            size={24}
+                            className={classes.buttonProgress}
+                        />
+                    )}
+                  </Button>
+              </div>
+          </DialogActions>
+      </Dialog>
     );
 }

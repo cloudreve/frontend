@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -100,43 +101,43 @@ class UserInfoCompoment extends Component {
         const user = Auth.GetUser(this.props.isLogin);
 
         return (
-            <div className={classes.userNav}>
-                <div className={classes.flexAvatar}>
-                    {/* eslint-disable-next-line */}
-                    <a onClick={this.showUserInfo} className={classes.avatar}>
-                        {isLogin && (
-                            <Avatar
-                                src={"/api/v3/user/avatar/" + user.id + "/l"}
-                                className={classes.avatarImg}
-                            />
-                        )}
-                        {!isLogin && (
-                            <Avatar
-                                src={"/api/v3/user/avatar/0/l"}
-                                className={classes.avatarImg}
-                            />
-                        )}
-                    </a>
-                    <DarkModeSwitcher position="left" />
-                </div>
-                <div className={classes.storageCircle}>
-                    <Typography
-                        className={classes.nickName}
-                        component="h2"
-                        noWrap
-                    >
-                        {isLogin ? user.nickname : "未登录"}
-                    </Typography>
-                    <Typography
-                        className={classes.groupName}
-                        component="h2"
-                        color="textSecondary"
-                        noWrap
-                    >
-                        {isLogin ? user.group.name : "游客"}
-                    </Typography>
-                </div>
-            </div>
+          <div className={classes.userNav}>
+              <div className={classes.flexAvatar}>
+                  {/* eslint-disable-next-line */}
+                  <a onClick={this.showUserInfo} className={classes.avatar}>
+                      {isLogin && (
+                          <Avatar
+                              src={"/api/v3/user/avatar/" + user.id + "/l"}
+                              className={classes.avatarImg}
+                          />
+                      )}
+                      {!isLogin && (
+                          <Avatar
+                              src={"/api/v3/user/avatar/0/l"}
+                              className={classes.avatarImg}
+                          />
+                      )}
+                  </a>
+                  <DarkModeSwitcher position="left" />
+              </div>
+              <div className={classes.storageCircle}>
+                  <Typography
+                      className={classes.nickName}
+                      component="h2"
+                      noWrap
+                  >
+                      {isLogin ? user.nickname : this.props.t('Not logged in')}
+                  </Typography>
+                  <Typography
+                      className={classes.groupName}
+                      component="h2"
+                      color="textSecondary"
+                      noWrap
+                  >
+                      {isLogin ? user.group.name : this.props.t('Guest')}
+                  </Typography>
+              </div>
+          </div>
         );
     }
 }
@@ -148,6 +149,6 @@ UserInfoCompoment.propTypes = {
 const UserInfo = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(UserInfoCompoment));
+)(withTranslation()(withStyles(styles)(UserInfoCompoment)));
 
 export default UserInfo;

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { withStyles } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Divider from "@material-ui/core/Divider";
@@ -177,92 +179,92 @@ const useStyles = makeStyles((theme) => ({
 
 const items = [
     {
-        title: "面板首页",
+        title: i18next.t('Home'),
         icon: <Home />,
         path: "home",
     },
     {
-        title: "参数设置",
+        title: i18next.t('Parameter settings'),
         icon: <Settings />,
         sub: [
             {
-                title: "站点信息",
+                title: i18next.t('Site Information'),
                 path: "basic",
                 icon: <Language />,
             },
             {
-                title: "注册与登录",
+                title: i18next.t('Registration and Login'),
                 path: "access",
                 icon: <Contacts />,
             },
             {
-                title: "邮件",
+                title: i18next.t('Mail'),
                 path: "mail",
                 icon: <Mail />,
             },
             {
-                title: "上传与下载",
+                title: i18next.t('Upload and download'),
                 path: "upload",
                 icon: <SettingsEthernet />,
             },
             {
-                title: "外观",
+                title: i18next.t('Themeing'),
                 path: "theme",
                 icon: <Palette />,
             },
             {
-                title: "离线下载",
+                title: i18next.t('Offline download'),
                 path: "aria2",
                 icon: <CloudDownload />,
             },
             {
-                title: "图像处理",
+                title: i18next.t('Image Processing'),
                 path: "image",
                 icon: <Image />,
             },
             {
-                title: "验证码",
+                title: i18next.t('Verification Code'),
                 path: "captcha",
                 icon: <Category />,
             },
         ],
     },
     {
-        title: "存储策略",
+        title: i18next.t('Storage Strategy'),
         icon: <Storage />,
         path: "policy",
     },
     {
-        title: "用户组",
+        title: i18next.t('User group'),
         icon: <Group />,
         path: "group",
     },
     {
-        title: "用户",
+        title: i18next.t('Users'),
         icon: <Person />,
         path: "user",
     },
     {
-        title: "文件",
+        title: i18next.t('document'),
         icon: <InsertDriveFile />,
         path: "file",
     },
     {
-        title: "分享",
+        title: i18next.t('share'),
         icon: <Share />,
         path: "share",
     },
     {
-        title: "持久任务",
+        title: i18next.t('Persistent Task'),
         icon: <Assignment />,
         sub: [
             {
-                title: "离线下载",
+                title: i18next.t('Offline download'),
                 path: "download",
                 icon: <CloudDownload />,
             },
             {
-                title: "常规任务",
+                title: i18next.t('Regular Tasks'),
                 path: "task",
                 icon: <ListAlt />,
             },
@@ -277,6 +279,7 @@ export default function Dashboard({ content }) {
     const [menuOpen, setMenuOpen] = useState(null);
     const history = useHistory();
     const location = useLocation();
+    const { t } = useTranslation();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -293,7 +296,7 @@ export default function Dashboard({ content }) {
     );
 
     useEffect(() => {
-        SetSubTitle("仪表盘");
+        SetSubTitle(t('Dashboard'));
     }, []);
 
     useEffect(() => {
@@ -305,151 +308,151 @@ export default function Dashboard({ content }) {
     const { path } = useRouteMatch();
 
     return (
-        <div className={classes.root}>
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title} noWrap>
-                        Cloudreve 仪表盘
-                    </Typography>
-                    <UserAvatar />
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-                <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === "rtl" ? (
-                            <ChevronRightIcon />
-                        ) : (
-                            <ChevronLeftIcon />
-                        )}
-                    </IconButton>
-                </div>
-                <Divider />
-                <List className={classes.noPadding}>
-                    {items.map((item) => {
-                        if (item.path !== undefined) {
-                            return (
-                                <ListItem
-                                    onClick={() =>
-                                        history.push("/admin/" + item.path)
-                                    }
-                                    button
-                                    className={clsx({
-                                        [classes.active]: location.pathname.startsWith(
-                                            "/admin/" + item.path
-                                        ),
-                                    })}
-                                    key={item.title}
-                                >
-                                    <ListItemIcon
-                                        className={clsx({
-                                            [classes.activeIcon]: location.pathname.startsWith(
-                                                "/admin/" + item.path
-                                            ),
-                                        })}
-                                    >
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        className={clsx({
-                                            [classes.activeText]: location.pathname.startsWith(
-                                                "/admin/" + item.path
-                                            ),
-                                        })}
-                                        primary={item.title}
-                                    />
-                                </ListItem>
-                            );
-                        }
-                        return (
-                            <ExpansionPanel
-                                key={item.title}
-                                square
-                                expanded={menuOpen === item.title}
-                                onChange={(event, isExpanded) => {
-                                    setMenuOpen(isExpanded ? item.title : null);
-                                }}
-                            >
-                                <ExpansionPanelSummary
-                                    aria-controls="panel1d-content"
-                                    id="panel1d-header"
-                                >
-                                    <ListItem button key={item.title}>
-                                        <ListItemIcon>{item.icon}</ListItemIcon>
-                                        <ListItemText primary={item.title} />
-                                    </ListItem>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                    <List className={classes.subMenu}>
-                                        {item.sub.map((sub) => (
-                                            <ListItem
-                                                onClick={() =>
-                                                    history.push(
-                                                        "/admin/" + sub.path
-                                                    )
-                                                }
-                                                className={clsx({
-                                                    [classes.sub]: open,
-                                                    [classes.active]: location.pathname.startsWith(
-                                                        "/admin/" + sub.path
-                                                    ),
-                                                })}
-                                                button
-                                                key={sub.title}
-                                            >
-                                                <ListItemIcon
-                                                    className={clsx({
-                                                        [classes.activeIcon]: location.pathname.startsWith(
-                                                            "/admin/" + sub.path
-                                                        ),
-                                                    })}
-                                                >
-                                                    {sub.icon}
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    primary={sub.title}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                        );
-                    })}
-                </List>
-            </Drawer>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                {content(path)}
-            </main>
-        </div>
+      <div className={classes.root}>
+          <AppBar
+              position="fixed"
+              className={clsx(classes.appBar, {
+                  [classes.appBarShift]: open,
+              })}
+          >
+              <Toolbar>
+                  <IconButton
+                      color="inherit"
+                      aria-label="open drawer"
+                      onClick={handleDrawerOpen}
+                      edge="start"
+                      className={clsx(classes.menuButton, {
+                          [classes.hide]: open,
+                      })}
+                  >
+                      <MenuIcon />
+                  </IconButton>
+                  <Typography variant="h6" className={classes.title} noWrap>
+                    {t('Cloudreve Dashboard')}
+                  </Typography>
+                  <UserAvatar />
+              </Toolbar>
+          </AppBar>
+          <Drawer
+              variant="permanent"
+              className={clsx(classes.drawer, {
+                  [classes.drawerOpen]: open,
+                  [classes.drawerClose]: !open,
+              })}
+              classes={{
+                  paper: clsx({
+                      [classes.drawerOpen]: open,
+                      [classes.drawerClose]: !open,
+                  }),
+              }}
+          >
+              <div className={classes.toolbar}>
+                  <IconButton onClick={handleDrawerClose}>
+                      {theme.direction === "rtl" ? (
+                          <ChevronRightIcon />
+                      ) : (
+                          <ChevronLeftIcon />
+                      )}
+                  </IconButton>
+              </div>
+              <Divider />
+              <List className={classes.noPadding}>
+                  {items.map((item) => {
+                      if (item.path !== undefined) {
+                          return (
+                              <ListItem
+                                  onClick={() =>
+                                      history.push("/admin/" + item.path)
+                                  }
+                                  button
+                                  className={clsx({
+                                      [classes.active]: location.pathname.startsWith(
+                                          "/admin/" + item.path
+                                      ),
+                                  })}
+                                  key={item.title}
+                              >
+                                  <ListItemIcon
+                                      className={clsx({
+                                          [classes.activeIcon]: location.pathname.startsWith(
+                                              "/admin/" + item.path
+                                          ),
+                                      })}
+                                  >
+                                      {item.icon}
+                                  </ListItemIcon>
+                                  <ListItemText
+                                      className={clsx({
+                                          [classes.activeText]: location.pathname.startsWith(
+                                              "/admin/" + item.path
+                                          ),
+                                      })}
+                                      primary={item.title}
+                                  />
+                              </ListItem>
+                          );
+                      }
+                      return (
+                          <ExpansionPanel
+                              key={item.title}
+                              square
+                              expanded={menuOpen === item.title}
+                              onChange={(event, isExpanded) => {
+                                  setMenuOpen(isExpanded ? item.title : null);
+                              }}
+                          >
+                              <ExpansionPanelSummary
+                                  aria-controls="panel1d-content"
+                                  id="panel1d-header"
+                              >
+                                  <ListItem button key={item.title}>
+                                      <ListItemIcon>{item.icon}</ListItemIcon>
+                                      <ListItemText primary={item.title} />
+                                  </ListItem>
+                              </ExpansionPanelSummary>
+                              <ExpansionPanelDetails>
+                                  <List className={classes.subMenu}>
+                                      {item.sub.map((sub) => (
+                                          <ListItem
+                                              onClick={() =>
+                                                  history.push(
+                                                      "/admin/" + sub.path
+                                                  )
+                                              }
+                                              className={clsx({
+                                                  [classes.sub]: open,
+                                                  [classes.active]: location.pathname.startsWith(
+                                                      "/admin/" + sub.path
+                                                  ),
+                                              })}
+                                              button
+                                              key={sub.title}
+                                          >
+                                              <ListItemIcon
+                                                  className={clsx({
+                                                      [classes.activeIcon]: location.pathname.startsWith(
+                                                          "/admin/" + sub.path
+                                                      ),
+                                                  })}
+                                              >
+                                                  {sub.icon}
+                                              </ListItemIcon>
+                                              <ListItemText
+                                                  primary={sub.title}
+                                              />
+                                          </ListItem>
+                                      ))}
+                                  </List>
+                              </ExpansionPanelDetails>
+                          </ExpansionPanel>
+                      );
+                  })}
+              </List>
+          </Drawer>
+          <main className={classes.content}>
+              <div className={classes.toolbar} />
+              {content(path)}
+          </main>
+      </div>
     );
 }

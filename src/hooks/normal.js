@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, {
     forwardRef,
     useCallback,
@@ -28,6 +29,8 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const refreshCaptcha = () => {
         API.get("/site/captcha")
             .then((response) => {
@@ -38,7 +41,7 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法加载验证码：" + error.message,
+                    t('Unable to load verification code:') + error.message,
                     "error"
                 );
             });
@@ -54,33 +57,33 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
     }, [captcha]);
 
     return (
-        <div className={classes.captchaContainer}>
-            <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="captcha">验证码</InputLabel>
-                <Input
-                    name="captcha"
-                    onChange={(e) => setCaptcha(e.target.value)}
-                    type="text"
-                    id="captcha"
-                    value={captcha}
-                    autoComplete
-                />
-            </FormControl>{" "}
-            <div>
-                {captchaData === null && (
-                    <div className={classes.captchaPlaceholder}>
-                        <Placeholder />
-                    </div>
-                )}
-                {captchaData !== null && (
-                    <img
-                        src={captchaData}
-                        alt="captcha"
-                        onClick={refreshCaptcha}
-                    />
-                )}
-            </div>
-        </div>
+      <div className={classes.captchaContainer}>
+          <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="captcha">{t('Verification Code')}</InputLabel>
+              <Input
+                  name="captcha"
+                  onChange={(e) => setCaptcha(e.target.value)}
+                  type="text"
+                  id="captcha"
+                  value={captcha}
+                  autoComplete
+              />
+          </FormControl>{" "}
+          <div>
+              {captchaData === null && (
+                  <div className={classes.captchaPlaceholder}>
+                      <Placeholder />
+                  </div>
+              )}
+              {captchaData !== null && (
+                  <img
+                      src={captchaData}
+                      alt="captcha"
+                      onClick={refreshCaptcha}
+                  />
+              )}
+          </div>
+      </div>
     );
 });
 

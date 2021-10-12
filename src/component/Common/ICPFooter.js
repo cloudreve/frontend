@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -25,19 +26,21 @@ export const ICPFooter = () => {
         setShow(siteICPId && (isSharePage || isLoginPage));
     }, [siteICPId, location]);
 
+    const { t } = useTranslation();
+
     if (!show) {
         return <></>;
     }
     return (
-        <div className={classes.icp}>
-            {`备案号: `}
-            <Link
-                href="https://beian.miit.gov.cn/"
-                rel="noopener noreferrer"
-                target="_blank"
-            >
-                {siteICPId}
-            </Link>
-        </div>
+      <div className={classes.icp}>
+          {t`record number: `}
+          <Link
+              href="https://beian.miit.gov.cn/"
+              rel="noopener noreferrer"
+              target="_blank"
+          >
+              {siteICPId}
+          </Link>
+      </div>
     );
 };

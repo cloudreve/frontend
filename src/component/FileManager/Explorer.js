@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import {
     CircularProgress,
     Grid,
@@ -262,15 +263,15 @@ class ExplorerCompoment extends Component {
                                     );
                                 }}
                             >
-                                名称
-                                {this.props.sortMethod === "namePos" ||
-                                this.props.sortMethod === "nameRev" ? (
-                                    <span className={classes.visuallyHidden}>
-                                        {this.props.sortMethod === "nameRev"
-                                            ? "sorted descending"
-                                            : "sorted ascending"}
-                                    </span>
-                                ) : null}
+                              {this.props.t('Name')}
+                              {this.props.sortMethod === "namePos" ||
+                              this.props.sortMethod === "nameRev" ? (
+                                  <span className={classes.visuallyHidden}>
+                                      {this.props.sortMethod === "nameRev"
+                                          ? "sorted descending"
+                                          : "sorted ascending"}
+                                  </span>
+                              ) : null}
                             </TableSortLabel>
                         </TableCell>
                         <TableCell className={classes.hideAuto}>
@@ -292,15 +293,15 @@ class ExplorerCompoment extends Component {
                                     );
                                 }}
                             >
-                                大小
-                                {this.props.sortMethod === "sizePos" ||
-                                this.props.sortMethod === "sizeRes" ? (
-                                    <span className={classes.visuallyHidden}>
-                                        {this.props.sortMethod === "sizeRes"
-                                            ? "sorted descending"
-                                            : "sorted ascending"}
-                                    </span>
-                                ) : null}
+                              {this.props.t('Size')}
+                              {this.props.sortMethod === "sizePos" ||
+                              this.props.sortMethod === "sizeRes" ? (
+                                  <span className={classes.visuallyHidden}>
+                                      {this.props.sortMethod === "sizeRes"
+                                          ? "sorted descending"
+                                          : "sorted ascending"}
+                                  </span>
+                              ) : null}
                             </TableSortLabel>
                         </TableCell>
                         <TableCell className={classes.hideAuto}>
@@ -322,15 +323,15 @@ class ExplorerCompoment extends Component {
                                     );
                                 }}
                             >
-                                日期
-                                {this.props.sortMethod === "timePos" ||
-                                this.props.sortMethod === "timeRev" ? (
-                                    <span className={classes.visuallyHidden}>
-                                        {this.props.sortMethod === "sizeRes"
-                                            ? "sorted descending"
-                                            : "sorted ascending"}
-                                    </span>
-                                ) : null}
+                              {this.props.t('date')}
+                              {this.props.sortMethod === "timePos" ||
+                              this.props.sortMethod === "timeRev" ? (
+                                  <span className={classes.visuallyHidden}>
+                                      {this.props.sortMethod === "sizeRes"
+                                          ? "sorted descending"
+                                          : "sorted ascending"}
+                                  </span>
+                              ) : null}
                             </TableSortLabel>
                         </TableCell>
                     </TableRow>
@@ -340,7 +341,7 @@ class ExplorerCompoment extends Component {
                         <ObjectIcon
                             file={{
                                 type: "up",
-                                name: "上级目录",
+                                name: this.props.t('Parent directory'),
                             }}
                         />
                     )}
@@ -363,7 +364,7 @@ class ExplorerCompoment extends Component {
                             variant="body2"
                             className={classes.typeHeader}
                         >
-                            文件夹
+                          {this.props.t('folder')}
                         </Typography>
                         <Grid
                             data-clickAway={"true"}
@@ -397,7 +398,7 @@ class ExplorerCompoment extends Component {
                             variant="body2"
                             className={classes.typeHeader}
                         >
-                            文件
+                          {this.props.t('document')}
                         </Typography>
                         <Grid
                             data-clickAway={"true"}
@@ -428,76 +429,76 @@ class ExplorerCompoment extends Component {
         );
         const view = this.props.viewMethod === "list" ? listView : normalView;
         return (
-            <div
-                onContextMenu={this.contextMenu}
-                onClick={this.ClickAway}
-                className={classNames(
-                    {
-                        [classes.root]: this.props.viewMethod !== "list",
-                        [classes.rootTable]: this.props.viewMethod === "list",
-                        [classes.rootShare]: this.props.share,
-                    },
-                    classes.button
-                )}
-            >
-                <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap} />
-                <ContextMenu share={this.props.share} />
-                <ImgPreivew />
-                {this.props.navigatorError && (
-                    <Paper elevation={1} className={classes.errorBox}>
-                        <Typography variant="h5" component="h3">
-                            :( 请求时出现错误
-                        </Typography>
-                        <Typography
-                            color={"textSecondary"}
-                            className={classes.errorMsg}
-                        >
-                            {this.props.navigatorErrorMsg.message}
-                        </Typography>
-                    </Paper>
-                )}
+          <div
+              onContextMenu={this.contextMenu}
+              onClick={this.ClickAway}
+              className={classNames(
+                  {
+                      [classes.root]: this.props.viewMethod !== "list",
+                      [classes.rootTable]: this.props.viewMethod === "list",
+                      [classes.rootShare]: this.props.share,
+                  },
+                  classes.button
+              )}
+          >
+              <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap} />
+              <ContextMenu share={this.props.share} />
+              <ImgPreivew />
+              {this.props.navigatorError && (
+                  <Paper elevation={1} className={classes.errorBox}>
+                      <Typography variant="h5" component="h3">
+                        {this.props.t(':( An error occurred during request')}
+                      </Typography>
+                      <Typography
+                          color={"textSecondary"}
+                          className={classes.errorMsg}
+                      >
+                          {this.props.navigatorErrorMsg.message}
+                      </Typography>
+                  </Paper>
+              )}
 
-                {this.props.loading && !this.props.navigatorError && (
-                    <div className={classes.loading}>
-                        <CircularProgress />
-                    </div>
-                )}
+              {this.props.loading && !this.props.navigatorError && (
+                  <div className={classes.loading}>
+                      <CircularProgress />
+                  </div>
+              )}
 
-                {this.props.keywords === "" &&
-                    isHomePage &&
-                    this.props.dirList.length === 0 &&
-                    this.props.fileList.length === 0 &&
-                    !this.props.loading &&
-                    !this.props.navigatorError && (
-                        <div className={classes.emptyContainer}>
-                            <EmptyIcon className={classes.emptyIcon} />
-                            <div className={classes.emptyInfoBig}>
-                                拖拽文件至此
-                            </div>
-                            <div className={classes.emptyInfoSmall}>
-                                或点击右下方“上传文件”按钮添加文件
-                            </div>
-                        </div>
-                    )}
-                {((this.props.keywords !== "" &&
-                    this.props.dirList.length === 0 &&
-                    this.props.fileList.length === 0 &&
-                    !this.props.loading &&
-                    !this.props.navigatorError) ||
-                    (this.props.dirList.length === 0 &&
-                        this.props.fileList.length === 0 &&
-                        !this.props.loading &&
-                        !this.props.navigatorError &&
-                        !isHomePage)) && (
-                    <div className={classes.emptyContainer}>
-                        <SadIcon className={classes.emptyIcon} />
-                        <div className={classes.emptyInfoBig}>
-                            什么都没有找到
-                        </div>
-                    </div>
-                )}
-                {showView && view}
-            </div>
+              {this.props.keywords === "" &&
+                  isHomePage &&
+                  this.props.dirList.length === 0 &&
+                  this.props.fileList.length === 0 &&
+                  !this.props.loading &&
+                  !this.props.navigatorError && (
+                      <div className={classes.emptyContainer}>
+                          <EmptyIcon className={classes.emptyIcon} />
+                          <div className={classes.emptyInfoBig}>
+                            {this.props.t('Drag and drop files here')}
+                          </div>
+                          <div className={classes.emptyInfoSmall}>
+                            {this.props.t('Or click the "Upload File" button at the bottom right to add a file')}
+                          </div>
+                      </div>
+                  )}
+              {((this.props.keywords !== "" &&
+                  this.props.dirList.length === 0 &&
+                  this.props.fileList.length === 0 &&
+                  !this.props.loading &&
+                  !this.props.navigatorError) ||
+                  (this.props.dirList.length === 0 &&
+                      this.props.fileList.length === 0 &&
+                      !this.props.loading &&
+                      !this.props.navigatorError &&
+                      !isHomePage)) && (
+                  <div className={classes.emptyContainer}>
+                      <SadIcon className={classes.emptyIcon} />
+                      <div className={classes.emptyInfoBig}>
+                        {this.props.t('Nothing was found')}
+                      </div>
+                  </div>
+              )}
+              {showView && view}
+          </div>
         );
     }
 }
@@ -510,6 +511,6 @@ ExplorerCompoment.propTypes = {
 const Explorer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ExplorerCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(ExplorerCompoment))));
 
 export default Explorer;

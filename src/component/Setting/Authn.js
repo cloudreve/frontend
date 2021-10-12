@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useCallback } from "react";
 import {
     Button,
@@ -56,12 +57,14 @@ export default function Authn(props) {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const deleteCredential = (id) => {
         API.patch("/user/setting/authn", {
             id: id,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "凭证已删除", "success");
+                ToggleSnackbar("top", "right", t('Credentials have been deleted'), "success");
                 props.remove(id);
             })
             .catch((error) => {
@@ -76,7 +79,7 @@ export default function Authn(props) {
 
     const addCredential = () => {
         if (!navigator.credentials) {
-            ToggleSnackbar("top", "right", "当前浏览器或环境不支持", "warning");
+            ToggleSnackbar("top", "right", t('The current browser or environment does not support'), "warning");
 
             return;
         }
@@ -129,7 +132,7 @@ export default function Authn(props) {
             })
             .then((response) => {
                 props.add(response.data);
-                ToggleSnackbar("top", "right", "验证器已添加", "success");
+                ToggleSnackbar("top", "right", t('Verifier has been added'), "success");
                 return;
             })
             .catch((error) => {
@@ -139,71 +142,71 @@ export default function Authn(props) {
     };
 
     return (
-        <div>
-            <Dialog open={confirm} onClose={() => setConfirm(false)}>
-                <DialogTitle>删除凭证</DialogTitle>
-                <DialogContent>确定要吊销这个凭证吗？</DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setConfirm(false)} color="default">
-                        取消
-                    </Button>
-                    <Button
-                        onClick={() => deleteCredential(selected)}
-                        color="primary"
-                    >
-                        确定
-                    </Button>
-                </DialogActions>
-            </Dialog>
+      <div>
+          <Dialog open={confirm} onClose={() => setConfirm(false)}>
+              <DialogTitle>{t('Delete Credentials')}</DialogTitle>
+              <DialogContent>{t('Are you sure you want to revoke this certificate?')}</DialogContent>
+              <DialogActions>
+                  <Button onClick={() => setConfirm(false)} color="default">
+                    {t('Cancel')}
+                  </Button>
+                  <Button
+                      onClick={() => deleteCredential(selected)}
+                      color="primary"
+                  >
+                    {t('Ok')}
+                  </Button>
+              </DialogActions>
+          </Dialog>
 
-            <Typography className={classes.sectionTitle} variant="subtitle2">
-                外部认证器
-            </Typography>
-            <Paper>
-                <List className={classes.desenList}>
-                    {props.list.map((v) => (
-                        <>
-                            <ListItem
-                                button
-                                style={{
-                                    paddingRight: 60,
-                                }}
-                                onClick={() => {
-                                    setConfirm(true);
-                                    setSelected(v.id);
-                                }}
-                            >
-                                <ListItemIcon className={classes.iconFix}>
-                                    <Fingerprint />
-                                </ListItemIcon>
-                                <ListItemText primary={v.fingerprint} />
+          <Typography className={classes.sectionTitle} variant="subtitle2">
+            {t('External Authenticator')}
+          </Typography>
+          <Paper>
+              <List className={classes.desenList}>
+                  {props.list.map((v) => (
+                      <>
+                          <ListItem
+                              button
+                              style={{
+                                  paddingRight: 60,
+                              }}
+                              onClick={() => {
+                                  setConfirm(true);
+                                  setSelected(v.id);
+                              }}
+                          >
+                              <ListItemIcon className={classes.iconFix}>
+                                  <Fingerprint />
+                              </ListItemIcon>
+                              <ListItemText primary={v.fingerprint} />
 
-                                <ListItemSecondaryAction
-                                    onClick={() => deleteCredential(v.id)}
-                                    className={classes.flexContainer}
-                                >
-                                    <HighlightOff
-                                        className={classes.rightIcon}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                        </>
-                    ))}
-                    <ListItem button onClick={() => addCredential()}>
-                        <ListItemIcon className={classes.iconFix}>
-                            <Add />
-                        </ListItemIcon>
-                        <ListItemText primary="添加新验证器" />
+                              <ListItemSecondaryAction
+                                  onClick={() => deleteCredential(v.id)}
+                                  className={classes.flexContainer}
+                              >
+                                  <HighlightOff
+                                      className={classes.rightIcon}
+                                  />
+                              </ListItemSecondaryAction>
+                          </ListItem>
+                          <Divider />
+                      </>
+                  ))}
+                  <ListItem button onClick={() => addCredential()}>
+                      <ListItemIcon className={classes.iconFix}>
+                          <Add />
+                      </ListItemIcon>
+                      <ListItemText primary={t('Add new validator')} />
 
-                        <ListItemSecondaryAction
-                            className={classes.flexContainer}
-                        >
-                            <RightIcon className={classes.rightIcon} />
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </List>
-            </Paper>
-        </div>
+                      <ListItemSecondaryAction
+                          className={classes.flexContainer}
+                      >
+                          <RightIcon className={classes.rightIcon} />
+                      </ListItemSecondaryAction>
+                  </ListItem>
+              </List>
+          </Paper>
+      </div>
     );
 }

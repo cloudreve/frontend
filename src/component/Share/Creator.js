@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Avatar, Typography } from "@material-ui/core";
@@ -30,14 +31,14 @@ export default function Creator(props) {
     const classes = useStyles();
     const history = useHistory();
 
+    const { t } = useTranslation();
+
     const getSecondDes = () => {
         if (props.share.expire > 0) {
             if (props.share.expire >= 24 * 3600) {
-                return (
-                    Math.round(props.share.expire / (24 * 3600)) + " 天后到期"
-                );
+                return Math.round(props.share.expire / (24 * 3600)) + t('Expires in days');
             }
-            return Math.round(props.share.expire / 3600) + " 小时后到期";
+            return Math.round(props.share.expire / 3600) + t('Expires in hours');
         }
         return formatLocalTime(props.share.create_date, "YYYY-MM-DD H:mm:ss");
     };
@@ -48,45 +49,45 @@ export default function Creator(props) {
     };
 
     return (
-        <div className={classes.boxHeader}>
-            <Avatar
-                className={classes.avatar}
-                alt={props.share.creator.nick}
-                src={"/api/v3/user/avatar/" + props.share.creator.key + "/l"}
-                onClick={() => userProfile()}
-            />
-            <Typography variant="h6" className={classes.shareDes}>
-                {props.isFolder && (
-                    <>
-                        此分享由{" "}
-                        <Link
-                            onClick={() => userProfile()}
-                            href={"javascript:void(0)"}
-                            color="inherit"
-                        >
-                            {props.share.creator.nick}
-                        </Link>{" "}
-                        创建
-                    </>
-                )}
-                {!props.isFolder && (
-                    <>
-                        {" "}
-                        <Link
-                            onClick={() => userProfile()}
-                            href={"javascript:void(0)"}
-                            color="inherit"
-                        >
-                            {props.share.creator.nick}
-                        </Link>{" "}
-                        向您分享了 1 个文件
-                    </>
-                )}
-            </Typography>
-            <Typography className={classes.shareInfo}>
-                {props.share.views} 次浏览 • {props.share.downloads} 次下载 •{" "}
-                {getSecondDes()}
-            </Typography>
-        </div>
+      <div className={classes.boxHeader}>
+          <Avatar
+              className={classes.avatar}
+              alt={props.share.creator.nick}
+              src={"/api/v3/user/avatar/" + props.share.creator.key + "/l"}
+              onClick={() => userProfile()}
+          />
+          <Typography variant="h6" className={classes.shareDes}>
+              {props.isFolder && (
+                  (<>
+                    {t('This is shared by')}{" "}
+                    <Link
+                        onClick={() => userProfile()}
+                        href={"javascript:void(0)"}
+                        color="inherit"
+                    >
+                        {props.share.creator.nick}
+                    </Link>{" "}
+                    {t('create')}
+                  </>)
+              )}
+              {!props.isFolder && (
+                  (<>
+                    {" "}
+                    <Link
+                        onClick={() => userProfile()}
+                        href={"javascript:void(0)"}
+                        color="inherit"
+                    >
+                        {props.share.creator.nick}
+                    </Link>{" "}
+                    {t('Shared a file with you')}
+                  </>)
+              )}
+          </Typography>
+          <Typography className={classes.shareInfo}>
+            {props.share.views} {t('Views •')} {props.share.downloads} {t('Downloads •')}{" "}
+            {getSecondDes()}
+          </Typography>
+      </div>
     );
 }

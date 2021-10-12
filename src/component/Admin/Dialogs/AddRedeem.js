@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -38,6 +39,8 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const handleChange = (name) => (event) => {
         setInput({
             ...input,
@@ -77,99 +80,99 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
     };
 
     return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            maxWidth={"xs"}
-        >
-            <form onSubmit={submit}>
-                <DialogTitle id="alert-dialog-title">生成兑换码</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    生成数量
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        step: 1,
-                                        min: 1,
-                                        max: 100,
-                                    }}
-                                    value={input.num}
-                                    onChange={handleChange("num")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    激活码批量生成数量
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+      <Dialog
+          open={open}
+          onClose={onClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"xs"}
+      >
+          <form onSubmit={submit}>
+              <DialogTitle id="alert-dialog-title">{t('Generate redemption code')}</DialogTitle>
+              <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Generate quantity')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      step: 1,
+                                      min: 1,
+                                      max: 100,
+                                  }}
+                                  value={input.num}
+                                  onChange={handleChange("num")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The number of activation codes generated in batches')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    对应商品
-                                </InputLabel>
-                                <Select
-                                    value={input.id}
-                                    onChange={(e) => {
-                                        handleChange("id")(e);
-                                    }}
-                                >
-                                    {products.map((v) => (
-                                        <MenuItem
-                                            key={v.id}
-                                            value={v.id}
-                                            data-type={"1"}
-                                        >
-                                            {v.name}
-                                        </MenuItem>
-                                    ))}
-                                    <MenuItem value={0}>积分</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Corresponding product')}
+                              </InputLabel>
+                              <Select
+                                  value={input.id}
+                                  onChange={(e) => {
+                                      handleChange("id")(e);
+                                  }}
+                              >
+                                  {products.map((v) => (
+                                      <MenuItem
+                                          key={v.id}
+                                          value={v.id}
+                                          data-type={"1"}
+                                      >
+                                          {v.name}
+                                      </MenuItem>
+                                  ))}
+                                  <MenuItem value={0}>{t('integral')}</MenuItem>
+                              </Select>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    商品数量
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        step: 1,
-                                        min: 1,
-                                    }}
-                                    value={input.time}
-                                    onChange={handleChange("time")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    对于积分类商品，此处为积分数量，其他商品为时长倍数
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        disabled={loading}
-                        onClick={onClose}
-                        color="default"
-                    >
-                        取消
-                    </Button>
-                    <Button disabled={loading} type={"submit"} color="primary">
-                        确定
-                    </Button>
-                </DialogActions>
-            </form>
-        </Dialog>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('amount of goods')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      step: 1,
+                                      min: 1,
+                                  }}
+                                  value={input.time}
+                                  onChange={handleChange("time")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('For point products, here is the number of points, and other products are multiples of duration')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                  <Button
+                      disabled={loading}
+                      onClick={onClose}
+                      color="default"
+                  >
+                    {t('Cancel')}
+                  </Button>
+                  <Button disabled={loading} type={"submit"} color="primary">
+                    {t('Ok')}
+                  </Button>
+              </DialogActions>
+          </form>
+      </Dialog>
     );
 }

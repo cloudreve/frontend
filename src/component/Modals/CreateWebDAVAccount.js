@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import { Dialog } from "@material-ui/core";
@@ -42,6 +43,8 @@ export default function CreateWebDAVAccount(props) {
     const [selectedPathName, setSelectedPathName] = useState("");
     const classes = useStyles();
 
+    const { t } = useTranslation();
+
     const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
@@ -67,83 +70,83 @@ export default function CreateWebDAVAccount(props) {
     };
 
     return (
-        <Dialog
-            open={props.open}
-            onClose={props.onClose}
-            aria-labelledby="form-dialog-title"
-        >
-            <Dialog
-                open={pathSelectDialog}
-                onClose={() => setPathSelectDialog(false)}
-                aria-labelledby="form-dialog-title"
-            >
-                <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
-                <PathSelector
-                    presentPath="/"
-                    selected={[]}
-                    onSelect={setMoveTarget}
-                />
+      <Dialog
+          open={props.open}
+          onClose={props.onClose}
+          aria-labelledby="form-dialog-title"
+      >
+          <Dialog
+              open={pathSelectDialog}
+              onClose={() => setPathSelectDialog(false)}
+              aria-labelledby="form-dialog-title"
+          >
+              <DialogTitle id="form-dialog-title">{t('Select Directory')}</DialogTitle>
+              <PathSelector
+                  presentPath="/"
+                  selected={[]}
+                  onSelect={setMoveTarget}
+              />
 
-                <DialogActions>
-                    <Button onClick={() => setPathSelectDialog(false)}>
-                        取消
-                    </Button>
-                    <Button
-                        onClick={selectPath}
-                        color="primary"
-                        disabled={selectedPath === ""}
-                    >
-                        确定
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <div className={classes.dialogContent}>
-                <div className={classes.formContainer}>
-                    <div className={classes.formGroup}>
-                        <div className={classes.formIcon}>
-                            <LabelOutlined />
-                        </div>
+              <DialogActions>
+                  <Button onClick={() => setPathSelectDialog(false)}>
+                    {t('Cancel')}
+                  </Button>
+                  <Button
+                      onClick={selectPath}
+                      color="primary"
+                      disabled={selectedPath === ""}
+                  >
+                    {t('Ok')}
+                  </Button>
+              </DialogActions>
+          </Dialog>
+          <div className={classes.dialogContent}>
+              <div className={classes.formContainer}>
+                  <div className={classes.formGroup}>
+                      <div className={classes.formIcon}>
+                          <LabelOutlined />
+                      </div>
 
-                        <TextField
-                            className={classes.input}
-                            value={value.name}
-                            onChange={handleInputChange("name")}
-                            label="备注名"
-                        />
-                    </div>
-                    <div className={classes.formGroup}>
-                        <div className={classes.formIcon}>
-                            <FolderOpenOutlined />
-                        </div>
-                        <div>
-                            <TextField
-                                value={value.path}
-                                onChange={handleInputChange("path")}
-                                className={classes.input}
-                                label="相对根目录"
-                            />
-                            <br />
-                            <Button
-                                className={classes.button}
-                                color="primary"
-                                onClick={() => setPathSelectDialog(true)}
-                            >
-                                选择目录
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
-                <Button
-                    disabled={value.path === "" || value.name === ""}
-                    color="primary"
-                    onClick={() => props.callback(value)}
-                >
-                    确定
-                </Button>
-            </DialogActions>
-        </Dialog>
+                      <TextField
+                          className={classes.input}
+                          value={value.name}
+                          onChange={handleInputChange("name")}
+                          label={t('Label')}
+                      />
+                  </div>
+                  <div className={classes.formGroup}>
+                      <div className={classes.formIcon}>
+                          <FolderOpenOutlined />
+                      </div>
+                      <div>
+                          <TextField
+                              value={value.path}
+                              onChange={handleInputChange("path")}
+                              className={classes.input}
+                              label={t('Relative root directory')}
+                          />
+                          <br />
+                          <Button
+                              className={classes.button}
+                              color="primary"
+                              onClick={() => setPathSelectDialog(true)}
+                          >
+                            {t('Select Directory')}
+                          </Button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <DialogActions>
+              <Button onClick={props.onClose}>{t('Cancel')}</Button>
+              <Button
+                  disabled={value.path === "" || value.name === ""}
+                  color="primary"
+                  onClick={() => props.callback(value)}
+              >
+                {t('Ok')}
+              </Button>
+          </DialogActions>
+      </Dialog>
     );
 }

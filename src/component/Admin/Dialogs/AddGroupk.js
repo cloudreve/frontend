@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -34,6 +35,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
         des: "",
         highlight: false,
     });
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (open && groups.length === 0) {
@@ -73,174 +75,173 @@ export default function AddGroup({ open, onClose, onSubmit }) {
     };
 
     return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            maxWidth={"xs"}
-            scroll={"paper"}
-        >
-            <form onSubmit={submit}>
-                <DialogTitle id="alert-dialog-title">
-                    添加可购用户组
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    名称
-                                </InputLabel>
-                                <Input
-                                    value={group.name}
-                                    onChange={handleChange("name")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    商品展示名称
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+      <Dialog
+          open={open}
+          onClose={onClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"xs"}
+          scroll={"paper"}
+      >
+          <form onSubmit={submit}>
+              <DialogTitle id="alert-dialog-title">
+                {t('Add Purchasable User Group')}
+              </DialogTitle>
+              <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Name')}
+                              </InputLabel>
+                              <Input
+                                  value={group.name}
+                                  onChange={handleChange("name")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Product display name')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    用户组
-                                </InputLabel>
-                                <Select
-                                    value={group.group_id}
-                                    onChange={handleChange("group_id")}
-                                    required
-                                >
-                                    {groups.map((v) => {
-                                        if (v.ID !== 3) {
-                                            return (
-                                                <MenuItem value={v.ID}>
-                                                    {v.Name}
-                                                </MenuItem>
-                                            );
-                                        }
-                                        return null;
-                                    })}
-                                </Select>
-                                <FormHelperText id="component-helper-text">
-                                    购买后升级的用户组
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('User group')}
+                              </InputLabel>
+                              <Select
+                                  value={group.group_id}
+                                  onChange={handleChange("group_id")}
+                                  required
+                              >
+                                  {groups.map((v) => {
+                                      if (v.ID !== 3) {
+                                          return (
+                                              <MenuItem value={v.ID}>
+                                                  {v.Name}
+                                              </MenuItem>
+                                          );
+                                      }
+                                      return null;
+                                  })}
+                              </Select>
+                              <FormHelperText id="component-helper-text">
+                                {t('User group upgraded after purchase')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    有效期 (天)
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={group.time}
-                                    onChange={handleChange("time")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    单位购买时间的有效期
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Validity period (days)')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 1,
+                                      step: 1,
+                                  }}
+                                  value={group.time}
+                                  onChange={handleChange("time")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Valid period of unit purchase time')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    单价 (元)
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 0.01,
-                                        step: 0.01,
-                                    }}
-                                    value={group.price}
-                                    onChange={handleChange("price")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    用户组的单价
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Unit price (yuan)')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 0.01,
+                                      step: 0.01,
+                                  }}
+                                  value={group.price}
+                                  onChange={handleChange("price")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Unit price of user group')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    单价 (积分)
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 0,
-                                        step: 1,
-                                    }}
-                                    value={group.score}
-                                    onChange={handleChange("score")}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    使用积分购买时的价格，填写为 0
-                                    表示不能使用积分购买
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Unit price (points)')}
+                              </InputLabel>
+                              <Input
+                                  type={"number"}
+                                  inputProps={{
+                                      min: 0,
+                                      step: 1,
+                                  }}
+                                  value={group.score}
+                                  onChange={handleChange("score")}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('The price when using points to purchase, fill in as 0\nmeans that you cannot use points to buy')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    商品描述 (一行一个)
-                                </InputLabel>
-                                <Input
-                                    value={group.des}
-                                    onChange={handleChange("des")}
-                                    multiline
-                                    rowsMax={10}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    购买页面展示的商品描述
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <InputLabel htmlFor="component-helper">
+                                {t('Product description (one per line)')}
+                              </InputLabel>
+                              <Input
+                                  value={group.des}
+                                  onChange={handleChange("des")}
+                                  multiline
+                                  rowsMax={10}
+                                  required
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('Product description displayed on the purchase page')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
 
-                        <div className={classes.formContainer}>
-                            <FormControl fullWidth>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={group.highlight}
-                                            onChange={handleCheckChange(
-                                                "highlight"
-                                            )}
-                                        />
-                                    }
-                                    label="突出展示"
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    开启后，在商品选择页面会被突出展示
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose} color="default">
-                        取消
-                    </Button>
-                    <Button type={"submit"} color="primary">
-                        确定
-                    </Button>
-                </DialogActions>
-            </form>
-        </Dialog>
+                      <div className={classes.formContainer}>
+                          <FormControl fullWidth>
+                              <FormControlLabel
+                                  control={
+                                      <Switch
+                                          checked={group.highlight}
+                                          onChange={handleCheckChange(
+                                              "highlight"
+                                          )}
+                                      />
+                                  }
+                                  label={t('Highlights')}
+                              />
+                              <FormHelperText id="component-helper-text">
+                                {t('When enabled, it will be highlighted on the product selection page')}
+                              </FormHelperText>
+                          </FormControl>
+                      </div>
+                  </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                  <Button onClick={onClose} color="default">
+                    {t('Cancel')}
+                  </Button>
+                  <Button type={"submit"} color="primary">
+                    {t('Ok')}
+                  </Button>
+              </DialogActions>
+          </form>
+      </Dialog>
     );
 }

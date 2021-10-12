@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RegIcon from "@material-ui/icons/AssignmentIndOutlined";
@@ -118,11 +119,13 @@ function Register() {
     } = useCaptcha();
     const classes = useStyles();
 
+    const { t } = useTranslation();
+
     const register = (e) => {
         e.preventDefault();
 
         if (input.password !== input.password_repeat) {
-            ToggleSnackbar("top", "right", "两次密码输入不一致", "warning");
+            ToggleSnackbar("top", "right", t('The two password entries are inconsistent'), "warning");
             return;
         }
 
@@ -142,7 +145,7 @@ function Register() {
                     setEmailActive(true);
                 } else {
                     history.push("/login?username=" + input.email);
-                    ToggleSnackbar("top", "right", "注册成功", "success");
+                    ToggleSnackbar("top", "right", t('registration success'), "success");
                 }
             })
             .catch((error) => {
@@ -153,101 +156,101 @@ function Register() {
     };
 
     return (
-        <div className={classes.layout}>
-            <>
-                {!emailActive && (
-                    <Paper className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <RegIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            注册 {title}
-                        </Typography>
+      <div className={classes.layout}>
+          <>
+              {!emailActive && (
+                  <Paper className={classes.paper}>
+                      <Avatar className={classes.avatar}>
+                          <RegIcon />
+                      </Avatar>
+                      <Typography component="h1" variant="h5">
+                        {t('Register')} {title}
+                      </Typography>
 
-                        <form className={classes.form} onSubmit={register}>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="email">
-                                    电子邮箱
-                                </InputLabel>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    onChange={handleInputChange("email")}
-                                    autoComplete
-                                    value={input.email}
-                                    autoFocus
-                                />
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">密码</InputLabel>
-                                <Input
-                                    name="password"
-                                    onChange={handleInputChange("password")}
-                                    type="password"
-                                    id="password"
-                                    value={input.password}
-                                    autoComplete
-                                />
-                            </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">
-                                    确认密码
-                                </InputLabel>
-                                <Input
-                                    name="pwdRepeat"
-                                    onChange={handleInputChange(
-                                        "password_repeat"
-                                    )}
-                                    type="password"
-                                    id="pwdRepeat"
-                                    value={input.password_repeat}
-                                    autoComplete
-                                />
-                            </FormControl>
-                            {regCaptcha && <CaptchaRender />}
+                      <form className={classes.form} onSubmit={register}>
+                          <FormControl margin="normal" required fullWidth>
+                              <InputLabel htmlFor="email">
+                                {t('E-mail')}
+                              </InputLabel>
+                              <Input
+                                  id="email"
+                                  type="email"
+                                  name="email"
+                                  onChange={handleInputChange("email")}
+                                  autoComplete
+                                  value={input.email}
+                                  autoFocus
+                              />
+                          </FormControl>
+                          <FormControl margin="normal" required fullWidth>
+                              <InputLabel htmlFor="password">{t('Password')}</InputLabel>
+                              <Input
+                                  name="password"
+                                  onChange={handleInputChange("password")}
+                                  type="password"
+                                  id="password"
+                                  value={input.password}
+                                  autoComplete
+                              />
+                          </FormControl>
+                          <FormControl margin="normal" required fullWidth>
+                              <InputLabel htmlFor="password">
+                                {t('Confirm Password')}
+                              </InputLabel>
+                              <Input
+                                  name="pwdRepeat"
+                                  onChange={handleInputChange(
+                                      "password_repeat"
+                                  )}
+                                  type="password"
+                                  id="pwdRepeat"
+                                  value={input.password_repeat}
+                                  autoComplete
+                              />
+                          </FormControl>
+                          {regCaptcha && <CaptchaRender />}
 
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                disabled={
-                                    loading ||
-                                    (regCaptcha ? captchaLoading : false)
-                                }
-                                className={classes.submit}
-                            >
-                                注册账号
-                            </Button>
-                        </form>
+                          <Button
+                              type="submit"
+                              fullWidth
+                              variant="contained"
+                              color="primary"
+                              disabled={
+                                  loading ||
+                                  (regCaptcha ? captchaLoading : false)
+                              }
+                              className={classes.submit}
+                          >
+                            {t('Create an account')}
+                          </Button>
+                      </form>
 
-                        <Divider />
-                        <div className={classes.link}>
-                            <div>
-                                <Link href={"/login"}>返回登录</Link>
-                            </div>
-                            <div>
-                                <Link href={"/forget"}>忘记密码</Link>
-                            </div>
-                        </div>
-                    </Paper>
-                )}
-                {emailActive && (
-                    <Paper className={classes.paper}>
-                        <Avatar className={classes.avatarSuccess}>
-                            <EmailIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            邮件激活
-                        </Typography>
-                        <Typography style={{ marginTop: "10px" }}>
-                            一封激活邮件已经发送至您的邮箱，请访问邮件中的链接以继续完成注册。
-                        </Typography>
-                    </Paper>
-                )}
-            </>
-        </div>
+                      <Divider />
+                      <div className={classes.link}>
+                          <div>
+                              <Link href={"/login"}>{t('Return to login')}</Link>
+                          </div>
+                          <div>
+                              <Link href={"/forget"}>{t('Forgot password')}</Link>
+                          </div>
+                      </div>
+                  </Paper>
+              )}
+              {emailActive && (
+                  <Paper className={classes.paper}>
+                      <Avatar className={classes.avatarSuccess}>
+                          <EmailIcon />
+                      </Avatar>
+                      <Typography component="h1" variant="h5">
+                        {t('Mail activation')}
+                      </Typography>
+                      <Typography style={{ marginTop: "10px" }}>
+                        {t('An activation email has been sent to your mailbox, please visit the link in the email to continue to complete the registration.')}
+                      </Typography>
+                  </Paper>
+              )}
+          </>
+      </div>
     );
 }
 

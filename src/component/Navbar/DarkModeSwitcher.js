@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback } from "react";
 import { IconButton, makeStyles } from "@material-ui/core";
 import DayIcon from "@material-ui/icons/Brightness7";
@@ -30,22 +31,25 @@ const DarkModeSwitcher = ({ position }) => {
         ToggleThemeMode();
     };
     const classes = useStyles();
+
+    const { t } = useTranslation();
+    
     return (
-        <Tooltip
-            title={isDayLight ? "切换到深色模式" : "切换到浅色模式"}
-            placement="bottom"
-        >
-            <IconButton
-                className={classNames({
-                    [classes.icon]: "left" === position,
-                })}
-                onClick={toggleMode}
-                color="inherit"
-            >
-                {isDayLight && <NightIcon />}
-                {isDark && <DayIcon />}
-            </IconButton>
-        </Tooltip>
+      <Tooltip
+          title={isDayLight ? t('Switch to dark mode') : t('Switch to light mode')}
+          placement="bottom"
+      >
+          <IconButton
+              className={classNames({
+                  [classes.icon]: "left" === position,
+              })}
+              onClick={toggleMode}
+              color="inherit"
+          >
+              {isDayLight && <NightIcon />}
+              {isDark && <DayIcon />}
+          </IconButton>
+      </Tooltip>
     );
 };
 

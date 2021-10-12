@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -75,6 +76,8 @@ export default function ObjectIcon(props) {
     );
     const OpenPreview = useCallback(() => dispatch(openPreview()), [dispatch]);
 
+    const { t } = useTranslation();
+
     const classes = useStyles();
 
     const contextMenu = (e) => {
@@ -130,12 +133,12 @@ export default function ObjectIcon(props) {
         if (isShare) {
             const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
-                ToggleSnackbar("top", "right", "请先登录", "warning");
+                ToggleSnackbar("top", "right", t('please log in first'), "warning");
                 return;
             }
         }
         if (window.shareInfo && !window.shareInfo.preview) {
-            OpenLoadingDialog("获取下载地址...");
+            OpenLoadingDialog(t('Get download address...'));
             return;
         }
 

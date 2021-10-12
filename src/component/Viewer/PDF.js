@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Paper } from "@material-ui/core";
@@ -68,6 +69,8 @@ export default function PDFViewer() {
         // eslint-disable-next-line
     }, [math.params[0], location]);
 
+    const { t } = useTranslation();
+
     const removeTextLayerOffset = () => {
         const textLayers = document.querySelectorAll(
             ".react-pdf__Page__textContent"
@@ -80,46 +83,46 @@ export default function PDFViewer() {
 
     const classes = useStyles();
     return (
-        <div className={classes.layout}>
-            <Document
-                onLoadSuccess={({ numPages }) => setPageNumber(numPages)}
-                onLoadError={(error) => {
-                    ToggleSnackbar(
-                        "top",
-                        "right",
-                        "PDF 加载失败，" + error.message,
-                        "error"
-                    );
-                }}
-                loading={
-                    <Paper className={classes.paper} elevation={1}>
-                        <TextLoading />
-                    </Paper>
-                }
-                file={
-                    getBaseURL() +
-                    (pathHelper.isSharePage(location.pathname)
-                        ? "/share/preview/" +
-                          id +
-                          (query.get("share_path") !== ""
-                              ? "?path=" +
-                                encodeURIComponent(query.get("share_path"))
-                              : "")
-                        : "/file/preview/" + query.get("id"))
-                }
-            >
-                {Array.from(new Array(pageNumber), (el, index) => (
-                    <Paper className={classes.paper} elevation={1}>
-                        <Page
-                            width={900}
-                            onLoadSuccess={removeTextLayerOffset}
-                            key={`page_${index + 1}`}
-                            pageNumber={index + 1}
-                            renderAnnotationLayer={false}
-                        />
-                    </Paper>
-                ))}
-            </Document>
-        </div>
+      <div className={classes.layout}>
+          <Document
+              onLoadSuccess={({ numPages }) => setPageNumber(numPages)}
+              onLoadError={(error) => {
+                  ToggleSnackbar(
+                      "top",
+                      "right",
+                      t('PDF failed to load,') + error.message,
+                      "error"
+                  );
+              }}
+              loading={
+                  <Paper className={classes.paper} elevation={1}>
+                      <TextLoading />
+                  </Paper>
+              }
+              file={
+                  getBaseURL() +
+                  (pathHelper.isSharePage(location.pathname)
+                      ? "/share/preview/" +
+                        id +
+                        (query.get("share_path") !== ""
+                            ? "?path=" +
+                              encodeURIComponent(query.get("share_path"))
+                            : "")
+                      : "/file/preview/" + query.get("id"))
+              }
+          >
+              {Array.from(new Array(pageNumber), (el, index) => (
+                  <Paper className={classes.paper} elevation={1}>
+                      <Page
+                          width={900}
+                          onLoadSuccess={removeTextLayerOffset}
+                          key={`page_${index + 1}`}
+                          pageNumber={index + 1}
+                          renderAnnotationLayer={false}
+                      />
+                  </Paper>
+              ))}
+          </Document>
+      </div>
     );
 }

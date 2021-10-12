@@ -1,3 +1,4 @@
+import { withTranslation } from "react-i18next";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { sizeToString, vhCheck } from "../../utils";
@@ -140,7 +141,7 @@ class SharedFileCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "请先登录",
+                    this.props.t('please log in first'),
                     "warning"
                 );
                 return;
@@ -202,7 +203,7 @@ class SharedFileCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "此文件无法预览",
+                    this.props.t('This file cannot be previewed'),
                     "warning"
                 );
                 return;
@@ -240,55 +241,55 @@ class SharedFileCompoment extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.layout}>
-                <Modals />
-                <ImgPreview />
-                <div className={classes.box}>
-                    <Creator share={this.props.share} />
-                    <Divider />
-                    <div className={classes.boxContent}>
-                        <TypeIcon
-                            className={classes.icon}
-                            isUpload
-                            fileName={this.props.share.source.name}
-                        />
-                        <div className={classes.fileName}>
-                            <Typography style={{ wordBreak: "break-all" }}>
-                                {this.props.share.source.name}
-                            </Typography>
-                            <Typography className={classes.fileSize}>
-                                {sizeToString(this.props.share.source.size)}
-                            </Typography>
-                        </div>
-                    </div>
-                    <Divider />
-                    <div className={classes.boxFooter}>
-                        <div className={classes.actionLeft}>
-                            {this.props.share.preview && (
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    onClick={this.scoreHandle(this.preview)}
-                                    disabled={this.state.loading}
-                                >
-                                    预览
-                                </Button>
-                            )}
-                        </div>
-                        <div className={classes.actions}>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                className={classes.downloadButton}
-                                onClick={this.scoreHandle(this.download)}
-                                disabled={this.state.loading}
-                            >
-                                下载
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div className={classes.layout}>
+              <Modals />
+              <ImgPreview />
+              <div className={classes.box}>
+                  <Creator share={this.props.share} />
+                  <Divider />
+                  <div className={classes.boxContent}>
+                      <TypeIcon
+                          className={classes.icon}
+                          isUpload
+                          fileName={this.props.share.source.name}
+                      />
+                      <div className={classes.fileName}>
+                          <Typography style={{ wordBreak: "break-all" }}>
+                              {this.props.share.source.name}
+                          </Typography>
+                          <Typography className={classes.fileSize}>
+                              {sizeToString(this.props.share.source.size)}
+                          </Typography>
+                      </div>
+                  </div>
+                  <Divider />
+                  <div className={classes.boxFooter}>
+                      <div className={classes.actionLeft}>
+                          {this.props.share.preview && (
+                              (<Button
+                                  variant="outlined"
+                                  color="secondary"
+                                  onClick={this.scoreHandle(this.preview)}
+                                  disabled={this.state.loading}
+                              >
+                                {this.props.t('Preview')}
+                              </Button>)
+                          )}
+                      </div>
+                      <div className={classes.actions}>
+                          <Button
+                              variant="contained"
+                              color="secondary"
+                              className={classes.downloadButton}
+                              onClick={this.scoreHandle(this.download)}
+                              disabled={this.state.loading}
+                          >
+                            {this.props.t('download')}
+                          </Button>
+                      </div>
+                  </div>
+              </div>
+          </div>
         );
     }
 }
@@ -296,6 +297,6 @@ class SharedFileCompoment extends Component {
 const SharedFile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(SharedFileCompoment)));
+)(withTranslation()(withStyles(styles)(withRouter(SharedFileCompoment))));
 
 export default SharedFile;

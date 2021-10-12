@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
@@ -43,23 +45,23 @@ const useStyles = makeStyles((theme) => ({
 
 const columns = [
     { id: "#", label: "#", minWidth: 50 },
-    { id: "name", label: "名称", minWidth: 170 },
-    { id: "type", label: "存储策略", minWidth: 170 },
+    { id: "name", label: i18next.t('Name'), minWidth: 170 },
+    { id: "type", label: i18next.t('Storage Strategy'), minWidth: 170 },
     {
         id: "count",
-        label: "下属用户数",
+        label: i18next.t('Number of Subordinate Users'),
         minWidth: 50,
         align: "right",
     },
     {
         id: "size",
-        label: "最大容量",
+        label: i18next.t('Maximum capacity'),
         minWidth: 100,
         align: "right",
     },
     {
         id: "action",
-        label: "操作",
+        label: i18next.t('Action'),
         minWidth: 170,
         align: "right",
     },
@@ -89,6 +91,8 @@ export default function Group() {
         [dispatch]
     );
 
+    const { t } = useTranslation();
+
     const loadList = () => {
         API.post("/admin/group/list", {
             page: page,
@@ -108,7 +112,7 @@ export default function Group() {
 
     useEffect(() => {
         if (query.get("code") === "0") {
-            ToggleSnackbar("top", "right", "授权成功", "success");
+            ToggleSnackbar("top", "right", t('Authorization succeeded'), "success");
         } else if (query.get("msg") && query.get("msg") !== "") {
             ToggleSnackbar(
                 "top",
@@ -127,7 +131,7 @@ export default function Group() {
         API.delete("/admin/group/" + id)
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "用户组已删除", "success");
+                ToggleSnackbar("top", "right", t('User group has been deleted'), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -135,114 +139,114 @@ export default function Group() {
     };
 
     return (
-        <div>
-            <div className={classes.header}>
-                <Button
-                    color={"primary"}
-                    onClick={() => history.push("/admin/group/add")}
-                    variant={"contained"}
-                >
-                    新建用户组
-                </Button>
-                <div className={classes.headerRight}>
-                    <Button
-                        color={"primary"}
-                        onClick={() => loadList()}
-                        variant={"outlined"}
-                    >
-                        刷新
-                    </Button>
-                </div>
-            </div>
+      <div>
+          <div className={classes.header}>
+              <Button
+                  color={"primary"}
+                  onClick={() => history.push("/admin/group/add")}
+                  variant={"contained"}
+              >
+                {t('New User Group')}
+              </Button>
+              <div className={classes.headerRight}>
+                  <Button
+                      color={"primary"}
+                      onClick={() => loadList()}
+                      variant={"outlined"}
+                  >
+                    {t('Refresh')}
+                  </Button>
+              </div>
+          </div>
 
-            <Paper square className={classes.tableContainer}>
-                <TableContainer className={classes.container}>
-                    <Table aria-label="sticky table" size={"small"}>
-                        <TableHead>
-                            <TableRow style={{ height: 52 }}>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {groups.map((row) => (
-                                <TableRow hover key={row.ID}>
-                                    <TableCell>{row.ID}</TableCell>
-                                    <TableCell>{row.Name}</TableCell>
-                                    <TableCell>
-                                        {row.PolicyList !== null &&
-                                            row.PolicyList.map((pid, key) => {
-                                                let res = "";
-                                                if (policies[pid]) {
-                                                    res += policies[pid].Name;
-                                                }
-                                                if (
-                                                    key !==
-                                                    row.PolicyList.length - 1
-                                                ) {
-                                                    res += " / ";
-                                                }
-                                                return res;
-                                            })}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {statics[row.ID] !== undefined &&
-                                            statics[row.ID].toLocaleString()}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        {statics[row.ID] !== undefined &&
-                                            sizeToString(row.MaxStorage)}
-                                    </TableCell>
-                                    <TableCell align={"right"}>
-                                        <Tooltip title={"编辑"}>
-                                            <IconButton
-                                                onClick={() =>
-                                                    history.push(
-                                                        "/admin/group/edit/" +
-                                                            row.ID
-                                                    )
-                                                }
-                                                size={"small"}
-                                            >
-                                                <Edit />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title={"删除"}>
-                                            <IconButton
-                                                onClick={() =>
-                                                    deletePolicy(row.ID)
-                                                }
-                                                size={"small"}
-                                            >
-                                                <Delete />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={total}
-                    rowsPerPage={pageSize}
-                    page={page - 1}
-                    onChangePage={(e, p) => setPage(p + 1)}
-                    onChangeRowsPerPage={(e) => {
-                        setPageSize(e.target.value);
-                        setPage(1);
-                    }}
-                />
-            </Paper>
-        </div>
+          <Paper square className={classes.tableContainer}>
+              <TableContainer className={classes.container}>
+                  <Table aria-label="sticky table" size={"small"}>
+                      <TableHead>
+                          <TableRow style={{ height: 52 }}>
+                              {columns.map((column) => (
+                                  <TableCell
+                                      key={column.id}
+                                      align={column.align}
+                                      style={{ minWidth: column.minWidth }}
+                                  >
+                                      {column.label}
+                                  </TableCell>
+                              ))}
+                          </TableRow>
+                      </TableHead>
+                      <TableBody>
+                          {groups.map((row) => (
+                              <TableRow hover key={row.ID}>
+                                  <TableCell>{row.ID}</TableCell>
+                                  <TableCell>{row.Name}</TableCell>
+                                  <TableCell>
+                                      {row.PolicyList !== null &&
+                                          row.PolicyList.map((pid, key) => {
+                                              let res = "";
+                                              if (policies[pid]) {
+                                                  res += policies[pid].Name;
+                                              }
+                                              if (
+                                                  key !==
+                                                  row.PolicyList.length - 1
+                                              ) {
+                                                  res += " / ";
+                                              }
+                                              return res;
+                                          })}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      {statics[row.ID] !== undefined &&
+                                          statics[row.ID].toLocaleString()}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      {statics[row.ID] !== undefined &&
+                                          sizeToString(row.MaxStorage)}
+                                  </TableCell>
+                                  <TableCell align={"right"}>
+                                      <Tooltip title={t('edit')}>
+                                          <IconButton
+                                              onClick={() =>
+                                                  history.push(
+                                                      "/admin/group/edit/" +
+                                                          row.ID
+                                                  )
+                                              }
+                                              size={"small"}
+                                          >
+                                              <Edit />
+                                          </IconButton>
+                                      </Tooltip>
+                                      <Tooltip title={t('delete')}>
+                                          <IconButton
+                                              onClick={() =>
+                                                  deletePolicy(row.ID)
+                                              }
+                                              size={"small"}
+                                          >
+                                              <Delete />
+                                          </IconButton>
+                                      </Tooltip>
+                                  </TableCell>
+                              </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+              </TableContainer>
+              <TablePagination
+                  rowsPerPageOptions={[10, 25, 100]}
+                  component="div"
+                  count={total}
+                  rowsPerPage={pageSize}
+                  page={page - 1}
+                  onChangePage={(e, p) => setPage(p + 1)}
+                  onChangeRowsPerPage={(e) => {
+                      setPageSize(e.target.value);
+                      setPage(1);
+                  }}
+              />
+          </Paper>
+      </div>
     );
 }
