@@ -141,6 +141,21 @@ export default function Node() {
             });
     };
 
+    const deleteNode = (id) => {
+        setLoading(true);
+        API.delete("/admin/node/" + id)
+            .then(() => {
+                loadList();
+                ToggleSnackbar("top", "right", "节点已删除", "success");
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            })
+            .then(() => {
+                setLoading(false);
+            });
+    };
+
     useEffect(() => {
         loadList();
     }, [page, pageSize]);
@@ -286,6 +301,9 @@ export default function Node() {
                                         </Tooltip>
                                         <Tooltip title={"删除"}>
                                             <IconButton
+                                                onClick={() =>
+                                                    deleteNode(row.ID)
+                                                }
                                                 disabled={loading}
                                                 size={"small"}
                                             >
