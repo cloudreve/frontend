@@ -63,9 +63,9 @@ export default function NodeGuide(props) {
                   MasterKey: randomStr(64),
                   Rank: "0",
                   Aria2OptionsSerialized: {
-                      Token: randomStr(32),
-                      Options: "{}",
-                      Interval: 10,
+                      token: randomStr(32),
+                      options: "{}",
+                      interval: 10,
                   },
               }
     );
@@ -88,8 +88,8 @@ export default function NodeGuide(props) {
     const handleOptionChange = (name) => (event) => {
         setNode({
             ...node,
-            Aria2Options: {
-                ...node.Aria2Options,
+            Aria2OptionsSerialized: {
+                ...node.Aria2OptionsSerialized,
                 [name]: event.target.value,
             },
         });
@@ -119,7 +119,7 @@ export default function NodeGuide(props) {
                     ToggleSnackbar(
                         "top",
                         "right",
-                        "节点已" + (props.policy ? "保存" : "添加"),
+                        "节点已" + (props.node ? "保存" : "添加"),
                         "success"
                     );
                     setActiveStep(activeStep + 1);

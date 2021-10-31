@@ -100,8 +100,8 @@ export default function Aria2RPC(props) {
             type: props.node.Type,
             server: props.node.Server,
             secret: props.node.SlaveKey,
-            rpc: props.node.Aria2OptionsSerialized.Server,
-            token: props.node.Aria2OptionsSerialized.Token,
+            rpc: props.node.Aria2OptionsSerialized.server,
+            token: props.node.Aria2OptionsSerialized.token,
         })
             .then((response) => {
                 ToggleSnackbar(
@@ -219,7 +219,7 @@ export default function Aria2RPC(props) {
                             <br />
                             # RPC 授权令牌，可自行设定
                             <br />
-                            rpc-secure={props.node.Aria2OptionsSerialized.Token}
+                            rpc-secret={props.node.Aria2OptionsSerialized.token}
                             <br />
                         </pre>
                         <Alert severity="info" style={{ marginBottom: 10 }}>
@@ -254,10 +254,10 @@ export default function Aria2RPC(props) {
                                     required
                                     type={"url"}
                                     value={
-                                        props.node.Aria2OptionsSerialized.Server
+                                        props.node.Aria2OptionsSerialized.server
                                     }
                                     onChange={props.handleOptionChange(
-                                        "Server"
+                                        "server"
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
@@ -281,8 +281,8 @@ export default function Aria2RPC(props) {
                         </Typography>
                         <div className={classes.form}>
                             <Input
-                                value={props.node.Aria2OptionsSerialized.Token}
-                                onChange={props.handleOptionChange("Token")}
+                                value={props.node.Aria2OptionsSerialized.token}
+                                onChange={props.handleOptionChange("token")}
                             />
                         </div>
                     </div>
@@ -301,9 +301,9 @@ export default function Aria2RPC(props) {
                         <div className={classes.form}>
                             <Input
                                 value={
-                                    props.node.Aria2OptionsSerialized.TempPath
+                                    props.node.Aria2OptionsSerialized.temp_path
                                 }
-                                onChange={props.handleOptionChange("TempPath")}
+                                onChange={props.handleOptionChange("temp_path")}
                             />
                         </div>
                     </div>
@@ -331,10 +331,10 @@ export default function Aria2RPC(props) {
                                     required
                                     value={
                                         props.node.Aria2OptionsSerialized
-                                            .Interval
+                                            .interval
                                     }
                                     onChange={props.handleOptionChange(
-                                        "Interval"
+                                        "interval"
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
@@ -356,10 +356,10 @@ export default function Aria2RPC(props) {
                                     required
                                     value={
                                         props.node.Aria2OptionsSerialized
-                                            .Timeout
+                                            .timeout
                                     }
                                     onChange={props.handleOptionChange(
-                                        "Timeout"
+                                        "timeout"
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
@@ -377,10 +377,10 @@ export default function Aria2RPC(props) {
                                     required
                                     value={
                                         props.node.Aria2OptionsSerialized
-                                            .Options
+                                            .options
                                     }
                                     onChange={props.handleOptionChange(
-                                        "Options"
+                                        "options"
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
