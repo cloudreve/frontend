@@ -33,6 +33,7 @@ import Task from "./component/Admin/Task/Task";
 import Import from "./component/Admin/File/Import";
 import Captcha from "./component/Admin/Setting/Captcha";
 import Node from "./component/Admin/Node/Node";
+import AddNode from "./component/Admin/Node/AddNode";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -187,6 +188,10 @@ export default function Admin() {
 
                                     <Route path={`${path}/node`} exact>
                                         <Node />
+                                    </Route>
+
+                                    <Route path={`${path}/node/add`} exact>
+                                        <AddNode />
                                     </Route>
                                 </Switch>
                             )}

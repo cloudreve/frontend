@@ -234,7 +234,7 @@ const items = [
         path: "policy",
     },
     {
-        title: "从机节点",
+        title: "节点",
         icon: <Contactless />,
         path: "node",
     },
