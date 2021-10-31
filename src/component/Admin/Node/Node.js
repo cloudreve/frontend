@@ -14,7 +14,14 @@ import TableBody from "@material-ui/core/TableBody";
 import TablePagination from "@material-ui/core/TablePagination";
 import { useHistory } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
-import { Delete, Edit, Cancel, CheckCircle } from "@material-ui/icons";
+import {
+    Delete,
+    Edit,
+    Cancel,
+    CheckCircle,
+    PlayArrow,
+    Pause,
+} from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 import classNames from "classnames";
@@ -84,6 +91,7 @@ export default function Node() {
     const classes = useStyles();
     const [nodes, setNodes] = useState([]);
     const [isActive, setIsActive] = useState({});
+    const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0);
@@ -113,20 +121,29 @@ export default function Node() {
             });
     };
 
-    useEffect(() => {
-        loadList();
-    }, [page, pageSize]);
-
-    const deletePolicy = (id) => {
-        API.delete("/admin/group/" + id)
-            .then(() => {
+    const toggleNode = (id, desired) => {
+        setLoading(true);
+        API.patch("/admin/node/enable/" + id + "/" + desired)
+            .then((response) => {
                 loadList();
-                ToggleSnackbar("top", "right", "用户组已删除", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "节点已" + (desired === 1 ? "暂停使用" : "启用"),
+                    "success"
+                );
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
+            })
+            .then(() => {
+                setLoading(false);
             });
     };
+
+    useEffect(() => {
+        loadList();
+    }, [page, pageSize]);
 
     const getStatusBadge = (status) => {
         if (status === 1) {
@@ -230,8 +247,32 @@ export default function Node() {
                                     </TableCell>
 
                                     <TableCell align={"right"}>
+                                        <Tooltip
+                                            title={
+                                                row.Status === 1
+                                                    ? "启用节点"
+                                                    : "暂停使用节点"
+                                            }
+                                        >
+                                            <IconButton
+                                                disabled={loading}
+                                                onClick={() =>
+                                                    toggleNode(
+                                                        row.ID,
+                                                        1 - row.Status
+                                                    )
+                                                }
+                                                size={"small"}
+                                            >
+                                                {row.Status === 1 && (
+                                                    <PlayArrow />
+                                                )}
+                                                {row.Status !== 1 && <Pause />}
+                                            </IconButton>
+                                        </Tooltip>
                                         <Tooltip title={"编辑"}>
                                             <IconButton
+                                                disabled={loading}
                                                 onClick={() =>
                                                     history.push(
                                                         "/admin/node/edit/" +
@@ -245,9 +286,7 @@ export default function Node() {
                                         </Tooltip>
                                         <Tooltip title={"删除"}>
                                             <IconButton
-                                                onClick={() =>
-                                                    deletePolicy(row.ID)
-                                                }
+                                                disabled={loading}
                                                 size={"small"}
                                             >
                                                 <Delete />
