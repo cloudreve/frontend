@@ -31,6 +31,7 @@ import {
     SettingsEthernet,
     Share,
     Storage,
+    Contactless,
 } from "@material-ui/icons";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -231,6 +232,11 @@ const items = [
         title: "存储策略",
         icon: <Storage />,
         path: "policy",
+    },
+    {
+        title: "从机节点",
+        icon: <Contactless />,
+        path: "node",
     },
     {
         title: "用户组",
