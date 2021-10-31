@@ -9,6 +9,8 @@ import { randomStr } from "../../../../utils";
 import Communication from "./Communication";
 import Aria2RPC from "./Aria2RPC";
 import API from "../../../../middleware/Api";
+import Metainfo from "./Metainfo";
+import Completed from "./Completed";
 
 const steps = [
     {
@@ -29,8 +31,19 @@ const steps = [
     },
     {
         slaveOnly: false,
+        title: "杂项信息",
+        optional: false,
+        component: function show(p) {
+            return <Metainfo {...p} />;
+        },
+    },
+    {
+        slaveOnly: false,
         title: "完成",
         optional: false,
+        component: function show(p) {
+            return <Completed {...p} />;
+        },
     },
 ];
 
@@ -48,6 +61,7 @@ export default function NodeGuide(props) {
                   Server: "https://example.com:5212",
                   SlaveKey: randomStr(64),
                   MasterKey: randomStr(64),
+                  Rank: "0",
                   Aria2OptionsSerialized: {
                       Token: randomStr(32),
                       Options: "{}",
@@ -96,6 +110,7 @@ export default function NodeGuide(props) {
             nodeCopy.Aria2OptionsSerialized = {
                 ...node.Aria2OptionsSerialized,
             };
+            nodeCopy.Rank = parseInt(nodeCopy.Rank);
             nodeCopy.Aria2Enabled = nodeCopy.Aria2Enabled === "true";
             API.post("/admin/node", {
                 node: nodeCopy,
@@ -104,7 +119,7 @@ export default function NodeGuide(props) {
                     ToggleSnackbar(
                         "top",
                         "right",
-                        "存储策略已" + (props.policy ? "保存" : "添加"),
+                        "节点已" + (props.policy ? "保存" : "添加"),
                         "success"
                     );
                     setActiveStep(activeStep + 1);
