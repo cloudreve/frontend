@@ -263,7 +263,7 @@ export default function Communication(props) {
 
             <div className={classes.stepFooter}>
                 <Button
-                    disabled={loading}
+                    disabled={loading || props.loading}
                     type={"submit"}
                     variant={"contained"}
                     color={"primary"}

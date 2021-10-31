@@ -8,6 +8,7 @@ import { toggleSnackbar } from "../../../../actions";
 import { randomStr } from "../../../../utils";
 import Communication from "./Communication";
 import Aria2RPC from "./Aria2RPC";
+import API from "../../../../middleware/Api";
 
 const steps = [
     {
@@ -28,11 +29,6 @@ const steps = [
     },
     {
         slaveOnly: false,
-        title: "杂项信息",
-        optional: false,
-    },
-    {
-        slaveOnly: false,
         title: "完成",
         optional: false,
     },
@@ -41,6 +37,7 @@ const steps = [
 export default function NodeGuide(props) {
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
+    const [loading, setLoading] = useState(false);
     const [node, setNode] = useState(
         props.node
             ? props.node
@@ -51,7 +48,7 @@ export default function NodeGuide(props) {
                   Server: "https://example.com:5212",
                   SlaveKey: randomStr(64),
                   MasterKey: randomStr(64),
-                  Aria2Options: {
+                  Aria2OptionsSerialized: {
                       Token: randomStr(32),
                       Options: "{}",
                       Interval: 10,
@@ -91,6 +88,39 @@ export default function NodeGuide(props) {
         [dispatch]
     );
 
+    const nextStep = () => {
+        if (props.node || activeStep + 1 === steps.length - 1) {
+            setLoading(true);
+
+            const nodeCopy = { ...node };
+            nodeCopy.Aria2OptionsSerialized = {
+                ...node.Aria2OptionsSerialized,
+            };
+            nodeCopy.Aria2Enabled = nodeCopy.Aria2Enabled === "true";
+            API.post("/admin/node", {
+                node: nodeCopy,
+            })
+                .then(() => {
+                    ToggleSnackbar(
+                        "top",
+                        "right",
+                        "存储策略已" + (props.policy ? "保存" : "添加"),
+                        "success"
+                    );
+                    setActiveStep(activeStep + 1);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    ToggleSnackbar("top", "right", error.message, "error");
+                })
+                .then(() => {
+                    setLoading(false);
+                });
+        } else {
+            setActiveStep(activeStep + 1);
+        }
+    };
+
     return (
         <div>
             <Typography variant={"h6"}>
@@ -121,8 +151,9 @@ export default function NodeGuide(props) {
             </Stepper>
 
             {usedSteps[activeStep].component({
-                onSubmit: (e) => setActiveStep(activeStep + 1),
+                onSubmit: (e) => nextStep(),
                 node: node,
+                loading: loading,
                 onBack: (e) => setActiveStep(activeStep - 1),
                 handleTextChange: handleTextChange,
                 activeStep: activeStep,

@@ -100,8 +100,8 @@ export default function Aria2RPC(props) {
             type: props.node.Type,
             server: props.node.Server,
             secret: props.node.SlaveKey,
-            rpc: props.node.Aria2Options.Server,
-            token: props.node.Aria2Options.Token,
+            rpc: props.node.Aria2OptionsSerialized.Server,
+            token: props.node.Aria2OptionsSerialized.Token,
         })
             .then((response) => {
                 ToggleSnackbar(
@@ -219,7 +219,7 @@ export default function Aria2RPC(props) {
                             <br />
                             # RPC 授权令牌，可自行设定
                             <br />
-                            rpc-secure={props.node.Aria2Options.Token}
+                            rpc-secure={props.node.Aria2OptionsSerialized.Token}
                             <br />
                         </pre>
                         <Alert severity="info" style={{ marginBottom: 10 }}>
@@ -253,7 +253,9 @@ export default function Aria2RPC(props) {
                                 <Input
                                     required
                                     type={"url"}
-                                    value={props.node.Aria2Options.Server}
+                                    value={
+                                        props.node.Aria2OptionsSerialized.Server
+                                    }
                                     onChange={props.handleOptionChange(
                                         "Server"
                                     )}
@@ -279,7 +281,7 @@ export default function Aria2RPC(props) {
                         </Typography>
                         <div className={classes.form}>
                             <Input
-                                value={props.node.Aria2Options.Token}
+                                value={props.node.Aria2OptionsSerialized.Token}
                                 onChange={props.handleOptionChange("Token")}
                             />
                         </div>
@@ -298,7 +300,9 @@ export default function Aria2RPC(props) {
                         </Typography>
                         <div className={classes.form}>
                             <Input
-                                value={props.node.Aria2Options.TempPath}
+                                value={
+                                    props.node.Aria2OptionsSerialized.TempPath
+                                }
                                 onChange={props.handleOptionChange("TempPath")}
                             />
                         </div>
@@ -325,7 +329,10 @@ export default function Aria2RPC(props) {
                                         min: 1,
                                     }}
                                     required
-                                    value={props.node.Aria2Options.Interval}
+                                    value={
+                                        props.node.Aria2OptionsSerialized
+                                            .Interval
+                                    }
                                     onChange={props.handleOptionChange(
                                         "Interval"
                                     )}
@@ -347,7 +354,10 @@ export default function Aria2RPC(props) {
                                         min: 1,
                                     }}
                                     required
-                                    value={props.node.Aria2Options.Timeout}
+                                    value={
+                                        props.node.Aria2OptionsSerialized
+                                            .Timeout
+                                    }
                                     onChange={props.handleOptionChange(
                                         "Timeout"
                                     )}
@@ -365,7 +375,10 @@ export default function Aria2RPC(props) {
                                 <Input
                                     multiline
                                     required
-                                    value={props.node.Aria2Options.Options}
+                                    value={
+                                        props.node.Aria2OptionsSerialized
+                                            .Options
+                                    }
                                     onChange={props.handleOptionChange(
                                         "Options"
                                     )}
@@ -386,7 +399,8 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            完成以上步骤后，你可以点击下方的测试按钮测试{mode}
+                            完成以上步骤后，你可以点击下方的测试按钮测试
+                            {mode}
                             Cloudreve 向 Aria2 通信是否正常。
                             {props.node.Type === 0 &&
                                 "在进行测试前请先确保您已进行并通过上一页面中的“从机通信测试”。"}
@@ -416,10 +430,11 @@ export default function Aria2RPC(props) {
                     </Button>
                 )}
                 <Button
-                    disabled={loading}
+                    disabled={loading || props.loading}
                     type={"submit"}
                     variant={"contained"}
                     color={"primary"}
+                    onClick={props.onSubmit}
                 >
                     下一步
                 </Button>
