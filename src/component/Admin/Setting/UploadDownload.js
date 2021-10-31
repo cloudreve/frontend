@@ -53,6 +53,10 @@ export default function UploadDownload() {
         onedrive_callback_check: "0",
         reset_after_upload_failed: "0",
         onedrive_source_timeout: "0",
+        slave_node_retry: "0",
+        slave_ping_interval: "0",
+        slave_recover_interval: "0",
+        slave_transfer_timeout: "0",
     });
 
     const handleCheckChange = (name) => (event) => {
@@ -251,240 +255,139 @@ export default function UploadDownload() {
                     <Typography variant="h6" gutterBottom>
                         有效期 (秒)
                     </Typography>
-
                     <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    打包下载
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.archive_timeout}
-                                    onChange={handleChange("archive_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    下载会话
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.download_timeout}
-                                    onChange={handleChange("download_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    预览链接
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.preview_timeout}
-                                    onChange={handleChange("preview_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    Office 文档预览连接
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.doc_preview_timeout}
-                                    onChange={handleChange(
-                                        "doc_preview_timeout"
+                        {[
+                            {
+                                name: "打包下载",
+                                field: "archive_timeout",
+                            },
+                            {
+                                name: "下载会话",
+                                field: "download_timeout",
+                            },
+                            {
+                                name: "预览链接",
+                                field: "preview_timeout",
+                            },
+                            {
+                                name: "Office 文档预览连接",
+                                field: "doc_preview_timeout",
+                            },
+                            {
+                                name: "上传凭证",
+                                field: "upload_credential_timeout",
+                            },
+                            {
+                                name: "上传会话",
+                                field: "upload_session_timeout",
+                                des: "超出后不再处理此上传的回调请求",
+                            },
+                            {
+                                name: "分享下载会话",
+                                field: "share_download_session_timeout",
+                                des:
+                                    "设定时间内重复下载分享文件，不会被记入总下载次数",
+                            },
+                            {
+                                name: "OneDrive 客户端上传监控间隔",
+                                field: "onedrive_monitor_timeout",
+                                des:
+                                    "每间隔所设定时间，Cloudreve 会向 OneDrive 请求检查客户端上传情况已确保客户端上传可控",
+                            },
+                            {
+                                name: "OneDrive 回调等待",
+                                field: "onedrive_callback_check",
+                                des:
+                                    "OneDrive 客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败",
+                            },
+                            {
+                                name: "OneDrive 下载请求缓存",
+                                field: "onedrive_source_timeout",
+                                des:
+                                    "OneDrive 获取文件下载 URL 后可将结果缓存，减轻热门文件下载API请求频率",
+                            },
+                        ].map((input) => (
+                            <div key={input.name} className={classes.form}>
+                                <FormControl>
+                                    <InputLabel htmlFor="component-helper">
+                                        {input.name}
+                                    </InputLabel>
+                                    <Input
+                                        type={"number"}
+                                        inputProps={{
+                                            min: 1,
+                                            step: 1,
+                                        }}
+                                        value={options[input.field]}
+                                        onChange={handleChange(input.field)}
+                                        required
+                                    />
+                                    {input.des && (
+                                        <FormHelperText id="component-helper-text">
+                                            {input.des}
+                                        </FormHelperText>
                                     )}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
+                                </FormControl>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    上传凭证
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.upload_credential_timeout}
-                                    onChange={handleChange(
-                                        "upload_credential_timeout"
-                                    )}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    上传会话
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.upload_session_timeout}
-                                    onChange={handleChange(
-                                        "upload_session_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    超出后不再处理此上传的回调请求
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    从机API请求
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.slave_api_timeout}
-                                    onChange={handleChange("slave_api_timeout")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    分享下载会话
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={
-                                        options.share_download_session_timeout
-                                    }
-                                    onChange={handleChange(
-                                        "share_download_session_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    设定时间内重复下载分享文件，不会被记入总下载次数
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 客户端上传监控间隔
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_monitor_timeout}
-                                    onChange={handleChange(
-                                        "onedrive_monitor_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    每间隔所设定时间，Cloudreve 会向 OneDrive
-                                    请求检查客户端上传情况已确保客户端上传可控
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 回调等待
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_callback_check}
-                                    onChange={handleChange(
-                                        "onedrive_callback_check"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    OneDrive
-                                    客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    OneDrive 下载请求缓存
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        max: 3659,
-                                        step: 1,
-                                    }}
-                                    value={options.onedrive_source_timeout}
-                                    onChange={handleChange(
-                                        "onedrive_source_timeout"
-                                    )}
-                                    required
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    OneDrive 获取文件下载 URL
-                                    后可将结果缓存，减轻热门文件下载API请求频率
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
+                <div className={classes.root}>
+                    <Typography variant="h6" gutterBottom>
+                        节点通信
+                    </Typography>
+                    <div className={classes.formContainer}>
+                        {[
+                            {
+                                name: "从机API请求超时（秒）",
+                                field: "slave_api_timeout",
+                                des: "主机等待从机API请求响应的超时时间",
+                            },
+                            {
+                                name: "节点心跳间隔（秒）",
+                                field: "slave_ping_interval",
+                                des: "主机节点向从机节点发送心跳的间隔",
+                            },
+                            {
+                                name: "心跳失败重试阈值",
+                                field: "slave_node_retry",
+                                des:
+                                    "主机向从机发送心跳失败后，主机可最大重试的次数。重试失败后，节点会进入恢复模式",
+                            },
+                            {
+                                name: "恢复模式心跳间隔（秒）",
+                                field: "slave_recover_interval",
+                                des:
+                                    "节点因异常被主机标记为恢复模式后，主机尝试重新连接节点的间隔",
+                            },
+                            {
+                                name: "从机中转超时（秒）",
+                                field: "slave_transfer_timeout",
+                                des: "从机执行文件中转任务可消耗的最长时间",
+                            },
+                        ].map((input) => (
+                            <div key={input.name} className={classes.form}>
+                                <FormControl>
+                                    <InputLabel htmlFor="component-helper">
+                                        {input.name}
+                                    </InputLabel>
+                                    <Input
+                                        type={"number"}
+                                        inputProps={{
+                                            min: 1,
+                                            step: 1,
+                                        }}
+                                        value={options[input.field]}
+                                        onChange={handleChange(input.field)}
+                                        required
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        {input.des}
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        ))}
                     </div>
                 </div>
 

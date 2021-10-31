@@ -15,7 +15,6 @@ import Access from "./component/Admin/Setting/Access";
 import Mail from "./component/Admin/Setting/Mail";
 import UploadDownload from "./component/Admin/Setting/UploadDownload";
 import Theme from "./component/Admin/Setting/Theme";
-import Aria2 from "./component/Admin/Setting/Aria2";
 import ImageSetting from "./component/Admin/Setting/Image";
 import Policy from "./component/Admin/Policy/Policy";
 import AddPolicy from "./component/Admin/Policy/AddPolicy";
@@ -108,10 +107,6 @@ export default function Admin() {
 
                                     <Route path={`${path}/theme`}>
                                         <Theme />
-                                    </Route>
-
-                                    <Route path={`${path}/aria2`}>
-                                        <Aria2 />
                                     </Route>
 
                                     <Route path={`${path}/image`}>

@@ -202,7 +202,7 @@ const items = [
                 icon: <Mail />,
             },
             {
-                title: "上传与下载",
+                title: "传输与通信",
                 path: "upload",
                 icon: <SettingsEthernet />,
             },
@@ -210,11 +210,6 @@ const items = [
                 title: "外观",
                 path: "theme",
                 icon: <Palette />,
-            },
-            {
-                title: "离线下载",
-                path: "aria2",
-                icon: <CloudDownload />,
             },
             {
                 title: "图像处理",
