@@ -24,6 +24,9 @@ import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import ShareFilter from "../Dialogs/ShareFilter";
 import { formatLocalTime } from "../../../utils/datetime";
+import Aria2Helper from "./Aria2Helper";
+import HelpIcon from "@material-ui/icons/Help";
+import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,6 +85,7 @@ export default function Download() {
     const [filterDialog, setFilterDialog] = useState(false);
     const [selected, setSelected] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [helperOpen, setHelperOpen] = useState(false);
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -176,6 +180,10 @@ export default function Download() {
 
     return (
         <div>
+            <Aria2Helper
+                open={helperOpen}
+                onClose={() => setHelperOpen(false)}
+            />
             <ShareFilter
                 filter={filter}
                 open={filterDialog}
@@ -184,13 +192,19 @@ export default function Download() {
                 setFilter={setFilter}
             />
             <div className={classes.header}>
+                <Button
+                    color={"primary"}
+                    onClick={() => loadList()}
+                    variant={"outlined"}
+                >
+                    刷新
+                </Button>
                 <div className={classes.headerRight}>
                     <Button
                         color={"primary"}
-                        onClick={() => loadList()}
-                        variant={"outlined"}
+                        onClick={() => setHelperOpen(true)}
                     >
-                        刷新
+                        <HelpIcon /> {"  "}如何配置离线下载
                     </Button>
                 </div>
             </div>
@@ -269,6 +283,9 @@ export default function Download() {
                                 <TableCell style={{ minWidth: 90 }}>
                                     状态
                                 </TableCell>
+                                <TableCell style={{ minWidth: 90 }}>
+                                    处理节点
+                                </TableCell>
                                 <TableCell
                                     style={{ minWidth: 150 }}
                                     align={"right"}
@@ -340,6 +357,27 @@ export default function Download() {
                                         {row.Status === 4 && "完成"}
                                         {row.Status === 5 && "取消/停止"}
                                         {row.Status === 6 && "未知"}
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.NodeID <= 1 && (
+                                            <Link
+                                                component={RouterLink}
+                                                to={"/admin/node/edit/1"}
+                                            >
+                                                主机
+                                            </Link>
+                                        )}
+                                        {row.NodeID > 1 && (
+                                            <Link
+                                                component={RouterLink}
+                                                to={
+                                                    "/admin/node/edit/" +
+                                                    row.NodeID
+                                                }
+                                            >
+                                                从机#{row.NodeID}
+                                            </Link>
+                                        )}
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         {sizeToString(row.TotalSize)}
