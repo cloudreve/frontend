@@ -65,7 +65,8 @@ export default function NodeGuide(props) {
                   Aria2OptionsSerialized: {
                       token: randomStr(32),
                       options: "{}",
-                      interval: 10,
+                      interval: "10",
+                      timeout: "10",
                   },
               }
     );
@@ -111,6 +112,12 @@ export default function NodeGuide(props) {
                 ...node.Aria2OptionsSerialized,
             };
             nodeCopy.Rank = parseInt(nodeCopy.Rank);
+            nodeCopy.Aria2OptionsSerialized.interval = parseInt(
+                nodeCopy.Aria2OptionsSerialized.interval
+            );
+            nodeCopy.Aria2OptionsSerialized.timeout = parseInt(
+                nodeCopy.Aria2OptionsSerialized.timeout
+            );
             nodeCopy.Aria2Enabled = nodeCopy.Aria2Enabled === "true";
             API.post("/admin/node", {
                 node: nodeCopy,

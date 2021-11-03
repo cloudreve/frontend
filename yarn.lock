@@ -1405,14 +1405,14 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@material-ui/core@^4.9.0":
-  version "4.12.3"
-  resolved "https://registry.nlark.com/@material-ui/core/download/@material-ui/core-4.12.3.tgz#80d665caf0f1f034e52355c5450c0e38b099d3ca"
-  integrity sha1-gNZlyvDx8DTlI1XFRQwOOLCZ08o=
+"@material-ui/core@~4.11.0":
+  version "4.11.4"
+  resolved "https://registry.nlark.com/@material-ui/core/download/@material-ui/core-4.11.4.tgz#4fb9fe5dec5dcf780b687e3a40cff78b2b9640a4"
+  integrity sha1-T7n+Xexdz3gLaH46QM/3iyuWQKQ=
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/styles" "^4.11.4"
-    "@material-ui/system" "^4.12.1"
+    "@material-ui/system" "^4.11.3"
     "@material-ui/types" "5.1.0"
     "@material-ui/utils" "^4.11.2"
     "@types/react-transition-group" "^4.2.0"
@@ -1430,10 +1430,10 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
-"@material-ui/lab@^4.0.0-alpha.42":
-  version "4.0.0-alpha.60"
-  resolved "https://registry.nlark.com/@material-ui/lab/download/@material-ui/lab-4.0.0-alpha.60.tgz#5ad203aed5a8569b0f1753945a21a05efa2234d2"
-  integrity sha1-WtIDrtWoVpsPF1OUWiGgXvoiNNI=
+"@material-ui/lab@4.0.0-alpha.57":
+  version "4.0.0-alpha.57"
+  resolved "https://registry.nlark.com/@material-ui/lab/download/@material-ui/lab-4.0.0-alpha.57.tgz#e8961bcf6449e8a8dabe84f2700daacfcafbf83a"
+  integrity sha1-6JYbz2RJ6KjavoTycA2qz8r7+Do=
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@material-ui/utils" "^4.11.2"
@@ -1463,7 +1463,7 @@
     jss-plugin-vendor-prefixer "^10.5.1"
     prop-types "^15.7.2"
 
-"@material-ui/system@^4.12.1":
+"@material-ui/system@^4.11.3":
   version "4.12.1"
   resolved "https://registry.nlark.com/@material-ui/system/download/@material-ui/system-4.12.1.tgz#2dd96c243f8c0a331b2bb6d46efd7771a399707c"
   integrity sha1-LdlsJD+MCjMbK7bUbv13caOZcHw=

@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import Auth from "./middleware/Auth";
 import { Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import createTheme from "@material-ui/core/styles/createMuiTheme";
 import { zhCN } from "@material-ui/core/locale";
 
 import Index from "./component/Admin/Index";
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
 }));
 
-const theme = createMuiTheme(
+const theme = createTheme(
     {
         palette: {
             background: {},

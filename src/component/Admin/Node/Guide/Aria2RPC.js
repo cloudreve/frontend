@@ -219,7 +219,8 @@ export default function Aria2RPC(props) {
                             <br />
                             # RPC 授权令牌，可自行设定
                             <br />
-                            rpc-secret={props.node.Aria2OptionsSerialized.token}
+                            rpc-secret=
+                            {props.node.Aria2OptionsSerialized.token}
                             <br />
                         </pre>
                         <Alert severity="info" style={{ marginBottom: 10 }}>
@@ -277,7 +278,7 @@ export default function Aria2RPC(props) {
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
                             RPC 授权令牌，与 Aria2 配置文件中
-                            <code>rpc-secure</code>保持一致，未设置请留空。
+                            <code>rpc-secret</code>保持一致，未设置请留空。
                         </Typography>
                         <div className={classes.form}>
                             <Input

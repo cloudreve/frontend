@@ -117,7 +117,7 @@ export default function Communication(props) {
         >
             <Alert severity="info" style={{ marginBottom: 10 }}>
                 您可以添加同样运行了 Cloudreve 的服务器作为从机端，
-                正常运行工作的从机端可以为主机分担某些异步任务（如离线下载及转存）。
+                正常运行工作的从机端可以为主机分担某些异步任务（如离线下载）。
                 请参考下面向导部署并配置连接 Cloudreve 从机节点。
                 <Box fontWeight="fontWeightBold">
                     如果你已经在目标服务器上部署了从机存储策略，您可以跳过本页面的某些步骤，

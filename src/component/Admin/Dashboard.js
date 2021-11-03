@@ -229,7 +229,7 @@ const items = [
         path: "policy",
     },
     {
-        title: "节点",
+        title: "离线下载节点",
         icon: <Contactless />,
         path: "node",
     },
