@@ -87,6 +87,7 @@ const mapStateToProps = (state) => {
         subTitle: state.viewUpdate.subTitle,
         loadUploader: state.viewUpdate.loadUploader,
         isLogin: state.viewUpdate.isLogin,
+        registerEnabled: state.siteConfig.registerEnabled,
     };
 };
 
@@ -519,16 +520,18 @@ class NavbarCompoment extends Component {
                             </ListItemIcon>
                             <ListItemText primary="登录" />
                         </ListItem>
-                        <ListItem
+                        { this.props.registerEnabled &&
+                            <ListItem
                             button
                             key="注册"
                             onClick={() => this.props.history.push("/signup")}
-                        >
-                            <ListItemIcon>
-                                <AccountPlus className={classes.iconFix} />
-                            </ListItemIcon>
-                            <ListItemText primary="注册" />
-                        </ListItem>
+                            >
+                                <ListItemIcon>
+                                    <AccountPlus className={classes.iconFix} />
+                                </ListItemIcon>
+                                <ListItemText primary="注册" />
+                            </ListItem>
+                        }  
                     </div>
                 )}
             </div>
