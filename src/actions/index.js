@@ -247,6 +247,29 @@ export const showImgPreivew = (first) => {
     };
 };
 
+export const showAudioPreview = (first) => {
+    return {
+        type: "SHOW_AUDIO_PREVIEW",
+        first: first,
+    };
+};
+
+export const audioPreviewSetIsOpen = (isOpen) => {
+    return {
+        type: "AUDIO_PREVIEW_SET_IS_OPEN",
+        isOpen,
+    };
+};
+
+export const audioPreviewSetPlaying = (playingName,paused) => {
+    return {
+        type: "AUDIO_PREVIEW_SET_PLAYING",
+        playingName,//the playing content name
+        paused,
+    };
+};
+
+
 export const refreshStorage = () => {
     return {
         type: "REFRESH_STORAGE",

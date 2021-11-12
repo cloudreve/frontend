@@ -31,6 +31,7 @@ import { isMac } from "../../utils";
 import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";
 import ImgPreivew from "./ImgPreview";
+import MusicPlayer from "./MusicPlayer";
 import ObjectIcon from "./ObjectIcon";
 
 const styles = (theme) => ({
@@ -443,6 +444,7 @@ class ExplorerCompoment extends Component {
                 <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap} />
                 <ContextMenu share={this.props.share} />
                 <ImgPreivew />
+                <MusicPlayer />
                 {this.props.navigatorError && (
                     <Paper elevation={1} className={classes.errorBox}>
                         <Typography variant="h5" component="h3">
