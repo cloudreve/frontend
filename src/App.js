@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import AuthRoute from "./middleware/AuthRoute";
 import Navbar from "./component/Navbar/Navbar.js";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
-import { changeThemeColor } from "./utils";
+import { changeThemeColor, isIOS } from "./utils";
 import NotFound from "./component/Share/NotFound";
 // Lazy loads
 import LoginForm from "./component/Login/LoginForm";
@@ -30,6 +30,7 @@ import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
 import PageLoading from "./component/Placeholder/PageLoading";
 import CodeViewer from "./component/Viewer/Code";
+import axios from "axios";
 const PDFViewer = React.lazy(() =>
     import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
 );
@@ -81,6 +82,24 @@ export default function App() {
     const classes = useStyles();
 
     const { path } = useRouteMatch();
+
+    useEffect(async () => {
+        // fix: ios下pwa icon没有生效
+        if(!isIOS()) return false;
+        try {
+             const { data } = await axios.get("/manifest.json");
+             const { head } = document;
+             if(data.icons && data.icons.length > 0 && head) {
+                let appendData = "";
+                data.icons.map(iconData => {
+                    appendData += `<link rel="apple-touch-icon" sizes="${iconData.sizes.split(' ')[0]}" href="${iconData.src}">`;
+                });
+                head.innerHTML += appendData;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
     return (
         <React.Fragment>
             <ThemeProvider theme={theme}>

@@ -185,6 +185,10 @@ export const isMac = () => {
     return navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 };
 
+export const isIOS = () => {
+    return navigator.userAgent.toUpperCase().indexOf("IPHONE") >= 0;
+};
+
 export function vhCheck() {
     const vh = window.innerHeight;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
