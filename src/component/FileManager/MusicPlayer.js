@@ -323,9 +323,8 @@ class MusicPlayerComponent extends Component {
                     <audio ref={this.myAudioRef}                                 
                         src={items[currentIndex]?.src}
                         />
+                    <div style={{"padding-top":8}}></div>
                     <Grid container spacing={2}>
-                        <Grid item>
-                        </Grid>
                         <Grid item xs>
                         <Slider 
                             value={this.state.currentTime}

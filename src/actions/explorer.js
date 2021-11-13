@@ -4,9 +4,7 @@ import Auth from "../middleware/Auth";
 import {
     changeContextMenu,
     openLoadingDialog,
-    openMusicDialog,
     showImgPreivew,
-    showAudioPreivew,
     toggleSnackbar,
     showAudioPreview,
 } from "./index";
