@@ -146,6 +146,9 @@ class MusicPlayerComponent extends Component {
         /*this.setState({
             isOpen: false,
         });*/
+        this.setState({
+            currentIndex: -1,
+        });
         this.pause();
         this.props.audioPreviewSetPlaying(null,false);
         this.props.audioPreviewSetIsOpen(false);
@@ -213,11 +216,13 @@ class MusicPlayerComponent extends Component {
     };
 
     pause = () => {
-        this.myAudioRef.current.pause()
+        if(this.myAudioRef.current){
+            this.myAudioRef.current.pause();
+        }
         /*this.setState({
             isPlay: false
         })*/
-        this.props.audioPreviewSetPlaying(this.state.items[this.state.currentIndex].intro,true);
+        this.props.audioPreviewSetPlaying(this.state.items[this.state.currentIndex]?.intro,true);
     };
 
     playOrPaues = () => {
@@ -245,8 +250,6 @@ class MusicPlayerComponent extends Component {
             }
         }else if(this.state.looptype==1){//single
             //index=index;
-            this.myAudioRef.current.currentTime=0;
-            this.play();
         }else if(this.state.looptype==2){//random
             if(this.state.items.length<=2){
                 index=index+1;
@@ -258,6 +261,10 @@ class MusicPlayerComponent extends Component {
                     index=Math.floor(Math.random()*this.state.items.length);
                 }
             }
+        }
+        if(this.state.currentIndex==index){
+            this.myAudioRef.current.currentTime=0;
+            this.play();
         }
         this.setState({
             currentIndex: index,
@@ -291,8 +298,7 @@ class MusicPlayerComponent extends Component {
 
     render() {
         const { currentIndex, items } = this.state;
-        const { isOpen } = this.props;
-        const { classes } = this.props;
+        const { isOpen,classes } = this.props;
         return (            
             <Dialog
                 open={isOpen}
