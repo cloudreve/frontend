@@ -33,7 +33,10 @@ const styles = (theme) => ({
         position: 'relative',
         overflow: 'auto',
         maxHeight: 300,
-    }
+    },
+    slider_root:{
+        "vertical-align": "middle",
+    },
 });
 
 const mapStateToProps = (state) => {
@@ -330,9 +333,9 @@ class MusicPlayerComponent extends Component {
                         src={items[currentIndex]?.src}
                         />
                     <div style={{"padding-top":8}}></div>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} alignItems="center">
                         <Grid item xs>
-                        <Slider 
+                        <Slider classes={{"root":classes.slider_root}}
                             value={this.state.currentTime}
                             onChange={this.handleProgress}
                             step={1}
