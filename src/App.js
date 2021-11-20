@@ -30,6 +30,8 @@ import ResetForm from "./component/Login/ResetForm";
 import Reset from "./component/Login/Reset";
 import PageLoading from "./component/Placeholder/PageLoading";
 import CodeViewer from "./component/Viewer/Code";
+import MusicPlayer from "./component/FileManager/MusicPlayer";
+
 const PDFViewer = React.lazy(() =>
     import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
 );
@@ -207,6 +209,7 @@ export default function App() {
                             </Route>
                         </Switch>
                     </main>
+                    <MusicPlayer/>
                 </div>
             </ThemeProvider>
         </React.Fragment>

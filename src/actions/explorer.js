@@ -4,9 +4,9 @@ import Auth from "../middleware/Auth";
 import {
     changeContextMenu,
     openLoadingDialog,
-    openMusicDialog,
     showImgPreivew,
     toggleSnackbar,
+    showAudioPreview,
 } from "./index";
 import { isPreviewable } from "../config";
 import { push } from "connected-react-router";
@@ -97,7 +97,11 @@ export const openPreview = () => {
                 );
                 return;
             case "audio":
-                dispatch(openMusicDialog());
+                //if (isShare) {
+                //    dispatch(openMusicDialog());
+                //}else{
+                    dispatch(showAudioPreview(selected[0]));
+                //}
                 return;
             case "video":
                 if (isShare) {
