@@ -42,6 +42,7 @@ export default function ImageSetting() {
         avatar_size_s: "",
         thumb_width: "",
         thumb_height: "",
+        office_preview_service: "",
     });
 
     const handleChange = (name) => (event) => {
@@ -210,14 +211,14 @@ export default function ImageSetting() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        缩略图
+                        文件预览
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    宽度
+                                    缩略图宽度
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -237,7 +238,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    高度
+                                    缩略图高度
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -249,6 +250,28 @@ export default function ImageSetting() {
                                     onChange={handleChange("thumb_height")}
                                     required
                                 />
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    Office 文档预览服务
+                                </InputLabel>
+                                <Input
+                                    value={options.office_preview_service}
+                                    onChange={handleChange(
+                                        "office_preview_service"
+                                    )}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    可使用以下替换变量：
+                                    <br />
+                                    <code>{"{$src}"}</code> - 文件 URL
+                                    <br />
+                                    <code>{"{$srcB64}"}</code> - Base64
+                                    编码后的文件 URL
+                                </FormHelperText>
                             </FormControl>
                         </div>
                     </div>

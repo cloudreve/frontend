@@ -212,7 +212,7 @@ const items = [
                 icon: <Palette />,
             },
             {
-                title: "图像处理",
+                title: "图像与预览",
                 path: "image",
                 icon: <Image />,
             },

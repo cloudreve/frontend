@@ -10,7 +10,6 @@ import pathHelper from "../../utils/page";
 const useStyles = makeStyles(() => ({
     layout: {
         width: "auto",
-        marginTop: "-48px",
     },
 
     container: {
