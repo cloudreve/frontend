@@ -1051,10 +1051,10 @@ function getCookieByString(cookieName) {
                         multipart: false,
                         send_file_name: false,
                         headers: {
-                            "X-Policy": that.putPolicy,
-                            "X-Overwrite": "false",
+                            "X-Cr-Policy": that.putPolicy,
+                            "X-Cr-Overwrite": "false",
                             Authorization: that.token,
-                            "X-FileName": encodeURIComponent(
+                            "X-Cr-FileName": encodeURIComponent(
                                 getFileKey(up, file, func)
                             ),
                         },
