@@ -25,6 +25,13 @@ export interface ExplorerState {
         first: CloudreveFile;
         other: [];
     };
+    audioPreview: {
+        first: CloudreveFile;
+        other: [];
+        playingName: any;
+        paused: boolean;
+        isOpen: boolean;
+    };
     keywords: string;
     fileSave: boolean;
     sideBarOpen: boolean;
@@ -62,6 +69,19 @@ export const initState: ExplorerState = {
             date: "",
         },
         other: [],
+    },
+    audioPreview: {
+        first: {
+            id: "",
+            name: "",
+            size: 0,
+            type: "file",
+            date: "",
+        },
+        other: [],
+        playingName: null,
+        paused: false,
+        isOpen: false,
     },
     keywords: "",
     fileSave: false,
@@ -150,6 +170,29 @@ const explorer = (
                 imgPreview: {
                     first: action.first,
                     other: state.fileList,
+                },
+            });
+        case "SHOW_AUDIO_PREVIEW":
+            return Object.assign({}, state, {
+                audioPreview: {
+                    ...state.audioPreview,
+                    first: action.first,
+                    other: state.fileList,
+                },
+            });
+        case "AUDIO_PREVIEW_SET_IS_OPEN":            
+            return Object.assign({}, state, {
+                audioPreview: {
+                    ...state.audioPreview,
+                    isOpen: action.isOpen,
+                },
+            });
+        case "AUDIO_PREVIEW_SET_PLAYING":
+            return Object.assign({}, state, {
+                audioPreview: {
+                    ...state.audioPreview,
+                    playingName: action.playingName,
+                    paused: action.paused,
                 },
             });
         case "SAVE_FILE":

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import ShareIcon from "@material-ui/icons/Share";
+import MusicNote from "@material-ui/icons/MusicNote";
 import BackIcon from "@material-ui/icons/ArrowBack";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
@@ -31,6 +32,7 @@ import {
     openLoadingDialog,
     setSessionStatus,
     openPreview,
+    audioPreviewSetIsOpen,
 } from "../../actions";
 import {
     allowSharePreview,
@@ -87,6 +89,8 @@ const mapStateToProps = (state) => {
         subTitle: state.viewUpdate.subTitle,
         loadUploader: state.viewUpdate.loadUploader,
         isLogin: state.viewUpdate.isLogin,
+        audioPreviewPlayingName:state.explorer.audioPreview.playingName,
+        audioPreviewIsOpen:state.explorer.audioPreview.isOpen,
     };
 };
 
@@ -142,6 +146,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openPreview: () => {
             dispatch(openPreview());
+        },
+        audioPreviewOpen: () => {
+            dispatch(audioPreviewSetIsOpen(true));
         },
     };
 };
@@ -881,6 +888,20 @@ class NavbarCompoment extends Component {
                                     )}
                                 </div>
                             )}
+                        {this.props.selected.length <= 1 &&
+                            !(
+                                !this.props.isMultiple && this.props.withFile
+                            ) && this.props.audioPreviewPlayingName!=null && (
+                            <IconButton
+                                title="音乐"
+                                className={classes.sideButton}
+                                onClick={this.props.audioPreviewOpen}
+                                color={"inherit"}
+                            >
+                                <MusicNote fontSize={ "default"} />
+                            </IconButton>
+                        )}
+
                         {this.props.selected.length <= 1 &&
                             !(
                                 !this.props.isMultiple && this.props.withFile

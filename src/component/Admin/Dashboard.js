@@ -31,6 +31,7 @@ import {
     SettingsEthernet,
     Share,
     Storage,
+    Contactless,
 } from "@material-ui/icons";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -201,7 +202,7 @@ const items = [
                 icon: <Mail />,
             },
             {
-                title: "上传与下载",
+                title: "传输与通信",
                 path: "upload",
                 icon: <SettingsEthernet />,
             },
@@ -211,12 +212,7 @@ const items = [
                 icon: <Palette />,
             },
             {
-                title: "离线下载",
-                path: "aria2",
-                icon: <CloudDownload />,
-            },
-            {
-                title: "图像处理",
+                title: "图像与预览",
                 path: "image",
                 icon: <Image />,
             },
@@ -231,6 +227,11 @@ const items = [
         title: "存储策略",
         icon: <Storage />,
         path: "policy",
+    },
+    {
+        title: "离线下载节点",
+        icon: <Contactless />,
+        path: "node",
     },
     {
         title: "用户组",

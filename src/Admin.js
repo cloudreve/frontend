@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import Auth from "./middleware/Auth";
 import { Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import createTheme from "@material-ui/core/styles/createMuiTheme";
 import { zhCN } from "@material-ui/core/locale";
 
 import Index from "./component/Admin/Index";
@@ -15,7 +15,6 @@ import Access from "./component/Admin/Setting/Access";
 import Mail from "./component/Admin/Setting/Mail";
 import UploadDownload from "./component/Admin/Setting/UploadDownload";
 import Theme from "./component/Admin/Setting/Theme";
-import Aria2 from "./component/Admin/Setting/Aria2";
 import ImageSetting from "./component/Admin/Setting/Image";
 import Policy from "./component/Admin/Policy/Policy";
 import AddPolicy from "./component/Admin/Policy/AddPolicy";
@@ -32,6 +31,9 @@ import Download from "./component/Admin/Task/Download";
 import Task from "./component/Admin/Task/Task";
 import Import from "./component/Admin/File/Import";
 import Captcha from "./component/Admin/Setting/Captcha";
+import Node from "./component/Admin/Node/Node";
+import AddNode from "./component/Admin/Node/AddNode";
+import EditNode from "./component/Admin/Node/EditNode";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
 }));
 
-const theme = createMuiTheme(
+const theme = createTheme(
     {
         palette: {
             background: {},
@@ -105,10 +107,6 @@ export default function Admin() {
 
                                     <Route path={`${path}/theme`}>
                                         <Theme />
-                                    </Route>
-
-                                    <Route path={`${path}/aria2`}>
-                                        <Aria2 />
                                     </Route>
 
                                     <Route path={`${path}/image`}>
@@ -182,6 +180,18 @@ export default function Admin() {
 
                                     <Route path={`${path}/task`} exact>
                                         <Task />
+                                    </Route>
+
+                                    <Route path={`${path}/node`} exact>
+                                        <Node />
+                                    </Route>
+
+                                    <Route path={`${path}/node/add`} exact>
+                                        <AddNode />
+                                    </Route>
+
+                                    <Route path={`${path}/node/edit/:id`} exact>
+                                        <EditNode />
                                     </Route>
                                 </Switch>
                             )}

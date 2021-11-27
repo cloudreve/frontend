@@ -1155,8 +1155,8 @@ function getCookieByString(cookieName) {
                             multipart: false,
                             send_file_name: false,
                             headers: {
-                                "X-Path": encodeURIComponent(file.path),
-                                "X-FileName": encodeURIComponent(
+                                "X-Cr-Path": encodeURIComponent(file.path),
+                                "X-Cr-FileName": encodeURIComponent(
                                     getFileKey(up, file, func)
                                 ),
                             },
