@@ -72,6 +72,7 @@ const mapDispatchToProps = (dispatch) => {
 class DownloadComponent extends Component {
     page = 0;
     interval = 0;
+    previousDownloading = -1;
 
     state = {
         downloading: [],
@@ -82,7 +83,6 @@ class DownloadComponent extends Component {
 
     componentDidMount = () => {
         this.loadDownloading();
-        this.loadMore();
     };
 
     componentWillUnmount() {
@@ -104,9 +104,25 @@ class DownloadComponent extends Component {
                 if (response.data.length > 0) {
                     this.interval = setTimeout(
                         this.loadDownloading,
-                        1000 * response.data[0].interval
+                        1000 *
+                            response.data.reduce(function (prev, current) {
+                                return prev.interval < current.interval
+                                    ? prev
+                                    : current;
+                            }).interval
                     );
                 }
+
+                // 下载中条目变更时刷新已完成列表
+                if (response.data.length !== this.previousDownloading) {
+                    this.page = 0;
+                    this.setState({
+                        finishedList: [],
+                        continue: true,
+                    });
+                    this.loadMore();
+                }
+                this.previousDownloading = response.data.length;
             })
             .catch((error) => {
                 this.props.toggleSnackbar(
