@@ -14,6 +14,7 @@ import {
     Avatar,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
+import { formatLocalTime } from "../../utils/datetime";
 
 const styles = (theme) => ({
     card: {
@@ -91,7 +92,10 @@ class LockedFileCompoment extends Component {
                             />
                         }
                         title={this.props.share.creator.nick + " 的加密分享"}
-                        subheader={this.props.share.create_date}
+                        subheader={formatLocalTime(
+                            this.props.share.create_date,
+                            "YYYY-MM-DD H:mm:ss"
+                        )}
                     />
                     <Divider />
                     <CardContent>

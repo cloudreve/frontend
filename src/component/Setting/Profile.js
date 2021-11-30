@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import Pagination from "@material-ui/lab/Pagination";
+import { formatLocalTime } from "../../utils/datetime";
 
 const styles = (theme) => ({
     layout: {
@@ -371,7 +372,10 @@ class ProfileCompoment extends Component {
                                                                 classes.mobileHide
                                                             }
                                                         >
-                                                            {row.create_date}
+                                                            {formatLocalTime(
+                                                                row.create_date,
+                                                                "YYYY-MM-DD H:mm:ss"
+                                                            )}
                                                         </TableCell>
                                                         <TableCell
                                                             className={
