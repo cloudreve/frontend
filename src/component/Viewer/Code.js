@@ -11,7 +11,9 @@ import SaveButton from "../Dial/Save";
 import { codePreviewSuffix } from "../../config";
 import TextLoading from "../Placeholder/TextLoading";
 import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Select from "@material-ui/core/Select";
+import Switch from "@material-ui/core/Switch";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 const MonacoEditor = React.lazy(() =>
@@ -56,6 +58,7 @@ export default function CodeViewer() {
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
     const [suffix, setSuffix] = useState("javascript");
+    const [wordWrap, setWordWrap] = useState("off");
 
     const math = useRouteMatch();
     const location = useLocation();
@@ -139,6 +142,13 @@ export default function CodeViewer() {
             <Paper className={classes.root} elevation={1}>
                 <div className={classes.toobar}>
                     <FormControl className={classes.formControl}>
+                        <FormControlLabel control={
+                            <Switch
+                                onChange={(e) => setWordWrap(e.target.checked ? "on" : "off")}
+                            />
+                        } label="自动换行" />
+                    </FormControl>
+                    <FormControl className={classes.formControl}>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -173,6 +183,7 @@ export default function CodeViewer() {
                             options={{
                                 readOnly: isSharePage,
                                 extraEditorClassName: classes.editor,
+                                wordWrap: wordWrap,
                             }}
                             onChange={(value) => setContent(value)}
                         />
