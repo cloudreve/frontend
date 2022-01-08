@@ -11,8 +11,10 @@ function AutoHidden({ children, enable }) {
     useEffect(() => {
         const handleNavigation = (e) => {
             const window = e.currentTarget;
-
-            if (prev > window.scrollY) {
+            if(window.scrollY < 0) {
+                lastUpdate = window.scrollY;
+                setHidden(false);
+            } else if (prev > window.scrollY) {
                 if (lastUpdate - window.scrollY > show) {
                     lastUpdate = window.scrollY;
                     setHidden(false);
