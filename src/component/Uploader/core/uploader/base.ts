@@ -28,6 +28,7 @@ export interface UploadHandlers {
 export default abstract class Base {
     public child?: Base[];
     public status: Status = Status.added;
+    public error?: Error;
 
     public id = ++Base.id;
     private static id = 0;
@@ -92,6 +93,7 @@ export default abstract class Base {
 
     protected setError(e: Error) {
         this.status = Status.error;
+        this.error = e;
         this.subscriber.onError(e);
     }
 
@@ -106,6 +108,7 @@ export default abstract class Base {
             size: this.task.file.size,
             name: this.task.file.name,
             policy_id: this.task.policy.id,
+            last_modified: this.task.file.lastModified,
         };
 
         const res = await requestAPI<UploadCredential>("file/upload/session", {

@@ -72,7 +72,7 @@ export class APIError extends UploaderError {
 
     public Message(i18n: string): string {
         let msg = `${this.message}: ${this.response.msg}`;
-        if (this.response.error != "") {
+        if (this.response.error) {
             msg += ` (${this.response.error})`;
         }
 

@@ -40,6 +40,7 @@ export interface UploadSessionRequest {
     size: number;
     name: string;
     policy_id: number;
+    last_modified?: number;
 }
 
 export interface UploadCredential {
