@@ -1,3 +1,5 @@
+import { ChunkProgress } from "./uploader/chunk";
+
 export enum PolicyType {
     local = "local",
     remote = "remote",
@@ -24,6 +26,8 @@ export interface Task {
     file: File;
     child?: Task[];
     session?: UploadCredential;
+    chunkProgress: ChunkProgress[];
+    resumed: boolean;
 }
 
 type Nullable<T> = T | null;

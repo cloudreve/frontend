@@ -84,6 +84,8 @@ export default function TaskList({ open, onClose, selectFile, taskList }) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [expanded, setExpanded] = useState(true);
+    const [useAvgSpeed, setUseAvgSpeed] = useState(true);
+
     const close = (e, reason) => {
         if (reason !== "backdropClick") {
             onClose();
@@ -159,6 +161,7 @@ export default function TaskList({ open, onClose, selectFile, taskList }) {
                             {taskList.map((uploader) => (
                                 <UploadTask
                                     key={uploader.id}
+                                    useAvgSpeed={useAvgSpeed}
                                     uploader={uploader}
                                 />
                             ))}

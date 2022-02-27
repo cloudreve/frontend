@@ -103,6 +103,8 @@ export default class UploadManager {
                                     dst: dst,
                                     file: file,
                                     name: file.name,
+                                    chunkProgress: [],
+                                    resumed: false,
                                 })
                         )
                     );

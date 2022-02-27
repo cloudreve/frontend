@@ -54,7 +54,7 @@ export default function Uploader() {
             .select(path)
             .then((tasks) => {
                 setTaskListOpen(true);
-                setUploaders([...uploaders, ...tasks]);
+                setUploaders((uploaders) => [...uploaders, ...tasks]);
             })
             .catch((e) => {
                 if (e instanceof UploaderError) {

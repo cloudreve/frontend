@@ -8,6 +8,11 @@ export enum UploaderErrorName {
     FailedCreateUploadSession = "FailedCreateUploadSession",
     HTTPRequestFailed = "HTTPRequestFailed",
     LocalChunkUploadFailed = "LocalChunkUploadFailed",
+    WriteCtxFailed = "WriteCtxFailed",
+    RemoveCtxFailed = "RemoveCtxFailed",
+    ReadCtxFailed = "ReadCtxFailed",
+    InvalidCtxData = "InvalidCtxData",
+    CtxExpired = "CtxExpired",
 }
 
 export class UploaderError implements Error {

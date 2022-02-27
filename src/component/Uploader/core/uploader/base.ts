@@ -6,6 +6,7 @@ import { validate } from "../utils/validator";
 import { CancelToken } from "../utils/request";
 import { CancelTokenSource } from "axios";
 import { createUploadSession } from "../api";
+import * as utils from "../utils";
 
 export enum Status {
     added,
@@ -101,14 +102,22 @@ export default abstract class Base {
     public run = async () => {
         this.logger.info("Start upload task, create upload session...");
         this.transit(Status.preparing);
-        this.task.session = await createUploadSession({
-            path: this.task.dst,
-            size: this.task.file.size,
-            name: this.task.file.name,
-            policy_id: this.task.policy.id,
-            last_modified: this.task.file.lastModified,
-        });
-        this.logger.info("Upload session created:", this.task.session);
+        const cachedInfo = utils.getResumeCtx(this.task, this.logger);
+        if (cachedInfo == null) {
+            this.task.session = await createUploadSession({
+                path: this.task.dst,
+                size: this.task.file.size,
+                name: this.task.file.name,
+                policy_id: this.task.policy.id,
+                last_modified: this.task.file.lastModified,
+            });
+            this.logger.info("Upload session created:", this.task.session);
+        } else {
+            this.task.session = cachedInfo.session;
+            this.task.resumed = true;
+            this.task.chunkProgress = cachedInfo.chunkProgress;
+            this.logger.info("Resume upload from cached ctx:", cachedInfo);
+        }
 
         this.transit(Status.processing);
         await this.upload();
