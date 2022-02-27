@@ -9,6 +9,7 @@ export interface Policy {
     allowedSuffix: Nullable<string[]>;
     maxSize: number;
     type: PolicyType;
+    chunkSize: number;
 }
 
 export enum TaskType {

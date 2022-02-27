@@ -62,7 +62,7 @@ export default class UploadManager {
             return;
         }
 
-        this.logger.info(`Switching policy to: ${p.name}, type: ${p.type}`);
+        this.logger.info(`Switching policy to:`, p);
 
         if (p.allowedSuffix != undefined && p.allowedSuffix.length > 0) {
             const acceptVal = p.allowedSuffix
