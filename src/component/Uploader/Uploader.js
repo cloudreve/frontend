@@ -7,6 +7,7 @@ import Auth from "../../middleware/Auth";
 export default function Uploader() {
     const [uploadTasks, setUploadTasks] = useState([]);
     const keywords = useSelector((state) => state.explorer.keywords);
+    const policy = useSelector((state) => state.explorer.currentPolicy);
     const user = Auth.GetUser();
 
     const uploadManager = useMemo(() => {
@@ -14,6 +15,10 @@ export default function Uploader() {
             logLevel: "INFO",
         });
     }, []);
+
+    useEffect(() => {
+        uploadManager.setPolicy(policy);
+    }, [policy]);
 
     const openFileList = () => {
         alert("openFileList");
@@ -23,6 +28,7 @@ export default function Uploader() {
         <>
             {keywords === "" && (
                 <UploadButton
+                    openFileSelector={uploadManager.openFileSelector}
                     Queued={uploadTasks.length}
                     openFileList={openFileList}
                 />

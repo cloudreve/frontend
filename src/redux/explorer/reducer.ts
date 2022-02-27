@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { AnyAction } from "redux";
 import { CloudreveFile } from "../../types";
+import { Policy } from "../../component/Uploader/core/types";
 
 interface SelectProps {
     isMultiple: boolean;
@@ -35,6 +36,7 @@ export interface ExplorerState {
     keywords: string;
     fileSave: boolean;
     sideBarOpen: boolean;
+    currentPolicy?: Policy;
 }
 
 export const initState: ExplorerState = {
@@ -180,7 +182,7 @@ const explorer = (
                     other: state.fileList,
                 },
             });
-        case "AUDIO_PREVIEW_SET_IS_OPEN":            
+        case "AUDIO_PREVIEW_SET_IS_OPEN":
             return Object.assign({}, state, {
                 audioPreview: {
                     ...state.audioPreview,
@@ -230,6 +232,11 @@ const explorer = (
             return {
                 ...state,
                 sideBarOpen: action.open,
+            };
+        case "SET_CURRENT_POLICY":
+            return {
+                ...state,
+                currentPolicy: action.policy,
             };
         default:
             return state;

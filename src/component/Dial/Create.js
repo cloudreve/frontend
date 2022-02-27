@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { makeStyles, Badge } from "@material-ui/core";
+import React, { useCallback, useEffect, useState } from "react";
+import { Badge, makeStyles } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
@@ -14,7 +14,9 @@ import { useDispatch } from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page";
 import Backdrop from "@material-ui/core/Backdrop";
-import { FolderUpload, FilePlus } from "mdi-material-ui";
+import { FilePlus, FolderUpload } from "mdi-material-ui";
+import { UploaderError } from "../Uploader/core/errors";
+import { ErrorMessage } from "../Uploader/core/errors/message";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -63,12 +65,20 @@ export default function UploadButton(props) {
         setQueued(props.Queued);
     }, [props.Queued]);
 
-    const openUpload = (id) => {
-        const uploadButton = document.getElementsByClassName(id)[0];
-        if (document.body.contains(uploadButton)) {
-            uploadButton.click();
-        } else {
-            ToggleSnackbar("top", "right", "上传组件还未加载完成", "warning");
+    const openUpload = () => {
+        try {
+            props.openFileSelector();
+        } catch (e) {
+            if (e instanceof UploaderError) {
+                ToggleSnackbar("top", "right", ErrorMessage[e.name], "warning");
+            } else {
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "出现未知错误：" + e.message,
+                    "error"
+                );
+            }
         }
     };
     const uploadClicked = () => {
@@ -76,7 +86,7 @@ export default function UploadButton(props) {
             if (queued !== 0) {
                 props.openFileList();
             } else {
-                openUpload("uploadFileForm");
+                openUpload();
             }
         }
     };
@@ -137,7 +147,7 @@ export default function UploadButton(props) {
                             icon={<FolderUpload />}
                             tooltipOpen
                             tooltipTitle="上传目录"
-                            onClick={() => openUpload("uploadFolderForm")}
+                            onClick={() => openUpload()}
                             title={"上传目录"}
                         />
                     )}

@@ -493,7 +493,7 @@ class ContextMenuCompoment extends Component {
                             {!this.props.isMultiple &&
                                 this.props.withFile &&
                                 isHomePage &&
-                                user.policy.allowSource && (
+                                this.props.selected[0].source_enabled && (
                                     <MenuItem
                                         dense
                                         onClick={() =>

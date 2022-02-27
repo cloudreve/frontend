@@ -3,6 +3,8 @@ import { Policy } from "../types";
 export enum UploaderErrorName {
     // 输入错误
     InvalidFile = "InvalidFile",
+    // 输入错误
+    NoPolicySelected = "NoPolicySelected",
 }
 
 export class UploaderError implements Error {

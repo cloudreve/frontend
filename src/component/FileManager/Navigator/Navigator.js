@@ -7,26 +7,26 @@ import ShareIcon from "@material-ui/icons/Share";
 import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
+    drawerToggleAction,
     navigateTo,
     navigateUp,
-    setNavigatorError,
-    setNavigatorLoadingStatus,
-    refreshFileList,
-    setSelectedTarget,
+    openCompressDialog,
     openCreateFolderDialog,
     openShareDialog,
-    drawerToggleAction,
-    openCompressDialog,
+    refreshFileList,
+    setNavigatorError,
+    setNavigatorLoadingStatus,
+    setSelectedTarget,
 } from "../../../actions/index";
 import explorer from "../../../redux/explorer";
 import API from "../../../middleware/Api";
-import { setCookie, setGetParameter, fixUrlHash } from "../../../utils/index";
+import { fixUrlHash, setGetParameter } from "../../../utils/index";
 import {
-    withStyles,
     Divider,
+    ListItemIcon,
     Menu,
     MenuItem,
-    ListItemIcon,
+    withStyles,
 } from "@material-ui/core";
 import PathButton from "./PathButton";
 import DropDown from "./DropDown";
@@ -38,6 +38,7 @@ import { Archive } from "@material-ui/icons";
 import { FilePlus } from "mdi-material-ui";
 import { openCreateFileDialog } from "../../../actions";
 import SubActions from "./SubActions";
+import { setCurrentPolicy } from "../../../redux/explorer/action";
 
 const mapStateToProps = (state) => {
     return {
@@ -87,6 +88,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openCompressDialog: () => {
             dispatch(openCompressDialog());
+        },
+        setCurrentPolicy: (policy) => {
+            dispatch(setCurrentPolicy(policy));
         },
     };
 };
@@ -187,13 +191,17 @@ class NavigatorComponent extends Component {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
-                const pathTemp = (path !== null
-                    ? path.substr(1).split("/")
-                    : this.props.path.substr(1).split("/")
-                ).join(",");
-                setCookie("path_tmp", encodeURIComponent(pathTemp), 1);
                 if (this.keywords === "") {
                     setGetParameter("path", encodeURIComponent(newPath));
+                }
+                if (response.data.policy) {
+                    this.props.setCurrentPolicy({
+                        id: response.data.policy.id,
+                        name: response.data.policy.name,
+                        type: response.data.policy.type,
+                        maxSize: response.data.policy.max_size,
+                        allowedSuffix: response.data.policy.file_type,
+                    });
                 }
             })
             .catch((error) => {

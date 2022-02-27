@@ -2,6 +2,7 @@ import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { CloudreveFile, SortMethod } from "./../../types/index";
 import { closeContextMenu } from "../viewUpdate/action";
+import { Policy } from "../../component/Uploader/core/types";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -40,6 +41,13 @@ export const setSideBar = (open: boolean) => {
     return {
         type: "SET_SIDE_BAR",
         open,
+    };
+};
+
+export const setCurrentPolicy = (policy: Policy) => {
+    return {
+        type: "SET_CURRENT_POLICY",
+        policy,
     };
 };
 
