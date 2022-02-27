@@ -5,6 +5,7 @@ import Base from "./uploader/base";
 import Local from "./uploader/local";
 import { Pool } from "./utils/pool";
 import { cleanupResumeCtx } from "./utils";
+import Remote from "./uploader/remote";
 
 export interface Option {
     logLevel: LogLevel;
@@ -45,7 +46,8 @@ export default class UploadManager {
         switch (task.policy.type) {
             case PolicyType.local:
                 return new Local(task, this);
-
+            case PolicyType.remote:
+                return new Remote(task, this);
             default:
                 throw new UnknownPolicyError(
                     "Unknown policy type.",

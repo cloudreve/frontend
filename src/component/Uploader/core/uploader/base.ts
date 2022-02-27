@@ -45,7 +45,13 @@ export interface Progress {
     loaded: number;
 }
 
-const resumePolicy = [PolicyType.local];
+const resumePolicy = [
+    PolicyType.local,
+    PolicyType.remote,
+    PolicyType.qiniu,
+    PolicyType.oss,
+    PolicyType.onedrive,
+];
 const deleteUploadSessionDelay = 500;
 
 export default abstract class Base {

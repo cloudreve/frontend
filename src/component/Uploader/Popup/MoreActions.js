@@ -8,7 +8,7 @@ import {
 import React, { useCallback } from "react";
 import { DeleteSweep } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
+import { refreshStorage, toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 
 const useStyles = makeStyles((theme) => ({}));
@@ -27,6 +27,9 @@ export default function MoreActions({ anchorEl, onClose, uploadManager }) {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+    const RefreshStorage = useCallback(() => dispatch(refreshStorage()), [
+        dispatch,
+    ]);
 
     const actionClicked = (next) => () => {
         onClose();
@@ -37,7 +40,17 @@ export default function MoreActions({ anchorEl, onClose, uploadManager }) {
         uploadManager.cleanupSessions();
         API.delete("/file/upload")
             .then((response) => {
-                ToggleSnackbar("top", "right", "上传会话已清除", "success");
+                if (response.rawData.code === 0) {
+                    ToggleSnackbar("top", "right", "上传会话已清除", "success");
+                } else {
+                    ToggleSnackbar(
+                        "top",
+                        "right",
+                        response.rawData.msg,
+                        "warning"
+                    );
+                }
+                RefreshStorage();
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");

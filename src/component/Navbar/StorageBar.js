@@ -7,11 +7,11 @@ import { sizeToString } from "../../utils";
 import { toggleSnackbar } from "../../actions";
 
 import {
-    withStyles,
-    LinearProgress,
-    Typography,
     Divider,
+    LinearProgress,
     Tooltip,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { withRouter } from "react-router";
@@ -68,6 +68,7 @@ const styles = (theme) => ({
     },
 });
 
+// TODO 使用 hooks 重构
 class StorageBarCompoment extends Component {
     state = {
         percent: 0,

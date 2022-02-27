@@ -3,6 +3,9 @@ import { ChunkProgress } from "./uploader/chunk";
 export enum PolicyType {
     local = "local",
     remote = "remote",
+    oss = "oss",
+    qiniu = "qiniu",
+    onedrive = "onedrive",
 }
 
 export interface Policy {
