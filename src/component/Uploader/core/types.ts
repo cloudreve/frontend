@@ -1,4 +1,7 @@
-export type PolicyType = "local" | "remote" | "onedrive";
+export enum PolicyType {
+    local = "local",
+    remote = "remote",
+}
 
 export interface Policy {
     id: number;
@@ -8,10 +11,17 @@ export interface Policy {
     type: PolicyType;
 }
 
+export enum TaskType {
+    file,
+    folder,
+}
+
 export interface Task {
-    type: "file" | "folder";
+    type: TaskType;
     policy: Policy;
+    dst: string;
     file?: File;
+    child?: Task[];
 }
 
 type Nullable<T> = T | null;

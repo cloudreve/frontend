@@ -1,6 +1,9 @@
-import { Policy, Task } from "./types";
+import { Policy, PolicyType, Task, TaskType } from "./types";
 import Logger, { LogLevel } from "./logger";
-import { UploaderError, UploaderErrorName } from "./errors";
+import { UnknownPolicyError, UploaderError, UploaderErrorName } from "./errors";
+import Base from "./uploader/base";
+import Folder from "./uploader/folder";
+import Local from "./uploader/local";
 
 export interface Option {
     logLevel: LogLevel;
@@ -8,8 +11,9 @@ export interface Option {
 }
 
 export default class UploadManager {
+    public logger: Logger;
+
     private static id = 0;
-    private logger: Logger;
     private policy?: Policy;
     private input: HTMLInputElement;
 
@@ -24,11 +28,28 @@ export default class UploadManager {
         input.id = `upload-input-${this.id}`;
         input.multiple = true;
         input.hidden = true;
-        input.onchange = this.inputHandler;
         document.body.appendChild(input);
         this.input = input;
     }
 
+    dispatchUploader(task: Task): Base {
+        if (task.type == TaskType.folder) {
+            return new Folder(task, this);
+        }
+
+        switch (task.policy.type) {
+            case PolicyType.local:
+                return new Local(task, this);
+
+            default:
+                throw new UnknownPolicyError(
+                    "Unknown policy type",
+                    task.policy
+                );
+        }
+    }
+
+    // 设定当前存储策略
     public setPolicy(p: Policy) {
         this.policy = p;
         if (p == undefined) {
@@ -52,19 +73,38 @@ export default class UploadManager {
         }
     }
 
-    public openFileSelector = () => {
-        if (this.policy == undefined) {
-            this.logger.warn(`Calling file selector while no policy is set`);
-            throw new UploaderError(
-                UploaderErrorName.NoPolicySelected,
-                "No policy selected."
-            );
-        }
+    // 选择文件
+    public select = (dst: string): Promise<Base[]> => {
+        return new Promise<Base[]>((resolve) => {
+            if (this.policy == undefined) {
+                this.logger.warn(
+                    `Calling file selector while no policy is set`
+                );
+                throw new UploaderError(
+                    UploaderErrorName.NoPolicySelected,
+                    "No policy selected."
+                );
+            }
 
-        this.input.click();
+            this.input.onchange = (ev: Event) => {
+                const target = ev.target as HTMLInputElement;
+                if (!ev || !target || !target.files) return;
+                if (target.files.length > 0) {
+                    resolve(
+                        Array.from(target.files).map(
+                            (file): Base =>
+                                this.dispatchUploader({
+                                    type: TaskType.file,
+                                    policy: this.policy as Policy,
+                                    dst: dst,
+                                    file: file,
+                                })
+                        )
+                    );
+                }
+            };
+
+            this.input.click();
+        });
     };
-
-    public inputHandler(this: GlobalEventHandlers, ev: Event): any {
-        alert("file select");
-    }
 }

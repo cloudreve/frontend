@@ -15,8 +15,6 @@ import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page";
 import Backdrop from "@material-ui/core/Backdrop";
 import { FilePlus, FolderUpload } from "mdi-material-ui";
-import { UploaderError } from "../Uploader/core/errors";
-import { ErrorMessage } from "../Uploader/core/errors/message";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -65,28 +63,12 @@ export default function UploadButton(props) {
         setQueued(props.Queued);
     }, [props.Queued]);
 
-    const openUpload = () => {
-        try {
-            props.openFileSelector();
-        } catch (e) {
-            if (e instanceof UploaderError) {
-                ToggleSnackbar("top", "right", ErrorMessage[e.name], "warning");
-            } else {
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    "出现未知错误：" + e.message,
-                    "error"
-                );
-            }
-        }
-    };
     const uploadClicked = () => {
         if (open) {
             if (queued !== 0) {
                 props.openFileList();
             } else {
-                openUpload();
+                props.selectFile();
             }
         }
     };
@@ -147,7 +129,7 @@ export default function UploadButton(props) {
                             icon={<FolderUpload />}
                             tooltipOpen
                             tooltipTitle="上传目录"
-                            onClick={() => openUpload()}
+                            onClick={() => props.selectFile()}
                             title={"上传目录"}
                         />
                     )}
