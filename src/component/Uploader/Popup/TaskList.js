@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     dialogContent: {
         [theme.breakpoints.up("sm")]: {
             minWidth: 500,
-            maxHeight: "calc(100vh - 160px)",
+            maxHeight: "calc(100vh - 140px)",
         },
         padding: 0,
         paddingTop: "0!important",
@@ -83,10 +83,9 @@ export default function TaskList({ open, onClose, selectFile, taskList }) {
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
     const close = () => {
         setExpanded(false);
-        onClose();
     };
     const handlePanelChange = (event, isExpanded) => {
         setExpanded(isExpanded);
@@ -132,10 +131,7 @@ export default function TaskList({ open, onClose, selectFile, taskList }) {
                         >
                             上传队列
                         </Typography>
-                        <IconButton
-                            color="inherit"
-                            onClick={() => setExpanded(!expanded)}
-                        >
+                        <IconButton color="inherit" onClick={selectFile}>
                             <AddIcon />
                         </IconButton>
                         {!fullScreen && (

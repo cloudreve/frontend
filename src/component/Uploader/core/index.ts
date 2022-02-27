@@ -43,7 +43,7 @@ export default class UploadManager {
 
             default:
                 throw new UnknownPolicyError(
-                    "Unknown policy type",
+                    "Unknown policy type.",
                     task.policy
                 );
         }

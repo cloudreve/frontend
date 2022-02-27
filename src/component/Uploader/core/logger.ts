@@ -2,7 +2,7 @@ export type LogLevel = "INFO" | "WARN" | "ERROR" | "OFF";
 
 export default class Logger {
     constructor(
-        private level: LogLevel = "OFF",
+        public level: LogLevel = "OFF",
         private prefix = "UPLOAD",
         private id: number = 1
     ) {}
