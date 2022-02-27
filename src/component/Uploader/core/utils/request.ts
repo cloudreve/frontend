@@ -8,6 +8,7 @@ export { CancelToken as CancelTokenType, CancelTokenSource } from "axios";
 const defaultConfig = {
     baseURL: "/api/v3",
     withCredentials: true,
+    transformResponse: [(response: any) => JSON.parse(response)],
 };
 
 export function requestAPI<T = any>(url: string, config?: AxiosRequestConfig) {

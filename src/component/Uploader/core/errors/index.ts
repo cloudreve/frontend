@@ -7,6 +7,7 @@ export enum UploaderErrorName {
     UnknownPolicyType = "UnknownPolicyType",
     FailedCreateUploadSession = "FailedCreateUploadSession",
     HTTPRequestFailed = "HTTPRequestFailed",
+    LocalChunkUploadFailed = "LocalChunkUploadFailed",
 }
 
 export class UploaderError implements Error {
@@ -100,5 +101,17 @@ export class HTTPError extends UploaderError {
 
     public Message(i18n: string): string {
         return `请求失败: ${this.axiosErr} (${this.url})`;
+    }
+}
+
+// 无法创建上传会话
+export class LocalChunkUploadError extends APIError {
+    constructor(response: Response<any>, protected chunkIndex: number) {
+        super(UploaderErrorName.LocalChunkUploadFailed, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = `分片 [${this.chunkIndex}] 上传失败`;
+        return super.Message(i18n);
     }
 }

@@ -46,5 +46,5 @@ export interface UploadSessionRequest {
 export interface UploadCredential {
     sessionID: string;
     expires: number;
-    chunk_size: number;
+    chunkSize: number;
 }

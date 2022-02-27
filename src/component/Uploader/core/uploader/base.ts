@@ -37,6 +37,11 @@ export interface ProgressCompose {
     fromCache?: boolean;
 }
 
+export interface Progress {
+    total: number;
+    loaded: number;
+}
+
 export default abstract class Base {
     public child?: Base[];
     public status: Status = Status.added;
