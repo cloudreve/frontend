@@ -30,6 +30,10 @@ export function getChunks(
         );
         chunks.push(chunk);
     }
+
+    if (chunks.length == 0) {
+        chunks.push(file.slice(0));
+    }
     return chunks;
 }
 

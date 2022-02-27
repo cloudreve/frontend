@@ -10,15 +10,17 @@ import {
     makeStyles,
     Slide,
     Toolbar,
+    Tooltip,
     Typography,
 } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
 import ExpandMoreIcon from "@material-ui/icons/ExpandLess";
-import AddIcon from "@material-ui/icons/AddCircleOutline";
+import AddIcon from "@material-ui/icons/Add";
 import classnames from "classnames";
 import UploadTask from "./UploadTask";
+import { MoreHoriz } from "@material-ui/icons";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -123,13 +125,15 @@ export default function TaskList({
             >
                 <AppBar className={classes.appBar}>
                     <Toolbar disableGutters className={classes.toolbar}>
-                        <IconButton
-                            color="inherit"
-                            onClick={close}
-                            aria-label="Close"
-                        >
-                            <CloseIcon />
-                        </IconButton>
+                        <Tooltip title={"隐藏队列"}>
+                            <IconButton
+                                color="inherit"
+                                onClick={close}
+                                aria-label="Close"
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Tooltip>
                         <Typography
                             variant="h6"
                             color="inherit"
@@ -137,21 +141,30 @@ export default function TaskList({
                         >
                             上传队列
                         </Typography>
-                        <IconButton color="inherit" onClick={selectFile}>
-                            <AddIcon />
-                        </IconButton>
-                        {!fullScreen && (
-                            <IconButton
-                                color="inherit"
-                                onClick={() => setExpanded(!expanded)}
-                            >
-                                <ExpandMoreIcon
-                                    className={classnames({
-                                        [classes.expandIconExpanded]: expanded,
-                                        [classes.expandIcon]: true,
-                                    })}
-                                />
+                        <Tooltip title={"更多操作"}>
+                            <IconButton color="inherit" onClick={selectFile}>
+                                <MoreHoriz />
                             </IconButton>
+                        </Tooltip>
+                        <Tooltip title={"添加新文件"}>
+                            <IconButton color="inherit" onClick={selectFile}>
+                                <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                        {!fullScreen && (
+                            <Tooltip title={"展开/折叠队列"}>
+                                <IconButton
+                                    color="inherit"
+                                    onClick={() => setExpanded(!expanded)}
+                                >
+                                    <ExpandMoreIcon
+                                        className={classnames({
+                                            [classes.expandIconExpanded]: expanded,
+                                            [classes.expandIcon]: true,
+                                        })}
+                                    />
+                                </IconButton>
+                            </Tooltip>
                         )}
                     </Toolbar>
                 </AppBar>
