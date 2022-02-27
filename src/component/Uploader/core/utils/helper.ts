@@ -75,6 +75,24 @@ export function removeResumeCtx(task: Task, logger: Logger) {
     }
 }
 
+export function cleanupResumeCtx(logger: Logger) {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(resumeKeyPrefix)) {
+            try {
+                localStorage.removeItem(key);
+            } catch (err) {
+                logger.warn(
+                    new UploaderError(
+                        UploaderErrorName.RemoveCtxFailed,
+                        `removeResumeCtx failed. key: ${key}`
+                    )
+                );
+            }
+        }
+    }
+}
+
 export function getResumeCtx(task: Task, logger: Logger): Task | null {
     const ctxKey = getResumeCtxKey(task);
     let localInfoString: string | null = null;

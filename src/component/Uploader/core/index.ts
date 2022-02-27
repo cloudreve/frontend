@@ -4,6 +4,7 @@ import { UnknownPolicyError, UploaderError, UploaderErrorName } from "./errors";
 import Base from "./uploader/base";
 import Local from "./uploader/local";
 import { Pool } from "./utils/pool";
+import { cleanupResumeCtx } from "./utils";
 
 export interface Option {
     logLevel: LogLevel;
@@ -114,5 +115,9 @@ export default class UploadManager {
             this.input.value = "";
             this.input.click();
         });
+    };
+
+    public cleanupSessions = () => {
+        cleanupResumeCtx(this.logger);
     };
 }

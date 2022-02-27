@@ -87,6 +87,7 @@ export default function Uploader() {
                         openFileList={() => setTaskListOpen(true)}
                     />
                     <TaskList
+                        uploadManager={uploadManager}
                         taskList={uploaders}
                         open={taskListOpen}
                         onCancel={deleteTask}

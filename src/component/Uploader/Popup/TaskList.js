@@ -21,6 +21,7 @@ import AddIcon from "@material-ui/icons/Add";
 import classnames from "classnames";
 import UploadTask from "./UploadTask";
 import { MoreHoriz } from "@material-ui/icons";
+import MoreActions from "./MoreActions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -81,12 +82,22 @@ export default function TaskList({
     selectFile,
     taskList,
     onCancel,
+    uploadManager,
 }) {
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [expanded, setExpanded] = useState(true);
     const [useAvgSpeed, setUseAvgSpeed] = useState(true);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleActionClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleActionClose = () => {
+        setAnchorEl(null);
+    };
 
     const close = (e, reason) => {
         if (reason !== "backdropClick") {
@@ -100,89 +111,102 @@ export default function TaskList({
     };
 
     return (
-        <Dialog
-            classes={{
-                container: classes.popup, // class name, e.g. `classes-nesting-root-x`
-                root: classnames({
-                    [classes.rootOverwrite]: !fullScreen,
-                }),
-            }}
-            className={classnames({
-                [classes.dialog]: !fullScreen,
-            })}
-            fullScreen={fullScreen}
-            open={open}
-            onClose={close}
-            TransitionComponent={Transition}
-            disableEnforceFocus={!expanded}
-            hideBackdrop={!expanded}
-            disableBackdropClick={!expanded}
-            disableScrollLock={!expanded}
-        >
-            <Accordion
-                expanded={expanded || fullScreen}
-                onChange={handlePanelChange}
+        <>
+            <MoreActions
+                onClose={handleActionClose}
+                uploadManager={uploadManager}
+                anchorEl={anchorEl}
+            />
+            <Dialog
+                classes={{
+                    container: classes.popup, // class name, e.g. `classes-nesting-root-x`
+                    root: classnames({
+                        [classes.rootOverwrite]: !fullScreen,
+                    }),
+                }}
+                className={classnames({
+                    [classes.dialog]: !fullScreen,
+                })}
+                fullScreen={fullScreen}
+                open={open}
+                onClose={close}
+                TransitionComponent={Transition}
+                disableEnforceFocus={!expanded}
+                hideBackdrop={!expanded}
+                disableBackdropClick={!expanded}
+                disableScrollLock={!expanded}
             >
-                <AppBar className={classes.appBar}>
-                    <Toolbar disableGutters className={classes.toolbar}>
-                        <Tooltip title={"隐藏队列"}>
-                            <IconButton
-                                color="inherit"
-                                onClick={close}
-                                aria-label="Close"
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Typography
-                            variant="h6"
-                            color="inherit"
-                            className={classes.flex}
-                        >
-                            上传队列
-                        </Typography>
-                        <Tooltip title={"更多操作"}>
-                            <IconButton color="inherit" onClick={selectFile}>
-                                <MoreHoriz />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title={"添加新文件"}>
-                            <IconButton color="inherit" onClick={selectFile}>
-                                <AddIcon />
-                            </IconButton>
-                        </Tooltip>
-                        {!fullScreen && (
-                            <Tooltip title={"展开/折叠队列"}>
+                <Accordion
+                    expanded={expanded || fullScreen}
+                    onChange={handlePanelChange}
+                >
+                    <AppBar className={classes.appBar}>
+                        <Toolbar disableGutters className={classes.toolbar}>
+                            <Tooltip title={"隐藏队列"}>
                                 <IconButton
                                     color="inherit"
-                                    onClick={() => setExpanded(!expanded)}
+                                    onClick={close}
+                                    aria-label="Close"
                                 >
-                                    <ExpandMoreIcon
-                                        className={classnames({
-                                            [classes.expandIconExpanded]: expanded,
-                                            [classes.expandIcon]: true,
-                                        })}
-                                    />
+                                    <CloseIcon />
                                 </IconButton>
                             </Tooltip>
-                        )}
-                    </Toolbar>
-                </AppBar>
-                <AccordionDetails className={classes.paddingZero}>
-                    <DialogContent className={classes.dialogContent}>
-                        <List className={classes.paddingZero}>
-                            {taskList.map((uploader) => (
-                                <UploadTask
-                                    onCancel={onCancel}
-                                    key={uploader.id}
-                                    useAvgSpeed={useAvgSpeed}
-                                    uploader={uploader}
-                                />
-                            ))}
-                        </List>
-                    </DialogContent>
-                </AccordionDetails>
-            </Accordion>
-        </Dialog>
+                            <Typography
+                                variant="h6"
+                                color="inherit"
+                                className={classes.flex}
+                            >
+                                上传队列
+                            </Typography>
+                            <Tooltip title={"更多操作"}>
+                                <IconButton
+                                    color="inherit"
+                                    onClick={handleActionClick}
+                                >
+                                    <MoreHoriz />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title={"添加新文件"}>
+                                <IconButton
+                                    color="inherit"
+                                    onClick={selectFile}
+                                >
+                                    <AddIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {!fullScreen && (
+                                <Tooltip title={"展开/折叠队列"}>
+                                    <IconButton
+                                        color="inherit"
+                                        onClick={() => setExpanded(!expanded)}
+                                    >
+                                        <ExpandMoreIcon
+                                            className={classnames({
+                                                [classes.expandIconExpanded]: expanded,
+                                                [classes.expandIcon]: true,
+                                            })}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </Toolbar>
+                    </AppBar>
+                    <AccordionDetails className={classes.paddingZero}>
+                        <DialogContent className={classes.dialogContent}>
+                            <List className={classes.paddingZero}>
+                                {taskList.map((uploader) => (
+                                    <UploadTask
+                                        onCancel={onCancel}
+                                        key={uploader.id}
+                                        useAvgSpeed={useAvgSpeed}
+                                        uploader={uploader}
+                                    />
+                                ))}
+                            </List>
+                        </DialogContent>
+                    </AccordionDetails>
+                </Accordion>
+            </Dialog>
+        </>
     );
 }
