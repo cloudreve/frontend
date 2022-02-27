@@ -1,4 +1,5 @@
 import { Policy } from "../types";
+import { sizeToString } from "../utils";
 
 export enum UploaderErrorName {
     // 输入错误
@@ -31,6 +32,20 @@ export class FileValidateError extends UploaderError {
         super(UploaderErrorName.InvalidFile, message);
         this.field = field;
         this.policy = policy;
+    }
+
+    public Message(i18n: string): string {
+        if (this.field == "size") {
+            return `文件大小超出存储策略限制（最大：${sizeToString(
+                this.policy.maxSize
+            )}）`;
+        }
+
+        return `存储策略不支持上传此扩展名的文件（当前支持：${
+            this.policy.allowedSuffix
+                ? this.policy.allowedSuffix.join(",")
+                : "*"
+        }）`;
     }
 }
 

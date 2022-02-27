@@ -2,12 +2,12 @@ import { Policy } from "../types";
 import { FileValidateError } from "../errors";
 
 interface Validator {
-    (file: File | null, policy: Policy): void;
+    (file: File, policy: Policy): void;
 }
 
 // validators
 const checkers: Array<Validator> = [
-    function checkExt(file: File | null, policy: Policy) {
+    function checkExt(file: File, policy: Policy) {
         if (
             policy.allowedSuffix != undefined &&
             policy.allowedSuffix.length > 0
@@ -22,26 +22,22 @@ const checkers: Array<Validator> = [
         }
     },
 
-    function checkSize(file: File | null, policy: Policy) {
-        if (options.maxFileSize !== "0.00mb") {
-            const maxFileSize = parseFloat(
-                options.maxFileSize.replace("mb", "")
-            );
-
-            // 转 mb
-            const fileSize = file?.size!! / (1024 * 1024);
-
-            if (fileSize > maxFileSize)
-                throw new Error(
-                    `文件过大，您当前用户组最多可上传 ${maxFileSize} mb的文件`
+    function checkSize(file: File, policy: Policy) {
+        if (policy.maxSize > 0) {
+            if (file.size > policy.maxSize) {
+                throw new FileValidateError(
+                    "File size exceeds maximum limit.",
+                    "size",
+                    policy
                 );
+            }
         }
     },
 ];
 
-/* 将每个 Checker 执行
+/* 将每个 Validator 执行
    失败返回 Error
  */
-export function check(file: File | null, policy: Policy) {
+export function validate(file: File, policy: Policy) {
     checkers.forEach((c) => c(file, policy));
 }

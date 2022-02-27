@@ -21,7 +21,7 @@ export interface Task {
     name: string;
     policy: Policy;
     dst: string;
-    file?: File;
+    file: File;
     child?: Task[];
 }
 

@@ -84,8 +84,12 @@ export default function TaskList({ open, onClose, selectFile, taskList }) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [expanded, setExpanded] = useState(true);
-    const close = () => {
-        setExpanded(false);
+    const close = (e, reason) => {
+        if (reason !== "backdropClick") {
+            onClose();
+        } else {
+            setExpanded(false);
+        }
     };
     const handlePanelChange = (event, isExpanded) => {
         setExpanded(isExpanded);

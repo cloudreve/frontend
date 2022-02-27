@@ -2,23 +2,23 @@
 import { Task } from "../types";
 import UploadManager from "../index";
 import Logger from "../logger";
-import { UploaderError } from "../errors";
+import { validate } from "../utils/validator";
 
 export enum Status {
     added,
     preparing,
     queued,
     processing,
-    done,
+    finishing,
+    finished,
     error,
     stopped,
 }
 
 export interface UploadHandlers {
-    onPrepare: () => void;
-    onError: (err: UploaderError) => void;
+    onTransition: (newStatus: Status) => void;
+    onError: (err: Error) => void;
     onProgress: () => void;
-    onComplete: () => void;
 }
 
 export default abstract class Base {
@@ -42,14 +42,11 @@ export default abstract class Base {
 
         this.subscriber = {
             /* eslint-disable @typescript-eslint/no-empty-function */
-            onPrepare: () => {},
-            onError: (err: UploaderError) => {},
+            onTransition: (newStatus: Status) => {},
+            onError: (err: Error) => {},
             onProgress: () => {},
-            onComplete: () => {},
             /* eslint-enable @typescript-eslint/no-empty-function */
         };
-
-        // TODO: file validate
     }
 
     public subscribe = (handlers: UploadHandlers) => {
@@ -58,6 +55,19 @@ export default abstract class Base {
 
     public start = async () => {
         this.logger.info("Activate uploading task.");
+        try {
+            validate(this.task.file, this.task.policy);
+        } catch (e) {
+            this.setError(e);
+            return;
+        }
+
         this.status = Status.preparing;
+        this.subscriber.onTransition(this.status);
     };
+
+    protected setError(e: Error) {
+        this.status = Status.error;
+        this.subscriber.onError(e);
+    }
 }

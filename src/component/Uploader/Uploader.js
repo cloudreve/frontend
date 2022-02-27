@@ -51,6 +51,10 @@ export default function Uploader() {
         // eslint-disable-next-line no-unreachable
         uploadManager
             .select(path)
+            .then((tasks) => {
+                setTaskListOpen(true);
+                setUploaders([...uploaders, ...tasks]);
+            })
             .catch((e) => {
                 if (e instanceof UploaderError) {
                     ToggleSnackbar("top", "right", e.Message(""), "warning");
@@ -62,10 +66,6 @@ export default function Uploader() {
                         "error"
                     );
                 }
-            })
-            .then((tasks) => {
-                setTaskListOpen(true);
-                setUploaders([...uploaders, ...tasks]);
             });
     };
 
