@@ -4,14 +4,17 @@ import { UnknownPolicyError, UploaderError, UploaderErrorName } from "./errors";
 import Base from "./uploader/base";
 import Folder from "./uploader/folder";
 import Local from "./uploader/local";
+import { Pool } from "./utils/pool";
 
 export interface Option {
     logLevel: LogLevel;
-    onFileAdded: (task: Task, error?: UploaderError) => void;
+    concurrentLimit: number;
 }
 
 export default class UploadManager {
     public logger: Logger;
+
+    public pool: Pool;
 
     private static id = 0;
     private policy?: Policy;
@@ -22,6 +25,8 @@ export default class UploadManager {
     constructor(o: Option) {
         this.logger = new Logger(o.logLevel, "MANAGER");
         this.logger.info(`Initialized with log level: ${o.logLevel}`);
+
+        this.pool = new Pool(o.concurrentLimit);
 
         const input = document.createElement("input");
         input.type = "file";
