@@ -4,6 +4,7 @@ import TypeIcon from "../../FileManager/TypeIcon";
 import { useUpload } from "../UseUpload";
 import { Status } from "../core/uploader/base";
 import { UploaderError } from "../core/errors";
+import { sizeToString } from "../../../utils";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UploadTask({ uploader }) {
     const classes = useStyles();
-    const { status, error } = useUpload(uploader);
+    const { status, error, progress, speed, speedAvg } = useUpload(uploader);
     const statusText = useMemo(() => {
         let errMsg;
         switch (status) {
@@ -46,10 +47,23 @@ export default function UploadTask({ uploader }) {
                         <br />
                     </div>
                 );
+            case Status.processing:
+                console.log(progress);
+                if (progress) {
+                    return (
+                        <div>{`${sizeToString(
+                            speed ? speed : 0
+                        )} /s  ${sizeToString(
+                            speedAvg ? speedAvg : 0
+                        )} /s`}</div>
+                    );
+                }
+
+                break;
             default:
                 return <div>未知</div>;
         }
-    }, [status, error]);
+    }, [status, error, progress, speed, speedAvg]);
 
     return (
         <>
