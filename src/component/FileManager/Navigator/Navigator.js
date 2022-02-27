@@ -201,7 +201,6 @@ class NavigatorComponent extends Component {
                         type: response.data.policy.type,
                         maxSize: response.data.policy.max_size,
                         allowedSuffix: response.data.policy.file_type,
-                        chunkSize: response.data.policy.chunk_size,
                     });
                 }
             })

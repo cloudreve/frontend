@@ -9,7 +9,6 @@ export interface Policy {
     allowedSuffix: Nullable<string[]>;
     maxSize: number;
     type: PolicyType;
-    chunkSize: number;
 }
 
 export enum TaskType {
@@ -24,6 +23,7 @@ export interface Task {
     dst: string;
     file: File;
     child?: Task[];
+    session?: UploadCredential;
 }
 
 type Nullable<T> = T | null;
@@ -45,4 +45,6 @@ export interface UploadSessionRequest {
 
 export interface UploadCredential {
     sessionID: string;
+    expires: number;
+    chunk_size: number;
 }

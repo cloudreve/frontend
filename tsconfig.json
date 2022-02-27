@@ -15,7 +15,7 @@
     "jsx": "react",
     "removeComments": true,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "strictBindCallApply": true,
     "noImplicitReturns": true,
     "alwaysStrict": true,

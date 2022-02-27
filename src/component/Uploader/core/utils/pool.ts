@@ -31,7 +31,7 @@ export class Pool {
     run(item: QueueContent) {
         this.queue = this.queue.filter((v) => v !== item);
         this.processing.push(item);
-        item.uploader.upload().then(
+        item.uploader.run().then(
             () => {
                 item.resolve();
                 this.release(item);

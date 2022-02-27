@@ -1,17 +1,17 @@
 // 所有 Uploader 的基类
-import { Task, UploadCredential, UploadSessionRequest } from "../types";
+import { Task } from "../types";
 import UploadManager from "../index";
 import Logger from "../logger";
 import { validate } from "../utils/validator";
-import { CancelToken, requestAPI } from "../utils/request";
+import { CancelToken } from "../utils/request";
 import { CancelTokenSource } from "axios";
-import { CreateUploadSessionError } from "../errors";
+import { createUploadSession } from "../api";
 
 export enum Status {
     added,
     initialized,
-    preparing,
     queued,
+    preparing,
     processing,
     finishing,
     finished,
@@ -22,7 +22,19 @@ export enum Status {
 export interface UploadHandlers {
     onTransition: (newStatus: Status) => void;
     onError: (err: Error) => void;
-    onProgress: () => void;
+    onProgress: (data: UploadProgress) => void;
+}
+
+export interface UploadProgress {
+    total: ProgressCompose;
+    chunks?: ProgressCompose[];
+}
+
+export interface ProgressCompose {
+    size: number;
+    loaded: number;
+    percent: number;
+    fromCache?: boolean;
 }
 
 export default abstract class Base {
@@ -35,9 +47,9 @@ export default abstract class Base {
 
     protected logger: Logger;
     protected subscriber: UploadHandlers;
-
     // 用于取消请求
-    private cancelToken: CancelTokenSource = CancelToken.source();
+    protected cancelToken: CancelTokenSource = CancelToken.source();
+    protected progress: UploadProgress;
 
     constructor(public task: Task, protected manager: UploadManager) {
         this.logger = new Logger(
@@ -51,7 +63,7 @@ export default abstract class Base {
             /* eslint-disable @typescript-eslint/no-empty-function */
             onTransition: (newStatus: Status) => {},
             onError: (err: Error) => {},
-            onProgress: () => {},
+            onProgress: (data: UploadProgress) => {},
             /* eslint-enable @typescript-eslint/no-empty-function */
         };
     }
@@ -67,24 +79,37 @@ export default abstract class Base {
         try {
             validate(this.task.file, this.task.policy);
         } catch (e) {
-            this.logger.info("File validate failed with error:", e);
+            this.logger.error("File validate failed with error:", e);
             this.setError(e);
             return;
         }
 
         this.logger.info("Enqueued in manager pool");
+        this.transit(Status.queued);
         this.manager.pool.enqueue(this).catch((e) => {
             this.logger.info("Upload task failed with error:", e);
+            // TODO: delete upload session
             this.setError(e);
         });
     };
 
-    public upload = async () => {
+    public run = async () => {
         this.logger.info("Start upload task, create upload session...");
         this.transit(Status.preparing);
-        const uploadSession = await this.createUploadSession();
-        console.log(uploadSession);
+        this.task.session = await createUploadSession({
+            path: this.task.dst,
+            size: this.task.file.size,
+            name: this.task.file.name,
+            policy_id: this.task.policy.id,
+            last_modified: this.task.file.lastModified,
+        });
+        this.logger.info("Upload session created:", this.task.session);
+
+        this.transit(Status.processing);
+        await this.upload();
     };
+
+    public abstract async upload(): Promise<any>;
 
     public cancel = async () => {
         this.cancelToken.cancel();
@@ -102,25 +127,16 @@ export default abstract class Base {
         this.subscriber.onTransition(status);
     }
 
-    private async createUploadSession(): Promise<UploadCredential> {
-        const req: UploadSessionRequest = {
-            path: this.task.dst,
-            size: this.task.file.size,
-            name: this.task.file.name,
-            policy_id: this.task.policy.id,
-            last_modified: this.task.file.lastModified,
+    public getProgressInfoItem(
+        loaded: number,
+        size: number,
+        fromCache?: boolean
+    ): ProgressCompose {
+        return {
+            size,
+            loaded,
+            percent: (loaded / size) * 100,
+            ...(fromCache == null ? {} : { fromCache }),
         };
-
-        const res = await requestAPI<UploadCredential>("file/upload/session", {
-            method: "put",
-            cancelToken: this.cancelToken.token,
-            data: req,
-        });
-
-        if (res.data.code !== 0) {
-            throw new CreateUploadSessionError(res.data);
-        }
-
-        return res.data.data;
     }
 }

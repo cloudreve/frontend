@@ -16,7 +16,7 @@ export function useUpload(uploader) {
                 setError(err);
                 setStatus(uploader.status);
             },
-            onProgress: () => {},
+            onProgress: (data) => {},
         });
         /* eslint-enable @typescript-eslint/no-empty-function */
         if (status === Status.added) {

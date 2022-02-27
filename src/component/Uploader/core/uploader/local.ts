@@ -1,3 +1,3 @@
-import Base from "./base";
+import Chunk from "./chunk";
 
-export default class Local extends Base {}
+export default class Local extends Chunk {}
