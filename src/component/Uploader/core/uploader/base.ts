@@ -7,6 +7,7 @@ import { CancelToken } from "../utils/request";
 import { CancelTokenSource } from "axios";
 import { createUploadSession } from "../api";
 import * as utils from "../utils";
+import { UploaderError } from "../errors";
 
 export enum Status {
     added,
@@ -133,6 +134,11 @@ export default abstract class Base {
     protected setError(e: Error) {
         this.status = Status.error;
         this.error = e;
+
+        if (!(e instanceof UploaderError && e.Retryable())) {
+            utils.removeResumeCtx(this.task, this.logger);
+        }
+
         this.subscriber.onError(e);
     }
 

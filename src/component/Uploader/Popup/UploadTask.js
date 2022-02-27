@@ -110,27 +110,27 @@ export default function UploadTask({ uploader, useAvgSpeed }) {
         [status]
     );
 
-    const progressBackground = useMemo(
+    const progressBar = useMemo(
         () =>
-            theme.palette.type === "light"
-                ? lighten(theme.palette.primary.main, 0.8)
-                : darken(theme.palette.background.paper, 0.2),
-        [theme]
+            status === Status.processing && progress ? (
+                <div
+                    style={{
+                        backgroundColor:
+                            theme.palette.type === "light"
+                                ? lighten(theme.palette.primary.main, 0.8)
+                                : darken(theme.palette.background.paper, 0.2),
+                        width: progress.total.percent + "%",
+                    }}
+                    className={classes.progress}
+                />
+            ) : null,
+        [status, progress, theme]
     );
 
     return (
         <>
             <div className={classes.progressContainer}>
-                {progress && (
-                    <div
-                        style={{
-                            backgroundColor: progressBackground,
-                            width: progress.total.percent + "%",
-                        }}
-                        className={classes.progress}
-                    />
-                )}
-
+                {progressBar}
                 <ListItem className={classes.progressContent} button>
                     <TypeIcon fileName={uploader.task.name} isUpload />
                     <ListItemText

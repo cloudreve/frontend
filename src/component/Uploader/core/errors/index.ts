@@ -15,6 +15,14 @@ export enum UploaderErrorName {
     CtxExpired = "CtxExpired",
 }
 
+const RETRY_ERROR_LIST = [
+    UploaderErrorName.FailedCreateUploadSession,
+    UploaderErrorName.HTTPRequestFailed,
+    UploaderErrorName.LocalChunkUploadFailed,
+];
+
+const RETRY_CODE_LIST = [-1];
+
 export class UploaderError implements Error {
     public stack: string | undefined;
     constructor(public name: UploaderErrorName, public message: string) {
@@ -23,6 +31,10 @@ export class UploaderError implements Error {
 
     public Message(i18n: string): string {
         return this.message;
+    }
+
+    public Retryable(): boolean {
+        return RETRY_ERROR_LIST.includes(name);
     }
 }
 
@@ -83,6 +95,12 @@ export class APIError extends UploaderError {
         }
 
         return msg;
+    }
+
+    public Retryable(): boolean {
+        return (
+            super.Retryable() && RETRY_CODE_LIST.includes(this.response.code)
+        );
     }
 }
 
