@@ -110,6 +110,7 @@ export default class UploadManager {
                 }
             };
 
+            this.input.value = "";
             this.input.click();
         });
     };

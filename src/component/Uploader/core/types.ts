@@ -31,15 +31,16 @@ export interface Response<T> {
     code: number;
     data: T;
     msg: string;
+    error: string;
 }
 
-interface UploadSessionRequest {
+export interface UploadSessionRequest {
     path: string;
     size: number;
     name: string;
     policy_id: number;
 }
 
-interface UploadCredential {
+export interface UploadCredential {
     sessionID: string;
 }

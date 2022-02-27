@@ -3,7 +3,7 @@ import { Status } from "./core/uploader/base";
 
 export function useUpload(uploader) {
     const startTimeRef = useRef(null);
-    const [status, setStatus] = useState(Status.added);
+    const [status, setStatus] = useState(uploader.status);
     const [error, setError] = useState(null);
     useEffect(() => {
         startTimeRef.current = Date.now();
@@ -19,7 +19,9 @@ export function useUpload(uploader) {
             onProgress: () => {},
         });
         /* eslint-enable @typescript-eslint/no-empty-function */
-        uploader.start();
+        if (status === Status.added) {
+            uploader.start();
+        }
     }, []);
     return { status, error };
 }

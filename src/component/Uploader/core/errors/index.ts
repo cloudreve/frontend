@@ -1,12 +1,12 @@
-import { Policy } from "../types";
+import { Policy, Response } from "../types";
 import { sizeToString } from "../utils";
 
 export enum UploaderErrorName {
-    // 输入错误
     InvalidFile = "InvalidFile",
-    // 未选取存储策略
     NoPolicySelected = "NoPolicySelected",
     UnknownPolicyType = "UnknownPolicyType",
+    FailedCreateUploadSession = "FailedCreateUploadSession",
+    HTTPRequestFailed = "HTTPRequestFailed",
 }
 
 export class UploaderError implements Error {
@@ -57,5 +57,48 @@ export class UnknownPolicyError extends UploaderError {
     constructor(message: string, policy: Policy) {
         super(UploaderErrorName.UnknownPolicyType, message);
         this.policy = policy;
+    }
+}
+
+// 后端 API 出错
+export class APIError extends UploaderError {
+    constructor(
+        name: UploaderErrorName,
+        message: string,
+        protected response: Response<any>
+    ) {
+        super(name, message);
+    }
+
+    public Message(i18n: string): string {
+        let msg = `${this.message}: ${this.response.msg}`;
+        if (this.response.error != "") {
+            msg += ` (${this.response.error})`;
+        }
+
+        return msg;
+    }
+}
+
+// 无法创建上传会话
+export class CreateUploadSessionError extends APIError {
+    constructor(response: Response<any>) {
+        super(UploaderErrorName.FailedCreateUploadSession, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = "无法创建上传会话";
+        return super.Message(i18n);
+    }
+}
+
+// HTTP 请求出错
+export class HTTPError extends UploaderError {
+    constructor(protected axiosErr: Error, protected url: string) {
+        super(UploaderErrorName.HTTPRequestFailed, axiosErr.message);
+    }
+
+    public Message(i18n: string): string {
+        return `请求失败: ${this.axiosErr} (${this.url})`;
     }
 }

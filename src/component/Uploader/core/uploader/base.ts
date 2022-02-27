@@ -1,13 +1,15 @@
 // 所有 Uploader 的基类
-import { Task, UploadCredential } from "../types";
+import { Task, UploadCredential, UploadSessionRequest } from "../types";
 import UploadManager from "../index";
 import Logger from "../logger";
 import { validate } from "../utils/validator";
 import { CancelToken, requestAPI } from "../utils/request";
 import { CancelTokenSource } from "axios";
+import { CreateUploadSessionError } from "../errors";
 
 export enum Status {
     added,
+    initialized,
     preparing,
     queued,
     processing,
@@ -31,7 +33,6 @@ export default abstract class Base {
     private static id = 0;
 
     protected logger: Logger;
-
     protected subscriber: UploadHandlers;
 
     // 用于取消请求
@@ -60,6 +61,8 @@ export default abstract class Base {
 
     public start = async () => {
         this.logger.info("Activate uploading task");
+        this.transit(Status.initialized);
+
         try {
             validate(this.task.file, this.task.policy);
         } catch (e) {
@@ -76,8 +79,10 @@ export default abstract class Base {
     };
 
     public upload = async () => {
-        this.logger.info("Start upload task");
+        this.logger.info("Start upload task, create upload session...");
         this.transit(Status.preparing);
+        const uploadSession = await this.createUploadSession();
+        console.log(uploadSession);
     };
 
     public cancel = async () => {
@@ -95,13 +100,24 @@ export default abstract class Base {
         this.subscriber.onTransition(status);
     }
 
-    private async createUploadSession() {
-        const res = await requestAPI<UploadCredential>(
-            `/api/v3/file/upload/session`,
-            {
-                method: "put",
-                cancelToken: this.cancelToken.token,
-            }
-        );
+    private async createUploadSession(): Promise<UploadCredential> {
+        const req: UploadSessionRequest = {
+            path: this.task.dst,
+            size: this.task.file.size,
+            name: this.task.file.name,
+            policy_id: this.task.policy.id,
+        };
+
+        const res = await requestAPI<UploadCredential>("file/upload/session", {
+            method: "put",
+            cancelToken: this.cancelToken.token,
+            data: req,
+        });
+
+        if (res.data.code !== 0) {
+            throw new CreateUploadSessionError(res.data);
+        }
+
+        return res.data.data;
     }
 }
