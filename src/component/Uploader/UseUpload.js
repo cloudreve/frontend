@@ -4,7 +4,7 @@ import { Status } from "./core/uploader/base";
 export function useUpload(uploader) {
     const startTimeRef = useRef(null);
     const [status, setStatus] = useState(uploader.status);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(uploader.error);
     useEffect(() => {
         startTimeRef.current = Date.now();
         /* eslint-disable @typescript-eslint/no-empty-function */

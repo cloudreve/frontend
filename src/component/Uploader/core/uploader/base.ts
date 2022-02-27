@@ -72,11 +72,11 @@ export default abstract class Base {
             return;
         }
 
+        this.logger.info("Enqueued in manager pool");
         this.manager.pool.enqueue(this).catch((e) => {
             this.logger.info("Upload task failed with error:", e);
             this.setError(e);
         });
-        this.logger.info("Enqueued in manager pool");
     };
 
     public upload = async () => {

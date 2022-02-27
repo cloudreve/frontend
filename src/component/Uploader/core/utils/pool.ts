@@ -23,16 +23,23 @@ export class Pool {
         });
     }
 
+    release(item: QueueContent) {
+        this.processing = this.processing.filter((v) => v !== item);
+        this.check();
+    }
+
     run(item: QueueContent) {
         this.queue = this.queue.filter((v) => v !== item);
         this.processing.push(item);
         item.uploader.upload().then(
             () => {
-                this.processing = this.processing.filter((v) => v !== item);
                 item.resolve();
-                this.check();
+                this.release(item);
             },
-            (err) => item.reject(err)
+            (err) => {
+                item.reject(err);
+                this.release(item);
+            }
         );
     }
 
