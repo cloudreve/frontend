@@ -79,7 +79,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function TaskList({ open, onClose, selectFile, taskList }) {
+export default function TaskList({
+    open,
+    onClose,
+    selectFile,
+    taskList,
+    onCancel,
+}) {
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -160,6 +166,7 @@ export default function TaskList({ open, onClose, selectFile, taskList }) {
                         <List className={classes.paddingZero}>
                             {taskList.map((uploader) => (
                                 <UploadTask
+                                    onCancel={onCancel}
                                     key={uploader.id}
                                     useAvgSpeed={useAvgSpeed}
                                     uploader={uploader}

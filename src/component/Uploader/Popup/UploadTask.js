@@ -65,7 +65,7 @@ const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
     return `${sizeToString(displayedSpeed ? displayedSpeed : 0)} /s`;
 };
 
-export default function UploadTask({ uploader, useAvgSpeed }) {
+export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
     const classes = useStyles();
     const theme = useTheme();
     const { status, error, progress, speed, speedAvg } = useUpload(uploader);
@@ -143,6 +143,7 @@ export default function UploadTask({ uploader, useAvgSpeed }) {
         setLoading(true);
         uploader.cancel().then(() => {
             setLoading(false);
+            onCancel(uploader);
         });
     };
 
@@ -162,16 +163,16 @@ export default function UploadTask({ uploader, useAvgSpeed }) {
                         }
                         secondary={statusText}
                     />
+                    <ListItemSecondaryAction className={classes.delete}>
+                        <IconButton
+                            aria-label="Delete"
+                            disabled={loading}
+                            onClick={() => cancel()}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
                 </ListItem>
-                <ListItemSecondaryAction className={classes.delete}>
-                    <IconButton
-                        aria-label="Delete"
-                        disabled={loading}
-                        onClick={() => cancel()}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
             </div>
             <Divider />
         </>

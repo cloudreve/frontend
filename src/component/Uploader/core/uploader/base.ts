@@ -1,5 +1,5 @@
 // 所有 Uploader 的基类
-import { Task } from "../types";
+import { PolicyType, Task } from "../types";
 import UploadManager from "../index";
 import Logger from "../logger";
 import { validate } from "../utils/validator";
@@ -7,7 +7,7 @@ import { CancelToken } from "../utils/request";
 import { CancelTokenSource } from "axios";
 import { createUploadSession, deleteUploadSession } from "../api";
 import * as utils from "../utils";
-import { UploaderError } from "../errors";
+import { RequestCanceledError, UploaderError } from "../errors";
 
 export enum Status {
     added,
@@ -44,6 +44,9 @@ export interface Progress {
     total: number;
     loaded: number;
 }
+
+const resumePolicy = [PolicyType.local];
+const deleteUploadSessionDelay = 500;
 
 export default abstract class Base {
     public child?: Base[];
@@ -97,7 +100,6 @@ export default abstract class Base {
         this.transit(Status.queued);
         this.manager.pool.enqueue(this).catch((e) => {
             this.logger.info("Upload task failed with error:", e);
-            // TODO: delete upload session
             this.setError(e);
         });
     };
@@ -135,28 +137,41 @@ export default abstract class Base {
     };
 
     protected setError(e: Error) {
-        this.status = Status.error;
-        this.error = e;
-
-        if (!(e instanceof UploaderError && e.Retryable())) {
-            this.logger.warn(
-                "Non-retryable error occurs, clean resume ctx cache"
-            );
+        if (
+            !(e instanceof UploaderError && e.Retryable()) ||
+            !resumePolicy.includes(this.task.policy.type)
+        ) {
+            this.logger.warn("Non-resume error occurs, clean resume ctx cache");
             this.cancelUploadSession();
         }
 
-        this.subscriber.onError(e);
+        if (!(e instanceof RequestCanceledError)) {
+            this.status = Status.error;
+            this.error = e;
+            this.subscriber.onError(e);
+        }
     }
 
-    protected cancelUploadSession = async () => {
-        utils.removeResumeCtx(this.task, this.logger);
-        if (this.task.session) {
-            await deleteUploadSession(this.task.session?.sessionID).catch(
-                (e) => {
-                    this.logger.warn("Failed to cancel upload session: ", e);
+    protected cancelUploadSession = (): Promise<void> => {
+        return new Promise<void>((resolve) => {
+            utils.removeResumeCtx(this.task, this.logger);
+            setTimeout(() => {
+                if (this.task.session) {
+                    deleteUploadSession(this.task.session?.sessionID)
+                        .catch((e) => {
+                            this.logger.warn(
+                                "Failed to cancel upload session: ",
+                                e
+                            );
+                        })
+                        .finally(() => {
+                            resolve();
+                        });
+                } else {
+                    resolve();
                 }
-            );
-        }
+            }, deleteUploadSessionDelay);
+        });
     };
 
     protected transit(status: Status) {

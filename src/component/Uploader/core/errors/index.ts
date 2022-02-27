@@ -14,12 +14,14 @@ export enum UploaderErrorName {
     ReadCtxFailed = "ReadCtxFailed",
     InvalidCtxData = "InvalidCtxData",
     CtxExpired = "CtxExpired",
+    RequestCanceled = "RequestCanceled",
 }
 
 const RETRY_ERROR_LIST = [
     UploaderErrorName.FailedCreateUploadSession,
     UploaderErrorName.HTTPRequestFailed,
     UploaderErrorName.LocalChunkUploadFailed,
+    UploaderErrorName.RequestCanceled,
 ];
 
 const RETRY_CODE_LIST = [-1];
@@ -149,5 +151,12 @@ export class LocalChunkUploadError extends APIError {
     public Message(i18n: string): string {
         this.message = `分片 [${this.chunkIndex}] 上传失败`;
         return super.Message(i18n);
+    }
+}
+
+// 无法创建上传会话
+export class RequestCanceledError extends UploaderError {
+    constructor() {
+        super(UploaderErrorName.RequestCanceled, "Request canceled");
     }
 }

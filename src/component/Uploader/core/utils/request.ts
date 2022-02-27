@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Response } from "../types";
-import { HTTPError } from "../errors";
+import { HTTPError, RequestCanceledError } from "../errors";
 
 export const { CancelToken } = axios;
 export { CancelToken as CancelTokenType, CancelTokenSource } from "axios";
@@ -15,6 +15,10 @@ export function requestAPI<T = any>(url: string, config?: AxiosRequestConfig) {
     return axios
         .request<Response<T>>({ ...defaultConfig, ...config, url })
         .catch((err) => {
+            if (axios.isCancel(err)) {
+                throw new RequestCanceledError();
+            }
+
             throw new HTTPError(err, url);
         });
 }

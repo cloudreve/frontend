@@ -70,6 +70,12 @@ export default function Uploader() {
             });
     };
 
+    const deleteTask = (uploader) => {
+        setUploaders((uploaders) =>
+            uploaders.filter((u) => u.id != uploader.id)
+        );
+    };
+
     return (
         <>
             {enableUploader && (
@@ -83,6 +89,7 @@ export default function Uploader() {
                     <TaskList
                         taskList={uploaders}
                         open={taskListOpen}
+                        onCancel={deleteTask}
                         selectFile={selectFile}
                         onClose={() => setTaskListOpen(false)}
                     />
