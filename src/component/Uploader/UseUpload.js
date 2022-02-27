@@ -70,5 +70,12 @@ export function useUpload(uploader) {
         return [res, resAvg];
     }, [progress, lastTimeRef, startTimeRef]);
 
-    return { status, error, progress, speed, speedAvg };
+    const retry = () => {
+        uploader.reset();
+        lastTimeRef.current = Date.now();
+        startTimeRef.current = Date.now();
+        uploader.start();
+    };
+
+    return { status, error, progress, speed, speedAvg, retry };
 }

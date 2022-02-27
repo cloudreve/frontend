@@ -6,6 +6,7 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     makeStyles,
+    Tooltip,
 } from "@material-ui/core";
 import TypeIcon from "../../FileManager/TypeIcon";
 import { useUpload } from "../UseUpload";
@@ -16,6 +17,8 @@ import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import { useTheme } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import DeleteIcon from "@material-ui/icons/Delete";
+import RefreshIcon from "@material-ui/icons/Refresh";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -39,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
     },
     fileName: {
         wordBreak: "break-all",
+        [theme.breakpoints.up("sm")]: {
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+        },
     },
     successStatus: {
         color: theme.palette.success.main,
@@ -54,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
     delete: {
         zIndex: 9,
     },
+    fileNameContainer: {
+        display: "flex",
+        alignItems: "center",
+    },
 }));
 
 const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
@@ -68,7 +80,10 @@ const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
 export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
     const classes = useStyles();
     const theme = useTheme();
-    const { status, error, progress, speed, speedAvg } = useUpload(uploader);
+    const { status, error, progress, speed, speedAvg, retry } = useUpload(
+        uploader
+    );
+    const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [loading, setLoading] = useState(false);
 
     const statusText = useMemo(() => {
@@ -112,14 +127,14 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
 
     const resumeLabel = useMemo(
         () =>
-            uploader.task.resumed ? (
+            uploader.task.resumed && !fullScreen ? (
                 <Chip
                     className={classes.disabledBadge}
                     size="small"
                     label={"断点续传"}
                 />
             ) : null,
-        [status]
+        [status, fullScreen]
     );
 
     const progressBar = useMemo(
@@ -147,6 +162,30 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
         });
     };
 
+    const secondaryAction = useMemo(() => {
+        if (status === Status.error) {
+            return (
+                <Tooltip title={"重试"}>
+                    <IconButton aria-label="Delete" onClick={() => retry()}>
+                        <RefreshIcon />
+                    </IconButton>
+                </Tooltip>
+            );
+        }
+
+        return (
+            <Tooltip title={"取消并删除"}>
+                <IconButton
+                    aria-label="Delete"
+                    disabled={loading}
+                    onClick={() => cancel()}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </Tooltip>
+        );
+    }, [status, loading]);
+
     return (
         <>
             <div className={classes.progressContainer}>
@@ -156,21 +195,17 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
                     <ListItemText
                         className={classes.listAction}
                         primary={
-                            <span className={classes.fileName}>
-                                {uploader.task.name}
-                                {resumeLabel}
-                            </span>
+                            <div className={classes.fileNameContainer}>
+                                <div className={classes.fileName}>
+                                    {uploader.task.name}
+                                </div>
+                                <div>{resumeLabel}</div>
+                            </div>
                         }
                         secondary={statusText}
                     />
                     <ListItemSecondaryAction className={classes.delete}>
-                        <IconButton
-                            aria-label="Delete"
-                            disabled={loading}
-                            onClick={() => cancel()}
-                        >
-                            <DeleteIcon />
-                        </IconButton>
+                        {secondaryAction}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>

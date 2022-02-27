@@ -47,18 +47,12 @@ const useStyles = makeStyles((theme) => ({
         position: "fixed",
         inset: "-1!important",
     },
-    minWidth: {
-        [theme.breakpoints.up("sm")]: {
-            minWidth: 500,
-        },
-        padding: 0,
-    },
     paddingZero: {
         padding: 0,
     },
     dialogContent: {
         [theme.breakpoints.up("sm")]: {
-            minWidth: 500,
+            width: 500,
             maxHeight: "calc(100vh - 140px)",
         },
         padding: 0,

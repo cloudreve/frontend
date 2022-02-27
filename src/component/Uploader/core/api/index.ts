@@ -10,11 +10,13 @@ import { Progress } from "../uploader/base";
 import { CancelToken } from "axios";
 
 export async function createUploadSession(
-    req: UploadSessionRequest
+    req: UploadSessionRequest,
+    cancel: CancelToken
 ): Promise<UploadCredential> {
     const res = await requestAPI<UploadCredential>("file/upload", {
         method: "put",
         data: req,
+        cancelToken: cancel,
     });
 
     if (res.data.code !== 0) {

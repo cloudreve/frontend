@@ -4,7 +4,7 @@ import UploadManager from "../index";
 import Logger from "../logger";
 import { validate } from "../utils/validator";
 import { CancelToken } from "../utils/request";
-import { CancelTokenSource } from "axios";
+import axios, { CancelTokenSource } from "axios";
 import { createUploadSession, deleteUploadSession } from "../api";
 import * as utils from "../utils";
 import { RequestCanceledError, UploaderError } from "../errors";
@@ -109,13 +109,16 @@ export default abstract class Base {
         this.transit(Status.preparing);
         const cachedInfo = utils.getResumeCtx(this.task, this.logger);
         if (cachedInfo == null) {
-            this.task.session = await createUploadSession({
-                path: this.task.dst,
-                size: this.task.file.size,
-                name: this.task.file.name,
-                policy_id: this.task.policy.id,
-                last_modified: this.task.file.lastModified,
-            });
+            this.task.session = await createUploadSession(
+                {
+                    path: this.task.dst,
+                    size: this.task.file.size,
+                    name: this.task.file.name,
+                    policy_id: this.task.policy.id,
+                    last_modified: this.task.file.lastModified,
+                },
+                this.cancelToken.token
+            );
             this.logger.info("Upload session created:", this.task.session);
         } else {
             this.task.session = cachedInfo.session;
@@ -134,6 +137,17 @@ export default abstract class Base {
         this.cancelToken.cancel();
         await this.cancelUploadSession();
         this.transit(Status.canceled);
+    };
+
+    public reset = () => {
+        this.cancelToken = axios.CancelToken.source();
+        this.progress = {
+            total: {
+                size: 0,
+                loaded: 0,
+                percent: 0,
+            },
+        };
     };
 
     protected setError(e: Error) {
@@ -155,9 +169,9 @@ export default abstract class Base {
     protected cancelUploadSession = (): Promise<void> => {
         return new Promise<void>((resolve) => {
             utils.removeResumeCtx(this.task, this.logger);
-            setTimeout(() => {
-                if (this.task.session) {
-                    deleteUploadSession(this.task.session?.sessionID)
+            if (this.task.session) {
+                setTimeout(() => {
+                    deleteUploadSession(this.task.session!?.sessionID)
                         .catch((e) => {
                             this.logger.warn(
                                 "Failed to cancel upload session: ",
@@ -167,10 +181,10 @@ export default abstract class Base {
                         .finally(() => {
                             resolve();
                         });
-                } else {
-                    resolve();
-                }
-            }, deleteUploadSessionDelay);
+                }, deleteUploadSessionDelay);
+            } else {
+                resolve();
+            }
         });
     };
 
