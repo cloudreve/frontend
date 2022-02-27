@@ -82,7 +82,7 @@ export default function UploadButton(props) {
     };
 
     return (
-        <AutoHidden enable>
+        <AutoHidden enable hide={props.taskListOpen}>
             <Badge
                 badgeContent={queued}
                 classes={{

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Zoom from "@material-ui/core/Zoom";
 
-function AutoHidden({ children, enable }) {
+function AutoHidden({ children, enable, hide = false }) {
     const [hidden, setHidden] = useState(false);
 
     let prev = window.scrollY;
@@ -31,7 +31,7 @@ function AutoHidden({ children, enable }) {
         // eslint-disable-next-line
     }, [enable]);
 
-    return <Zoom in={!hidden}>{children}</Zoom>;
+    return <Zoom in={!hidden && !hide}>{children}</Zoom>;
 }
 
 export default AutoHidden;

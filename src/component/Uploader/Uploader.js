@@ -6,9 +6,11 @@ import pathHelper from "../../utils/page";
 import { useLocation } from "react-router-dom";
 import { UploaderError } from "./core/errors";
 import { toggleSnackbar } from "../../actions";
+import TaskList from "./Popup/TaskList";
 
 export default function Uploader() {
-    const [uploadTasks, setUploadTasks] = useState([]);
+    const [uploaders, setUploaders] = useState([]);
+    const [taskListOpen, setTaskListOpen] = useState(false);
     const keywords = useSelector((state) => state.explorer.keywords);
     const policy = useSelector((state) => state.explorer.currentPolicy);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
@@ -44,6 +46,9 @@ export default function Uploader() {
     };
 
     const selectFile = () => {
+        setTaskListOpen(true);
+        return;
+        // eslint-disable-next-line no-unreachable
         uploadManager
             .select(path)
             .catch((e) => {
@@ -59,19 +64,26 @@ export default function Uploader() {
                 }
             })
             .then((uploaders) => {
-                alert("success");
                 console.log(uploaders);
+                setTaskListOpen(true);
             });
     };
 
     return (
         <>
             {enableUploader && (
-                <UploadButton
-                    selectFile={selectFile}
-                    Queued={uploadTasks.length}
-                    openFileList={openFileList}
-                />
+                <>
+                    <UploadButton
+                        taskListOpen={taskListOpen}
+                        selectFile={selectFile}
+                        Queued={uploaders.length}
+                        openFileList={() => setTaskListOpen(true)}
+                    />
+                    <TaskList
+                        open={taskListOpen}
+                        onClose={() => setTaskListOpen(false)}
+                    />
+                </>
             )}
         </>
     );
