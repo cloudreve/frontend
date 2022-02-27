@@ -1116,17 +1116,6 @@ describe("index reducer", () => {
         });
     });
 
-    it("should handle ENABLE_LOAD_UPLOADER", () => {
-        const action = enableLoadUploader();
-        expect(cloudreveApp(initState, action)).toEqual({
-            ...initState,
-            viewUpdate: {
-                ...initState.viewUpdate,
-                loadUploader: true,
-            },
-        });
-    });
-
     it("should handle REFRESH_FILE_LIST", () => {
         const action = refreshFileList();
         expect(cloudreveApp(initState, action)).toEqual({

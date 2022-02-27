@@ -3,7 +3,6 @@ import Auth from "../../middleware/Auth";
 
 export interface ViewUpdateState {
     isLogin: boolean;
-    loadUploader: boolean;
     open: boolean;
     explorerViewMethod: string;
     sortMethod:
@@ -53,7 +52,6 @@ export interface ViewUpdateState {
 export const initState: ViewUpdateState = {
     // 是否登录
     isLogin: Auth.Check(),
-    loadUploader: false,
     open: false,
     explorerViewMethod: "icon",
     sortMethod: "timePos",
@@ -271,10 +269,6 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 ...state,
                 isLogin: action.status,
             };
-        case "ENABLE_LOAD_UPLOADER":
-            return Object.assign({}, state, {
-                loadUploader: true,
-            });
         case "REFRESH_STORAGE":
             return Object.assign({}, state, {
                 storageRefresh: !state.storageRefresh,

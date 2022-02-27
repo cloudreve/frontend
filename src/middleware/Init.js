@@ -49,14 +49,6 @@ export const InitSiteConfig = (rawStore) => {
     return rawStore;
 };
 
-export function enableUploaderLoad() {
-    // 开启上传组件加载
-    const user = Auth.GetUser();
-    window.policyType = user !== null ? user.policy.saveType : "local";
-    window.uploadConfig = user !== null ? user.policy : {};
-    window.pathCache = [];
-}
-
 export async function UpdateSiteConfig(store) {
     API.get("/site/config")
         .then(function (response) {
@@ -94,9 +86,5 @@ export async function UpdateSiteConfig(store) {
                     "error"
                 )
             );
-        })
-        .then(function () {
-            enableUploaderLoad(store);
-            store.dispatch(enableLoadUploader());
         });
 }

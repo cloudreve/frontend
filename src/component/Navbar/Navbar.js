@@ -39,7 +39,7 @@ import {
     checkGetParameters,
     changeThemeColor,
 } from "../../utils";
-import Uploader from "../Upload/Uploader.js";
+import Uploader from "../Uploader/Uploader.js";
 import { sizeToString, vhCheck } from "../../utils";
 import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
@@ -89,8 +89,8 @@ const mapStateToProps = (state) => {
         subTitle: state.viewUpdate.subTitle,
         loadUploader: state.viewUpdate.loadUploader,
         isLogin: state.viewUpdate.isLogin,
-        audioPreviewPlayingName:state.explorer.audioPreview.playingName,
-        audioPreviewIsOpen:state.explorer.audioPreview.isOpen,
+        audioPreviewPlayingName: state.explorer.audioPreview.playingName,
+        audioPreviewIsOpen: state.explorer.audioPreview.isOpen,
     };
 };
 
@@ -336,18 +336,6 @@ class NavbarCompoment extends Component {
 
     handleDrawerToggle = () => {
         this.setState((state) => ({ mobileOpen: !state.mobileOpen }));
-    };
-
-    loadUploader = () => {
-        if (pathHelper.isHomePage(this.props.location.pathname)) {
-            return (
-                <>
-                    {this.props.loadUploader && this.props.isLogin && (
-                        <Uploader />
-                    )}
-                </>
-            );
-        }
     };
 
     openDownload = () => {
@@ -889,18 +877,17 @@ class NavbarCompoment extends Component {
                                 </div>
                             )}
                         {this.props.selected.length <= 1 &&
-                            !(
-                                !this.props.isMultiple && this.props.withFile
-                            ) && this.props.audioPreviewPlayingName!=null && (
-                            <IconButton
-                                title="音乐"
-                                className={classes.sideButton}
-                                onClick={this.props.audioPreviewOpen}
-                                color={"inherit"}
-                            >
-                                <MusicNote fontSize={ "default"} />
-                            </IconButton>
-                        )}
+                            !(!this.props.isMultiple && this.props.withFile) &&
+                            this.props.audioPreviewPlayingName != null && (
+                                <IconButton
+                                    title="音乐"
+                                    className={classes.sideButton}
+                                    onClick={this.props.audioPreviewOpen}
+                                    color={"inherit"}
+                                >
+                                    <MusicNote fontSize={"default"} />
+                                </IconButton>
+                            )}
 
                         {this.props.selected.length <= 1 &&
                             !(
@@ -912,7 +899,7 @@ class NavbarCompoment extends Component {
                             pathHelper.isMobile() && <SubActions inherit />}
                     </Toolbar>
                 </AppBar>
-                {this.loadUploader()}
+                <Uploader />
 
                 <Hidden smUp implementation="css">
                     <SwipeableDrawer

@@ -22,7 +22,6 @@ import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { bufferDecode, bufferEncode } from "../../utils/index";
-import { enableUploaderLoad } from "../../middleware/Init";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
@@ -142,7 +141,6 @@ function LoginForm() {
         if (data["preferred_theme"] !== "") {
             ApplyThemes(data["preferred_theme"]);
         }
-        enableUploaderLoad();
 
         // 设置登录状态
         SetSessionStatus(true);

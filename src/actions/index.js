@@ -261,14 +261,13 @@ export const audioPreviewSetIsOpen = (isOpen) => {
     };
 };
 
-export const audioPreviewSetPlaying = (playingName,paused) => {
+export const audioPreviewSetPlaying = (playingName, paused) => {
     return {
         type: "AUDIO_PREVIEW_SET_PLAYING",
-        playingName,//the playing content name
+        playingName, //the playing content name
         paused,
     };
 };
-
 
 export const refreshStorage = () => {
     return {
