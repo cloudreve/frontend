@@ -6,6 +6,7 @@ export enum UploaderErrorName {
     NoPolicySelected = "NoPolicySelected",
     UnknownPolicyType = "UnknownPolicyType",
     FailedCreateUploadSession = "FailedCreateUploadSession",
+    FailedDeleteUploadSession = "FailedDeleteUploadSession",
     HTTPRequestFailed = "HTTPRequestFailed",
     LocalChunkUploadFailed = "LocalChunkUploadFailed",
     WriteCtxFailed = "WriteCtxFailed",
@@ -34,7 +35,7 @@ export class UploaderError implements Error {
     }
 
     public Retryable(): boolean {
-        return RETRY_ERROR_LIST.includes(name);
+        return RETRY_ERROR_LIST.includes(this.name);
     }
 }
 
@@ -112,6 +113,18 @@ export class CreateUploadSessionError extends APIError {
 
     public Message(i18n: string): string {
         this.message = "无法创建上传会话";
+        return super.Message(i18n);
+    }
+}
+
+// 无法删除上传会话
+export class DeleteUploadSessionError extends APIError {
+    constructor(response: Response<any>) {
+        super(UploaderErrorName.FailedDeleteUploadSession, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = "无法删除上传会话";
         return super.Message(i18n);
     }
 }

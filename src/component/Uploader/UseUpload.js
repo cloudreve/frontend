@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Status } from "./core/uploader/base";
+import { useDispatch } from "react-redux";
+import { toggleSnackbar } from "../../actions";
 
 export function useUpload(uploader) {
     const lastTimeRef = useRef(null);
@@ -8,6 +10,13 @@ export function useUpload(uploader) {
     const [status, setStatus] = useState(uploader.status);
     const [error, setError] = useState(uploader.error);
     const [progress, setProgress] = useState(null);
+    const dispatch = useDispatch();
+
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
+        [dispatch]
+    );
 
     useEffect(() => {
         lastTimeRef.current = Date.now();
@@ -23,6 +32,9 @@ export function useUpload(uploader) {
             },
             onProgress: (data) => {
                 setProgress(data);
+            },
+            onMsg: (msg, color) => {
+                ToggleSnackbar("top", "right", msg, color);
             },
         });
         /* eslint-enable @typescript-eslint/no-empty-function */

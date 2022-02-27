@@ -8,7 +8,8 @@ export default class Local extends Chunk {
             chunkInfo,
             (p) => {
                 this.updateChunkProgress(p.loaded, chunkInfo.index);
-            }
+            },
+            this.cancelToken.token
         );
     }
 }

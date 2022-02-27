@@ -19,6 +19,7 @@ export default abstract class Chunk extends Base {
         this.initBeforeUploadChunks();
 
         this.logger.info("Starting uploading file chunks:", this.chunks);
+        this.updateLocalCache();
         for (let i = 0; i < this.chunks.length; i++) {
             if (this.task.chunkProgress[i].loaded < this.chunks[i].size) {
                 await this.uploadChunk({ chunk: this.chunks[i], index: i });

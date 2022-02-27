@@ -5,7 +5,7 @@ import Logger from "../logger";
 import { validate } from "../utils/validator";
 import { CancelToken } from "../utils/request";
 import { CancelTokenSource } from "axios";
-import { createUploadSession } from "../api";
+import { createUploadSession, deleteUploadSession } from "../api";
 import * as utils from "../utils";
 import { UploaderError } from "../errors";
 
@@ -18,13 +18,14 @@ export enum Status {
     finishing,
     finished,
     error,
-    stopped,
+    canceled,
 }
 
 export interface UploadHandlers {
     onTransition: (newStatus: Status) => void;
     onError: (err: Error) => void;
     onProgress: (data: UploadProgress) => void;
+    onMsg: (msg: string, color: string) => void;
 }
 
 export interface UploadProgress {
@@ -71,6 +72,7 @@ export default abstract class Base {
             onTransition: (newStatus: Status) => {},
             onError: (err: Error) => {},
             onProgress: (data: UploadProgress) => {},
+            onMsg: (msg, color: string) => {},
             /* eslint-enable @typescript-eslint/no-empty-function */
         };
     }
@@ -128,7 +130,8 @@ export default abstract class Base {
 
     public cancel = async () => {
         this.cancelToken.cancel();
-        // TODO: delete upload session
+        await this.cancelUploadSession();
+        this.transit(Status.canceled);
     };
 
     protected setError(e: Error) {
@@ -136,11 +139,25 @@ export default abstract class Base {
         this.error = e;
 
         if (!(e instanceof UploaderError && e.Retryable())) {
-            utils.removeResumeCtx(this.task, this.logger);
+            this.logger.warn(
+                "Non-retryable error occurs, clean resume ctx cache"
+            );
+            this.cancelUploadSession();
         }
 
         this.subscriber.onError(e);
     }
+
+    protected cancelUploadSession = async () => {
+        utils.removeResumeCtx(this.task, this.logger);
+        if (this.task.session) {
+            await deleteUploadSession(this.task.session?.sessionID).catch(
+                (e) => {
+                    this.logger.warn("Failed to cancel upload session: ", e);
+                }
+            );
+        }
+    };
 
     protected transit(status: Status) {
         this.status = status;

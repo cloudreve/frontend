@@ -1,8 +1,13 @@
 import { UploadCredential, UploadSessionRequest } from "../types";
 import { requestAPI } from "../utils";
-import { CreateUploadSessionError, LocalChunkUploadError } from "../errors";
+import {
+    CreateUploadSessionError,
+    DeleteUploadSessionError,
+    LocalChunkUploadError,
+} from "../errors";
 import { ChunkInfo } from "../uploader/chunk";
 import { Progress } from "../uploader/base";
+import { CancelToken } from "axios";
 
 export async function createUploadSession(
     req: UploadSessionRequest
@@ -19,10 +24,23 @@ export async function createUploadSession(
     return res.data.data;
 }
 
+export async function deleteUploadSession(id: string): Promise<any> {
+    const res = await requestAPI<UploadCredential>(`file/upload/${id}`, {
+        method: "delete",
+    });
+
+    if (res.data.code !== 0) {
+        throw new DeleteUploadSessionError(res.data);
+    }
+
+    return res.data.data;
+}
+
 export async function loadUploadChunk(
     sessionID: string,
     chunk: ChunkInfo,
-    onProgress: (p: Progress) => void
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
 ): Promise<any> {
     const res = await requestAPI<any>(
         `file/upload/${sessionID}/${chunk.index}`,
@@ -36,6 +54,7 @@ export async function loadUploadChunk(
                     total: progressEvent.total,
                 });
             },
+            cancelToken: cancel,
         }
     );
 

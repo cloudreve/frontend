@@ -1,5 +1,12 @@
-import React, { useMemo } from "react";
-import { Divider, ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import React, { useMemo, useState } from "react";
+import {
+    Divider,
+    IconButton,
+    ListItem,
+    ListItemSecondaryAction,
+    ListItemText,
+    makeStyles,
+} from "@material-ui/core";
 import TypeIcon from "../../FileManager/TypeIcon";
 import { useUpload } from "../UseUpload";
 import { Status } from "../core/uploader/base";
@@ -8,6 +15,7 @@ import { sizeToString } from "../../../utils";
 import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import { useTheme } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -43,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         height: 18,
     },
+    delete: {
+        zIndex: 9,
+    },
 }));
 
 const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
@@ -57,8 +68,9 @@ const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
 export default function UploadTask({ uploader, useAvgSpeed }) {
     const classes = useStyles();
     const theme = useTheme();
-
     const { status, error, progress, speed, speedAvg } = useUpload(uploader);
+    const [loading, setLoading] = useState(false);
+
     const statusText = useMemo(() => {
         let errMsg;
         switch (status) {
@@ -127,6 +139,13 @@ export default function UploadTask({ uploader, useAvgSpeed }) {
         [status, progress, theme]
     );
 
+    const cancel = () => {
+        setLoading(true);
+        uploader.cancel().then(() => {
+            setLoading(false);
+        });
+    };
+
     return (
         <>
             <div className={classes.progressContainer}>
@@ -144,6 +163,15 @@ export default function UploadTask({ uploader, useAvgSpeed }) {
                         secondary={statusText}
                     />
                 </ListItem>
+                <ListItemSecondaryAction className={classes.delete}>
+                    <IconButton
+                        aria-label="Delete"
+                        disabled={loading}
+                        onClick={() => cancel()}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </ListItemSecondaryAction>
             </div>
             <Divider />
         </>
