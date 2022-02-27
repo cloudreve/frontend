@@ -47,7 +47,7 @@ export default function Uploader() {
 
     const selectFile = () => {
         setTaskListOpen(true);
-        return;
+
         // eslint-disable-next-line no-unreachable
         uploadManager
             .select(path)
@@ -63,9 +63,9 @@ export default function Uploader() {
                     );
                 }
             })
-            .then((uploaders) => {
-                console.log(uploaders);
+            .then((tasks) => {
                 setTaskListOpen(true);
+                setUploaders([...uploaders, ...tasks]);
             });
     };
 
@@ -80,7 +80,9 @@ export default function Uploader() {
                         openFileList={() => setTaskListOpen(true)}
                     />
                     <TaskList
+                        taskList={uploaders}
                         open={taskListOpen}
+                        selectFile={selectFile}
                         onClose={() => setTaskListOpen(false)}
                     />
                 </>

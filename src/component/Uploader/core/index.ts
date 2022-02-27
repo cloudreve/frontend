@@ -98,6 +98,7 @@ export default class UploadManager {
                                     policy: this.policy as Policy,
                                     dst: dst,
                                     file: file,
+                                    name: file.name,
                                 })
                         )
                     );

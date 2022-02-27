@@ -15,6 +15,9 @@ export default abstract class Base {
     public child?: Base[];
     public status: Status = Status.added;
 
+    public id = ++Base.id;
+    private static id = 0;
+
     constructor(public task: Task, protected manager: UploadManager) {
         this.manager.logger.info("Initialize new uploader for task: ", task);
         // TODO: file validate

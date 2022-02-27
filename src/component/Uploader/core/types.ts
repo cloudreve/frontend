@@ -18,6 +18,7 @@ export enum TaskType {
 
 export interface Task {
     type: TaskType;
+    name: string;
     policy: Policy;
     dst: string;
     file?: File;
