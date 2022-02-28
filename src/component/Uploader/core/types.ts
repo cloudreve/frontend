@@ -54,4 +54,6 @@ export interface UploadCredential {
     sessionID: string;
     expires: number;
     chunkSize: number;
+    uploadURLs: string[];
+    credential: string;
 }

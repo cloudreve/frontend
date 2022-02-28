@@ -1,9 +1,9 @@
 import Chunk, { ChunkInfo } from "./chunk";
-import { loadUploadChunk } from "../api";
+import { localUploadChunk } from "../api";
 
 export default class Local extends Chunk {
     protected async uploadChunk(chunkInfo: ChunkInfo) {
-        return loadUploadChunk(
+        return localUploadChunk(
             this.task.session?.sessionID!,
             chunkInfo,
             (p) => {

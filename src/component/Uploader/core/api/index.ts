@@ -4,6 +4,7 @@ import {
     CreateUploadSessionError,
     DeleteUploadSessionError,
     LocalChunkUploadError,
+    SlaveChunkUploadError,
 } from "../errors";
 import { ChunkInfo } from "../uploader/chunk";
 import { Progress } from "../uploader/base";
@@ -38,7 +39,7 @@ export async function deleteUploadSession(id: string): Promise<any> {
     return res.data.data;
 }
 
-export async function loadUploadChunk(
+export async function localUploadChunk(
     sessionID: string,
     chunk: ChunkInfo,
     onProgress: (p: Progress) => void,
@@ -62,6 +63,37 @@ export async function loadUploadChunk(
 
     if (res.data.code !== 0) {
         throw new LocalChunkUploadError(res.data, chunk.index);
+    }
+
+    return res.data.data;
+}
+
+export async function slaveUploadChunk(
+    url: string,
+    credential: string,
+    chunk: ChunkInfo,
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
+): Promise<any> {
+    const res = await requestAPI<any>(`${url}?chunk=${chunk.index}`, {
+        method: "post",
+        headers: {
+            "content-type": "application/octet-stream",
+            Authorization: credential,
+        },
+        data: chunk.chunk,
+        onUploadProgress: (progressEvent) => {
+            onProgress({
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+            });
+        },
+        cancelToken: cancel,
+        withCredentials: false,
+    });
+
+    if (res.data.code !== 0) {
+        throw new SlaveChunkUploadError(res.data, chunk.index);
     }
 
     return res.data.data;

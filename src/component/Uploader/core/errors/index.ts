@@ -9,6 +9,7 @@ export enum UploaderErrorName {
     FailedDeleteUploadSession = "FailedDeleteUploadSession",
     HTTPRequestFailed = "HTTPRequestFailed",
     LocalChunkUploadFailed = "LocalChunkUploadFailed",
+    SlaveChunkUploadFailed = "SlaveChunkUploadFailed",
     WriteCtxFailed = "WriteCtxFailed",
     RemoveCtxFailed = "RemoveCtxFailed",
     ReadCtxFailed = "ReadCtxFailed",
@@ -21,6 +22,7 @@ const RETRY_ERROR_LIST = [
     UploaderErrorName.FailedCreateUploadSession,
     UploaderErrorName.HTTPRequestFailed,
     UploaderErrorName.LocalChunkUploadFailed,
+    UploaderErrorName.SlaveChunkUploadFailed,
     UploaderErrorName.RequestCanceled,
 ];
 
@@ -142,7 +144,7 @@ export class HTTPError extends UploaderError {
     }
 }
 
-// 无法创建上传会话
+// 本地分块上传失败
 export class LocalChunkUploadError extends APIError {
     constructor(response: Response<any>, protected chunkIndex: number) {
         super(UploaderErrorName.LocalChunkUploadFailed, "", response);
@@ -158,5 +160,17 @@ export class LocalChunkUploadError extends APIError {
 export class RequestCanceledError extends UploaderError {
     constructor() {
         super(UploaderErrorName.RequestCanceled, "Request canceled");
+    }
+}
+
+// 从机分块上传失败
+export class SlaveChunkUploadError extends APIError {
+    constructor(response: Response<any>, protected chunkIndex: number) {
+        super(UploaderErrorName.SlaveChunkUploadFailed, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = `分片 [${this.chunkIndex}] 上传失败`;
+        return super.Message(i18n);
     }
 }
