@@ -16,6 +16,7 @@ export enum UploaderErrorName {
     InvalidCtxData = "InvalidCtxData",
     CtxExpired = "CtxExpired",
     RequestCanceled = "RequestCanceled",
+    ProcessingTaskDuplicated = "ProcessingTaskDuplicated",
 }
 
 const RETRY_ERROR_LIST = [
@@ -24,6 +25,7 @@ const RETRY_ERROR_LIST = [
     UploaderErrorName.LocalChunkUploadFailed,
     UploaderErrorName.SlaveChunkUploadFailed,
     UploaderErrorName.RequestCanceled,
+    UploaderErrorName.ProcessingTaskDuplicated,
 ];
 
 const RETRY_CODE_LIST = [-1];
@@ -172,5 +174,19 @@ export class SlaveChunkUploadError extends APIError {
     public Message(i18n: string): string {
         this.message = `分片 [${this.chunkIndex}] 上传失败`;
         return super.Message(i18n);
+    }
+}
+
+// 上传任务冲突
+export class ProcessingTaskDuplicatedError extends UploaderError {
+    constructor() {
+        super(
+            UploaderErrorName.ProcessingTaskDuplicated,
+            "Processing task duplicated"
+        );
+    }
+
+    public Message(i18n: string): string {
+        return "同名文件的上传任务已经在处理中";
     }
 }

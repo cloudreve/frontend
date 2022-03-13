@@ -1,4 +1,5 @@
 import Base from "../uploader/base";
+import { ProcessingTaskDuplicatedError } from "../errors";
 
 export interface QueueContent {
     uploader: Base;
@@ -30,6 +31,19 @@ export class Pool {
 
     run(item: QueueContent) {
         this.queue = this.queue.filter((v) => v !== item);
+        if (
+            this.processing.findIndex(
+                (v) =>
+                    v.uploader.task.dst == item.uploader.task.dst &&
+                    v.uploader.task.file.name == item.uploader.task.name
+            ) > -1
+        ) {
+            // 找到重名任务
+            item.reject(new ProcessingTaskDuplicatedError());
+            this.release(item);
+            return;
+        }
+
         this.processing.push(item);
         item.uploader.run().then(
             () => {
