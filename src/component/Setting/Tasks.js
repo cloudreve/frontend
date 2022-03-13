@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
@@ -81,7 +81,7 @@ export default function Tasks() {
         }
         try {
             const res = JSON.parse(error);
-            return res.msg;
+            return `${res.msg}: ${res.error}`;
         } catch (e) {
             return "未知";
         }
