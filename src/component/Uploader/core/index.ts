@@ -11,6 +11,7 @@ import OSS from "./uploader/oss";
 import Qiniu from "./uploader/qiniu";
 import COS from "./uploader/cos";
 import Upyun from "./uploader/upyun";
+import S3 from "./uploader/s3";
 
 export interface Option {
     logLevel: LogLevel;
@@ -63,6 +64,8 @@ export default class UploadManager {
                 return new COS(task, this);
             case PolicyType.upyun:
                 return new Upyun(task, this);
+            case PolicyType.s3:
+                return new S3(task, this);
             default:
                 throw new UnknownPolicyError(
                     "Unknown policy type.",

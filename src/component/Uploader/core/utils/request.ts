@@ -1,12 +1,24 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { Response } from "../types";
-import { HTTPError, RequestCanceledError } from "../errors";
+import {
+    HTTPError,
+    RequestCanceledError,
+    TransformResponseError,
+} from "../errors";
 
 export const { CancelToken } = axios;
 export { CancelTokenSource } from "axios";
 
 const baseConfig = {
-    transformResponse: [(response: any) => JSON.parse(response)],
+    transformResponse: [
+        (response: any) => {
+            try {
+                return JSON.parse(response);
+            } catch (e) {
+                throw new TransformResponseError(response, e);
+            }
+        },
+    ],
 };
 
 const cdBackendConfig = {
@@ -21,6 +33,10 @@ export function request<T = any>(url: string, config?: AxiosRequestConfig) {
         .catch((err) => {
             if (axios.isCancel(err)) {
                 throw new RequestCanceledError();
+            }
+
+            if (err instanceof TransformResponseError) {
+                throw err;
             }
 
             throw new HTTPError(err, url);

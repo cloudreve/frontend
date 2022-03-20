@@ -57,6 +57,11 @@ export default function EditPro(props) {
         policyCopy.IsOriginLinkEnable =
             policyCopy.IsOriginLinkEnable === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
+        policyCopy.OptionsSerialized.chunk_size = parseInt(
+            policyCopy.OptionsSerialized.chunk_size
+        );
+        policyCopy.OptionsSerialized.placeholder_with_size =
+            policyCopy.OptionsSerialized.placeholder_with_size === "true";
         policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
             ","
         );
@@ -530,6 +535,70 @@ export default function EditPro(props) {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>仅对 OSS 存储策略有效</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    上传分片大小 (Bytes)
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            type={"number"}
+                                            inputProps={{
+                                                min: 0,
+                                                step: 1,
+                                            }}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .chunk_size
+                                            }
+                                            onChange={handleOptionChange(
+                                                "chunk_size"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    分片上传时单个分片的大小，填写为0表示不分片
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    上传前预支用户存储
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <RadioGroup
+                                            required
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .placeholder_with_size
+                                            }
+                                            onChange={handleOptionChange(
+                                                "placeholder_with_size"
+                                            )}
+                                            row
+                                        >
+                                            <FormControlLabel
+                                                value={"true"}
+                                                control={
+                                                    <Radio color={"primary"} />
+                                                }
+                                                label="是"
+                                            />
+                                            <FormControlLabel
+                                                value={"false"}
+                                                control={
+                                                    <Radio color={"primary"} />
+                                                }
+                                                label="否"
+                                            />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    是否在上传会话创建时就对用户存储进行预支。
+                                </TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

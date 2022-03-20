@@ -31,8 +31,6 @@ export default abstract class Chunk extends Base {
                 this.updateLocalCache();
             }
         }
-
-        utils.removeResumeCtx(this.task, this.logger);
     };
 
     private initBeforeUploadChunks() {

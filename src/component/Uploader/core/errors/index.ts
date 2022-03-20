@@ -26,12 +26,14 @@ export enum UploaderErrorName {
     OneDriveChunkUploadFailed = "OneDriveChunkUploadFailed",
     OneDriveEmptyFile = "OneDriveEmptyFile",
     FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
-    OSSChunkUploadFailed = "OSSChunkUploadFailed",
+    S3LikeChunkUploadFailed = "S3LikeChunkUploadFailed",
+    S3LikeUploadCallbackFailed = "S3LikeUploadCallbackFailed",
     COSPostUploadFailed = "COSPostUploadFailed",
     UpyunPostUploadFailed = "UpyunPostUploadFailed",
     QiniuChunkUploadFailed = "QiniuChunkUploadFailed",
     FailedFinishOSSUpload = "FailedFinishOSSUpload",
     FailedFinishQiniuUpload = "FailedFinishQiniuUpload",
+    FailedTransformResponse = "FailedTransformResponse",
 }
 
 const RETRY_ERROR_LIST = [
@@ -41,6 +43,7 @@ const RETRY_ERROR_LIST = [
     UploaderErrorName.SlaveChunkUploadFailed,
     UploaderErrorName.RequestCanceled,
     UploaderErrorName.ProcessingTaskDuplicated,
+    UploaderErrorName.FailedTransformResponse,
 ];
 
 const RETRY_CODE_LIST = [-1];
@@ -245,11 +248,11 @@ export class OneDriveFinishUploadError extends APIError {
     }
 }
 
-// OSS 分块上传失败
-export class OSSChunkError extends UploaderError {
+// S3 类策略分块上传失败
+export class S3LikeChunkError extends UploaderError {
     constructor(public response: Document) {
         super(
-            UploaderErrorName.OSSChunkUploadFailed,
+            UploaderErrorName.S3LikeChunkUploadFailed,
             response.getElementsByTagName("Message")[0].innerHTML
         );
     }
@@ -260,10 +263,10 @@ export class OSSChunkError extends UploaderError {
 }
 
 // OSS 完成传失败
-export class OSSFinishUploadError extends UploaderError {
+export class S3LikeFinishUploadError extends UploaderError {
     constructor(public response: Document) {
         super(
-            UploaderErrorName.OSSChunkUploadFailed,
+            UploaderErrorName.S3LikeChunkUploadFailed,
             response.getElementsByTagName("Message")[0].innerHTML
         );
     }
@@ -321,5 +324,28 @@ export class UpyunUploadError extends UploaderError {
 
     public Message(i18n: string): string {
         return `上传失败: ${this.message}`;
+    }
+}
+
+// S3 无法完成上传回调
+export class S3LikeUploadCallbackError extends APIError {
+    constructor(response: Response<any>) {
+        super(UploaderErrorName.S3LikeUploadCallbackFailed, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = `无法完成文件上传`;
+        return super.Message(i18n);
+    }
+}
+
+// 无法解析响应
+export class TransformResponseError extends UploaderError {
+    constructor(private response: string, parseError: Error) {
+        super(UploaderErrorName.FailedTransformResponse, parseError.message);
+    }
+
+    public Message(i18n: string): string {
+        return `无法解析响应: ${this.message} (${this.response})`;
     }
 }

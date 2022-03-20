@@ -65,6 +65,7 @@ export interface UploadCredential {
     ak: string;
     keyTime: string;
     path: string;
+    completeURL: string;
 }
 
 export interface OneDriveError {
@@ -103,4 +104,9 @@ export interface QiniuFinishUploadRequest {
 export interface UpyunError {
     message: string;
     code: number;
+}
+
+export interface S3Part {
+    ETag: string;
+    PartNumber: number;
 }

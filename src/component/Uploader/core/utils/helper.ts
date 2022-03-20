@@ -142,3 +142,25 @@ export function getResumeCtx(task: Task, logger: Logger): Task | null {
 
     return localInfo;
 }
+
+export function OBJtoXML(obj: any): string {
+    let xml = "";
+    for (const prop in obj) {
+        xml += "<" + prop + ">";
+        if (Array.isArray(obj[prop])) {
+            for (const array of obj[prop]) {
+                // A real botch fix here
+                xml += "</" + prop + ">";
+                xml += "<" + prop + ">";
+
+                xml += OBJtoXML(new Object(array));
+            }
+        } else if (typeof obj[prop] == "object") {
+            xml += OBJtoXML(new Object(obj[prop]));
+        } else {
+            xml += obj[prop];
+        }
+        xml += "</" + prop + ">";
+    }
+    return xml.replace(/<\/?[0-9]{1,}>/g, "");
+}

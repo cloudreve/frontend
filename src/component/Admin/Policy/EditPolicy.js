@@ -53,7 +53,15 @@ export default function EditPolicyPreload() {
                     ? "true"
                     : "false";
                 response.data.MaxSize = response.data.MaxSize.toString();
+                response.data.OptionsSerialized.chunk_size = response.data
+                    .OptionsSerialized.chunk_size
+                    ? response.data.OptionsSerialized.chunk_size.toString()
+                    : 0;
                 response.data.IsPrivate = response.data.IsPrivate
+                    ? "true"
+                    : "false";
+                response.data.OptionsSerialized.placeholder_with_size = response
+                    .data.OptionsSerialized.placeholder_with_size
                     ? "true"
                     : "false";
                 response.data.OptionsSerialized.file_type = response.data

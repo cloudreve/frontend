@@ -3,10 +3,11 @@ import {
     QiniuChunkResponse,
     QiniuFinishUploadRequest,
     QiniuPartsInfo,
+    S3Part,
     UploadCredential,
     UploadSessionRequest,
 } from "../types";
-import { request, requestAPI } from "../utils";
+import { OBJtoXML, request, requestAPI } from "../utils";
 import {
     COSUploadError,
     CreateUploadSessionError,
@@ -15,10 +16,11 @@ import {
     LocalChunkUploadError,
     OneDriveChunkError,
     OneDriveFinishUploadError,
-    OSSChunkError,
-    OSSFinishUploadError,
     QiniuChunkError,
     QiniuFinishUploadError,
+    S3LikeChunkError,
+    S3LikeFinishUploadError,
+    S3LikeUploadCallbackError,
     SlaveChunkUploadError,
     UpyunUploadError,
 } from "../errors";
@@ -36,7 +38,7 @@ export async function createUploadSession(
         cancelToken: cancel,
     });
 
-    if (res.data.code !== 0) {
+    if (res.data.code > 0) {
         throw new CreateUploadSessionError(res.data);
     }
 
@@ -48,7 +50,7 @@ export async function deleteUploadSession(id: string): Promise<any> {
         method: "delete",
     });
 
-    if (res.data.code !== 0) {
+    if (res.data.code > 0) {
         throw new DeleteUploadSessionError(res.data);
     }
 
@@ -77,7 +79,7 @@ export async function localUploadChunk(
         }
     );
 
-    if (res.data.code !== 0) {
+    if (res.data.code > 0) {
         throw new LocalChunkUploadError(res.data, chunk.index);
     }
 
@@ -107,7 +109,7 @@ export async function slaveUploadChunk(
         cancelToken: cancel,
     });
 
-    if (res.data.code !== 0) {
+    if (res.data.code > 0) {
         throw new SlaveChunkUploadError(res.data, chunk.index);
     }
 
@@ -159,20 +161,20 @@ export async function finishOneDriveUpload(
         }
     );
 
-    if (res.data.code !== 0) {
+    if (res.data.code > 0) {
         throw new OneDriveFinishUploadError(res.data);
     }
 
     return res.data.data;
 }
 
-export async function ossDriveUploadChunk(
+export async function s3LikeUploadChunk(
     url: string,
     chunk: ChunkInfo,
     onProgress: (p: Progress) => void,
     cancel: CancelToken
-): Promise<any> {
-    const res = await request<any>(url, {
+): Promise<string> {
+    const res = await request<string>(url, {
         method: "put",
         headers: {
             "content-type": "application/octet-stream",
@@ -189,35 +191,57 @@ export async function ossDriveUploadChunk(
         transformResponse: undefined,
     }).catch((e) => {
         if (e instanceof HTTPError && e.response) {
-            throw new OSSChunkError(e.response.data);
+            throw new S3LikeChunkError(e.response.data);
         }
 
         throw e;
     });
 
-    return res.data;
+    return res.headers.etag;
 }
 
-export async function ossFinishUpload(
+export async function s3LikeFinishUpload(
     url: string,
+    isOss: boolean,
+    chunks: ChunkProgress[],
     cancel: CancelToken
 ): Promise<any> {
+    let body = "";
+    if (!isOss) {
+        body += "<CompleteMultipartUpload>";
+        chunks.forEach((chunk) => {
+            body += "<Part>";
+            const part: S3Part = {
+                PartNumber: chunk.index + 1,
+                ETag: chunk.etag!,
+            };
+            body += OBJtoXML(part);
+            body += "</Part>";
+        });
+        body += "</CompleteMultipartUpload>";
+    }
+
     const res = await request<any>(url, {
         method: "post",
         cancelToken: cancel,
         responseType: "document",
         transformResponse: undefined,
-        headers: {
-            "content-type": "application/octet-stream",
-            "x-oss-forbid-overwrite": "true",
-            "x-oss-complete-all": "yes",
-        },
+        data: body,
+        headers: isOss
+            ? {
+                  "content-type": "application/octet-stream",
+                  "x-oss-forbid-overwrite": "true",
+                  "x-oss-complete-all": "yes",
+              }
+            : {
+                  "content-type": "application/xhtml+xml",
+              },
         validateStatus: function (status) {
             return status == 200;
         },
     }).catch((e) => {
         if (e instanceof HTTPError && e.response) {
-            throw new OSSFinishUploadError(e.response.data);
+            throw new S3LikeFinishUploadError(e.response.data);
         }
 
         throw e;
@@ -382,4 +406,21 @@ export async function upyunFormUploadChunk(
     });
 
     return res.data;
+}
+
+export async function s3LikeUploadCallback(
+    sessionID: string,
+    cancel: CancelToken
+): Promise<any> {
+    const res = await requestAPI<any>(`callback/s3/${sessionID}`, {
+        method: "get",
+        data: "{}",
+        cancelToken: cancel,
+    });
+
+    if (res.data.code > 0) {
+        throw new S3LikeUploadCallbackError(res.data);
+    }
+
+    return res.data.data;
 }

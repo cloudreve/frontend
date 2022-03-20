@@ -51,6 +51,7 @@ const resumePolicy = [
     PolicyType.qiniu,
     PolicyType.oss,
     PolicyType.onedrive,
+    PolicyType.s3,
 ];
 const deleteUploadSessionDelay = 500;
 
@@ -136,6 +137,7 @@ export default abstract class Base {
         this.transit(Status.processing);
         await this.upload();
         await this.afterUpload();
+        utils.removeResumeCtx(this.task, this.logger);
         this.transit(Status.finished);
         this.logger.info("Upload task completed");
     };
