@@ -11,6 +11,8 @@ import {
     LocalChunkUploadError,
     OneDriveChunkError,
     OneDriveFinishUploadError,
+    OSSChunkError,
+    OSSFinishUploadError,
     SlaveChunkUploadError,
 } from "../errors";
 import { ChunkInfo } from "../uploader/chunk";
@@ -155,4 +157,64 @@ export async function finishOneDriveUpload(
     }
 
     return res.data.data;
+}
+
+export async function ossDriveUploadChunk(
+    url: string,
+    chunk: ChunkInfo,
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
+): Promise<any> {
+    const res = await request<any>(url, {
+        method: "put",
+        headers: {
+            "content-type": "application/octet-stream",
+        },
+        data: chunk.chunk,
+        onUploadProgress: (progressEvent) => {
+            onProgress({
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+            });
+        },
+        cancelToken: cancel,
+        responseType: "document",
+        transformResponse: undefined,
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new OSSChunkError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data;
+}
+
+export async function ossFinishUpload(
+    url: string,
+    cancel: CancelToken
+): Promise<any> {
+    const res = await request<any>(url, {
+        method: "post",
+        cancelToken: cancel,
+        responseType: "document",
+        transformResponse: undefined,
+        headers: {
+            "content-type": "application/octet-stream",
+            "x-oss-forbid-overwrite": "true",
+            "x-oss-complete-all": "yes",
+        },
+        validateStatus: function (status) {
+            return status == 200;
+        },
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new OSSFinishUploadError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data;
 }

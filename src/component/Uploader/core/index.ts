@@ -7,6 +7,7 @@ import { Pool } from "./utils/pool";
 import { cleanupResumeCtx } from "./utils";
 import Remote from "./uploader/remote";
 import OneDrive from "./uploader/onedrive";
+import OSS from "./uploader/oss";
 
 export interface Option {
     logLevel: LogLevel;
@@ -51,6 +52,8 @@ export default class UploadManager {
                 return new Remote(task, this);
             case PolicyType.onedrive:
                 return new OneDrive(task, this);
+            case PolicyType.oss:
+                return new OSS(task, this);
             default:
                 throw new UnknownPolicyError(
                     "Unknown policy type.",

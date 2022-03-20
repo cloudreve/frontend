@@ -20,6 +20,8 @@ export enum UploaderErrorName {
     OneDriveChunkUploadFailed = "OneDriveChunkUploadFailed",
     OneDriveEmptyFile = "OneDriveEmptyFile",
     FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
+    OSSChunkUploadFailed = "OSSChunkUploadFailed",
+    FailedFinishOSSUpload = "FailedFinishOSSUpload",
 }
 
 const RETRY_ERROR_LIST = [
@@ -230,5 +232,33 @@ export class OneDriveFinishUploadError extends APIError {
     public Message(i18n: string): string {
         this.message = `无法完成文件上传`;
         return super.Message(i18n);
+    }
+}
+
+// OSS 分块上传失败
+export class OSSChunkError extends UploaderError {
+    constructor(public response: Document) {
+        super(
+            UploaderErrorName.OSSChunkUploadFailed,
+            response.getElementsByTagName("Message")[0].innerHTML
+        );
+    }
+
+    public Message(i18n: string): string {
+        return `分片上传失败: ${this.message}`;
+    }
+}
+
+// OSS 完成传失败
+export class OSSFinishUploadError extends UploaderError {
+    constructor(public response: Document) {
+        super(
+            UploaderErrorName.OSSChunkUploadFailed,
+            response.getElementsByTagName("Message")[0].innerHTML
+        );
+    }
+
+    public Message(i18n: string): string {
+        return `无法完成文件上传: ${this.message}`;
     }
 }

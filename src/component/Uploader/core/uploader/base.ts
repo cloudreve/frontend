@@ -136,6 +136,8 @@ export default abstract class Base {
         this.transit(Status.processing);
         await this.upload();
         await this.afterUpload();
+        this.transit(Status.finished);
+        this.logger.info("Upload task completed");
     };
 
     public abstract async upload(): Promise<any>;

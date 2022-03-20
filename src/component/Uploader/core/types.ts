@@ -56,6 +56,8 @@ export interface UploadCredential {
     chunkSize: number;
     uploadURLs: string[];
     credential: string;
+    uploadID: string;
+    callback: string;
 }
 
 export interface OneDriveError {
