@@ -9,6 +9,7 @@ import Remote from "./uploader/remote";
 import OneDrive from "./uploader/onedrive";
 import OSS from "./uploader/oss";
 import Qiniu from "./uploader/qiniu";
+import COS from "./uploader/cos";
 
 export interface Option {
     logLevel: LogLevel;
@@ -57,6 +58,8 @@ export default class UploadManager {
                 return new OSS(task, this);
             case PolicyType.qiniu:
                 return new Qiniu(task, this);
+            case PolicyType.cos:
+                return new COS(task, this);
             default:
                 throw new UnknownPolicyError(
                     "Unknown policy type.",

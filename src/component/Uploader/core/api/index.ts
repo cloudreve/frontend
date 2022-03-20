@@ -8,6 +8,7 @@ import {
 } from "../types";
 import { request, requestAPI } from "../utils";
 import {
+    COSUploadError,
     CreateUploadSessionError,
     DeleteUploadSessionError,
     HTTPError,
@@ -284,6 +285,58 @@ export async function qiniuFinishUpload(
     }).catch((e) => {
         if (e instanceof HTTPError && e.response) {
             throw new QiniuFinishUploadError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data;
+}
+
+export async function cosFormUploadChunk(
+    url: string,
+    file: File,
+    policy: string,
+    path: string,
+    callback: string,
+    sessionID: string,
+    keyTime: string,
+    credential: string,
+    ak: string,
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
+): Promise<any> {
+    const bodyFormData = new FormData();
+    bodyFormData.append("policy", policy);
+    bodyFormData.append("key", path);
+    bodyFormData.append("x-cos-meta-callback", callback);
+    bodyFormData.append("x-cos-meta-key", sessionID);
+    bodyFormData.append("q-sign-algorithm", "sha1");
+    bodyFormData.append("q-key-time", keyTime);
+    bodyFormData.append("q-ak", ak);
+    bodyFormData.append("q-signature", credential);
+    bodyFormData.append("name", file.name);
+    // File must be the last element in the form
+    bodyFormData.append("file", file);
+
+    const res = await request<any>(`${url}`, {
+        method: "post",
+        headers: {
+            "content-type": "multipart/form-data",
+        },
+        data: bodyFormData,
+        onUploadProgress: (progressEvent) => {
+            onProgress({
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+            });
+        },
+        cancelToken: cancel,
+        responseType: "document",
+        transformResponse: undefined,
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new COSUploadError(e.response.data);
         }
 
         throw e;

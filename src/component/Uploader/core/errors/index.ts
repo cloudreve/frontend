@@ -21,6 +21,7 @@ export enum UploaderErrorName {
     OneDriveEmptyFile = "OneDriveEmptyFile",
     FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
     OSSChunkUploadFailed = "OSSChunkUploadFailed",
+    COSPostUploadFailed = "COSPostUploadFailed",
     QiniuChunkUploadFailed = "QiniuChunkUploadFailed",
     FailedFinishOSSUpload = "FailedFinishOSSUpload",
     FailedFinishQiniuUpload = "FailedFinishQiniuUpload",
@@ -286,5 +287,21 @@ export class QiniuFinishUploadError extends UploaderError {
 
     public Message(i18n: string): string {
         return `无法完成文件上传: ${this.message}`;
+    }
+}
+
+// COS 上传失败
+export class COSUploadError extends UploaderError {
+    constructor(public response: Document) {
+        super(
+            UploaderErrorName.COSPostUploadFailed,
+            response.getElementsByTagName("Message")[0].innerHTML
+        );
+    }
+
+    public Message(i18n: string): string {
+        return `上传失败: ${this.message} (${
+            this.response.getElementsByTagName("Code")[0].innerHTML
+        })`;
     }
 }

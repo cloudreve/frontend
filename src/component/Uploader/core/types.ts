@@ -6,6 +6,9 @@ export enum PolicyType {
     oss = "oss",
     qiniu = "qiniu",
     onedrive = "onedrive",
+    cos = "cos",
+    upyun = "upyun",
+    s3 = "s3",
 }
 
 export interface Policy {
@@ -58,6 +61,10 @@ export interface UploadCredential {
     credential: string;
     uploadID: string;
     callback: string;
+    policy: string;
+    ak: string;
+    keyTime: string;
+    path: string;
 }
 
 export interface OneDriveError {
