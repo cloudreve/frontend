@@ -1,4 +1,4 @@
-import { Policy, Response } from "../types";
+import { OneDriveError, Policy, Response } from "../types";
 import { sizeToString } from "../utils";
 
 export enum UploaderErrorName {
@@ -17,6 +17,9 @@ export enum UploaderErrorName {
     CtxExpired = "CtxExpired",
     RequestCanceled = "RequestCanceled",
     ProcessingTaskDuplicated = "ProcessingTaskDuplicated",
+    OneDriveChunkUploadFailed = "OneDriveChunkUploadFailed",
+    OneDriveEmptyFile = "OneDriveEmptyFile",
+    FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
 }
 
 const RETRY_ERROR_LIST = [
@@ -137,8 +140,10 @@ export class DeleteUploadSessionError extends APIError {
 
 // HTTP 请求出错
 export class HTTPError extends UploaderError {
-    constructor(protected axiosErr: Error, protected url: string) {
+    public response?: any;
+    constructor(public axiosErr: any, protected url: string) {
         super(UploaderErrorName.HTTPRequestFailed, axiosErr.message);
+        this.response = axiosErr.response;
     }
 
     public Message(i18n: string): string {
@@ -188,5 +193,42 @@ export class ProcessingTaskDuplicatedError extends UploaderError {
 
     public Message(i18n: string): string {
         return "同名文件的上传任务已经在处理中";
+    }
+}
+
+// OneDrive 分块上传失败
+export class OneDriveChunkError extends UploaderError {
+    constructor(public response: OneDriveError) {
+        super(
+            UploaderErrorName.OneDriveChunkUploadFailed,
+            response.error.message
+        );
+    }
+
+    public Message(i18n: string): string {
+        return `分片上传失败: ${this.message}`;
+    }
+}
+
+// OneDrive 选择了空文件上传
+export class OneDriveEmptyFileSelected extends UploaderError {
+    constructor() {
+        super(UploaderErrorName.OneDriveEmptyFile, "empty file not supported");
+    }
+
+    public Message(i18n: string): string {
+        return `暂不支持上传空文件至 OneDrive，请通过创建文件按钮创建空文件`;
+    }
+}
+
+// OneDrive 无法完成文件上传
+export class OneDriveFinishUploadError extends APIError {
+    constructor(response: Response<any>) {
+        super(UploaderErrorName.FailedFinishOneDriveUpload, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = `无法完成文件上传`;
+        return super.Message(i18n);
     }
 }

@@ -1,9 +1,16 @@
-import { UploadCredential, UploadSessionRequest } from "../types";
-import { requestAPI } from "../utils";
+import {
+    OneDriveChunkResponse,
+    UploadCredential,
+    UploadSessionRequest,
+} from "../types";
+import { request, requestAPI } from "../utils";
 import {
     CreateUploadSessionError,
     DeleteUploadSessionError,
+    HTTPError,
     LocalChunkUploadError,
+    OneDriveChunkError,
+    OneDriveFinishUploadError,
     SlaveChunkUploadError,
 } from "../errors";
 import { ChunkInfo } from "../uploader/chunk";
@@ -75,7 +82,7 @@ export async function slaveUploadChunk(
     onProgress: (p: Progress) => void,
     cancel: CancelToken
 ): Promise<any> {
-    const res = await requestAPI<any>(`${url}?chunk=${chunk.index}`, {
+    const res = await request<any>(`${url}?chunk=${chunk.index}`, {
         method: "post",
         headers: {
             "content-type": "application/octet-stream",
@@ -89,11 +96,62 @@ export async function slaveUploadChunk(
             });
         },
         cancelToken: cancel,
-        withCredentials: false,
     });
 
     if (res.data.code !== 0) {
         throw new SlaveChunkUploadError(res.data, chunk.index);
+    }
+
+    return res.data.data;
+}
+
+export async function oneDriveUploadChunk(
+    url: string,
+    range: string,
+    chunk: ChunkInfo,
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
+): Promise<OneDriveChunkResponse> {
+    const res = await request<OneDriveChunkResponse>(url, {
+        method: "put",
+        headers: {
+            "content-type": "application/octet-stream",
+            "content-range": range,
+        },
+        data: chunk.chunk,
+        onUploadProgress: (progressEvent) => {
+            onProgress({
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+            });
+        },
+        cancelToken: cancel,
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new OneDriveChunkError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data.data;
+}
+
+export async function finishOneDriveUpload(
+    sessionID: string,
+    cancel: CancelToken
+): Promise<UploadCredential> {
+    const res = await requestAPI<UploadCredential>(
+        `callback/onedrive/finish/${sessionID}`,
+        {
+            method: "post",
+            data: "{}",
+            cancelToken: cancel,
+        }
+    );
+
+    if (res.data.code !== 0) {
+        throw new OneDriveFinishUploadError(res.data);
     }
 
     return res.data.data;

@@ -57,3 +57,18 @@ export interface UploadCredential {
     uploadURLs: string[];
     credential: string;
 }
+
+export interface OneDriveError {
+    error: {
+        code: string;
+        message: string;
+        innererror?: {
+            code: string;
+        };
+    };
+}
+
+export interface OneDriveChunkResponse {
+    expirationDateTime: string;
+    nextExpectedRanges: string[];
+}

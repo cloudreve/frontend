@@ -135,9 +135,13 @@ export default abstract class Base {
 
         this.transit(Status.processing);
         await this.upload();
+        await this.afterUpload();
     };
 
     public abstract async upload(): Promise<any>;
+    protected async afterUpload(): Promise<any> {
+        return;
+    }
 
     public cancel = async () => {
         this.cancelToken.cancel();
