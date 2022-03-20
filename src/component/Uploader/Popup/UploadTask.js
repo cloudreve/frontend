@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     Divider,
     IconButton,
@@ -12,13 +12,16 @@ import TypeIcon from "../../FileManager/TypeIcon";
 import { useUpload } from "../UseUpload";
 import { Status } from "../core/uploader/base";
 import { UploaderError } from "../core/errors";
-import { sizeToString } from "../../../utils";
+import { filename, sizeToString } from "../../../utils";
 import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import { useTheme } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { navigateTo } from "../../../actions";
+import { useDispatch } from "react-redux";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -62,6 +65,10 @@ const useStyles = makeStyles((theme) => ({
     delete: {
         zIndex: 9,
     },
+    dstLink: {
+        color: theme.palette.success.main,
+        fontWeight: 600,
+    },
     fileNameContainer: {
         display: "flex",
         alignItems: "center",
@@ -77,7 +84,12 @@ const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
     return `${sizeToString(displayedSpeed ? displayedSpeed : 0)} /s`;
 };
 
-export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
+export default function UploadTask({
+    uploader,
+    useAvgSpeed,
+    onCancel,
+    onClose,
+}) {
     const classes = useStyles();
     const theme = useTheme();
     const { status, error, progress, speed, speedAvg, retry } = useUpload(
@@ -85,9 +97,16 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
     );
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const NavigateTo = useCallback((k) => dispatch(navigateTo(k)), [dispatch]);
+    const navigateToDst = (path) => {
+        onClose(null, "backdropClick");
+        NavigateTo(path);
+    };
 
     const statusText = useMemo(() => {
         let errMsg;
+        const parent = filename(uploader.task.dst);
         switch (status) {
             case Status.preparing:
                 return <div>准备中...</div>;
@@ -103,6 +122,8 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
                         <br />
                     </div>
                 );
+            case Status.finishing:
+                return <div>处理中...</div>;
             case Status.processing:
                 if (progress) {
                     return (
@@ -120,6 +141,22 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
                     );
                 }
                 break;
+            case Status.finished:
+                return (
+                    <div className={classes.successStatus}>
+                        已上传至{" "}
+                        <Tooltip title={uploader.task.dst}>
+                            <Link
+                                className={classes.dstLink}
+                                href={"javascript:void"}
+                                onClick={() => navigateToDst(uploader.task.dst)}
+                            >
+                                {parent === "" ? "根目录" : parent}
+                            </Link>
+                        </Tooltip>
+                        <br />
+                    </div>
+                );
             default:
                 return <div>未知</div>;
         }
@@ -139,7 +176,8 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
 
     const progressBar = useMemo(
         () =>
-            status === Status.processing && progress ? (
+            (status === Status.processing || status === Status.finishing) &&
+            progress ? (
                 <div
                     style={{
                         backgroundColor:
@@ -174,7 +212,11 @@ export default function UploadTask({ uploader, useAvgSpeed, onCancel }) {
         }
 
         return (
-            <Tooltip title={"取消并删除"}>
+            <Tooltip
+                title={
+                    status === Status.finished ? "删除任务记录" : "取消并删除"
+                }
+            >
                 <IconButton
                     aria-label="Delete"
                     disabled={loading}

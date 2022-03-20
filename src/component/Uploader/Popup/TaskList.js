@@ -196,6 +196,7 @@ export default function TaskList({
                             <List className={classes.paddingZero}>
                                 {taskList.map((uploader) => (
                                     <UploadTask
+                                        onClose={close}
                                         onCancel={onCancel}
                                         key={uploader.id}
                                         useAvgSpeed={useAvgSpeed}

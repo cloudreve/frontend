@@ -146,6 +146,10 @@ export default abstract class Base {
     }
 
     public cancel = async () => {
+        if (this.status === Status.finished) {
+            return;
+        }
+
         this.cancelToken.cancel();
         await this.cancelUploadSession();
         this.transit(Status.canceled);
