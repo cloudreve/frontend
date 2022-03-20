@@ -4,6 +4,7 @@ import * as utils from "../utils";
 export interface ChunkProgress {
     loaded: number;
     index: number;
+    etag?: string;
 }
 
 export interface ChunkInfo {

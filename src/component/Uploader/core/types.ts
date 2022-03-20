@@ -74,3 +74,21 @@ export interface OneDriveChunkResponse {
     expirationDateTime: string;
     nextExpectedRanges: string[];
 }
+
+export interface QiniuChunkResponse {
+    etag: string;
+    md5: string;
+}
+
+export interface QiniuError {
+    error: string;
+}
+
+export interface QiniuPartsInfo {
+    etag: string;
+    partNumber: number;
+}
+
+export interface QiniuFinishUploadRequest {
+    parts: QiniuPartsInfo[];
+}

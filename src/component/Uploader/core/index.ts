@@ -8,6 +8,7 @@ import { cleanupResumeCtx } from "./utils";
 import Remote from "./uploader/remote";
 import OneDrive from "./uploader/onedrive";
 import OSS from "./uploader/oss";
+import Qiniu from "./uploader/qiniu";
 
 export interface Option {
     logLevel: LogLevel;
@@ -54,6 +55,8 @@ export default class UploadManager {
                 return new OneDrive(task, this);
             case PolicyType.oss:
                 return new OSS(task, this);
+            case PolicyType.qiniu:
+                return new Qiniu(task, this);
             default:
                 throw new UnknownPolicyError(
                     "Unknown policy type.",

@@ -1,4 +1,4 @@
-import { OneDriveError, Policy, Response } from "../types";
+import { OneDriveError, Policy, QiniuError, Response } from "../types";
 import { sizeToString } from "../utils";
 
 export enum UploaderErrorName {
@@ -21,7 +21,9 @@ export enum UploaderErrorName {
     OneDriveEmptyFile = "OneDriveEmptyFile",
     FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
     OSSChunkUploadFailed = "OSSChunkUploadFailed",
+    QiniuChunkUploadFailed = "QiniuChunkUploadFailed",
     FailedFinishOSSUpload = "FailedFinishOSSUpload",
+    FailedFinishQiniuUpload = "FailedFinishQiniuUpload",
 }
 
 const RETRY_ERROR_LIST = [
@@ -256,6 +258,30 @@ export class OSSFinishUploadError extends UploaderError {
             UploaderErrorName.OSSChunkUploadFailed,
             response.getElementsByTagName("Message")[0].innerHTML
         );
+    }
+
+    public Message(i18n: string): string {
+        return `无法完成文件上传: ${this.message} (${
+            this.response.getElementsByTagName("Code")[0].innerHTML
+        })`;
+    }
+}
+
+// qiniu 分块上传失败
+export class QiniuChunkError extends UploaderError {
+    constructor(public response: QiniuError) {
+        super(UploaderErrorName.QiniuChunkUploadFailed, response.error);
+    }
+
+    public Message(i18n: string): string {
+        return `分片上传失败: ${this.message}`;
+    }
+}
+
+// qiniu 完成传失败
+export class QiniuFinishUploadError extends UploaderError {
+    constructor(public response: QiniuError) {
+        super(UploaderErrorName.FailedFinishQiniuUpload, response.error);
     }
 
     public Message(i18n: string): string {

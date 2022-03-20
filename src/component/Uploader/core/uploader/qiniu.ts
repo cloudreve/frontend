@@ -1,24 +1,29 @@
 import Chunk, { ChunkInfo } from "./chunk";
-import { ossDriveUploadChunk, ossFinishUpload } from "../api";
+import { qiniuDriveUploadChunk, qiniuFinishUpload } from "../api";
 import { Status } from "./base";
 
-export default class OSS extends Chunk {
+export default class Qiniu extends Chunk {
     protected async uploadChunk(chunkInfo: ChunkInfo) {
-        return ossDriveUploadChunk(
-            this.task.session?.uploadURLs[chunkInfo.index]!,
+        const chunkRes = await qiniuDriveUploadChunk(
+            this.task.session?.uploadURLs[0]!,
+            this.task.session?.credential!,
             chunkInfo,
             (p) => {
                 this.updateChunkProgress(p.loaded, chunkInfo.index);
             },
             this.cancelToken.token
         );
+
+        this.task.chunkProgress[chunkInfo.index].etag = chunkRes.etag;
     }
 
     protected async afterUpload(): Promise<any> {
         this.logger.info(`Finishing multipart upload...`);
         this.transit(Status.finishing);
-        return ossFinishUpload(
-            this.task.session!.callback,
+        return qiniuFinishUpload(
+            this.task.session?.uploadURLs[0]!,
+            this.task.session?.credential!,
+            this.task.chunkProgress,
             this.cancelToken.token
         );
     }

@@ -3,7 +3,7 @@ import { Response } from "../types";
 import { HTTPError, RequestCanceledError } from "../errors";
 
 export const { CancelToken } = axios;
-export { CancelToken as CancelTokenType, CancelTokenSource } from "axios";
+export { CancelTokenSource } from "axios";
 
 const baseConfig = {
     transformResponse: [(response: any) => JSON.parse(response)],
@@ -17,7 +17,7 @@ const cdBackendConfig = {
 
 export function request<T = any>(url: string, config?: AxiosRequestConfig) {
     return axios
-        .request<Response<T>>({ ...baseConfig, ...config, url })
+        .request<T>({ ...baseConfig, ...config, url })
         .catch((err) => {
             if (axios.isCancel(err)) {
                 throw new RequestCanceledError();
@@ -28,5 +28,5 @@ export function request<T = any>(url: string, config?: AxiosRequestConfig) {
 }
 
 export function requestAPI<T = any>(url: string, config?: AxiosRequestConfig) {
-    return request<T>(url, { ...cdBackendConfig, ...config });
+    return request<Response<T>>(url, { ...cdBackendConfig, ...config });
 }

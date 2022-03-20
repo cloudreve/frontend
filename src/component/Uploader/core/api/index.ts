@@ -1,5 +1,8 @@
 import {
     OneDriveChunkResponse,
+    QiniuChunkResponse,
+    QiniuFinishUploadRequest,
+    QiniuPartsInfo,
     UploadCredential,
     UploadSessionRequest,
 } from "../types";
@@ -13,9 +16,11 @@ import {
     OneDriveFinishUploadError,
     OSSChunkError,
     OSSFinishUploadError,
+    QiniuChunkError,
+    QiniuFinishUploadError,
     SlaveChunkUploadError,
 } from "../errors";
-import { ChunkInfo } from "../uploader/chunk";
+import { ChunkInfo, ChunkProgress } from "../uploader/chunk";
 import { Progress } from "../uploader/base";
 import { CancelToken } from "axios";
 
@@ -136,7 +141,7 @@ export async function oneDriveUploadChunk(
         throw e;
     });
 
-    return res.data.data;
+    return res.data;
 }
 
 export async function finishOneDriveUpload(
@@ -211,6 +216,74 @@ export async function ossFinishUpload(
     }).catch((e) => {
         if (e instanceof HTTPError && e.response) {
             throw new OSSFinishUploadError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data;
+}
+
+export async function qiniuDriveUploadChunk(
+    url: string,
+    upToken: string,
+    chunk: ChunkInfo,
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
+): Promise<QiniuChunkResponse> {
+    const res = await request<QiniuChunkResponse>(`${url}/${chunk.index + 1}`, {
+        method: "put",
+        headers: {
+            "content-type": "application/octet-stream",
+            authorization: "UpToken " + upToken,
+        },
+        data: chunk.chunk,
+        onUploadProgress: (progressEvent) => {
+            onProgress({
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+            });
+        },
+        cancelToken: cancel,
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new QiniuChunkError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data;
+}
+
+export async function qiniuFinishUpload(
+    url: string,
+    upToken: string,
+    chunks: ChunkProgress[],
+    cancel: CancelToken
+): Promise<any> {
+    const content: QiniuFinishUploadRequest = {
+        parts: chunks.map(
+            (chunk): QiniuPartsInfo => {
+                return {
+                    etag: chunk.etag!,
+                    partNumber: chunk.index + 1,
+                };
+            }
+        ),
+    };
+
+    const res = await request<any>(`${url}`, {
+        method: "post",
+        headers: {
+            "content-type": "application/json",
+            authorization: "UpToken " + upToken,
+        },
+        data: content,
+        cancelToken: cancel,
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new QiniuFinishUploadError(e.response.data);
         }
 
         throw e;

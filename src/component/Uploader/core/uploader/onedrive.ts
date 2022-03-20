@@ -1,6 +1,7 @@
 import Chunk, { ChunkInfo } from "./chunk";
 import { finishOneDriveUpload, oneDriveUploadChunk } from "../api";
 import { OneDriveChunkError, OneDriveEmptyFileSelected } from "../errors";
+import { Status } from "./base";
 
 export default class OneDrive extends Chunk {
     protected async uploadChunk(chunkInfo: ChunkInfo) {
@@ -37,6 +38,7 @@ export default class OneDrive extends Chunk {
 
     protected async afterUpload(): Promise<any> {
         this.logger.info(`Finishing upload...`);
+        this.transit(Status.finishing);
         return finishOneDriveUpload(
             this.task.session!.sessionID,
             this.cancelToken.token
