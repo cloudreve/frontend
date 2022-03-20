@@ -1,4 +1,10 @@
-import { OneDriveError, Policy, QiniuError, Response } from "../types";
+import {
+    OneDriveError,
+    Policy,
+    QiniuError,
+    Response,
+    UpyunError,
+} from "../types";
 import { sizeToString } from "../utils";
 
 export enum UploaderErrorName {
@@ -22,6 +28,7 @@ export enum UploaderErrorName {
     FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
     OSSChunkUploadFailed = "OSSChunkUploadFailed",
     COSPostUploadFailed = "COSPostUploadFailed",
+    UpyunPostUploadFailed = "UpyunPostUploadFailed",
     QiniuChunkUploadFailed = "QiniuChunkUploadFailed",
     FailedFinishOSSUpload = "FailedFinishOSSUpload",
     FailedFinishQiniuUpload = "FailedFinishQiniuUpload",
@@ -303,5 +310,16 @@ export class COSUploadError extends UploaderError {
         return `上传失败: ${this.message} (${
             this.response.getElementsByTagName("Code")[0].innerHTML
         })`;
+    }
+}
+
+// Upyun 上传失败
+export class UpyunUploadError extends UploaderError {
+    constructor(public response: UpyunError) {
+        super(UploaderErrorName.UpyunPostUploadFailed, response.message);
+    }
+
+    public Message(i18n: string): string {
+        return `上传失败: ${this.message}`;
     }
 }

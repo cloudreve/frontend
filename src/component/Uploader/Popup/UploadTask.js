@@ -108,6 +108,10 @@ export default function UploadTask({
         let errMsg;
         const parent = filename(uploader.task.dst);
         switch (status) {
+            case Status.added:
+            case Status.initialized:
+            case Status.queued:
+                return <div>排队中...</div>;
             case Status.preparing:
                 return <div>准备中...</div>;
             case Status.error:
@@ -140,7 +144,7 @@ export default function UploadTask({
                         </div>
                     );
                 }
-                break;
+                return <div>已上传 - </div>;
             case Status.finished:
                 return (
                     <div className={classes.successStatus}>

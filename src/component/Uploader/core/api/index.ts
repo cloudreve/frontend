@@ -20,6 +20,7 @@ import {
     QiniuChunkError,
     QiniuFinishUploadError,
     SlaveChunkUploadError,
+    UpyunUploadError,
 } from "../errors";
 import { ChunkInfo, ChunkProgress } from "../uploader/chunk";
 import { Progress } from "../uploader/base";
@@ -337,6 +338,44 @@ export async function cosFormUploadChunk(
     }).catch((e) => {
         if (e instanceof HTTPError && e.response) {
             throw new COSUploadError(e.response.data);
+        }
+
+        throw e;
+    });
+
+    return res.data;
+}
+
+export async function upyunFormUploadChunk(
+    url: string,
+    file: File,
+    policy: string,
+    credential: string,
+    onProgress: (p: Progress) => void,
+    cancel: CancelToken
+): Promise<any> {
+    const bodyFormData = new FormData();
+    bodyFormData.append("policy", policy);
+    bodyFormData.append("authorization", credential);
+    // File must be the last element in the form
+    bodyFormData.append("file", file);
+
+    const res = await request<any>(`${url}`, {
+        method: "post",
+        headers: {
+            "content-type": "multipart/form-data",
+        },
+        data: bodyFormData,
+        onUploadProgress: (progressEvent) => {
+            onProgress({
+                loaded: progressEvent.loaded,
+                total: progressEvent.total,
+            });
+        },
+        cancelToken: cancel,
+    }).catch((e) => {
+        if (e instanceof HTTPError && e.response) {
+            throw new UpyunUploadError(e.response.data);
         }
 
         throw e;

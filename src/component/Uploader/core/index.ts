@@ -10,6 +10,7 @@ import OneDrive from "./uploader/onedrive";
 import OSS from "./uploader/oss";
 import Qiniu from "./uploader/qiniu";
 import COS from "./uploader/cos";
+import Upyun from "./uploader/upyun";
 
 export interface Option {
     logLevel: LogLevel;
@@ -60,6 +61,8 @@ export default class UploadManager {
                 return new Qiniu(task, this);
             case PolicyType.cos:
                 return new COS(task, this);
+            case PolicyType.upyun:
+                return new Upyun(task, this);
             default:
                 throw new UnknownPolicyError(
                     "Unknown policy type.",

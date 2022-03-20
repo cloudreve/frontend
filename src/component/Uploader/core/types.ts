@@ -99,3 +99,8 @@ export interface QiniuPartsInfo {
 export interface QiniuFinishUploadRequest {
     parts: QiniuPartsInfo[];
 }
+
+export interface UpyunError {
+    message: string;
+    code: number;
+}
