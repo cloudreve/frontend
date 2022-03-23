@@ -11,6 +11,105 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 
+const magicVars = [
+    {
+        value: "{randomkey16}",
+        des: "16位随机字符",
+        example: "N6IimT5XZP324ACK",
+        fileOnly: false,
+    },
+    {
+        value: "{randomkey8}",
+        des: "8位随机字符",
+        example: "gWz78q30",
+        fileOnly: false,
+    },
+    {
+        value: "{timestamp}",
+        des: "秒级时间戳",
+        example: "1582692933",
+        fileOnly: false,
+    },
+    {
+        value: "{timestamp_nano}",
+        des: "纳秒级时间戳",
+        example: "1582692933231834600",
+        fileOnly: false,
+    },
+    {
+        value: "{uid}",
+        des: "用户ID",
+        example: "1",
+        fileOnly: false,
+    },
+    {
+        value: "{originname}",
+        des: "原始文件名",
+        example: "MyPico.mp4",
+        fileOnly: true,
+    },
+    {
+        value: "{ext}",
+        des: "文件扩展名",
+        example: ".jpg",
+        fileOnly: true,
+    },
+    {
+        value: "{uuid}",
+        des: "UUID V4",
+        example: "31f0a770-659d-45bf-a5a9-166c06f33281",
+        fileOnly: true,
+    },
+    {
+        value: "{date}",
+        des: "日期",
+        example: "20060102",
+        fileOnly: false,
+    },
+    {
+        value: "{datetime}",
+        des: "日期时间",
+        example: "20060102150405",
+        fileOnly: false,
+    },
+    {
+        value: "{year}",
+        des: "年份",
+        example: "2006",
+        fileOnly: false,
+    },
+    {
+        value: "{month}",
+        des: "月份",
+        example: "01",
+        fileOnly: false,
+    },
+    {
+        value: "{day}",
+        des: "日",
+        example: "02",
+        fileOnly: false,
+    },
+    {
+        value: "{hour}",
+        des: "小时",
+        example: "15",
+        fileOnly: false,
+    },
+    {
+        value: "{minute}",
+        des: "分钟",
+        example: "04",
+        fileOnly: false,
+    },
+    {
+        value: "{second}",
+        des: "秒",
+        example: "05",
+        fileOnly: false,
+    },
+];
+
 export default function MagicVar({ isFile, open, onClose, isSlave }) {
     return (
         <Dialog
@@ -33,53 +132,23 @@ export default function MagicVar({ isFile, open, onClose, isSlave }) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{randomkey16}"}
-                                </TableCell>
-                                <TableCell>16位随机字符</TableCell>
-                                <TableCell>N6IimT5XZP324ACK</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{randomkey8}"}
-                                </TableCell>
-                                <TableCell>8位随机字符</TableCell>
-                                <TableCell>gWz78q30</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{timestamp}"}
-                                </TableCell>
-                                <TableCell>秒级时间戳</TableCell>
-                                <TableCell>1582692933</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{timestamp_nano}"}
-                                </TableCell>
-                                <TableCell>纳秒级时间戳</TableCell>
-                                <TableCell>1582692933231834600</TableCell>
-                            </TableRow>
-                            {!isSlave && (
-                                <TableRow>
-                                    <TableCell component="th" scope="row">
-                                        {"{uid}"}
-                                    </TableCell>
-                                    <TableCell>用户ID</TableCell>
-                                    <TableCell>1</TableCell>
-                                </TableRow>
-                            )}
-                            {isFile && (
-                                <TableRow>
-                                    <TableCell component="th" scope="row">
-                                        {"{originname}"}
-                                    </TableCell>
-                                    <TableCell>原始文件名</TableCell>
-                                    <TableCell>MyPico.mp4</TableCell>
-                                </TableRow>
-                            )}
-                            {!isFile && !isSlave && (
+                            {magicVars.map((m) => {
+                                if (!m.fileOnly || isFile) {
+                                    return (
+                                        <TableRow>
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                            >
+                                                {m.value}
+                                            </TableCell>
+                                            <TableCell>{m.des}</TableCell>
+                                            <TableCell>{m.example}</TableCell>
+                                        </TableRow>
+                                    );
+                                }
+                            })}
+                            {!isFile && (
                                 <TableRow>
                                     <TableCell component="th" scope="row">
                                         {"{path}"}
@@ -88,62 +157,6 @@ export default function MagicVar({ isFile, open, onClose, isSlave }) {
                                     <TableCell>/我的文件/学习资料/</TableCell>
                                 </TableRow>
                             )}
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{date}"}
-                                </TableCell>
-                                <TableCell>日期</TableCell>
-                                <TableCell>20060102</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{datetime}"}
-                                </TableCell>
-                                <TableCell>日期时间</TableCell>
-                                <TableCell>20060102150405</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{year}"}
-                                </TableCell>
-                                <TableCell>年份</TableCell>
-                                <TableCell>2006</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{month}"}
-                                </TableCell>
-                                <TableCell>月份</TableCell>
-                                <TableCell>01</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{day}"}
-                                </TableCell>
-                                <TableCell>日</TableCell>
-                                <TableCell>02</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{hour}"}
-                                </TableCell>
-                                <TableCell>小时</TableCell>
-                                <TableCell>15</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{minute}"}
-                                </TableCell>
-                                <TableCell>分钟</TableCell>
-                                <TableCell>04</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">
-                                    {"{second}"}
-                                </TableCell>
-                                <TableCell>秒</TableCell>
-                                <TableCell>05</TableCell>
-                            </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
