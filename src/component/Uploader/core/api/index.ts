@@ -118,16 +118,16 @@ export async function slaveUploadChunk(
 
 export async function oneDriveUploadChunk(
     url: string,
-    range: string,
+    range: string, // if range is empty, this will be an request to query the session status
     chunk: ChunkInfo,
     onProgress: (p: Progress) => void,
     cancel: CancelToken
 ): Promise<OneDriveChunkResponse> {
     const res = await request<OneDriveChunkResponse>(url, {
-        method: "put",
+        method: range === "" ? "get" : "put",
         headers: {
             "content-type": "application/octet-stream",
-            "content-range": range,
+            ...(range !== "" && { "content-range": range }),
         },
         data: chunk.chunk,
         onUploadProgress: (progressEvent) => {

@@ -10,30 +10,83 @@ export default class OneDrive extends Chunk {
         }
 
         const rangeEnd = this.progress.total.loaded + chunkInfo.chunk.size - 1;
-        const range = `bytes ${this.progress.total.loaded}-${rangeEnd}/${this.task.file.size}`;
-        return oneDriveUploadChunk(
-            `${this.task.session?.uploadURLs[0]!}`,
-            range,
+        return this.sendRange(
             chunkInfo,
-            (p) => {
-                this.updateChunkProgress(p.loaded, chunkInfo.index);
-            },
-            this.cancelToken.token
+            this.progress.total.loaded,
+            rangeEnd,
+            0
         ).catch((e) => {
             if (
                 e instanceof OneDriveChunkError &&
                 e.response.error.innererror &&
                 e.response.error.innererror.code == "fragmentOverlap"
             ) {
-                this.logger.info(
-                    `Chunk [${chunkInfo.index}] overlapped, skip uploading.`
-                );
-                this.updateChunkProgress(chunkInfo.chunk.size, chunkInfo.index);
-                return;
+                return this.alignChunkOffset(chunkInfo);
             }
 
             throw e;
         });
+    }
+
+    private async sendRange(
+        chunkInfo: ChunkInfo,
+        start: number,
+        end: number,
+        chunkOffset: number
+    ) {
+        const range = `bytes ${start}-${end}/${this.task.file.size}`;
+        return oneDriveUploadChunk(
+            `${this.task.session?.uploadURLs[0]!}`,
+            range,
+            chunkInfo,
+            (p) => {
+                this.updateChunkProgress(
+                    chunkOffset + p.loaded,
+                    chunkInfo.index
+                );
+            },
+            this.cancelToken.token
+        );
+    }
+
+    private async alignChunkOffset(chunkInfo: ChunkInfo) {
+        this.logger.info(
+            `Chunk [${chunkInfo.index}] overlapped, checking next expected range...`
+        );
+        const rangeStatus = await oneDriveUploadChunk(
+            `${this.task.session?.uploadURLs[0]!}`,
+            "",
+            chunkInfo,
+            (p) => {
+                return null;
+            },
+            this.cancelToken.token
+        );
+        const expectedStart = parseInt(
+            rangeStatus.nextExpectedRanges[0].split("-")[0]
+        );
+        this.logger.info(
+            `Next expected range start from OneDrive is ${expectedStart}.`
+        );
+
+        if (expectedStart >= this.progress.total.loaded) {
+            this.logger.info(`This whole chunk is overlapped, skipping...`);
+            this.updateChunkProgress(chunkInfo.chunk.size, chunkInfo.index);
+            return;
+        } else {
+            this.updateChunkProgress(0, chunkInfo.index);
+            const rangeEnd =
+                this.progress.total.loaded + chunkInfo.chunk.size - 1;
+            const newChunkOffset = expectedStart - this.progress.total.loaded;
+            chunkInfo.chunk = chunkInfo.chunk.slice(newChunkOffset);
+            this.updateChunkProgress(newChunkOffset, chunkInfo.index);
+            return this.sendRange(
+                chunkInfo,
+                expectedStart,
+                rangeEnd,
+                newChunkOffset
+            );
+        }
     }
 
     protected async afterUpload(): Promise<any> {
