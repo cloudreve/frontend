@@ -23,6 +23,7 @@ import UploadTask from "./UploadTask";
 import { MoreHoriz } from "@material-ui/icons";
 import MoreActions from "./MoreActions";
 import { useSelector } from "react-redux";
+import { Virtuoso } from "react-virtuoso";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -61,6 +62,13 @@ const useStyles = makeStyles((theme) => ({
         },
         padding: 0,
         paddingTop: "0!important",
+    },
+    virtualList: {
+        height: "100%",
+        maxHeight: "calc(100vh - 56px)",
+        [theme.breakpoints.up("sm")]: {
+            maxHeight: "calc(100vh - 140px)",
+        },
     },
     expandIcon: {
         transform: "rotate(0deg)",
@@ -118,20 +126,13 @@ export default function TaskList({
         }
     }, [taskList]);
 
-    const list = useMemo(() => {
-        return taskList.map((uploader) => (
-            <UploadTask
-                selectFile={selectFile}
-                onClose={close}
-                onCancel={onCancel}
-                key={uploader.id}
-                useAvgSpeed={useAvgSpeed}
-                uploader={uploader}
-            />
-        ));
-    }, [taskList, useAvgSpeed]);
     return (
         <>
+            <Virtuoso
+                style={{ height: 400 }}
+                data={[{}]}
+                itemContent={(index, uploader) => <div>Item {index}</div>}
+            />
             <MoreActions
                 onClose={handleActionClose}
                 uploadManager={uploadManager}
@@ -213,7 +214,23 @@ export default function TaskList({
                     </AppBar>
                     <AccordionDetails className={classes.paddingZero}>
                         <DialogContent className={classes.dialogContent}>
-                            <List className={classes.paddingZero}>{list}</List>
+                            <Virtuoso
+                                className={classes.virtualList}
+                                style={{
+                                    height: 70 * taskList.length,
+                                }}
+                                data={taskList}
+                                itemContent={(index, uploader) => (
+                                    <UploadTask
+                                        selectFile={selectFile}
+                                        onClose={close}
+                                        onCancel={onCancel}
+                                        key={uploader.id}
+                                        useAvgSpeed={useAvgSpeed}
+                                        uploader={uploader}
+                                    />
+                                )}
+                            />
                         </DialogContent>
                     </AccordionDetails>
                 </Accordion>

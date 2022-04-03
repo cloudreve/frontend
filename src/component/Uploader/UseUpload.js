@@ -37,10 +37,6 @@ export function useUpload(uploader) {
                 ToggleSnackbar("top", "right", msg, color);
             },
         });
-        /* eslint-enable @typescript-eslint/no-empty-function */
-        if (status === Status.added) {
-            uploader.start();
-        }
     }, []);
 
     // 获取上传速度

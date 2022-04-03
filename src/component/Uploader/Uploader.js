@@ -123,6 +123,8 @@ export default function Uploader() {
                     }
                 }
 
+                tasks.forEach((t) => t.start());
+
                 setTaskListOpen(true);
                 setUploaders((uploaders) => {
                     if (original !== null) {
