@@ -21,12 +21,13 @@ export interface Policy {
 
 export enum TaskType {
     file,
-    folder,
+    resumeHint,
 }
 
 export interface Task {
     type: TaskType;
     name: string;
+    size: number;
     policy: Policy;
     dst: string;
     file: File;

@@ -9,7 +9,7 @@ export function useUpload(uploader) {
     const startLoadedRef = useRef(0);
     const [status, setStatus] = useState(uploader.status);
     const [error, setError] = useState(uploader.error);
-    const [progress, setProgress] = useState(null);
+    const [progress, setProgress] = useState(uploader.progress);
     const dispatch = useDispatch();
 
     const ToggleSnackbar = useCallback(

@@ -1,5 +1,8 @@
-import Base from "./base";
+import Base, { Status, UploadProgress } from "./base";
 import * as utils from "../utils";
+import { Task, TaskType } from "../types";
+import UploadManager from "../index";
+import Logger from "../logger";
 
 export interface ChunkProgress {
     loaded: number;

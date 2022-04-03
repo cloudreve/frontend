@@ -14,7 +14,6 @@ export default function Uploader() {
     const keywords = useSelector((state) => state.explorer.keywords);
     const policy = useSelector((state) => state.explorer.currentPolicy);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
-    const path = useSelector((state) => state.navigator.path);
     const location = useLocation();
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -42,19 +41,47 @@ export default function Uploader() {
         uploadManager.setPolicy(policy);
     }, [policy]);
 
+    useEffect(() => {
+        const unfinished = uploadManager.resumeTasks();
+        setUploaders((uploaders) => [...uploaders, ...unfinished]);
+    }, []);
+
     const openFileList = () => {
         alert("openFileList");
     };
 
-    const selectFile = () => {
+    const selectFile = (path, original = null) => {
         setTaskListOpen(true);
 
         // eslint-disable-next-line no-unreachable
         uploadManager
             .select(path)
             .then((tasks) => {
+                if (original !== null) {
+                    if (
+                        tasks.length !== 1 ||
+                        tasks[0].key() !== original.key()
+                    ) {
+                        ToggleSnackbar(
+                            "top",
+                            "right",
+                            "所选择文件与原始文件不符",
+                            "warning"
+                        );
+                        return;
+                    }
+                }
+
                 setTaskListOpen(true);
-                setUploaders((uploaders) => [...uploaders, ...tasks]);
+                setUploaders((uploaders) => {
+                    if (original !== null) {
+                        uploaders = uploaders.filter(
+                            (u) => u.key() !== original.key()
+                        );
+                    }
+
+                    return [...uploaders, ...tasks];
+                });
             })
             .catch((e) => {
                 if (e instanceof UploaderError) {

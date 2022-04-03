@@ -43,8 +43,16 @@ export function sumChunk(list: ChunkProgress[]) {
 
 const resumeKeyPrefix = "cd_upload_ctx_";
 
-export function getResumeCtxKey(task: Task): string {
-    return `${resumeKeyPrefix}name_${task.file.name}_dst_${task.dst}_size_${task.file.size}_policy_${task.policy.id}`;
+function isTask(toBeDetermined: Task | string): toBeDetermined is Task {
+    return !!(toBeDetermined as Task).name;
+}
+
+export function getResumeCtxKey(task: Task | string): string {
+    if (isTask(task)) {
+        return `${resumeKeyPrefix}name_${task.name}_dst_${task.dst}_size_${task.size}_policy_${task.policy.id}`;
+    }
+
+    return task;
 }
 
 export function setResumeCtx(task: Task, logger: Logger) {
@@ -61,7 +69,7 @@ export function setResumeCtx(task: Task, logger: Logger) {
     }
 }
 
-export function removeResumeCtx(task: Task, logger: Logger) {
+export function removeResumeCtx(task: Task | string, logger: Logger) {
     const ctxKey = getResumeCtxKey(task);
     try {
         localStorage.removeItem(ctxKey);
@@ -93,7 +101,7 @@ export function cleanupResumeCtx(logger: Logger) {
     }
 }
 
-export function getResumeCtx(task: Task, logger: Logger): Task | null {
+export function getResumeCtx(task: Task | string, logger: Logger): Task | null {
     const ctxKey = getResumeCtxKey(task);
     let localInfoString: string | null = null;
     try {
@@ -141,6 +149,21 @@ export function getResumeCtx(task: Task, logger: Logger): Task | null {
     }
 
     return localInfo;
+}
+
+export function listResumeCtx(logger: Logger): Task[] {
+    const res: Task[] = [];
+    for (let i = 0, len = localStorage.length; i < len; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(resumeKeyPrefix)) {
+            const value = getResumeCtx(key, logger);
+            if (value) {
+                res.push(value);
+            }
+        }
+    }
+
+    return res;
 }
 
 export function OBJtoXML(obj: any): string {

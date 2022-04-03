@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Accordion,
     AccordionDetails,
@@ -22,6 +22,7 @@ import classnames from "classnames";
 import UploadTask from "./UploadTask";
 import { MoreHoriz } from "@material-ui/icons";
 import MoreActions from "./MoreActions";
+import { useSelector } from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -87,6 +88,7 @@ export default function TaskList({
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const path = useSelector((state) => state.navigator.path);
     const [expanded, setExpanded] = useState(true);
     const [useAvgSpeed, setUseAvgSpeed] = useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -110,6 +112,24 @@ export default function TaskList({
         setExpanded(isExpanded);
     };
 
+    useMemo(() => {
+        if (open) {
+            setExpanded(true);
+        }
+    }, [taskList]);
+
+    const list = useMemo(() => {
+        return taskList.map((uploader) => (
+            <UploadTask
+                selectFile={selectFile}
+                onClose={close}
+                onCancel={onCancel}
+                key={uploader.id}
+                useAvgSpeed={useAvgSpeed}
+                uploader={uploader}
+            />
+        ));
+    }, [taskList, useAvgSpeed]);
     return (
         <>
             <MoreActions
@@ -169,7 +189,7 @@ export default function TaskList({
                             <Tooltip title={"添加新文件"}>
                                 <IconButton
                                     color="inherit"
-                                    onClick={selectFile}
+                                    onClick={() => selectFile(path)}
                                 >
                                     <AddIcon />
                                 </IconButton>
@@ -193,17 +213,7 @@ export default function TaskList({
                     </AppBar>
                     <AccordionDetails className={classes.paddingZero}>
                         <DialogContent className={classes.dialogContent}>
-                            <List className={classes.paddingZero}>
-                                {taskList.map((uploader) => (
-                                    <UploadTask
-                                        onClose={close}
-                                        onCancel={onCancel}
-                                        key={uploader.id}
-                                        useAvgSpeed={useAvgSpeed}
-                                        uploader={uploader}
-                                    />
-                                ))}
-                            </List>
+                            <List className={classes.paddingZero}>{list}</List>
                         </DialogContent>
                     </AccordionDetails>
                 </Accordion>

@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
     Divider,
+    Grow,
     IconButton,
     ListItem,
     ListItemSecondaryAction,
@@ -22,6 +23,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { navigateTo } from "../../../actions";
 import { useDispatch } from "react-redux";
 import Link from "@material-ui/core/Link";
+import PlayArrow from "@material-ui/icons/PlayArrow";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -57,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
     errorStatus: {
         color: theme.palette.warning.main,
         wordBreak: "break-all",
+        [theme.breakpoints.up("sm")]: {
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+        },
     },
     disabledBadge: {
         marginLeft: theme.spacing(1),
@@ -89,9 +96,11 @@ export default function UploadTask({
     useAvgSpeed,
     onCancel,
     onClose,
+    selectFile,
 }) {
     const classes = useStyles();
     const theme = useTheme();
+    const [taskHover, setTaskHover] = useState(false);
     const { status, error, progress, speed, speedAvg, retry } = useUpload(
         uploader
     );
@@ -128,6 +137,16 @@ export default function UploadTask({
                 );
             case Status.finishing:
                 return <div>处理中...</div>;
+            case Status.resumable:
+                return (
+                    <div>
+                        {`已上传 ${sizeToString(
+                            progress.total.loaded
+                        )} , 共 ${sizeToString(
+                            progress.total.size
+                        )} - ${progress.total.percent.toFixed(2)}%`}
+                    </div>
+                );
             case Status.processing:
                 if (progress) {
                     return (
@@ -178,9 +197,24 @@ export default function UploadTask({
         [status, fullScreen]
     );
 
+    const continueLabel = useMemo(
+        () =>
+            status === Status.resumable && !fullScreen ? (
+                <Chip
+                    className={classes.disabledBadge}
+                    size="small"
+                    color={"secondary"}
+                    label={"可恢复进度"}
+                />
+            ) : null,
+        [status, fullScreen]
+    );
+
     const progressBar = useMemo(
         () =>
-            (status === Status.processing || status === Status.finishing) &&
+            (status === Status.processing ||
+                status === Status.finishing ||
+                status === Status.resumable) &&
             progress ? (
                 <div
                     style={{
@@ -204,40 +238,76 @@ export default function UploadTask({
         });
     };
 
+    const stopRipple = (e) => {
+        e.stopPropagation();
+    };
+
     const secondaryAction = useMemo(() => {
-        if (status === Status.error) {
-            return (
-                <Tooltip title={"重试"}>
-                    <IconButton aria-label="Delete" onClick={() => retry()}>
-                        <RefreshIcon />
-                    </IconButton>
-                </Tooltip>
-            );
+        if (!taskHover && !fullScreen) {
+            return <></>;
         }
 
+        const actions = [
+            {
+                show: status === Status.error,
+                title: "重试",
+                click: retry,
+                icon: <RefreshIcon />,
+                loading: false,
+            },
+            {
+                show: true,
+                title:
+                    status === Status.finished ? "删除任务记录" : "取消并删除",
+                click: cancel,
+                icon: <DeleteIcon />,
+                loading: loading,
+            },
+            {
+                show: status === Status.resumable,
+                title: "选取同样文件并恢复上传",
+                click: () => selectFile(uploader.task.dst, uploader),
+                icon: <PlayArrow />,
+                loading: false,
+            },
+        ];
+
         return (
-            <Tooltip
-                title={
-                    status === Status.finished ? "删除任务记录" : "取消并删除"
-                }
-            >
-                <IconButton
-                    aria-label="Delete"
-                    disabled={loading}
-                    onClick={() => cancel()}
-                >
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
+            <>
+                {actions.map((a) => (
+                    <>
+                        {a.show && (
+                            <Grow in={a.show}>
+                                <Tooltip title={a.title}>
+                                    <IconButton
+                                        onMouseDown={stopRipple}
+                                        onTouchStart={stopRipple}
+                                        disabled={a.loading}
+                                        onClick={() => a.click()}
+                                    >
+                                        {a.icon}
+                                    </IconButton>
+                                </Tooltip>
+                            </Grow>
+                        )}
+                    </>
+                ))}
+            </>
         );
-    }, [status, loading]);
+    }, [status, loading, taskHover, fullScreen, uploader]);
 
     return (
         <>
-            <div className={classes.progressContainer}>
+            <div
+                className={classes.progressContainer}
+                onMouseLeave={() => setTaskHover(false)}
+                onMouseEnter={() => setTaskHover(true)}
+            >
                 {progressBar}
                 <ListItem className={classes.progressContent} button>
-                    <TypeIcon fileName={uploader.task.name} isUpload />
+                    {!fullScreen && (
+                        <TypeIcon fileName={uploader.task.name} isUpload />
+                    )}
                     <ListItemText
                         className={classes.listAction}
                         primary={
@@ -246,13 +316,12 @@ export default function UploadTask({
                                     {uploader.task.name}
                                 </div>
                                 <div>{resumeLabel}</div>
+                                <div>{continueLabel}</div>
                             </div>
                         }
                         secondary={statusText}
                     />
-                    <ListItemSecondaryAction className={classes.delete}>
-                        {secondaryAction}
-                    </ListItemSecondaryAction>
+                    {secondaryAction}
                 </ListItem>
             </div>
             <Divider />

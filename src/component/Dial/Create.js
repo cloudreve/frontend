@@ -10,7 +10,7 @@ import {
     openCreateFolderDialog,
     toggleSnackbar,
 } from "../../actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -43,6 +43,7 @@ const useStyles = makeStyles(() => ({
 export default function UploadButton(props) {
     const [open, setOpen] = useState(false);
     const [queued, setQueued] = useState(5);
+    const path = useSelector((state) => state.navigator.path);
     const classes = useStyles();
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -129,7 +130,7 @@ export default function UploadButton(props) {
                             icon={<FolderUpload />}
                             tooltipOpen
                             tooltipTitle="上传目录"
-                            onClick={() => props.selectFile()}
+                            onClick={() => props.selectFile(path)}
                             title={"上传目录"}
                         />
                     )}

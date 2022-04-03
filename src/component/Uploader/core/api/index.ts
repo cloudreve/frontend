@@ -38,7 +38,7 @@ export async function createUploadSession(
         cancelToken: cancel,
     });
 
-    if (res.data.code > 0) {
+    if (res.data.code != 0) {
         throw new CreateUploadSessionError(res.data);
     }
 
@@ -50,7 +50,7 @@ export async function deleteUploadSession(id: string): Promise<any> {
         method: "delete",
     });
 
-    if (res.data.code > 0) {
+    if (res.data.code != 0) {
         throw new DeleteUploadSessionError(res.data);
     }
 
@@ -79,7 +79,7 @@ export async function localUploadChunk(
         }
     );
 
-    if (res.data.code > 0) {
+    if (res.data.code != 0) {
         throw new LocalChunkUploadError(res.data, chunk.index);
     }
 
@@ -109,7 +109,7 @@ export async function slaveUploadChunk(
         cancelToken: cancel,
     });
 
-    if (res.data.code > 0) {
+    if (res.data.code != 0) {
         throw new SlaveChunkUploadError(res.data, chunk.index);
     }
 
@@ -161,7 +161,7 @@ export async function finishOneDriveUpload(
         }
     );
 
-    if (res.data.code > 0) {
+    if (res.data.code != 0) {
         throw new OneDriveFinishUploadError(res.data);
     }
 
@@ -418,7 +418,7 @@ export async function s3LikeUploadCallback(
         cancelToken: cancel,
     });
 
-    if (res.data.code > 0) {
+    if (res.data.code != 0) {
         throw new S3LikeUploadCallbackError(res.data);
     }
 

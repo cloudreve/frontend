@@ -4,7 +4,7 @@ import { UnknownPolicyError, UploaderError, UploaderErrorName } from "./errors";
 import Base from "./uploader/base";
 import Local from "./uploader/local";
 import { Pool } from "./utils/pool";
-import { cleanupResumeCtx } from "./utils";
+import { cleanupResumeCtx, listResumeCtx } from "./utils";
 import Remote from "./uploader/remote";
 import OneDrive from "./uploader/onedrive";
 import OSS from "./uploader/oss";
@@ -12,6 +12,7 @@ import Qiniu from "./uploader/qiniu";
 import COS from "./uploader/cos";
 import Upyun from "./uploader/upyun";
 import S3 from "./uploader/s3";
+import ResumeHint from "./uploader/placeholder";
 
 export interface Option {
     logLevel: LogLevel;
@@ -45,8 +46,8 @@ export default class UploadManager {
     }
 
     dispatchUploader(task: Task): Base {
-        if (task.type == TaskType.folder) {
-            //return new Folder(task, this);
+        if (task.type == TaskType.resumeHint) {
+            return new ResumeHint(task, this);
         }
 
         switch (task.policy.type) {
@@ -123,6 +124,7 @@ export default class UploadManager {
                                     policy: this.policy as Policy,
                                     dst: dst,
                                     file: file,
+                                    size: file.size,
                                     name: file.name,
                                     chunkProgress: [],
                                     resumed: false,
@@ -135,6 +137,19 @@ export default class UploadManager {
             this.input.value = "";
             this.input.click();
         });
+    };
+
+    public resumeTasks = (): Base[] => {
+        const tasks = listResumeCtx(this.logger);
+        if (tasks.length > 0) {
+            this.logger.info(
+                `Resumed ${tasks.length} unfinished task(s) from local storage:`,
+                tasks
+            );
+        }
+        return tasks.map((t) =>
+            this.dispatchUploader({ ...t, type: TaskType.resumeHint })
+        );
     };
 
     public cleanupSessions = () => {

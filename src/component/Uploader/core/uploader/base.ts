@@ -1,5 +1,5 @@
 // 所有 Uploader 的基类
-import { PolicyType, Task } from "../types";
+import { PolicyType, Task, TaskType } from "../types";
 import UploadManager from "../index";
 import Logger from "../logger";
 import { validate } from "../utils/validator";
@@ -8,6 +8,7 @@ import axios, { CancelTokenSource } from "axios";
 import { createUploadSession, deleteUploadSession } from "../api";
 import * as utils from "../utils";
 import { RequestCanceledError, UploaderError } from "../errors";
+import { getResumeCtxKey } from "../utils";
 
 export enum Status {
     added,
@@ -19,6 +20,7 @@ export enum Status {
     finished,
     error,
     canceled,
+    resumable,
 }
 
 export interface UploadHandlers {
@@ -76,7 +78,6 @@ export default abstract class Base {
             this.id
         );
         this.logger.info("Initialize new uploader for task: ", task);
-
         this.subscriber = {
             /* eslint-disable @typescript-eslint/no-empty-function */
             onTransition: (newStatus: Status) => {},
@@ -222,5 +223,9 @@ export default abstract class Base {
             percent: (loaded / size) * 100,
             ...(fromCache == null ? {} : { fromCache }),
         };
+    }
+
+    public key(): string {
+        return utils.getResumeCtxKey(this.task);
     }
 }
