@@ -7,10 +7,19 @@ import { useLocation } from "react-router-dom";
 import { UploaderError } from "./core/errors";
 import { toggleSnackbar } from "../../actions";
 import TaskList from "./Popup/TaskList";
+import { Status } from "./core/uploader/base";
+
+let totalProgressCollector = null;
 
 export default function Uploader() {
     const [uploaders, setUploaders] = useState([]);
     const [taskListOpen, setTaskListOpen] = useState(false);
+    const [totalProgress, setTotalProgress] = useState({
+        totalSize: 0,
+        processedSize: 0,
+        total: 0,
+        processed: 0,
+    });
     const keywords = useSelector((state) => state.explorer.keywords);
     const policy = useSelector((state) => state.explorer.currentPolicy);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
@@ -44,6 +53,48 @@ export default function Uploader() {
     useEffect(() => {
         const unfinished = uploadManager.resumeTasks();
         setUploaders((uploaders) => [...uploaders, ...unfinished]);
+        if (!totalProgressCollector) {
+            totalProgressCollector = setInterval(() => {
+                const progress = {
+                    totalSize: 0,
+                    processedSize: 0,
+                    total: 0,
+                    processed: 0,
+                };
+                setUploaders((uploaders) => {
+                    uploaders.forEach((u) => {
+                        if (
+                            u.status === Status.finished ||
+                            u.status === Status.canceled ||
+                            u.status === Status.error
+                        ) {
+                            progress.totalSize += u.task.size;
+                            progress.total += 1;
+                            progress.processedSize += u.task.size;
+                            progress.processed += 1;
+                        }
+
+                        if (
+                            u.status === Status.added ||
+                            u.status === Status.initialized ||
+                            u.status === Status.queued ||
+                            u.status === Status.preparing ||
+                            u.status === Status.processing ||
+                            u.status === Status.finishing
+                        ) {
+                            progress.totalSize += u.task.size;
+                            progress.total += 1;
+                            progress.processedSize += u.progress
+                                ? u.progress.total.loaded
+                                : 0;
+                        }
+                    });
+                    return uploaders;
+                });
+
+                setTotalProgress(progress);
+            }, 2000);
+        }
     }, []);
 
     const openFileList = () => {
@@ -108,6 +159,7 @@ export default function Uploader() {
             {enableUploader && (
                 <>
                     <UploadButton
+                        progress={totalProgress}
                         taskListOpen={taskListOpen}
                         selectFile={selectFile}
                         Queued={uploaders.length}

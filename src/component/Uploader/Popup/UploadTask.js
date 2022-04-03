@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 20,
         marginRight: 20,
     },
-    fileName: {
+    wordBreak: {
         wordBreak: "break-all",
         [theme.breakpoints.up("sm")]: {
             whiteSpace: "nowrap",
@@ -207,7 +207,7 @@ export default function UploadTask({
             case Status.processing:
                 if (progress) {
                     return (
-                        <div>
+                        <div className={classes.wordBreak}>
                             {`${getSpeedText(
                                 speed,
                                 speedAvg,
@@ -350,7 +350,10 @@ export default function UploadTask({
                                         onMouseDown={stopRipple}
                                         onTouchStart={stopRipple}
                                         disabled={a.loading}
-                                        onClick={() => a.click()}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            a.click();
+                                        }}
                                     >
                                         {a.icon}
                                     </IconButton>
@@ -387,7 +390,7 @@ export default function UploadTask({
                                 className={classes.listAction}
                                 primary={
                                     <div className={classes.fileNameContainer}>
-                                        <div className={classes.fileName}>
+                                        <div className={classes.wordBreak}>
                                             {uploader.task.name}
                                         </div>
                                         <div>{resumeLabel}</div>

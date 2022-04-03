@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Badge, makeStyles } from "@material-ui/core";
+import { Badge, CircularProgress, makeStyles } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
@@ -15,6 +15,7 @@ import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page";
 import Backdrop from "@material-ui/core/Backdrop";
 import { FilePlus, FolderUpload } from "mdi-material-ui";
+import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -37,6 +38,13 @@ const useStyles = makeStyles(() => ({
         ".MuiSpeedDialAction-staticTooltipLabel": {
             width: 100,
         },
+    },
+    fabProgress: {
+        color: green[500],
+        position: "absolute",
+        bottom: -6,
+        left: -6,
+        zIndex: 1,
     },
 }));
 
@@ -151,6 +159,18 @@ export default function UploadButton(props) {
                         title={"新建文件"}
                     />
                 </SpeedDial>
+                {props.progress.totalSize > 0 && (
+                    <CircularProgress
+                        size={68}
+                        variant="determinate"
+                        value={
+                            (props.progress.processedSize /
+                                props.progress.totalSize) *
+                            100
+                        }
+                        className={classes.fabProgress}
+                    />
+                )}
             </Badge>
         </AutoHidden>
     );
