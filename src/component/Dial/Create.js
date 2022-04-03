@@ -69,7 +69,7 @@ export default function UploadButton(props) {
             if (queued !== 0) {
                 props.openFileList();
             } else {
-                props.selectFile();
+                props.selectFile(path);
             }
         }
     };

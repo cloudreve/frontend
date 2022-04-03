@@ -4,7 +4,6 @@ import {
     Grow,
     IconButton,
     ListItem,
-    ListItemSecondaryAction,
     ListItemText,
     makeStyles,
     Tooltip,
@@ -24,6 +23,11 @@ import { navigateTo } from "../../../actions";
 import { useDispatch } from "react-redux";
 import Link from "@material-ui/core/Link";
 import PlayArrow from "@material-ui/icons/PlayArrow";
+import withStyles from "@material-ui/core/styles/withStyles";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import TaskDetail from "./TaskDetail";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -82,6 +86,51 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const ExpansionPanel = withStyles({
+    root: {
+        maxWidth: "100%",
+        boxShadow: "none",
+        "&:not(:last-child)": {
+            borderBottom: 0,
+        },
+        "&:before": {
+            display: "none",
+        },
+        "&$expanded": {
+            margin: 0,
+        },
+    },
+    expanded: {},
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+    root: {
+        minHeight: 0,
+        padding: 0,
+        display: "block",
+        "&$expanded": {},
+    },
+    content: {
+        margin: 0,
+        display: "block",
+        "&$expanded": {
+            margin: "0",
+        },
+    },
+    expanded: {},
+})(MuiExpansionPanelSummary);
+
+const ExpansionPanelDetails = withStyles((theme) => ({
+    root: {
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 8,
+        paddingBottom: 8,
+        display: "block",
+        backgroundColor: theme.palette.background.default,
+    },
+}))(MuiExpansionPanelDetails);
+
 const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
     let displayedSpeed = speedAvg;
     if (!useSpeedAvg) {
@@ -89,6 +138,15 @@ const getSpeedText = (speed, speedAvg, useSpeedAvg) => {
     }
 
     return `${sizeToString(displayedSpeed ? displayedSpeed : 0)} /s`;
+};
+
+const getErrMsg = (error) => {
+    let errMsg = error.message;
+    if (error instanceof UploaderError) {
+        errMsg = error.Message("");
+    }
+
+    return errMsg;
 };
 
 export default function UploadTask({
@@ -101,6 +159,7 @@ export default function UploadTask({
     const classes = useStyles();
     const theme = useTheme();
     const [taskHover, setTaskHover] = useState(false);
+    const [expanded, setExpanded] = useState(false);
     const { status, error, progress, speed, speedAvg, retry } = useUpload(
         uploader
     );
@@ -113,8 +172,11 @@ export default function UploadTask({
         NavigateTo(path);
     };
 
+    const toggleDetail = (event, newExpanded) => {
+        setExpanded(!!newExpanded);
+    };
+
     const statusText = useMemo(() => {
-        let errMsg;
         const parent = filename(uploader.task.dst);
         switch (status) {
             case Status.added:
@@ -124,14 +186,9 @@ export default function UploadTask({
             case Status.preparing:
                 return <div>准备中...</div>;
             case Status.error:
-                errMsg = error.message;
-                if (error instanceof UploaderError) {
-                    errMsg = error.Message("");
-                }
-
                 return (
                     <div className={classes.errorStatus}>
-                        {errMsg}
+                        {getErrMsg(error)}
                         <br />
                     </div>
                 );
@@ -230,6 +287,16 @@ export default function UploadTask({
         [status, progress, theme]
     );
 
+    const taskDetail = useMemo(() => {
+        return (
+            <TaskDetail
+                error={error && getErrMsg(error)}
+                navigateToDst={navigateToDst}
+                uploader={uploader}
+            />
+        );
+    }, [uploader, expanded]);
+
     const cancel = () => {
         setLoading(true);
         uploader.cancel().then(() => {
@@ -298,32 +365,43 @@ export default function UploadTask({
 
     return (
         <>
-            <div
-                className={classes.progressContainer}
-                onMouseLeave={() => setTaskHover(false)}
-                onMouseEnter={() => setTaskHover(true)}
-            >
-                {progressBar}
-                <ListItem className={classes.progressContent} button>
-                    {!fullScreen && (
-                        <TypeIcon fileName={uploader.task.name} isUpload />
-                    )}
-                    <ListItemText
-                        className={classes.listAction}
-                        primary={
-                            <div className={classes.fileNameContainer}>
-                                <div className={classes.fileName}>
-                                    {uploader.task.name}
-                                </div>
-                                <div>{resumeLabel}</div>
-                                <div>{continueLabel}</div>
-                            </div>
-                        }
-                        secondary={statusText}
-                    />
-                    {secondaryAction}
-                </ListItem>
-            </div>
+            <ExpansionPanel square expanded={expanded} onChange={toggleDetail}>
+                <ExpansionPanelSummary
+                    aria-controls="panel1d-content"
+                    id="panel1d-header"
+                >
+                    <div
+                        className={classes.progressContainer}
+                        onMouseLeave={() => setTaskHover(false)}
+                        onMouseOver={() => setTaskHover(true)}
+                    >
+                        {progressBar}
+                        <ListItem className={classes.progressContent} button>
+                            {!fullScreen && (
+                                <TypeIcon
+                                    fileName={uploader.task.name}
+                                    isUpload
+                                />
+                            )}
+                            <ListItemText
+                                className={classes.listAction}
+                                primary={
+                                    <div className={classes.fileNameContainer}>
+                                        <div className={classes.fileName}>
+                                            {uploader.task.name}
+                                        </div>
+                                        <div>{resumeLabel}</div>
+                                        <div>{continueLabel}</div>
+                                    </div>
+                                }
+                                secondary={statusText}
+                            />
+                            {secondaryAction}
+                        </ListItem>
+                    </div>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>{taskDetail}</ExpansionPanelDetails>
+            </ExpansionPanel>
             <Divider />
         </>
     );
