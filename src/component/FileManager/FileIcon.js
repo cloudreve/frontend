@@ -142,6 +142,25 @@ class FileIconCompoment extends Component {
         showPicIcon: false,
     };
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        const isSelectedCurrent =
+            this.props.selected.findIndex((value) => {
+                return value === this.props.file;
+            }) !== -1;
+        const isSelectedNext =
+            nextProps.selected.findIndex((value) => {
+                return value === this.props.file;
+            }) !== -1;
+        if (
+            nextProps.selected !== this.props.selected &&
+            isSelectedCurrent === isSelectedNext
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
     render() {
         const { classes } = this.props;
         const isSelected =
