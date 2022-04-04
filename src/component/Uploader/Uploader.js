@@ -5,11 +5,12 @@ import UploadButton from "../Dial/Create";
 import pathHelper from "../../utils/page";
 import { useLocation } from "react-router-dom";
 import { UploaderError } from "./core/errors";
-import { toggleSnackbar } from "../../actions";
+import { refreshFileList, toggleSnackbar } from "../../actions";
 import TaskList from "./Popup/TaskList";
 import { Status } from "./core/uploader/base";
 
 let totalProgressCollector = null;
+let lastProgressStart = -1;
 
 export default function Uploader() {
     const [uploaders, setUploaders] = useState([]);
@@ -30,6 +31,9 @@ export default function Uploader() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
+    const RefreshFileList = useCallback(() => dispatch(refreshFileList()), [
+        dispatch,
+    ]);
 
     const enableUploader = useMemo(
         () =>
@@ -63,6 +67,10 @@ export default function Uploader() {
                 };
                 setUploaders((uploaders) => {
                     uploaders.forEach((u) => {
+                        if (u.id <= lastProgressStart) {
+                            return;
+                        }
+
                         if (
                             u.status === Status.finished ||
                             u.status === Status.canceled ||
@@ -88,9 +96,20 @@ export default function Uploader() {
                                 ? u.progress.total.loaded
                                 : 0;
                         }
+
+                        if (progress.processed === progress.total) {
+                            lastProgressStart = u.id;
+                        }
                     });
                     return uploaders;
                 });
+
+                if (
+                    progress.total > 0 &&
+                    progress.total === progress.processed
+                ) {
+                    RefreshFileList();
+                }
 
                 setTotalProgress(progress);
             }, 2000);
@@ -168,6 +187,7 @@ export default function Uploader() {
                         openFileList={() => setTaskListOpen(true)}
                     />
                     <TaskList
+                        progress={totalProgress}
                         uploadManager={uploadManager}
                         taskList={uploaders}
                         open={taskListOpen}

@@ -5,6 +5,7 @@ import {
     AppBar,
     Dialog,
     DialogContent,
+    Fade,
     IconButton,
     List,
     makeStyles,
@@ -24,6 +25,9 @@ import { MoreHoriz } from "@material-ui/icons";
 import MoreActions from "./MoreActions";
 import { useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
+import Nothing from "../../Placeholder/Nothing";
+import { Status } from "../core/uploader/base";
+import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -56,8 +60,9 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
     },
     dialogContent: {
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("md")]: {
             width: 500,
+            minHeight: 300,
             maxHeight: "calc(100vh - 140px)",
         },
         padding: 0,
@@ -66,7 +71,8 @@ const useStyles = makeStyles((theme) => ({
     virtualList: {
         height: "100%",
         maxHeight: "calc(100vh - 56px)",
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("md")]: {
+            minHeight: 300,
             maxHeight: "calc(100vh - 140px)",
         },
     },
@@ -83,6 +89,14 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
     },
+    progress: {
+        transition: "width .4s linear",
+        zIndex: -1,
+        height: "100%",
+        position: "absolute",
+        left: 0,
+        top: 0,
+    },
 }));
 
 export default function TaskList({
@@ -92,6 +106,7 @@ export default function TaskList({
     taskList,
     onCancel,
     uploadManager,
+    progress,
 }) {
     const classes = useStyles();
     const theme = useTheme();
@@ -126,13 +141,66 @@ export default function TaskList({
         }
     }, [taskList]);
 
+    const progressBar = useMemo(
+        () =>
+            progress.totalSize > 0 ? (
+                <Fade in={progress.totalSize > 0 && !expanded}>
+                    <div>
+                        <div
+                            style={{
+                                backgroundColor:
+                                    theme.palette.type === "light"
+                                        ? lighten(
+                                              theme.palette.primary.main,
+                                              0.2
+                                          )
+                                        : lighten(
+                                              theme.palette.primary.main,
+                                              0.2
+                                          ),
+                                width:
+                                    (progress.processedSize /
+                                        progress.totalSize) *
+                                        100 +
+                                    "%",
+                            }}
+                            className={classes.progress}
+                        />
+                    </div>
+                </Fade>
+            ) : null,
+        [progress, expanded, classes, theme]
+    );
+
+    const list = useMemo(() => {
+        if (taskList.length === 0) {
+            return <Nothing size={0.5} top={63} primary={"没有上传任务"} />;
+        }
+
+        return (
+            <Virtuoso
+                style={{
+                    height: (fullScreen ? 500 : 73) * taskList.length,
+                }}
+                className={classes.virtualList}
+                increaseViewportBy={180}
+                data={taskList}
+                itemContent={(index, uploader) => (
+                    <UploadTask
+                        selectFile={selectFile}
+                        onClose={close}
+                        onCancel={onCancel}
+                        key={uploader.id}
+                        useAvgSpeed={useAvgSpeed}
+                        uploader={uploader}
+                    />
+                )}
+            />
+        );
+    }, [classes, taskList, useAvgSpeed, fullScreen]);
+
     return (
         <>
-            <Virtuoso
-                style={{ height: 400 }}
-                data={[{}]}
-                itemContent={(index, uploader) => <div>Item {index}</div>}
-            />
             <MoreActions
                 onClose={handleActionClose}
                 uploadManager={uploadManager}
@@ -162,6 +230,7 @@ export default function TaskList({
                     onChange={handlePanelChange}
                 >
                     <AppBar className={classes.appBar}>
+                        {progressBar}
                         <Toolbar disableGutters className={classes.toolbar}>
                             <Tooltip title={"隐藏队列"}>
                                 <IconButton
@@ -214,23 +283,7 @@ export default function TaskList({
                     </AppBar>
                     <AccordionDetails className={classes.paddingZero}>
                         <DialogContent className={classes.dialogContent}>
-                            <Virtuoso
-                                className={classes.virtualList}
-                                style={{
-                                    height: 70 * taskList.length,
-                                }}
-                                data={taskList}
-                                itemContent={(index, uploader) => (
-                                    <UploadTask
-                                        selectFile={selectFile}
-                                        onClose={close}
-                                        onCancel={onCancel}
-                                        key={uploader.id}
-                                        useAvgSpeed={useAvgSpeed}
-                                        uploader={uploader}
-                                    />
-                                )}
-                            />
+                            {list}
                         </DialogContent>
                     </AccordionDetails>
                 </Accordion>

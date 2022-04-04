@@ -51,11 +51,9 @@ const useStyles = makeStyles((theme) => ({
     },
     wordBreak: {
         wordBreak: "break-all",
-        [theme.breakpoints.up("sm")]: {
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-        },
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
     },
     successStatus: {
         color: theme.palette.success.main,
@@ -207,7 +205,7 @@ export default function UploadTask({
             case Status.processing:
                 if (progress) {
                     return (
-                        <div className={classes.wordBreak}>
+                        <div>
                             {`${getSpeedText(
                                 speed,
                                 speedAvg,
@@ -366,6 +364,12 @@ export default function UploadTask({
         );
     }, [status, loading, taskHover, fullScreen, uploader]);
 
+    const fileIcon = useMemo(() => {
+        if (!fullScreen) {
+            return <TypeIcon fileName={uploader.task.name} isUpload />;
+        }
+    }, [uploader, fullScreen]);
+
     return (
         <>
             <ExpansionPanel square expanded={expanded} onChange={toggleDetail}>
@@ -380,12 +384,7 @@ export default function UploadTask({
                     >
                         {progressBar}
                         <ListItem className={classes.progressContent} button>
-                            {!fullScreen && (
-                                <TypeIcon
-                                    fileName={uploader.task.name}
-                                    isUpload
-                                />
-                            )}
+                            {fileIcon}
                             <ListItemText
                                 className={classes.listAction}
                                 primary={
@@ -397,7 +396,11 @@ export default function UploadTask({
                                         <div>{continueLabel}</div>
                                     </div>
                                 }
-                                secondary={statusText}
+                                secondary={
+                                    <div className={classes.wordBreak}>
+                                        {statusText}
+                                    </div>
+                                }
                             />
                             {secondaryAction}
                         </ListItem>

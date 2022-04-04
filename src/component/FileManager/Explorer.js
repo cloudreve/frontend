@@ -32,6 +32,7 @@ import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";
 import ImgPreivew from "./ImgPreview";
 import ObjectIcon from "./ObjectIcon";
+import Nothing from "../Placeholder/Nothing";
 
 const styles = (theme) => ({
     paper: {
@@ -79,25 +80,6 @@ const styles = (theme) => ({
     },
     errorMsg: {
         marginTop: "10px",
-    },
-    emptyContainer: {
-        bottom: "0",
-        height: "300px",
-        margin: "50px auto",
-        width: "300px",
-        color: theme.palette.text.disabled,
-        textAlign: "center",
-        paddingTop: "20px",
-    },
-    emptyIcon: {
-        fontSize: "160px",
-    },
-    emptyInfoBig: {
-        fontSize: "25px",
-        color: theme.palette.text.disabled,
-    },
-    emptyInfoSmall: {
-        color: theme.palette.text.hint,
     },
     hideAuto: {
         [theme.breakpoints.down("sm")]: {
@@ -469,15 +451,10 @@ class ExplorerCompoment extends Component {
                     this.props.fileList.length === 0 &&
                     !this.props.loading &&
                     !this.props.navigatorError && (
-                        <div className={classes.emptyContainer}>
-                            <EmptyIcon className={classes.emptyIcon} />
-                            <div className={classes.emptyInfoBig}>
-                                拖拽文件至此
-                            </div>
-                            <div className={classes.emptyInfoSmall}>
-                                或点击右下方“上传文件”按钮添加文件
-                            </div>
-                        </div>
+                        <Nothing
+                            primary={"拖拽文件至此"}
+                            secondary={"或点击右下方“上传文件”按钮添加文件"}
+                        />
                     )}
                 {((this.props.keywords !== "" &&
                     this.props.dirList.length === 0 &&
@@ -488,14 +465,7 @@ class ExplorerCompoment extends Component {
                         this.props.fileList.length === 0 &&
                         !this.props.loading &&
                         !this.props.navigatorError &&
-                        !isHomePage)) && (
-                    <div className={classes.emptyContainer}>
-                        <SadIcon className={classes.emptyIcon} />
-                        <div className={classes.emptyInfoBig}>
-                            什么都没有找到
-                        </div>
-                    </div>
-                )}
+                        !isHomePage)) && <Nothing primary={"什么都没有找到"} />}
                 {showView && view}
             </div>
         );

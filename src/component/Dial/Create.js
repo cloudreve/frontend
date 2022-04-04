@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Badge, CircularProgress, makeStyles } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
@@ -16,6 +16,7 @@ import statusHelper from "../../utils/page";
 import Backdrop from "@material-ui/core/Backdrop";
 import { FilePlus, FolderUpload } from "mdi-material-ui";
 import { green } from "@material-ui/core/colors";
+import clsx from "clsx";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -45,6 +46,12 @@ const useStyles = makeStyles(() => ({
         bottom: -6,
         left: -6,
         zIndex: 1,
+    },
+    buttonSuccess: {
+        backgroundColor: green[500],
+        "&:hover": {
+            backgroundColor: green[700],
+        },
     },
 }));
 
@@ -89,6 +96,24 @@ export default function UploadButton(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const circularProgress = useMemo(() => {
+        if (props.progress.totalSize > 0) {
+            return (
+                <CircularProgress
+                    key={1}
+                    size={68}
+                    variant="determinate"
+                    value={
+                        (props.progress.processedSize /
+                            props.progress.totalSize) *
+                        100
+                    }
+                    className={classes.fabProgress}
+                />
+            );
+        }
+    }, [classes, props.progress]);
 
     return (
         <AutoHidden enable hide={props.taskListOpen}>
@@ -159,18 +184,7 @@ export default function UploadButton(props) {
                         title={"新建文件"}
                     />
                 </SpeedDial>
-                {props.progress.totalSize > 0 && (
-                    <CircularProgress
-                        size={68}
-                        variant="determinate"
-                        value={
-                            (props.progress.processedSize /
-                                props.progress.totalSize) *
-                            100
-                        }
-                        className={classes.fabProgress}
-                    />
-                )}
+                {circularProgress}
             </Badge>
         </AutoHidden>
     );
