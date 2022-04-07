@@ -202,6 +202,7 @@ export default function TaskList({
     return (
         <>
             <MoreActions
+                deleteTask={onCancel}
                 onClose={handleActionClose}
                 uploadManager={uploadManager}
                 anchorEl={anchorEl}

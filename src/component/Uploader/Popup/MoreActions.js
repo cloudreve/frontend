@@ -10,6 +10,7 @@ import { DeleteSweep } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
 import { refreshStorage, toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
+import { TaskType } from "../core/types";
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -19,7 +20,12 @@ const menuItems = [
     },
 ];
 
-export default function MoreActions({ anchorEl, onClose, uploadManager }) {
+export default function MoreActions({
+    anchorEl,
+    onClose,
+    uploadManager,
+    deleteTask,
+}) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -50,6 +56,7 @@ export default function MoreActions({ anchorEl, onClose, uploadManager }) {
                         "warning"
                     );
                 }
+                deleteTask((u) => u.task.type !== TaskType.resumeHint);
                 RefreshStorage();
             })
             .catch((error) => {

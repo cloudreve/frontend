@@ -299,7 +299,7 @@ export default function UploadTask({
         setLoading(true);
         uploader.cancel().then(() => {
             setLoading(false);
-            onCancel(uploader);
+            onCancel((u) => u.id != uploader.id);
         });
     };
 

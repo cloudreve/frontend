@@ -169,10 +169,8 @@ export default function Uploader() {
             });
     };
 
-    const deleteTask = (uploader) => {
-        setUploaders((uploaders) =>
-            uploaders.filter((u) => u.id != uploader.id)
-        );
+    const deleteTask = (filter) => {
+        setUploaders((uploaders) => uploaders.filter(filter));
     };
 
     return (
