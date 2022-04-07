@@ -187,3 +187,47 @@ export function OBJtoXML(obj: any): string {
     }
     return xml.replace(/<\/?[0-9]{1,}>/g, "");
 }
+
+export function getFileInput(id: number, isFolder: boolean): HTMLInputElement {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.id = `upload-file-input-${id}`;
+    if (isFolder) {
+        input.id = `upload-folder-input-${id}`;
+        input.setAttribute("webkitdirectory", "true");
+        input.setAttribute("mozdirectory", "true");
+    } else {
+        input.id = `upload-file-input-${id}`;
+        input.multiple = true;
+    }
+    input.hidden = true;
+    document.body.appendChild(input);
+    return input;
+}
+
+function pathJoin(parts: string[], sep = "/"): string {
+    parts = parts.map((part, index) => {
+        if (index) {
+            part = part.replace(new RegExp("^" + sep), "");
+        }
+        if (index !== parts.length - 1) {
+            part = part.replace(new RegExp(sep + "$"), "");
+        }
+        return part;
+    });
+    return parts.join(sep);
+}
+
+function basename(path: string): string {
+    const pathList = path.split("/");
+    pathList.pop();
+    return pathList.join("/") === "" ? "/" : pathList.join("/");
+}
+
+export function getDirectoryUploadDst(dst: string, file: any): string {
+    if (!file.webkitRelativePath && file.webkitRelativePath != "") {
+        return dst;
+    }
+
+    return basename(pathJoin([dst, file.webkitRelativePath]));
+}

@@ -4,7 +4,12 @@ import { UnknownPolicyError, UploaderError, UploaderErrorName } from "./errors";
 import Base from "./uploader/base";
 import Local from "./uploader/local";
 import { Pool } from "./utils/pool";
-import { cleanupResumeCtx, listResumeCtx } from "./utils";
+import {
+    cleanupResumeCtx,
+    getDirectoryUploadDst,
+    getFileInput,
+    listResumeCtx,
+} from "./utils";
 import Remote from "./uploader/remote";
 import OneDrive from "./uploader/onedrive";
 import OSS from "./uploader/oss";
@@ -19,6 +24,11 @@ export interface Option {
     concurrentLimit: number;
 }
 
+export enum SelectType {
+    File,
+    Directory,
+}
+
 export default class UploadManager {
     public logger: Logger;
 
@@ -26,7 +36,8 @@ export default class UploadManager {
 
     private static id = 0;
     private policy?: Policy;
-    private input: HTMLInputElement;
+    private fileInput: HTMLInputElement;
+    private directoryInput: HTMLInputElement;
 
     private id = ++UploadManager.id;
 
@@ -35,14 +46,8 @@ export default class UploadManager {
         this.logger.info(`Initialized with log level: ${o.logLevel}`);
 
         this.pool = new Pool(o.concurrentLimit);
-
-        const input = document.createElement("input");
-        input.type = "file";
-        input.id = `upload-input-${this.id}`;
-        input.multiple = true;
-        input.hidden = true;
-        document.body.appendChild(input);
-        this.input = input;
+        this.fileInput = getFileInput(this.id, false);
+        this.directoryInput = getFileInput(this.id, true);
     }
 
     dispatchUploader(task: Task): Base {
@@ -92,15 +97,15 @@ export default class UploadManager {
                 })
                 .join(",");
             this.logger.info(`Set allowed file suffix to ${acceptVal}`);
-            this.input.setAttribute("accept", acceptVal);
+            this.fileInput.setAttribute("accept", acceptVal);
         } else {
             this.logger.info(`Set allowed file suffix to *`);
-            this.input.removeAttribute("accept");
+            this.fileInput.removeAttribute("accept");
         }
     }
 
     // 选择文件
-    public select = (dst: string): Promise<Base[]> => {
+    public select = (dst: string, type = SelectType.File): Promise<Base[]> => {
         return new Promise<Base[]>((resolve) => {
             if (this.policy == undefined) {
                 this.logger.warn(
@@ -112,30 +117,15 @@ export default class UploadManager {
                 );
             }
 
-            this.input.onchange = (ev: Event) => {
-                const target = ev.target as HTMLInputElement;
-                if (!ev || !target || !target.files) return;
-                if (target.files.length > 0) {
-                    resolve(
-                        Array.from(target.files).map(
-                            (file): Base =>
-                                this.dispatchUploader({
-                                    type: TaskType.file,
-                                    policy: this.policy as Policy,
-                                    dst: dst,
-                                    file: file,
-                                    size: file.size,
-                                    name: file.name,
-                                    chunkProgress: [],
-                                    resumed: false,
-                                })
-                        )
-                    );
-                }
-            };
-
-            this.input.value = "";
-            this.input.click();
+            this.fileInput.onchange = (ev: Event) =>
+                this.fileSelectCallback(ev, dst, resolve);
+            this.directoryInput.onchange = (ev: Event) =>
+                this.fileSelectCallback(ev, dst, resolve);
+            this.fileInput.value = "";
+            this.directoryInput.value = "";
+            type == SelectType.File
+                ? this.fileInput.click()
+                : this.directoryInput.click();
         });
     };
 
@@ -154,5 +144,31 @@ export default class UploadManager {
 
     public cleanupSessions = () => {
         cleanupResumeCtx(this.logger);
+    };
+
+    private fileSelectCallback = (
+        ev: Event,
+        dst: string,
+        resolve: (value?: Base[] | PromiseLike<Base[]> | undefined) => void
+    ) => {
+        const target = ev.target as HTMLInputElement;
+        if (!ev || !target || !target.files) return;
+        if (target.files.length > 0) {
+            resolve(
+                Array.from(target.files).map(
+                    (file): Base =>
+                        this.dispatchUploader({
+                            type: TaskType.file,
+                            policy: this.policy as Policy,
+                            dst: getDirectoryUploadDst(dst, file),
+                            file: file,
+                            size: file.size,
+                            name: file.name,
+                            chunkProgress: [],
+                            resumed: false,
+                        })
+                )
+            );
+        }
     };
 }

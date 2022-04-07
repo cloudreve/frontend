@@ -28,6 +28,7 @@ import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TaskDetail from "./TaskDetail";
+import { SelectType } from "../core";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -331,7 +332,8 @@ export default function UploadTask({
             {
                 show: status === Status.resumable,
                 title: "选取同样文件并恢复上传",
-                click: () => selectFile(uploader.task.dst, uploader),
+                click: () =>
+                    selectFile(uploader.task.dst, SelectType.File, uploader),
                 icon: <PlayArrow />,
                 loading: false,
             },

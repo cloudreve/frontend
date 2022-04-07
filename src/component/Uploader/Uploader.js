@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import UploadManager from "./core";
+import UploadManager, { SelectType } from "./core";
 import { useDispatch, useSelector } from "react-redux";
 import UploadButton from "../Dial/Create";
 import pathHelper from "../../utils/page";
@@ -120,12 +120,12 @@ export default function Uploader() {
         alert("openFileList");
     };
 
-    const selectFile = (path, original = null) => {
+    const selectFile = (path, type = SelectType.File, original = null) => {
         setTaskListOpen(true);
 
         // eslint-disable-next-line no-unreachable
         uploadManager
-            .select(path)
+            .select(path, type)
             .then((tasks) => {
                 if (original !== null) {
                     if (

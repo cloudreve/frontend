@@ -17,6 +17,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import { FilePlus, FolderUpload } from "mdi-material-ui";
 import { green } from "@material-ui/core/colors";
 import clsx from "clsx";
+import { SelectType } from "../Uploader/core";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -163,7 +164,9 @@ export default function UploadButton(props) {
                             icon={<FolderUpload />}
                             tooltipOpen
                             tooltipTitle="上传目录"
-                            onClick={() => props.selectFile(path)}
+                            onClick={() =>
+                                props.selectFile(path, SelectType.Directory)
+                            }
                             title={"上传目录"}
                         />
                     )}
