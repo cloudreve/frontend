@@ -6,8 +6,10 @@ import Local from "./uploader/local";
 import { Pool } from "./utils/pool";
 import {
     cleanupResumeCtx,
+    getAllFileEntries,
     getDirectoryUploadDst,
     getFileInput,
+    isFileDrop,
     listResumeCtx,
 } from "./utils";
 import Remote from "./uploader/remote";
@@ -22,6 +24,11 @@ import ResumeHint from "./uploader/placeholder";
 export interface Option {
     logLevel: LogLevel;
     concurrentLimit: number;
+    dropZone?: HTMLElement;
+    onDropOver?: (e: DragEvent) => void;
+    onDropLeave?: (e: DragEvent) => void;
+    onToast: (type: string, msg: string) => void;
+    onDropFileAdded?: (uploaders: Base[]) => void;
 }
 
 export enum SelectType {
@@ -31,23 +38,45 @@ export enum SelectType {
 
 export default class UploadManager {
     public logger: Logger;
-
     public pool: Pool;
-
     private static id = 0;
     private policy?: Policy;
     private fileInput: HTMLInputElement;
     private directoryInput: HTMLInputElement;
-
     private id = ++UploadManager.id;
+    // used for proactive upload (drop, paste)
+    private currentPath = "/";
 
-    constructor(o: Option) {
+    constructor(private o: Option) {
         this.logger = new Logger(o.logLevel, "MANAGER");
         this.logger.info(`Initialized with log level: ${o.logLevel}`);
 
         this.pool = new Pool(o.concurrentLimit);
         this.fileInput = getFileInput(this.id, false);
         this.directoryInput = getFileInput(this.id, true);
+
+        if (o.dropZone) {
+            this.logger.info(`Drag and drop container set to:`, o.dropZone);
+            o.dropZone.addEventListener("dragenter", (e) => {
+                if (isFileDrop(e)) {
+                    e.preventDefault();
+                    if (o.onDropOver) {
+                        o.onDropOver(e);
+                    }
+                }
+            });
+
+            o.dropZone.addEventListener("dragleave", (e) => {
+                if (isFileDrop(e)) {
+                    e.preventDefault();
+                    if (o.onDropLeave) {
+                        o.onDropLeave(e);
+                    }
+                }
+            });
+
+            o.dropZone.addEventListener("drop", this.onFileDroppedIn);
+        }
     }
 
     dispatchUploader(task: Task): Base {
@@ -81,8 +110,9 @@ export default class UploadManager {
     }
 
     // 设定当前存储策略
-    public setPolicy(p: Policy) {
+    public setPolicy(p: Policy, path: string) {
         this.policy = p;
+        this.currentPath = path;
         if (p == undefined) {
             this.logger.info(`Currently no policy selected`);
             return;
@@ -152,15 +182,24 @@ export default class UploadManager {
     };
 
     private fileSelectCallback = (
-        ev: Event,
+        ev: Event | File[],
         dst: string,
         resolve: (value?: Base[] | PromiseLike<Base[]> | undefined) => void
     ) => {
-        const target = ev.target as HTMLInputElement;
-        if (!ev || !target || !target.files) return;
-        if (target.files.length > 0) {
+        let files: File[] = [];
+        if (ev instanceof Event) {
+            const target = ev.target as HTMLInputElement;
+            if (!ev || !target || !target.files) return;
+            if (target.files.length > 0) {
+                files = Array.from(target.files);
+            }
+        } else {
+            files = ev as File[];
+        }
+
+        if (files.length > 0) {
             resolve(
-                Array.from(target.files).map(
+                files.map(
                     (file): Base =>
                         this.dispatchUploader({
                             type: TaskType.file,
@@ -174,6 +213,20 @@ export default class UploadManager {
                         })
                 )
             );
+        }
+    };
+
+    private onFileDroppedIn = async (e: DragEvent) => {
+        const containFile =
+            e.dataTransfer && e.dataTransfer.types.includes("Files");
+        if (containFile) {
+            this.o.onDropLeave && this.o.onDropLeave(e);
+            const items = await getAllFileEntries(e.dataTransfer!.items);
+            console.log(items);
+            const uploaders = await new Promise<Base[]>((resolve) =>
+                this.fileSelectCallback(items, this.currentPath, resolve)
+            );
+            this.o.onDropFileAdded && this.o.onDropFileAdded(uploaders);
         }
     };
 }

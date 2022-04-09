@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Status } from "./core/uploader/base";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../actions";
 
 export function useUpload(uploader) {
-    const lastTimeRef = useRef(null);
-    const startTimeRef = useRef(null);
     const startLoadedRef = useRef(0);
     const [status, setStatus] = useState(uploader.status);
     const [error, setError] = useState(uploader.error);
@@ -19,8 +16,6 @@ export function useUpload(uploader) {
     );
 
     useEffect(() => {
-        lastTimeRef.current = Date.now();
-        startTimeRef.current = Date.now();
         /* eslint-disable @typescript-eslint/no-empty-function */
         uploader.subscribe({
             onTransition: (newStatus) => {
@@ -47,8 +42,8 @@ export function useUpload(uploader) {
             progress.total.loaded == null
         )
             return [0, 0];
-        const duration = (Date.now() - (lastTimeRef.current || 0)) / 1000;
-        const durationTotal = (Date.now() - (startTimeRef.current || 0)) / 1000;
+        const duration = (Date.now() - (uploader.lastTime || 0)) / 1000;
+        const durationTotal = (Date.now() - (uploader.startTime || 0)) / 1000;
         const res =
             progress.total.loaded > startLoadedRef.current
                 ? Math.floor(
@@ -62,14 +57,12 @@ export function useUpload(uploader) {
                 : 0;
 
         startLoadedRef.current = progress.total.loaded;
-        lastTimeRef.current = Date.now();
+        uploader.lastTime = Date.now();
         return [res, resAvg];
-    }, [progress, lastTimeRef, startTimeRef]);
+    }, [progress]);
 
     const retry = () => {
         uploader.reset();
-        lastTimeRef.current = Date.now();
-        startTimeRef.current = Date.now();
         uploader.start();
     };
 

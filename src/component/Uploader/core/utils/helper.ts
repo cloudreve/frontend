@@ -225,9 +225,91 @@ function basename(path: string): string {
 }
 
 export function getDirectoryUploadDst(dst: string, file: any): string {
-    if (!file.webkitRelativePath && file.webkitRelativePath != "") {
-        return dst;
+    let relPath = file.webkitRelativePath;
+    if (!relPath || relPath == "") {
+        relPath = file.fsPath;
+        if (!relPath || relPath == "") {
+            return dst;
+        }
     }
 
-    return basename(pathJoin([dst, file.webkitRelativePath]));
+    if (relPath.startsWith("/")) {
+        relPath = relPath.slice("/".length);
+    }
+
+    return basename(pathJoin([dst, relPath]));
+}
+
+// Wrap readEntries in a promise to make working with readEntries easier
+async function readEntriesPromise(directoryReader: any): Promise<any> {
+    try {
+        return await new Promise((resolve, reject) => {
+            directoryReader.readEntries(resolve, reject);
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function readFilePromise(fileReader: any, path: string): Promise<any> {
+    try {
+        return await new Promise((resolve, reject) => {
+            fileReader.file((file: any) => {
+                file.fsPath = path;
+                resolve(file);
+            });
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// Get all the entries (files or sub-directories) in a directory by calling readEntries until it returns empty array
+async function readAllDirectoryEntries(directoryReader: any): Promise<any> {
+    const entries = [];
+    let readEntries = await readEntriesPromise(directoryReader);
+    while (readEntries.length > 0) {
+        entries.push(...readEntries);
+        readEntries = await readEntriesPromise(directoryReader);
+    }
+    return entries;
+}
+
+// Drop handler function to get all files
+export async function getAllFileEntries(
+    dataTransferItemList: DataTransferItemList
+): Promise<File[]> {
+    const fileEntries = [];
+    // Use BFS to traverse entire directory/file structure
+    const queue = [];
+    // Unfortunately dataTransferItemList is not iterable i.e. no forEach
+    for (let i = 0; i < dataTransferItemList.length; i++) {
+        const fileEntry = dataTransferItemList[i].webkitGetAsEntry();
+        if (!fileEntry) {
+            const file = dataTransferItemList[i].getAsFile();
+            if (file) {
+                fileEntries.push(file);
+            }
+        }
+
+        queue.push(dataTransferItemList[i].webkitGetAsEntry());
+    }
+    while (queue.length > 0) {
+        const entry = queue.shift();
+        if (!entry) {
+            continue;
+        }
+        if (entry.isFile) {
+            fileEntries.push(await readFilePromise(entry, entry.fullPath));
+        } else if (entry.isDirectory) {
+            const reader = entry.createReader();
+            const entries: any = await readAllDirectoryEntries(reader);
+            queue.push(...entries);
+        }
+    }
+    return fileEntries;
+}
+
+export function isFileDrop(e: DragEvent): boolean {
+    return !!e.dataTransfer && e.dataTransfer.types.includes("Files");
 }

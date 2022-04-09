@@ -1,5 +1,5 @@
 // 所有 Uploader 的基类
-import { PolicyType, Task, TaskType } from "../types";
+import { PolicyType, Task } from "../types";
 import UploadManager from "../index";
 import Logger from "../logger";
 import { validate } from "../utils/validator";
@@ -8,7 +8,6 @@ import axios, { CancelTokenSource } from "axios";
 import { createUploadSession, deleteUploadSession } from "../api";
 import * as utils from "../utils";
 import { RequestCanceledError, UploaderError } from "../errors";
-import { getResumeCtxKey } from "../utils";
 
 export enum Status {
     added,
@@ -71,6 +70,9 @@ export default abstract class Base {
     protected cancelToken: CancelTokenSource = CancelToken.source();
     protected progress: UploadProgress;
 
+    public lastTime = Date.now();
+    public startTime = Date.now();
+
     constructor(public task: Task, protected manager: UploadManager) {
         this.logger = new Logger(
             this.manager.logger.level,
@@ -95,6 +97,7 @@ export default abstract class Base {
     public start = async () => {
         this.logger.info("Activate uploading task");
         this.transit(Status.initialized);
+        this.lastTime = this.startTime = Date.now();
 
         try {
             validate(this.task.file, this.task.policy);
