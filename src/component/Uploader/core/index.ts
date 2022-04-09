@@ -137,9 +137,14 @@ export default class UploadManager {
                 tasks
             );
         }
-        return tasks.map((t) =>
-            this.dispatchUploader({ ...t, type: TaskType.resumeHint })
-        );
+        return tasks
+            .filter(
+                (t) =>
+                    t.chunkProgress.length > 0 && t.chunkProgress[0].loaded > 0
+            )
+            .map((t) =>
+                this.dispatchUploader({ ...t, type: TaskType.resumeHint })
+            );
     };
 
     public cleanupSessions = () => {
