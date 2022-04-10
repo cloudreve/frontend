@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -12,6 +11,7 @@ import API from "../../middleware/Api";
 import { getTaskProgress, getTaskStatus, getTaskType } from "../../config";
 import Pagination from "@material-ui/lab/Pagination";
 import { formatLocalTime } from "../../utils/datetime";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     layout: {

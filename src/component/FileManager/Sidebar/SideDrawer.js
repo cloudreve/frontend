@@ -11,7 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import API from "../../../middleware/Api";
-import { navigateTo, toggleSnackbar } from "../../../actions";
 import { filename, sizeToString } from "../../../utils";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -22,6 +21,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import AppBar from "@material-ui/core/AppBar";
 import { formatLocalTime } from "../../../utils/datetime";
+import { navigateTo, toggleSnackbar } from "../../../redux/explorer";
 
 const drawerWidth = 350;
 

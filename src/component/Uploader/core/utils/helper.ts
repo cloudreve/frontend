@@ -205,7 +205,7 @@ export function getFileInput(id: number, isFolder: boolean): HTMLInputElement {
     return input;
 }
 
-function pathJoin(parts: string[], sep = "/"): string {
+export function pathJoin(parts: string[], sep = "/"): string {
     parts = parts.map((part, index) => {
         if (index) {
             part = part.replace(new RegExp("^" + sep), "");
@@ -224,6 +224,13 @@ function basename(path: string): string {
     return pathList.join("/") === "" ? "/" : pathList.join("/");
 }
 
+export function trimPrefix(src: string, prefix: string): string {
+    if (src.startsWith(prefix)) {
+        return src.slice(prefix.length);
+    }
+    return src;
+}
+
 export function getDirectoryUploadDst(dst: string, file: any): string {
     let relPath = file.webkitRelativePath;
     if (!relPath || relPath == "") {
@@ -233,9 +240,7 @@ export function getDirectoryUploadDst(dst: string, file: any): string {
         }
     }
 
-    if (relPath.startsWith("/")) {
-        relPath = relPath.slice("/".length);
-    }
+    relPath = trimPrefix(relPath, "/");
 
     return basename(pathJoin([dst, relPath]));
 }
@@ -266,7 +271,7 @@ async function readFilePromise(fileReader: any, path: string): Promise<any> {
 
 // Get all the entries (files or sub-directories) in a directory by calling readEntries until it returns empty array
 async function readAllDirectoryEntries(directoryReader: any): Promise<any> {
-    const entries = [];
+    const entries: any[] = [];
     let readEntries = await readEntriesPromise(directoryReader);
     while (readEntries.length > 0) {
         entries.push(...readEntries);
@@ -279,9 +284,9 @@ async function readAllDirectoryEntries(directoryReader: any): Promise<any> {
 export async function getAllFileEntries(
     dataTransferItemList: DataTransferItemList
 ): Promise<File[]> {
-    const fileEntries = [];
+    const fileEntries: any[] = [];
     // Use BFS to traverse entire directory/file structure
-    const queue = [];
+    const queue: any[] = [];
     // Unfortunately dataTransferItemList is not iterable i.e. no forEach
     for (let i = 0; i < dataTransferItemList.length; i++) {
         const fileEntry = dataTransferItemList[i].webkitGetAsEntry();

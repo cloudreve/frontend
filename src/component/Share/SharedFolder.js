@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-    openMusicDialog,
-    openResaveDialog,
-    setSelectedTarget,
-    setShareUserPopover,
-    showImgPreivew,
-    toggleSnackbar,
-} from "../../actions";
-import { withStyles, Typography } from "@material-ui/core";
+import { Typography, withStyles } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import FileManager from "../FileManager/FileManager";
 import Paper from "@material-ui/core/Paper";
@@ -16,6 +8,8 @@ import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import pathHelper from "../../utils/page";
+import { openMusicDialog, openResaveDialog, setSelectedTarget, setShareUserPopover, showImgPreivew, toggleSnackbar } from "../../redux/explorer";
+
 const styles = (theme) => ({
     layout: {
         width: "auto",

@@ -13,7 +13,7 @@ import {
     DialogTitle,
     CircularProgress,
 } from "@material-ui/core";
-import { toggleSnackbar } from "../../actions/index";
+import { toggleSnackbar } from "../../redux/explorer";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import List from "@material-ui/core/List";

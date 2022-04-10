@@ -7,11 +7,11 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
 import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 import Link from "@material-ui/core/Link";
+import { toggleSnackbar } from "../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     root: {

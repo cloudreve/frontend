@@ -28,7 +28,7 @@ import classNames from "classnames";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import TimeAgo from "timeago-react";
-import { toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../redux/explorer";
 import API from "../../middleware/Api";
 import { hex2bin, sizeToString } from "../../utils";
 import TypeIcon from "../FileManager/TypeIcon";

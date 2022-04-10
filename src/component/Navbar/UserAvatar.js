@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import SettingIcon from "@material-ui/icons/Settings";
 import UserAvatarPopover from "./UserAvatarPopover";
 import { AccountCircle } from "mdi-material-ui";
-import { setUserPopover } from "../../actions";
 import Auth from "../../middleware/Auth";
 import {
     withStyles,
@@ -17,6 +16,7 @@ import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import { Home } from "@material-ui/icons";
+import { setUserPopover } from "../../redux/explorer";
 
 const mapStateToProps = (state) => {
     return {

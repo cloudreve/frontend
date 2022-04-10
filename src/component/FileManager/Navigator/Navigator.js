@@ -6,20 +6,19 @@ import RightIcon from "@material-ui/icons/KeyboardArrowRight";
 import ShareIcon from "@material-ui/icons/Share";
 import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import {
+import explorer, {
     drawerToggleAction,
     navigateTo,
     navigateUp,
     openCompressDialog,
+    openCreateFileDialog,
     openCreateFolderDialog,
     openShareDialog,
     refreshFileList,
     setNavigatorError,
     setNavigatorLoadingStatus,
     setSelectedTarget,
-} from "../../../actions/index";
-import explorer from "../../../redux/explorer";
-import API from "../../../middleware/Api";
+} from "../../../redux/explorer";
 import { fixUrlHash, setGetParameter } from "../../../utils/index";
 import {
     Divider,
@@ -36,9 +35,9 @@ import Auth from "../../../middleware/Auth";
 import Avatar from "@material-ui/core/Avatar";
 import { Archive } from "@material-ui/icons";
 import { FilePlus } from "mdi-material-ui";
-import { openCreateFileDialog } from "../../../actions";
 import SubActions from "./SubActions";
 import { setCurrentPolicy } from "../../../redux/explorer/action";
+import { list } from "../../../services/navigate";
 
 const mapStateToProps = (state) => {
     return {
@@ -178,15 +177,8 @@ class NavigatorComponent extends Component {
                     ? path.substr(1).split("/")
                     : this.props.path.substr(1).split("/"),
         });
-        let newPath = path !== null ? path : this.props.path;
-        const apiURL = this.props.share
-            ? "/share/list/" + this.props.share.key
-            : this.keywords === ""
-            ? "/directory"
-            : "/file/search/";
-        newPath = this.keywords === "" ? newPath : this.keywords;
-
-        API.get(apiURL + encodeURIComponent(newPath))
+        const newPath = path !== null ? path : this.props.path;
+        list(newPath, this.props.share, this.keywords)
             .then((response) => {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { baseURL } from "../../middleware/Api";
-import { showImgPreivew } from "../../actions/index";
 import { imgPreviewSuffix } from "../../config";
 import { withStyles } from "@material-ui/core";
 import pathHelper from "../../utils/page";
@@ -10,6 +9,7 @@ import { withRouter } from "react-router";
 import { PhotoSlider } from "react-photo-view";
 import "react-photo-view/dist/index.css";
 import * as explorer from "../../redux/explorer/reducer";
+import { showImgPreivew } from "../../redux/explorer";
 
 const styles = () => ({});
 

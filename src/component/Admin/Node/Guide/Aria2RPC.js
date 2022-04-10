@@ -2,7 +2,6 @@ import { lighten, makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../../actions";
 import Link from "@material-ui/core/Link";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -16,6 +15,7 @@ import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import API from "../../../../middleware/Api";
+import { toggleSnackbar } from "../../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {

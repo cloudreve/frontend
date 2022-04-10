@@ -5,7 +5,6 @@ import RightIcon from "@material-ui/icons/KeyboardArrowRight";
 import UpIcon from "@material-ui/icons/ArrowUpward";
 import { connect } from "react-redux";
 import classNames from "classnames";
-import { toggleSnackbar } from "../../actions/index";
 
 import {
     MenuList,
@@ -17,6 +16,7 @@ import {
     ListItemSecondaryAction,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const mapStateToProps = (state) => {
     return {

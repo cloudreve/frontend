@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -20,6 +19,7 @@ import { Delete } from "@material-ui/icons";
 import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
 import Link from "@material-ui/core/Link";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     layout: {

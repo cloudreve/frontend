@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles(() => ({
     layout: {

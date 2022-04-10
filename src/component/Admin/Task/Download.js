@@ -19,7 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import { Delete } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import ShareFilter from "../Dialogs/ShareFilter";

@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import SaveButton from "../Dial/Save";
@@ -16,6 +15,7 @@ import Select from "@material-ui/core/Select";
 import Switch from "@material-ui/core/Switch";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
+import { toggleSnackbar } from "../../redux/explorer";
 const MonacoEditor = React.lazy(() =>
     import(/* webpackChunkName: "codeEditor" */ "react-monaco-editor")
 );

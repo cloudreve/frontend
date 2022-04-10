@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../redux/explorer";
 
 export function useUpload(uploader) {
     const startLoadedRef = useRef(0);

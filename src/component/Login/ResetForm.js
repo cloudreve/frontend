@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
-import { toggleSnackbar } from "../../actions/index";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import {
@@ -17,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { useLocation } from "react-router";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
+import { toggleSnackbar } from "../../redux/explorer";
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",

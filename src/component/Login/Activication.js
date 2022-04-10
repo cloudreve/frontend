@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
-import { toggleSnackbar } from "../../actions/index";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import { Button, Paper, Avatar, Typography } from "@material-ui/core";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
 import { useLocation } from "react-router";
+import { toggleSnackbar } from "../../redux/explorer";
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
-import { toggleSnackbar } from "../../actions/index";
 import axios from "axios";
 
 import {
@@ -16,6 +15,7 @@ import {
     Avatar,
     Typography,
 } from "@material-ui/core";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const styles = (theme) => ({
     layout: {

@@ -13,11 +13,11 @@ import {
     Paper,
     Typography,
 } from "@material-ui/core";
-import { toggleSnackbar } from "../../actions/index";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
 import { useCaptcha } from "../../hooks/useCaptcha";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     layout: {

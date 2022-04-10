@@ -12,12 +12,6 @@ import NickIcon from "@material-ui/icons/PermContactCalendar";
 import LockIcon from "@material-ui/icons/Lock";
 import VerifyIcon from "@material-ui/icons/VpnKey";
 import ColorIcon from "@material-ui/icons/Palette";
-import {
-    applyThemes,
-    changeViewMethod,
-    toggleDaylightMode,
-    toggleSnackbar,
-} from "../../actions";
 import axios from "axios";
 import FingerprintIcon from "@material-ui/icons/Fingerprint";
 import ToggleButton from "@material-ui/lab/ToggleButton";
@@ -49,10 +43,10 @@ import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import QRCode from "qrcode-react";
 import { Brightness3, ListAlt, PermContactCalendar,Schedule } from "@material-ui/icons";
-import { transformTime } from "../../utils";
 import Authn from "./Authn";
 import { formatLocalTime, timeZone } from "../../utils/datetime";
 import TimeZoneDialog from "../Modals/TimeZone";
+import { applyThemes, changeViewMethod, toggleDaylightMode, toggleSnackbar } from "../../redux/explorer";
 
 const styles = (theme) => ({
     layout: {

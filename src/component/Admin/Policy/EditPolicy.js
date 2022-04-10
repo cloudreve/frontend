@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import COSGuide from "./Guid/COSGuide";
 import EditPro from "./Guid/EditPro";

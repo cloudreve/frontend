@@ -8,11 +8,6 @@ import {
     AccountArrowRight,
     AccountPlus,
 } from "mdi-material-ui";
-import {
-    setSessionStatus,
-    setUserPopover,
-    toggleSnackbar,
-} from "../../actions";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import {
@@ -27,6 +22,7 @@ import {
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import pathHelper from "../../utils/page";
+import { setSessionStatus, setUserPopover, toggleSnackbar } from "../../redux/explorer";
 
 const mapStateToProps = (state) => {
     return {

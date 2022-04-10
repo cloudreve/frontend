@@ -7,40 +7,18 @@ import MusicNote from "@material-ui/icons/MusicNote";
 import BackIcon from "@material-ui/icons/ArrowBack";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
-import OpenFolderIcon from "@material-ui/icons/FolderOpen";
 import RenameIcon from "@material-ui/icons/BorderColor";
 import MoveIcon from "@material-ui/icons/Input";
 import DeleteIcon from "@material-ui/icons/Delete";
-import SaveIcon from "@material-ui/icons/Save";
 import MenuIcon from "@material-ui/icons/Menu";
 import { isPreviewable } from "../../config";
 import {
-    drawerToggleAction,
-    setSelectedTarget,
-    navigateTo,
-    openCreateFolderDialog,
-    changeContextMenu,
-    searchMyFile,
-    saveFile,
-    openMusicDialog,
-    showImgPreivew,
-    toggleSnackbar,
-    openMoveDialog,
-    openRemoveDialog,
-    openShareDialog,
-    openRenameDialog,
-    openLoadingDialog,
-    setSessionStatus,
-    openPreview,
-    audioPreviewSetIsOpen,
-} from "../../actions";
-import {
     allowSharePreview,
-    checkGetParameters,
     changeThemeColor,
+    sizeToString,
+    vhCheck,
 } from "../../utils";
 import Uploader from "../Uploader/Uploader.js";
-import { sizeToString, vhCheck } from "../../utils";
 import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
@@ -50,20 +28,20 @@ import { AccountArrowRight, AccountPlus, LogoutVariant } from "mdi-material-ui";
 import { withRouter } from "react-router-dom";
 import {
     AppBar,
-    Toolbar,
-    Typography,
-    withStyles,
-    withTheme,
     Drawer,
-    SwipeableDrawer,
-    IconButton,
+    Grow,
     Hidden,
+    IconButton,
+    List,
     ListItem,
     ListItemIcon,
     ListItemText,
-    List,
-    Grow,
+    SwipeableDrawer,
+    Toolbar,
     Tooltip,
+    Typography,
+    withStyles,
+    withTheme,
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
@@ -71,6 +49,26 @@ import FileTag from "./FileTags";
 import { Assignment, Devices, MoreHoriz, Settings } from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import SubActions from "../FileManager/Navigator/SubActions";
+import {
+    audioPreviewSetIsOpen,
+    changeContextMenu,
+    drawerToggleAction,
+    navigateTo,
+    openCreateFolderDialog,
+    openLoadingDialog,
+    openMoveDialog,
+    openMusicDialog,
+    openPreview,
+    openRemoveDialog,
+    openRenameDialog,
+    openShareDialog,
+    saveFile,
+    searchMyFile,
+    setSelectedTarget,
+    setSessionStatus,
+    showImgPreivew,
+    toggleSnackbar,
+} from "../../redux/explorer";
 
 vhCheck();
 const drawerWidth = 240;
@@ -316,16 +314,11 @@ class NavbarCompoment extends Component {
 
     UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (
-            (this.props.selected.length <= 1 &&
-                !(!this.props.isMultiple && this.props.withFile)) !==
-            (nextProps.selected.length <= 1 &&
-                !(!nextProps.isMultiple && nextProps.withFile))
+            (this.props.selected.length === 0) !==
+            (nextProps.selected.length === 0)
         ) {
             changeThemeColor(
-                !(
-                    this.props.selected.length <= 1 &&
-                    !(!this.props.isMultiple && this.props.withFile)
-                )
+                !(this.props.selected.length === 0)
                     ? this.props.theme.palette.type === "dark"
                         ? this.props.theme.palette.background.default
                         : this.props.theme.palette.primary.main
@@ -537,56 +530,42 @@ class NavbarCompoment extends Component {
                     className={classes.appBar}
                     color={
                         this.props.theme.palette.type !== "dark" &&
-                        this.props.selected.length <= 1 &&
-                        !(!this.props.isMultiple && this.props.withFile)
+                        this.props.selected.length === 0
                             ? "primary"
                             : "default"
                     }
                 >
                     <Toolbar>
-                        {this.props.selected.length <= 1 &&
-                            !(
-                                !this.props.isMultiple && this.props.withFile
-                            ) && (
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="Open drawer"
-                                    onClick={this.handleDrawerToggle}
-                                    className={classes.menuButton}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                            )}
-                        {this.props.selected.length <= 1 &&
-                            !(
-                                !this.props.isMultiple && this.props.withFile
-                            ) && (
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="Open drawer"
-                                    onClick={() =>
-                                        this.props.handleDesktopToggle(
-                                            !this.props.desktopOpen
-                                        )
-                                    }
-                                    className={classes.menuButtonDesktop}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                            )}
-                        {(this.props.selected.length > 1 ||
-                            (!this.props.isMultiple && this.props.withFile)) &&
+                        {this.props.selected.length === 0 && (
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerToggle}
+                                className={classes.menuButton}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        )}
+                        {this.props.selected.length === 0 && (
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={() =>
+                                    this.props.handleDesktopToggle(
+                                        !this.props.desktopOpen
+                                    )
+                                }
+                                className={classes.menuButtonDesktop}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        )}
+                        {this.props.selected.length > 0 &&
                             (isHomePage ||
                                 pathHelper.isSharePage(
                                     this.props.location.pathname
                                 )) && (
-                                <Grow
-                                    in={
-                                        this.props.selected.length > 1 ||
-                                        (!this.props.isMultiple &&
-                                            this.props.withFile)
-                                    }
-                                >
+                                <Grow in={this.props.selected.length > 0}>
                                     <IconButton
                                         color="inherit"
                                         className={classes.menuIcon}
@@ -598,33 +577,31 @@ class NavbarCompoment extends Component {
                                     </IconButton>
                                 </Grow>
                             )}
-                        {this.props.selected.length <= 1 &&
-                            !(
-                                !this.props.isMultiple && this.props.withFile
-                            ) && (
-                                <Typography
-                                    variant="h6"
-                                    color="inherit"
-                                    noWrap
-                                    onClick={() => {
-                                        this.props.history.push("/");
-                                    }}
-                                >
-                                    {this.props.subTitle
-                                        ? this.props.subTitle
-                                        : this.props.title}
-                                </Typography>
-                            )}
+                        {this.props.selected.length === 0 && (
+                            <Typography
+                                variant="h6"
+                                color="inherit"
+                                noWrap
+                                onClick={() => {
+                                    this.props.history.push("/");
+                                }}
+                            >
+                                {this.props.subTitle
+                                    ? this.props.subTitle
+                                    : this.props.title}
+                            </Typography>
+                        )}
 
                         {!this.props.isMultiple &&
-                            this.props.withFile &&
+                            (this.props.withFile || this.props.withFolder) &&
                             !pathHelper.isMobile() && (
                                 <Typography variant="h6" color="inherit" noWrap>
                                     {this.props.selected[0].name}{" "}
-                                    {(isHomePage ||
-                                        pathHelper.isSharePage(
-                                            this.props.location.pathname
-                                        )) &&
+                                    {this.props.withFile &&
+                                        (isHomePage ||
+                                            pathHelper.isSharePage(
+                                                this.props.location.pathname
+                                            )) &&
                                         "(" +
                                             sizeToString(
                                                 this.props.selected[0].size
@@ -636,37 +613,12 @@ class NavbarCompoment extends Component {
                         {this.props.selected.length > 1 &&
                             !pathHelper.isMobile() && (
                                 <Typography variant="h6" color="inherit" noWrap>
-                                    {this.props.selected.length}个对象
+                                    {this.props.selected.length} 个对象
                                 </Typography>
                             )}
-                        {this.props.selected.length <= 1 &&
-                            !(
-                                !this.props.isMultiple && this.props.withFile
-                            ) && <SezrchBar />}
+                        {this.props.selected.length === 0 && <SezrchBar />}
                         <div className={classes.grow} />
-                        {(this.props.selected.length > 1 ||
-                            (!this.props.isMultiple && this.props.withFile)) &&
-                            !isHomePage &&
-                            !pathHelper.isSharePage(
-                                this.props.location.pathname
-                            ) &&
-                            Auth.Check(this.props.isLogin) &&
-                            !checkGetParameters("share") && (
-                                <div className={classes.sectionForFile}>
-                                    <Tooltip title="保存">
-                                        <IconButton
-                                            color="inherit"
-                                            onClick={() =>
-                                                this.props.saveFile()
-                                            }
-                                        >
-                                            <SaveIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                            )}
-                        {(this.props.selected.length > 1 ||
-                            (!this.props.isMultiple && this.props.withFile)) &&
+                        {this.props.selected.length > 0 &&
                             (isHomePage || isSharePage) && (
                                 <div className={classes.sectionForFile}>
                                     {!this.props.isMultiple &&
@@ -736,44 +688,6 @@ class NavbarCompoment extends Component {
                                                         }
                                                     >
                                                         <DownloadIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Grow>
-                                        )}
-
-                                    {!this.props.isMultiple &&
-                                        this.props.withFolder && (
-                                            <Grow
-                                                in={
-                                                    !this.props.isMultiple &&
-                                                    this.props.withFolder
-                                                }
-                                            >
-                                                <Tooltip title="进入目录">
-                                                    <IconButton
-                                                        color="inherit"
-                                                        onClick={() =>
-                                                            this.props.navigateTo(
-                                                                this.props
-                                                                    .path ===
-                                                                    "/"
-                                                                    ? this.props
-                                                                          .path +
-                                                                          this
-                                                                              .props
-                                                                              .selected[0]
-                                                                              .name
-                                                                    : this.props
-                                                                          .path +
-                                                                          "/" +
-                                                                          this
-                                                                              .props
-                                                                              .selected[0]
-                                                                              .name
-                                                            )
-                                                        }
-                                                    >
-                                                        <OpenFolderIcon />
                                                     </IconButton>
                                                 </Tooltip>
                                             </Grow>
@@ -889,12 +803,8 @@ class NavbarCompoment extends Component {
                                 </IconButton>
                             )}
 
-                        {this.props.selected.length <= 1 &&
-                            !(
-                                !this.props.isMultiple && this.props.withFile
-                            ) && <UserAvatar />}
-                        {this.props.selected.length <= 1 &&
-                            !(!this.props.isMultiple && this.props.withFile) &&
+                        {this.props.selected.length === 0 && <UserAvatar />}
+                        {this.props.selected.length === 0 &&
                             isHomePage &&
                             pathHelper.isMobile() && <SubActions inherit />}
                     </Toolbar>

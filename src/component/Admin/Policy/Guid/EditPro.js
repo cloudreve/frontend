@@ -13,7 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../../actions";
+import { toggleSnackbar } from "../../../../redux/explorer";
 import API from "../../../../middleware/Api";
 
 export default function EditPro(props) {

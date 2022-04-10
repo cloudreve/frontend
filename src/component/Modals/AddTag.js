@@ -8,7 +8,6 @@ import {
     DialogTitle,
     CircularProgress,
 } from "@material-ui/core";
-import { toggleSnackbar } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
@@ -35,6 +34,7 @@ import {
     SquareOutline,
     Triangle,
 } from "mdi-material-ui";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {

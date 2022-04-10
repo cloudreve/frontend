@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import { openRemoteDownloadDialog } from "../../actions";
 import { useDispatch } from "react-redux";
 import AutoHidden from "./AutoHidden";
 import { makeStyles } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import { Add } from "@material-ui/icons";
 import Modals from "../FileManager/Modals";
+import { openRemoteDownloadDialog } from "../../redux/explorer";
 
 const useStyles = makeStyles(() => ({
     fab: {

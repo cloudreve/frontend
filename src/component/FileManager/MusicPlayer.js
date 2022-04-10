@@ -18,11 +18,11 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { showAudioPreview ,audioPreviewSetIsOpen, audioPreviewSetPlaying} from "../../actions/index";
 import { audioPreviewSuffix } from "../../config";
 import { baseURL } from "../../middleware/Api";
 import * as explorer from "../../redux/explorer/reducer";
 import pathHelper from "../../utils/page";
+import { audioPreviewSetIsOpen, audioPreviewSetPlaying, showAudioPreview } from "../../redux/explorer";
 
 
 

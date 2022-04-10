@@ -3,16 +3,14 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classNames from "classnames";
 import {
-    withStyles,
     ButtonBase,
-    Typography,
-    Tooltip,
     fade,
+    Tooltip,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
-import { lighten } from "@material-ui/core/styles";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
-import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
 import { Folder } from "@material-ui/icons";
 
@@ -117,7 +115,6 @@ class SmallIconCompoment extends Component {
             this.props.selected.findIndex((value) => {
                 return value === this.props.file;
             }) !== -1;
-        const isMobile = statusHelper.isMobile();
 
         return (
             <ButtonBase
@@ -137,7 +134,7 @@ class SmallIconCompoment extends Component {
                         [classes.iconNotSelected]: !isSelected,
                     })}
                 >
-                    {(!isSelected || !isMobile) && (
+                    {!isSelected && (
                         <>
                             {this.props.isFolder && <Folder />}
                             {!this.props.isFolder && (
@@ -145,8 +142,8 @@ class SmallIconCompoment extends Component {
                             )}
                         </>
                     )}
-                    {isSelected && isMobile && (
-                        <Grow in={isSelected && isMobile}>
+                    {isSelected && (
+                        <Grow in={isSelected}>
                             <CheckCircleRoundedIcon
                                 className={classes.checkIcon}
                             />

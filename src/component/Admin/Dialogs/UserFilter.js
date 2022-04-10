@@ -10,7 +10,7 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 
 export default function UserFilter({ setFilter, setSearch, open, onClose }) {

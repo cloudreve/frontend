@@ -17,14 +17,7 @@ import React, { Component } from "react";
 import { configure, GlobalHotKeys } from "react-hotkeys";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import {
-    changeContextMenu,
-    navigateTo,
-    navigateUp,
-    openRemoveDialog,
-    setSelectedTarget,
-} from "../../actions/index";
-import explorer from "../../redux/explorer";
+import explorer, { changeContextMenu, navigateTo, navigateUp, openRemoveDialog, setSelectedTarget } from "../../redux/explorer";
 import { isMac } from "../../utils";
 import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";

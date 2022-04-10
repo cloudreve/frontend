@@ -3,16 +3,15 @@ import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
 import {
     ButtonBase,
-    Typography,
-    Tooltip,
-    makeStyles,
     fade,
+    makeStyles,
+    Tooltip,
+    Typography,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { lighten } from "@material-ui/core/styles";
 import statusHelper from "../../utils/page";
-import TypeIcon from "./TypeIcon";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+
 const useStyles = makeStyles((theme) => ({
     container: {
         padding: "7px",
@@ -108,8 +107,8 @@ export default function Folder({ folder, isActive, onIconClick }) {
                     [classes.iconNotSelected]: !isSelected,
                 })}
             >
-                {(!isSelected || !isMobile) && <FolderIcon />}
-                {isSelected && isMobile && (
+                {!isSelected && <FolderIcon />}
+                {isSelected && (
                     <CheckCircleRoundedIcon className={classes.checkIcon} />
                 )}
             </div>

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import Pagination from "@material-ui/lab/Pagination";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -37,6 +36,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { withRouter } from "react-router-dom";
 import ToggleIcon from "material-ui-toggle-icon";
 import { formatLocalTime } from "../../utils/datetime";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const styles = (theme) => ({
     cardContainer: {

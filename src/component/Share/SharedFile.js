@@ -1,15 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { sizeToString, vhCheck } from "../../utils";
-import {
-    openMusicDialog,
-    openResaveDialog,
-    setSelectedTarget,
-    showImgPreivew,
-    toggleSnackbar,
-} from "../../actions";
 import { isPreviewable } from "../../config";
-import { withStyles, Button, Typography } from "@material-ui/core";
+import { Button, Typography, withStyles } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
@@ -17,6 +10,8 @@ import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
 import pathHelper from "../../utils/page";
+import { openMusicDialog, openResaveDialog, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../redux/explorer";
+
 
 vhCheck();
 const styles = (theme) => ({

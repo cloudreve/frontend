@@ -2,13 +2,13 @@ import React, { Suspense, useCallback, useEffect, useState } from "react";
 import PageLoading from "../Placeholder/PageLoading";
 import { useParams } from "react-router";
 import API from "../../middleware/Api";
-import { toggleSnackbar } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import { useDispatch } from "react-redux";
 import Notice from "./NotFound";
 import LockedFile from "./LockedFile";
 import SharedFile from "./SharedFile";
 import SharedFolder from "./SharedFolder";
+import { toggleSnackbar } from "../../redux/explorer";
 
 export default function SharePreload() {
     const dispatch = useDispatch();

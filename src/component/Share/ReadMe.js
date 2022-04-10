@@ -7,8 +7,8 @@ import Paper from "@material-ui/core/Paper";
 import TextLoading from "../Placeholder/TextLoading";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import Editor from "for-editor";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     readMeContainer: {

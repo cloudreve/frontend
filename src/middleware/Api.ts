@@ -7,23 +7,25 @@ export const getBaseURL = () => {
     return baseURL;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 const instance = axios.create({
     baseURL: getBaseURL(),
     withCredentials: true,
-    crossDomain: true,
 });
 
-function AppError(message, code, error) {
-    this.code = code;
-    this.message = message || "未知错误";
-    this.message += error ? " " + error : "";
-    this.stack = new Error().stack;
+class AppError extends Error {
+    constructor(message: string | undefined, public code: any, error: any) {
+        super(message);
+        this.code = code;
+        this.message = message || "未知错误";
+        this.message += error ? " " + error : "";
+        this.stack = new Error().stack;
+    }
 }
-AppError.prototype = Object.create(Error.prototype);
-AppError.prototype.constructor = AppError;
 
 instance.interceptors.response.use(
-    function (response) {
+    function (response: any) {
         response.rawData = response.data;
         response.data = response.data.data;
         if (

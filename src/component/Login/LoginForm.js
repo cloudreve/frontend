@@ -13,11 +13,6 @@ import {
     Paper,
     Typography,
 } from "@material-ui/core";
-import {
-    applyThemes,
-    setSessionStatus,
-    toggleSnackbar,
-} from "../../actions/index";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
@@ -27,6 +22,7 @@ import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
 import { ICPFooter } from "../Common/ICPFooter";
 import { useCaptcha } from "../../hooks/useCaptcha";
+import { applyThemes, setSessionStatus, toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     layout: {

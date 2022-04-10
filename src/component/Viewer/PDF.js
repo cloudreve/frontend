@@ -5,10 +5,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
+import { toggleSnackbar } from "../../redux/explorer";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles((theme) => ({

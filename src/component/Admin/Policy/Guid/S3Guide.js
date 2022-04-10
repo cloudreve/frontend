@@ -5,7 +5,6 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Step from "@material-ui/core/Step";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../../actions";
 import Link from "@material-ui/core/Link";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -24,6 +23,7 @@ import { getNumber } from "../../../../utils";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import AlertDialog from "../../Dialogs/Alert";
+import { toggleSnackbar } from "../../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {

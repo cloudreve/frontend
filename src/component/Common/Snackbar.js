@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {} from "../../actions";
 import classNames from "classnames";
 import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
@@ -9,13 +8,11 @@ import CloseIcon from "@material-ui/icons/Close";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
 
-import { green, amber } from "@material-ui/core/colors";
-
 import {
-    withStyles,
-    SnackbarContent,
-    Snackbar,
     IconButton,
+    Snackbar,
+    SnackbarContent,
+    withStyles,
 } from "@material-ui/core";
 
 const mapStateToProps = (state) => {

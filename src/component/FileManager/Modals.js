@@ -1,26 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {
-    closeAllModals,
-    toggleSnackbar,
-    setModalsLoading,
-    refreshFileList,
-    refreshStorage,
-    openLoadingDialog,
-} from "../../actions/index";
 import PathSelector from "./PathSelector";
 import API, { baseURL } from "../../middleware/Api";
 import {
-    withStyles,
     Button,
-    TextField,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle,
     DialogContentText,
-    CircularProgress,
+    DialogTitle,
+    TextField,
+    withStyles,
 } from "@material-ui/core";
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
@@ -29,6 +21,14 @@ import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
+import {
+    closeAllModals,
+    openLoadingDialog,
+    refreshFileList,
+    refreshStorage,
+    setModalsLoading,
+    toggleSnackbar,
+} from "../../redux/explorer";
 
 const styles = (theme) => ({
     wrapper: {

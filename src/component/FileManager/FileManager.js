@@ -3,12 +3,6 @@ import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import {
-    closeAllModals,
-    navigateTo,
-    setSelectedTarget,
-    toggleSnackbar,
-} from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import DragLayer from "./DnD/DragLayer";
@@ -16,6 +10,8 @@ import Explorer from "./Explorer";
 import Modals from "./Modals";
 import Navigator from "./Navigator/Navigator";
 import SideDrawer from "./Sidebar/SideDrawer";
+import { closeAllModals, navigateTo, setSelectedTarget, toggleSnackbar } from "../../redux/explorer";
+
 
 const mapStateToProps = () => ({});
 

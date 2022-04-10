@@ -8,9 +8,9 @@ import {
 import React, { useCallback } from "react";
 import { DeleteSweep } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
-import { refreshStorage, toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
 import { TaskType } from "../core/types";
+import { refreshStorage, toggleSnackbar } from "../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({}));
 

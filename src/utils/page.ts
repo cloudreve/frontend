@@ -1,14 +1,14 @@
 const statusHelper = {
-    isHomePage(path) {
+    isHomePage(path: string) {
         return path === "/home";
     },
-    isSharePage(path) {
+    isSharePage(path: string) {
         return path && path.startsWith("/s/");
     },
-    isAdminPage(path) {
+    isAdminPage(path: string) {
         return path && path.startsWith("/admin");
     },
-    isLoginPage(path) {
+    isLoginPage(path: string) {
         return path && path.startsWith("/login");
     },
     isMobile() {

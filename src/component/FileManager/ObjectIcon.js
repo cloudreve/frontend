@@ -1,14 +1,5 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    changeContextMenu,
-    dragAndDrop,
-    navigateTo,
-    openLoadingDialog,
-    selectFile as selectFileAction,
-    setSelectedTarget,
-    toggleSnackbar,
-} from "../../actions/index";
 import statusHelper from "../../utils/page";
 import FileIcon from "./FileIcon";
 import SmallIcon from "./SmallIcon";
@@ -21,7 +12,16 @@ import DropWarpper from "./DnD/DropWarpper";
 import { useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import { pathBack } from "../../utils";
-import { openPreview } from "../../actions";
+import {
+    changeContextMenu,
+    dragAndDrop,
+    navigateTo,
+    openLoadingDialog,
+    openPreview,
+    selectFile,
+    setSelectedTarget,
+    toggleSnackbar,
+} from "../../redux/explorer";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -89,8 +89,8 @@ export default function ObjectIcon(props) {
         ContextMenu("file", true);
     };
 
-    const selectFile = (e) => {
-        dispatch(selectFileAction(props.file, e, props.index));
+    const SelectFile = (e) => {
+        dispatch(selectFile(props.file, e, props.index));
     };
     const enterFolder = () => {
         NavitateTo(
@@ -101,17 +101,11 @@ export default function ObjectIcon(props) {
         if (props.file.type === "up") {
             NavitateTo(pathBack(navigatorPath));
         }
-        if (
-            statusHelper.isMobile() ||
-            statusHelper.isSharePage(location.pathname)
-        ) {
-            selectFile(e);
-            if (props.file.type === "dir" && !e.ctrlKey) {
-                enterFolder();
-                return;
-            }
-        } else {
-            selectFile(e);
+
+        SelectFile(e);
+        if (props.file.type === "dir" && !e.ctrlKey) {
+            enterFolder();
+            return;
         }
     };
 
@@ -140,12 +134,10 @@ export default function ObjectIcon(props) {
     };
 
     const handleIconClick = (e) => {
-        if (statusHelper.isMobile()) {
-            e.stopPropagation();
-            e.ctrlKey = true;
-            selectFile(e);
-            return false;
-        }
+        e.stopPropagation();
+        e.ctrlKey = true;
+        SelectFile(e);
+        return false;
     };
 
     const [{ isDragging }, drag, preview] = useDrag({

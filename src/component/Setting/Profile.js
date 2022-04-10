@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import API from "../../middleware/Api";
 
 import {
@@ -20,6 +19,7 @@ import {
 import { withRouter } from "react-router";
 import Pagination from "@material-ui/lab/Pagination";
 import { formatLocalTime } from "../../utils/datetime";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const styles = (theme) => ({
     layout: {

@@ -19,7 +19,6 @@ import Chip from "@material-ui/core/Chip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { navigateTo } from "../../../actions";
 import { useDispatch } from "react-redux";
 import Link from "@material-ui/core/Link";
 import PlayArrow from "@material-ui/icons/PlayArrow";
@@ -29,6 +28,7 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TaskDetail from "./TaskDetail";
 import { SelectType } from "../core";
+import { navigateTo } from "../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {

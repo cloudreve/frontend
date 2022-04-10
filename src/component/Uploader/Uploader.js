@@ -5,10 +5,10 @@ import UploadButton from "../Dial/Create";
 import pathHelper from "../../utils/page";
 import { useLocation } from "react-router-dom";
 import { UploaderError } from "./core/errors";
-import { refreshFileList, refreshStorage, toggleSnackbar } from "../../actions";
 import TaskList from "./Popup/TaskList";
 import { Status } from "./core/uploader/base";
 import { DropFileBackground } from "../Placeholder/DropFile";
+import { refreshFileList, refreshStorage, toggleSnackbar } from "../../redux/explorer";
 
 let totalProgressCollector = null;
 let lastProgressStart = -1;

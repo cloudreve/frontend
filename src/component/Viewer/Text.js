@@ -4,12 +4,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import Editor from "for-editor";
 import SaveButton from "../Dial/Save";
 import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
+import { toggleSnackbar } from "../../redux/explorer";
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",

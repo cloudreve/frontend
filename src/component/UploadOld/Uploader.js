@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import uploaderLoader from "../../loader";
 import { connect } from "react-redux";
-import { refreshFileList, refreshStorage, toggleSnackbar } from "../../actions";
 import FileList from "./FileList.js";
 import Auth from "../../middleware/Auth";
 import UploadButton from "../Dial/Create.js";
 import { basename, pathJoin } from "../../utils";
+import { refreshFileList, refreshStorage, toggleSnackbar } from "../../redux/explorer";
 
 let loaded = false;
 

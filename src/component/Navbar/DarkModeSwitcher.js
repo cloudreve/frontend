@@ -3,10 +3,10 @@ import { IconButton, makeStyles } from "@material-ui/core";
 import DayIcon from "@material-ui/icons/Brightness7";
 import NightIcon from "@material-ui/icons/Brightness4";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleDaylightMode } from "../../actions";
 import Tooltip from "@material-ui/core/Tooltip";
 import Auth from "../../middleware/Auth";
 import classNames from "classnames";
+import { toggleDaylightMode } from "../../redux/explorer";
 
 const useStyles = makeStyles(() => ({
     icon: {

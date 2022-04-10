@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
 import UserForm from "./UserForm";
+import { toggleSnackbar } from "../../../redux/explorer";
 
 export default function EditUserPreload() {
     const [user, setUser] = useState({});

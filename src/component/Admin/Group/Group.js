@@ -14,7 +14,7 @@ import { Delete, Edit } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 

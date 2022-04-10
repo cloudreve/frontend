@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -26,6 +25,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 import classNames from "classnames";
 import Box from "@material-ui/core/Box";
+import { toggleSnackbar } from "../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     root: {

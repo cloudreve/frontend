@@ -4,13 +4,13 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Step from "@material-ui/core/Step";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../../actions";
 import { randomStr } from "../../../../utils";
 import Communication from "./Communication";
 import Aria2RPC from "./Aria2RPC";
 import API from "../../../../middleware/Api";
 import Metainfo from "./Metainfo";
 import Completed from "./Completed";
+import { toggleSnackbar } from "../../../../redux/explorer";
 
 const steps = [
     {

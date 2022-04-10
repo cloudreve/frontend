@@ -4,7 +4,6 @@ import StorageIcon from "@material-ui/icons/Storage";
 import { connect } from "react-redux";
 import API from "../../middleware/Api";
 import { sizeToString } from "../../utils";
-import { toggleSnackbar } from "../../actions";
 
 import {
     Divider,
@@ -15,6 +14,7 @@ import {
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { withRouter } from "react-router";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const mapStateToProps = (state) => {
     return {

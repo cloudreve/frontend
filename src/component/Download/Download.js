@@ -2,7 +2,7 @@ import { Button, IconButton, Typography, withStyles } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../redux/explorer";
 import API from "../../middleware/Api";
 import DownloadingCard from "./DownloadingCard";
 import FinishedCard from "./FinishedCard";

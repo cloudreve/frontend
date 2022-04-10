@@ -20,7 +20,7 @@ import Typography from "@material-ui/core/Typography";
 import { Delete, FilterList } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import ShareFilter from "../Dialogs/ShareFilter";
 import { formatLocalTime } from "../../../utils/datetime";

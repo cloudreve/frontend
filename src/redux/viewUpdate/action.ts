@@ -1,5 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
+
 export interface ActionSetSubtitle extends AnyAction {
     type: "SET_SUBTITLE";
     title: string;
@@ -15,6 +16,14 @@ export const setSubtitle = (title: string): ActionSetSubtitle => {
 export const closeContextMenu = () => {
     return {
         type: "CLOSE_CONTEXT_MENU",
+    };
+};
+
+export const changeContextMenu = (type: string, open: boolean) => {
+    return {
+        type: "CHANGE_CONTEXT_MENU",
+        menuType: type,
+        open: open,
     };
 };
 

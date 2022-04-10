@@ -13,7 +13,7 @@ import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 
 const useStyles = makeStyles(() => ({

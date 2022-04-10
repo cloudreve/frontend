@@ -15,7 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { toggleSnackbar } from "../../../../actions";
+import { toggleSnackbar } from "../../../../redux/explorer";
 import API from "../../../../middleware/Api";
 import SizeInput from "../../Common/SizeInput";
 import AlertDialog from "../../Dialogs/Alert";

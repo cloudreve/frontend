@@ -1,12 +1,11 @@
-import {
-    setSiteConfig,
-    toggleSnackbar,
-    enableLoadUploader,
-    changeViewMethod,
-} from "../actions/index";
 import API from "./Api";
 import Auth from "./Auth";
 import pathHelper from "../utils/page";
+import {
+    changeViewMethod,
+    setSiteConfig,
+    toggleSnackbar,
+} from "../redux/explorer";
 
 const initUserConfig = (siteConfig) => {
     if (siteConfig.user !== undefined && !siteConfig.user.anonymous) {

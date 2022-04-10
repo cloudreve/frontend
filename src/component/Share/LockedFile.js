@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 
 import {
     withStyles,
@@ -15,6 +14,7 @@ import {
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import { formatLocalTime } from "../../utils/datetime";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const styles = (theme) => ({
     card: {

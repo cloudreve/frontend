@@ -9,7 +9,6 @@ import {
     DialogContentText,
     CircularProgress,
 } from "@material-ui/core";
-import { toggleSnackbar, setModalsLoading } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
@@ -23,6 +22,7 @@ import {
 } from "../../utils/datetime";
 import FormControl from "@material-ui/core/FormControl";
 import Auth from "../../middleware/Auth";
+import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({}));
 

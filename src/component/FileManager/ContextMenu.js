@@ -23,15 +23,23 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { isCompressFile, isPreviewable, isTorrent } from "../../config";
+import Auth from "../../middleware/Auth";
+import { allowSharePreview } from "../../utils/index";
+import pathHelper from "../../utils/page";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import {
-    openCompressDialog,
-    openCreateFileDialog,
-    refreshFileList,
-} from "../../actions";
+    openPreview,
+    setSelectedTarget,
+    startBatchDownload,
+    toggleObjectInfoSidebar,
+} from "../../redux/explorer/action";
 import {
     changeContextMenu,
     navigateTo,
+    openCompressDialog,
     openCopyDialog,
+    openCreateFileDialog,
     openCreateFolderDialog,
     openDecompressDialog,
     openGetSourceDialog,
@@ -43,21 +51,12 @@ import {
     openRenameDialog,
     openShareDialog,
     openTorrentDownloadDialog,
+    refreshFileList,
     setNavigatorLoadingStatus,
-    setSelectedTarget,
     showImgPreivew,
     toggleSnackbar,
-} from "../../actions/index";
-import { isCompressFile, isPreviewable, isTorrent } from "../../config";
-import Auth from "../../middleware/Auth";
-import { allowSharePreview } from "../../utils/index";
-import pathHelper from "../../utils/page";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import { openPreview } from "../../actions";
-import {
-    setSideBar,
-    toggleObjectInfoSidebar,
-} from "../../redux/explorer/action";
+} from "../../redux/explorer";
+import { pathJoin } from "../Uploader/core/utils";
 
 const styles = () => ({
     propover: {},
@@ -157,6 +156,9 @@ const mapDispatchToProps = (dispatch) => {
         toggleObjectInfoSidebar: (open) => {
             dispatch(toggleObjectInfoSidebar(open));
         },
+        startBatchDownload: (share) => {
+            dispatch(startBatchDownload(share));
+        },
     };
 };
 
@@ -176,8 +178,7 @@ class ContextMenuCompoment extends Component {
     };
 
     openArchiveDownload = () => {
-        this.props.changeContextMenu("file", false);
-        this.props.openLoadingDialog("打包中...");
+        this.props.startBatchDownload(this.props.share);
     };
 
     openDownload = () => {
@@ -197,9 +198,7 @@ class ContextMenuCompoment extends Component {
 
     enterFolder = () => {
         this.props.navigateTo(
-            this.props.path === "/"
-                ? this.props.path + this.props.selected[0].name
-                : this.props.path + "/" + this.props.selected[0].name
+            pathJoin([this.props.path, this.props.selected[0].name])
         );
     };
 

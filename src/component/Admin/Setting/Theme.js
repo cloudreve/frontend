@@ -18,7 +18,7 @@ import { Delete } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import CreateTheme from "../Dialogs/CreateTheme";
 

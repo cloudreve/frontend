@@ -9,11 +9,11 @@ import {
     DialogContentText,
     CircularProgress,
 } from "@material-ui/core";
-import { toggleSnackbar, setModalsLoading } from "../../actions/index";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import TextField from "@material-ui/core/TextField";
+import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {

@@ -21,7 +21,6 @@ import pathHelper from "../../utils/page";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import { navigateTo, searchMyFile, toggleSnackbar } from "../../actions";
 import { useDispatch } from "react-redux";
 import Auth from "../../middleware/Auth";
 import {
@@ -45,6 +44,7 @@ import {
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import API from "../../middleware/Api";
+import { navigateTo, searchMyFile, toggleSnackbar } from "../../redux/explorer";
 
 const ExpansionPanel = withStyles({
     root: {

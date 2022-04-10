@@ -7,7 +7,7 @@ import TextTotateVerticalIcon from "@material-ui/icons/TextRotateVertical";
 import Avatar from "@material-ui/core/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../../middleware/Auth";
-import { changeViewMethod, setShareUserPopover } from "../../../actions";
+import { changeViewMethod, setShareUserPopover } from "../../../redux/explorer";
 import { changeSortMethod } from "../../../redux/explorer/action";
 
 const useStyles = makeStyles((theme) => ({

@@ -5,7 +5,6 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 import FileIcon from "@material-ui/icons/InsertDriveFile";
 import ShareIcon from "@material-ui/icons/Share";
 import { connect } from "react-redux";
-import { searchMyFile } from "../../actions";
 
 import {
     withStyles,
@@ -21,6 +20,7 @@ import {
 import { withRouter } from "react-router";
 import pathHelper from "../../utils/page";
 import { HotKeys, configure } from "react-hotkeys";
+import { searchMyFile } from "../../redux/explorer";
 
 configure({
     ignoreTags: [],

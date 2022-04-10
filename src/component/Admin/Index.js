@@ -44,7 +44,7 @@ import {
 } from "recharts";
 import { ResponsiveContainer } from "recharts/lib/component/ResponsiveContainer";
 import TimeAgo from "timeago-react";
-import { toggleSnackbar } from "../../actions";
+import { toggleSnackbar } from "../../redux/explorer";
 import API from "../../middleware/Api";
 import pathHelper from "../../utils/page";
 

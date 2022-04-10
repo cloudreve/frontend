@@ -27,9 +27,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import { useHistory } from "react-router";
 import { formatLocalTime } from "../../utils/datetime";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const ExpansionPanel = withStyles({
     root: {

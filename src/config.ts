@@ -16,7 +16,7 @@ export const msDocPreviewSuffix = [
     "xlsx",
     "xls",
 ];
-export const audioPreviewSuffix = ["mp3", "ogg","flac"];
+export const audioPreviewSuffix = ["mp3", "ogg", "flac"];
 export const videoPreviewSuffix = ["mp4", "mkv", "webm"];
 export const pdfPreviewSuffix = ["pdf"];
 export const editSuffix = ["md", "txt"];
@@ -74,7 +74,7 @@ export const policyTypeMap = {
     onedrive: "OneDrive",
     s3: "Amazon S3",
 };
-export const isPreviewable = (name) => {
+export const isPreviewable = (name: any) => {
     const suffix = name.split(".").pop().toLowerCase();
     if (imgPreviewSuffix.indexOf(suffix) !== -1) {
         return "img";
@@ -93,7 +93,7 @@ export const isPreviewable = (name) => {
     }
     return false;
 };
-export const isTorrent = (name) => {
+export const isTorrent = (name: any) => {
     const suffix = name.split(".").pop().toLowerCase();
     if (mediaType.torrent.indexOf(suffix) !== -1) {
         return true;
@@ -101,7 +101,7 @@ export const isTorrent = (name) => {
     return false;
 };
 
-export const isCompressFile = (name) => {
+export const isCompressFile = (name: any) => {
     const suffix = name.split(".").pop().toLowerCase();
     return suffix === "zip";
 };
@@ -118,15 +118,15 @@ const taskProgress = [
     "插入中",
 ];
 
-export const getTaskStatus = (status) => {
+export const getTaskStatus = (status: any) => {
     return taskStatus[status];
 };
 
-export const getTaskType = (status) => {
+export const getTaskType = (status: any) => {
     return taskType[status];
 };
 
-export const getTaskProgress = (type, status) => {
+export const getTaskProgress = (type: any, status: any) => {
     if (type === 2) {
         return "已完成 " + (status + 1) + " 个文件";
     }

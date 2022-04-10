@@ -5,11 +5,6 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
 import PublishIcon from "@material-ui/icons/Publish";
-import {
-    openCreateFileDialog,
-    openCreateFolderDialog,
-    toggleSnackbar,
-} from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
 import AutoHidden from "./AutoHidden";
 import statusHelper from "../../utils/page";
@@ -18,6 +13,7 @@ import { FilePlus, FolderUpload } from "mdi-material-ui";
 import { green } from "@material-ui/core/colors";
 import clsx from "clsx";
 import { SelectType } from "../Uploader/core";
+import { openCreateFileDialog, openCreateFolderDialog, toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles(() => ({
     fab: {

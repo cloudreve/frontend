@@ -4,8 +4,8 @@ import Paper from "@material-ui/core/Paper";
 import NodeGuide from "./Guide/NodeGuide";
 import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../actions";
 import API from "../../../middleware/Api";
+import { toggleSnackbar } from "../../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     root: {

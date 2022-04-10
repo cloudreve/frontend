@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { setUserPopover } from "../../actions";
 import { withStyles, Typography } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import Avatar from "@material-ui/core/Avatar";
+import { setUserPopover } from "../../redux/explorer";
 
 const mapStateToProps = (state) => {
     return {

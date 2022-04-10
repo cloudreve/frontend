@@ -6,21 +6,19 @@ import FolderIcon from "@material-ui/icons/Folder";
 import classNames from "classnames";
 import { sizeToString } from "../../utils/index";
 import {
-    withStyles,
+    fade,
     TableCell,
     TableRow,
     Typography,
-    fade,
+    withStyles,
 } from "@material-ui/core";
 import TypeIcon from "./TypeIcon";
-import { lighten } from "@material-ui/core/styles";
 import pathHelper from "../../utils/page";
+import statusHelper from "../../utils/page";
 import { withRouter } from "react-router";
 import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
-import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
-import dayjs from "dayjs";
 import { formatLocalTime } from "../../utils/datetime";
 
 const styles = (theme) => ({
@@ -167,9 +165,9 @@ class TableRowCompoment extends Component {
                                     : null
                             }
                         >
-                            {(!isSelected || !isMobile) && icon}
-                            {isSelected && isMobile && (
-                                <Grow in={isSelected && isMobile}>
+                            {!isSelected && icon}
+                            {isSelected && (
+                                <Grow in={isSelected}>
                                     <CheckCircleRoundedIcon
                                         className={classNames(
                                             classes.checkIcon,

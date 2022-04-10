@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../actions";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import Pagination from "@material-ui/lab/Pagination";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -23,6 +22,7 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router";
 import TimeAgo from "timeago-react";
+import { toggleSnackbar } from "../../redux/explorer";
 
 const useStyles = makeStyles((theme) => ({
     cardContainer: {

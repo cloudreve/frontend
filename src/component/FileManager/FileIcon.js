@@ -5,7 +5,6 @@ import {
     Tooltip,
     Typography,
     withStyles,
-    fade,
 } from "@material-ui/core";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -266,11 +265,11 @@ class FileIconCompoment extends Component {
                                     [classes.iconNotSelected]: !isSelected,
                                 })}
                             >
-                                {(!isSelected || !isMobile) && (
+                                {!isSelected && (
                                     <TypeIcon fileName={this.props.file.name} />
                                 )}
-                                {isSelected && isMobile && (
-                                    <Grow in={isSelected && isMobile}>
+                                {isSelected && (
+                                    <Grow in={isSelected}>
                                         <CheckCircleRoundedIcon
                                             className={classes.checkIcon}
                                         />

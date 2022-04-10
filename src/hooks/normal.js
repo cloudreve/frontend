@@ -6,11 +6,11 @@ import React, {
     useState,
 } from "react";
 import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../actions";
 import API from "../middleware/Api";
 import { FormControl, Input, InputLabel } from "@material-ui/core";
 import Placeholder from "../component/Placeholder/Captcha";
 import { defaultValidate, useStyle } from "./useCaptcha";
+import { toggleSnackbar } from "../redux/explorer";
 
 const NormalCaptcha = forwardRef(function NormalCaptcha(
     { captchaRef, setLoading },
