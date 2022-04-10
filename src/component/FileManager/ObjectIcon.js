@@ -2,26 +2,23 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     changeContextMenu,
-    setSelectedTarget,
-    selectFile as selectFileAction,
-    navigateTo,
-    showImgPreivew,
-    openMusicDialog,
-    toggleSnackbar,
     dragAndDrop,
+    navigateTo,
     openLoadingDialog,
+    selectFile as selectFileAction,
+    setSelectedTarget,
+    toggleSnackbar,
 } from "../../actions/index";
 import statusHelper from "../../utils/page";
 import FileIcon from "./FileIcon";
 import SmallIcon from "./SmallIcon";
 import TableItem from "./TableRow";
 import classNames from "classnames";
-import { isPreviewable } from "../../config";
 import { makeStyles } from "@material-ui/core";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import DropWarpper from "./DnD/DropWarpper";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import { pathBack } from "../../utils";
 import { openPreview } from "../../actions";

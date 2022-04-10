@@ -1,12 +1,12 @@
 import {
     ButtonBase,
     Divider,
+    fade,
     Tooltip,
     Typography,
     withStyles,
     fade,
 } from "@material-ui/core";
-import { lighten } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
@@ -22,9 +22,7 @@ import statusHelper from "../../utils/page";
 import Grow from "@material-ui/core/Grow";
 
 const styles = (theme) => ({
-    container: {
-        padding: "7px",
-    },
+    container: {},
 
     selected: {
         "&:hover": {
@@ -119,6 +117,9 @@ const styles = (theme) => ({
     checkIcon: {
         color: theme.palette.primary.main,
     },
+    noDrag: {
+        userDrag: "none",
+    },
 });
 
 const mapStateToProps = (state) => {
@@ -190,11 +191,14 @@ class FileIconCompoment extends Component {
                         this.props.file.pic !== "null,null" && (
                             <div className={classes.preview}>
                                 <LazyLoadImage
-                                    className={classNames({
-                                        [classes.hide]: this.state.loading,
-                                        [classes.picPreview]: !this.state
-                                            .loading,
-                                    })}
+                                    className={classNames(
+                                        {
+                                            [classes.hide]: this.state.loading,
+                                            [classes.picPreview]: !this.state
+                                                .loading,
+                                        },
+                                        classes.noDrag
+                                    )}
                                     src={
                                         baseURL +
                                         (isSharePage

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useDragLayer } from "react-dnd";
 import Preview from "./Preview";
 import { useSelector } from "react-redux";
+
 const layerStyles = {
     position: "fixed",
     pointerEvents: "none",
@@ -55,14 +56,14 @@ const CustomDragLayer = (props) => {
     const viewMethod = useSelector(
         (state) => state.viewUpdate.explorerViewMethod
     );
-    function renderItem() {
+    const image = useMemo(() => {
         switch (itemType) {
             case "object":
                 return <Preview object={item.object} />;
             default:
                 return null;
         }
-    }
+    }, [itemType, item]);
     if (!isDragging) {
         return null;
     }
@@ -76,7 +77,7 @@ const CustomDragLayer = (props) => {
                     viewMethod
                 )}
             >
-                {renderItem()}
+                {image}
             </div>
         </div>
     );

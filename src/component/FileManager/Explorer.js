@@ -11,8 +11,6 @@ import {
     withStyles,
 } from "@material-ui/core";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import SadIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-import EmptyIcon from "@material-ui/icons/Unarchive";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
@@ -112,6 +110,18 @@ const styles = (theme) => ({
         position: "absolute",
         top: 20,
         width: 1,
+    },
+    gridContainer: {
+        [theme.breakpoints.down("sm")]: {
+            gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))",
+        },
+        [theme.breakpoints.up("md")]: {
+            gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))",
+        },
+        display: "grid",
+    },
+    gridItem: {
+        flex: "1 1 220px",
     },
 });
 
@@ -352,15 +362,13 @@ class ExplorerCompoment extends Component {
                             container
                             spacing={0}
                             alignItems="flex-start"
+                            className={classes.gridContainer}
                         >
                             {this.props.dirList.map((value, index) => (
                                 <Grid
                                     key={value.id}
                                     item
-                                    xs={6}
-                                    md={3}
-                                    sm={4}
-                                    lg={2}
+                                    className={classes.gridItem}
                                 >
                                     <ObjectIcon
                                         key={value.id}
@@ -386,15 +394,13 @@ class ExplorerCompoment extends Component {
                             container
                             spacing={0}
                             alignItems="flex-start"
+                            className={classes.gridContainer}
                         >
                             {this.props.fileList.map((value, index) => (
                                 <Grid
+                                    className={classes.gridItem}
                                     key={value.id}
                                     item
-                                    xs={6}
-                                    md={3}
-                                    sm={4}
-                                    lg={2}
                                 >
                                     <ObjectIcon
                                         key={value.id}
