@@ -121,17 +121,7 @@ class ModalsCompoment extends Component {
         if (this.props.loading !== nextProps.loading) {
             // 打包下载
             if (nextProps.loading === true) {
-                if (nextProps.loadingText === "打包中...") {
-                    if (
-                        pathHelper.isSharePage(this.props.location.pathname) &&
-                        this.props.share &&
-                        this.props.share.score > 0
-                    ) {
-                        this.scoreHandler(this.archiveDownload);
-                        return;
-                    }
-                    this.archiveDownload();
-                } else if (nextProps.loadingText === "获取下载地址...") {
+                if (nextProps.loadingText === "获取下载地址...") {
                     if (
                         pathHelper.isSharePage(this.props.location.pathname) &&
                         this.props.share &&
@@ -201,55 +191,6 @@ class ModalsCompoment extends Component {
                 window.location.assign(response.data);
                 this.onClose();
                 this.downloaded = true;
-            })
-            .catch((error) => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.onClose();
-            });
-    };
-
-    archiveDownload = () => {
-        const dirs = [],
-            items = [];
-        this.props.selected.map((value) => {
-            if (value.type === "dir") {
-                dirs.push(value.id);
-            } else {
-                items.push(value.id);
-            }
-            return null;
-        });
-
-        let reqURL = "/file/archive";
-        const postBody = {
-            items: items,
-            dirs: dirs,
-        };
-        if (pathHelper.isSharePage(this.props.location.pathname)) {
-            reqURL = "/share/archive/" + window.shareInfo.key;
-            postBody["path"] = this.props.selected[0].path;
-        }
-
-        API.post(reqURL, postBody)
-            .then((response) => {
-                if (response.rawData.code === 0) {
-                    this.onClose();
-                    window.location.assign(response.data);
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.rawData.msg,
-                        "warning"
-                    );
-                }
-                this.onClose();
-                this.props.refreshStorage();
             })
             .catch((error) => {
                 this.props.toggleSnackbar(

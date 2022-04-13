@@ -258,9 +258,9 @@ export const startBatchDownload = (
                             },
                             {
                                 key: "server",
-                                name: "服务端端中专打包",
+                                name: "服务端中转打包",
                                 description:
-                                    "由服务端中专打包并实时发送到客户端下载。",
+                                    "由服务端中转打包并实时发送到客户端下载。",
                             },
                         ],
                         "选择打包下载方式"

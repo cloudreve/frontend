@@ -97,7 +97,7 @@ export default function DecompressDialog(props) {
             {selectedPath !== "" && (
                 <DialogContent className={classes.contentFix}>
                     <DialogContentText>
-                        解压送至 <strong>{selectedPathName}</strong>
+                        解压缩至 <strong>{selectedPathName}</strong>
                     </DialogContentText>
                 </DialogContent>
             )}
