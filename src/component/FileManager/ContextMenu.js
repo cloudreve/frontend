@@ -471,23 +471,20 @@ class ContextMenuCompoment extends Component {
                                 </div>
                             )}
 
-                            {(this.props.isMultiple || this.props.withFolder) &&
-                                (user.group.allowArchiveDownload ||
-                                    !isHomePage) && (
-                                    <MenuItem
-                                        dense
-                                        onClick={() =>
-                                            this.openArchiveDownload()
-                                        }
-                                    >
-                                        <StyledListItemIcon>
-                                            <DownloadIcon />
-                                        </StyledListItemIcon>
-                                        <Typography variant="inherit">
-                                            打包下载
-                                        </Typography>
-                                    </MenuItem>
-                                )}
+                            {(this.props.isMultiple ||
+                                this.props.withFolder) && (
+                                <MenuItem
+                                    dense
+                                    onClick={() => this.openArchiveDownload()}
+                                >
+                                    <StyledListItemIcon>
+                                        <DownloadIcon />
+                                    </StyledListItemIcon>
+                                    <Typography variant="inherit">
+                                        打包下载
+                                    </Typography>
+                                </MenuItem>
+                            )}
 
                             {!this.props.isMultiple &&
                                 this.props.withFile &&

@@ -7,9 +7,10 @@ import streamSaver from "streamsaver";
 import "../../utils/zip";
 import pathHelper from "../../utils/page";
 import { isMac } from "../../utils";
-import { getBaseURL } from "../../middleware/Api";
+import API, { getBaseURL } from "../../middleware/Api";
 import { pathJoin, trimPrefix } from "../../component/Uploader/core/utils";
 import { getPreviewPath, walk } from "../../utils/api";
+import { askForOption } from "./async";
 import Auth from "../../middleware/Auth";
 import { isPreviewable } from "../../config";
 import { push } from "connected-react-router";
@@ -175,6 +176,64 @@ export const toggleObjectInfoSidebar = (
     };
 };
 
+export const serverSideBatchDownload = (
+    share: any
+): ThunkAction<any, any, any, any> => {
+    return (dispatch, getState): void => {
+        dispatch(openLoadingDialog("正在准备打包下载..."));
+        const {
+            explorer: { selected },
+            router: {
+                location: { pathname },
+            },
+        } = getState();
+        const dirs: any[] = [],
+            items: any[] = [];
+        selected.map((value) => {
+            if (value.type === "dir") {
+                dirs.push(value.id);
+            } else {
+                items.push(value.id);
+            }
+            return null;
+        });
+
+        let reqURL = "/file/archive";
+        const postBody = {
+            items: items,
+            dirs: dirs,
+        };
+        if (pathHelper.isSharePage(pathname)) {
+            reqURL = "/share/archive/" + share.key;
+            postBody["path"] = selected[0].path;
+        }
+
+        API.post(reqURL, postBody)
+            .then((response: any) => {
+                if (response.rawData.code === 0) {
+                    dispatch(closeAllModals());
+                    window.location.assign(response.data);
+                } else {
+                    dispatch(
+                        toggleSnackbar(
+                            "top",
+                            "right",
+                            response.rawData.msg,
+                            "warning"
+                        )
+                    );
+                }
+                dispatch(closeAllModals());
+            })
+            .catch((error) => {
+                dispatch(
+                    toggleSnackbar("top", "right", error.message, "error")
+                );
+                dispatch(closeAllModals());
+            });
+    };
+};
+
 export const startBatchDownload = (
     share: any
 ): ThunkAction<any, any, any, any> => {
@@ -183,6 +242,39 @@ export const startBatchDownload = (
         const {
             explorer: { selected },
         } = getState();
+
+        const user = Auth.GetUser();
+        if (user.group.allowArchiveDownload) {
+            let option: any;
+            try {
+                option = await dispatch(
+                    askForOption(
+                        [
+                            {
+                                key: "client",
+                                name: "浏览器端打包",
+                                description:
+                                    "由浏览器实时下载并打包，并非所有环境都支持。",
+                            },
+                            {
+                                key: "server",
+                                name: "服务端端中专打包",
+                                description:
+                                    "由服务端中专打包并实时发送到客户端下载。",
+                            },
+                        ],
+                        "选择打包下载方式"
+                    )
+                );
+            } catch (e) {
+                return;
+            }
+
+            if (option.key === "server") {
+                dispatch(serverSideBatchDownload(share));
+                return;
+            }
+        }
 
         dispatch(openLoadingDialog("列取文件中..."));
 
@@ -259,7 +351,7 @@ export const startBatchDownload = (
                     toggleSnackbar(
                         "top",
                         "right",
-                        `打包遇到错误：${e.message}`,
+                        `打包遇到错误：${e && e.message}`,
                         "warning"
                     );
                     dispatch(closeAllModals());

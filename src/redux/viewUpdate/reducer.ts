@@ -40,6 +40,17 @@ export interface ViewUpdateState {
         decompress: boolean;
         loading: boolean;
         loadingText: string;
+        option?: {
+            options: {
+                open: boolean;
+                key: string;
+                name: string;
+                description?: string;
+            }[];
+            title: string;
+            callback: any;
+            onClose: any;
+        };
     };
     snackbar: {
         toggle: boolean;
@@ -248,6 +259,7 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                     loading: false,
                     compress: false,
                     decompress: false,
+                    option: undefined,
                 }),
             });
         case "TOGGLE_SNACKBAR":
@@ -303,6 +315,13 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 navigatorError: false,
                 navigatorLoading: action.navigatorLoading,
             };
+        case "SET_OPTION_MODAL":
+            return Object.assign({}, state, {
+                modals: Object.assign({}, state.modals, {
+                    option: action.option,
+                }),
+                contextOpen: false,
+            });
         default:
             return state;
     }

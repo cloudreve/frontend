@@ -29,6 +29,7 @@ import {
     setModalsLoading,
     toggleSnackbar,
 } from "../../redux/explorer";
+import OptionSelector from "../Modals/OptionSelector";
 
 const styles = (theme) => ({
     wrapper: {
@@ -631,6 +632,7 @@ class ModalsCompoment extends Component {
         return (
             <div>
                 <Loading />
+                <OptionSelector />
                 <Dialog
                     open={this.props.modalsStatus.getSource}
                     onClose={this.onClose}

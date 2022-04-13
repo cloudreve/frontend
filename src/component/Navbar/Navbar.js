@@ -69,6 +69,7 @@ import {
     showImgPreivew,
     toggleSnackbar,
 } from "../../redux/explorer";
+import { startBatchDownload } from "../../redux/explorer/action";
 
 vhCheck();
 const drawerWidth = 240;
@@ -147,6 +148,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         audioPreviewOpen: () => {
             dispatch(audioPreviewSetIsOpen(true));
+        },
+        startBatchDownload: (share) => {
+            dispatch(startBatchDownload(share));
         },
     };
 };
@@ -345,7 +349,7 @@ class NavbarCompoment extends Component {
     };
 
     archiveDownload = () => {
-        this.props.openLoadingDialog("打包中...");
+        this.props.startBatchDownload(this.props.share);
     };
 
     signOut = () => {
@@ -669,29 +673,25 @@ class NavbarCompoment extends Component {
                                             </Grow>
                                         )}
                                     {(this.props.isMultiple ||
-                                        this.props.withFolder) &&
-                                        user.group.allowArchiveDownload && (
-                                            <Grow
-                                                in={
-                                                    (this.props.isMultiple ||
-                                                        this.props
-                                                            .withFolder) &&
-                                                    user.group
-                                                        .allowArchiveDownload
-                                                }
-                                            >
-                                                <Tooltip title="打包下载">
-                                                    <IconButton
-                                                        color="inherit"
-                                                        onClick={() =>
-                                                            this.archiveDownload()
-                                                        }
-                                                    >
-                                                        <DownloadIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Grow>
-                                        )}
+                                        this.props.withFolder) && (
+                                        <Grow
+                                            in={
+                                                this.props.isMultiple ||
+                                                this.props.withFolder
+                                            }
+                                        >
+                                            <Tooltip title="打包下载">
+                                                <IconButton
+                                                    color="inherit"
+                                                    onClick={() =>
+                                                        this.archiveDownload()
+                                                    }
+                                                >
+                                                    <DownloadIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grow>
+                                    )}
                                     {!this.props.isMultiple &&
                                         !pathHelper.isMobile() &&
                                         !isSharePage && (

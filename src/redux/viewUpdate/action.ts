@@ -39,3 +39,10 @@ export const changeSubTitle = (
         dispatch(setSubtitle(title));
     };
 };
+
+export const setOptionModal = (option: any) => {
+    return {
+        type: "SET_OPTION_MODAL",
+        option: option,
+    };
+};
