@@ -37,10 +37,15 @@ const Auth = {
         const preference = JSON.parse(
             localStorage.getItem("user_preference") || "{}"
         );
-        if (preference && preference[key]) {
+        if (preference && preference[key] !== undefined) {
             return preference[key];
         }
         return null;
+    },
+    GetPreferenceWithDefault(key: string, defaultVal: any): any {
+        return Auth.GetPreference(key) !== null
+            ? Auth.GetPreference(key)
+            : defaultVal;
     },
 };
 

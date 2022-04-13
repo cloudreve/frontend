@@ -11,6 +11,7 @@ import { RequestCanceledError, UploaderError } from "../errors";
 
 export enum Status {
     added,
+    resumable,
     initialized,
     queued,
     preparing,
@@ -19,7 +20,6 @@ export enum Status {
     finished,
     error,
     canceled,
-    resumable,
 }
 
 export interface UploadHandlers {

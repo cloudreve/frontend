@@ -8,7 +8,11 @@ import { UploaderError } from "./core/errors";
 import TaskList from "./Popup/TaskList";
 import { Status } from "./core/uploader/base";
 import { DropFileBackground } from "../Placeholder/DropFile";
-import { refreshFileList, refreshStorage, toggleSnackbar } from "../../redux/explorer";
+import {
+    refreshFileList,
+    refreshStorage,
+    toggleSnackbar,
+} from "../../redux/explorer";
 
 let totalProgressCollector = null;
 let lastProgressStart = -1;
@@ -209,6 +213,7 @@ export default function Uploader() {
                         onCancel={deleteTask}
                         selectFile={selectFile}
                         onClose={() => setTaskListOpen(false)}
+                        setUploaders={setUploaders}
                     />
                 </>
             )}

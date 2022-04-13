@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
     Accordion,
     AccordionDetails,
@@ -7,7 +7,6 @@ import {
     DialogContent,
     Fade,
     IconButton,
-    List,
     makeStyles,
     Slide,
     Toolbar,
@@ -26,8 +25,9 @@ import MoreActions from "./MoreActions";
 import { useSelector } from "react-redux";
 import { Virtuoso } from "react-virtuoso";
 import Nothing from "../../Placeholder/Nothing";
+import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { Status } from "../core/uploader/base";
-import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
+import Auth from "../../../middleware/Auth";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -99,6 +99,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const sorters = {
+    default: (a, b) => a.id - b.id,
+    reverse: (a, b) => b.id - a.id,
+};
+
+const filters = {
+    default: (u) => true,
+    ongoing: (u) => u.status < Status.finished,
+};
+
+const getTaskListPreference = (key, defaultVal) =>
+    Auth.GetPreference(key) ? Auth.GetPreference(key) : defaultVal;
+
 export default function TaskList({
     open,
     onClose,
@@ -107,14 +120,23 @@ export default function TaskList({
     onCancel,
     uploadManager,
     progress,
+    setUploaders,
 }) {
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const path = useSelector((state) => state.navigator.path);
     const [expanded, setExpanded] = useState(true);
-    const [useAvgSpeed, setUseAvgSpeed] = useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [useAvgSpeed, setUseAvgSpeed] = useState(
+        Auth.GetPreferenceWithDefault("use_avg_speed", true)
+    );
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [filter, setFilter] = useState(
+        Auth.GetPreferenceWithDefault("task_filter", "default")
+    );
+    const [sorter, setSorter] = useState(
+        Auth.GetPreferenceWithDefault("task_sorter", "default")
+    );
 
     const handleActionClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -184,7 +206,7 @@ export default function TaskList({
                 }}
                 className={classes.virtualList}
                 increaseViewportBy={180}
-                data={taskList}
+                data={taskList.filter(filters[filter]).sort(sorters[sorter])}
                 itemContent={(index, uploader) => (
                     <UploadTask
                         selectFile={selectFile}
@@ -197,7 +219,7 @@ export default function TaskList({
                 )}
             />
         );
-    }, [classes, taskList, useAvgSpeed, fullScreen]);
+    }, [classes, taskList, useAvgSpeed, fullScreen, filter, sorter]);
 
     return (
         <>
@@ -206,6 +228,24 @@ export default function TaskList({
                 onClose={handleActionClose}
                 uploadManager={uploadManager}
                 anchorEl={anchorEl}
+                useAvgSpeed={useAvgSpeed}
+                setUseAvgSpeed={(v) => {
+                    Auth.SetPreference("use_avg_speed", v);
+                    setUseAvgSpeed(v);
+                }}
+                filter={filter}
+                sorter={sorter}
+                setFilter={(v) => {
+                    Auth.SetPreference("task_filter", v);
+                    setFilter(v);
+                }}
+                setSorter={(v) => {
+                    Auth.SetPreference("task_sorter", v);
+                    setSorter(v);
+                }}
+                cleanFinished={() =>
+                    setUploaders((u) => u.filter(filters["ongoing"]))
+                }
             />
             <Dialog
                 classes={{
