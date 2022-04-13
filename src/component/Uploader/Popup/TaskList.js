@@ -109,9 +109,6 @@ const filters = {
     ongoing: (u) => u.status < Status.finished,
 };
 
-const getTaskListPreference = (key, defaultVal) =>
-    Auth.GetPreference(key) ? Auth.GetPreference(key) : defaultVal;
-
 export default function TaskList({
     open,
     onClose,

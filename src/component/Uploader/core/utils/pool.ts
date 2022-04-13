@@ -11,7 +11,7 @@ export class Pool {
     queue: Array<QueueContent> = [];
     processing: Array<QueueContent> = [];
 
-    constructor(private limit: number) {}
+    constructor(public limit: number) {}
 
     enqueue(uploader: Base) {
         return new Promise<void>((resolve, reject) => {

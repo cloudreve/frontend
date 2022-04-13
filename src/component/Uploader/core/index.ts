@@ -79,6 +79,10 @@ export default class UploadManager {
         }
     }
 
+    changeConcurrentLimit = (newLimit: number) => {
+        this.pool.limit = newLimit;
+    };
+
     dispatchUploader(task: Task): Base {
         if (task.type == TaskType.resumeHint) {
             return new ResumeHint(task, this);

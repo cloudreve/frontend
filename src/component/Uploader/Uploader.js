@@ -13,6 +13,7 @@ import {
     refreshStorage,
     toggleSnackbar,
 } from "../../redux/explorer";
+import Auth from "../../middleware/Auth";
 
 let totalProgressCollector = null;
 let lastProgressStart = -1;
@@ -82,7 +83,9 @@ export default function Uploader() {
     const uploadManager = useMemo(() => {
         return new UploadManager({
             logLevel: "INFO",
-            concurrentLimit: 5,
+            concurrentLimit: parseInt(
+                Auth.GetPreferenceWithDefault("concurrent_limit", "5")
+            ),
             dropZone: document.querySelector("body"),
             onToast: (type, msg) => {
                 ToggleSnackbar("top", "right", msg, type);

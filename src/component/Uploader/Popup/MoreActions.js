@@ -6,7 +6,7 @@ import {
     MenuItem,
     Tooltip,
 } from "@material-ui/core";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import API from "../../../middleware/Api";
 import { TaskType } from "../core/types";
@@ -15,6 +15,9 @@ import Divider from "@material-ui/core/Divider";
 import CheckIcon from "@material-ui/icons/Check";
 import { DeleteEmpty } from "mdi-material-ui";
 import DeleteIcon from "@material-ui/icons/Delete";
+import ConcurrentOptionDialog from "../../Modals/ConcurrentOption";
+import Auth from "../../../middleware/Auth";
+import { ClearAll } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -37,6 +40,7 @@ export default function MoreActions({
 }) {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [concurrentDialog, setConcurrentDialog] = useState(false);
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
@@ -126,6 +130,13 @@ export default function MoreActions({
                 onClick: () => cleanFinished(),
                 icon: <DeleteIcon />,
                 text: "清除已完成任务",
+                divider: true,
+            },
+            {
+                tooltip: "清除列表中已完成、失败、被取消的任务",
+                onClick: () => setConcurrentDialog(true),
+                icon: <ClearAll />,
+                text: "设置并行数量",
                 divider: false,
             },
         ],
@@ -140,25 +151,44 @@ export default function MoreActions({
         ]
     );
 
+    const onConcurrentLimitSave = (val) => {
+        val = parseInt(val);
+        if (val > 0) {
+            Auth.SetPreference("concurrent_limit", val);
+            uploadManager.changeConcurrentLimit(parseInt(val));
+        }
+        setConcurrentDialog(false);
+    };
+
     return (
-        <Menu id={id} open={open} anchorEl={anchorEl} onClose={onClose}>
-            {listItems.map((item) => (
-                <>
-                    <Tooltip
-                        enterNextDelay={500}
-                        key={item.text}
-                        title={item.tooltip}
-                    >
-                        <MenuItem dense onClick={actionClicked(item.onClick)}>
-                            <ListItemIcon className={classes.icon}>
-                                {item.icon}
-                            </ListItemIcon>
-                            {item.text}
-                        </MenuItem>
-                    </Tooltip>
-                    {item.divider && <Divider />}
-                </>
-            ))}
-        </Menu>
+        <>
+            <Menu id={id} open={open} anchorEl={anchorEl} onClose={onClose}>
+                {listItems.map((item) => (
+                    <>
+                        <Tooltip
+                            enterNextDelay={500}
+                            key={item.text}
+                            title={item.tooltip}
+                        >
+                            <MenuItem
+                                dense
+                                onClick={actionClicked(item.onClick)}
+                            >
+                                <ListItemIcon className={classes.icon}>
+                                    {item.icon}
+                                </ListItemIcon>
+                                {item.text}
+                            </MenuItem>
+                        </Tooltip>
+                        {item.divider && <Divider />}
+                    </>
+                ))}
+            </Menu>
+            <ConcurrentOptionDialog
+                open={concurrentDialog}
+                onClose={() => setConcurrentDialog(false)}
+                onSave={onConcurrentLimitSave}
+            />
+        </>
     );
 }
