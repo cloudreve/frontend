@@ -28,6 +28,7 @@ export enum UploaderErrorName {
     FailedFinishOneDriveUpload = "FailedFinishOneDriveUpload",
     S3LikeChunkUploadFailed = "S3LikeChunkUploadFailed",
     S3LikeUploadCallbackFailed = "S3LikeUploadCallbackFailed",
+    COSUploadCallbackFailed = "COSUploadCallbackFailed",
     COSPostUploadFailed = "COSPostUploadFailed",
     UpyunPostUploadFailed = "UpyunPostUploadFailed",
     QiniuChunkUploadFailed = "QiniuChunkUploadFailed",
@@ -313,6 +314,18 @@ export class COSUploadError extends UploaderError {
         return `上传失败: ${this.message} (${
             this.response.getElementsByTagName("Code")[0].innerHTML
         })`;
+    }
+}
+
+// COS 无法完成上传回调
+export class COSUploadCallbackError extends APIError {
+    constructor(response: Response<any>) {
+        super(UploaderErrorName.COSUploadCallbackFailed, "", response);
+    }
+
+    public Message(i18n: string): string {
+        this.message = `无法完成文件上传`;
+        return super.Message(i18n);
     }
 }
 

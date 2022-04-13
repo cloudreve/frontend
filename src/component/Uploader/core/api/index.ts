@@ -9,6 +9,7 @@ import {
 } from "../types";
 import { OBJtoXML, request, requestAPI } from "../utils";
 import {
+    COSUploadCallbackError,
     COSUploadError,
     CreateUploadSessionError,
     DeleteUploadSessionError,
@@ -368,6 +369,23 @@ export async function cosFormUploadChunk(
     });
 
     return res.data;
+}
+
+export async function cosUploadCallback(
+    sessionID: string,
+    cancel: CancelToken
+): Promise<any> {
+    const res = await requestAPI<any>(`callback/cos/${sessionID}`, {
+        method: "get",
+        data: "{}",
+        cancelToken: cancel,
+    });
+
+    if (res.data.code != 0) {
+        throw new COSUploadCallbackError(res.data);
+    }
+
+    return res.data.data;
 }
 
 export async function upyunFormUploadChunk(

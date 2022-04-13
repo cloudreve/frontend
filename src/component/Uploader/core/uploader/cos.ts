@@ -1,5 +1,5 @@
-import Base from "./base";
-import { cosFormUploadChunk } from "../api";
+import Base, { Status } from "./base";
+import { cosFormUploadChunk, cosUploadCallback } from "../api";
 
 export default class COS extends Base {
     public upload = async () => {
@@ -22,4 +22,13 @@ export default class COS extends Base {
             this.cancelToken.token
         );
     };
+
+    protected async afterUpload(): Promise<any> {
+        this.transit(Status.finishing);
+        this.logger.info(`Sending COS upload callback...`);
+        return cosUploadCallback(
+            this.task.session!.sessionID,
+            this.cancelToken.token
+        );
+    }
 }
