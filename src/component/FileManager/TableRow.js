@@ -34,7 +34,7 @@ const styles = (theme) => ({
 
     notSelected: {
         "&:hover": {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.action.hover,
         },
     },
     icon: {
