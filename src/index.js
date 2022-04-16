@@ -1,24 +1,33 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
-import { Switch, Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import App from "./App";
 import cloureveApp from "./reducers";
 import { UpdateSiteConfig } from "./middleware/Init";
 import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
 import { createBrowserHistory } from "history";
-import { routerMiddleware } from "connected-react-router";
-import { ConnectedRouter } from "connected-react-router";
+import { ConnectedRouter, routerMiddleware } from "connected-react-router";
+
 const Admin = React.lazy(() => import("./Admin"));
 
 if (window.location.hash !== "") {
     window.location.href = window.location.hash.split("#")[1];
 }
 
-serviceWorker.register();
+serviceWorker.register({
+    onUpdate: (registration) => {
+        alert("当前页面有新版本可用，准备刷新。");
+        if (registration && registration.waiting) {
+            registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+        window.location.reload();
+    },
+});
+
 export const history = createBrowserHistory();
 let reduxEnhance = applyMiddleware(routerMiddleware(history), thunk);
 if (
