@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React from "react";
 import { PackageVariant } from "mdi-material-ui";
 import { makeStyles } from "@material-ui/core";
 
@@ -6,16 +6,16 @@ const useStyles = makeStyles((theme) => ({
     emptyContainer: {
         bottom: "0",
 
-        color: theme.palette.text.disabled,
+        color: theme.palette.action.disabled,
         textAlign: "center",
         paddingTop: "20px",
     },
     emptyInfoBig: {
         fontSize: "25px",
-        color: theme.palette.text.disabled,
+        color: theme.palette.action.disabled,
     },
     emptyInfoSmall: {
-        color: theme.palette.text.hint,
+        color: theme.palette.action.disabled,
     },
 }));
 

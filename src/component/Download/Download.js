@@ -8,6 +8,7 @@ import DownloadingCard from "./DownloadingCard";
 import FinishedCard from "./FinishedCard";
 import RemoteDownloadButton from "../Dial/Aria2";
 import Auth from "../../middleware/Auth";
+import Nothing from "../Placeholder/Nothing";
 
 const styles = (theme) => ({
     actions: {
@@ -177,6 +178,9 @@ class DownloadComponent extends Component {
                         <RefreshIcon />
                     </IconButton>
                 </Typography>
+                {this.state.downloading.length === 0 && (
+                    <Nothing primary={"没有下载中的任务"} />
+                )}
                 {this.state.downloading.map((value, k) => (
                     <DownloadingCard key={k} task={value} />
                 ))}
@@ -188,6 +192,9 @@ class DownloadComponent extends Component {
                     已完成
                 </Typography>
                 <div className={classes.loadMore}>
+                    {this.state.finishedList.length === 0 && (
+                        <Nothing primary={"没有已完成的任务"} />
+                    )}
                     {this.state.finishedList.map((value, k) => {
                         if (value.files) {
                             return <FinishedCard key={k} task={value} />;

@@ -5,13 +5,13 @@ import Pagination from "@material-ui/lab/Pagination";
 import FolderIcon from "@material-ui/icons/Folder";
 
 import {
-    Tooltip,
-    Card,
     Avatar,
+    Card,
     CardHeader,
-    Typography,
     Grid,
     IconButton,
+    Tooltip,
+    Typography,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import TypeIcon from "../FileManager/TypeIcon";
@@ -23,6 +23,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router";
 import TimeAgo from "timeago-react";
 import { toggleSnackbar } from "../../redux/explorer";
+import Nothing from "../Placeholder/Nothing";
 
 const useStyles = makeStyles((theme) => ({
     cardContainer: {
@@ -109,14 +110,6 @@ export default function SearchResult() {
                 encodeURIComponent(keywords)
         )
             .then((response) => {
-                if (response.data.items.length === 0) {
-                    ToggleSnackbar(
-                        "top",
-                        "right",
-                        "找不到符合条件的分享",
-                        "info"
-                    );
-                }
                 setTotal(response.data.total);
                 setShareList(response.data.items);
             })
@@ -184,6 +177,7 @@ export default function SearchResult() {
                 </Grid>
             </Grid>
             <Grid container spacing={24} className={classes.gird}>
+                {shareList.length === 0 && <Nothing primary={"没有分享记录"} />}
                 {shareList.map((value) => (
                     <Grid
                         item

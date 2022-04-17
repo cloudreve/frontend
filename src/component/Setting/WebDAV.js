@@ -20,6 +20,7 @@ import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
 import Link from "@material-ui/core/Link";
 import { toggleSnackbar } from "../../redux/explorer";
+import Nothing from "../Placeholder/Nothing";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -218,6 +219,9 @@ export default function WebDAV() {
                                         ))}
                                     </TableBody>
                                 </Table>
+                                {accounts.length === 0 && (
+                                    <Nothing primary={"没有记录"} />
+                                )}
                             </TableContainer>
                             <Button
                                 onClick={() => setCreate(true)}

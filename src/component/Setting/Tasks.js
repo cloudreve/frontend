@@ -12,6 +12,7 @@ import { getTaskProgress, getTaskStatus, getTaskType } from "../../config";
 import Pagination from "@material-ui/lab/Pagination";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
+import Nothing from "../Placeholder/Nothing";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -140,6 +141,7 @@ export default function Tasks() {
                         ))}
                     </TableBody>
                 </Table>
+                {tasks.length === 0 && <Nothing primary={"没有记录"} />}
                 <div className={classes.footer}>
                     <Pagination
                         count={Math.ceil(total / 10)}

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withStyles, Typography } from "@material-ui/core";
+import { Typography, withStyles } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import Avatar from "@material-ui/core/Avatar";
@@ -77,7 +77,7 @@ const styles = (theme) => ({
     flexAvatar: {
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "end",
+        alignItems: "flex-start",
     },
     groupName: {
         marginLeft: "10px",

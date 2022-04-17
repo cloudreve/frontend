@@ -184,7 +184,7 @@ const styles = (theme) => ({
     },
     menuButtonDesktop: {
         marginRight: 20,
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("xs")]: {
             display: "none",
         },
     },
@@ -200,6 +200,10 @@ const styles = (theme) => ({
     },
     upDrawer: {
         overflowX: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        justifyContent: "space-between",
     },
     drawerOpen: {
         width: drawerWidth,
@@ -280,13 +284,6 @@ const styles = (theme) => ({
     },
     minStickDrawer: {
         overflowY: "auto",
-        [theme.breakpoints.up("sm")]: {
-            height: "calc(var(--vh, 100vh) - 145px)",
-        },
-
-        [theme.breakpoints.down("sm")]: {
-            minHeight: "calc(var(--vh, 100vh) - 360px)",
-        },
     },
 });
 class NavbarCompoment extends Component {
@@ -454,43 +451,42 @@ class NavbarCompoment extends Component {
                                     </ListItemIcon>
                                     <ListItemText primary="任务队列" />
                                 </ListItem>
+                                {pathHelper.isMobile() && (
+                                    <>
+                                        <Divider />
+                                        <ListItem
+                                            button
+                                            key="个人设置"
+                                            onClick={() =>
+                                                this.props.history.push(
+                                                    "/setting?"
+                                                )
+                                            }
+                                        >
+                                            <ListItemIcon>
+                                                <Settings
+                                                    className={classes.iconFix}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText primary="个人设置" />
+                                        </ListItem>
+
+                                        <ListItem
+                                            button
+                                            key="退出登录"
+                                            onClick={this.signOut}
+                                        >
+                                            <ListItemIcon>
+                                                <LogoutVariant
+                                                    className={classes.iconFix}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText primary="退出登录" />
+                                        </ListItem>
+                                    </>
+                                )}
                             </List>
                         </div>
-
-                        {pathHelper.isMobile() && (
-                            <>
-                                <Divider />
-                                <List>
-                                    <ListItem
-                                        button
-                                        key="个人设置"
-                                        onClick={() =>
-                                            this.props.history.push("/setting?")
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            <Settings
-                                                className={classes.iconFix}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText primary="个人设置" />
-                                    </ListItem>
-
-                                    <ListItem
-                                        button
-                                        key="退出登录"
-                                        onClick={this.signOut}
-                                    >
-                                        <ListItemIcon>
-                                            <LogoutVariant
-                                                className={classes.iconFix}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText primary="退出登录" />
-                                    </ListItem>
-                                </List>
-                            </>
-                        )}
                         <div>
                             <StorageBar></StorageBar>
                         </div>

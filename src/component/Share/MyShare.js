@@ -9,21 +9,21 @@ import EyeIcon from "@material-ui/icons/RemoveRedEye";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import {
-    withStyles,
-    Tooltip,
-    Card,
     Avatar,
-    CardHeader,
+    Button,
+    Card,
     CardActions,
-    Typography,
-    Grid,
-    IconButton,
+    CardHeader,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    Button,
+    Grid,
+    IconButton,
     TextField,
+    Tooltip,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import TypeIcon from "../FileManager/TypeIcon";
@@ -37,6 +37,7 @@ import { withRouter } from "react-router-dom";
 import ToggleIcon from "material-ui-toggle-icon";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
+import Nothing from "../Placeholder/Nothing";
 
 const styles = (theme) => ({
     cardContainer: {
@@ -212,14 +213,6 @@ class MyShareCompoment extends Component {
                 order[1]
         )
             .then((response) => {
-                if (response.data.items.length === 0) {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        "没有更多了",
-                        "info"
-                    );
-                }
                 this.setState({
                     total: response.data.total,
                     shareList: response.data.items,
@@ -289,6 +282,9 @@ class MyShareCompoment extends Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={24} className={classes.gird}>
+                    {this.state.shareList.length === 0 && (
+                        <Nothing primary={"没有分享记录"} />
+                    )}
                     {this.state.shareList.map((value) => (
                         <Grid
                             item
