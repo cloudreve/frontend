@@ -57,6 +57,10 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import { pathJoin } from "../Uploader/core/utils";
+import {
+    openFileSelector,
+    openFolderSelector,
+} from "../../redux/viewUpdate/action";
 
 const styles = () => ({
     propover: {},
@@ -159,6 +163,12 @@ const mapDispatchToProps = (dispatch) => {
         startBatchDownload: (share) => {
             dispatch(startBatchDownload(share));
         },
+        openFileSelector: () => {
+            dispatch(openFileSelector());
+        },
+        openFolderSelector: () => {
+            dispatch(openFolderSelector());
+        },
     };
 };
 
@@ -200,21 +210,6 @@ class ContextMenuCompoment extends Component {
         this.props.navigateTo(
             pathJoin([this.props.path, this.props.selected[0].name])
         );
-    };
-
-    clickUpload = (id) => {
-        this.props.changeContextMenu("empty", false);
-        const uploadButton = document.getElementsByClassName(id)[0];
-        if (document.body.contains(uploadButton)) {
-            uploadButton.click();
-        } else {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "上传组件还未加载完成",
-                "warning"
-            );
-        }
     };
 
     // 暂时只对空白处右键菜单使用这个函数，疑似有bug会导致的一个菜单被默认选中。
@@ -272,13 +267,13 @@ class ContextMenuCompoment extends Component {
             center: [
                 {
                     condition: true,
-                    onClick: () => this.clickUpload("uploadFileForm"),
+                    onClick: () => this.props.openFileSelector(),
                     icon: <UploadIcon />,
                     text: "上传文件",
                 },
                 {
                     condition: true,
-                    onClick: () => this.clickUpload("uploadFolderForm"),
+                    onClick: () => this.props.openFolderSelector(),
                     icon: <FolderUpload />,
                     text: "上传目录",
                 },
@@ -344,9 +339,7 @@ class ContextMenuCompoment extends Component {
                             <Divider className={classes.divider} />
                             <MenuItem
                                 dense
-                                onClick={() =>
-                                    this.clickUpload("uploadFileForm")
-                                }
+                                onClick={() => this.props.openFileSelector()}
                             >
                                 <StyledListItemIcon>
                                     <UploadIcon />
@@ -357,9 +350,7 @@ class ContextMenuCompoment extends Component {
                             </MenuItem>
                             <MenuItem
                                 dense
-                                onClick={() =>
-                                    this.clickUpload("uploadFolderForm")
-                                }
+                                onClick={() => this.props.openFolderSelector()}
                             >
                                 <StyledListItemIcon>
                                     <FolderUpload />

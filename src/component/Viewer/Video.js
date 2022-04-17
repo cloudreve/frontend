@@ -58,6 +58,13 @@ export default function VideoViewer() {
         return () => {
             if (playing && document.pictureInPictureEnabled && dp) {
                 dp.video.requestPictureInPicture();
+                dp.video.addEventListener(
+                    "leavepictureinpicture",
+                    () => {
+                        dp.video.pause();
+                    },
+                    false
+                );
             }
         };
     }, []);

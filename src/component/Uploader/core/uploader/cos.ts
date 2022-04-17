@@ -26,9 +26,13 @@ export default class COS extends Base {
     protected async afterUpload(): Promise<any> {
         this.transit(Status.finishing);
         this.logger.info(`Sending COS upload callback...`);
-        return cosUploadCallback(
-            this.task.session!.sessionID,
-            this.cancelToken.token
-        );
+        try {
+            await cosUploadCallback(
+                this.task.session!.sessionID,
+                this.cancelToken.token
+            );
+        } catch (e) {
+            this.logger.warn(`Failed to finish COS upload:`, e);
+        }
     }
 }

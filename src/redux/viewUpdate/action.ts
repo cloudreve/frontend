@@ -46,3 +46,15 @@ export const setOptionModal = (option: any) => {
         option: option,
     };
 };
+
+export const openFileSelector = () => {
+    return {
+        type: "OPEN_FILE_SELECTOR",
+    };
+};
+
+export const openFolderSelector = () => {
+    return {
+        type: "OPEN_FOLDER_SELECTOR",
+    };
+};

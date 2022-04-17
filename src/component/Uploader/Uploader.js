@@ -33,6 +33,12 @@ export default function Uploader() {
     const policy = useSelector((state) => state.explorer.currentPolicy);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
     const path = useSelector((state) => state.navigator.path);
+    const fileSelectCounter = useSelector(
+        (state) => state.viewUpdate.openFileSelector
+    );
+    const folderSelectCounter = useSelector(
+        (state) => state.viewUpdate.openFolderSelector
+    );
     const location = useLocation();
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -191,6 +197,18 @@ export default function Uploader() {
                 }
             });
     };
+
+    useEffect(() => {
+        if (fileSelectCounter > 0) {
+            selectFile(path);
+        }
+    }, [fileSelectCounter]);
+
+    useEffect(() => {
+        if (folderSelectCounter > 0) {
+            selectFile(path, SelectType.Directory);
+        }
+    }, [folderSelectCounter]);
 
     const deleteTask = (filter) => {
         setUploaders((uploaders) => uploaders.filter(filter));

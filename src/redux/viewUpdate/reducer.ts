@@ -59,6 +59,8 @@ export interface ViewUpdateState {
         msg: string;
         color: string;
     };
+    openFileSelector: number;
+    openFolderSelector: number;
 }
 export const initState: ViewUpdateState = {
     // 是否登录
@@ -102,6 +104,8 @@ export const initState: ViewUpdateState = {
         msg: "",
         color: "",
     },
+    openFileSelector: 0,
+    openFolderSelector: 0,
 };
 const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
     switch (action.type) {
@@ -322,6 +326,18 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 }),
                 contextOpen: false,
             });
+        case "OPEN_FILE_SELECTOR":
+            return {
+                ...state,
+                openFileSelector: state.openFileSelector + 1,
+                contextOpen: false,
+            };
+        case "OPEN_FOLDER_SELECTOR":
+            return {
+                ...state,
+                openFolderSelector: state.openFolderSelector + 1,
+                contextOpen: false,
+            };
         default:
             return state;
     }
