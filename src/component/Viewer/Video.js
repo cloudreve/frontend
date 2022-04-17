@@ -30,6 +30,9 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
+let dp = null;
+let playing = false;
+
 export default function VideoViewer() {
     const math = useRouteMatch();
     const location = useLocation();
@@ -40,6 +43,7 @@ export default function VideoViewer() {
         (title) => dispatch(changeSubTitle(title)),
         [dispatch]
     );
+
     useEffect(() => {
         if (!pathHelper.isSharePage(location.pathname)) {
             const path = query.get("p").split("/");
@@ -50,11 +54,22 @@ export default function VideoViewer() {
         // eslint-disable-next-line
     }, [math.params[0], location]);
 
+    useEffect(() => {
+        return () => {
+            if (playing && document.pictureInPictureEnabled && dp) {
+                dp.video.requestPictureInPicture();
+            }
+        };
+    }, []);
+
     const classes = useStyles();
     return (
         <div className={classes.layout}>
             <Paper className={classes.root} elevation={1}>
                 <DPlayer
+                    onLoad={(d) => (dp = d)}
+                    onPlay={() => (playing = true)}
+                    onEnded={() => (playing = false)}
                     className={classes.player}
                     options={{
                         video: {
