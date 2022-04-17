@@ -65,8 +65,17 @@ export default function WebDAV() {
     );
 
     const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text);
-        ToggleSnackbar("top", "center", "已复制到剪切板", "success");
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+            ToggleSnackbar("top", "center", "已复制到剪切板", "success");
+        } else {
+            ToggleSnackbar(
+                "top",
+                "center",
+                "当前浏览器不支持，请手动复制",
+                "warning"
+            );
+        }
     };
 
     const loadList = () => {

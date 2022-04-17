@@ -1,17 +1,15 @@
 import React, { useCallback } from "react";
 import {
-    Checkbox,
-    FormControl,
-    makeStyles,
-    TextField,
-} from "@material-ui/core";
-import {
     Button,
+    Checkbox,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    CircularProgress,
+    FormControl,
+    makeStyles,
+    TextField,
 } from "@material-ui/core";
 import { toggleSnackbar } from "../../redux/explorer";
 import { useDispatch } from "react-redux";
@@ -38,7 +36,6 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import EyeIcon from "@material-ui/icons/RemoveRedEye";
 import ToggleIcon from "material-ui-toggle-icon";
 
 const useStyles = makeStyles((theme) => ({
@@ -182,6 +179,18 @@ export default function CreatShare(props) {
         setTimeout(() => {
             setShareURL("");
         }, 500);
+    };
+
+    const senLink = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: props.selected[0].name,
+                url: shareURL,
+            });
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(shareURL);
+            ToggleSnackbar("top", "right", "分享链接已复制", "info");
+        }
     };
 
     const submitShare = (e) => {
@@ -436,6 +445,13 @@ export default function CreatShare(props) {
             )}
 
             <DialogActions>
+                {shareURL !== "" && (
+                    <div className={classes.wrapper}>
+                        <Button onClick={senLink} color="secondary">
+                            发送链接
+                        </Button>
+                    </div>
+                )}
                 <Button onClick={onClose}>关闭</Button>
 
                 {shareURL === "" && (

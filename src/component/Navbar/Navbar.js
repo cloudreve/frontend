@@ -200,10 +200,12 @@ const styles = (theme) => ({
     },
     upDrawer: {
         overflowX: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        justifyContent: "space-between",
+        [theme.breakpoints.up("sm")]: {
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            justifyContent: "space-between",
+        },
     },
     drawerOpen: {
         width: drawerWidth,
