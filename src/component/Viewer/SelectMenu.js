@@ -34,7 +34,11 @@ export default function SelectMenu({
         >
             {options.map((item) => (
                 <>
-                    <MenuItem dense onClick={() => callback(item)}>
+                    <MenuItem
+                        style={{ whiteSpace: "normal" }}
+                        dense
+                        onClick={() => callback(item)}
+                    >
                         {showIcon && (
                             <ListItemIcon className={classes.icon}>
                                 {item.name !== selected ? (

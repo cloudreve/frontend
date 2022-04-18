@@ -30,6 +30,7 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import OptionSelector from "../Modals/OptionSelector";
+import { getDownloadURL } from "../../services/file";
 
 const styles = (theme) => ({
     wrapper: {
@@ -169,24 +170,7 @@ class ModalsCompoment extends Component {
     };
 
     Download = () => {
-        let reqURL = "";
-        if (this.props.selected[0].key) {
-            const downloadPath =
-                this.props.selected[0].path === "/"
-                    ? this.props.selected[0].path + this.props.selected[0].name
-                    : this.props.selected[0].path +
-                      "/" +
-                      this.props.selected[0].name;
-            reqURL =
-                "/share/download/" +
-                this.props.selected[0].key +
-                "?path=" +
-                encodeURIComponent(downloadPath);
-        } else {
-            reqURL = "/file/download/" + this.props.selected[0].id;
-        }
-
-        API.put(reqURL)
+        getDownloadURL(this.props.selected[0])
             .then((response) => {
                 window.location.assign(response.data);
                 this.onClose();

@@ -16,12 +16,42 @@ import { pathJoin } from "../Uploader/core/utils";
 import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
 import TextLoading from "../Placeholder/TextLoading";
 import SelectMenu from "./SelectMenu";
+import { getDownloadURL } from "../../services/file";
 
 const Artplayer = React.lazy(() =>
     import(
         /* webpackChunkName: "artplayer" */ "artplayer/examples/react/Artplayer"
     )
 );
+
+const externalPlayers = [
+    {
+        name: "PotPlayer",
+        url: (source, title) => `potplayer://${source}`,
+    },
+    {
+        name: "VLC",
+        url: (source, title) => `vlc://${source}`,
+    },
+    {
+        name: "IINA",
+        url: (source, title) => `iina://weblink?url=${source}`,
+    },
+    {
+        name: "nPlayer",
+        url: (source, title) => `nplayer-${source}`,
+    },
+    {
+        name: "MXPlayer (Free)",
+        url: (source, title) =>
+            `intent:${source}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`,
+    },
+    {
+        name: "MXPlayer (Pro)",
+        url: (source, title) =>
+            `intent:${source}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`,
+    },
+];
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -179,7 +209,11 @@ export default function VideoViewer() {
         if (isShare) {
             file.key = id;
         }
-        history.push(getViewerURL("video", file, isShare));
+        if (isMobileSafari()) {
+            window.location.href = getViewerURL("video", file, isShare);
+        } else {
+            history.push(getViewerURL("video", file, isShare));
+        }
     };
 
     const setSubtitle = (sub) => {
@@ -200,6 +234,24 @@ export default function VideoViewer() {
         setSubtitleOpen(e.currentTarget);
     };
 
+    const openInExternalPlayer = (player) => {
+        const current = { name: title };
+        current.id = query.get("id");
+        current.path = basename(path);
+        if (isShare) {
+            current.key = id;
+        }
+
+        setExternalPlayerOpen(null);
+        getDownloadURL(current)
+            .then((response) => {
+                window.location.assign(player.url(response.data, title));
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
     return (
         <div className={classes.layout}>
             <Paper className={classes.root} elevation={1}>
@@ -216,6 +268,11 @@ export default function VideoViewer() {
                             pip: true,
                             fullscreen: true,
                             fullscreenWeb: true,
+                            whitelist: ["*"],
+                            moreVideoAttr: {
+                                "webkit-playsinline": true,
+                                playsInline: true,
+                            },
                         }}
                         className={classes.player}
                         getInstance={(a) => setArt(a)}
@@ -231,7 +288,7 @@ export default function VideoViewer() {
                 >
                     选择字幕
                 </Button>
-                {playlist.length > 0 && (
+                {playlist.length > 2 && (
                     <Button
                         onClick={(e) => setPlaylistOpen(e.currentTarget)}
                         className={classes.actionButton}
@@ -242,6 +299,7 @@ export default function VideoViewer() {
                     </Button>
                 )}
                 <Button
+                    onClick={(e) => setExternalPlayerOpen(e.currentTarget)}
                     className={classes.actionButton}
                     startIcon={<Launch />}
                     variant="outlined"
@@ -262,6 +320,13 @@ export default function VideoViewer() {
                 callback={switchVideo}
                 anchorEl={playlistOpen}
                 handleClose={() => setPlaylistOpen(null)}
+            />
+            <SelectMenu
+                showIcon={false}
+                options={externalPlayers}
+                callback={openInExternalPlayer}
+                anchorEl={externalPlayerOpen}
+                handleClose={() => setExternalPlayerOpen(null)}
             />
         </div>
     );
