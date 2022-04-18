@@ -360,6 +360,36 @@ export const startBatchDownload = (
     };
 };
 
+export const getViewerURL = (
+    viewer: string,
+    file: any,
+    isShare: boolean | ""
+): string => {
+    const previewPath = getPreviewPath(file);
+    if (isShare) {
+        return (
+            "/s/" +
+            file.key +
+            `/${viewer}?name=` +
+            encodeURIComponent(file.name) +
+            "&share_path=" +
+            previewPath
+        );
+    }
+
+    return `/${viewer}?p=` + previewPath + "&id=" + file.id;
+};
+
+export const openViewer = (
+    viewer: string,
+    file: any,
+    isShare: boolean | ""
+) => {
+    return (dispatch: any, getState: any) => {
+        dispatch(push(getViewerURL(viewer, file, isShare)));
+    };
+};
+
 export const openPreview = () => {
     return (dispatch: any, getState: any) => {
         const {
@@ -379,102 +409,27 @@ export const openPreview = () => {
         }
 
         dispatch(changeContextMenu("file", false));
-        const previewPath = getPreviewPath(selected[0]);
         switch (isPreviewable(selected[0].name)) {
             case "img":
                 dispatch(showImgPreivew(selected[0]));
                 return;
             case "msDoc":
-                if (isShare) {
-                    dispatch(
-                        push(
-                            selected[0].key +
-                                "/doc?name=" +
-                                encodeURIComponent(selected[0].name) +
-                                "&share_path=" +
-                                previewPath
-                        )
-                    );
-                    return;
-                }
-                dispatch(
-                    push("/doc?p=" + previewPath + "&id=" + selected[0].id)
-                );
+                dispatch(openViewer("doc", selected[0], isShare));
                 return;
             case "audio":
-                //if (isShare) {
-                //    dispatch(openMusicDialog());
-                //}else{
                 dispatch(showAudioPreview(selected[0]));
-                //}
                 return;
             case "video":
-                if (isShare) {
-                    dispatch(
-                        push(
-                            selected[0].key +
-                                "/video?name=" +
-                                encodeURIComponent(selected[0].name) +
-                                "&share_path=" +
-                                previewPath
-                        )
-                    );
-                    return;
-                }
-                dispatch(
-                    push("/video?p=" + previewPath + "&id=" + selected[0].id)
-                );
+                dispatch(openViewer("video", selected[0], isShare));
                 return;
             case "pdf":
-                if (isShare) {
-                    dispatch(
-                        push(
-                            selected[0].key +
-                                "/pdf?name=" +
-                                encodeURIComponent(selected[0].name) +
-                                "&share_path=" +
-                                previewPath
-                        )
-                    );
-                    return;
-                }
-                dispatch(
-                    push("/pdf?p=" + previewPath + "&id=" + selected[0].id)
-                );
+                dispatch(openViewer("pdf", selected[0], isShare));
                 return;
             case "edit":
-                if (isShare) {
-                    dispatch(
-                        push(
-                            selected[0].key +
-                                "/text?name=" +
-                                encodeURIComponent(selected[0].name) +
-                                "&share_path=" +
-                                previewPath
-                        )
-                    );
-                    return;
-                }
-                dispatch(
-                    push("/text?p=" + previewPath + "&id=" + selected[0].id)
-                );
+                dispatch(openViewer("text", selected[0], isShare));
                 return;
             case "code":
-                if (isShare) {
-                    dispatch(
-                        push(
-                            selected[0].key +
-                                "/code?name=" +
-                                encodeURIComponent(selected[0].name) +
-                                "&share_path=" +
-                                previewPath
-                        )
-                    );
-                    return;
-                }
-                dispatch(
-                    push("/code?p=" + previewPath + "&id=" + selected[0].id)
-                );
+                dispatch(openViewer("code", selected[0], isShare));
                 return;
             default:
                 dispatch(openLoadingDialog("获取下载地址..."));

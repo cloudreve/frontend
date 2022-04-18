@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import { toggleSnackbar } from "../../redux/explorer";
+import UseFileSubTitle from "../../hooks/fileSubtitle";
 
 const useStyles = makeStyles(() => ({
     layout: {
@@ -30,29 +30,15 @@ export default function DocViewer() {
     const location = useLocation();
     const query = useQuery();
     const { id } = useParams();
+    UseFileSubTitle(query, math, location);
 
     const dispatch = useDispatch();
-
-    const SetSubTitle = useCallback(
-        (title) => dispatch(changeSubTitle(title)),
-        [dispatch]
-    );
 
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-
-    useEffect(() => {
-        if (!pathHelper.isSharePage(location.pathname)) {
-            const path = query.get("p").split("/");
-            SetSubTitle(path[path.length - 1]);
-        } else {
-            SetSubTitle(query.get("name"));
-        }
-        // eslint-disable-next-line
-    }, [math.params[0], location]);
 
     useEffect(() => {
         let requestURL = "/file/doc/" + query.get("id");

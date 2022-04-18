@@ -1,13 +1,27 @@
-import React, { useCallback, useEffect } from "react";
-import DPlayer from "react-dplayer";
-import { Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
+import { Button, Paper } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
-import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
-import { isMobileSafari } from "../../utils";
+import UseFileSubTitle from "../../hooks/fileSubtitle";
+import { getPreviewURL } from "../../middleware/Api";
+import { useHistory } from "react-router-dom";
+import { basename, fileNameNoExt, isMobileSafari } from "../../utils";
+import { list } from "../../services/navigate";
+import { getViewerURL } from "../../redux/explorer/action";
+import { subtitleSuffix, videoPreviewSuffix } from "../../config";
+import { toggleSnackbar } from "../../redux/explorer";
+import { pathJoin } from "../Uploader/core/utils";
+import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
+import TextLoading from "../Placeholder/TextLoading";
+import SelectMenu from "./SelectMenu";
+
+const Artplayer = React.lazy(() =>
+    import(
+        /* webpackChunkName: "artplayer" */ "artplayer/examples/react/Artplayer"
+    )
+);
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -24,6 +38,14 @@ const useStyles = makeStyles((theme) => ({
     },
     player: {
         borderRadius: "4px",
+        height: 600,
+    },
+    actions: {
+        marginTop: theme.spacing(2),
+    },
+    actionButton: {
+        marginRight: theme.spacing(1),
+        marginTop: theme.spacing(1),
     },
 }));
 
@@ -31,77 +53,216 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-let dp = null;
-let playing = false;
-
 export default function VideoViewer() {
     const math = useRouteMatch();
     const location = useLocation();
     const query = useQuery();
     const { id } = useParams();
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(
-        (title) => dispatch(changeSubTitle(title)),
+    const ToggleSnackbar = useCallback(
+        (vertical, horizontal, msg, color) =>
+            dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-
-    useEffect(() => {
-        if (!pathHelper.isSharePage(location.pathname)) {
-            const path = query.get("p").split("/");
-            SetSubTitle(path[path.length - 1]);
-        } else {
-            SetSubTitle(query.get("name"));
-        }
-        // eslint-disable-next-line
-    }, [math.params[0], location]);
+    const { title, path } = UseFileSubTitle(query, math, location);
+    const theme = useTheme();
+    const [art, setArt] = useState(null);
+    const history = useHistory();
+    const [files, setFiles] = useState([]);
+    const [subtitles, setSubtitles] = useState([]);
+    const [playlist, setPlaylist] = useState([]);
+    const [subtitleOpen, setSubtitleOpen] = useState(null);
+    const [subtitleSelected, setSubtitleSelected] = useState("");
+    const [playlistOpen, setPlaylistOpen] = useState(null);
+    const [externalPlayerOpen, setExternalPlayerOpen] = useState(null);
+    const isShare = pathHelper.isSharePage(location.pathname);
 
     useEffect(() => {
         return () => {
             if (
-                playing &&
+                art !== null &&
                 !isMobileSafari() &&
                 document.pictureInPictureEnabled &&
-                dp
+                art.playing
             ) {
-                dp.video.requestPictureInPicture();
-                dp.video.addEventListener(
+                art.pip = true;
+                art.query(".art-video").addEventListener(
                     "leavepictureinpicture",
                     () => {
-                        dp.video.pause();
+                        art.pause();
                     },
                     false
                 );
             }
         };
-    }, []);
+    }, [art]);
 
     const classes = useStyles();
+
+    useEffect(() => {
+        if (art !== null) {
+            const newURL = getPreviewURL(
+                isShare,
+                id,
+                query.get("id"),
+                query.get("share_path")
+            );
+            if (newURL !== art.url) {
+                if (art.subtitle) {
+                    art.subtitle.show = false;
+                }
+                art.switchUrl(newURL);
+                if (path && path !== "") {
+                    list(basename(path), isShare ? { key: id } : null, "").then(
+                        (res) => {
+                            setFiles(
+                                res.data.objects.filter(
+                                    (o) => o.type === "file"
+                                )
+                            );
+                            setPlaylist(
+                                res.data.objects.filter(
+                                    (o) =>
+                                        o.type === "file" &&
+                                        videoPreviewSuffix.indexOf(
+                                            o.name
+                                                .split(".")
+                                                .pop()
+                                                .toLowerCase()
+                                        ) !== -1
+                                )
+                            );
+                        }
+                    );
+                }
+            }
+        }
+    }, [art, id, location, path]);
+
+    const switchSubtitle = (f) => {
+        if (art !== null) {
+            const fileType = f.name.split(".").pop().toLowerCase();
+            art.subtitle.switch(
+                getPreviewURL(
+                    isShare,
+                    id,
+                    f.id,
+                    pathJoin([basename(query.get("share_path")), f.name])
+                ),
+                {
+                    type: fileType,
+                }
+            );
+            art.subtitle.show = true;
+            setSubtitleSelected(f.name);
+            ToggleSnackbar("top", "center", `字幕切换到：${f.name} `, "info");
+        }
+    };
+
+    useEffect(() => {
+        if (files.length > 0) {
+            const options = files.filter((f) => {
+                const fileType = f.name.split(".").pop().toLowerCase();
+                if (subtitleSuffix.indexOf(fileType) !== -1) {
+                    if (fileNameNoExt(f.name) === fileNameNoExt(title)) {
+                        switchSubtitle(f);
+                    }
+                    return true;
+                }
+                return false;
+            });
+            setSubtitles(options);
+        }
+    }, [files]);
+
+    const switchVideo = (file) => {
+        if (isShare) {
+            file.key = id;
+        }
+        history.push(getViewerURL("video", file, isShare));
+    };
+
+    const setSubtitle = (sub) => {
+        setSubtitleOpen(null);
+        switchSubtitle(sub);
+    };
+
+    const startSelectSubTitle = (e) => {
+        if (subtitles.length === 0) {
+            ToggleSnackbar(
+                "top",
+                "right",
+                `视频目录下没有可用字幕文件 (支持：ASS/SRT/VTT)`,
+                "warning"
+            );
+            return;
+        }
+        setSubtitleOpen(e.currentTarget);
+    };
+
     return (
         <div className={classes.layout}>
             <Paper className={classes.root} elevation={1}>
-                <DPlayer
-                    onLoad={(d) => (dp = d)}
-                    onPlay={() => (playing = true)}
-                    onEnded={() => (playing = false)}
-                    className={classes.player}
-                    options={{
-                        video: {
-                            url:
-                                getBaseURL() +
-                                (pathHelper.isSharePage(location.pathname)
-                                    ? "/share/preview/" +
-                                      id +
-                                      (query.get("share_path") !== ""
-                                          ? "?path=" +
-                                            encodeURIComponent(
-                                                query.get("share_path")
-                                            )
-                                          : "")
-                                    : "/file/preview/" + query.get("id")),
-                        },
-                    }}
-                />
+                <Suspense fallback={<TextLoading />}>
+                    <Artplayer
+                        option={{
+                            title: title,
+                            theme: theme.palette.secondary.main,
+                            flip: true,
+                            setting: true,
+                            playbackRate: true,
+                            aspectRatio: true,
+                            hotkey: true,
+                            pip: true,
+                            fullscreen: true,
+                            fullscreenWeb: true,
+                        }}
+                        className={classes.player}
+                        getInstance={(a) => setArt(a)}
+                    />
+                </Suspense>
             </Paper>
+            <div className={classes.actions}>
+                <Button
+                    onClick={startSelectSubTitle}
+                    className={classes.actionButton}
+                    startIcon={<Subtitles />}
+                    variant="outlined"
+                >
+                    选择字幕
+                </Button>
+                {playlist.length > 0 && (
+                    <Button
+                        onClick={(e) => setPlaylistOpen(e.currentTarget)}
+                        className={classes.actionButton}
+                        startIcon={<PlaylistPlay />}
+                        variant="outlined"
+                    >
+                        播放列表
+                    </Button>
+                )}
+                <Button
+                    className={classes.actionButton}
+                    startIcon={<Launch />}
+                    variant="outlined"
+                >
+                    用外部播放器打开
+                </Button>
+            </div>
+            <SelectMenu
+                selected={subtitleSelected}
+                options={subtitles}
+                callback={setSubtitle}
+                anchorEl={subtitleOpen}
+                handleClose={() => setSubtitleOpen(null)}
+            />
+            <SelectMenu
+                selected={title}
+                options={playlist}
+                callback={switchVideo}
+                anchorEl={playlistOpen}
+                handleClose={() => setPlaylistOpen(null)}
+            />
         </div>
     );
 }

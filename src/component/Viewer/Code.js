@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import SaveButton from "../Dial/Save";
 import { codePreviewSuffix } from "../../config";
@@ -16,6 +15,8 @@ import Switch from "@material-ui/core/Switch";
 import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import { toggleSnackbar } from "../../redux/explorer";
+import UseFileSubTitle from "../../hooks/fileSubtitle";
+
 const MonacoEditor = React.lazy(() =>
     import(/* webpackChunkName: "codeEditor" */ "react-monaco-editor")
 );
@@ -65,12 +66,9 @@ export default function CodeViewer() {
     const query = useQuery();
     const { id } = useParams();
     const theme = useTheme();
+    UseFileSubTitle(query, math, location);
 
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(
-        (title) => dispatch(changeSubTitle(title)),
-        [dispatch]
-    );
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
@@ -78,18 +76,10 @@ export default function CodeViewer() {
     );
 
     useEffect(() => {
-        if (!pathHelper.isSharePage(location.pathname)) {
-            const path = query.get("p").split("/");
-            const extension = query.get("p").split(".");
-            setSuffix(codePreviewSuffix[extension.pop()]);
-            SetSubTitle(path[path.length - 1]);
-        } else {
-            const extension = query.get("name").split(".");
-            setSuffix(codePreviewSuffix[extension.pop()]);
-            SetSubTitle(query.get("name"));
-        }
+        const extension = query.get("p").split(".");
+        setSuffix(codePreviewSuffix[extension.pop()]);
         // eslint-disable-next-line
-    }, [math.params[0], location]);
+    }, []);
 
     useEffect(() => {
         let requestURL = "/file/content/" + query.get("id");
@@ -142,11 +132,18 @@ export default function CodeViewer() {
             <Paper className={classes.root} elevation={1}>
                 <div className={classes.toobar}>
                     <FormControl className={classes.formControl}>
-                        <FormControlLabel control={
-                            <Switch
-                                onChange={(e) => setWordWrap(e.target.checked ? "on" : "off")}
-                            />
-                        } label="自动换行" />
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    onChange={(e) =>
+                                        setWordWrap(
+                                            e.target.checked ? "on" : "off"
+                                        )
+                                    }
+                                />
+                            }
+                            label="自动换行"
+                        />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <Select

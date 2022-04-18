@@ -149,6 +149,9 @@ export function pathJoin(parts, sep) {
 }
 
 export function basename(path) {
+    if (!path) {
+        return "";
+    }
     const pathList = path.split("/");
     pathList.pop();
     return pathList.join("/") === "" ? "/" : pathList.join("/");
@@ -157,6 +160,10 @@ export function basename(path) {
 export function filename(path) {
     const pathList = path.split("/");
     return pathList.pop();
+}
+
+export function fileNameNoExt(filename) {
+    return filename.substring(0, filename.lastIndexOf(".")) || filename;
 }
 
 export function randomStr(length) {

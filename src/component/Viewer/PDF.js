@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
 import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
-import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
 import { toggleSnackbar } from "../../redux/explorer";
+import UseFileSubTitle from "../../hooks/fileSubtitle";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles((theme) => ({
@@ -44,30 +45,16 @@ export default function PDFViewer() {
     const location = useLocation();
     const query = useQuery();
     const { id } = useParams();
+    UseFileSubTitle(query, math, location);
 
     const [pageNumber, setPageNumber] = useState(1);
 
     const dispatch = useDispatch();
-    const SetSubTitle = useCallback(
-        (title) => dispatch(changeSubTitle(title)),
-        [dispatch]
-    );
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-
-    useEffect(() => {
-        if (!pathHelper.isSharePage(location.pathname)) {
-            const path = query.get("p").split("/");
-            SetSubTitle(path[path.length - 1]);
-        } else {
-            SetSubTitle(query.get("name"));
-        }
-        // eslint-disable-next-line
-    }, [math.params[0], location]);
-
     const removeTextLayerOffset = () => {
         const textLayers = document.querySelectorAll(
             ".react-pdf__Page__textContent"

@@ -7,6 +7,22 @@ export const getBaseURL = () => {
     return baseURL;
 };
 
+export const getPreviewURL = (
+    isShare: boolean,
+    shareID: any,
+    fileID: any,
+    path: any
+): string => {
+    return (
+        getBaseURL() +
+        (isShare
+            ? "/share/preview/" +
+              shareID +
+              (path !== "" ? "?path=" + encodeURIComponent(path) : "")
+            : "/file/preview/" + fileID)
+    );
+};
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 const instance = axios.create({
