@@ -185,6 +185,13 @@ export const isMac = () => {
     return navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 };
 
+export const isMobileSafari = () => {
+    const ua = window.navigator.userAgent;
+    const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+    const webkit = !!ua.match(/WebKit/i);
+    return iOS && webkit && !ua.match(/CriOS/i);
+};
+
 export function vhCheck() {
     const vh = window.innerHeight;
     document.documentElement.style.setProperty("--vh", `${vh}px`);

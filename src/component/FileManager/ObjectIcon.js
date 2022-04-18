@@ -100,6 +100,7 @@ export default function ObjectIcon(props) {
     const handleClick = (e) => {
         if (props.file.type === "up") {
             NavitateTo(pathBack(navigatorPath));
+            return;
         }
 
         SelectFile(e);

@@ -7,6 +7,7 @@ import { getBaseURL } from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
+import { isMobileSafari } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -56,7 +57,12 @@ export default function VideoViewer() {
 
     useEffect(() => {
         return () => {
-            if (playing && document.pictureInPictureEnabled && dp) {
+            if (
+                playing &&
+                !isMobileSafari() &&
+                document.pictureInPictureEnabled &&
+                dp
+            ) {
                 dp.video.requestPictureInPicture();
                 dp.video.addEventListener(
                     "leavepictureinpicture",
