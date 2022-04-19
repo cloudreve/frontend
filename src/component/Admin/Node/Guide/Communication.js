@@ -190,6 +190,24 @@ export default function Communication(props) {
                         <br />
                         Secret = {props.node.SlaveKey}
                         <br />
+                        <br />;
+                        以下为可选的设置，对应主机节点的相关参数，可以通过配置文件应用到从机节点，请根据
+                        <br />
+                        ; 实际情况调整。更改下面设置需要重启从机节点后生效。
+                        <br />
+                        [OptionOverwrite]
+                        <br />
+                        ; 任务队列最多并行执行的任务数
+                        <br />
+                        max_worker_num = 50
+                        <br />
+                        ; 任务队列中转任务传输时，最大并行协程数
+                        <br />
+                        max_parallel_transfer = 10
+                        <br />
+                        ; 中转分片上传失败后重试的最大次数
+                        <br />
+                        chunk_retries = 10
                     </pre>
                     <Typography variant={"body2"}>
                         从机端配置文件格式大致与主站端相同，区别在于：

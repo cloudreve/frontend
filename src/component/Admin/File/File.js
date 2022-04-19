@@ -26,6 +26,7 @@ import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import FileFilter from "../Dialogs/FileFilter";
 import { formatLocalTime } from "../../../utils/datetime";
+import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
         position: "absolute",
         top: 20,
         width: 1,
+    },
+    disabledBadge: {
+        marginLeft: theme.spacing(1),
+        height: 18,
     },
 }));
 
@@ -374,7 +379,7 @@ export default function File() {
                                     上传者
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    上传于
+                                    创建于
                                 </TableCell>
                                 <TableCell style={{ minWidth: 100 }}>
                                     操作
@@ -408,6 +413,15 @@ export default function File() {
                                             }
                                         >
                                             {row.Name}
+                                            {row.UploadSessionID && (
+                                                <Chip
+                                                    className={
+                                                        classes.disabledBadge
+                                                    }
+                                                    size="small"
+                                                    label="上传中"
+                                                />
+                                            )}
                                         </Link>
                                     </TableCell>
                                     <TableCell align={"right"}>
