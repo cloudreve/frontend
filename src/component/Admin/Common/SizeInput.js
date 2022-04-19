@@ -10,7 +10,7 @@ import { toggleSnackbar } from "../../../redux/explorer";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
 const unitTransform = (v) => {
-    if (v.toString() === "0") {
+    if (!v || v.toString() === "0") {
         return [0, 1024 * 1024];
     }
     for (let i = 4; i >= 0; i--) {
