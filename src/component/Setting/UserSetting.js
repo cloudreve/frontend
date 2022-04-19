@@ -42,11 +42,23 @@ import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
 import QRCode from "qrcode-react";
-import { Brightness3, ListAlt, PermContactCalendar,Schedule } from "@material-ui/icons";
+import {
+    Brightness3,
+    GitHub,
+    Home,
+    ListAlt,
+    PermContactCalendar,
+    Schedule,
+} from "@material-ui/icons";
 import Authn from "./Authn";
 import { formatLocalTime, timeZone } from "../../utils/datetime";
 import TimeZoneDialog from "../Modals/TimeZone";
-import { applyThemes, changeViewMethod, toggleDaylightMode, toggleSnackbar } from "../../redux/explorer";
+import {
+    applyThemes,
+    changeViewMethod,
+    toggleDaylightMode,
+    toggleSnackbar,
+} from "../../redux/explorer";
 
 const styles = (theme) => ({
     layout: {
@@ -998,6 +1010,59 @@ class UserSettingCompoment extends Component {
                             </Paper>
                         </div>
                     )}
+
+                    <Typography
+                        className={classes.sectionTitle}
+                        variant="subtitle2"
+                    >
+                        关于 Cloudreve
+                    </Typography>
+                    <Paper>
+                        <List className={classes.desenList}>
+                            <ListItem
+                                button
+                                onClick={() =>
+                                    window.open(
+                                        "https://github.com/cloudreve/cloudreve"
+                                    )
+                                }
+                            >
+                                <ListItemIcon className={classes.iconFix}>
+                                    <GitHub />
+                                </ListItemIcon>
+                                <ListItemText primary="GitHub 仓库" />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider />
+                            <ListItem
+                                button
+                                onClick={() =>
+                                    window.open("https://cloudreve.org")
+                                }
+                            >
+                                <ListItemIcon className={classes.iconFix}>
+                                    <Home />
+                                </ListItemIcon>
+                                <ListItemText primary="主页" />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        </List>
+                    </Paper>
+
                     <div className={classes.paddingBottom}></div>
                 </div>
                 <TimeZoneDialog
