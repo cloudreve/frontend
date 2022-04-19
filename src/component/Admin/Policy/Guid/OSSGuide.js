@@ -92,7 +92,7 @@ const steps = [
         optional: false,
     },
     {
-        title: "上传限制",
+        title: "上传设置",
         optional: false,
     },
     {
@@ -138,6 +138,8 @@ export default function OSSGuide(props) {
                   OptionsSerialized: {
                       file_type: "",
                       server_side_endpoint: "",
+                      chunk_size: 25 << 20,
+                      placeholder_with_size: "false",
                   },
               }
     );
@@ -194,6 +196,11 @@ export default function OSSGuide(props) {
             policyCopy.IsOriginLinkEnable === "true";
         policyCopy.IsPrivate = policyCopy.IsPrivate === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
+        policyCopy.OptionsSerialized.chunk_size = parseInt(
+            policyCopy.OptionsSerialized.chunk_size
+        );
+        policyCopy.OptionsSerialized.placeholder_with_size =
+            policyCopy.OptionsSerialized.placeholder_with_size === "true";
         policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
             ","
         );
@@ -1023,6 +1030,80 @@ export default function OSSGuide(props) {
                             </div>
                         </div>
                     </Collapse>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>
+                                {getNumber(3, [
+                                    policy.MaxSize !== "0",
+                                    policy.OptionsSerialized.file_type !== "",
+                                ])}
+                            </div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                请指定分片上传时的分片大小，范围 100 KB ~ 5 GB。
+                                <br />
+                                启用分片上传后，用户上传的文件将会被切分成分片逐个上传到存储端，当上传中断后，用户可以选择从上次上传的分片后继续开始上传。
+                            </Typography>
+                            <div className={classes.form}>
+                                <SizeInput
+                                    value={policy.OptionsSerialized.chunk_size}
+                                    onChange={handleOptionChange("chunk_size")}
+                                    min={100 * 1024}
+                                    max={5368709120}
+                                    label={"分片上传大小"}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>
+                                {getNumber(4, [
+                                    policy.MaxSize !== "0",
+                                    policy.OptionsSerialized.file_type !== "",
+                                ])}
+                            </div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                是否要再用户开始上传时就创建占位符文件并扣除用户容量？开启后，可以防止用户恶意发起多个上传请求但不完成上传。
+                            </Typography>
+                            <div className={classes.form}>
+                                <FormControl required component="fieldset">
+                                    <RadioGroup
+                                        aria-label="gender"
+                                        name="gender1"
+                                        value={
+                                            policy.OptionsSerialized
+                                                .placeholder_with_size
+                                        }
+                                        onChange={handleOptionChange(
+                                            "placeholder_with_size"
+                                        )}
+                                        row
+                                    >
+                                        <FormControlLabel
+                                            value={"true"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="创建占位符文件"
+                                        />
+                                        <FormControlLabel
+                                            value={"false"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="不创建"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
 
                     <div className={classes.stepFooter}>
                         <Button

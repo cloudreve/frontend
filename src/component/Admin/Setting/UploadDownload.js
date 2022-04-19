@@ -297,7 +297,8 @@ export default function UploadDownload() {
                             {
                                 name: "上传会话",
                                 field: "upload_session_timeout",
-                                des: "超出后不再处理此上传的回调请求",
+                                des:
+                                    "在上传会话有效期内，对于支持的存储策略，用户可以断点续传未完成的任务。最大可设定的值受限于不同存储策略服务商的规则。",
                             },
                             {
                                 name: "分享下载会话",

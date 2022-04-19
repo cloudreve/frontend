@@ -336,7 +336,7 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    -1 表示不限制
+                                    -1 表示自动决定
                                 </FormHelperText>
                             </FormControl>
                         </div>

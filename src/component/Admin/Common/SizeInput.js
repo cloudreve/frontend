@@ -4,27 +4,21 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const unitTransform = (v) => {
-    if (v < 1024) {
-        return [Math.round(v), 1];
+    if (v.toString() === "0") {
+        return [0, 1024 * 1024];
     }
-    if (v < 1024 * 1024) {
-        return [Math.round(v / 1024), 1024];
+    for (let i = 4; i >= 0; i--) {
+        const base = Math.pow(1024, i);
+        if (v % base === 0) {
+            return [v / base, base];
+        }
     }
-    if (v < 1024 * 1024 * 1024) {
-        return [Math.round(v / (1024 * 1024)), 1024 * 1024];
-    }
-    if (v < 1024 * 1024 * 1024 * 1024) {
-        return [Math.round(v / (1024 * 1024 * 1024)), 1024 * 1024 * 1024];
-    }
-    return [
-        Math.round(v / (1024 * 1024 * 1024 * 1024)),
-        1024 * 1024 * 1024 * 1024,
-    ];
 };
 
 export default function SizeInput({
@@ -44,41 +38,37 @@ export default function SizeInput({
     );
 
     const [unit, setUnit] = useState(1);
-    let first = true;
+    const [val, setVal] = useState(value);
+    const [err, setError] = useState("");
 
-    const transform = useCallback(() => {
-        const res = unitTransform(value);
-        if (first && value !== 0) {
-            setUnit(res[1]);
-            first = false;
+    useEffect(() => {
+        onChange({
+            target: {
+                value: (val * unit).toString(),
+            },
+        });
+        if (val * unit > max || val * unit < min) {
+            setError("不符合尺寸限制");
+        } else {
+            setError("");
         }
-        return res;
-    }, [value]);
+    }, [val, unit, max, min]);
+
+    useEffect(() => {
+        const res = unitTransform(value);
+        setUnit(res[1]);
+        setVal(res[0]);
+    }, []);
 
     return (
-        <FormControl>
+        <FormControl error={err !== ""}>
             <InputLabel htmlFor="component-helper">{label}</InputLabel>
             <Input
                 style={{ width: 200 }}
-                value={transform()[0]}
+                value={val}
                 type={"number"}
-                inputProps={{ min: min, step: 1 }}
-                onChange={(e) => {
-                    if (e.target.value * unit < max) {
-                        onChange({
-                            target: {
-                                value: (e.target.value * unit).toString(),
-                            },
-                        });
-                    } else {
-                        ToggleSnackbar(
-                            "top",
-                            "right",
-                            "超出最大尺寸限制",
-                            "warning"
-                        );
-                    }
-                }}
+                inputProps={{ step: 1 }}
+                onChange={(e) => setVal(e.target.value)}
                 required={required}
                 endAdornment={
                     <InputAdornment position="end">
@@ -86,25 +76,7 @@ export default function SizeInput({
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={unit}
-                            onChange={(e) => {
-                                if (transform()[0] * e.target.value < max) {
-                                    onChange({
-                                        target: {
-                                            value: (
-                                                transform()[0] * e.target.value
-                                            ).toString(),
-                                        },
-                                    });
-                                    setUnit(e.target.value);
-                                } else {
-                                    ToggleSnackbar(
-                                        "top",
-                                        "right",
-                                        "超出最大尺寸限制",
-                                        "warning"
-                                    );
-                                }
-                            }}
+                            onChange={(e) => setUnit(e.target.value)}
                         >
                             <MenuItem value={1}>B{suffix && suffix}</MenuItem>
                             <MenuItem value={1024}>
@@ -123,6 +95,7 @@ export default function SizeInput({
                     </InputAdornment>
                 }
             />
+            {err !== "" && <FormHelperText>{err}</FormHelperText>}
         </FormControl>
     );
 }

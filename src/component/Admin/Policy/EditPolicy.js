@@ -60,10 +60,12 @@ export default function EditPolicyPreload() {
                 response.data.IsPrivate = response.data.IsPrivate
                     ? "true"
                     : "false";
+
                 response.data.OptionsSerialized.placeholder_with_size = response
                     .data.OptionsSerialized.placeholder_with_size
                     ? "true"
                     : "false";
+
                 response.data.OptionsSerialized.file_type = response.data
                     .OptionsSerialized.file_type
                     ? response.data.OptionsSerialized.file_type.join(",")

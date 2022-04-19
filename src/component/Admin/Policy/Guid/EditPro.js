@@ -559,7 +559,7 @@ export default function EditPro(props) {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    分片上传时单个分片的大小，填写为0表示不分片
+                                    分片上传时单个分片的大小，仅部分存储策略支持。
                                 </TableCell>
                             </TableRow>
                             <TableRow>
@@ -597,7 +597,7 @@ export default function EditPro(props) {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    是否在上传会话创建时就对用户存储进行预支。
+                                    是否在上传会话创建时就对用户存储进行预支，仅部分存储策略支持。
                                 </TableCell>
                             </TableRow>
                         </TableBody>
