@@ -182,7 +182,12 @@ export default function Index() {
                 setNewsUsers(res);
             })
             .catch((error) => {
-                ToggleSnackbar("top", "right", error.message, "error");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    "Cloudreve 公告加载失败",
+                    "warning"
+                );
             });
     }, []);
 

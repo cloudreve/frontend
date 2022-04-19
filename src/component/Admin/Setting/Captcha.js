@@ -12,6 +12,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 import Link from "@material-ui/core/Link";
 import { toggleSnackbar } from "../../../redux/explorer";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,7 +42,14 @@ export default function Captcha() {
         captcha_height: "1",
         captcha_width: "1",
         captcha_mode: "3",
-        captcha_CaptchaLen: "",
+        captcha_CaptchaLen: "6",
+        captcha_ComplexOfNoiseText: "0",
+        captcha_ComplexOfNoiseDot: "0",
+        captcha_IsShowHollowLine: "0",
+        captcha_IsShowNoiseDot: "0",
+        captcha_IsShowNoiseText: "0",
+        captcha_IsShowSlimeLine: "0",
+        captcha_IsShowSineLine: "0",
         captcha_ReCaptchaKey: "",
         captcha_ReCaptchaSecret: "",
         captcha_TCaptcha_CaptchaAppId: "",
@@ -98,6 +107,14 @@ export default function Captcha() {
             .then(() => {
                 setLoading(false);
             });
+    };
+
+    const handleCheckChange = (name) => (event) => {
+        const value = event.target.checked ? "1" : "0";
+        setOptions({
+            ...options,
+            [name]: value,
+        });
     };
 
     return (
@@ -181,6 +198,25 @@ export default function Captcha() {
                             <div className={classes.form}>
                                 <FormControl>
                                     <InputLabel htmlFor="component-helper">
+                                        长度
+                                    </InputLabel>
+                                    <Input
+                                        type={"number"}
+                                        inputProps={{
+                                            min: 1,
+                                            step: 1,
+                                        }}
+                                        value={options.captcha_CaptchaLen}
+                                        onChange={handleChange(
+                                            "captcha_CaptchaLen"
+                                        )}
+                                        required
+                                    />
+                                </FormControl>
+                            </div>
+                            <div className={classes.form}>
+                                <FormControl>
+                                    <InputLabel htmlFor="component-helper">
                                         模式
                                     </InputLabel>
                                     <Select
@@ -200,6 +236,55 @@ export default function Captcha() {
                                     </FormHelperText>
                                 </FormControl>
                             </div>
+                            {[
+                                {
+                                    name: "加强干扰文字",
+                                    field: "captcha_ComplexOfNoiseText",
+                                },
+                                {
+                                    name: "加强干扰点",
+                                    field: "captcha_ComplexOfNoiseDot",
+                                },
+                                {
+                                    name: "使用空心线",
+                                    field: "captcha_IsShowHollowLine",
+                                },
+                                {
+                                    name: "使用噪点",
+                                    field: "captcha_IsShowNoiseDot",
+                                },
+                                {
+                                    name: "使用干扰文字",
+                                    field: "captcha_IsShowNoiseText",
+                                },
+                                {
+                                    name: "使用波浪线",
+                                    field: "captcha_IsShowSlimeLine",
+                                },
+                                {
+                                    name: "使用正弦线",
+                                    field: "captcha_IsShowSineLine",
+                                },
+                            ].map((input) => (
+                                <div key={input.name} className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <FormControlLabel
+                                            control={
+                                                <Switch
+                                                    checked={
+                                                        options[input.field] ===
+                                                        "1"
+                                                    }
+                                                    onChange={handleCheckChange(
+                                                        input.field
+                                                    )}
+                                                />
+                                            }
+                                            label={input.name}
+                                        />
+                                    </FormControl>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}

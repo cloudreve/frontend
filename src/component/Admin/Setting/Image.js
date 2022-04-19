@@ -10,6 +10,9 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import SizeInput from "../Common/SizeInput";
+import Alert from "@material-ui/lab/Alert";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,6 +46,11 @@ export default function ImageSetting() {
         thumb_width: "",
         thumb_height: "",
         office_preview_service: "",
+        thumb_file_suffix: "",
+        thumb_max_task_count: "",
+        thumb_encode_method: "",
+        thumb_gc_after_gen: "0",
+        thumb_encode_quality: "",
     });
 
     const handleChange = (name) => (event) => {
@@ -94,6 +102,14 @@ export default function ImageSetting() {
             .then(() => {
                 setLoading(false);
             });
+    };
+
+    const handleCheckChange = (name) => (event) => {
+        const value = event.target.checked ? "1" : "0";
+        setOptions({
+            ...options,
+            [name]: value,
+        });
     };
 
     return (
@@ -218,43 +234,6 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图宽度
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.thumb_width}
-                                    onChange={handleChange("thumb_width")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-                    </div>
-
-                    <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
-                                    缩略图高度
-                                </InputLabel>
-                                <Input
-                                    type={"number"}
-                                    inputProps={{
-                                        min: 1,
-                                        step: 1,
-                                    }}
-                                    value={options.thumb_height}
-                                    onChange={handleChange("thumb_height")}
-                                    required
-                                />
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl>
-                                <InputLabel htmlFor="component-helper">
                                     Office 文档预览服务
                                 </InputLabel>
                                 <Input
@@ -272,6 +251,155 @@ export default function ImageSetting() {
                                     <code>{"{$srcB64}"}</code> - Base64
                                     编码后的文件 URL
                                 </FormHelperText>
+                            </FormControl>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={classes.root}>
+                    <Typography variant="h6" gutterBottom>
+                        缩略图
+                    </Typography>
+
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <Alert severity="info">
+                                以下设置只针对本机存储策略有效。
+                            </Alert>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    缩略图宽度
+                                </InputLabel>
+                                <Input
+                                    type={"number"}
+                                    inputProps={{
+                                        min: 1,
+                                        step: 1,
+                                    }}
+                                    value={options.thumb_width}
+                                    onChange={handleChange("thumb_width")}
+                                    required
+                                />
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    缩略图高度
+                                </InputLabel>
+                                <Input
+                                    type={"number"}
+                                    inputProps={{
+                                        min: 1,
+                                        step: 1,
+                                    }}
+                                    value={options.thumb_height}
+                                    onChange={handleChange("thumb_height")}
+                                    required
+                                />
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    缩略图文件后缀
+                                </InputLabel>
+                                <Input
+                                    type={"text"}
+                                    value={options.thumb_file_suffix}
+                                    onChange={handleChange("thumb_file_suffix")}
+                                    required
+                                />
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    缩略图生成并行数量
+                                </InputLabel>
+                                <Input
+                                    type={"number"}
+                                    inputProps={{
+                                        min: -1,
+                                        step: 1,
+                                    }}
+                                    value={options.thumb_max_task_count}
+                                    onChange={handleChange(
+                                        "thumb_max_task_count"
+                                    )}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    -1 表示不限制
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    缩略图格式
+                                </InputLabel>
+                                <Input
+                                    type={"test"}
+                                    value={options.thumb_encode_method}
+                                    onChange={handleChange(
+                                        "thumb_encode_method"
+                                    )}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    可选：png/jpg
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    缩略图生成并行数量
+                                </InputLabel>
+                                <Input
+                                    type={"number"}
+                                    inputProps={{
+                                        min: 1,
+                                        step: 1,
+                                        max: 100,
+                                    }}
+                                    value={options.thumb_encode_quality}
+                                    onChange={handleChange(
+                                        "thumb_encode_quality"
+                                    )}
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    压缩质量百分比，只针对 jpg 编码有效
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.thumb_gc_after_gen ===
+                                                "1"
+                                            }
+                                            onChange={handleCheckChange(
+                                                "thumb_gc_after_gen"
+                                            )}
+                                        />
+                                    }
+                                    label="生成完成后立即回收内存"
+                                />
                             </FormControl>
                         </div>
                     </div>

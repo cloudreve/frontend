@@ -40,7 +40,7 @@ export default function UploadDownload() {
         max_parallel_transfer: "1",
         temp_path: "",
         maxEditSize: "0",
-        onedrive_chunk_retries: "0",
+        chunk_retries: "0",
         archive_timeout: "0",
         download_timeout: "0",
         preview_timeout: "0",
@@ -57,6 +57,7 @@ export default function UploadDownload() {
         slave_ping_interval: "0",
         slave_recover_interval: "0",
         slave_transfer_timeout: "0",
+        use_temp_chunk_buffer: "1",
     });
 
     const handleCheckChange = (name) => (event) => {
@@ -142,7 +143,7 @@ export default function UploadDownload() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    任务队列最多并行执行的任务数，保存后需要重启
+                                    主机节点任务队列最多并行执行的任务数，保存后需要重启
                                     Cloudreve 生效
                                 </FormHelperText>
                             </FormControl>
@@ -182,7 +183,7 @@ export default function UploadDownload() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    用于存放打包下载、解压缩、压缩等任务产生的临时文件的目录路径
+                                    用于存放解压缩、压缩等任务产生的临时文件的目录路径
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -206,7 +207,7 @@ export default function UploadDownload() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    OneDrive 分片错误重试
+                                    分片错误重试
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -214,15 +215,35 @@ export default function UploadDownload() {
                                         min: 0,
                                         step: 1,
                                     }}
-                                    value={options.onedrive_chunk_retries}
-                                    onChange={handleChange(
-                                        "onedrive_chunk_retries"
-                                    )}
+                                    value={options.chunk_retries}
+                                    onChange={handleChange("chunk_retries")}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    OneDrive
-                                    存储策略分片上传失败后重试的最大次数，只适用于服务端上传或中转
+                                    分片上传失败后重试的最大次数，只适用于服务端上传或中转
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.use_temp_chunk_buffer ===
+                                                "1"
+                                            }
+                                            onChange={handleCheckChange(
+                                                "use_temp_chunk_buffer"
+                                            )}
+                                        />
+                                    }
+                                    label="缓存流式分片文件以用于重试"
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    开启后，流式中转分片上传时会将分片数据缓存在系统临时目录，以便用于分片上传失败后的重试；
+                                    关闭后，流式中转分片上传不会额外占用硬盘空间，但分片上传失败后整个上传会立即失败。
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -272,10 +293,6 @@ export default function UploadDownload() {
                             {
                                 name: "Office 文档预览连接",
                                 field: "doc_preview_timeout",
-                            },
-                            {
-                                name: "上传凭证",
-                                field: "upload_credential_timeout",
                             },
                             {
                                 name: "上传会话",
