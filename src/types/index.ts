@@ -3,6 +3,7 @@ export interface CloudreveFile {
     name: string;
     size: number;
     date: string;
+    create_date: string;
     path: string;
     type: "up" | "file" | "dir";
 }
@@ -13,7 +14,9 @@ export type SortMethod =
     | "namePos"
     | "nameRev"
     | "timePos"
-    | "timeRev";
+    | "timeRev"
+    | "modifyTimePos"
+    | "modifyTimeRev";
 
 export enum BatchDownloadMethod {
     ClientStream,

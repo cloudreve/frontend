@@ -125,9 +125,15 @@ const sortMethodFuncs: Record<SortMethod, SortFunc> = {
         );
     },
     timePos: (a: CloudreveFile, b: CloudreveFile) => {
-        return Date.parse(a.date) - Date.parse(b.date);
+        return Date.parse(a.create_date) - Date.parse(b.create_date);
     },
     timeRev: (a: CloudreveFile, b: CloudreveFile) => {
+        return Date.parse(b.create_date) - Date.parse(a.create_date);
+    },
+    modifyTimePos: (a: CloudreveFile, b: CloudreveFile) => {
+        return Date.parse(a.date) - Date.parse(b.date);
+    },
+    modifyTimeRev: (a: CloudreveFile, b: CloudreveFile) => {
         return Date.parse(b.date) - Date.parse(a.date);
     },
 };
@@ -158,6 +164,7 @@ export const changeSortMethod = (
         const state = getState();
         const { fileList, dirList } = state.explorer;
         const sortFunc = sortMethodFuncs[method];
+        Auth.SetPreference("sort", method);
         dispatch(setSortMethod(method));
         dispatch(setDirList(dirList.sort(sortFunc)));
         dispatch(setFileList(fileList.sort(sortFunc)));

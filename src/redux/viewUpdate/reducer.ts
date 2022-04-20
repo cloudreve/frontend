@@ -1,17 +1,12 @@
 import { AnyAction } from "redux";
 import Auth from "../../middleware/Auth";
+import { SortMethod } from "../../types";
 
 export interface ViewUpdateState {
     isLogin: boolean;
     open: boolean;
     explorerViewMethod: string;
-    sortMethod:
-        | "sizePos"
-        | "sizeRes"
-        | "namePos"
-        | "nameRev"
-        | "timePos"
-        | "timeRev";
+    sortMethod: SortMethod;
     subTitle: string | null;
     contextType: string;
     contextOpen: boolean;
@@ -67,7 +62,7 @@ export const initState: ViewUpdateState = {
     isLogin: Auth.Check(),
     open: false,
     explorerViewMethod: "icon",
-    sortMethod: "timePos",
+    sortMethod: Auth.GetPreferenceWithDefault("sort", "timePos"),
     subTitle: null,
     contextType: "none",
     contextOpen: false,

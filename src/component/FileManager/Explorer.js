@@ -291,25 +291,26 @@ class ExplorerCompoment extends Component {
                         <TableCell className={classes.hideAuto}>
                             <TableSortLabel
                                 active={
-                                    this.props.sortMethod === "timePos" ||
-                                    this.props.sortMethod === "timeRev"
+                                    this.props.sortMethod === "modifyTimePos" ||
+                                    this.props.sortMethod === "modifyTimeRev"
                                 }
                                 direction={
-                                    this.props.sortMethod === "timePos"
+                                    this.props.sortMethod === "modifyTimePos"
                                         ? "asc"
                                         : "des"
                                 }
                                 onClick={() => {
                                     this.props.changeSort(
-                                        this.props.sortMethod === "timePos"
-                                            ? "timeRev"
-                                            : "timePos"
+                                        this.props.sortMethod ===
+                                            "modifyTimePos"
+                                            ? "modifyTimeRev"
+                                            : "modifyTimePos"
                                     );
                                 }}
                             >
-                                日期
-                                {this.props.sortMethod === "timePos" ||
-                                this.props.sortMethod === "timeRev" ? (
+                                修改日期
+                                {this.props.sortMethod === "modifyTimePos" ||
+                                this.props.sortMethod === "modifyTimeRev" ? (
                                     <span className={classes.visuallyHidden}>
                                         {this.props.sortMethod === "sizeRes"
                                             ? "sorted descending"

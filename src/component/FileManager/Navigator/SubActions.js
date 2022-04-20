@@ -17,7 +17,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const sortOptions = ["A-Z", "Z-A", "最早", "最新", "最小", "最大"];
+const sortOptions = [
+    "A-Z",
+    "Z-A",
+    "最早上传",
+    "最新上传",
+    "最早修改",
+    "最新修改",
+    "最小",
+    "最大",
+];
 
 export default function SubActions({ isSmall, share, inherit }) {
     const dispatch = useDispatch();
@@ -48,8 +57,10 @@ export default function SubActions({ isSmall, share, inherit }) {
             1: "nameRev",
             2: "timePos",
             3: "timeRev",
-            4: "sizePos",
-            5: "sizeRes",
+            4: "modifyTimePos",
+            5: "modifyTimeRev",
+            6: "sizePos",
+            7: "sizeRes",
         };
         ChangeSortMethod(optionsTable[index]);
         setAnchorSort(null);
