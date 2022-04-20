@@ -458,10 +458,11 @@ export default function GroupForm(props) {
                                             )}
                                         />
                                     }
-                                    label="打包下载"
+                                    label="服务端打包下载"
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    是否允许用户多选文件打包下载
+                                    是否允许用户多选文件使用服务端中转打包下载，关闭后，用户仍然可以使用纯
+                                    Web 端打包下载功能。
                                 </FormHelperText>
                             </FormControl>
                         </div>
