@@ -192,18 +192,21 @@ export default function TaskList({
     );
 
     const list = useMemo(() => {
-        if (taskList.length === 0) {
+        const currentList = taskList
+            .filter(filters[filter])
+            .sort(sorters[sorter]);
+        if (currentList.length === 0) {
             return <Nothing size={0.5} top={63} primary={"没有上传任务"} />;
         }
 
         return (
             <Virtuoso
                 style={{
-                    height: (fullScreen ? 500 : 73) * taskList.length,
+                    height: (fullScreen ? 500 : 73) * currentList.length,
                 }}
                 className={classes.virtualList}
                 increaseViewportBy={180}
-                data={taskList.filter(filters[filter]).sort(sorters[sorter])}
+                data={currentList}
                 itemContent={(index, uploader) => (
                     <UploadTask
                         selectFile={selectFile}
