@@ -155,14 +155,16 @@ export default function ImageSetting() {
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
-                                <SizeInput
-                                    value={options.avatar_size}
-                                    onChange={handleChange("avatar_size")}
-                                    required
-                                    min={0}
-                                    max={2147483647}
-                                    label={"头像文件大小限制"}
-                                />
+                                {options.avatar_size !== "" && (
+                                    <SizeInput
+                                        value={options.avatar_size}
+                                        onChange={handleChange("avatar_size")}
+                                        required
+                                        min={0}
+                                        max={2147483647}
+                                        label={"头像文件大小限制"}
+                                    />
+                                )}
                                 <FormHelperText id="component-helper-text">
                                     用户可上传头像文件的最大大小
                                 </FormHelperText>

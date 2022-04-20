@@ -39,7 +39,7 @@ export default function UploadDownload() {
         max_worker_num: "1",
         max_parallel_transfer: "1",
         temp_path: "",
-        maxEditSize: "0",
+        maxEditSize: "",
         chunk_retries: "0",
         archive_timeout: "0",
         download_timeout: "0",
@@ -190,14 +190,17 @@ export default function UploadDownload() {
 
                         <div className={classes.form}>
                             <FormControl>
-                                <SizeInput
-                                    value={options.maxEditSize}
-                                    onChange={handleChange("maxEditSize")}
-                                    required
-                                    min={0}
-                                    max={2147483647}
-                                    label={"文本文件在线编辑大小"}
-                                />
+                                {options.maxEditSize !== "" && (
+                                    <SizeInput
+                                        value={options.maxEditSize}
+                                        onChange={handleChange("maxEditSize")}
+                                        required
+                                        min={0}
+                                        max={2147483647}
+                                        label={"文本文件在线编辑大小"}
+                                    />
+                                )}
+
                                 <FormHelperText id="component-helper-text">
                                     文本文件可在线编辑的最大大小，超出此大小的文件无法在线编辑
                                 </FormHelperText>
