@@ -17,8 +17,8 @@ export const msDocPreviewSuffix = [
     "xls",
 ];
 export const subtitleSuffix = ["ass", "srt", "vrr"];
-export const audioPreviewSuffix = ["mp3", "ogg", "flac"];
-export const videoPreviewSuffix = ["mp4", "mkv", "webm", "avi", "m3u8"];
+export const audioPreviewSuffix = ["mp3", "ogg", "flac","m4a"];
+export const videoPreviewSuffix = ["mp4", "mkv", "webm", "avi", "m3u8", "mov"];
 export const pdfPreviewSuffix = ["pdf"];
 export const editSuffix = ["md", "txt"];
 export const codePreviewSuffix = {
@@ -46,7 +46,7 @@ export const codePreviewSuffix = {
     yaml: "yaml",
 };
 export const mediaType = {
-    audio: ["mp3", "flac", "ape", "wav", "acc", "ogg"],
+    audio: ["mp3", "flac", "ape", "wav", "acc", "ogg","m4a"],
     video: ["mp4", "flv", "avi", "wmv", "mkv", "rm", "rmvb", "mov", "ogv"],
     image: ["bmp", "iff", "png", "gif", "jpg", "jpeg", "psd", "svg", "webp"],
     pdf: ["pdf"],
