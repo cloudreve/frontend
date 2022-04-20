@@ -318,7 +318,7 @@ export const startBatchDownload = (
                             getBaseURL() +
                             (pathHelper.isSharePage(location.pathname)
                                 ? "/share/preview/" +
-                                  next.id +
+                                  share.key +
                                   (previewPath !== ""
                                       ? "?path=" + previewPath
                                       : "")
