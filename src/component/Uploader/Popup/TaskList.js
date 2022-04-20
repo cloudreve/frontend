@@ -215,6 +215,7 @@ export default function TaskList({
                         key={uploader.id}
                         useAvgSpeed={useAvgSpeed}
                         uploader={uploader}
+                        filter={filters[filter]}
                     />
                 )}
             />
