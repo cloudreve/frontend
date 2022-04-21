@@ -159,6 +159,11 @@ export default function UpyunGuide(props) {
             policyCopy.IsOriginLinkEnable === "true";
         policyCopy.IsPrivate = policyCopy.IsPrivate === "true";
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
+        policyCopy.OptionsSerialized.chunk_size = parseInt(
+            policyCopy.OptionsSerialized.chunk_size
+        );
+        policyCopy.OptionsSerialized.placeholder_with_size =
+            policyCopy.OptionsSerialized.placeholder_with_size === "true";
         policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
             ","
         );
