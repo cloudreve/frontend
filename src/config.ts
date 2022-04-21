@@ -55,7 +55,7 @@ export const mediaType = {
     excel: ["xls", "xlsx", "csv"],
     text: ["txt", "md", "html"],
     torrent: ["torrent"],
-    zip: ["zip", "gz", "tar", "rar", "7z"],
+    zip: ["zip", "gz", "xz", "tar", "rar", "7z"],
     excute: ["exe"],
     android: ["apk"],
     php: ["php"],
@@ -104,7 +104,7 @@ export const isTorrent = (name: any) => {
 
 export const isCompressFile = (name: any) => {
     const suffix = name.split(".").pop().toLowerCase();
-    return suffix === "zip";
+    return suffix !== "7z" && mediaType['zip'].indexOf(suffix) !== -1;
 };
 
 const taskStatus = ["排队中", "处理中", "失败", "取消", "已完成"];
