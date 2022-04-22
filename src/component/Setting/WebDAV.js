@@ -159,7 +159,7 @@ export default function WebDAV() {
                             <Alert severity="info">
                                 WebDAV的地址为：
                                 {window.location.origin + "/dav"}
-                                ；登陆用户名统一为：{user.user_name}{" "}
+                                ；登录用户名统一为：{user.user_name}{" "}
                                 ；密码为所创建账号的密码。
                             </Alert>
                             <TableContainer className={classes.tableContainer}>

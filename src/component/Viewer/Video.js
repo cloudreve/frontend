@@ -288,7 +288,7 @@ export default function VideoViewer() {
                 >
                     选择字幕
                 </Button>
-                {playlist.length > 2 && (
+                {playlist.length >= 2 && (
                     <Button
                         onClick={(e) => setPlaylistOpen(e.currentTarget)}
                         className={classes.actionButton}

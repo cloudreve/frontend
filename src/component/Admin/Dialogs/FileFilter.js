@@ -88,9 +88,6 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
                     >
                         <MenuItem value={"all"}>全部</MenuItem>
                         {policies.map((v) => {
-                            if (v.ID === 3) {
-                                return null;
-                            }
                             return (
                                 <MenuItem key={v.ID} value={v.ID.toString()}>
                                     {v.Name}
