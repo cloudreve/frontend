@@ -104,9 +104,8 @@ export default function ObjectIcon(props) {
         }
 
         SelectFile(e);
-        if (props.file.type === "dir" && !e.ctrlKey) {
+        if (props.file.type === "dir" && (!e.ctrlKey && !e.metaKey && !e.shiftKey)) {
             enterFolder();
-            return;
         }
     };
 
