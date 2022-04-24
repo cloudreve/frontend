@@ -164,6 +164,7 @@ class ExplorerCompoment extends Component {
         this.keyMap = {
             DELETE_FILE: "del",
             SELECT_ALL: `${isMac() ? "command" : "ctrl"}+a`,
+            DESELECT_ALL: "esc",
         };
 
         this.handlers = {
@@ -185,6 +186,10 @@ class ExplorerCompoment extends Component {
                         ...this.props.fileList,
                     ]);
                 }
+            },
+            DESELECT_ALL: (e) => {
+                e.preventDefault();
+                this.props.setSelectedTarget([]);
             },
         };
 

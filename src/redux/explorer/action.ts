@@ -448,7 +448,7 @@ export const selectFile = (file: any, event: any, fileIndex: any) => {
     const { ctrlKey, metaKey, shiftKey } = event;
     return (dispatch: any, getState: any) => {
         // 多种组合操作忽略
-        if ([ctrlKey, metaKey, shiftKey].filter(Boolean).length > 1) {
+        if ([ctrlKey, shiftKey].filter(Boolean).length > 1 || [metaKey, shiftKey].filter(Boolean).length > 1) {
             return;
         }
         const isMacbook = isMac();
