@@ -30,6 +30,7 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import OptionSelector from "../Modals/OptionSelector";
+import { getDownloadURL } from "../../services/file";
 
 const styles = (theme) => ({
     wrapper: {

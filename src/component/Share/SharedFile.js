@@ -17,8 +17,6 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import { startDownload } from "../../redux/explorer/action";
-import { trySharePurchase } from "../../redux/explorer/async";
-
 
 vhCheck();
 const styles = (theme) => ({
@@ -121,7 +119,6 @@ const mapDispatchToProps = (dispatch) => {
         startDownload: (share, file) => {
             dispatch(startDownload(share, file));
         },
-        trySharePurchase: (share) => dispatch(trySharePurchase(share)),
     };
 };
 
