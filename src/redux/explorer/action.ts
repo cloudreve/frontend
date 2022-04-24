@@ -22,6 +22,7 @@ import {
     showImgPreivew,
     toggleSnackbar,
 } from "./index";
+import { getDownloadURL } from "../../services/file";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -241,6 +242,40 @@ export const serverSideBatchDownload = (
     };
 };
 
+export const startDownload = (
+    share: any,
+    file: CloudreveFile
+): ThunkAction<any, any, any, any> => {
+    return async (dispatch, getState): Promise<void> => {
+        const {
+            router: {
+                location: { pathname },
+            },
+        } = getState();
+        const user = Auth.GetUser();
+        if (
+            pathHelper.isSharePage(pathname) &&
+            !Auth.Check() &&
+            user &&
+            !user.group.shareDownload
+        ) {
+            dispatch(toggleSnackbar("top", "right", "请先登录", "warning"));
+            return;
+        }
+
+        dispatch(changeContextMenu("file", false));
+        dispatch(openLoadingDialog("获取下载地址..."));
+        try {
+            const res = await getDownloadURL(file ? file : share);
+            window.location.assign(res.data);
+            dispatch(closeAllModals());
+        } catch (e) {
+            toggleSnackbar("top", "right", e.message, "warning");
+            dispatch(closeAllModals());
+        }
+    };
+};
+
 export const startBatchDownload = (
     share: any
 ): ThunkAction<any, any, any, any> => {
@@ -397,7 +432,7 @@ export const openViewer = (
     };
 };
 
-export const openPreview = () => {
+export const openPreview = (share: any) => {
     return (dispatch: any, getState: any) => {
         const {
             explorer: { selected },
@@ -439,7 +474,7 @@ export const openPreview = () => {
                 dispatch(openViewer("code", selected[0], isShare));
                 return;
             default:
-                dispatch(openLoadingDialog("获取下载地址..."));
+                dispatch(startDownload(share, selected[0]));
                 return;
         }
     };

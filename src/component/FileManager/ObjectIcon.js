@@ -10,7 +10,6 @@ import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import DropWarpper from "./DnD/DropWarpper";
 import { useLocation } from "react-router-dom";
-import Auth from "../../middleware/Auth";
 import { pathBack } from "../../utils";
 import {
     changeContextMenu,
@@ -70,7 +69,13 @@ export default function ObjectIcon(props) {
         (text) => dispatch(openLoadingDialog(text)),
         [dispatch]
     );
-    const OpenPreview = useCallback(() => dispatch(openPreview()), [dispatch]);
+    const OpenPreview = useCallback((share) => dispatch(openPreview(share)), [
+        dispatch,
+    ]);
+    const StartDownload = useCallback(
+        (share, file) => dispatch(StartDownload(share, file)),
+        [dispatch]
+    );
 
     const classes = useStyles();
 
@@ -117,20 +122,8 @@ export default function ObjectIcon(props) {
             enterFolder();
             return;
         }
-        const isShare = statusHelper.isSharePage(location.pathname);
-        if (isShare) {
-            const user = Auth.GetUser();
-            if (!Auth.Check() && user && !user.group.shareDownload) {
-                ToggleSnackbar("top", "right", "请先登录", "warning");
-                return;
-            }
-        }
-        if (window.shareInfo && !window.shareInfo.preview) {
-            OpenLoadingDialog("获取下载地址...");
-            return;
-        }
 
-        OpenPreview();
+        OpenPreview(window.shareInfo);
     };
 
     const handleIconClick = (e) => {

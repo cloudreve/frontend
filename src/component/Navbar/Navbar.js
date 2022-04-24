@@ -12,12 +12,7 @@ import MoveIcon from "@material-ui/icons/Input";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MenuIcon from "@material-ui/icons/Menu";
 import { isPreviewable } from "../../config";
-import {
-    allowSharePreview,
-    changeThemeColor,
-    sizeToString,
-    vhCheck,
-} from "../../utils";
+import { changeThemeColor, sizeToString, vhCheck } from "../../utils";
 import Uploader from "../Uploader/Uploader.js";
 import pathHelper from "../../utils/page";
 import SezrchBar from "./SearchBar";
@@ -69,7 +64,7 @@ import {
     showImgPreivew,
     toggleSnackbar,
 } from "../../redux/explorer";
-import { startBatchDownload } from "../../redux/explorer/action";
+import { startBatchDownload, startDownload } from "../../redux/explorer/action";
 
 vhCheck();
 const drawerWidth = 240;
@@ -143,14 +138,17 @@ const mapDispatchToProps = (dispatch) => {
         setSessionStatus: () => {
             dispatch(setSessionStatus());
         },
-        openPreview: () => {
-            dispatch(openPreview());
+        openPreview: (share) => {
+            dispatch(openPreview(share));
         },
         audioPreviewOpen: () => {
             dispatch(audioPreviewSetIsOpen(true));
         },
         startBatchDownload: (share) => {
             dispatch(startBatchDownload(share));
+        },
+        startDownload: (share, file) => {
+            dispatch(startDownload(share, file));
         },
     };
 };
@@ -335,20 +333,11 @@ class NavbarCompoment extends Component {
     };
 
     openDownload = () => {
-        if (!allowSharePreview()) {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "未登录用户无法预览",
-                "warning"
-            );
-            return;
-        }
-        this.props.openLoadingDialog("获取下载地址...");
+        this.props.startDownload(window.shareInfo, this.props.selected[0]);
     };
 
     archiveDownload = () => {
-        this.props.startBatchDownload(this.props.share);
+        this.props.startBatchDownload(window.shareInfo);
     };
 
     signOut = () => {
@@ -642,7 +631,9 @@ class NavbarCompoment extends Component {
                                                     <IconButton
                                                         color="inherit"
                                                         onClick={() =>
-                                                            this.props.openPreview()
+                                                            this.props.openPreview(
+                                                                window.shareInfo
+                                                            )
                                                         }
                                                     >
                                                         <OpenIcon />

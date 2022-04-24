@@ -6,11 +6,18 @@ import { Button, Typography, withStyles } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import TypeIcon from "../FileManager/TypeIcon";
 import Auth from "../../middleware/Auth";
-import API from "../../middleware/Api";
 import { withRouter } from "react-router-dom";
 import Creator from "./Creator";
 import pathHelper from "../../utils/page";
-import { openMusicDialog, openResaveDialog, setSelectedTarget, showImgPreivew, toggleSnackbar } from "../../redux/explorer";
+import {
+    openMusicDialog,
+    openResaveDialog,
+    setSelectedTarget,
+    showImgPreivew,
+    toggleSnackbar,
+} from "../../redux/explorer";
+import { startDownload } from "../../redux/explorer/action";
+import { trySharePurchase } from "../../redux/explorer/async";
 
 
 vhCheck();
@@ -111,6 +118,10 @@ const mapDispatchToProps = (dispatch) => {
         openResave: (key) => {
             dispatch(openResaveDialog(key));
         },
+        startDownload: (share, file) => {
+            dispatch(startDownload(share, file));
+        },
+        trySharePurchase: (share) => dispatch(trySharePurchase(share)),
     };
 };
 
@@ -204,6 +215,10 @@ class SharedFileCompoment extends Component {
         }
     };
 
+    scoreHandler = (callback) => (event) => {
+        this.props.trySharePurchase(this.props.share).then(() => callback());
+    };
+
     componentWillUnmount() {
         this.props.setSelectedTarget([]);
     }
@@ -213,23 +228,7 @@ class SharedFileCompoment extends Component {
     };
 
     download = () => {
-        this.setState({ loading: true });
-        API.put("/share/download/" + this.props.share.key)
-            .then((response) => {
-                this.downloaded = true;
-                window.location.assign(response.data);
-            })
-            .catch((error) => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "warning"
-                );
-            })
-            .then(() => {
-                this.setState({ loading: false });
-            });
+        this.props.startDownload(this.props.share, null);
     };
 
     render() {
@@ -263,7 +262,7 @@ class SharedFileCompoment extends Component {
                                 <Button
                                     variant="outlined"
                                     color="secondary"
-                                    onClick={this.scoreHandle(this.preview)}
+                                    onClick={this.scoreHandler(this.preview)}
                                     disabled={this.state.loading}
                                 >
                                     预览
@@ -275,7 +274,7 @@ class SharedFileCompoment extends Component {
                                 variant="contained"
                                 color="secondary"
                                 className={classes.downloadButton}
-                                onClick={this.scoreHandle(this.download)}
+                                onClick={this.download}
                                 disabled={this.state.loading}
                             >
                                 下载

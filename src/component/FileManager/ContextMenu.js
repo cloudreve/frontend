@@ -25,13 +25,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { isCompressFile, isPreviewable, isTorrent } from "../../config";
 import Auth from "../../middleware/Auth";
-import { allowSharePreview } from "../../utils/index";
 import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
     openPreview,
     setSelectedTarget,
     startBatchDownload,
+    startDownload,
     toggleObjectInfoSidebar,
 } from "../../redux/explorer/action";
 import {
@@ -154,8 +154,8 @@ const mapDispatchToProps = (dispatch) => {
         refreshFileList: () => {
             dispatch(refreshFileList());
         },
-        openPreview: () => {
-            dispatch(openPreview());
+        openPreview: (share) => {
+            dispatch(openPreview(share));
         },
         toggleObjectInfoSidebar: (open) => {
             dispatch(toggleObjectInfoSidebar(open));
@@ -168,6 +168,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openFolderSelector: () => {
             dispatch(openFolderSelector());
+        },
+        startDownload: (share, file) => {
+            dispatch(startDownload(share, file));
         },
     };
 };
@@ -192,18 +195,7 @@ class ContextMenuCompoment extends Component {
     };
 
     openDownload = () => {
-        if (!allowSharePreview()) {
-            this.props.toggleSnackbar(
-                "top",
-                "right",
-                "未登录用户无法预览",
-                "warning"
-            );
-            this.props.changeContextMenu("file", false);
-            return;
-        }
-        this.props.changeContextMenu("file", false);
-        this.props.openLoadingDialog("获取下载地址...");
+        this.props.startDownload(this.props.share, this.props.selected[0]);
     };
 
     enterFolder = () => {
@@ -447,7 +439,9 @@ class ContextMenuCompoment extends Component {
                                 <div>
                                     <MenuItem
                                         dense
-                                        onClick={() => this.openDownload()}
+                                        onClick={() =>
+                                            this.openDownload(this.props.share)
+                                        }
                                     >
                                         <StyledListItemIcon>
                                             <DownloadIcon />

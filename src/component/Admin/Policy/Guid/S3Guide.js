@@ -324,28 +324,6 @@ export default function S3Guide(props) {
                 >
                     <div className={classes.subStepContainer}>
                         <div className={classes.stepNumberContainer}>
-                            <div className={classes.stepNumber}>0</div>
-                        </div>
-                        <div className={classes.subStepContent}>
-                            <Typography variant={"body2"}>
-                                Cloudreve 主站需要启用 CORS 支持，具体步骤如下：
-                                <br />
-                                修改 Cloudreve 配置文件，新增以下 CORS
-                                配置项，保存并重启 Cloudreve。
-                                <pre>
-                                    [CORS]
-                                    <br />
-                                    AllowOrigins = *<br />
-                                    AllowMethods = OPTIONS,GET,POST
-                                    <br />
-                                    AllowHeaders = *<br />
-                                </pre>
-                            </Typography>
-                        </div>
-                    </div>
-
-                    <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}>
                             <div className={classes.stepNumber}>1</div>
                         </div>
                         <div className={classes.subStepContent}>

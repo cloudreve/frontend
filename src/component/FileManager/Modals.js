@@ -30,7 +30,6 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import OptionSelector from "../Modals/OptionSelector";
-import { getDownloadURL } from "../../services/file";
 
 const styles = (theme) => ({
     wrapper: {
@@ -112,30 +111,13 @@ class ModalsCompoment extends Component {
     };
 
     newNameSuffix = "";
-    downloaded = false;
 
     UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (this.props.dndSignale !== nextProps.dndSignale) {
             this.dragMove(nextProps.dndSource, nextProps.dndTarget);
             return;
         }
-        if (this.props.loading !== nextProps.loading) {
-            // 打包下载
-            if (nextProps.loading === true) {
-                if (nextProps.loadingText === "获取下载地址...") {
-                    if (
-                        pathHelper.isSharePage(this.props.location.pathname) &&
-                        this.props.share &&
-                        this.props.share.score > 0
-                    ) {
-                        this.scoreHandler(this.Download);
-                        return;
-                    }
-                    this.Download();
-                }
-            }
-            return;
-        }
+
         if (this.props.modalsStatus.rename !== nextProps.modalsStatus.rename) {
             const name = nextProps.selected[0].name;
             this.setState({
