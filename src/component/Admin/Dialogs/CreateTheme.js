@@ -52,7 +52,11 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
     });
 
     const subTheme = useCallback(() => {
-        return createMuiTheme(theme);
+        try {
+            return createMuiTheme(theme);
+        } catch (e) {
+            return createMuiTheme({});
+        }
     }, [theme]);
 
     return (
