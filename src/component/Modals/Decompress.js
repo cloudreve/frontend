@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import { filePath } from "../../utils";
 import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
+import { submitDecompressTask } from "../../redux/explorer/action";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -49,6 +50,10 @@ export default function DecompressDialog(props) {
         },
         [dispatch]
     );
+    const SubmitDecompressTask = useCallback(
+        (path) => dispatch(submitDecompressTask(path)),
+        [dispatch]
+    );
 
     const setMoveTarget = (folder) => {
         const path =
@@ -64,10 +69,7 @@ export default function DecompressDialog(props) {
             e.preventDefault();
         }
         SetModalsLoading(true);
-        API.post("/file/decompress", {
-            src: filePath(props.selected[0]),
-            dst: selectedPath === "//" ? "/" : selectedPath,
-        })
+        SubmitDecompressTask(selectedPath)
             .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "解压缩任务已创建", "success");

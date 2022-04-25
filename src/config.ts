@@ -17,7 +17,7 @@ export const msDocPreviewSuffix = [
     "xls",
 ];
 export const subtitleSuffix = ["ass", "srt", "vrr"];
-export const audioPreviewSuffix = ["mp3", "ogg", "flac","m4a"];
+export const audioPreviewSuffix = ["mp3", "ogg", "flac", "m4a"];
 export const videoPreviewSuffix = ["mp4", "mkv", "webm", "avi", "m3u8", "mov"];
 export const pdfPreviewSuffix = ["pdf"];
 export const editSuffix = ["md", "txt"];
@@ -46,7 +46,7 @@ export const codePreviewSuffix = {
     yaml: "yaml",
 };
 export const mediaType = {
-    audio: ["mp3", "flac", "ape", "wav", "acc", "ogg","m4a"],
+    audio: ["mp3", "flac", "ape", "wav", "acc", "ogg", "m4a"],
     video: ["mp4", "flv", "avi", "wmv", "mkv", "rm", "rmvb", "mov", "ogv"],
     image: ["bmp", "iff", "png", "gif", "jpg", "jpeg", "psd", "svg", "webp"],
     pdf: ["pdf"],
@@ -104,7 +104,12 @@ export const isTorrent = (name: any) => {
 
 export const isCompressFile = (name: any) => {
     const suffix = name.split(".").pop().toLowerCase();
-    return suffix !== "7z" && mediaType['zip'].indexOf(suffix) !== -1;
+    return suffix !== "7z" && mediaType["zip"].indexOf(suffix) !== -1;
+};
+
+export const encodingRequired = (name: any) => {
+    const suffix = name.split(".").pop().toLowerCase();
+    return suffix === "zip";
 };
 
 const taskStatus = ["排队中", "处理中", "失败", "取消", "已完成"];
