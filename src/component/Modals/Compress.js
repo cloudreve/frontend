@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
 import TextField from "@material-ui/core/TextField";
 import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
+import { submitCompressTask } from "../../redux/explorer/action";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -55,6 +56,11 @@ export default function CompressDialog(props) {
         [dispatch]
     );
 
+    const SubmitCompressTask = useCallback(
+        (name, path) => dispatch(submitCompressTask(name, path)),
+        [dispatch]
+    );
+
     const setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
@@ -70,25 +76,7 @@ export default function CompressDialog(props) {
         }
         SetModalsLoading(true);
 
-        const dirs = [],
-            items = [];
-        // eslint-disable-next-line
-        props.selected.map((value) => {
-            if (value.type === "dir") {
-                dirs.push(value.id);
-            } else {
-                items.push(value.id);
-            }
-        });
-
-        API.post("/file/compress", {
-            src: {
-                dirs: dirs,
-                items: items,
-            },
-            name: fileName,
-            dst: selectedPath === "//" ? "/" : selectedPath,
-        })
+        SubmitCompressTask(fileName, selectedPath)
             .then(() => {
                 props.onClose();
                 ToggleSnackbar("top", "right", "压缩任务已创建", "success");
