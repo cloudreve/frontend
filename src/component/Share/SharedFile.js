@@ -212,10 +212,6 @@ class SharedFileCompoment extends Component {
         }
     };
 
-    scoreHandler = (callback) => (event) => {
-        this.props.trySharePurchase(this.props.share).then(() => callback());
-    };
-
     componentWillUnmount() {
         this.props.setSelectedTarget([]);
     }
@@ -259,7 +255,7 @@ class SharedFileCompoment extends Component {
                                 <Button
                                     variant="outlined"
                                     color="secondary"
-                                    onClick={this.scoreHandler(this.preview)}
+                                    onClick={this.scoreHandle(this.preview)}
                                     disabled={this.state.loading}
                                 >
                                     预览
