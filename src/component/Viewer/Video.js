@@ -108,6 +108,10 @@ export default function VideoViewer() {
     const isShare = pathHelper.isSharePage(location.pathname);
 
     useEffect(() => {
+        art &&
+            art.on("ready", () => {
+                art.autoHeight = true;
+            });
         return () => {
             if (
                 art !== null &&
@@ -268,6 +272,7 @@ export default function VideoViewer() {
                             pip: true,
                             fullscreen: true,
                             fullscreenWeb: true,
+                            autoHeight: true,
                             whitelist: ["*"],
                             moreVideoAttr: {
                                 "webkit-playsinline": true,
