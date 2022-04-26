@@ -24,6 +24,7 @@ import FileShowIcon from "@material-ui/icons/InsertDriveFile";
 import { lighten } from "@material-ui/core/styles";
 import useTheme from "@material-ui/core/styles/useTheme";
 import { Avatar } from "@material-ui/core";
+import { MenuBook } from "@material-ui/icons";
 
 const icons = {
     audio: {
@@ -101,6 +102,10 @@ const icons = {
     js: {
         color: "#f4d003",
         icon: LanguageJavascript,
+    },
+    epub: {
+        color: "#81b315",
+        icon: MenuBook,
     },
 };
 

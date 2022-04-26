@@ -31,6 +31,7 @@ import Reset from "./component/Login/Reset";
 import PageLoading from "./component/Placeholder/PageLoading";
 import CodeViewer from "./component/Viewer/Code";
 import MusicPlayer from "./component/FileManager/MusicPlayer";
+import EpubViewer from "./component/Viewer/Epub";
 
 const PDFViewer = React.lazy(() =>
     import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
@@ -127,6 +128,10 @@ export default function App() {
                                 <CodeViewer />
                             </AuthRoute>
 
+                            <AuthRoute path={`${path}epub`} isLogin={isLogin}>
+                                <EpubViewer />
+                            </AuthRoute>
+
                             <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
                                 <Download />
                             </AuthRoute>
@@ -202,6 +207,10 @@ export default function App() {
 
                             <Route path={`${path}s/:id/code(/)*`}>
                                 <CodeViewer />
+                            </Route>
+
+                            <Route path={`${path}s/:id/epub(/)*`}>
+                                <EpubViewer />
                             </Route>
 
                             <Route path="*">

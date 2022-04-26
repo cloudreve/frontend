@@ -473,6 +473,9 @@ export const openPreview = (share: any) => {
             case "code":
                 dispatch(openViewer("code", selected[0], isShare));
                 return;
+            case "epub":
+                dispatch(openViewer("epub", selected[0], isShare));
+                return;
             default:
                 dispatch(startDownload(share, selected[0]));
                 return;

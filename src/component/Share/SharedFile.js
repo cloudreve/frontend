@@ -201,6 +201,13 @@ class SharedFileCompoment extends Component {
                         encodeURIComponent(this.props.share.source.name)
                 );
                 return;
+            case "epub":
+                this.props.history.push(
+                    this.props.share.key +
+                        "/epub?name=" +
+                        encodeURIComponent(this.props.share.source.name)
+                );
+                return;
             default:
                 this.props.toggleSnackbar(
                     "top",
