@@ -6,13 +6,13 @@ import { Policy } from "../../component/Uploader/core/types";
 import streamSaver from "streamsaver";
 import "../../utils/zip";
 import pathHelper from "../../utils/page";
-import { isMac } from "../../utils";
+import { filePath, isMac } from "../../utils";
 import API, { getBaseURL } from "../../middleware/Api";
 import { pathJoin, trimPrefix } from "../../component/Uploader/core/utils";
 import { getPreviewPath, walk } from "../../utils/api";
 import { askForOption } from "./async";
 import Auth from "../../middleware/Auth";
-import { isPreviewable } from "../../config";
+import { encodingRequired, isPreviewable } from "../../config";
 import { push } from "connected-react-router";
 import {
     changeContextMenu,
@@ -530,5 +530,119 @@ export const selectFile = (file: any, event: any, fileIndex: any) => {
         }
         // 单选
         return dispatch(setSelectedTarget([file]));
+    };
+};
+
+export const submitCompressTask = (fileName: string, path: string) => {
+    return async (dispatch: any, getState: any) => {
+        const {
+            explorer: { selected },
+        } = getState();
+        const dirs: string[] = [],
+            items: string[] = [];
+        // eslint-disable-next-line
+        selected.map((value) => {
+            if (value.type === "dir") {
+                dirs.push(value.id);
+            } else {
+                items.push(value.id);
+            }
+        });
+
+        return await API.post("/file/compress", {
+            src: {
+                dirs: dirs,
+                items: items,
+            },
+            name: fileName,
+            dst: path === "//" ? "/" : path,
+        });
+    };
+};
+
+const encodings = [
+    "ibm866",
+    "iso8859_2",
+    "iso8859_3",
+    "iso8859_4",
+    "iso8859_5",
+    "iso8859_6",
+    "iso8859_7",
+    "iso8859_8",
+    "iso8859_8I",
+    "iso8859_10",
+    "iso8859_13",
+    "iso8859_14",
+    "iso8859_15",
+    "iso8859_16",
+    "koi8r",
+    "koi8u",
+    "macintosh",
+    "windows874",
+    "windows1250",
+    "windows1251",
+    "windows1252",
+    "windows1253",
+    "windows1254",
+    "windows1255",
+    "windows1256",
+    "windows1257",
+    "windows1258",
+    "macintoshcyrillic",
+    "gbk",
+    "big5",
+    "eucjp",
+    "iso2022jp",
+    "shiftjis",
+    "euckr",
+    "utf16be",
+    "utf16le",
+];
+
+export const submitDecompressTask = (path: string) => {
+    return async (dispatch: any, getState: any) => {
+        const {
+            explorer: { selected },
+        } = getState();
+
+        let encoding = "";
+        if (selected.length > 0 && encodingRequired(selected[0].name)) {
+            let option: any;
+            try {
+                const allOptions = encodings.map((e) => {
+                    return {
+                        key: e,
+                        name: e.toUpperCase(),
+                    };
+                });
+                option = await dispatch(
+                    askForOption(
+                        [
+                            {
+                                key: "",
+                                name: "缺省",
+                            },
+                            {
+                                key: "gb18030",
+                                name: "GB18030",
+                                description: "中文常见编码",
+                            },
+                            ...allOptions,
+                        ],
+                        "选择 ZIP 文件特殊字符编码"
+                    )
+                );
+            } catch (e) {
+                throw new Error("未选择编码方式");
+            }
+
+            encoding = option.key;
+        }
+
+        return await API.post("/file/decompress", {
+            src: filePath(selected[0]),
+            dst: path === "//" ? "/" : path,
+            encoding: encoding,
+        });
     };
 };
