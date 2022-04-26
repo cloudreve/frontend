@@ -8,7 +8,14 @@ import Popover from "@material-ui/core/Popover";
 import Creator from "./Creator";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import pathHelper from "../../utils/page";
-import { openMusicDialog, openResaveDialog, setSelectedTarget, setShareUserPopover, showImgPreivew, toggleSnackbar } from "../../redux/explorer";
+import {
+    openMusicDialog,
+    openResaveDialog,
+    setSelectedTarget,
+    setShareUserPopover,
+    showImgPreivew,
+    toggleSnackbar,
+} from "../../redux/explorer";
 
 const styles = (theme) => ({
     layout: {
@@ -77,8 +84,9 @@ class SharedFolderComponent extends Component {
         this.props.setSelectedTarget([]);
     }
 
-    handleClickAway = () => {
-        if (!pathHelper.isMobile()) {
+    handleClickAway = (e) => {
+        const ignore = e && e.clientY && e.clientY <= 64;
+        if (!pathHelper.isMobile() && !ignore) {
             this.props.setSelectedTarget([]);
         }
     };

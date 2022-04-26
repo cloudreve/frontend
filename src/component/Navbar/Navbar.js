@@ -336,7 +336,7 @@ class NavbarCompoment extends Component {
         this.props.startDownload(window.shareInfo, this.props.selected[0]);
     };
 
-    archiveDownload = () => {
+    archiveDownload = (e) => {
         this.props.startBatchDownload(window.shareInfo);
     };
 
@@ -672,6 +672,7 @@ class NavbarCompoment extends Component {
                                             <Tooltip title="打包下载">
                                                 <IconButton
                                                     color="inherit"
+                                                    disableClickAway
                                                     onClick={() =>
                                                         this.archiveDownload()
                                                     }
