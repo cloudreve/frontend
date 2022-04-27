@@ -270,7 +270,7 @@ export const startDownload = (
             window.location.assign(res.data);
             dispatch(closeAllModals());
         } catch (e) {
-            toggleSnackbar("top", "right", e.message, "warning");
+            dispatch(toggleSnackbar("top", "right", e.message, "warning"));
             dispatch(closeAllModals());
         }
     };
