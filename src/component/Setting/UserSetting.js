@@ -584,10 +584,14 @@ class UserSettingCompoment extends Component {
     handleAlignment = (event, chosenTheme) => this.setState({ chosenTheme });
 
     toggleThemeMode = (current) => {
-        if (current !== null) {
-            this.props.toggleDaylightMode();
-            Auth.SetPreference("theme_mode", null);
-        }
+        const newMode =
+            current === null
+                ? "light"
+                : current === "light"
+                ? "dark"
+                : null;
+        this.props.toggleDaylightMode();
+        Auth.SetPreference("theme_mode", newMode);
     };
 
     render() {
