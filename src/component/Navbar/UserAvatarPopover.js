@@ -27,6 +27,7 @@ import { setSessionStatus, setUserPopover, toggleSnackbar } from "../../redux/ex
 const mapStateToProps = (state) => {
     return {
         anchorEl: state.viewUpdate.userPopoverAnchorEl,
+        registerEnabled: state.siteConfig.registerEnabled,
     };
 };
 
@@ -135,14 +136,16 @@ class UserAvatarPopoverCompoment extends Component {
                             </ListItemIcon>
                             登录
                         </MenuItem>
-                        <MenuItem
-                            onClick={() => this.props.history.push("/signup")}
-                        >
-                            <ListItemIcon>
-                                <AccountPlus />
-                            </ListItemIcon>
-                            注册
-                        </MenuItem>
+                        {this.props.registerEnabled && (
+                            <MenuItem
+                                onClick={() => this.props.history.push("/signup")}
+                            >
+                                <ListItemIcon>
+                                    <AccountPlus />
+                                </ListItemIcon>
+                                注册
+                            </MenuItem>
+                        )}
                     </div>
                 )}
                 {Auth.Check() && (

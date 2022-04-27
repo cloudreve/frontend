@@ -66,9 +66,8 @@ function Reset() {
         email: "",
     });
     const [loading, setLoading] = useState(false);
-    const forgetCaptcha = useSelector(
-        (state) => state.siteConfig.forgetCaptcha
-    );
+    const forgetCaptcha = useSelector((state) => state.siteConfig.forgetCaptcha);
+    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -161,9 +160,11 @@ function Reset() {
                     <div>
                         <Link href={"/login"}>返回登录</Link>
                     </div>
-                    <div>
-                        <Link href={"/signup"}>注册账号</Link>
-                    </div>
+                    { registerEnabled && (
+                        <div>
+                            <Link href={"/signup"}>注册账号</Link>
+                        </div>
+                    )}
                 </div>
             </Paper>
         </div>
