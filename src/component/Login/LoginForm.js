@@ -95,6 +95,7 @@ function LoginForm() {
     const [faCode, setFACode] = useState("");
 
     const loginCaptcha = useSelector((state) => state.siteConfig.loginCaptcha);
+    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
     const title = useSelector((state) => state.siteConfig.title);
     const authn = useSelector((state) => state.siteConfig.authn);
 
@@ -347,7 +348,7 @@ function LoginForm() {
                                 <Link href={"/forget"}>忘记密码</Link>
                             </div>
                             <div>
-                                <Link href={"/signup"}>注册账号</Link>
+                            { registerEnabled && <Link href={"/signup"}>注册账号</Link> }
                             </div>
                         </div>
 
