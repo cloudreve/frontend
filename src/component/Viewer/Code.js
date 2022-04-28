@@ -76,7 +76,7 @@ export default function CodeViewer() {
     );
 
     useEffect(() => {
-        const extension = (query.get("p") ?? query.get("name")).split(".");
+        const extension = query.get("p").split(".");
         setSuffix(codePreviewSuffix[extension.pop()]);
         // eslint-disable-next-line
     }, []);
