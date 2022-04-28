@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import AuthRoute from "./middleware/AuthRoute";
+import NoAuthRoute from "./middleware/NoAuthRoute";
 import Navbar from "./component/Navbar/Navbar.js";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AlertBar from "./component/Common/Snackbar";
@@ -163,13 +164,13 @@ export default function App() {
                                 <Tasks />
                             </AuthRoute>
 
-                            <Route path={`${path}login`} exact>
+                            <NoAuthRoute exact path={`${path}login`} isLogin={isLogin}>
                                 <LoginForm />
-                            </Route>
+                            </NoAuthRoute>
 
-                            <Route path={`${path}signup`} exact>
+                            <NoAuthRoute exact path={`${path}signup`} isLogin={isLogin}>
                                 <Register />
-                            </Route>
+                            </NoAuthRoute>
 
                             <Route path={`${path}activate`} exact>
                                 <Activation />

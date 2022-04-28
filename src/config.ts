@@ -17,7 +17,7 @@ export const msDocPreviewSuffix = [
     "xls",
 ];
 export const subtitleSuffix = ["ass", "srt", "vrr"];
-export const audioPreviewSuffix = ["mp3", "ogg", "flac", "m4a"];
+export const audioPreviewSuffix = ["mp3", "ogg", "wav", "flac","m4a"];
 export const videoPreviewSuffix = ["mp4", "mkv", "webm", "avi", "m3u8", "mov"];
 export const pdfPreviewSuffix = ["pdf"];
 export const editSuffix = ["md", "txt"];

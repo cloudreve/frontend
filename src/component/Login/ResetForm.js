@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
@@ -65,6 +65,7 @@ function ResetForm() {
         password_repeat: "",
     });
     const [loading, setLoading] = useState(false);
+    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
     const handleInputChange = (name) => (e) => {
         setInput({
             ...input,
@@ -152,11 +153,13 @@ function ResetForm() {
                 <Divider />
                 <div className={classes.link}>
                     <div>
-                        <Link href={"/#/login"}>返回登录</Link>
+                        <Link href={"/login"}>返回登录</Link>
                     </div>
-                    <div>
-                        <Link href={"/#/signup"}>注册账号</Link>
-                    </div>
+                    { registerEnabled && (
+                        <div>
+                            <Link href={"/signup"}>注册账号</Link>
+                        </div>
+                    )}
                 </div>
             </Paper>
         </div>
