@@ -58,3 +58,10 @@ export const openFolderSelector = () => {
         type: "OPEN_FOLDER_SELECTOR",
     };
 };
+
+export const setPagination = (pagination) => {
+    return {
+        type: "SET_PAGINATION",
+        pagination: pagination,
+    };
+};

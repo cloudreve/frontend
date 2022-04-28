@@ -8,24 +8,24 @@ import {
     TableHead,
     TableRow,
     Typography,
-    withStyles,
 } from "@material-ui/core";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import classNames from "classnames";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { configure, GlobalHotKeys } from "react-hotkeys";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import explorer, { changeContextMenu, navigateTo, navigateUp, openRemoveDialog, setSelectedTarget } from "../../redux/explorer";
+import explorer, { changeContextMenu, openRemoveDialog, setSelectedTarget } from "../../redux/explorer";
 import { isMac } from "../../utils";
 import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";
 import ImgPreivew from "./ImgPreview";
 import ObjectIcon from "./ObjectIcon";
 import Nothing from "../Placeholder/Nothing";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router";
+import { usePagination } from "../../hooks/pagination";
+import { makeStyles } from "@material-ui/core/styles";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         textAlign: "center",
@@ -35,26 +35,10 @@ const styles = (theme) => ({
     root: {
         flexGrow: 1,
         padding: "10px",
-        overflowY: "auto",
-        height: "calc(100vh - 113px)",
-        [theme.breakpoints.up("sm")]: {
-            overflowY: "auto",
-            height: "calc(100vh - 113px)",
-        },
-        [theme.breakpoints.down("sm")]: {
-            height: "100%",
-        },
     },
     rootTable: {
         padding: "0px",
         backgroundColor: theme.palette.background.paper.white,
-        [theme.breakpoints.up("sm")]: {
-            overflowY: "auto",
-            height: "calc(100vh - 113px)",
-        },
-        [theme.breakpoints.down("sm")]: {
-            height: "100%",
-        },
     },
     typeHeader: {
         margin: "10px 25px",
@@ -89,10 +73,7 @@ const styles = (theme) => ({
         height: "100%",
         width: "100%",
     },
-    rootShare: {
-        height: "100%",
-        minHeight: 500,
-    },
+    rootShare: {},
     visuallyHidden: {
         border: 0,
         clip: "rect(0 0 0 0)",
@@ -116,147 +97,127 @@ const styles = (theme) => ({
     gridItem: {
         flex: "1 1 220px",
     },
-});
+}));
 
-const mapStateToProps = (state) => {
-    return {
-        path: state.navigator.path,
-        drawerDesktopOpen: state.viewUpdate.open,
-        viewMethod: state.viewUpdate.explorerViewMethod,
-        sortMethod: state.viewUpdate.sortMethod,
-        fileList: state.explorer.fileList,
-        dirList: state.explorer.dirList,
-        loading: state.viewUpdate.navigatorLoading,
-        navigatorError: state.viewUpdate.navigatorError,
-        navigatorErrorMsg: state.viewUpdate.navigatorErrorMsg,
-        keywords: state.explorer.keywords,
-        selected: state.explorer.selected,
-    };
+const keyMap = {
+    DELETE_FILE: "del",
+    SELECT_ALL: `${isMac() ? "command" : "ctrl"}+a`,
+    DESELECT_ALL: "esc",
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        navigateToPath: (path) => {
-            dispatch(navigateTo(path));
-        },
+export default function Explorer({ share }) {
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const selected = useSelector((state) => state.explorer.selected);
+    const keywords = useSelector((state) => state.explorer.keywords);
+    const loading = useSelector((state) => state.viewUpdate.navigatorLoading);
+    const path = useSelector((state) => state.navigator.path);
+    const sortMethod = useSelector((state) => state.viewUpdate.sortMethod);
+    const navigatorErrorMsg = useSelector(
+        (state) => state.viewUpdate.navigatorErrorMsg
+    );
+    const navigatorError = useSelector(
+        (state) => state.viewUpdate.navigatorError
+    );
+    const viewMethod = useSelector(
+        (state) => state.viewUpdate.explorerViewMethod
+    );
 
-        changeContextMenu: (type, open) => {
-            dispatch(changeContextMenu(type, open));
+    const OpenRemoveDialog = useCallback(() => dispatch(openRemoveDialog()), [
+        dispatch,
+    ]);
+    const SetSelectedTarget = useCallback(
+        (targets) => dispatch(setSelectedTarget(targets)),
+        [dispatch]
+    );
+    const ChangeContextMenu = useCallback(
+        (type, open) => dispatch(changeContextMenu(type, open)),
+        [dispatch]
+    );
+    const ChangeSortMethod = useCallback(
+        (method) => dispatch(explorer.actions.changeSortMethod(method)),
+        [dispatch]
+    );
+
+    const { dirList, fileList } = usePagination();
+
+    const handlers = {
+        DELETE_FILE: () => {
+            if (selected.length > 0 && !share) {
+                OpenRemoveDialog();
+            }
         },
-        navigateUp: () => {
-            dispatch(navigateUp());
+        SELECT_ALL: (e) => {
+            e.preventDefault();
+            if (selected.length >= dirList.length + fileList.length) {
+                SetSelectedTarget([]);
+            } else {
+                SetSelectedTarget([...dirList, ...fileList]);
+            }
         },
-        setSelectedTarget: (targets) => {
-            dispatch(setSelectedTarget(targets));
-        },
-        openRemoveDialog: () => {
-            dispatch(openRemoveDialog());
-        },
-        changeSort: (method) => {
-            dispatch(explorer.actions.changeSortMethod(method));
+        DESELECT_ALL: (e) => {
+            e.preventDefault();
+            SetSelectedTarget([]);
         },
     };
-};
 
-class ExplorerCompoment extends Component {
-    constructor() {
-        super();
-        this.keyMap = {
-            DELETE_FILE: "del",
-            SELECT_ALL: `${isMac() ? "command" : "ctrl"}+a`,
-            DESELECT_ALL: "esc",
-        };
+    useEffect(
+        () =>
+            configure({
+                ignoreTags: ["input", "select", "textarea"],
+            }),
+        []
+    );
 
-        this.handlers = {
-            DELETE_FILE: () => {
-                if (this.props.selected.length > 0 && !this.props.share) {
-                    this.props.openRemoveDialog();
-                }
-            },
-            SELECT_ALL: (e) => {
-                e.preventDefault();
-                if (
-                    this.props.selected.length >=
-                    this.props.dirList.length + this.props.fileList.length
-                ) {
-                    this.props.setSelectedTarget([]);
-                } else {
-                    this.props.setSelectedTarget([
-                        ...this.props.dirList,
-                        ...this.props.fileList,
-                    ]);
-                }
-            },
-            DESELECT_ALL: (e) => {
-                e.preventDefault();
-                this.props.setSelectedTarget([]);
-            },
-        };
-
-        configure({
-            ignoreTags: ["input", "select", "textarea"],
-        });
-    }
-
-    contextMenu = (e) => {
+    const contextMenu = (e) => {
         e.preventDefault();
-        if (
-            this.props.keywords === "" &&
-            !pathHelper.isSharePage(this.props.location.pathname)
-        ) {
-            if (!this.props.loading) {
-                this.props.changeContextMenu("empty", true);
+        if (keywords === "" && !pathHelper.isSharePage(location.pathname)) {
+            if (!loading) {
+                ChangeContextMenu("empty", true);
             }
         }
     };
 
-    componentDidUpdate() {
-        this.away = 0;
-    }
-
-    ClickAway = (e) => {
+    const ClickAway = (e) => {
         const element = e.target;
         if (element.dataset.clickaway) {
-            this.props.setSelectedTarget([]);
+            SetSelectedTarget([]);
         }
     };
 
-    render() {
-        const { classes } = this.props;
-        const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
+    const classes = useStyles();
+    const isHomePage = pathHelper.isHomePage(location.pathname);
 
-        const showView =
-            !this.props.loading &&
-            (this.props.dirList.length !== 0 ||
-                this.props.fileList.length !== 0);
-        const listView = (
+    const showView =
+        !loading && (dirList.length !== 0 || fileList.length !== 0);
+
+    const listView = useMemo(
+        () => (
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
                         <TableCell>
                             <TableSortLabel
                                 active={
-                                    this.props.sortMethod === "namePos" ||
-                                    this.props.sortMethod === "nameRev"
+                                    sortMethod === "namePos" ||
+                                    sortMethod === "nameRev"
                                 }
                                 direction={
-                                    this.props.sortMethod === "namePos"
-                                        ? "asc"
-                                        : "des"
+                                    sortMethod === "namePos" ? "asc" : "des"
                                 }
                                 onClick={() => {
-                                    this.props.changeSort(
-                                        this.props.sortMethod === "namePos"
+                                    ChangeSortMethod(
+                                        sortMethod === "namePos"
                                             ? "nameRev"
                                             : "namePos"
                                     );
                                 }}
                             >
                                 名称
-                                {this.props.sortMethod === "namePos" ||
-                                this.props.sortMethod === "nameRev" ? (
+                                {sortMethod === "namePos" ||
+                                sortMethod === "nameRev" ? (
                                     <span className={classes.visuallyHidden}>
-                                        {this.props.sortMethod === "nameRev"
+                                        {sortMethod === "nameRev"
                                             ? "sorted descending"
                                             : "sorted ascending"}
                                     </span>
@@ -266,27 +227,25 @@ class ExplorerCompoment extends Component {
                         <TableCell className={classes.hideAuto}>
                             <TableSortLabel
                                 active={
-                                    this.props.sortMethod === "sizePos" ||
-                                    this.props.sortMethod === "sizeRes"
+                                    sortMethod === "sizePos" ||
+                                    sortMethod === "sizeRes"
                                 }
                                 direction={
-                                    this.props.sortMethod === "sizePos"
-                                        ? "asc"
-                                        : "des"
+                                    sortMethod === "sizePos" ? "asc" : "des"
                                 }
                                 onClick={() => {
-                                    this.props.changeSort(
-                                        this.props.sortMethod === "sizePos"
+                                    ChangeSortMethod(
+                                        sortMethod === "sizePos"
                                             ? "sizeRes"
                                             : "sizePos"
                                     );
                                 }}
                             >
                                 大小
-                                {this.props.sortMethod === "sizePos" ||
-                                this.props.sortMethod === "sizeRes" ? (
+                                {sortMethod === "sizePos" ||
+                                sortMethod === "sizeRes" ? (
                                     <span className={classes.visuallyHidden}>
-                                        {this.props.sortMethod === "sizeRes"
+                                        {sortMethod === "sizeRes"
                                             ? "sorted descending"
                                             : "sorted ascending"}
                                     </span>
@@ -296,28 +255,27 @@ class ExplorerCompoment extends Component {
                         <TableCell className={classes.hideAuto}>
                             <TableSortLabel
                                 active={
-                                    this.props.sortMethod === "modifyTimePos" ||
-                                    this.props.sortMethod === "modifyTimeRev"
+                                    sortMethod === "modifyTimePos" ||
+                                    sortMethod === "modifyTimeRev"
                                 }
                                 direction={
-                                    this.props.sortMethod === "modifyTimePos"
+                                    sortMethod === "modifyTimePos"
                                         ? "asc"
                                         : "des"
                                 }
                                 onClick={() => {
-                                    this.props.changeSort(
-                                        this.props.sortMethod ===
-                                            "modifyTimePos"
+                                    ChangeSortMethod(
+                                        sortMethod === "modifyTimePos"
                                             ? "modifyTimeRev"
                                             : "modifyTimePos"
                                     );
                                 }}
                             >
                                 修改日期
-                                {this.props.sortMethod === "modifyTimePos" ||
-                                this.props.sortMethod === "modifyTimeRev" ? (
+                                {sortMethod === "modifyTimePos" ||
+                                sortMethod === "modifyTimeRev" ? (
                                     <span className={classes.visuallyHidden}>
-                                        {this.props.sortMethod === "sizeRes"
+                                        {sortMethod === "sizeRes"
                                             ? "sorted descending"
                                             : "sorted ascending"}
                                     </span>
@@ -327,7 +285,7 @@ class ExplorerCompoment extends Component {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {pathHelper.isMobile() && this.props.path !== "/" && (
+                    {pathHelper.isMobile() && path !== "/" && (
                         <ObjectIcon
                             file={{
                                 type: "up",
@@ -335,19 +293,22 @@ class ExplorerCompoment extends Component {
                             }}
                         />
                     )}
-                    {this.props.dirList.map((value, index) => (
+                    {dirList.map((value, index) => (
                         <ObjectIcon key={value.id} file={value} index={index} />
                     ))}
-                    {this.props.fileList.map((value, index) => (
+                    {fileList.map((value, index) => (
                         <ObjectIcon key={value.id} file={value} index={index} />
                     ))}
                 </TableBody>
             </Table>
-        );
+        ),
+        [dirList, fileList, path, sortMethod, ChangeSortMethod]
+    );
 
-        const normalView = (
+    const normalView = useMemo(
+        () => (
             <div className={classes.flexFix}>
-                {this.props.dirList.length !== 0 && (
+                {dirList.length !== 0 && (
                     <>
                         <Typography
                             data-clickAway={"true"}
@@ -363,7 +324,7 @@ class ExplorerCompoment extends Component {
                             alignItems="flex-start"
                             className={classes.gridContainer}
                         >
-                            {this.props.dirList.map((value, index) => (
+                            {dirList.map((value, index) => (
                                 <Grid
                                     key={value.id}
                                     item
@@ -379,7 +340,7 @@ class ExplorerCompoment extends Component {
                         </Grid>
                     </>
                 )}
-                {this.props.fileList.length !== 0 && (
+                {fileList.length !== 0 && (
                     <>
                         <Typography
                             data-clickAway={"true"}
@@ -395,7 +356,7 @@ class ExplorerCompoment extends Component {
                             alignItems="flex-start"
                             className={classes.gridContainer}
                         >
-                            {this.props.fileList.map((value, index) => (
+                            {fileList.map((value, index) => (
                                 <Grid
                                     className={classes.gridItem}
                                     key={value.id}
@@ -412,79 +373,70 @@ class ExplorerCompoment extends Component {
                     </>
                 )}
             </div>
-        );
-        const view = this.props.viewMethod === "list" ? listView : normalView;
-        return (
-            <div
-                onContextMenu={this.contextMenu}
-                onClick={this.ClickAway}
-                className={classNames(
-                    {
-                        [classes.root]: this.props.viewMethod !== "list",
-                        [classes.rootTable]: this.props.viewMethod === "list",
-                        [classes.rootShare]: this.props.share,
-                    },
-                    classes.button
-                )}
-            >
-                <GlobalHotKeys handlers={this.handlers} keyMap={this.keyMap} />
-                <ContextMenu share={this.props.share} />
-                <ImgPreivew />
-                {this.props.navigatorError && (
-                    <Paper elevation={1} className={classes.errorBox}>
-                        <Typography variant="h5" component="h3">
-                            :( 请求时出现错误
-                        </Typography>
-                        <Typography
-                            color={"textSecondary"}
-                            className={classes.errorMsg}
-                        >
-                            {this.props.navigatorErrorMsg.message}
-                        </Typography>
-                    </Paper>
-                )}
+        ),
+        [dirList, fileList]
+    );
 
-                {this.props.loading && !this.props.navigatorError && (
-                    <div className={classes.loading}>
-                        <CircularProgress />
-                    </div>
-                )}
+    const view = viewMethod === "list" ? listView : normalView;
 
-                {this.props.keywords === "" &&
-                    isHomePage &&
-                    this.props.dirList.length === 0 &&
-                    this.props.fileList.length === 0 &&
-                    !this.props.loading &&
-                    !this.props.navigatorError && (
-                        <Nothing
-                            primary={"拖拽文件至此"}
-                            secondary={"或点击右下方“上传文件”按钮添加文件"}
-                        />
-                    )}
-                {((this.props.keywords !== "" &&
-                    this.props.dirList.length === 0 &&
-                    this.props.fileList.length === 0 &&
-                    !this.props.loading &&
-                    !this.props.navigatorError) ||
-                    (this.props.dirList.length === 0 &&
-                        this.props.fileList.length === 0 &&
-                        !this.props.loading &&
-                        !this.props.navigatorError &&
-                        !isHomePage)) && <Nothing primary={"什么都没有找到"} />}
-                {showView && view}
-            </div>
-        );
-    }
+    return (
+        <div
+            onContextMenu={contextMenu}
+            onClick={ClickAway}
+            className={classNames(
+                {
+                    [classes.root]: viewMethod !== "list",
+                    [classes.rootTable]: viewMethod === "list",
+                    [classes.rootShare]: share,
+                },
+                classes.button
+            )}
+        >
+            <GlobalHotKeys handlers={handlers} allowChanges keyMap={keyMap} />
+            <ContextMenu share={share} />
+            <ImgPreivew />
+            {navigatorError && (
+                <Paper elevation={1} className={classes.errorBox}>
+                    <Typography variant="h5" component="h3">
+                        :( 请求时出现错误
+                    </Typography>
+                    <Typography
+                        color={"textSecondary"}
+                        className={classes.errorMsg}
+                    >
+                        {navigatorErrorMsg.message}
+                    </Typography>
+                </Paper>
+            )}
+
+            {loading && !navigatorError && (
+                <div className={classes.loading}>
+                    <CircularProgress />
+                </div>
+            )}
+
+            {keywords === "" &&
+                isHomePage &&
+                dirList.length === 0 &&
+                fileList.length === 0 &&
+                !loading &&
+                !navigatorError && (
+                    <Nothing
+                        primary={"拖拽文件至此"}
+                        secondary={"或点击右下方“上传文件”按钮添加文件"}
+                    />
+                )}
+            {((keywords !== "" &&
+                dirList.length === 0 &&
+                fileList.length === 0 &&
+                !loading &&
+                !navigatorError) ||
+                (dirList.length === 0 &&
+                    fileList.length === 0 &&
+                    !loading &&
+                    !navigatorError &&
+                    !isHomePage)) && <Nothing primary={"什么都没有找到"} />}
+            {showView && view}
+        </div>
+    );
 }
-
-ExplorerCompoment.propTypes = {
-    classes: PropTypes.object.isRequired,
-    path: PropTypes.string.isRequired,
-};
-
-const Explorer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(withRouter(ExplorerCompoment)));
-
-export default Explorer;

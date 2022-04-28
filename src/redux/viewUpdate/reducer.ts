@@ -54,6 +54,10 @@ export interface ViewUpdateState {
         msg: string;
         color: string;
     };
+    pagination: {
+        page: number;
+        size: number;
+    };
     openFileSelector: number;
     openFolderSelector: number;
 }
@@ -98,6 +102,10 @@ export const initState: ViewUpdateState = {
         horizontal: "center",
         msg: "",
         color: "",
+    },
+    pagination: {
+        page: 1,
+        size: 100,
     },
     openFileSelector: 0,
     openFolderSelector: 0,
@@ -332,6 +340,11 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 ...state,
                 openFolderSelector: state.openFolderSelector + 1,
                 contextOpen: false,
+            };
+        case "SET_PAGINATION":
+            return {
+                ...state,
+                pagination: action.pagination,
             };
         default:
             return state;

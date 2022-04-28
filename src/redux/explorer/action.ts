@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { CloudreveFile, SortMethod } from "./../../types/index";
-import { closeContextMenu } from "../viewUpdate/action";
+import { closeContextMenu, setPagination } from "../viewUpdate/action";
 import { Policy } from "../../component/Uploader/core/types";
 import streamSaver from "streamsaver";
 import "../../utils/zip";
@@ -145,7 +145,7 @@ export const updateFileList = (
     return (dispatch, getState): void => {
         const state = getState();
         // TODO: define state type
-        const { sortMethod } = state.viewUpdate;
+        const { sortMethod, pagination } = state.viewUpdate;
         const dirList = list.filter((x) => {
             return x.type === "dir";
         });
@@ -155,6 +155,15 @@ export const updateFileList = (
         const sortFunc = sortMethodFuncs[sortMethod as SortMethod];
         dispatch(setDirList(dirList.sort(sortFunc)));
         dispatch(setFileList(fileList.sort(sortFunc)));
+        const total = dirList.length + fileList.length;
+        if (pagination.page * pagination.size > total) {
+            dispatch(
+                setPagination({
+                    ...pagination,
+                    page: Math.max(Math.ceil(total / pagination.size), 1),
+                })
+            );
+        }
     };
 };
 
@@ -167,8 +176,8 @@ export const changeSortMethod = (
         const sortFunc = sortMethodFuncs[method];
         Auth.SetPreference("sort", method);
         dispatch(setSortMethod(method));
-        dispatch(setDirList(dirList.sort(sortFunc)));
-        dispatch(setFileList(fileList.sort(sortFunc)));
+        dispatch(setDirList(dirList.slice().sort(sortFunc)));
+        dispatch(setFileList(fileList.slice().sort(sortFunc)));
     };
 };
 

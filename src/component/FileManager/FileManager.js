@@ -10,8 +10,23 @@ import Explorer from "./Explorer";
 import Modals from "./Modals";
 import Navigator from "./Navigator/Navigator";
 import SideDrawer from "./Sidebar/SideDrawer";
-import { closeAllModals, navigateTo, setSelectedTarget, toggleSnackbar } from "../../redux/explorer";
+import {
+    closeAllModals,
+    navigateTo,
+    setSelectedTarget,
+    toggleSnackbar,
+} from "../../redux/explorer";
+import PaginationFooter from "./Pagination";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const styles = () => ({
+    root: {
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100vh - 64px)",
+        overflowY: "auto",
+    },
+});
 
 const mapStateToProps = () => ({});
 
@@ -52,8 +67,9 @@ class FileManager extends Component {
         }
     }
     render() {
+        const { classes } = this.props;
         return (
-            <div>
+            <div className={classes.root}>
                 <DndProvider backend={HTML5Backend}>
                     <Modals share={this.props.share} />
                     <Navigator
@@ -61,6 +77,7 @@ class FileManager extends Component {
                         share={this.props.share}
                     />
                     <Explorer share={this.props.share} />
+                    <PaginationFooter />
                     <DragLayer />
                 </DndProvider>
                 <SideDrawer />
@@ -74,4 +91,4 @@ FileManager.propTypes = {};
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withRouter(FileManager));
+)(withStyles(styles)(withRouter(FileManager)));

@@ -101,8 +101,6 @@ const styles = (theme) => ({
         [theme.breakpoints.down("xs")]: {
             display: "none",
         },
-        height: "49px",
-        overflow: "hidden",
         backgroundColor: theme.palette.background.paper,
     },
     navigatorContainer: {
