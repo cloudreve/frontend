@@ -60,6 +60,7 @@ export interface ViewUpdateState {
     };
     openFileSelector: number;
     openFolderSelector: number;
+    shareInfo: any;
 }
 export const initState: ViewUpdateState = {
     // 是否登录
@@ -109,6 +110,7 @@ export const initState: ViewUpdateState = {
     },
     openFileSelector: 0,
     openFolderSelector: 0,
+    shareInfo: null,
 };
 const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
     switch (action.type) {

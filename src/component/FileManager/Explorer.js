@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
         margin: "10px",
     },
     root: {
-        flexGrow: 1,
         padding: "10px",
     },
     rootTable: {

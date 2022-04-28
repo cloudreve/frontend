@@ -798,7 +798,6 @@ class NavbarCompoment extends Component {
 
                         {this.props.selected.length === 0 && <UserAvatar />}
                         {this.props.selected.length === 0 &&
-                            isHomePage &&
                             pathHelper.isMobile() && <SubActions inherit />}
                     </Toolbar>
                 </AppBar>

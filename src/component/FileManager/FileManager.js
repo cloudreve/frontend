@@ -28,15 +28,18 @@ const styles = (theme) => ({
         [theme.breakpoints.down("xs")]: {
             height: "100%",
         },
-        overflowY: "auto",
     },
     rootShare: {
         display: "flex",
         flexDirection: "column",
-
         height: "100%",
         minHeight: 500,
+    },
+    explorer: {
+        display: "flex",
+        flexDirection: "column",
         overflowY: "auto",
+        minHeight: 500,
     },
 });
 
@@ -93,8 +96,10 @@ class FileManager extends Component {
                         isShare={this.props.isShare}
                         share={this.props.share}
                     />
-                    <Explorer share={this.props.share} />
-                    <PaginationFooter />
+                    <div className={classes.explorer}>
+                        <Explorer share={this.props.share} />
+                        <PaginationFooter />
+                    </div>
                     <DragLayer />
                 </DndProvider>
                 <SideDrawer />

@@ -1,5 +1,6 @@
 import * as actions from "./action";
 import * as reducers from "./reducer";
+import { setPagination } from "../viewUpdate/action";
 
 export default {
     actions,
@@ -23,6 +24,14 @@ export const navigateTo = (path: any) => {
     return (dispatch: any, getState: any) => {
         const state = getState();
         const navigatorLoading = path !== state.navigator.path;
+        if (navigatorLoading) {
+            dispatch(
+                setPagination({
+                    ...state.viewUpdate.pagination,
+                    page: 1,
+                })
+            );
+        }
         dispatch(setNavigator(path, navigatorLoading));
     };
 };
@@ -33,6 +42,14 @@ export const navigateUp = () => {
         pathSplit.pop();
         const newPath = pathSplit.length === 1 ? "/" : pathSplit.join("/");
         const navigatorLoading = newPath !== state.navigator.path;
+        if (navigatorLoading) {
+            dispatch(
+                setPagination({
+                    ...state.viewUpdate.pagination,
+                    page: 1,
+                })
+            );
+        }
         dispatch(setNavigator(newPath, navigatorLoading));
     };
 };

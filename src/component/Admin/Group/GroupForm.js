@@ -65,6 +65,8 @@ export default function GroupForm(props) {
                       aria2_options: "{}", // json decode
                       compress_size: "0",
                       decompress_size: "0",
+                      source_batch: "0",
+                      aria2_batch: "1",
                   },
               }
     );
@@ -162,7 +164,12 @@ export default function GroupForm(props) {
         ["MaxStorage", "SpeedLimit"].forEach((v) => {
             groupCopy[v] = parseInt(groupCopy[v]);
         });
-        ["compress_size", "decompress_size"].forEach((v) => {
+        [
+            "compress_size",
+            "decompress_size",
+            "source_batch",
+            "aria2_batch",
+        ].forEach((v) => {
             if (groupCopy.OptionsSerialized[v] !== undefined) {
                 groupCopy.OptionsSerialized[v] = parseInt(
                     groupCopy.OptionsSerialized[v]
@@ -303,6 +310,34 @@ export default function GroupForm(props) {
                         {group.ID !== 3 && (
                             <div className={classes.form}>
                                 <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        批量生成外链数量限制
+                                    </InputLabel>
+                                    <Input
+                                        multiline
+                                        type={"number"}
+                                        inputProps={{
+                                            min: 1,
+                                            step: 1,
+                                        }}
+                                        value={
+                                            group.OptionsSerialized.source_batch
+                                        }
+                                        onChange={handleOptionChange(
+                                            "source_batch"
+                                        )}
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        对于支持的存储策略下的文件，允许用户单次批量获取外链的最大文件数量，填写为
+                                        0 或空表示不允许批量生成外链。
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
+
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -439,6 +474,30 @@ export default function GroupForm(props) {
                                         JSON
                                         编码后的格式书写，您可也可以将这些设置写在
                                         Aria2 配置文件里，可用参数请查阅官方文档
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        Aria2 批量下载最大数量
+                                    </InputLabel>
+                                    <Input
+                                        multiline
+                                        type={"number"}
+                                        inputProps={{
+                                            min: 1,
+                                            step: 1,
+                                        }}
+                                        value={
+                                            group.OptionsSerialized.aria2_batch
+                                        }
+                                        onChange={handleOptionChange(
+                                            "aria2_batch"
+                                        )}
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        允许用户单次批量创建的离线下载链接的最大数量
                                     </FormHelperText>
                                 </FormControl>
                             </div>

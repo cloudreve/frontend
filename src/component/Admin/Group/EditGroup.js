@@ -44,7 +44,12 @@ export default function EditGroupPreload() {
                 ["MaxStorage", "SpeedLimit"].forEach((v) => {
                     response.data[v] = response.data[v].toString();
                 });
-                ["compress_size", "decompress_size"].forEach((v) => {
+                [
+                    "compress_size",
+                    "decompress_size",
+                    "source_batch",
+                    "aria2_batch",
+                ].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
                         response.data.OptionsSerialized[
                             v
