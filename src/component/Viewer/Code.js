@@ -66,7 +66,7 @@ export default function CodeViewer() {
     const query = useQuery();
     const { id } = useParams();
     const theme = useTheme();
-    UseFileSubTitle(query, math, location);
+    const { title } = UseFileSubTitle(query, math, location);
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -76,7 +76,7 @@ export default function CodeViewer() {
     );
 
     useEffect(() => {
-        const extension = query.get("p").split(".");
+        const extension = title.split(".");
         setSuffix(codePreviewSuffix[extension.pop()]);
         // eslint-disable-next-line
     }, []);
