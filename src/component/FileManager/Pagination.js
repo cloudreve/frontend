@@ -28,7 +28,7 @@ export default function PaginationFooter() {
 
     const count = useMemo(
         () => Math.ceil((files.length + folders.length) / pagination.size),
-        [files, folders]
+        [files, folders, pagination.size]
     );
 
     if (count > 1 && !loading) {

@@ -105,7 +105,7 @@ export const initState: ViewUpdateState = {
     },
     pagination: {
         page: 1,
-        size: 100,
+        size: Auth.GetPreferenceWithDefault("pagination", 100),
     },
     openFileSelector: 0,
     openFolderSelector: 0,

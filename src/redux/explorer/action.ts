@@ -139,6 +139,18 @@ const sortMethodFuncs: Record<SortMethod, SortFunc> = {
     },
 };
 
+export const selectAll = (): ThunkAction<any, any, any, any> => {
+    return (dispatch, getState): void => {
+        const state = getState();
+        const { selected, fileList, dirList } = state.explorer;
+        if (selected.length >= dirList.length + fileList.length) {
+            dispatch(setSelectedTarget([]));
+        } else {
+            dispatch(setSelectedTarget([...dirList, ...fileList]));
+        }
+    };
+};
+
 export const updateFileList = (
     list: CloudreveFile[]
 ): ThunkAction<any, any, any, any> => {

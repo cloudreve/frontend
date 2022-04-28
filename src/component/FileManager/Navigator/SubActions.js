@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../../middleware/Auth";
 import { changeViewMethod, setShareUserPopover } from "../../../redux/explorer";
 import { changeSortMethod } from "../../../redux/explorer/action";
+import { FormatPageBreak } from "mdi-material-ui";
+import pathHelper from "../../../utils/page";
+import { changePageSize } from "../../../redux/viewUpdate/action";
 
 const useStyles = makeStyles((theme) => ({
     sideButton: {
@@ -28,11 +31,14 @@ const sortOptions = [
     "最大",
 ];
 
+const paginationOption = ["50", "100", "200", "500", "1000"];
+
 export default function SubActions({ isSmall, share, inherit }) {
     const dispatch = useDispatch();
     const viewMethod = useSelector(
         (state) => state.viewUpdate.explorerViewMethod
     );
+    const pageSize = useSelector((state) => state.viewUpdate.pagination.size);
     const OpenLoadingDialog = useCallback(
         (method) => dispatch(changeViewMethod(method)),
         [dispatch]
@@ -45,10 +51,17 @@ export default function SubActions({ isSmall, share, inherit }) {
         (e) => dispatch(setShareUserPopover(e)),
         [dispatch]
     );
+    const ChangePageSize = useCallback((e) => dispatch(changePageSize(e)), [
+        dispatch,
+    ]);
     const [anchorSort, setAnchorSort] = useState(null);
+    const [anchorPagination, setAnchorPagination] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const showSortOptions = (e) => {
         setAnchorSort(e.currentTarget);
+    };
+    const showPaginationOptions = (e) => {
+        setAnchorPagination(e.currentTarget);
     };
     const handleMenuItemClick = (e, index) => {
         setSelectedIndex(index);
@@ -65,6 +78,10 @@ export default function SubActions({ isSmall, share, inherit }) {
         ChangeSortMethod(optionsTable[index]);
         setAnchorSort(null);
     };
+    const handlePaginationChange = (s) => {
+        ChangePageSize(s);
+        setAnchorPagination(null);
+    };
 
     const toggleViewMethod = () => {
         const newMethod =
@@ -76,6 +93,7 @@ export default function SubActions({ isSmall, share, inherit }) {
         Auth.SetPreference("view_method", newMethod);
         OpenLoadingDialog(newMethod);
     };
+    const isMobile = pathHelper.isMobile();
 
     const classes = useStyles();
     return (
@@ -111,6 +129,39 @@ export default function SubActions({ isSmall, share, inherit }) {
                     <ViewModuleIcon fontSize={isSmall ? "small" : "default"} />
                 </IconButton>
             )}
+
+            {!isMobile && (
+                <IconButton
+                    title="分页大小"
+                    className={classes.sideButton}
+                    onClick={showPaginationOptions}
+                    color={inherit ? "inherit" : "default"}
+                >
+                    <FormatPageBreak fontSize={isSmall ? "small" : "default"} />
+                </IconButton>
+            )}
+            <Menu
+                id="sort-menu"
+                anchorEl={anchorPagination}
+                open={Boolean(anchorPagination)}
+                onClose={() => setAnchorPagination(null)}
+            >
+                {paginationOption.map((option, index) => (
+                    <MenuItem
+                        key={option}
+                        selected={option === pageSize.toString()}
+                        onClick={() => handlePaginationChange(parseInt(option))}
+                    >
+                        {`${option} / 页`}
+                    </MenuItem>
+                ))}
+                <MenuItem
+                    selected={pageSize === -1}
+                    onClick={() => handlePaginationChange(-1)}
+                >
+                    不分页
+                </MenuItem>
+            </Menu>
 
             <IconButton
                 title="排序方式"

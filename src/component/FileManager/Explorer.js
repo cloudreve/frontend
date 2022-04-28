@@ -101,7 +101,8 @@ const useStyles = makeStyles((theme) => ({
 
 const keyMap = {
     DELETE_FILE: "del",
-    SELECT_ALL: `${isMac() ? "command" : "ctrl"}+a`,
+    SELECT_ALL_SHOWED: `${isMac() ? "command" : "ctrl"}+a`,
+    SELECT_ALL: `${isMac() ? "command" : "ctrl"}+shift+a`,
     DESELECT_ALL: "esc",
 };
 
@@ -138,6 +139,10 @@ export default function Explorer({ share }) {
         (method) => dispatch(explorer.actions.changeSortMethod(method)),
         [dispatch]
     );
+    const SelectAll = useCallback(
+        () => dispatch(explorer.actions.selectAll()),
+        [dispatch]
+    );
 
     const { dirList, fileList } = usePagination();
 
@@ -147,13 +152,17 @@ export default function Explorer({ share }) {
                 OpenRemoveDialog();
             }
         },
-        SELECT_ALL: (e) => {
+        SELECT_ALL_SHOWED: (e) => {
             e.preventDefault();
             if (selected.length >= dirList.length + fileList.length) {
                 SetSelectedTarget([]);
             } else {
                 SetSelectedTarget([...dirList, ...fileList]);
             }
+        },
+        SELECT_ALL: (e) => {
+            e.preventDefault();
+            SelectAll();
         },
         DESELECT_ALL: (e) => {
             e.preventDefault();
@@ -387,7 +396,6 @@ export default function Explorer({ share }) {
                 {
                     [classes.root]: viewMethod !== "list",
                     [classes.rootTable]: viewMethod === "list",
-                    [classes.rootShare]: share,
                 },
                 classes.button
             )}

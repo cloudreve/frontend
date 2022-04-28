@@ -10,6 +10,7 @@ import Explorer from "./Explorer";
 import Modals from "./Modals";
 import Navigator from "./Navigator/Navigator";
 import SideDrawer from "./Sidebar/SideDrawer";
+import classNames from "classnames";
 import {
     closeAllModals,
     navigateTo,
@@ -19,11 +20,22 @@ import {
 import PaginationFooter from "./Pagination";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-const styles = () => ({
+const styles = (theme) => ({
     root: {
         display: "flex",
         flexDirection: "column",
         height: "calc(100vh - 64px)",
+        [theme.breakpoints.down("xs")]: {
+            height: "100%",
+        },
+        overflowY: "auto",
+    },
+    rootShare: {
+        display: "flex",
+        flexDirection: "column",
+
+        height: "100%",
+        minHeight: 500,
         overflowY: "auto",
     },
 });
@@ -69,7 +81,12 @@ class FileManager extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.root}>
+            <div
+                className={classNames({
+                    [classes.rootShare]: this.props.share,
+                    [classes.root]: !this.props.share,
+                })}
+            >
                 <DndProvider backend={HTML5Backend}>
                     <Modals share={this.props.share} />
                     <Navigator
