@@ -6,6 +6,7 @@ import CustomPaginationItem from "./PaginationItem";
 import { setPagination } from "../../redux/viewUpdate/action";
 import AutoHidden from "../Dial/AutoHidden";
 import statusHelper from "../../utils/page";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,6 +32,7 @@ export default function PaginationFooter() {
     const folders = useSelector((state) => state.explorer.dirList);
     const pagination = useSelector((state) => state.viewUpdate.pagination);
     const loading = useSelector((state) => state.viewUpdate.navigatorLoading);
+    const location = useLocation();
 
     const SetPagination = useCallback((p) => dispatch(setPagination(p)), [
         dispatch,
@@ -46,11 +48,14 @@ export default function PaginationFooter() {
     );
 
     const isMobile = statusHelper.isMobile();
+    const isSharePage = statusHelper.isSharePage(location.pathname);
 
     if (count > 1 && !loading) {
         return (
             <>
-                {!isMobile && <div className={classes.placeholder} />}
+                {!isMobile && !isSharePage && (
+                    <div className={classes.placeholder} />
+                )}
                 <AutoHidden enable>
                     <div className={classes.root}>
                         <Pagination

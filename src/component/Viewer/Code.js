@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: "auto",
             marginRight: "auto",
         },
-        marginBottom: 50,
+        marginBottom: 40,
     },
     editor: {
         borderRadius: "4px",
@@ -79,7 +79,7 @@ export default function CodeViewer() {
         const extension = title.split(".");
         setSuffix(codePreviewSuffix[extension.pop()]);
         // eslint-disable-next-line
-    }, []);
+    }, [title]);
 
     useEffect(() => {
         let requestURL = "/file/content/" + query.get("id");
@@ -171,7 +171,7 @@ export default function CodeViewer() {
                 {!loading && (
                     <Suspense fallback={<TextLoading />}>
                         <MonacoEditor
-                            height="600"
+                            height="calc(100vh - 198px)"
                             language={suffix}
                             theme={
                                 theme.palette.type === "dark" ? "vs-dark" : "vs"
