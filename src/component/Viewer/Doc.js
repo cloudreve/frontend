@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
     container: {
         border: "none",
         width: "100%",
-        height: "calc(100vh - 18px)",
+        height: "calc(100vh - 64px)",
         marginBottom: -3,
     },
 }));
