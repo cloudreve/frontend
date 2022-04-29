@@ -523,22 +523,16 @@ export const selectFile = (file: any, event: any, fileIndex: any) => {
             fileList,
             shiftSelectedIds,
         } = explorer;
-        if (
-            shiftKey &&
-            !ctrlKey &&
-            !metaKey &&
-            selected.length !== 0 &&
-            // 点击类型一样
-            file.type === lastSelect.file.type
-        ) {
+        if (shiftKey && !ctrlKey && !metaKey && selected.length !== 0) {
             // shift 多选
             // 取消原有选择
             dispatch(removeSelectedTargets(selected.map((v: any) => v.id)));
+            const all = [...dirList, ...fileList];
             // 添加新选择
             const begin = Math.min(lastSelect.index, fileIndex);
             const end = Math.max(lastSelect.index, fileIndex);
             const list = file.type === "dir" ? dirList : fileList;
-            const newShiftSelected = list.slice(begin, end + 1);
+            const newShiftSelected = all.slice(begin, end + 1);
             return dispatch(addSelectedTargets(newShiftSelected));
         }
         dispatch(setLastSelect(file, fileIndex));

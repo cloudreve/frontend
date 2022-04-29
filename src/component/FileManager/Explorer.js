@@ -143,7 +143,7 @@ export default function Explorer({ share }) {
         [dispatch]
     );
 
-    const { dirList, fileList } = usePagination();
+    const { dirList, fileList, startIndex } = usePagination();
 
     const handlers = {
         DELETE_FILE: () => {
@@ -302,10 +302,18 @@ export default function Explorer({ share }) {
                         />
                     )}
                     {dirList.map((value, index) => (
-                        <ObjectIcon key={value.id} file={value} index={index} />
+                        <ObjectIcon
+                            key={value.id}
+                            file={value}
+                            index={startIndex + index}
+                        />
                     ))}
                     {fileList.map((value, index) => (
-                        <ObjectIcon key={value.id} file={value} index={index} />
+                        <ObjectIcon
+                            key={value.id}
+                            file={value}
+                            index={startIndex + dirList.length + index}
+                        />
                     ))}
                 </TableBody>
             </Table>
@@ -341,7 +349,7 @@ export default function Explorer({ share }) {
                                     <ObjectIcon
                                         key={value.id}
                                         file={value}
-                                        index={index}
+                                        index={startIndex + index}
                                     />
                                 </Grid>
                             ))}
@@ -372,7 +380,9 @@ export default function Explorer({ share }) {
                                 >
                                     <ObjectIcon
                                         key={value.id}
-                                        index={index}
+                                        index={
+                                            startIndex + dirList.length + index
+                                        }
                                         file={value}
                                     />
                                 </Grid>

@@ -11,7 +11,7 @@ export function usePagination() {
     const folders = useSelector((state) => state.explorer.dirList);
     const pagination = useSelector((state) => state.viewUpdate.pagination);
 
-    const { dirList, fileList } = useMemo(() => {
+    const { dirList, fileList, startIndex } = useMemo(() => {
         const all = paginate(
             [...folders, ...files],
             pagination.size,
@@ -22,7 +22,8 @@ export function usePagination() {
         all.forEach((v) =>
             v.type === "dir" ? dirList.push(v) : fileList.push(v)
         );
-        return { dirList, fileList };
+        const startIndex = pagination.size * (pagination.page - 1);
+        return { dirList, fileList, startIndex };
     }, [folders, files, pagination]);
-    return { dirList, fileList };
+    return { dirList, fileList, startIndex };
 }

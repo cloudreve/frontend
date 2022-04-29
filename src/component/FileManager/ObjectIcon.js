@@ -134,7 +134,9 @@ export default function ObjectIcon(props) {
 
     const handleIconClick = (e) => {
         e.stopPropagation();
-        e.ctrlKey = true;
+        if (!e.shiftKey) {
+            e.ctrlKey = true;
+        }
         SelectFile(e);
         return false;
     };
