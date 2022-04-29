@@ -7,33 +7,37 @@ import ShareIcon from "@material-ui/icons/Share";
 import { connect } from "react-redux";
 
 import {
-    withStyles,
-    InputBase,
-    Popper,
     Fade,
-    Paper,
-    MenuItem,
+    InputBase,
     ListItemIcon,
     ListItemText,
+    MenuItem,
+    Paper,
+    Popper,
     Typography,
+    withStyles,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import pathHelper from "../../utils/page";
-import { HotKeys, configure } from "react-hotkeys";
+import { configure, HotKeys } from "react-hotkeys";
 import { searchMyFile } from "../../redux/explorer";
+import FolderIcon from "@material-ui/icons/Folder";
 
 configure({
     ignoreTags: [],
 });
 
-const mapStateToProps = () => {
-    return {};
+const mapStateToProps = (state) => {
+    return {
+        path: state.navigator.path,
+        search: state.explorer.search,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        searchMyFile: (keywords) => {
-            dispatch(searchMyFile(keywords));
+        searchMyFile: (keywords, path) => {
+            dispatch(searchMyFile(keywords, path));
         },
     };
 };
@@ -106,7 +110,7 @@ class SearchBarCompoment extends Component {
     handlers = {
         SEARCH: (e) => {
             if (pathHelper.isHomePage(this.props.location.pathname)) {
-                this.searchMyFile();
+                this.searchMyFile("")();
             } else {
                 this.searchShare();
             }
@@ -129,8 +133,8 @@ class SearchBarCompoment extends Component {
         });
     };
 
-    searchMyFile = () => {
-        this.props.searchMyFile("keywords/" + this.input);
+    searchMyFile = (path) => () => {
+        this.props.searchMyFile("keywords/" + this.input, path);
     };
 
     searchShare = () => {
@@ -173,7 +177,7 @@ class SearchBarCompoment extends Component {
                         <Fade {...TransitionProps} timeout={350}>
                             <Paper square={true}>
                                 {isHomePage && (
-                                    <MenuItem onClick={this.searchMyFile}>
+                                    <MenuItem onClick={this.searchMyFile("")}>
                                         <ListItemIcon className={classes.icon}>
                                             <FileIcon />
                                         </ListItemIcon>
@@ -192,6 +196,35 @@ class SearchBarCompoment extends Component {
                                         />
                                     </MenuItem>
                                 )}
+
+                                {isHomePage &&
+                                    this.props.path !== "/" &&
+                                    !this.props.search && (
+                                        <MenuItem
+                                            onClick={this.searchMyFile(
+                                                this.props.path
+                                            )}
+                                        >
+                                            <ListItemIcon
+                                                className={classes.icon}
+                                            >
+                                                <FolderIcon />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                classes={{
+                                                    primary: classes.primary,
+                                                }}
+                                                primary={
+                                                    <Typography noWrap>
+                                                        在当前目录中搜索{" "}
+                                                        <strong>
+                                                            {this.state.input}
+                                                        </strong>
+                                                    </Typography>
+                                                }
+                                            />
+                                        </MenuItem>
+                                    )}
 
                                 <MenuItem onClick={this.searchShare}>
                                     <ListItemIcon className={classes.icon}>

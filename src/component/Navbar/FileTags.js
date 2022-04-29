@@ -1,4 +1,4 @@
-import React, { useCallback, useState, Suspense } from "react";
+import React, { Suspense, useCallback, useState } from "react";
 import {
     Divider,
     List,
@@ -26,6 +26,7 @@ import Auth from "../../middleware/Auth";
 import {
     Circle,
     CircleOutline,
+    FolderHeartOutline,
     Heart,
     HeartOutline,
     Hexagon,
@@ -36,10 +37,9 @@ import {
     RhombusOutline,
     Square,
     SquareOutline,
+    TagPlus,
     Triangle,
     TriangleOutline,
-    FolderHeartOutline,
-    TagPlus,
 } from "mdi-material-ui";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
@@ -149,7 +149,7 @@ export default function FileTag() {
     );
 
     const dispatch = useDispatch();
-    const SearchMyFile = useCallback((k) => dispatch(searchMyFile(k)), [
+    const SearchMyFile = useCallback((k, p) => dispatch(searchMyFile(k, p)), [
         dispatch,
     ]);
     const NavigateTo = useCallback((k) => dispatch(navigateTo(k)), [dispatch]);
@@ -323,7 +323,9 @@ export default function FileTag() {
                             <ListItem
                                 button
                                 key={v.key}
-                                onClick={() => SearchMyFile(v.id + "/internal")}
+                                onClick={() =>
+                                    SearchMyFile(v.id + "/internal", "")
+                                }
                             >
                                 <ListItemIcon className={classes.subMenu}>
                                     {v.icon}
@@ -338,7 +340,7 @@ export default function FileTag() {
                                 onMouseEnter={() => setTagHover(v.id)}
                                 onClick={() => {
                                     if (v.type === 0) {
-                                        SearchMyFile("tag/" + v.id);
+                                        SearchMyFile("tag/" + v.id, "");
                                     } else {
                                         NavigateTo(v.expression);
                                     }

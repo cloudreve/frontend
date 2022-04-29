@@ -22,7 +22,12 @@ export async function walk(
         }
 
         if (f.type === "dir") {
-            const response = await list(pathJoin([f.path, f.name]), share, "");
+            const response = await list(
+                pathJoin([f.path, f.name]),
+                share,
+                "",
+                ""
+            );
             const subs = await walk(response.data.objects, share);
             res = [...res, ...subs];
         }

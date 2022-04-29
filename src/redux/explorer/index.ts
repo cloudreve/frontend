@@ -232,10 +232,11 @@ export const refreshFileList = () => {
         type: "REFRESH_FILE_LIST",
     };
 };
-export const searchMyFile = (keywords) => {
+export const searchMyFile = (keywords, path) => {
     return {
         type: "SEARCH_MY_FILE",
         keywords: keywords,
+        path: path,
     };
 };
 export const showImgPreivew = (first) => {

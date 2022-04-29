@@ -58,7 +58,6 @@ import {
     openRenameDialog,
     openShareDialog,
     saveFile,
-    searchMyFile,
     setSelectedTarget,
     setSessionStatus,
     showImgPreivew,
@@ -78,7 +77,6 @@ const mapStateToProps = (state) => {
         withFolder: state.explorer.selectProps.withFolder,
         withFile: state.explorer.selectProps.withFile,
         path: state.navigator.path,
-        keywords: state.explorer.keywords,
         title: state.siteConfig.title,
         subTitle: state.viewUpdate.subTitle,
         loadUploader: state.viewUpdate.loadUploader,
@@ -106,9 +104,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         changeContextMenu: (type, open) => {
             dispatch(changeContextMenu(type, open));
-        },
-        searchMyFile: (keywords) => {
-            dispatch(searchMyFile(keywords));
         },
         saveFile: () => {
             dispatch(saveFile());

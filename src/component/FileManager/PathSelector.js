@@ -7,20 +7,20 @@ import { connect } from "react-redux";
 import classNames from "classnames";
 
 import {
-    MenuList,
-    MenuItem,
     IconButton,
     ListItemIcon,
-    ListItemText,
-    withStyles,
     ListItemSecondaryAction,
+    ListItemText,
+    MenuItem,
+    MenuList,
+    withStyles,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import { toggleSnackbar } from "../../redux/explorer";
 
 const mapStateToProps = (state) => {
     return {
-        keywords: state.explorer.keywords,
+        search: state.explorer.search,
     };
 };
 
@@ -63,7 +63,7 @@ class PathSelectorCompoment extends Component {
 
     componentDidMount = () => {
         const toBeLoad = this.props.presentPath;
-        this.enterFolder(this.props.keywords === "" ? toBeLoad : "/");
+        this.enterFolder(!this.props.search ? toBeLoad : "/");
     };
 
     back = () => {

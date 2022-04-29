@@ -29,7 +29,7 @@ export default function Uploader() {
         total: 0,
         processed: 0,
     });
-    const keywords = useSelector((state) => state.explorer.keywords);
+    const search = useSelector((state) => state.explorer.search);
     const policy = useSelector((state) => state.explorer.currentPolicy);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
     const path = useSelector((state) => state.navigator.path);
@@ -54,11 +54,8 @@ export default function Uploader() {
     ]);
 
     const enableUploader = useMemo(
-        () =>
-            pathHelper.isHomePage(location.pathname) &&
-            isLogin &&
-            keywords === "",
-        [location.pathname, isLogin, keywords]
+        () => pathHelper.isHomePage(location.pathname) && isLogin && !search,
+        [location.pathname, isLogin, search]
     );
 
     const taskAdded = (original = null) => (tasks) => {

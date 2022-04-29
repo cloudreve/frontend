@@ -109,7 +109,7 @@ export default function Explorer({ share }) {
     const location = useLocation();
     const dispatch = useDispatch();
     const selected = useSelector((state) => state.explorer.selected);
-    const keywords = useSelector((state) => state.explorer.keywords);
+    const search = useSelector((state) => state.explorer.search);
     const loading = useSelector((state) => state.viewUpdate.navigatorLoading);
     const path = useSelector((state) => state.navigator.path);
     const sortMethod = useSelector((state) => state.viewUpdate.sortMethod);
@@ -179,7 +179,7 @@ export default function Explorer({ share }) {
 
     const contextMenu = (e) => {
         e.preventDefault();
-        if (keywords === "" && !pathHelper.isSharePage(location.pathname)) {
+        if (!search && !pathHelper.isSharePage(location.pathname)) {
             if (!loading) {
                 ChangeContextMenu("empty", true);
             }
@@ -422,7 +422,7 @@ export default function Explorer({ share }) {
                 </div>
             )}
 
-            {keywords === "" &&
+            {!search &&
                 isHomePage &&
                 dirList.length === 0 &&
                 fileList.length === 0 &&
@@ -433,7 +433,7 @@ export default function Explorer({ share }) {
                         secondary={"或点击右下方“上传文件”按钮添加文件"}
                     />
                 )}
-            {((keywords !== "" &&
+            {((search &&
                 dirList.length === 0 &&
                 fileList.length === 0 &&
                 !loading &&

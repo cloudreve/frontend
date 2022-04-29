@@ -147,27 +147,25 @@ export default function VideoViewer() {
                 }
                 art.switchUrl(newURL);
                 if (path && path !== "") {
-                    list(basename(path), isShare ? { key: id } : null, "").then(
-                        (res) => {
-                            setFiles(
-                                res.data.objects.filter(
-                                    (o) => o.type === "file"
-                                )
-                            );
-                            setPlaylist(
-                                res.data.objects.filter(
-                                    (o) =>
-                                        o.type === "file" &&
-                                        videoPreviewSuffix.indexOf(
-                                            o.name
-                                                .split(".")
-                                                .pop()
-                                                .toLowerCase()
-                                        ) !== -1
-                                )
-                            );
-                        }
-                    );
+                    list(
+                        basename(path),
+                        isShare ? { key: id } : null,
+                        "",
+                        ""
+                    ).then((res) => {
+                        setFiles(
+                            res.data.objects.filter((o) => o.type === "file")
+                        );
+                        setPlaylist(
+                            res.data.objects.filter(
+                                (o) =>
+                                    o.type === "file" &&
+                                    videoPreviewSuffix.indexOf(
+                                        o.name.split(".").pop().toLowerCase()
+                                    ) !== -1
+                            )
+                        );
+                    });
                 }
             }
         }

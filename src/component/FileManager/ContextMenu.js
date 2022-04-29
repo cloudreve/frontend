@@ -86,7 +86,7 @@ const mapStateToProps = (state) => {
         withSourceEnabled: state.explorer.selectProps.withSourceEnabled,
         path: state.navigator.path,
         selected: state.explorer.selected,
-        keywords: state.explorer.keywords,
+        search: state.explorer.search,
     };
 };
 
@@ -598,7 +598,7 @@ class ContextMenuCompoment extends Component {
                                             重命名
                                         </Typography>
                                     </MenuItem>
-                                    {this.props.keywords === "" && (
+                                    {!this.props.search && (
                                         <MenuItem
                                             dense
                                             onClick={() =>
@@ -617,7 +617,7 @@ class ContextMenuCompoment extends Component {
                             )}
                             {isHomePage && (
                                 <div>
-                                    {this.props.keywords === "" && (
+                                    {!this.props.search && (
                                         <MenuItem
                                             dense
                                             onClick={() =>

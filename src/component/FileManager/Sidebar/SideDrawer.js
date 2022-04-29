@@ -101,7 +101,7 @@ export default function SideDrawer() {
         [dispatch]
     );
     const NavigateTo = useCallback((k) => dispatch(navigateTo(k)), [dispatch]);
-    const keywords = useSelector((state) => state.explorer.keywords);
+    const search = useSelector((state) => state.explorer.search);
     const [target, setTarget] = useState(null);
     const [details, setDetails] = useState(null);
     const loadProps = (object) => {
@@ -109,7 +109,7 @@ export default function SideDrawer() {
             "/object/property/" +
                 object.id +
                 "?trace_root=" +
-                (keywords !== "" ? "true" : "false") +
+                (search ? "true" : "false") +
                 "&is_folder=" +
                 (object.type === "dir").toString()
         )

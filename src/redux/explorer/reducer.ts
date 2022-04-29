@@ -34,7 +34,10 @@ export interface ExplorerState {
         paused: boolean;
         isOpen: boolean;
     };
-    keywords: string;
+    search?: {
+        keywords: string;
+        searchPath: string;
+    };
     fileSave: boolean;
     sideBarOpen: boolean;
     currentPolicy?: Policy;
@@ -93,7 +96,6 @@ export const initState: ExplorerState = {
         paused: false,
         isOpen: false,
     },
-    keywords: "",
     fileSave: false,
     sideBarOpen: false,
 };
@@ -181,7 +183,10 @@ const explorer = (
                     withFile: false,
                     withSourceEnabled: false,
                 },
-                keywords: action.keywords,
+                search: {
+                    keywords: action.keywords,
+                    searchPath: action.path,
+                },
             });
         case "SHOW_IMG_PREIVEW":
             return Object.assign({}, state, {
@@ -243,7 +248,7 @@ const explorer = (
                     withFile: false,
                     withSourceEnabled: false,
                 },
-                keywords: "",
+                search: undefined,
             };
         case "SET_SIDE_BAR":
             return {

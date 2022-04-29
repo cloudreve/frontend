@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
         refresh: state.navigator.refresh,
         drawerDesktopOpen: state.viewUpdate.open,
         viewMethod: state.viewUpdate.explorerViewMethod,
-        keywords: state.explorer.keywords,
+        search: state.explorer.search,
         sortMethod: state.viewUpdate.sortMethod,
     };
 };
@@ -130,7 +130,7 @@ const styles = (theme) => ({
 });
 
 class NavigatorComponent extends Component {
-    keywords = "";
+    search = undefined;
     currentID = 0;
 
     state = {
@@ -176,12 +176,17 @@ class NavigatorComponent extends Component {
                     : this.props.path.substr(1).split("/"),
         });
         const newPath = path !== null ? path : this.props.path;
-        list(newPath, this.props.share, this.keywords)
+        list(
+            newPath,
+            this.props.share,
+            this.search ? this.search.keywords : "",
+            this.search ? this.search.searchPath : ""
+        )
             .then((response) => {
                 this.currentID = response.data.parent;
                 this.props.updateFileList(response.data.objects);
                 this.props.setNavigatorLoadingStatus(false);
-                if (this.keywords === "") {
+                if (!this.search) {
                     setGetParameter("path", encodeURIComponent(newPath));
                 }
                 if (response.data.policy) {
@@ -208,8 +213,8 @@ class NavigatorComponent extends Component {
     };
 
     UNSAFE_componentWillReceiveProps = (nextProps) => {
-        if (this.props.keywords !== nextProps.keywords) {
-            this.keywords = nextProps.keywords;
+        if (this.props.search !== nextProps.search) {
+            this.search = nextProps.search;
         }
         if (this.props.path !== nextProps.path) {
             this.renderPath(nextProps.path);
@@ -337,7 +342,7 @@ class NavigatorComponent extends Component {
                     </ListItemIcon>
                     刷新
                 </MenuItem>
-                {this.props.keywords === "" && isHomePage && (
+                {!this.props.search && isHomePage && (
                     <div>
                         <Divider />
                         <MenuItem onClick={() => this.performAction("share")}>
