@@ -67,6 +67,13 @@ export const setPagination = (pagination) => {
     };
 };
 
+export const setShareInfo = (shareInfo) => {
+    return {
+        type: "SET_SHARE_INFO",
+        shareInfo: shareInfo,
+    };
+};
+
 export const changePageSize = (
     size: number
 ): ThunkAction<any, any, any, any> => {

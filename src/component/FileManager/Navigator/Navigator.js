@@ -475,7 +475,7 @@ class NavigatorComponent extends Component {
                             ))}
                     </div>
                     <div className={classes.optionContainer}>
-                        <SubActions isSmall share={this.props.share} />
+                        <SubActions isSmall />
                     </div>
                 </div>
                 <Divider />

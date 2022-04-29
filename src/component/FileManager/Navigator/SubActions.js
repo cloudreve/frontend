@@ -33,11 +33,12 @@ const sortOptions = [
 
 const paginationOption = ["50", "100", "200", "500", "1000"];
 
-export default function SubActions({ isSmall, share, inherit }) {
+export default function SubActions({ isSmall, inherit }) {
     const dispatch = useDispatch();
     const viewMethod = useSelector(
         (state) => state.viewUpdate.explorerViewMethod
     );
+    const share = useSelector((state) => state.viewUpdate.shareInfo);
     const pageSize = useSelector((state) => state.viewUpdate.pagination.size);
     const OpenLoadingDialog = useCallback(
         (method) => dispatch(changeViewMethod(method)),

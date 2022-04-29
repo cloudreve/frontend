@@ -125,6 +125,7 @@ const mapStateToProps = (state) => {
     return {
         path: state.navigator.path,
         selected: state.explorer.selected,
+        shareInfo: state.viewUpdate.shareInfo,
     };
 };
 
@@ -200,9 +201,9 @@ class FileIconCompoment extends Component {
                                     )}
                                     src={
                                         baseURL +
-                                        (isSharePage
+                                        (isSharePage && this.props.shareInfo
                                             ? "/share/thumb/" +
-                                              window.shareInfo.key +
+                                              this.props.shareInfo.key +
                                               "/" +
                                               this.props.file.id +
                                               "?path=" +

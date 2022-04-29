@@ -40,21 +40,6 @@ export const setGetParameter = (paramName, paramValue) => {
     window.history.pushState(null, null, url);
 };
 
-export const allowSharePreview = () => {
-    if (!window.isSharePage) {
-        return true;
-    }
-    if (window.isSharePage) {
-        if (window.shareInfo.allowPreview) {
-            return true;
-        }
-        if (window.userInfo.uid === -1) {
-            return false;
-        }
-        return true;
-    }
-};
-
 export const checkGetParameters = (field) => {
     const url = window.location.href;
     if (url.indexOf("?" + field + "=") !== -1) return true;

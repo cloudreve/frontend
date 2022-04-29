@@ -348,6 +348,11 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 ...state,
                 pagination: action.pagination,
             };
+        case "SET_SHARE_INFO":
+            return {
+                ...state,
+                shareInfo: action.shareInfo,
+            };
         default:
             return state;
     }

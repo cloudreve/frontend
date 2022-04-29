@@ -16,6 +16,7 @@ import {
     showImgPreivew,
     toggleSnackbar,
 } from "../../redux/explorer";
+import { setShareInfo } from "../../redux/viewUpdate/action";
 
 const styles = (theme) => ({
     layout: {
@@ -69,6 +70,9 @@ const mapDispatchToProps = (dispatch) => {
         setShareUserPopover: (e) => {
             dispatch(setShareUserPopover(e));
         },
+        setShareInfo: (s) => {
+            dispatch(setShareInfo(s));
+        },
     };
 };
 
@@ -76,11 +80,11 @@ class SharedFolderComponent extends Component {
     state = {};
 
     UNSAFE_componentWillMount() {
-        window.shareInfo = this.props.share;
+        this.props.setShareInfo(this.props.share);
     }
 
     componentWillUnmount() {
-        window.shareInfo = null;
+        this.props.setShareInfo(null);
         this.props.setSelectedTarget([]);
     }
 

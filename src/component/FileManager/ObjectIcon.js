@@ -36,6 +36,7 @@ const useStyles = makeStyles(() => ({
 
 export default function ObjectIcon(props) {
     const path = useSelector((state) => state.navigator.path);
+    const shareInfo = useSelector((state) => state.viewUpdate.shareInfo);
     const selected = useSelector((state) => state.explorer.selected);
     const viewMethod = useSelector(
         (state) => state.viewUpdate.explorerViewMethod
@@ -109,7 +110,12 @@ export default function ObjectIcon(props) {
         }
 
         SelectFile(e);
-        if (props.file.type === "dir" && (!e.ctrlKey && !e.metaKey && !e.shiftKey)) {
+        if (
+            props.file.type === "dir" &&
+            !e.ctrlKey &&
+            !e.metaKey &&
+            !e.shiftKey
+        ) {
             enterFolder();
         }
     };
@@ -123,7 +129,7 @@ export default function ObjectIcon(props) {
             return;
         }
 
-        OpenPreview(window.shareInfo);
+        OpenPreview(shareInfo);
     };
 
     const handleIconClick = (e) => {
