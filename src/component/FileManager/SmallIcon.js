@@ -13,6 +13,7 @@ import TypeIcon from "./TypeIcon";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import Grow from "@material-ui/core/Grow";
 import { Folder } from "@material-ui/icons";
+import FileName from "./FileName";
 
 const styles = (theme) => ({
     container: {
@@ -161,7 +162,7 @@ class SmallIconCompoment extends Component {
                         })}
                         variant="body2"
                     >
-                        {this.props.file.name}
+                        <FileName name={this.props.file.name} />
                     </Typography>
                 </Tooltip>
             </ButtonBase>

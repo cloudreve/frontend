@@ -20,6 +20,7 @@ import KeyboardReturnIcon from "@material-ui/icons/KeyboardReturn";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import Grow from "@material-ui/core/Grow";
 import { formatLocalTime } from "../../utils/datetime";
+import FileName from "./FileName";
 
 const styles = (theme) => ({
     selected: {
@@ -177,7 +178,7 @@ class TableRowCompoment extends Component {
                                 </Grow>
                             )}
                         </div>
-                        {this.props.file.name}
+                        <FileName name={this.props.file.name} />
                     </Typography>
                 </TableCell>
                 <TableCell
