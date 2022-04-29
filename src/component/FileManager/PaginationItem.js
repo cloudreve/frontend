@@ -26,6 +26,15 @@ export default function CustomPaginationItem(props) {
             props.onClick();
         }
     }, [isActive, inputRef]);
+
+    if (
+        props.isMobile &&
+        (props.type === "start-ellipsis" ||
+            props.type === "end-ellipsis" ||
+            props.type === "page")
+    ) {
+        return <></>;
+    }
     return (
         <div ref={inputRef}>
             <PaginationItem ref={drop} {...props} />
