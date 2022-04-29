@@ -48,6 +48,10 @@ const styles = (theme) => ({
     contentFix: {
         padding: "10px 24px 0px 24px",
     },
+    sources: {
+        overflow: "auto",
+        whiteSpace: "nowrap",
+    },
 });
 
 const mapStateToProps = (state) => {
@@ -101,7 +105,6 @@ class ModalsCompoment extends Component {
         shareUrl: "",
         downloadURL: "",
         remoteDownloadPathSelect: false,
-        source: "",
         purchaseCallback: null,
     };
 
@@ -125,26 +128,6 @@ class ModalsCompoment extends Component {
                 newName: name,
             });
             return;
-        }
-        if (
-            this.props.modalsStatus.getSource !==
-                nextProps.modalsStatus.getSource &&
-            nextProps.modalsStatus.getSource === true
-        ) {
-            API.get("/file/source/" + this.props.selected[0].id)
-                .then((response) => {
-                    this.setState({
-                        source: response.data.url,
-                    });
-                })
-                .catch((error) => {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        error.message,
-                        "error"
-                    );
-                });
         }
     };
 
@@ -524,7 +507,6 @@ class ModalsCompoment extends Component {
             downloadURL: "",
             shareUrl: "",
             remoteDownloadPathSelect: false,
-            source: "",
         });
         this.newNameSuffix = "";
         this.props.closeAllModals();
@@ -536,7 +518,7 @@ class ModalsCompoment extends Component {
 
     copySource = () => {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(this.state.source);
+            navigator.clipboard.writeText(this.props.modalsStatus.getSource);
             this.props.toggleSnackbar("top", "right", "链接已复制", "info");
         }
     };
@@ -552,23 +534,21 @@ class ModalsCompoment extends Component {
                     open={this.props.modalsStatus.getSource}
                     onClose={this.onClose}
                     aria-labelledby="form-dialog-title"
+                    fullWidth
                 >
                     <DialogTitle id="form-dialog-title">
                         获取文件外链
                     </DialogTitle>
 
-                    <DialogContent>
-                        <form onSubmit={this.submitCreateNewFolder}>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id="newFolderName"
-                                label="外链地址"
-                                type="text"
-                                value={this.state.source}
-                                fullWidth
-                            />
-                        </form>
+                    <DialogContent className={classes.sources}>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: this.props.modalsStatus.getSource.replace(
+                                    /\n/g,
+                                    "<br />"
+                                ),
+                            }}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.copySource} color="secondary">

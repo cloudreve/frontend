@@ -28,6 +28,7 @@ import Auth from "../../middleware/Auth";
 import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
+    batchGetSource,
     openPreview,
     setSelectedTarget,
     startBatchDownload,
@@ -42,7 +43,6 @@ import {
     openCreateFileDialog,
     openCreateFolderDialog,
     openDecompressDialog,
-    openGetSourceDialog,
     openLoadingDialog,
     openMoveDialog,
     openMusicDialog,
@@ -83,6 +83,7 @@ const mapStateToProps = (state) => {
         isMultiple: state.explorer.selectProps.isMultiple,
         withFolder: state.explorer.selectProps.withFolder,
         withFile: state.explorer.selectProps.withFile,
+        withSourceEnabled: state.explorer.selectProps.withSourceEnabled,
         path: state.navigator.path,
         selected: state.explorer.selected,
         keywords: state.explorer.keywords,
@@ -136,9 +137,6 @@ const mapDispatchToProps = (dispatch) => {
         openTorrentDownloadDialog: () => {
             dispatch(openTorrentDownloadDialog());
         },
-        openGetSourceDialog: () => {
-            dispatch(openGetSourceDialog());
-        },
         openCopyDialog: () => {
             dispatch(openCopyDialog());
         },
@@ -171,6 +169,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         startDownload: (share, file) => {
             dispatch(startDownload(share, file));
+        },
+        batchGetSource: () => {
+            dispatch(batchGetSource());
         },
     };
 };
@@ -471,21 +472,24 @@ class ContextMenuCompoment extends Component {
                                 </MenuItem>
                             )}
 
-                            {!this.props.isMultiple &&
-                                this.props.withFile &&
-                                isHomePage &&
-                                this.props.selected[0].source_enabled && (
+                            {isHomePage &&
+                                user.group.sourceBatch > 0 &&
+                                this.props.withSourceEnabled && (
                                     <MenuItem
                                         dense
                                         onClick={() =>
-                                            this.props.openGetSourceDialog()
+                                            this.props.batchGetSource()
                                         }
                                     >
                                         <StyledListItemIcon>
                                             <LinkIcon />
                                         </StyledListItemIcon>
                                         <Typography variant="inherit">
-                                            获取外链
+                                            {this.props.isMultiple ||
+                                            (this.props.withFolder &&
+                                                !this.props.withFile)
+                                                ? "批量获取外链"
+                                                : "获取外链"}
                                         </Typography>
                                     </MenuItem>
                                 )}

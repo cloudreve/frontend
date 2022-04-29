@@ -7,6 +7,7 @@ interface SelectProps {
     isMultiple: boolean;
     withFolder: boolean;
     withFile: boolean;
+    withSourceEnabled: boolean;
 }
 
 export interface ExplorerState {
@@ -50,6 +51,7 @@ export const initState: ExplorerState = {
         isMultiple: false,
         withFolder: false,
         withFile: false,
+        withSourceEnabled: false,
     },
     lastSelect: {
         file: {
@@ -100,17 +102,23 @@ const checkSelectedProps = (selected: CloudreveFile[]): SelectProps => {
     const isMultiple = selected.length > 1;
     let withFolder = false;
     let withFile = false;
+    let withSourceEnabled = false;
     selected.forEach((value) => {
         if (value.type === "dir") {
             withFolder = true;
+            withSourceEnabled = true;
         } else if (value.type === "file") {
             withFile = true;
+            if (value.source_enabled) {
+                withSourceEnabled = true;
+            }
         }
     });
     return {
         isMultiple,
         withFolder,
         withFile,
+        withSourceEnabled,
     };
 };
 
@@ -161,6 +169,7 @@ const explorer = (
                     isMultiple: false,
                     withFolder: false,
                     withFile: false,
+                    withSourceEnabled: false,
                 },
             });
         case "SEARCH_MY_FILE":
@@ -170,6 +179,7 @@ const explorer = (
                     isMultiple: false,
                     withFolder: false,
                     withFile: false,
+                    withSourceEnabled: false,
                 },
                 keywords: action.keywords,
             });
@@ -231,6 +241,7 @@ const explorer = (
                     isMultiple: false,
                     withFolder: false,
                     withFile: false,
+                    withSourceEnabled: false,
                 },
                 keywords: "",
             };

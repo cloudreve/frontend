@@ -17,6 +17,7 @@ import { push } from "connected-react-router";
 import {
     changeContextMenu,
     closeAllModals,
+    openGetSourceDialog,
     openLoadingDialog,
     showAudioPreview,
     showImgPreivew,
@@ -668,5 +669,80 @@ export const submitDecompressTask = (path: string) => {
             dst: path === "//" ? "/" : path,
             encoding: encoding,
         });
+    };
+};
+
+export const batchGetSource = (): ThunkAction<any, any, any, any> => {
+    return async (dispatch, getState): Promise<any> => {
+        const {
+            explorer: { selected },
+            router: {
+                location: { pathname },
+            },
+        } = getState();
+
+        if (selected.findIndex((f) => f.type === "dir") >= 0) {
+            dispatch(openLoadingDialog("列取文件中..."));
+        }
+
+        let queue: CloudreveFile[] = [];
+        try {
+            queue = await walk(selected, null);
+        } catch (e) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    `列取文件时出错：${e.message}`,
+                    "warning"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
+        dispatch(openLoadingDialog("生成外链中..."));
+
+        const items = queue
+            .filter((value) => value.source_enabled && value.type === "file")
+            .map((v) => v.id);
+
+        const user = Auth.GetUser();
+        if (items.length > user.group.sourceBatch) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    `当前用户组最大可同时为 ${user.group.sourceBatch} 个文件生成外链`,
+                    "warning"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
+        API.post("/file/source", { items: items })
+            .then((response) => {
+                console.log(response);
+                dispatch(closeAllModals());
+                dispatch(
+                    openGetSourceDialog(
+                        response.data
+                            .map(
+                                (res) =>
+                                    `${res.name}: ${res.url}${
+                                        res.error ? res.error : ""
+                                    }`
+                            )
+                            .join("\n")
+                    )
+                );
+            })
+            .catch((error) => {
+                dispatch(
+                    toggleSnackbar("top", "right", error.message, "warning")
+                );
+                dispatch(closeAllModals());
+            });
     };
 };

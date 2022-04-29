@@ -28,7 +28,7 @@ export interface ViewUpdateState {
         music: boolean;
         remoteDownload: boolean;
         torrentDownload: boolean;
-        getSource: boolean;
+        getSource: string;
         copy: boolean;
         resave: boolean;
         compress: boolean;
@@ -89,7 +89,7 @@ export const initState: ViewUpdateState = {
         music: false,
         remoteDownload: false,
         torrentDownload: false,
-        getSource: false,
+        getSource: "",
         copy: false,
         resave: false,
         compress: false,
@@ -227,7 +227,7 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
         case "OPEN_GET_SOURCE_DIALOG":
             return Object.assign({}, state, {
                 modals: Object.assign({}, state.modals, {
-                    getSource: true,
+                    getSource: action.source,
                 }),
                 contextOpen: false,
             });
@@ -262,7 +262,7 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                     music: false,
                     remoteDownload: false,
                     torrentDownload: false,
-                    getSource: false,
+                    getSource: "",
                     resave: false,
                     copy: false,
                     loading: false,

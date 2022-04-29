@@ -188,9 +188,10 @@ export const openRelocateDialog = () => {
         type: "OPEN_RELOCATE_DIALOG",
     };
 };
-export const openGetSourceDialog = () => {
+export const openGetSourceDialog = (source) => {
     return {
         type: "OPEN_GET_SOURCE_DIALOG",
+        source,
     };
 };
 export const openCopyDialog = () => {
