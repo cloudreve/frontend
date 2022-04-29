@@ -329,34 +329,6 @@ export default function GroupForm(props) {
                                     />
                                     <FormHelperText id="component-helper-text">
                                         对于支持的存储策略下的文件，允许用户单次批量获取外链的最大文件数量，填写为
-                                        0 表示不允许批量生成外链。
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                        )}
-
-                        {group.ID !== 3 && (
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        批量生成外链数量限制
-                                    </InputLabel>
-                                    <Input
-                                        multiline
-                                        type={"number"}
-                                        inputProps={{
-                                            min: 1,
-                                            step: 1,
-                                        }}
-                                        value={
-                                            group.OptionsSerialized.source_batch
-                                        }
-                                        onChange={handleOptionChange(
-                                            "source_batch"
-                                        )}
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        对于支持的存储策略下的文件，允许用户单次批量获取外链的最大文件数量，填写为
                                         0 或空表示不允许批量生成外链。
                                     </FormHelperText>
                                 </FormControl>
@@ -526,31 +498,6 @@ export default function GroupForm(props) {
                                     />
                                     <FormHelperText id="component-helper-text">
                                         允许用户单次批量创建的离线下载链接的最大数量
-                                    </FormHelperText>
-                                </FormControl>
-                            </div>
-                            <div className={classes.form}>
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="component-helper">
-                                        Aria2 批量下载最大数量
-                                    </InputLabel>
-                                    <Input
-                                        multiline
-                                        type={"number"}
-                                        inputProps={{
-                                            min: 0,
-                                            step: 1,
-                                        }}
-                                        value={
-                                            group.OptionsSerialized.aria2_batch
-                                        }
-                                        onChange={handleOptionChange(
-                                            "aria2_batch"
-                                        )}
-                                    />
-                                    <FormHelperText id="component-helper-text">
-                                        允许用户同时进行的离线下载任务数量，填写为
-                                        0 或留空表示不限制。
                                     </FormHelperText>
                                 </FormControl>
                             </div>
