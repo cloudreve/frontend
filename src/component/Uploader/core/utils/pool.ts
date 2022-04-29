@@ -59,7 +59,7 @@ export class Pool {
 
     check() {
         const processingNum = this.processing.length;
-        const availableNum = this.limit - processingNum;
+        const availableNum = Math.max(0, this.limit - processingNum);
         this.queue.slice(0, availableNum).forEach((item) => {
             this.run(item);
         });
