@@ -86,15 +86,17 @@ const useStyles = makeStyles((theme) => ({
     },
     gridContainer: {
         [theme.breakpoints.down("sm")]: {
-            gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))",
+            gridTemplateColumns:
+                "repeat(auto-fill,minmax(180px,1fr))!important",
         },
         [theme.breakpoints.up("md")]: {
-            gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))",
+            gridTemplateColumns:
+                "repeat(auto-fill,minmax(220px,1fr))!important",
         },
-        display: "grid",
+        display: "grid!important",
     },
     gridItem: {
-        flex: "1 1 220px",
+        flex: "1 1 220px!important",
     },
 }));
 
@@ -392,7 +394,7 @@ export default function Explorer({ share }) {
                 )}
             </div>
         ),
-        [dirList, fileList]
+        [dirList, fileList, classes]
     );
 
     const view = viewMethod === "list" ? listView : normalView;
