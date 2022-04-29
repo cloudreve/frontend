@@ -134,6 +134,7 @@ export default function TaskList({
     const [sorter, setSorter] = useState(
         Auth.GetPreferenceWithDefault("task_sorter", "default")
     );
+    const [refreshList, setRefreshList] = useState(false);
 
     const handleActionClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -216,11 +217,20 @@ export default function TaskList({
                         useAvgSpeed={useAvgSpeed}
                         uploader={uploader}
                         filter={filters[filter]}
+                        onRefresh={() => setRefreshList((r) => !r)}
                     />
                 )}
             />
         );
-    }, [classes, taskList, useAvgSpeed, fullScreen, filter, sorter]);
+    }, [
+        classes,
+        taskList,
+        useAvgSpeed,
+        fullScreen,
+        filter,
+        sorter,
+        refreshList,
+    ]);
 
     return (
         <>

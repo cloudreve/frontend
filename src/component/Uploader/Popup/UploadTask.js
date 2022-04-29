@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Divider,
     Grow,
@@ -154,7 +154,7 @@ export default function UploadTask({
     onCancel,
     onClose,
     selectFile,
-    filter,
+    onRefresh,
 }) {
     const classes = useStyles();
     const theme = useTheme();
@@ -175,6 +175,12 @@ export default function UploadTask({
     const toggleDetail = (event, newExpanded) => {
         setExpanded(!!newExpanded);
     };
+
+    useEffect(() => {
+        if (status >= Status.finished) {
+            onRefresh();
+        }
+    }, [status]);
 
     const statusText = useMemo(() => {
         const parent = filename(uploader.task.dst);
@@ -309,8 +315,6 @@ export default function UploadTask({
         e.stopPropagation();
     };
 
-    const show = useMemo(() => filter(uploader), [filter, status, uploader]);
-
     const secondaryAction = useMemo(() => {
         if (!taskHover && !fullScreen) {
             return <></>;
@@ -376,57 +380,44 @@ export default function UploadTask({
     }, [uploader, fullScreen]);
 
     return (
-        show && (
-            <>
-                <ExpansionPanel
-                    square
-                    expanded={expanded}
-                    onChange={toggleDetail}
+        <>
+            <ExpansionPanel square expanded={expanded} onChange={toggleDetail}>
+                <ExpansionPanelSummary
+                    aria-controls="panel1d-content"
+                    id="panel1d-header"
                 >
-                    <ExpansionPanelSummary
-                        aria-controls="panel1d-content"
-                        id="panel1d-header"
+                    <div
+                        className={classes.progressContainer}
+                        onMouseLeave={() => setTaskHover(false)}
+                        onMouseOver={() => setTaskHover(true)}
                     >
-                        <div
-                            className={classes.progressContainer}
-                            onMouseLeave={() => setTaskHover(false)}
-                            onMouseOver={() => setTaskHover(true)}
-                        >
-                            {progressBar}
-                            <ListItem
-                                className={classes.progressContent}
-                                button
-                            >
-                                {fileIcon}
-                                <ListItemText
-                                    className={classes.listAction}
-                                    primary={
-                                        <div
-                                            className={
-                                                classes.fileNameContainer
-                                            }
-                                        >
-                                            <div className={classes.wordBreak}>
-                                                {uploader.task.name}
-                                            </div>
-                                            <div>{resumeLabel}</div>
-                                            <div>{continueLabel}</div>
-                                        </div>
-                                    }
-                                    secondary={
+                        {progressBar}
+                        <ListItem className={classes.progressContent} button>
+                            {fileIcon}
+                            <ListItemText
+                                className={classes.listAction}
+                                primary={
+                                    <div className={classes.fileNameContainer}>
                                         <div className={classes.wordBreak}>
-                                            {statusText}
+                                            {uploader.task.name}
                                         </div>
-                                    }
-                                />
-                                {secondaryAction}
-                            </ListItem>
-                        </div>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>{taskDetail}</ExpansionPanelDetails>
-                </ExpansionPanel>
-                <Divider />
-            </>
-        )
+                                        <div>{resumeLabel}</div>
+                                        <div>{continueLabel}</div>
+                                    </div>
+                                }
+                                secondary={
+                                    <div className={classes.wordBreak}>
+                                        {statusText}
+                                    </div>
+                                }
+                            />
+                            {secondaryAction}
+                        </ListItem>
+                    </div>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>{taskDetail}</ExpansionPanelDetails>
+            </ExpansionPanel>
+            <Divider />
+        </>
     );
 }
