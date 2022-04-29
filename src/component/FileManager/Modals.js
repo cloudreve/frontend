@@ -534,6 +534,13 @@ class ModalsCompoment extends Component {
         this.setState({ [name]: event.target.checked });
     };
 
+    copySource = () => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(this.state.source);
+            this.props.toggleSnackbar("top", "right", "链接已复制", "info");
+        }
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -564,6 +571,9 @@ class ModalsCompoment extends Component {
                         </form>
                     </DialogContent>
                     <DialogActions>
+                        <Button onClick={this.copySource} color="secondary">
+                            复制
+                        </Button>
                         <Button onClick={this.onClose}>关闭</Button>
                     </DialogActions>
                 </Dialog>

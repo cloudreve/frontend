@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import {
     Button,
     Checkbox,
@@ -113,6 +113,7 @@ export default function CreatShare(props) {
         [dispatch]
     );
 
+    const lastSubmit = useRef(null);
     const [expanded, setExpanded] = React.useState(false);
     const [shareURL, setShareURL] = React.useState("");
     const [values, setValues] = React.useState({
@@ -183,10 +184,11 @@ export default function CreatShare(props) {
 
     const senLink = () => {
         if (navigator.share) {
-            navigator.share({
-                title: props.selected[0].name,
-                url: shareURL,
-            });
+            let text = `我向你分享了：${props.selected[0].name} 链接：${shareURL}`;
+            if (lastSubmit.current && lastSubmit.current.password) {
+                text += `密码：${lastSubmit.current.password}`;
+            }
+            navigator.share({ text });
         } else if (navigator.clipboard) {
             navigator.clipboard.writeText(shareURL);
             ToggleSnackbar("top", "right", "分享链接已复制", "info");
@@ -204,6 +206,7 @@ export default function CreatShare(props) {
             expire: values.expires,
             preview: shareOption.preview,
         };
+        lastSubmit.current = submitFormBody;
 
         API.post("/share", submitFormBody)
             .then((response) => {
