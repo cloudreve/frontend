@@ -538,7 +538,7 @@ export default function GroupForm(props) {
                                         multiline
                                         type={"number"}
                                         inputProps={{
-                                            min: 1,
+                                            min: 0,
                                             step: 1,
                                         }}
                                         value={
@@ -549,7 +549,8 @@ export default function GroupForm(props) {
                                         )}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        允许用户单次批量创建的离线下载链接的最大数量
+                                        允许用户同时进行的离线下载任务数量，填写为
+                                        0 或留空表示不限制。
                                     </FormHelperText>
                                 </FormControl>
                             </div>

@@ -450,19 +450,32 @@ class ModalsCompoment extends Component {
         e.preventDefault();
         this.props.setModalsLoading(true);
         API.post("/aria2/url", {
-            url: this.state.downloadURL,
+            url: this.state.downloadURL.split("\n"),
             dst:
                 this.state.selectedPath === "//"
                     ? "/"
                     : this.state.selectedPath,
         })
-            .then(() => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    "任务已创建",
-                    "success"
-                );
+            .then((response) => {
+                const failed = response.data
+                    .filter((r) => r.code !== 0)
+                    .map((r) => (r.msg + r.error ? r.error : ""));
+                if (failed.length > 0) {
+                    this.props.toggleSnackbar(
+                        "top",
+                        "right",
+                        `${failed.length} 个任务创建失败：${failed.join(",")}`,
+                        "warning"
+                    );
+                } else {
+                    this.props.toggleSnackbar(
+                        "top",
+                        "right",
+                        "任务已创建",
+                        "success"
+                    );
+                }
+
                 this.onClose();
                 this.props.setModalsLoading(false);
             })
@@ -864,9 +877,10 @@ class ModalsCompoment extends Component {
                                 label="文件地址"
                                 autoFocus
                                 fullWidth
+                                multiline
                                 id="downloadURL"
                                 onChange={this.handleInputChange}
-                                placeholder="输入文件下载地址，支持 HTTP(s)/FTP/磁力链"
+                                placeholder="输入文件下载地址，一行一个，支持 HTTP(s)/FTP/磁力链"
                             />
                         </DialogContentText>
                     </DialogContent>
