@@ -534,7 +534,7 @@ export default function DownloadingCard(props) {
                             color="secondary"
                             onClick={() =>
                                 history.push(
-                                    "/#/home?path=" +
+                                    "/home?path=" +
                                         encodeURIComponent(task.dst)
                                 )
                             }
