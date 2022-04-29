@@ -21,6 +21,7 @@ import {
     setSelectedTarget,
     toggleSnackbar,
 } from "../../redux/explorer";
+import useDragScrolling from "./DnD/Scrolling";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -141,6 +142,11 @@ export default function ObjectIcon(props) {
         return false;
     };
 
+    const {
+        addEventListenerForWindow,
+        removeEventListenerForWindow,
+    } = useDragScrolling();
+
     const [{ isDragging }, drag, preview] = useDrag({
         item: {
             object: props.file,
@@ -148,7 +154,11 @@ export default function ObjectIcon(props) {
             selected: [...selected],
             viewMethod: viewMethod,
         },
+        begin: () => {
+            addEventListenerForWindow();
+        },
         end: (item, monitor) => {
+            removeEventListenerForWindow();
             const dropResult = monitor.getDropResult();
             if (item && dropResult) {
                 if (dropResult.folder) {

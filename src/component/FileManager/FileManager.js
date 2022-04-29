@@ -96,10 +96,11 @@ class FileManager extends Component {
                         isShare={this.props.isShare}
                         share={this.props.share}
                     />
-                    <div className={classes.explorer}>
+                    <div className={classes.explorer} id={"explorer-container"}>
                         <Explorer share={this.props.share} />
                         <PaginationFooter />
                     </div>
+
                     <DragLayer />
                 </DndProvider>
                 <SideDrawer />

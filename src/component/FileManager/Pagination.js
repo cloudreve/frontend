@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { Pagination } from "@material-ui/lab";
+import CustomPaginationItem from "./PaginationItem";
 import { setPagination } from "../../redux/viewUpdate/action";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +36,7 @@ export default function PaginationFooter() {
         return (
             <div className={classes.root}>
                 <Pagination
+                    renderItem={(item) => <CustomPaginationItem {...item} />}
                     color="secondary"
                     count={count}
                     page={pagination.page}
