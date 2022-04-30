@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Zoom from "@material-ui/core/Zoom";
 
-function AutoHidden({ children, enable, hide = false }) {
+function AutoHidden({ children, enable, hide = false, element = null }) {
     const [hidden, setHidden] = useState(false);
-
     let prev = window.scrollY;
     let lastUpdate = window.scrollY;
     const show = 50;
@@ -11,22 +10,24 @@ function AutoHidden({ children, enable, hide = false }) {
     useEffect(() => {
         const handleNavigation = (e) => {
             const window = e.currentTarget;
+            const current = element ? element.scrollTop : window.scrollY;
 
-            if (prev > window.scrollY) {
-                if (lastUpdate - window.scrollY > show) {
-                    lastUpdate = window.scrollY;
+            if (prev > current) {
+                if (lastUpdate - current > show) {
+                    lastUpdate = current;
                     setHidden(false);
                 }
-            } else if (prev < window.scrollY) {
-                if (window.scrollY - lastUpdate > show) {
-                    lastUpdate = window.scrollY;
+            } else if (prev < current) {
+                if (current - lastUpdate > show) {
+                    lastUpdate = current;
                     setHidden(true);
                 }
             }
-            prev = window.scrollY;
+            prev = current;
         };
         if (enable) {
-            window.addEventListener("scroll", (e) => handleNavigation(e));
+            const target = element ? element : window;
+            target.addEventListener("scroll", (e) => handleNavigation(e));
         }
         // eslint-disable-next-line
     }, [enable]);

@@ -11,14 +11,14 @@ import { useLocation } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     root: {
         position: "fixed",
-        bottom: 20,
+        bottom: 23,
         /* left: 8px; */
         background: theme.palette.background.paper,
-        borderRadius: 8,
+        borderRadius: 24,
         boxShadow:
             " 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%)",
         padding: "8px 4px 8px 4px",
-        marginLeft: 8,
+        marginLeft: 20,
     },
     placeholder: {
         marginTop: 80,
@@ -56,11 +56,19 @@ export default function PaginationFooter() {
                 {!isMobile && !isSharePage && (
                     <div className={classes.placeholder} />
                 )}
-                <AutoHidden enable>
+                <AutoHidden
+                    enable
+                    element={
+                        isMobile || isSharePage
+                            ? null
+                            : document.querySelector("#explorer-container")
+                    }
+                >
                     <div className={classes.root}>
                         <Pagination
                             renderItem={(item) => (
                                 <CustomPaginationItem
+                                    count={count}
                                     isMobile={isMobile}
                                     {...item}
                                 />

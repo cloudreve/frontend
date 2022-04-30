@@ -34,10 +34,16 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         padding: "10px",
+        [theme.breakpoints.up("sm")]: {
+            height: "calc(100vh - 113px)",
+        },
     },
     rootTable: {
         padding: "0px",
         backgroundColor: theme.palette.background.paper.white,
+        [theme.breakpoints.up("sm")]: {
+            height: "calc(100vh - 113px)",
+        },
     },
     typeHeader: {
         margin: "10px 25px",
@@ -72,7 +78,10 @@ const useStyles = makeStyles((theme) => ({
         height: "100%",
         width: "100%",
     },
-    rootShare: {},
+    rootShare: {
+        height: "100%",
+        minHeight: 500,
+    },
     visuallyHidden: {
         border: 0,
         clip: "rect(0 0 0 0)",
@@ -407,6 +416,7 @@ export default function Explorer({ share }) {
                 {
                     [classes.root]: viewMethod !== "list",
                     [classes.rootTable]: viewMethod === "list",
+                    [classes.rootShare]: share,
                 },
                 classes.button
             )}

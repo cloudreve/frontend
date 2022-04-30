@@ -33,6 +33,13 @@ export default function CustomPaginationItem(props) {
             props.type === "end-ellipsis" ||
             props.type === "page")
     ) {
+        if (props.selected) {
+            return (
+                <div>
+                    {props.page} / {props.count}
+                </div>
+            );
+        }
         return <></>;
     }
     return (
