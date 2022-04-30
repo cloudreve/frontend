@@ -70,7 +70,7 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
             </FormControl>{" "}
             <div
                 className={classes.captchaImageContainer}
-                title="点击刷新验证码"
+                title={t("login.clickToRefresh")}
             >
                 {captchaData === null && (
                     <Placeholder />

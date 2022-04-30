@@ -24,6 +24,7 @@
     "browserNotSupport": "Not supported by current browser or environment.",
     "success": "Sign in successful",
     "title": "Sign in to {{title}}",
-    "continue": "Next"
+    "continue": "Next",
+    "clickToRefresh": "Click to refresh"
   }
 }

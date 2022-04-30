@@ -24,6 +24,7 @@
     "browserNotSupport": "当前浏览器或环境不支持",
     "success": "登录成功",
     "title": "登录 {{title}}",
-    "continue": "下一步"
+    "continue": "下一步",
+    "clickToRefresh": "点击刷新验证码"
   }
 }
