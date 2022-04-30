@@ -68,14 +68,16 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
                     autoComplete
                 />
             </FormControl>{" "}
-            <div>
+            <div
+                className={classes.captchaImageContainer}
+                title="点击刷新验证码"
+            >
                 {captchaData === null && (
-                    <div className={classes.captchaPlaceholder}>
-                        <Placeholder />
-                    </div>
+                    <Placeholder />
                 )}
                 {captchaData !== null && (
                     <img
+                        className={classes.captchaImage}
                         src={captchaData}
                         alt="captcha"
                         onClick={refreshCaptcha}

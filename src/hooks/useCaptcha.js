@@ -9,9 +9,20 @@ export const useStyle = makeStyles((theme) => ({
     captchaContainer: {
         display: "flex",
         marginTop: "10px",
+        alignItems: 'center',
         [theme.breakpoints.down("sm")]: {
             display: "block",
         },
+    },
+    captchaImageContainer: {
+        cursor: 'pointer',
+        marginLeft: "1rem",
+        [theme.breakpoints.down("sm")]: {
+            marginLeft: 0,
+        },
+    },
+    captchaImage: {
+        borderRadius: 4,
     },
 }));
 
