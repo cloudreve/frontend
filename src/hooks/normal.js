@@ -11,11 +11,13 @@ import { FormControl, Input, InputLabel } from "@material-ui/core";
 import Placeholder from "../component/Placeholder/Captcha";
 import { defaultValidate, useStyle } from "./useCaptcha";
 import { toggleSnackbar } from "../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const NormalCaptcha = forwardRef(function NormalCaptcha(
     { captchaRef, setLoading },
     ref
 ) {
+    const { t } = useTranslation();
     const classes = useStyle();
 
     const [captcha, setCaptcha] = useState("");
@@ -38,7 +40,7 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法加载验证码：" + error.message,
+                    t("login.captchaError", { message: error.message }),
                     "error"
                 );
             });
@@ -56,7 +58,7 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
     return (
         <div className={classes.captchaContainer}>
             <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="captcha">验证码</InputLabel>
+                <InputLabel htmlFor="captcha">{t("login.captcha")}</InputLabel>
                 <Input
                     name="captcha"
                     onChange={(e) => setCaptcha(e.target.value)}

@@ -45,7 +45,7 @@ class AppError extends Error {
                 message || i18next.t("unknownError", { ns: "common" });
         }
 
-        this.message += error ? " " + error : "";
+        this.message += error ? ` (${error})` : "";
         this.stack = new Error().stack;
     }
 }

@@ -3,6 +3,7 @@
     "email": "电子邮箱",
     "password": "密码",
     "captcha": "验证码",
+    "captchaError": "Cannot load CAPTCHA: {{message}}",
     "signIn": "登录",
     "signUp": "注册",
     "signUpAccount": "注册账号",

@@ -13,6 +13,8 @@
     "40001": "Wrong format of input parameters ({{message}})",
     "40021": "User not found",
     "40022": "Verification code not correct",
-    "40023": "Login session not exist"
+    "40023": "Login session not exist",
+    "40024": "Cannot initialize WebAuthn",
+    "40025": "Authentication failed"
   }
 }

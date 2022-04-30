@@ -3,6 +3,7 @@
     "email": "Email",
     "password": "Password",
     "captcha": "CAPTCHA",
+    "captchaError": "Cannot load CAPTCHA: {{message}}",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signUpAccount": "Sign up",
