@@ -701,6 +701,19 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
             .filter((value) => value.source_enabled && value.type === "file")
             .map((v) => v.id);
 
+        if (items.length === 0) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    `没有可以生成外链的文件`,
+                    "warning"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
         const user = Auth.GetUser();
         if (items.length > user.group.sourceBatch) {
             dispatch(
@@ -721,14 +734,16 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
                 dispatch(closeAllModals());
                 dispatch(
                     openGetSourceDialog(
-                        response.data
-                            .map(
-                                (res) =>
-                                    `${res.name}: ${res.url}${
-                                        res.error ? res.error : ""
-                                    }`
-                            )
-                            .join("\n")
+                        response.data.length == 1
+                            ? response.data[0].url
+                            : response.data
+                                  .map(
+                                      (res) =>
+                                          `${res.name}: ${res.url}${
+                                              res.error ? res.error : ""
+                                          }`
+                                  )
+                                  .join("\n")
                     )
                 );
             })

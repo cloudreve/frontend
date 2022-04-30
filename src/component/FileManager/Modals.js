@@ -48,10 +48,6 @@ const styles = (theme) => ({
     contentFix: {
         padding: "10px 24px 0px 24px",
     },
-    sources: {
-        overflow: "auto",
-        whiteSpace: "nowrap",
-    },
 });
 
 const mapStateToProps = (state) => {
@@ -553,14 +549,15 @@ class ModalsCompoment extends Component {
                         获取文件外链
                     </DialogTitle>
 
-                    <DialogContent className={classes.sources}>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: this.props.modalsStatus.getSource.replace(
-                                    /\n/g,
-                                    "<br />"
-                                ),
-                            }}
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            inputProps={{ readonly: true }}
+                            label="文件外链"
+                            multiline
+                            value={this.props.modalsStatus.getSource}
+                            variant="outlined"
+                            fullWidth
                         />
                     </DialogContent>
                     <DialogActions>
