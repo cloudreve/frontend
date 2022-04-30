@@ -11,6 +11,7 @@ export const useStyle = makeStyles((theme) => ({
         marginTop: "10px",
         alignItems: 'center',
         [theme.breakpoints.down("sm")]: {
+            marginTop: 0,
             display: "block",
         },
     },
