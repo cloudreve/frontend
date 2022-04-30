@@ -13,7 +13,7 @@ import {
     Paper,
     Typography,
 } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { bufferDecode, bufferEncode } from "../../utils/index";
@@ -22,7 +22,12 @@ import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
 import { ICPFooter } from "../Common/ICPFooter";
 import { useCaptcha } from "../../hooks/useCaptcha";
-import { applyThemes, setSessionStatus, toggleSnackbar } from "../../redux/explorer";
+import {
+    applyThemes,
+    setSessionStatus,
+    toggleSnackbar,
+} from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -87,6 +92,8 @@ function useQuery() {
 }
 
 function LoginForm() {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
     const [loading, setLoading] = useState(false);
@@ -95,7 +102,9 @@ function LoginForm() {
     const [faCode, setFACode] = useState("");
 
     const loginCaptcha = useSelector((state) => state.siteConfig.loginCaptcha);
-    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
+    const registerEnabled = useSelector(
+        (state) => state.siteConfig.registerEnabled
+    );
     const title = useSelector((state) => state.siteConfig.title);
     const authn = useSelector((state) => state.siteConfig.authn);
 
@@ -143,7 +152,7 @@ function LoginForm() {
         SetSessionStatus(true);
 
         history.push("/home");
-        ToggleSnackbar("top", "right", "登录成功", "success");
+        ToggleSnackbar("top", "right", t("login.success"), "success");
 
         localStorage.removeItem("siteConfigCache");
     };
@@ -151,7 +160,12 @@ function LoginForm() {
     const authnLogin = (e) => {
         e.preventDefault();
         if (!navigator.credentials) {
-            ToggleSnackbar("top", "right", "当前浏览器或环境不支持", "warning");
+            ToggleSnackbar(
+                "top",
+                "right",
+                t("login.browserNotSupport"),
+                "warning"
+            );
 
             return;
         }
@@ -261,13 +275,13 @@ function LoginForm() {
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            登录 {title}
+                            {t("login.title", { title })}
                         </Typography>
                         {!useAuthn && (
                             <form className={classes.form} onSubmit={login}>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="email">
-                                        电子邮箱
+                                        {t("login.email")}
                                     </InputLabel>
                                     <Input
                                         id="email"
@@ -283,7 +297,7 @@ function LoginForm() {
                                 </FormControl>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="password">
-                                        密码
+                                        {t("login.password")}
                                     </InputLabel>
                                     <Input
                                         name="password"
@@ -307,7 +321,7 @@ function LoginForm() {
                                     }
                                     className={classes.submit}
                                 >
-                                    登录
+                                    {t("login.signIn")}
                                 </Button>
                             </form>
                         )}
@@ -315,7 +329,7 @@ function LoginForm() {
                             <form className={classes.form}>
                                 <FormControl margin="normal" required fullWidth>
                                     <InputLabel htmlFor="email">
-                                        电子邮箱
+                                        {t("login.email")}
                                     </InputLabel>
                                     <Input
                                         id="email"
@@ -338,17 +352,23 @@ function LoginForm() {
                                     onClick={authnLogin}
                                     className={classes.submit}
                                 >
-                                    下一步
+                                    {t("login.continue")}
                                 </Button>
                             </form>
                         )}
                         <Divider />
                         <div className={classes.link}>
                             <div>
-                                <Link href={"/forget"}>忘记密码</Link>
+                                <Link component={RouterLink} to={"/forget"}>
+                                    {t("login.forgetPassword")}
+                                </Link>
                             </div>
                             <div>
-                            { registerEnabled && <Link href={"/signup"}>注册账号</Link> }
+                                {registerEnabled && (
+                                    <Link component={RouterLink} to={"/signup"}>
+                                        {t("login.signUpAccount")}
+                                    </Link>
+                                )}
                             </div>
                         </div>
 
@@ -368,7 +388,7 @@ function LoginForm() {
                                                 marginRight: 8,
                                             }}
                                         />
-                                        使用外部验证器登录
+                                        {t("login.useFIDO2")}
                                     </>
                                 )}
                                 {useAuthn && (
@@ -378,7 +398,7 @@ function LoginForm() {
                                                 marginRight: 8,
                                             }}
                                         />
-                                        使用密码登录
+                                        {t("login.usePassword")}
                                     </>
                                 )}
                             </Button>
@@ -392,12 +412,12 @@ function LoginForm() {
                         <VpnIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        二步验证
+                        {t("login.2FA")}
                     </Typography>
                     <form className={classes.form} onSubmit={twoFALogin}>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="code">
-                                请输入六位二步验证代码
+                                {t("login.input2FACode")}
                             </InputLabel>
                             <Input
                                 id="code"
@@ -419,7 +439,7 @@ function LoginForm() {
                             disabled={loading}
                             className={classes.submit}
                         >
-                            继续登录
+                            {t("login.continue")}
                         </Button>{" "}
                     </form>{" "}
                     <Divider />

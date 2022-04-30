@@ -30,7 +30,6 @@ export const ICPFooter = () => {
     }
     return (
         <div className={classes.icp}>
-            {`备案号: `}
             <Link
                 href="https://beian.miit.gov.cn/"
                 rel="noopener noreferrer"

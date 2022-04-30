@@ -1,0 +1,18 @@
+{
+  "pageNotFound": "Page not found",
+  "unknownError": "Unknown error",
+  "errLoadingSiteConfig": "Unable to load site configuration: ",
+  "newVersionRefresh": "A new version of the current page is available and ready to be refreshed.",
+  "errorDetails": "Error details",
+  "renderError": "There is an error in the page rendering, please try refreshing this page.",
+  "errors": {
+    "40020": "Wrong password or email address",
+    "40017": "This account has been blocked",
+    "40018": "This account is not activated",
+    "40019": "This feature is not enabled",
+    "40001": "Wrong format of input parameters ({{message}})",
+    "40021": "User not found",
+    "40022": "Verification code not correct",
+    "40023": "Login session not exist"
+  }
+}

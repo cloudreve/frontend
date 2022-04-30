@@ -1,0 +1,19 @@
+{
+  "login": {
+    "email": "电子邮箱",
+    "password": "密码",
+    "captcha": "验证码",
+    "signIn": "登录",
+    "signUp": "注册",
+    "signUpAccount": "注册账号",
+    "useFIDO2": "使用外部验证器登录",
+    "usePassword": "使用密码登录",
+    "forgetPassword": "忘记密码",
+    "2FA": "二步验证",
+    "input2FACode": "请输入六位二步验证代码",
+    "browserNotSupport": "当前浏览器或环境不支持",
+    "success": "登录成功",
+    "title": "登录 {{title}}",
+    "continue": "下一步"
+  }
+}

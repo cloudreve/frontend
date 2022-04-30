@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core";
+import { withTranslation } from "react-i18next";
 
 const styles = {
     h1: {
@@ -18,7 +19,6 @@ class ErrorBoundary extends React.Component {
     }
 
     static getDerivedStateFromError() {
-        // 更新 state 使下一次渲染能够显示降级后的 UI
         return { hasError: true };
     }
 
@@ -30,20 +30,17 @@ class ErrorBoundary extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         if (this.state.hasError) {
-            // 你可以自定义降级后的 UI 并渲染
             return (
                 <>
                     <h1 className={classes.h1}>:(</h1>
-                    <h2 className={classes.h2}>
-                        页面渲染出现错误，请尝试刷新此页面。
-                    </h2>
+                    <h2 className={classes.h2}>{t("renderError")}</h2>
                     {this.state.error &&
                         this.state.errorInfo &&
                         this.state.errorInfo.componentStack && (
                             <details>
-                                <summary>错误详情</summary>
+                                <summary>{t("errorDetails")}</summary>
                                 <pre>
                                     <code>{this.state.error.toString()}</code>
                                 </pre>
@@ -62,4 +59,4 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-export default withStyles(styles)(ErrorBoundary);
+export default withTranslation(["common"])(withStyles(styles)(ErrorBoundary));

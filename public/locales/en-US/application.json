@@ -1,0 +1,19 @@
+{
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "captcha": "CAPTCHA",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signUpAccount": "Sign up",
+    "useFIDO2": "Use Hardware Authenticator",
+    "usePassword": "Use Password",
+    "forgetPassword": "Forgot password?",
+    "2FA": "2FA Verification",
+    "input2FACode": "Please enter the six-digit 2FA verification code",
+    "browserNotSupport": "Not supported by current browser or environment",
+    "success": "Sign in successful",
+    "title": "Sign in {{title}}",
+    "continue": "Continue"
+  }
+}

@@ -11,16 +11,16 @@ import { UpdateSiteConfig } from "./middleware/Init";
 import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
 import { createBrowserHistory } from "history";
 import { ConnectedRouter, routerMiddleware } from "connected-react-router";
+import i18next from "./i18n";
 
 const Admin = React.lazy(() => import("./Admin"));
 
 if (window.location.hash !== "") {
     window.location.href = window.location.hash.split("#")[1];
 }
-
 serviceWorker.register({
     onUpdate: (registration) => {
-        alert("当前页面有新版本可用，准备刷新。");
+        alert(i18next.t("newVersionRefresh", { ns: "common" }));
         if (registration && registration.waiting) {
             registration.waiting.postMessage({ type: "SKIP_WAITING" });
         }
@@ -41,21 +41,21 @@ const store = createStore(cloureveApp(history), reduxEnhance);
 UpdateSiteConfig(store);
 
 ReactDOM.render(
-    <ErrorBoundary>
-        <Provider store={store}>
-            <ConnectedRouter history={history}>
-                <Switch>
-                    <Route path="/admin">
-                        <Suspense fallback={"Loading..."}>
+    <Suspense fallback={"Loading..."}>
+        <ErrorBoundary>
+            <Provider store={store}>
+                <ConnectedRouter history={history}>
+                    <Switch>
+                        <Route path="/admin">
                             <Admin />
-                        </Suspense>
-                    </Route>
-                    <Route exact path="">
-                        <App />
-                    </Route>
-                </Switch>
-            </ConnectedRouter>
-        </Provider>
-    </ErrorBoundary>,
+                        </Route>
+                        <Route exact path="">
+                            <App />
+                        </Route>
+                    </Switch>
+                </ConnectedRouter>
+            </Provider>
+        </ErrorBoundary>
+    </Suspense>,
     document.getElementById("root")
 );

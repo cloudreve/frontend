@@ -6,6 +6,7 @@ import {
     setSiteConfig,
     toggleSnackbar,
 } from "../redux/explorer";
+import i18next from "../i18n";
 
 const initUserConfig = (siteConfig) => {
     if (siteConfig.user !== undefined && !siteConfig.user.anonymous) {
@@ -81,7 +82,8 @@ export async function UpdateSiteConfig(store) {
                 toggleSnackbar(
                     "top",
                     "right",
-                    "无法加载站点配置：" + error.message,
+                    i18next.t("errLoadingSiteConfig", { ns: "common" }) +
+                        error.message,
                     "error"
                 )
             );

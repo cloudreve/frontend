@@ -33,6 +33,7 @@ import PageLoading from "./component/Placeholder/PageLoading";
 import CodeViewer from "./component/Viewer/Code";
 import MusicPlayer from "./component/FileManager/MusicPlayer";
 import EpubViewer from "./component/Viewer/Epub";
+import { useTranslation } from "react-i18next";
 
 const PDFViewer = React.lazy(() =>
     import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
@@ -42,6 +43,7 @@ export default function App() {
     const themeConfig = useSelector((state) => state.siteConfig.theme);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+    const { t } = useTranslation();
 
     const theme = React.useMemo(() => {
         themeConfig.palette.type = prefersDarkMode ? "dark" : "light";
@@ -59,6 +61,13 @@ export default function App() {
                         themeConfig.palette.type === "dark"
                             ? lighten(themeConfig.palette.primary.main, 0.3)
                             : themeConfig.palette.primary.main,
+                },
+            },
+            overrides: {
+                MuiButton: {
+                    root: {
+                        textTransform: "none",
+                    },
                 },
             },
         });
@@ -164,11 +173,19 @@ export default function App() {
                                 <Tasks />
                             </AuthRoute>
 
-                            <NoAuthRoute exact path={`${path}login`} isLogin={isLogin}>
+                            <NoAuthRoute
+                                exact
+                                path={`${path}login`}
+                                isLogin={isLogin}
+                            >
                                 <LoginForm />
                             </NoAuthRoute>
 
-                            <NoAuthRoute exact path={`${path}signup`} isLogin={isLogin}>
+                            <NoAuthRoute
+                                exact
+                                path={`${path}signup`}
+                                isLogin={isLogin}
+                            >
                                 <Register />
                             </NoAuthRoute>
 
@@ -215,7 +232,7 @@ export default function App() {
                             </Route>
 
                             <Route path="*">
-                                <NotFound msg={"页面不存在"} />
+                                <NotFound  msg={t("pageNotFound", { ns: "common" })} />
                             </Route>
                         </Switch>
                     </main>
