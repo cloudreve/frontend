@@ -180,6 +180,22 @@ export default function App() {
                             >
                                 <LoginForm />
                             </NoAuthRoute>
+                            
+                            <NoAuthRoute
+                                exact
+                                path={`${path}forget`}
+                                isLogin={isLogin}
+                            >
+                                <Reset />
+                            </NoAuthRoute>
+                            
+                            <NoAuthRoute
+                                exact
+                                path={`${path}reset`}
+                                isLogin={isLogin}
+                            >
+                                <ResetForm />
+                            </NoAuthRoute>
 
                             <NoAuthRoute
                                 exact
