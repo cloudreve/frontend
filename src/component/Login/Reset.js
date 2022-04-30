@@ -16,6 +16,8 @@ import API from "../../middleware/Api";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useCaptcha } from "../../hooks/useCaptcha";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
+import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -62,12 +64,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Reset() {
+    const { t } = useTranslation();
+
     const [input, setInput] = useState({
         email: "",
     });
     const [loading, setLoading] = useState(false);
-    const forgetCaptcha = useSelector((state) => state.siteConfig.forgetCaptcha);
-    const registerEnabled = useSelector((state) => state.siteConfig.registerEnabled);
+    const forgetCaptcha = useSelector(
+        (state) => state.siteConfig.forgetCaptcha
+    );
+    const registerEnabled = useSelector(
+        (state) => state.siteConfig.registerEnabled
+    );
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -106,7 +114,7 @@ function Reset() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "密码重置邮件已发送，请注意查收",
+                    t("login.resetEmailSent"),
                     "success"
                 );
             })
@@ -126,11 +134,13 @@ function Reset() {
                     <KeyIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    找回密码
+                    {t("login.findMyPassword")}
                 </Typography>
                 <form className={classes.form} onSubmit={submit}>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">注册邮箱</InputLabel>
+                        <InputLabel htmlFor="email">
+                            {t("login.email")}
+                        </InputLabel>
                         <Input
                             id="email"
                             type="email"
@@ -152,19 +162,23 @@ function Reset() {
                         }
                         className={classes.submit}
                     >
-                        发送密码重置邮件
+                        {t("login.sendMeAnEmail")}
                     </Button>{" "}
                 </form>{" "}
                 <Divider />
                 <div className={classes.link}>
                     <div>
-                        <Link href={"/login"}>返回登录</Link>
+                        <Link component={RouterLink} to={"/login"}>
+                            {t("login.backToSingIn")}
+                        </Link>
                     </div>
-                    { registerEnabled && (
-                        <div>
-                            <Link href={"/signup"}>注册账号</Link>
-                        </div>
-                    )}
+                    <div>
+                        {registerEnabled && (
+                            <Link component={RouterLink} to={"/signup"}>
+                                {t("login.signUpAccount")}
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </Paper>
         </div>

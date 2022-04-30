@@ -6,15 +6,21 @@
   "errorDetails": "Error details",
   "renderError": "There is an error in the page rendering, please try refreshing this page.",
   "errors": {
-    "40020": "Wrong password or email address",
-    "40017": "This account has been blocked",
-    "40018": "This account is not activated",
-    "40019": "This feature is not enabled",
-    "40001": "Wrong format of input parameters ({{message}})",
-    "40021": "User not found",
-    "40022": "Verification code not correct",
-    "40023": "Login session not exist",
-    "40024": "Cannot initialize WebAuthn",
-    "40025": "Authentication failed"
+    "40020": "Wrong password or email address.",
+    "40017": "This account has been blocked.",
+    "40018": "This account is not activated.",
+    "40019": "This feature is not enabled.",
+    "40001": "Wrong format of input parameters ({{message}}).",
+    "40021": "User not found.",
+    "40022": "Verification code not correct.",
+    "40023": "Login session not exist.",
+    "40024": "Cannot initialize WebAuthn.",
+    "40025": "Authentication failed.",
+    "40026": "CAPTCHA code is not correct.",
+    "40027": "Verification failed, please refresh the page and retry.",
+    "40028": "Mail delivery failed.",
+    "40029": "This link is invalid.",
+    "40030": "This link is expired.",
+    "50001": "Database operation failed. ({{message}})"
   }
 }
