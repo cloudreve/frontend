@@ -31,6 +31,57 @@
     "sinUpTitle": "注册 {{title}}",
     "activateTitle": "邮件激活",
     "activateDescription": "一封激活邮件已经发送至您的邮箱，请访问邮件中的链接以继续完成注册。",
-    "continue": "下一步"
+    "continue": "下一步",
+    "logout": "退出登录",
+    "loggedOut": "您已退出登录"
+  },
+  "navbar": {
+    "myFiles": "我的文件",
+    "myShare": "我的分享",
+    "remoteDownload": "离线下载",
+    "connect": "连接",
+    "taskQueue": "任务队列",
+    "setting": "个人设置",
+    "videos": "视频",
+    "photos": "图片",
+    "music": "音乐",
+    "documents": "文档",
+    "addATag": "添加标签...",
+    "addTagDialog": {
+      "selectFolder": "选择目录",
+      "fileSelector": "文件分类",
+      "folderLink": "目录快捷方式",
+      "tagName": "标签名",
+      "matchPattern": "文件名匹配规则",
+      "matchPatternDescription": "你可以使用 <0>*</0> 作为通配符。比如 <1>*.png</1> 表示匹配 png 格式图像。多行规则间会以 “或” 的关系进行运算。",
+      "icon": "图标：",
+      "color": "颜色：",
+      "folderPath": "目录路径"
+    },
+    "storage": "存储空间",
+    "storageDetail": "已使用 {{used}}, 共 {{total}}",
+    "notLoginIn": "未登录",
+    "visitor": "游客",
+    "objectsSelected": "{{num}} 个对象",
+    "searchPlaceholder": "搜索...",
+    "searchInFiles": "在我的文件中搜索 <0>{{name}}</0>",
+    "searchInFolders": "在当前目录中搜索 <0>{{name}}</0>",
+    "searchInShares": "在全站分享中搜索 <0>{{name}}</0>",
+    "backToHomepage": "返回主页",
+    "toDarkMode": "切换到深色模式",
+    "toLightMode": "切换到浅色模式",
+    "myProfile": "个人主页",
+    "dashboard": "管理面板",
+    "exceedQuota": "您的已用容量已超过容量配额，请尽快删除多余文件"
+  },
+  "fileManager": {
+    "open": "打开",
+    "download": "下载",
+    "batchDownload": "打包下载",
+    "share": "分享",
+    "rename": "重命名",
+    "move": "移动",
+    "delete": "删除",
+    "moreActions": "更多操作"
   }
 }

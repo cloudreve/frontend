@@ -1,12 +1,13 @@
-import React, { useState, useCallback } from "react";
-import { makeStyles, useTheme } from "@material-ui/core";
+import React, { useCallback, useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    CircularProgress,
+    makeStyles,
+    useTheme,
 } from "@material-ui/core";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
@@ -35,6 +36,7 @@ import {
     Triangle,
 } from "mdi-material-ui";
 import { toggleSnackbar } from "../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -93,6 +95,7 @@ const icons = {
 
 export default function AddTag(props) {
     const theme = useTheme();
+    const { t } = useTranslation();
 
     const [value, setValue] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -229,7 +232,9 @@ export default function AddTag(props) {
                 onClose={() => setPathSelectDialog(false)}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                    {t("navbar.addTagDialog.selectFolder")}
+                </DialogTitle>
                 <PathSelector
                     presentPath="/"
                     selected={[]}
@@ -238,14 +243,14 @@ export default function AddTag(props) {
 
                 <DialogActions>
                     <Button onClick={() => setPathSelectDialog(false)}>
-                        取消
+                        {t("common:cancel")}
                     </Button>
                     <Button
                         onClick={selectPath}
                         color="primary"
                         disabled={selectedPath === ""}
                     >
-                        确定
+                        {t("common:ok")}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -257,14 +262,14 @@ export default function AddTag(props) {
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    <Tab label="文件分类" />
-                    <Tab label="目录快捷方式" />
+                    <Tab label={t("navbar.addTagDialog.fileSelector")} />
+                    <Tab label={t("navbar.addTagDialog.folderLink")} />
                 </Tabs>
             </AppBar>
             {value === 0 && (
                 <DialogContent className={classes.dialogContent}>
                     <TextField
-                        label="标签名"
+                        label={t("navbar.addTagDialog.tagName")}
                         id="filled-name"
                         value={input["tagName"]}
                         onChange={handleInputChange("tagName")}
@@ -273,21 +278,21 @@ export default function AddTag(props) {
                     />
                     <TextField
                         id="filled-name"
-                        label="文件名匹配规则"
+                        label={t("navbar.addTagDialog.matchPattern")}
                         value={input["filename"]}
                         onChange={handleInputChange("filename")}
                         fullWidth
-                        rows="4"
                         multiline
-                        variant="filled"
                         className={classes.textField}
                     />
                     <Typography variant="caption" color={"textSecondary"}>
-                        你可以使用<code>*</code>作为通配符。比如
-                        <code>*.png</code>
-                        表示匹配png格式图像。多行规则间会以“或”的关系进行运算。
+                        <Trans i18nKey="navbar.addTagDialog.matchPatternDescription">
+                            {[<code key={0} />, <code key={1} />]}
+                        </Trans>
                     </Typography>
-                    <FormLabel className={classes.marginTop}>图标：</FormLabel>
+                    <FormLabel className={classes.marginTop}>
+                        {t("navbar.addTagDialog.icon")}
+                    </FormLabel>
                     <div className={classes.scroll}>
                         <ToggleButtonGroup
                             size="small"
@@ -303,7 +308,9 @@ export default function AddTag(props) {
                             ))}
                         </ToggleButtonGroup>
                     </div>
-                    <FormLabel className={classes.marginTop}>颜色：</FormLabel>
+                    <FormLabel className={classes.marginTop}>
+                        {t("navbar.addTagDialog.color")}
+                    </FormLabel>
                     <div className={classes.scroll}>
                         <ToggleButtonGroup
                             size="small"
@@ -344,7 +351,7 @@ export default function AddTag(props) {
             {value === 1 && (
                 <DialogContent className={classes.dialogContent}>
                     <TextField
-                        label="标签名"
+                        label={t("navbar.addTagDialog.tagName")}
                         id="filled-name"
                         value={input["tagName"]}
                         onChange={handleInputChange("tagName")}
@@ -353,7 +360,7 @@ export default function AddTag(props) {
                     />
                     <div className={classes.pathSelect}>
                         <TextField
-                            label="目录路径"
+                            label={t("navbar.addTagDialog.folderPath")}
                             id="filled-name"
                             value={input["path"]}
                             onChange={handleInputChange("path")}
@@ -369,13 +376,13 @@ export default function AddTag(props) {
                             color="primary"
                             variant="outlined"
                         >
-                            选择
+                            {t("common:select")}
                         </Button>
                     </div>
                 </DialogContent>
             )}
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>{t("common:cancel")}</Button>
                 <div className={classes.wrapper}>
                     <Button
                         onClick={submit}
@@ -389,7 +396,7 @@ export default function AddTag(props) {
                                 (input.tagName === "" || input.path === ""))
                         }
                     >
-                        确定
+                        {t("common:ok")}
                         {loading && (
                             <CircularProgress
                                 size={24}

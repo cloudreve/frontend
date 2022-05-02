@@ -7,6 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Auth from "../../middleware/Auth";
 import classNames from "classnames";
 import { toggleDaylightMode } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     icon: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DarkModeSwitcher = ({ position }) => {
+    const { t } = useTranslation();
     const ThemeType = useSelector(
         (state) => state.siteConfig.theme.palette.type
     );
@@ -32,7 +34,9 @@ const DarkModeSwitcher = ({ position }) => {
     const classes = useStyles();
     return (
         <Tooltip
-            title={isDayLight ? "切换到深色模式" : "切换到浅色模式"}
+            title={
+                isDayLight ? t("navbar.toDarkMode") : t("navbar.toLightMode")
+            }
             placement="bottom"
         >
             <IconButton

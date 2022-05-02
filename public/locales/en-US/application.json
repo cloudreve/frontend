@@ -31,6 +31,57 @@
     "sinUpTitle": "Sign up to {{title}}",
     "activateTitle": "Activate your account",
     "activateDescription": "An activation email has been sent to your email address, please visit the link in the email to complete your sign-up.",
-    "continue": "Next"
+    "continue": "Next",
+    "logout": "Sign out",
+    "loggedOut": "You are signed out now."
+  },
+  "navbar": {
+    "myFiles": "My Files",
+    "myShare": "Shared",
+    "remoteDownload": "Remote Download",
+    "connect": "Connect",
+    "taskQueue": "Task Queue",
+    "setting": "Settings",
+    "videos": "Videos",
+    "photos": "Photos",
+    "music": "Music",
+    "documents": "Documents",
+    "addATag": "Add a tag...",
+    "addTagDialog": {
+      "selectFolder": "Select a Folder",
+      "fileSelector": "File Selector",
+      "folderLink": "Folder Shortcut",
+      "tagName": "Tag name",
+      "matchPattern": "Match pattern(s) of file name",
+      "matchPatternDescription": "You can use <0>*</0> as a wildcard. For example, <1>*.png</1> means match png format images. Multi-line rules will operate in an \"or\" relationship with each other.",
+      "icon": "Icon:",
+      "color": "Color:",
+      "folderPath": "Path to the folder"
+    },
+    "storage": "Storage",
+    "storageDetail": "{{used}} of {{total}} used",
+    "notLoginIn": "Not sign in",
+    "visitor": "Anonymous",
+    "objectsSelected": "{{num}} objects selected",
+    "searchPlaceholder": "Search...",
+    "searchInFiles": "Search <0>{{name}}</0> in my files",
+    "searchInFolders": "Search <0>{{name}}</0> under current folder",
+    "searchInShares": "Search <0>{{name}}</0> in other users’ shares",
+    "backToHomepage": "Back to homepage",
+    "toDarkMode": "Switch to dark theme",
+    "toLightMode": "Switch to light theme",
+    "myProfile": "My profile",
+    "dashboard": "Dashboard",
+    "exceedQuota": "Your used capacity has exceeded the quota, please delete the extra files."
+  },
+  "fileManager": {
+    "open": "Open",
+    "download": "Download",
+    "batchDownload": "Download in batch",
+    "share": "Share",
+    "rename": "Rename",
+    "move": "Move",
+    "delete": "Remove",
+    "moreActions": "More actions..."
   }
 }

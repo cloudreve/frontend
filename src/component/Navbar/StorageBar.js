@@ -15,6 +15,8 @@ import {
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { withRouter } from "react-router";
 import { toggleSnackbar } from "../../redux/explorer";
+import { Link as RouterLink } from "react-router-dom";
+import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
     return {
@@ -108,7 +110,7 @@ class StorageBarCompoment extends Component {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        "您的已用容量已超过容量配额，请尽快删除多余文件或购买容量",
+                        this.props.t("navbar.exceedQuota"),
                         "warning"
                     );
                 } else {
@@ -125,7 +127,7 @@ class StorageBarCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         return (
             <div
                 onMouseEnter={() => this.setState({ showExpand: true })}
@@ -137,7 +139,9 @@ class StorageBarCompoment extends Component {
                     <div className={classes.storageContainer}>
                         <StorageIcon className={classes.iconFix} />
                         <div className={classes.detail}>
-                            存储空间{"   "}
+                            <Typography variant={"subtitle2"}>
+                                {t("navbar.storage")}
+                            </Typography>
                             <LinearProgress
                                 className={classes.bar}
                                 color="secondary"
@@ -146,16 +150,16 @@ class StorageBarCompoment extends Component {
                             />
                             <div className={classes.info}>
                                 <Tooltip
-                                    title={
-                                        "已使用 " +
-                                        (this.state.used === null
-                                            ? " -- "
-                                            : this.state.used) +
-                                        ", 共 " +
-                                        (this.state.total === null
-                                            ? " -- "
-                                            : this.state.total)
-                                    }
+                                    title={t("navbar.storageDetail", {
+                                        used:
+                                            this.state.used === null
+                                                ? " -- "
+                                                : this.state.used,
+                                        total:
+                                            this.state.total === null
+                                                ? " -- "
+                                                : this.state.total,
+                                    })}
                                     placement="top"
                                 >
                                     <Typography
@@ -188,6 +192,6 @@ StorageBarCompoment.propTypes = {
 const StorageBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(StorageBarCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(StorageBarCompoment))));
 
 export default StorageBar;

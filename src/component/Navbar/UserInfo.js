@@ -6,6 +6,7 @@ import Auth from "../../middleware/Auth";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import Avatar from "@material-ui/core/Avatar";
 import { setUserPopover } from "../../redux/explorer";
+import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
     return {
@@ -70,7 +71,6 @@ const styles = (theme) => ({
     },
     nickName: {
         color: "#fff",
-        marginLeft: "10px",
         marginTop: "15px",
         fontSize: "17px",
     },
@@ -80,7 +80,6 @@ const styles = (theme) => ({
         alignItems: "flex-start",
     },
     groupName: {
-        marginLeft: "10px",
         color: "#ffffff",
         opacity: "0.54",
     },
@@ -95,7 +94,7 @@ class UserInfoCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const isLogin = Auth.Check(this.props.isLogin);
         const user = Auth.GetUser(this.props.isLogin);
 
@@ -125,7 +124,7 @@ class UserInfoCompoment extends Component {
                         component="h2"
                         noWrap
                     >
-                        {isLogin ? user.nickname : "未登录"}
+                        {isLogin ? user.nickname : t("navbar.notLoginIn")}
                     </Typography>
                     <Typography
                         className={classes.groupName}
@@ -133,7 +132,7 @@ class UserInfoCompoment extends Component {
                         color="textSecondary"
                         noWrap
                     >
-                        {isLogin ? user.group.name : "游客"}
+                        {isLogin ? user.group.name : t("navbar.visitor")}
                     </Typography>
                 </div>
             </div>
@@ -148,6 +147,6 @@ UserInfoCompoment.propTypes = {
 const UserInfo = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(UserInfoCompoment));
+)(withStyles(styles)(withTranslation()(UserInfoCompoment)));
 
 export default UserInfo;

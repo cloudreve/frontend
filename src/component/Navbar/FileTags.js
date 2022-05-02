@@ -45,6 +45,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import API from "../../middleware/Api";
 import { navigateTo, searchMyFile, toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -135,6 +136,7 @@ const AddTag = React.lazy(() => import("../Modals/AddTag"));
 
 export default function FileTag() {
     const classes = useStyles();
+    const { t } = useTranslation();
 
     const location = useLocation();
     const history = useHistory();
@@ -243,7 +245,7 @@ export default function FileTag() {
                                 <FolderShared className={classes.iconFix} />
                             )}
                         </ListItemIcon>
-                        <ListItemText primary="我的文件" />
+                        <ListItemText primary={t("navbar.myFiles")} />
                     </ListItem>
                     <Divider />
                 </ExpansionPanelSummary>
@@ -272,7 +274,7 @@ export default function FileTag() {
                         </ListItem>
                         {[
                             {
-                                key: "视频",
+                                key: t("navbar.videos"),
                                 id: "video",
                                 icon: (
                                     <VideoIcon
@@ -284,7 +286,7 @@ export default function FileTag() {
                                 ),
                             },
                             {
-                                key: "图片",
+                                key: t("navbar.photos"),
                                 id: "image",
                                 icon: (
                                     <ImageIcon
@@ -296,7 +298,7 @@ export default function FileTag() {
                                 ),
                             },
                             {
-                                key: "音频",
+                                key: t("navbar.music"),
                                 id: "audio",
                                 icon: (
                                     <MusicIcon
@@ -308,7 +310,7 @@ export default function FileTag() {
                                 ),
                             },
                             {
-                                key: "文档",
+                                key: t("navbar.documents"),
                                 id: "doc",
                                 icon: (
                                     <DocIcon
@@ -379,7 +381,7 @@ export default function FileTag() {
                             <ListItemIcon className={classes.subMenu}>
                                 <TagPlus className={classes.iconFix} />
                             </ListItemIcon>
-                            <ListItemText primary={"添加标签..."} />
+                            <ListItemText primary={t("navbar.addATag")} />
                         </ListItem>
                     </List>{" "}
                     <Divider />

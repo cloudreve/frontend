@@ -2,27 +2,32 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {
-    LogoutVariant,
-    HomeAccount,
-    DesktopMacDashboard,
     AccountArrowRight,
     AccountPlus,
+    DesktopMacDashboard,
+    HomeAccount,
+    LogoutVariant,
 } from "mdi-material-ui";
 import { withRouter } from "react-router-dom";
 import Auth from "../../middleware/Auth";
 import {
-    withStyles,
     Avatar,
-    Popover,
-    Typography,
     Chip,
+    Divider,
     ListItemIcon,
     MenuItem,
-    Divider,
+    Popover,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import pathHelper from "../../utils/page";
-import { setSessionStatus, setUserPopover, toggleSnackbar } from "../../redux/explorer";
+import {
+    setSessionStatus,
+    setUserPopover,
+    toggleSnackbar,
+} from "../../redux/explorer";
+import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
     return {
@@ -105,7 +110,7 @@ class UserAvatarPopoverCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const user = Auth.GetUser();
         const isAdminPage = pathHelper.isAdminPage(
             this.props.location.pathname
@@ -134,16 +139,18 @@ class UserAvatarPopoverCompoment extends Component {
                             <ListItemIcon>
                                 <AccountArrowRight />
                             </ListItemIcon>
-                            登录
+                            {t("login.signIn")}
                         </MenuItem>
                         {this.props.registerEnabled && (
                             <MenuItem
-                                onClick={() => this.props.history.push("/signup")}
+                                onClick={() =>
+                                    this.props.history.push("/signup")
+                                }
                             >
                                 <ListItemIcon>
                                     <AccountPlus />
                                 </ListItemIcon>
-                                注册
+                                {t("login.signUp")}
                             </MenuItem>
                         )}
                     </div>
@@ -198,7 +205,7 @@ class UserAvatarPopoverCompoment extends Component {
                                     <ListItemIcon>
                                         <HomeAccount />
                                     </ListItemIcon>
-                                    个人主页
+                                    {t("navbar.myProfile")}
                                 </MenuItem>
                             )}
                             {user.group.id === 1 && (
@@ -214,7 +221,7 @@ class UserAvatarPopoverCompoment extends Component {
                                     <ListItemIcon>
                                         <DesktopMacDashboard />
                                     </ListItemIcon>
-                                    管理面板
+                                    {t("navbar.dashboard")}
                                 </MenuItem>
                             )}
 
@@ -227,7 +234,7 @@ class UserAvatarPopoverCompoment extends Component {
                                 <ListItemIcon>
                                     <LogoutVariant />
                                 </ListItemIcon>
-                                退出登录
+                                {t("login.logout")}
                             </MenuItem>
                         </div>
                     </div>
@@ -244,6 +251,10 @@ UserAvatarPopoverCompoment.propTypes = {
 const UserAvatarPopover = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(UserAvatarPopoverCompoment)));
+)(
+    withStyles(styles)(
+        withRouter(withTranslation()(UserAvatarPopoverCompoment))
+    )
+);
 
 export default UserAvatarPopover;

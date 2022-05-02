@@ -22,6 +22,7 @@ import pathHelper from "../../utils/page";
 import { configure, HotKeys } from "react-hotkeys";
 import { searchMyFile } from "../../redux/explorer";
 import FolderIcon from "@material-ui/icons/Folder";
+import { Trans, withTranslation } from "react-i18next";
 
 configure({
     ignoreTags: [],
@@ -144,7 +145,7 @@ class SearchBarCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const { anchorEl } = this.state;
         const id = this.state.input !== "" ? "simple-popper" : null;
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
@@ -156,7 +157,7 @@ class SearchBarCompoment extends Component {
                 </div>
                 <HotKeys keyMap={keyMap} handlers={this.handlers}>
                     <InputBase
-                        placeholder="搜索..."
+                        placeholder={t("navbar.searchPlaceholder")}
                         classes={{
                             root: classes.inputRoot,
                             input: classes.inputInput,
@@ -187,10 +188,16 @@ class SearchBarCompoment extends Component {
                                             }}
                                             primary={
                                                 <Typography noWrap>
-                                                    在我的文件中搜索{" "}
-                                                    <strong>
-                                                        {this.state.input}
-                                                    </strong>
+                                                    <Trans
+                                                        i18nKey="navbar.searchInFiles"
+                                                        values={{
+                                                            name: this.state
+                                                                .input,
+                                                        }}
+                                                        components={[
+                                                            <strong key={0} />,
+                                                        ]}
+                                                    />
                                                 </Typography>
                                             }
                                         />
@@ -216,10 +223,18 @@ class SearchBarCompoment extends Component {
                                                 }}
                                                 primary={
                                                     <Typography noWrap>
-                                                        在当前目录中搜索{" "}
-                                                        <strong>
-                                                            {this.state.input}
-                                                        </strong>
+                                                        <Trans
+                                                            i18nKey="navbar.searchInFolders"
+                                                            values={{
+                                                                name: this.state
+                                                                    .input,
+                                                            }}
+                                                            components={[
+                                                                <strong
+                                                                    key={0}
+                                                                />,
+                                                            ]}
+                                                        />
                                                     </Typography>
                                                 }
                                             />
@@ -234,10 +249,15 @@ class SearchBarCompoment extends Component {
                                         classes={{ primary: classes.primary }}
                                         primary={
                                             <Typography noWrap>
-                                                在全站分享中搜索{" "}
-                                                <strong>
-                                                    {this.state.input}
-                                                </strong>
+                                                <Trans
+                                                    i18nKey="navbar.searchInShares"
+                                                    values={{
+                                                        name: this.state.input,
+                                                    }}
+                                                    components={[
+                                                        <strong key={0} />,
+                                                    ]}
+                                                />
                                             </Typography>
                                         }
                                     />
@@ -258,6 +278,6 @@ SearchBarCompoment.propTypes = {
 const SearchBar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(SearchBarCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(SearchBarCompoment))));
 
 export default SearchBar;

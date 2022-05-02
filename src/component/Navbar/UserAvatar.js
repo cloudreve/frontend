@@ -6,17 +6,18 @@ import UserAvatarPopover from "./UserAvatarPopover";
 import { AccountCircle } from "mdi-material-ui";
 import Auth from "../../middleware/Auth";
 import {
-    withStyles,
-    Grow,
     Avatar,
+    Grow,
     IconButton,
     Tooltip,
+    withStyles,
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import { Home } from "@material-ui/icons";
 import { setUserPopover } from "../../redux/explorer";
+import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
     return {
@@ -91,7 +92,7 @@ class UserAvatarCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const loginCheck = Auth.Check(this.props.isLogin);
         const user = Auth.GetUser(this.props.isLogin);
         const isAdminPage = pathHelper.isAdminPage(
@@ -113,7 +114,7 @@ class UserAvatarCompoment extends Component {
                                 {loginCheck && (
                                     <>
                                         <Tooltip
-                                            title={"设置"}
+                                            title={t("navbar.setting")}
                                             placement="bottom"
                                         >
                                             <IconButton
@@ -132,7 +133,10 @@ class UserAvatarCompoment extends Component {
                             </>
                         )}
                         {isAdminPage && (
-                            <Tooltip title={"返回主页"} placement="bottom">
+                            <Tooltip
+                                title={t("navbar.backToHomepage")}
+                                placement="bottom"
+                            >
                                 <IconButton
                                     color="inherit"
                                     onClick={this.returnHome}
@@ -167,6 +171,6 @@ UserAvatarCompoment.propTypes = {
 const UserAvatar = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(UserAvatarCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(UserAvatarCompoment))));
 
 export default UserAvatar;

@@ -5,6 +5,9 @@
   "newVersionRefresh": "A new version of the current page is available and ready to be refreshed.",
   "errorDetails": "Error details",
   "renderError": "There is an error in the page rendering, please try refreshing this page.",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "select": "Select",
   "errors": {
     "40020": "Wrong password or email address.",
     "40017": "This account has been blocked.",

@@ -5,6 +5,9 @@
   "newVersionRefresh": "当前页面有新版本可用，准备刷新。",
   "errorDetails": "错误详情",
   "renderError": "页面渲染出现错误，请尝试刷新此页面。",
+  "ok": "确定",
+  "cancel": "取消",
+  "select": "选择",
   "errors": {
     "40020": "用户邮箱或密码错误",
     "40017": "该账号已被封禁",
