@@ -16,14 +16,21 @@
     "findMyPassword": "Find my password",
     "passwordReset": "Password has been reset.",
     "newPassword": "New password",
-    "repeatNewPassword": "Repeat the password",
+    "repeatNewPassword": "Repeat the new password",
+    "repeatPassword": "Repeat the password",
     "resetPassword": "Reset my password",
     "backToSingIn": "Back to sign in",
     "sendMeAnEmail": "Send me an email",
     "resetEmailSent": "An email has been sent, please pay attention to check.",
     "browserNotSupport": "Not supported by current browser or environment.",
     "success": "Sign in successful",
+    "signUpSuccess": "Sign up successful",
+    "activateSuccess": "Sign up completed",
+    "accountActivated": "Your account has been successfully activated.",
     "title": "Sign in to {{title}}",
+    "sinUpTitle": "Sign up to {{title}}",
+    "activateTitle": "Activate your account",
+    "activateDescription": "An activation email has been sent to your email address, please visit the link in the email to complete your sign-up.",
     "continue": "Next"
   }
 }

@@ -1,12 +1,19 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { makeStyles } from "@material-ui/core";
+import {
+    Avatar,
+    Button,
+    makeStyles,
+    Paper,
+    Typography,
+} from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
-import { Button, Paper, Avatar, Typography } from "@material-ui/core";
 import EmailIcon from "@material-ui/icons/EmailOutlined";
 import { useLocation } from "react-router";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
+
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
@@ -43,6 +50,7 @@ function useQuery() {
 }
 
 function Activation() {
+    const { t } = useTranslation();
     const query = useQuery();
     const location = useLocation();
 
@@ -82,10 +90,10 @@ function Activation() {
                         <EmailIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        激活成功
+                        {t("login.activateSuccess")}
                     </Typography>
                     <Typography style={{ marginTop: "20px" }}>
-                        您的账号已被成功激活。
+                        {t("login.accountActivated")}
                     </Typography>
                     <Button
                         type="submit"
@@ -95,7 +103,7 @@ function Activation() {
                         className={classes.submit}
                         onClick={() => history.push("/login?username=" + email)}
                     >
-                        返回登录
+                        {t("login.backToSingIn")}
                     </Button>
                 </Paper>
             )}

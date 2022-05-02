@@ -17,13 +17,20 @@
     "passwordReset": "密码已重设",
     "newPassword": "新密码",
     "repeatNewPassword": "重复新密码",
+    "repeatPassword": "重复密码",
     "resetPassword": "重设密码",
     "backToSingIn": "返回登陆",
     "sendMeAnEmail": "发送密码重置邮件",
     "resetEmailSent": "密码重置邮件已发送，请注意查收",
     "browserNotSupport": "当前浏览器或环境不支持",
     "success": "登录成功",
+    "signUpSuccess": "注册成功",
+    "activateSuccess": "激活成功",
+    "accountActivated": "您的账号已被成功激活。",
     "title": "登录 {{title}}",
+    "sinUpTitle": "注册 {{title}}",
+    "activateTitle": "邮件激活",
+    "activateDescription": "一封激活邮件已经发送至您的邮箱，请访问邮件中的链接以继续完成注册。",
     "continue": "下一步"
   }
 }
