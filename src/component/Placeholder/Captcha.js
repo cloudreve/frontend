@@ -3,13 +3,13 @@ import ContentLoader from "react-content-loader";
 
 const MyLoader = () => (
     <ContentLoader
-        height={80}
-        width={200}
+        height={60}
+        width={240}
         speed={2}
         primaryColor="#f3f3f3"
         secondaryColor="#e4e4e4"
     >
-        <rect x="4" y="4" rx="7" ry="7" width="392" height="116" />
+        <rect x="0" y="0" rx="3" ry="3" width="100%" height="100%" />
     </ContentLoader>
 );
 

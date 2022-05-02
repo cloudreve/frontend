@@ -33,7 +33,8 @@
     "activateDescription": "一封激活邮件已经发送至您的邮箱，请访问邮件中的链接以继续完成注册。",
     "continue": "下一步",
     "logout": "退出登录",
-    "loggedOut": "您已退出登录"
+    "loggedOut": "您已退出登录",
+    "clickToRefresh": "点击刷新验证码"
   },
   "navbar": {
     "myFiles": "我的文件",

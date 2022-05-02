@@ -33,7 +33,8 @@
     "activateDescription": "An activation email has been sent to your email address, please visit the link in the email to complete your sign-up.",
     "continue": "Next",
     "logout": "Sign out",
-    "loggedOut": "You are signed out now."
+    "loggedOut": "You are signed out now.",
+    "clickToRefresh": "Click to refresh"
   },
   "navbar": {
     "myFiles": "My Files",

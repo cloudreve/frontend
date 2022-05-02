@@ -48,13 +48,6 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         marginTop: theme.spacing(3),
     },
-    captchaContainer: {
-        display: "flex",
-        marginTop: "10px",
-    },
-    captchaPlaceholder: {
-        width: 200,
-    },
     link: {
         marginTop: "20px",
         display: "flex",
