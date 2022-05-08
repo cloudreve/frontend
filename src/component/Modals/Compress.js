@@ -1,20 +1,20 @@
-import React, { useState, useCallback } from "react";
-import { makeStyles } from "@material-ui/core";
+import React, { useCallback, useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle,
     DialogContentText,
-    CircularProgress,
+    DialogTitle,
+    makeStyles,
 } from "@material-ui/core";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
-import API from "../../middleware/Api";
 import TextField from "@material-ui/core/TextField";
 import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
 import { submitCompressTask } from "../../redux/explorer/action";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CompressDialog(props) {
+    const { t } = useTranslation();
     const [selectedPath, setSelectedPath] = useState("");
     const [fileName, setFileName] = useState("");
     // eslint-disable-next-line
@@ -79,7 +80,12 @@ export default function CompressDialog(props) {
         SubmitCompressTask(fileName, selectedPath)
             .then(() => {
                 props.onClose();
-                ToggleSnackbar("top", "right", "压缩任务已创建", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    t("modals.taskCreated"),
+                    "success"
+                );
                 SetModalsLoading(false);
             })
             .catch((error) => {
@@ -96,7 +102,9 @@ export default function CompressDialog(props) {
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">存放到</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("modals.saveToTitle")}
+            </DialogTitle>
             <PathSelector
                 presentPath={props.presentPath}
                 selected={props.selected}
@@ -112,13 +120,15 @@ export default function CompressDialog(props) {
                             fullWidth
                             autoFocus
                             id="standard-basic"
-                            label="压缩文件名"
+                            label={t("modals.zipFileName")}
                         />
                     </DialogContentText>
                 </DialogContent>
             )}
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <div className={classes.wrapper}>
                     <Button
                         onClick={submitMove}
@@ -129,7 +139,7 @@ export default function CompressDialog(props) {
                             props.modalsLoading
                         }
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                         {props.modalsLoading && (
                             <CircularProgress
                                 size={24}

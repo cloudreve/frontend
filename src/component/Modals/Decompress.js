@@ -1,20 +1,19 @@
-import React, { useState, useCallback } from "react";
-import { makeStyles } from "@material-ui/core";
+import React, { useCallback, useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle,
     DialogContentText,
-    CircularProgress,
+    DialogTitle,
+    makeStyles,
 } from "@material-ui/core";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
-import API from "../../middleware/Api";
-import { filePath } from "../../utils";
 import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
 import { submitDecompressTask } from "../../redux/explorer/action";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -35,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DecompressDialog(props) {
+    const { t } = useTranslation();
     const [selectedPath, setSelectedPath] = useState("");
     const [selectedPathName, setSelectedPathName] = useState("");
 
@@ -72,7 +72,12 @@ export default function DecompressDialog(props) {
         SubmitDecompressTask(selectedPath)
             .then(() => {
                 props.onClose();
-                ToggleSnackbar("top", "right", "解压缩任务已创建", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    t("modals.taskCreated"),
+                    "success"
+                );
                 SetModalsLoading(false);
             })
             .catch((error) => {
@@ -89,7 +94,9 @@ export default function DecompressDialog(props) {
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">解压送至</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("modals.decompressTo")}
+            </DialogTitle>
             <PathSelector
                 presentPath={props.presentPath}
                 selected={props.selected}
@@ -99,19 +106,27 @@ export default function DecompressDialog(props) {
             {selectedPath !== "" && (
                 <DialogContent className={classes.contentFix}>
                     <DialogContentText>
-                        解压缩至 <strong>{selectedPathName}</strong>
+                        <Trans
+                            i18nKey="modals.decompressToDst"
+                            values={{
+                                name: selectedPathName,
+                            }}
+                            components={[<strong key={0} />]}
+                        />
                     </DialogContentText>
                 </DialogContent>
             )}
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <div className={classes.wrapper}>
                     <Button
                         onClick={submitMove}
                         color="primary"
                         disabled={selectedPath === "" || props.modalsLoading}
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                         {props.modalsLoading && (
                             <CircularProgress
                                 size={24}

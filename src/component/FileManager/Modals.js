@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import PathSelector from "./PathSelector";
-import API, { baseURL } from "../../middleware/Api";
+import API from "../../middleware/Api";
 import {
     Button,
     CircularProgress,
@@ -18,7 +18,6 @@ import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
-import pathHelper from "../../utils/page";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
 import {
@@ -31,6 +30,7 @@ import {
 } from "../../redux/explorer";
 import OptionSelector from "../Modals/OptionSelector";
 import { getDownloadURL } from "../../services/file";
+import { Trans, withTranslation } from "react-i18next";
 
 const styles = (theme) => ({
     wrapper: {
@@ -270,7 +270,7 @@ class ModalsCompoment extends Component {
                 target.path === "/"
                     ? target.path + target.name
                     : target.path + "/" + target.name;
-            this.props.openLoadingDialog("处理中...");
+            this.props.openLoadingDialog(this.props.t("modals.processing"));
             this.submitMove();
         }
     };
@@ -303,7 +303,7 @@ class ModalsCompoment extends Component {
             this.props.toggleSnackbar(
                 "top",
                 "right",
-                "新名称与已有文件重复",
+                this.props.t("modals.duplicatedObjectName"),
                 "warning"
             );
             this.props.setModalsLoading(false);
@@ -341,7 +341,7 @@ class ModalsCompoment extends Component {
             this.props.toggleSnackbar(
                 "top",
                 "right",
-                "文件夹名称重复",
+                this.props.t("modals.duplicatedFolderName"),
                 "warning"
             );
             this.props.setModalsLoading(false);
@@ -382,7 +382,7 @@ class ModalsCompoment extends Component {
             this.props.toggleSnackbar(
                 "top",
                 "right",
-                "文件名称重复",
+                this.props.t("modals.duplicatedFolderName"),
                 "warning"
             );
             this.props.setModalsLoading(false);
@@ -425,7 +425,7 @@ class ModalsCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "任务已创建",
+                    this.props.t("modals.taskCreated"),
                     "success"
                 );
                 this.onClose();
@@ -455,19 +455,22 @@ class ModalsCompoment extends Component {
             .then((response) => {
                 const failed = response.data
                     .filter((r) => r.code !== 0)
-                    .map((r) => (r.msg + r.error ? r.error : ""));
+                    .map((r) => r.msg + (r.error ? r.error : ""));
                 if (failed.length > 0) {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        `${failed.length} 个任务创建失败：${failed.join(",")}`,
+                        this.props.t("modals.taskCreateFailed", {
+                            failed: failed.length,
+                            details: failed.join(","),
+                        }),
                         "warning"
                     );
                 } else {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        "任务已创建",
+                        this.props.t("modals.taskCreated"),
                         "success"
                     );
                 }
@@ -528,12 +531,17 @@ class ModalsCompoment extends Component {
     copySource = () => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(this.props.modalsStatus.getSource);
-            this.props.toggleSnackbar("top", "right", "链接已复制", "info");
+            this.props.toggleSnackbar(
+                "top",
+                "right",
+                this.props.t("modals.linkCopied"),
+                "info"
+            );
         }
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         return (
             <div>
@@ -546,14 +554,14 @@ class ModalsCompoment extends Component {
                     fullWidth
                 >
                     <DialogTitle id="form-dialog-title">
-                        获取文件外链
+                        {t("modals.getSourceLinkTitle")}
                     </DialogTitle>
 
                     <DialogContent>
                         <TextField
                             autoFocus
                             inputProps={{ readonly: true }}
-                            label="文件外链"
+                            label={t("modals.sourceLink")}
                             multiline
                             value={this.props.modalsStatus.getSource}
                             variant="outlined"
@@ -562,9 +570,11 @@ class ModalsCompoment extends Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.copySource} color="secondary">
-                            复制
+                            {t("copyToClipboard", { ns: "common" })}
                         </Button>
-                        <Button onClick={this.onClose}>关闭</Button>
+                        <Button onClick={this.onClose}>
+                            {t("close", { ns: "common" })}
+                        </Button>
                     </DialogActions>
                 </Dialog>
                 <Dialog
@@ -572,7 +582,9 @@ class ModalsCompoment extends Component {
                     onClose={this.onClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">新建文件夹</DialogTitle>
+                    <DialogTitle id="form-dialog-title">
+                        {t("fileManager.newFolder")}
+                    </DialogTitle>
 
                     <DialogContent>
                         <form onSubmit={this.submitCreateNewFolder}>
@@ -580,7 +592,7 @@ class ModalsCompoment extends Component {
                                 autoFocus
                                 margin="dense"
                                 id="newFolderName"
-                                label="文件夹名称"
+                                label={t("modals.folderName")}
                                 type="text"
                                 value={this.state.newFolderName}
                                 onChange={(e) => this.handleInputChange(e)}
@@ -589,7 +601,9 @@ class ModalsCompoment extends Component {
                         </form>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitCreateNewFolder}
@@ -599,7 +613,7 @@ class ModalsCompoment extends Component {
                                     this.props.modalsLoading
                                 }
                             >
-                                创建
+                                {t("modals.create")}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -616,7 +630,9 @@ class ModalsCompoment extends Component {
                     onClose={this.onClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">新建文件</DialogTitle>
+                    <DialogTitle id="form-dialog-title">
+                        {t("fileManager.newFile")}
+                    </DialogTitle>
 
                     <DialogContent>
                         <form onSubmit={this.submitCreateNewFile}>
@@ -624,7 +640,7 @@ class ModalsCompoment extends Component {
                                 autoFocus
                                 margin="dense"
                                 id="newFileName"
-                                label="文件名称"
+                                label={t("modals.fileName")}
                                 type="text"
                                 value={this.state.newFileName}
                                 onChange={(e) => this.handleInputChange(e)}
@@ -633,7 +649,9 @@ class ModalsCompoment extends Component {
                         </form>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitCreateNewFile}
@@ -643,7 +661,7 @@ class ModalsCompoment extends Component {
                                     this.props.modalsLoading
                                 }
                             >
-                                创建
+                                {t("modals.create")}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -662,23 +680,28 @@ class ModalsCompoment extends Component {
                     maxWidth="sm"
                     fullWidth={true}
                 >
-                    <DialogTitle id="form-dialog-title">重命名</DialogTitle>
+                    <DialogTitle id="form-dialog-title">
+                        {t("fileManager.rename")}
+                    </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            输入{" "}
-                            <strong>
-                                {this.props.selected.length === 1
-                                    ? this.props.selected[0].name
-                                    : ""}
-                            </strong>{" "}
-                            的新名称：
+                            <Trans
+                                i18nKey="modals.renameDescription"
+                                values={{
+                                    name:
+                                        this.props.selected.length === 1
+                                            ? this.props.selected[0].name
+                                            : "",
+                                }}
+                                components={[<strong key={0} />]}
+                            />
                         </DialogContentText>
                         <form onSubmit={this.submitRename}>
                             <TextField
                                 autoFocus
                                 margin="dense"
                                 id="newName"
-                                label="新名称"
+                                label={t("modals.newName")}
                                 type="text"
                                 value={this.state.newName}
                                 onChange={(e) => this.handleInputChange(e)}
@@ -687,7 +710,9 @@ class ModalsCompoment extends Component {
                         </form>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitRename}
@@ -697,7 +722,7 @@ class ModalsCompoment extends Component {
                                     this.props.modalsLoading
                                 }
                             >
-                                确定
+                                {t("ok", { ns: "common" })}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -721,7 +746,9 @@ class ModalsCompoment extends Component {
                     onClose={this.onClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">移动至</DialogTitle>
+                    <DialogTitle id="form-dialog-title">
+                        {t("modals.moveToTitle")}
+                    </DialogTitle>
                     <PathSelector
                         presentPath={this.props.path}
                         selected={this.props.selected}
@@ -731,13 +758,20 @@ class ModalsCompoment extends Component {
                     {this.state.selectedPath !== "" && (
                         <DialogContent className={classes.contentFix}>
                             <DialogContentText>
-                                移动至{" "}
-                                <strong>{this.state.selectedPathName}</strong>
+                                <Trans
+                                    i18nKey="modals.moveToDescription"
+                                    values={{
+                                        name: this.state.selectedPathName,
+                                    }}
+                                    components={[<strong key={0} />]}
+                                />
                             </DialogContentText>
                         </DialogContent>
                     )}
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitMove}
@@ -747,7 +781,7 @@ class ModalsCompoment extends Component {
                                     this.props.modalsLoading
                                 }
                             >
-                                确定
+                                {t("ok", { ns: "common" })}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -763,31 +797,38 @@ class ModalsCompoment extends Component {
                     onClose={this.onClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">删除对象</DialogTitle>
+                    <DialogTitle id="form-dialog-title">
+                        {t("modals.deleteTitle")}
+                    </DialogTitle>
 
                     <DialogContent>
                         <DialogContentText>
-                            确定要删除
                             {this.props.selected.length === 1 && (
-                                <strong> {this.props.selected[0].name} </strong>
+                                <Trans
+                                    i18nKey="modals.deleteOneDescription"
+                                    values={{
+                                        name: this.props.selected[0].name,
+                                    }}
+                                    components={[<strong key={0} />]}
+                                />
                             )}
-                            {this.props.selected.length > 1 && (
-                                <span>
-                                    这{this.props.selected.length}个对象
-                                </span>
-                            )}
-                            吗？
+                            {this.props.selected.length > 1 &&
+                                t("modals.deleteMultipleDescription", {
+                                    num: this.props.selected.length,
+                                })}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitRemove}
                                 color="primary"
                                 disabled={this.props.modalsLoading}
                             >
-                                确定
+                                {t("ok", { ns: "common" })}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -806,58 +847,6 @@ class ModalsCompoment extends Component {
                     setModalsLoading={this.props.setModalsLoading}
                     selected={this.props.selected}
                 />
-
-                <Dialog
-                    open={this.props.modalsStatus.music}
-                    onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">音频播放</DialogTitle>
-
-                    <DialogContent>
-                        <DialogContentText>
-                            {this.props.selected.length !== 0 && (
-                                <audio
-                                    controls
-                                    src={
-                                        pathHelper.isSharePage(
-                                            this.props.location.pathname
-                                        )
-                                            ? baseURL +
-                                              "/share/preview/" +
-                                              this.props.selected[0].key +
-                                              (this.props.selected[0].key
-                                                  ? "?path=" +
-                                                    encodeURIComponent(
-                                                        this.props.selected[0]
-                                                            .path === "/"
-                                                            ? this.props
-                                                                  .selected[0]
-                                                                  .path +
-                                                                  this.props
-                                                                      .selected[0]
-                                                                      .name
-                                                            : this.props
-                                                                  .selected[0]
-                                                                  .path +
-                                                                  "/" +
-                                                                  this.props
-                                                                      .selected[0]
-                                                                      .name
-                                                    )
-                                                  : "")
-                                            : baseURL +
-                                              "/file/preview/" +
-                                              this.props.selected[0].id
-                                    }
-                                />
-                            )}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.onClose}>关闭</Button>
-                    </DialogActions>
-                </Dialog>
                 <Dialog
                     open={this.props.modalsStatus.remoteDownload}
                     onClose={this.onClose}
@@ -865,24 +854,28 @@ class ModalsCompoment extends Component {
                     fullWidth
                 >
                     <DialogTitle id="form-dialog-title">
-                        新建离线下载任务
+                        {t("modals.newRemoteDownloadTitle")}
                     </DialogTitle>
 
                     <DialogContent>
                         <DialogContentText>
                             <TextField
-                                label="文件地址"
+                                label={t("modals.remoteDownloadURL")}
                                 autoFocus
                                 fullWidth
                                 multiline
                                 id="downloadURL"
                                 onChange={this.handleInputChange}
-                                placeholder="输入文件下载地址，一行一个，支持 HTTP(s)/FTP/磁力链"
+                                placeholder={t(
+                                    "modals.remoteDownloadURLDescription"
+                                )}
                             />
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onClose}>关闭</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <Button
                             onClick={this.remoteDownloadNext}
                             color="primary"
@@ -891,7 +884,7 @@ class ModalsCompoment extends Component {
                                 this.state.downloadURL === ""
                             }
                         >
-                            下一步
+                            {t("ok", { ns: "common" })}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -901,7 +894,7 @@ class ModalsCompoment extends Component {
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">
-                        选择存储位置
+                        {t("modals.remoteDownloadDst")}
                     </DialogTitle>
                     <PathSelector
                         presentPath={this.props.path}
@@ -912,13 +905,20 @@ class ModalsCompoment extends Component {
                     {this.state.selectedPath !== "" && (
                         <DialogContent className={classes.contentFix}>
                             <DialogContentText>
-                                下载至{" "}
-                                <strong>{this.state.selectedPathName}</strong>
+                                <Trans
+                                    i18nKey="modals.downloadTo"
+                                    values={{
+                                        name: this.state.selectedPathName,
+                                    }}
+                                    components={[<strong key={0} />]}
+                                />
                             </DialogContentText>
                         </DialogContent>
                     )}
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitDownload}
@@ -928,7 +928,7 @@ class ModalsCompoment extends Component {
                                     this.props.modalsLoading
                                 }
                             >
-                                创建任务
+                                {t("modals.createTask")}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -945,7 +945,7 @@ class ModalsCompoment extends Component {
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">
-                        选择存储位置
+                        {t("modals.remoteDownloadDst")}
                     </DialogTitle>
                     <PathSelector
                         presentPath={this.props.path}
@@ -956,13 +956,20 @@ class ModalsCompoment extends Component {
                     {this.state.selectedPath !== "" && (
                         <DialogContent className={classes.contentFix}>
                             <DialogContentText>
-                                下载至{" "}
-                                <strong>{this.state.selectedPathName}</strong>
+                                <Trans
+                                    i18nKey="modals.downloadTo"
+                                    values={{
+                                        name: this.state.selectedPathName,
+                                    }}
+                                    components={[<strong key={0} />]}
+                                />
                             </DialogContentText>
                         </DialogContent>
                     )}
                     <DialogActions>
-                        <Button onClick={this.onClose}>取消</Button>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
                         <div className={classes.wrapper}>
                             <Button
                                 onClick={this.submitTorrentDownload}
@@ -972,7 +979,7 @@ class ModalsCompoment extends Component {
                                     this.props.modalsLoading
                                 }
                             >
-                                创建任务
+                                {t("modals.createTask")}
                                 {this.props.modalsLoading && (
                                     <CircularProgress
                                         size={24}
@@ -1010,6 +1017,6 @@ ModalsCompoment.propTypes = {
 const Modals = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ModalsCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(ModalsCompoment))));
 
 export default Modals;

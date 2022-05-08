@@ -8,6 +8,8 @@
   "ok": "OK",
   "cancel": "Cancel",
   "select": "Select",
+  "copyToClipboard": "Copy",
+  "close": "Close",
   "errors": {
     "40020": "Wrong password or email address.",
     "40017": "This account has been blocked.",

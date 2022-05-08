@@ -37,6 +37,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import ToggleIcon from "material-ui-toggle-icon";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     widthAnimation: {},
@@ -104,6 +105,7 @@ const ExpansionPanelDetails = withStyles((theme) => ({
 }))(MuiExpansionPanelDetails);
 
 export default function CreatShare(props) {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const classes = useStyles();
 
@@ -184,14 +186,19 @@ export default function CreatShare(props) {
 
     const senLink = () => {
         if (navigator.share) {
-            let text = `我向你分享了：${props.selected[0].name} 链接：${shareURL}`;
+            let text = t("modals.shareLinkShareContent", {
+                name: props.selected[0].name,
+                link: shareURL,
+            });
             if (lastSubmit.current && lastSubmit.current.password) {
-                text += `密码：${lastSubmit.current.password}`;
+                text += t("modals.shareLinkPasswordInfo", {
+                    password: lastSubmit.current.password,
+                });
             }
             navigator.share({ text });
         } else if (navigator.clipboard) {
             navigator.clipboard.writeText(shareURL);
-            ToggleSnackbar("top", "right", "分享链接已复制", "info");
+            ToggleSnackbar("top", "right", t("modals.linkCopied"), "info");
         }
     };
 
@@ -240,7 +247,9 @@ export default function CreatShare(props) {
             maxWidth="xs"
             fullWidth
         >
-            <DialogTitle id="form-dialog-title">创建分享链接</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("modals.createShareLink")}
+            </DialogTitle>
 
             {shareURL === "" && (
                 <>
@@ -258,7 +267,11 @@ export default function CreatShare(props) {
                                     <ListItemIcon>
                                         <LockIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary="使用密码保护" />
+                                    <ListItemText
+                                        primary={t(
+                                            "modals.usePasswordProtection"
+                                        )}
+                                    />
                                     <ListItemSecondaryAction>
                                         <Checkbox
                                             checked={shareOption.password}
@@ -274,7 +287,7 @@ export default function CreatShare(props) {
                                     fullWidth
                                 >
                                     <InputLabel htmlFor="filled-adornment-password">
-                                        分享密码
+                                        {t("modals.sharePassword")}
                                     </InputLabel>
                                     <OutlinedInput
                                         fullWidth
@@ -288,7 +301,11 @@ export default function CreatShare(props) {
                                         onChange={handleChange("password")}
                                         endAdornment={
                                             <InputAdornment position="end">
-                                                <Tooltip title="随机生成">
+                                                <Tooltip
+                                                    title={t(
+                                                        "modals.randomlyGenerate"
+                                                    )}
+                                                >
                                                     <IconButton
                                                         aria-label="toggle password visibility"
                                                         onClick={randomPassword}
@@ -334,7 +351,11 @@ export default function CreatShare(props) {
                                     <ListItemIcon>
                                         <TimerIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary="自动过期" />
+                                    <ListItemText
+                                        primary={t(
+                                            "modals.expireAutomatically"
+                                        )}
+                                    />
                                     <ListItemSecondaryAction>
                                         <Checkbox
                                             checked={shareOption.expire}
@@ -357,23 +378,19 @@ export default function CreatShare(props) {
                                         value={values.downloads}
                                         onChange={handleChange("downloads")}
                                     >
-                                        <MenuItem value={1}>1 次下载</MenuItem>
-                                        <MenuItem value={2}>2 次下载</MenuItem>
-                                        <MenuItem value={3}>3 次下载</MenuItem>
-                                        <MenuItem value={4}>4 次下载</MenuItem>
-                                        <MenuItem value={5}>5 次下载</MenuItem>
-                                        <MenuItem value={20}>
-                                            20 次下载
-                                        </MenuItem>
-                                        <MenuItem value={50}>
-                                            50 次下载
-                                        </MenuItem>
-                                        <MenuItem value={100}>
-                                            100 次下载
-                                        </MenuItem>
+                                        {[1, 2, 3, 4, 5, 20, 50, 100].map(
+                                            (v) => (
+                                                <MenuItem value={v} key={v}>
+                                                    {t(
+                                                        "modals.downloadLimitOptions",
+                                                        { num: v }
+                                                    )}
+                                                </MenuItem>
+                                            )
+                                        )}
                                     </Select>
                                 </FormControl>
-                                <Typography>或者</Typography>
+                                <Typography>{t("modals.or")}</Typography>
                                 <FormControl
                                     style={{
                                         marginRight: 10,
@@ -386,20 +403,26 @@ export default function CreatShare(props) {
                                         value={values.expires}
                                         onChange={handleChange("expires")}
                                     >
-                                        <MenuItem value={300}>5 分钟</MenuItem>
-                                        <MenuItem value={3600}>1 小时</MenuItem>
+                                        <MenuItem value={300}>
+                                            {t("modals.5minutes")}
+                                        </MenuItem>
+                                        <MenuItem value={3600}>
+                                            {t("modals.1hour")}
+                                        </MenuItem>
                                         <MenuItem value={24 * 3600}>
-                                            1 天
+                                            {t("modals.1day")}
                                         </MenuItem>
                                         <MenuItem value={7 * 24 * 3600}>
-                                            7 天
+                                            {t("modals.7days")}
                                         </MenuItem>
                                         <MenuItem value={30 * 24 * 3600}>
-                                            30 天
+                                            {t("modals.30days")}
                                         </MenuItem>
                                     </Select>
                                 </FormControl>
-                                <Typography>后过期</Typography>
+                                <Typography>
+                                    {t("modals.downloadSuffix")}
+                                </Typography>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         <ExpansionPanel
@@ -414,7 +437,9 @@ export default function CreatShare(props) {
                                     <ListItemIcon>
                                         <LockIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary="允许预览" />
+                                    <ListItemText
+                                        primary={t("modals.allowPreview")}
+                                    />
                                     <ListItemSecondaryAction>
                                         <Checkbox
                                             checked={shareOption.preview}
@@ -425,7 +450,7 @@ export default function CreatShare(props) {
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
                                 <Typography>
-                                    是否允许在分享页面预览文件内容
+                                    {t("modals.allowPreviewDescription")}
                                 </Typography>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
@@ -439,7 +464,7 @@ export default function CreatShare(props) {
                         onFocus={handleFocus}
                         autoFocus
                         inputProps={{ readonly: true }}
-                        label="分享链接"
+                        label={t("modals.shareLink")}
                         value={shareURL}
                         variant="outlined"
                         fullWidth
@@ -451,11 +476,13 @@ export default function CreatShare(props) {
                 {shareURL !== "" && (
                     <div className={classes.wrapper}>
                         <Button onClick={senLink} color="secondary">
-                            发送链接
+                            {t("modals.sendLink")}
                         </Button>
                     </div>
                 )}
-                <Button onClick={onClose}>关闭</Button>
+                <Button onClick={onClose}>
+                    {t("close", { ns: "common" })}
+                </Button>
 
                 {shareURL === "" && (
                     <div className={classes.wrapper}>
@@ -464,7 +491,7 @@ export default function CreatShare(props) {
                             color="secondary"
                             disabled={props.modalsLoading}
                         >
-                            创建分享链接
+                            {t("modals.createShareLink")}
                             {props.modalsLoading && (
                                 <CircularProgress
                                     size={24}

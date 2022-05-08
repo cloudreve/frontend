@@ -24,6 +24,7 @@ import {
     toggleSnackbar,
 } from "./index";
 import { getDownloadURL } from "../../services/file";
+import i18next from "../../i18n";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -639,20 +640,22 @@ export const submitDecompressTask = (path: string) => {
                         [
                             {
                                 key: "",
-                                name: "缺省",
+                                name: i18next.t("modals.defaultEncoding"),
                             },
                             {
                                 key: "gb18030",
                                 name: "GB18030",
-                                description: "中文常见编码",
+                                description: i18next.t(
+                                    "modals.chineseMajorEncoding"
+                                ),
                             },
                             ...allOptions,
                         ],
-                        "选择 ZIP 文件特殊字符编码"
+                        i18next.t("modals.selectEncoding")
                     )
                 );
             } catch (e) {
-                throw new Error("未选择编码方式");
+                throw new Error(i18next.t("modals.noEncodingSelected"));
             }
 
             encoding = option.key;
@@ -676,7 +679,7 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
         } = getState();
 
         if (selected.findIndex((f) => f.type === "dir") >= 0) {
-            dispatch(openLoadingDialog("列取文件中..."));
+            dispatch(openLoadingDialog(i18next.t("modals.listingFiles")));
         }
 
         let queue: CloudreveFile[] = [];
@@ -687,7 +690,9 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
                 toggleSnackbar(
                     "top",
                     "right",
-                    `列取文件时出错：${e.message}`,
+                    i18next.t("modals.listingFileError", {
+                        message: e.message,
+                    }),
                     "warning"
                 )
             );
@@ -695,7 +700,7 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
             return;
         }
 
-        dispatch(openLoadingDialog("生成外链中..."));
+        dispatch(openLoadingDialog(i18next.t("modals.generatingSourceLinks")));
 
         const items = queue
             .filter((value) => value.source_enabled && value.type === "file")
@@ -706,7 +711,7 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
                 toggleSnackbar(
                     "top",
                     "right",
-                    `没有可以生成外链的文件`,
+                    i18next.t("modals.noFileCanGenerateSourceLink"),
                     "warning"
                 )
             );
@@ -720,7 +725,9 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
                 toggleSnackbar(
                     "top",
                     "right",
-                    `当前用户组最大可同时为 ${user.group.sourceBatch} 个文件生成外链`,
+                    i18next.t("modals.sourceBatchSizeExceeded", {
+                        limit: user.group.sourceBatch,
+                    }),
                     "warning"
                 )
             );
