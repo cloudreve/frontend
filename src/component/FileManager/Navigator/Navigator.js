@@ -38,6 +38,7 @@ import { FilePlus } from "mdi-material-ui";
 import SubActions from "./SubActions";
 import { setCurrentPolicy } from "../../../redux/explorer/action";
 import { list } from "../../../services/navigate";
+import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
     return {
@@ -324,7 +325,7 @@ class NavigatorComponent extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const isHomePage = pathHelper.isHomePage(this.props.location.pathname);
         const user = Auth.GetUser();
 
@@ -340,7 +341,7 @@ class NavigatorComponent extends Component {
                     <ListItemIcon>
                         <RefreshIcon />
                     </ListItemIcon>
-                    刷新
+                    {t("fileManager.refresh")}
                 </MenuItem>
                 {!this.props.search && isHomePage && (
                     <div>
@@ -349,7 +350,7 @@ class NavigatorComponent extends Component {
                             <ListItemIcon>
                                 <ShareIcon />
                             </ListItemIcon>
-                            分享
+                            {t("fileManager.share")}
                         </MenuItem>
                         {user.group.compress && (
                             <MenuItem
@@ -358,7 +359,7 @@ class NavigatorComponent extends Component {
                                 <ListItemIcon>
                                     <Archive />
                                 </ListItemIcon>
-                                压缩
+                                {t("fileManager.compress")}
                             </MenuItem>
                         )}
                         <Divider />
@@ -368,13 +369,13 @@ class NavigatorComponent extends Component {
                             <ListItemIcon>
                                 <NewFolderIcon />
                             </ListItemIcon>
-                            创建文件夹
+                            {t("fileManager.newFolder")}
                         </MenuItem>
                         <MenuItem onClick={() => this.performAction("newFile")}>
                             <ListItemIcon>
                                 <FilePlus />
                             </ListItemIcon>
-                            创建文件
+                            {t("fileManager.newFile")}
                         </MenuItem>
                     </div>
                 )}
@@ -404,7 +405,7 @@ class NavigatorComponent extends Component {
                             <span>
                                 <PathButton
                                     more
-                                    title="显示路径"
+                                    title={t("fileManager.showFullPath")}
                                     onClick={this.showHiddenPath}
                                 />
                                 <Menu
@@ -424,10 +425,6 @@ class NavigatorComponent extends Component {
                                     />
                                 </Menu>
                                 <RightIcon className={classes.rightIcon} />
-                                {/* <Button component="span" onClick={(e)=>this.navigateTo(e,this.state.folders.length-1)}>
-                                    {this.state.folders.slice(-1)}  
-                                    <ExpandMore className={classes.expandMore}/>
-                                </Button> */}
                                 <PathButton
                                     folder={this.state.folders.slice(-1)}
                                     path={
@@ -497,6 +494,6 @@ NavigatorComponent.propTypes = {
 const Navigator = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(NavigatorComponent)));
+)(withStyles(styles)(withRouter(withTranslation()(NavigatorComponent))));
 
 export default Navigator;

@@ -12,6 +12,7 @@ import { changeSortMethod } from "../../../redux/explorer/action";
 import { FormatPageBreak } from "mdi-material-ui";
 import pathHelper from "../../../utils/page";
 import { changePageSize } from "../../../redux/viewUpdate/action";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     sideButton: {
@@ -23,17 +24,19 @@ const useStyles = makeStyles((theme) => ({
 const sortOptions = [
     "A-Z",
     "Z-A",
-    "最早上传",
-    "最新上传",
-    "最早修改",
-    "最新修改",
-    "最小",
-    "最大",
+    "oldestUploaded",
+    "newestUploaded",
+    "oldestModified",
+    "newestModified",
+    "smallest",
+    "largest",
 ];
 
 const paginationOption = ["50", "100", "200", "500", "1000"];
 
 export default function SubActions({ isSmall, inherit }) {
+    const { t } = useTranslation("application", { keyPrefix: "fileManager" });
+    const { t: vasT } = useTranslation("application", { keyPrefix: "vas" });
     const dispatch = useDispatch();
     const viewMethod = useSelector(
         (state) => state.viewUpdate.explorerViewMethod
@@ -101,7 +104,7 @@ export default function SubActions({ isSmall, inherit }) {
         <>
             {viewMethod === "icon" && (
                 <IconButton
-                    title="列表展示"
+                    title={t("listView")}
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
                     color={inherit ? "inherit" : "default"}
@@ -111,7 +114,7 @@ export default function SubActions({ isSmall, inherit }) {
             )}
             {viewMethod === "list" && (
                 <IconButton
-                    title="小图标展示"
+                    title={t("gridViewSmall")}
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
                     color={inherit ? "inherit" : "default"}
@@ -122,7 +125,7 @@ export default function SubActions({ isSmall, inherit }) {
 
             {viewMethod === "smallIcon" && (
                 <IconButton
-                    title="大图标展示"
+                    title={t("gridViewLarge")}
                     className={classes.sideButton}
                     onClick={toggleViewMethod}
                     color={inherit ? "inherit" : "default"}
@@ -133,7 +136,7 @@ export default function SubActions({ isSmall, inherit }) {
 
             {!isMobile && (
                 <IconButton
-                    title="分页大小"
+                    title={t("paginationSize")}
                     className={classes.sideButton}
                     onClick={showPaginationOptions}
                     color={inherit ? "inherit" : "default"}
@@ -153,19 +156,19 @@ export default function SubActions({ isSmall, inherit }) {
                         selected={option === pageSize.toString()}
                         onClick={() => handlePaginationChange(parseInt(option))}
                     >
-                        {`${option} / 页`}
+                        {t("paginationOption", { option })}
                     </MenuItem>
                 ))}
                 <MenuItem
                     selected={pageSize === -1}
                     onClick={() => handlePaginationChange(-1)}
                 >
-                    不分页
+                    {t("noPagination")}
                 </MenuItem>
             </Menu>
 
             <IconButton
-                title="排序方式"
+                title={t("sortMethod")}
                 className={classes.sideButton}
                 onClick={showSortOptions}
                 color={inherit ? "inherit" : "default"}
@@ -186,13 +189,13 @@ export default function SubActions({ isSmall, inherit }) {
                         selected={index === selectedIndex}
                         onClick={(event) => handleMenuItemClick(event, index)}
                     >
-                        {option}
+                        {t("sortMethods." + option)}
                     </MenuItem>
                 ))}
             </Menu>
             {share && (
                 <IconButton
-                    title={"由 " + share.creator.nick + " 创建"}
+                    title={t("shareCreateBy", { nick: share.creator.nick })}
                     className={classes.sideButton}
                     onClick={(e) => SetShareUserPopover(e.currentTarget)}
                     style={{ padding: 5 }}

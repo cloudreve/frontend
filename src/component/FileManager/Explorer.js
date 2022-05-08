@@ -13,7 +13,11 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import classNames from "classnames";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { configure, GlobalHotKeys } from "react-hotkeys";
-import explorer, { changeContextMenu, openRemoveDialog, setSelectedTarget } from "../../redux/explorer";
+import explorer, {
+    changeContextMenu,
+    openRemoveDialog,
+    setSelectedTarget,
+} from "../../redux/explorer";
 import { isMac } from "../../utils";
 import pathHelper from "../../utils/page";
 import ContextMenu from "./ContextMenu";
@@ -24,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { usePagination } from "../../hooks/pagination";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -117,6 +122,7 @@ const keyMap = {
 };
 
 export default function Explorer({ share }) {
+    const { t } = useTranslation("application", { keyPrefix: "fileManager" });
     const location = useLocation();
     const dispatch = useDispatch();
     const selected = useSelector((state) => state.explorer.selected);
@@ -232,7 +238,7 @@ export default function Explorer({ share }) {
                                     );
                                 }}
                             >
-                                名称
+                                {t("name")}
                                 {sortMethod === "namePos" ||
                                 sortMethod === "nameRev" ? (
                                     <span className={classes.visuallyHidden}>
@@ -260,7 +266,7 @@ export default function Explorer({ share }) {
                                     );
                                 }}
                             >
-                                大小
+                                {t("size")}
                                 {sortMethod === "sizePos" ||
                                 sortMethod === "sizeRes" ? (
                                     <span className={classes.visuallyHidden}>
@@ -290,7 +296,7 @@ export default function Explorer({ share }) {
                                     );
                                 }}
                             >
-                                修改日期
+                                {t("lastModified")}
                                 {sortMethod === "modifyTimePos" ||
                                 sortMethod === "modifyTimeRev" ? (
                                     <span className={classes.visuallyHidden}>
@@ -308,7 +314,7 @@ export default function Explorer({ share }) {
                         <ObjectIcon
                             file={{
                                 type: "up",
-                                name: "上级目录",
+                                name: t("backToParentFolder"),
                             }}
                         />
                     )}
@@ -329,7 +335,7 @@ export default function Explorer({ share }) {
                 </TableBody>
             </Table>
         ),
-        [dirList, fileList, path, sortMethod, ChangeSortMethod]
+        [dirList, fileList, path, sortMethod, ChangeSortMethod, classes]
     );
 
     const normalView = useMemo(
@@ -342,7 +348,7 @@ export default function Explorer({ share }) {
                             variant="body2"
                             className={classes.typeHeader}
                         >
-                            文件夹
+                            {t("folders")}
                         </Typography>
                         <Grid
                             data-clickAway={"true"}
@@ -374,7 +380,7 @@ export default function Explorer({ share }) {
                             variant="body2"
                             className={classes.typeHeader}
                         >
-                            文件
+                            {t("files")}
                         </Typography>
                         <Grid
                             data-clickAway={"true"}
@@ -427,7 +433,7 @@ export default function Explorer({ share }) {
             {navigatorError && (
                 <Paper elevation={1} className={classes.errorBox}>
                     <Typography variant="h5" component="h3">
-                        :( 请求时出现错误
+                        {t("listError")}
                     </Typography>
                     <Typography
                         color={"textSecondary"}
@@ -451,8 +457,8 @@ export default function Explorer({ share }) {
                 !loading &&
                 !navigatorError && (
                     <Nothing
-                        primary={"拖拽文件至此"}
-                        secondary={"或点击右下方“上传文件”按钮添加文件"}
+                        primary={t("dropFileHere")}
+                        secondary={t("orClickUploadButton")}
                     />
                 )}
             {((search &&
@@ -464,7 +470,7 @@ export default function Explorer({ share }) {
                     fileList.length === 0 &&
                     !loading &&
                     !navigatorError &&
-                    !isHomePage)) && <Nothing primary={"什么都没有找到"} />}
+                    !isHomePage)) && <Nothing primary={t("nothingFound")} />}
             {showView && view}
         </div>
     );
