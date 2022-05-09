@@ -29,6 +29,7 @@ import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TaskDetail from "./TaskDetail";
 import { SelectType } from "../core";
 import { navigateTo } from "../../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     progressContent: {
@@ -156,6 +157,7 @@ export default function UploadTask({
     selectFile,
     onRefresh,
 }) {
+    const { t } = useTranslation("application", { keyPrefix: "uploader" });
     const classes = useStyles();
     const theme = useTheme();
     const [taskHover, setTaskHover] = useState(false);
@@ -188,9 +190,9 @@ export default function UploadTask({
             case Status.added:
             case Status.initialized:
             case Status.queued:
-                return <div>排队中...</div>;
+                return <div>{t("pendingInQueue")}</div>;
             case Status.preparing:
-                return <div>准备中...</div>;
+                return <div>{t("preparing")}</div>;
             case Status.error:
                 return (
                     <div className={classes.errorStatus}>
@@ -199,52 +201,53 @@ export default function UploadTask({
                     </div>
                 );
             case Status.finishing:
-                return <div>处理中...</div>;
+                return <div>{t("processing")}</div>;
             case Status.resumable:
                 return (
                     <div>
-                        {`已上传 ${sizeToString(
-                            progress.total.loaded
-                        )} , 共 ${sizeToString(
-                            progress.total.size
-                        )} - ${progress.total.percent.toFixed(2)}%`}
+                        {t("progressDescription", {
+                            uploaded: sizeToString(progress.total.loaded),
+                            total: sizeToString(progress.total.size),
+                            percentage: progress.total.percent.toFixed(2),
+                        })}
                     </div>
                 );
             case Status.processing:
                 if (progress) {
                     return (
                         <div>
-                            {`${getSpeedText(
-                                speed,
-                                speedAvg,
-                                useAvgSpeed
-                            )} 已上传 ${sizeToString(
-                                progress.total.loaded
-                            )} , 共 ${sizeToString(
-                                progress.total.size
-                            )} - ${progress.total.percent.toFixed(2)}%`}
+                            {t("progressDescriptionFull", {
+                                speed: getSpeedText(
+                                    speed,
+                                    speedAvg,
+                                    useAvgSpeed
+                                ),
+                                uploaded: sizeToString(progress.total.loaded),
+                                total: sizeToString(progress.total.size),
+                                percentage: progress.total.percent.toFixed(2),
+                            })}
                         </div>
                     );
                 }
-                return <div>已上传 - </div>;
+                return <div>{t("progressDescriptionPlaceHolder")}</div>;
             case Status.finished:
                 return (
                     <div className={classes.successStatus}>
-                        已上传至{" "}
+                        {t("uploadedTo")}
                         <Tooltip title={uploader.task.dst}>
                             <Link
                                 className={classes.dstLink}
                                 href={"javascript:void"}
                                 onClick={() => navigateToDst(uploader.task.dst)}
                             >
-                                {parent === "" ? "根目录" : parent}
+                                {parent === "" ? t("rootFolder") : parent}
                             </Link>
                         </Tooltip>
                         <br />
                     </div>
                 );
             default:
-                return <div>未知</div>;
+                return <div>{t("unknownStatus")}</div>;
         }
     }, [status, error, progress, speed, speedAvg, useAvgSpeed]);
 
@@ -254,7 +257,7 @@ export default function UploadTask({
                 <Chip
                     className={classes.disabledBadge}
                     size="small"
-                    label={"断点续传"}
+                    label={t("resumed")}
                 />
             ) : null,
         [status, fullScreen]
@@ -267,7 +270,7 @@ export default function UploadTask({
                     className={classes.disabledBadge}
                     size="small"
                     color={"secondary"}
-                    label={"可恢复进度"}
+                    label={t("resumable")}
                 />
             ) : null,
         [status, fullScreen]
@@ -323,7 +326,7 @@ export default function UploadTask({
         const actions = [
             {
                 show: status === Status.error,
-                title: "重试",
+                title: t("retry"),
                 click: retry,
                 icon: <RefreshIcon />,
                 loading: false,
@@ -331,14 +334,16 @@ export default function UploadTask({
             {
                 show: true,
                 title:
-                    status === Status.finished ? "删除任务记录" : "取消并删除",
+                    status === Status.finished
+                        ? t("deleteTask")
+                        : t("cancelAndDelete"),
                 click: cancel,
                 icon: <DeleteIcon />,
                 loading: loading,
             },
             {
                 show: status === Status.resumable,
-                title: "选取同样文件并恢复上传",
+                title: t("selectAndResume"),
                 click: () =>
                     selectFile(uploader.task.dst, SelectType.File, uploader),
                 icon: <PlayArrow />,

@@ -14,12 +14,14 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import Auth from "../../middleware/Auth";
+import { useTranslation } from "react-i18next";
 
 let totalProgressCollector = null;
 let lastProgressStart = -1;
 let dragCounter = 0;
 
 export default function Uploader() {
+    const { t } = useTranslation("application", { keyPrefix: "uploader" });
     const [uploaders, setUploaders] = useState([]);
     const [taskListOpen, setTaskListOpen] = useState(false);
     const [dropBgOpen, setDropBgOpen] = useState(0);
@@ -64,7 +66,7 @@ export default function Uploader() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "所选择文件与原始文件不符",
+                    t("fileNotMatchError"),
                     "warning"
                 );
                 return;
@@ -183,12 +185,12 @@ export default function Uploader() {
             .then(taskAdded(original))
             .catch((e) => {
                 if (e instanceof UploaderError) {
-                    ToggleSnackbar("top", "right", e.Message(""), "warning");
+                    ToggleSnackbar("top", "right", e.Message(), "warning");
                 } else {
                     ToggleSnackbar(
                         "top",
                         "right",
-                        "出现未知错误：" + e.message,
+                        t("unknownError", { msg: e.message }),
                         "error"
                     );
                 }

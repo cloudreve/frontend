@@ -11,9 +11,13 @@ import statusHelper from "../../utils/page";
 import Backdrop from "@material-ui/core/Backdrop";
 import { FilePlus, FolderUpload } from "mdi-material-ui";
 import { green } from "@material-ui/core/colors";
-import clsx from "clsx";
 import { SelectType } from "../Uploader/core";
-import { openCreateFileDialog, openCreateFolderDialog, toggleSnackbar } from "../../redux/explorer";
+import {
+    openCreateFileDialog,
+    openCreateFolderDialog,
+    toggleSnackbar,
+} from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     fab: {
@@ -34,7 +38,7 @@ const useStyles = makeStyles(() => ({
     },
     "@global": {
         ".MuiSpeedDialAction-staticTooltipLabel": {
-            width: 100,
+            whiteSpace: "nowrap",
         },
     },
     fabProgress: {
@@ -53,6 +57,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function UploadButton(props) {
+    const { t } = useTranslation("application", { keyPrefix: "fileManager" });
     const [open, setOpen] = useState(false);
     const [queued, setQueued] = useState(5);
     const path = useSelector((state) => state.navigator.path);
@@ -125,9 +130,8 @@ export default function UploadButton(props) {
             >
                 <Backdrop open={open && statusHelper.isMobile()} />
                 <SpeedDial
-                    ariaLabel="SpeedDial openIcon example"
                     hidden={false}
-                    tooltipTitle="上传文件"
+                    tooltipTitle={t("uploadFiles")}
                     icon={
                         <SpeedDialIcon
                             openIcon={
@@ -143,15 +147,16 @@ export default function UploadButton(props) {
                     }}
                     onOpen={handleOpen}
                     open={open}
+                    ariaLabel={""}
                 >
                     {statusHelper.isMobile() && (
                         <SpeedDialAction
                             key="UploadFile"
                             icon={<PublishIcon />}
                             tooltipOpen
-                            tooltipTitle="上传文件"
+                            tooltipTitle={t("uploadFiles")}
                             onClick={() => uploadClicked()}
-                            title={"上传文件"}
+                            title={t("uploadFiles")}
                         />
                     )}
                     {!statusHelper.isMobile() && (
@@ -159,28 +164,28 @@ export default function UploadButton(props) {
                             key="UploadFolder"
                             icon={<FolderUpload />}
                             tooltipOpen
-                            tooltipTitle="上传目录"
+                            tooltipTitle={t("uploadFolder")}
                             onClick={() =>
                                 props.selectFile(path, SelectType.Directory)
                             }
-                            title={"上传目录"}
+                            title={t("uploadFolder")}
                         />
                     )}
                     <SpeedDialAction
                         key="NewFolder"
                         icon={<CreateNewFolderIcon />}
                         tooltipOpen
-                        tooltipTitle="新建目录"
+                        tooltipTitle={t("newFolder")}
                         onClick={() => OpenNewFolderDialog()}
-                        title={"新建目录"}
+                        title={t("newFolder")}
                     />
                     <SpeedDialAction
                         key="NewFile"
                         icon={<FilePlus />}
                         tooltipOpen
-                        tooltipTitle="新建文件"
+                        tooltipTitle={t("newFile")}
                         onClick={() => OpenNewFileDialog()}
-                        title={"新建文件"}
+                        title={t("newFile")}
                     />
                 </SpeedDial>
                 {circularProgress}

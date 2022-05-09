@@ -28,6 +28,7 @@ import Nothing from "../../Placeholder/Nothing";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { Status } from "../core/uploader/base";
 import Auth from "../../../middleware/Auth";
+import { useTranslation } from "react-i18next";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -119,6 +120,7 @@ export default function TaskList({
     progress,
     setUploaders,
 }) {
+    const { t } = useTranslation("application", { keyPrefix: "uploader" });
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -197,7 +199,7 @@ export default function TaskList({
             .filter(filters[filter])
             .sort(sorters[sorter]);
         if (currentList.length === 0) {
-            return <Nothing size={0.5} top={63} primary={"没有上传任务"} />;
+            return <Nothing size={0.5} top={63} primary={t("taskListEmpty")} />;
         }
 
         return (
@@ -284,7 +286,7 @@ export default function TaskList({
                     <AppBar className={classes.appBar}>
                         {progressBar}
                         <Toolbar disableGutters className={classes.toolbar}>
-                            <Tooltip title={"隐藏队列"}>
+                            <Tooltip title={t("hideTaskList")}>
                                 <IconButton
                                     color="inherit"
                                     onClick={close}
@@ -298,9 +300,9 @@ export default function TaskList({
                                 color="inherit"
                                 className={classes.flex}
                             >
-                                上传队列
+                                {t("uploadTasks")}
                             </Typography>
-                            <Tooltip title={"更多操作"}>
+                            <Tooltip title={t("moreActions")}>
                                 <IconButton
                                     color="inherit"
                                     onClick={handleActionClick}
@@ -308,7 +310,7 @@ export default function TaskList({
                                     <MoreHoriz />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title={"添加新文件"}>
+                            <Tooltip title={t("addNewFiles")}>
                                 <IconButton
                                     color="inherit"
                                     onClick={() => selectFile(path)}
@@ -317,7 +319,7 @@ export default function TaskList({
                                 </IconButton>
                             </Tooltip>
                             {!fullScreen && (
-                                <Tooltip title={"展开/折叠队列"}>
+                                <Tooltip title={t("toggleTaskList")}>
                                     <IconButton
                                         color="inherit"
                                         onClick={() => setExpanded(!expanded)}
