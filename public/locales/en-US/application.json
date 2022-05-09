@@ -127,7 +127,18 @@
     "decompress": "Decompress",
     "createShareLink": "Share",
     "viewDetails": "View details",
-    "copy": "Copy"
+    "copy": "Copy",
+    "bytes": " ({{bytes}} Bytes)",
+    "storagePolicy": "Storage policy",
+    "inheritedFromParent": "Inherited from parent",
+    "childFolders": "Child folders",
+    "childFiles": "Child files",
+    "childCount": "{{num}}",
+    "parentFolder": "Parent folder",
+    "rootFolder": "Root folder",
+    "modifiedAt": "Modified at",
+    "createdAt": "Created at",
+    "statisticAt": "Statistic at <1></1>"
   },
   "modals": {
     "processing": "Processing...",

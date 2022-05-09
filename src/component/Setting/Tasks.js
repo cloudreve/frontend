@@ -120,10 +120,7 @@ export default function Tasks() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {formatLocalTime(
-                                        row.create_date,
-                                        "YYYY-MM-DD H:mm:ss"
-                                    )}
+                                    {formatLocalTime(row.create_date)}
                                 </TableCell>
                                 <TableCell nowrap="nowrap" align="right">
                                     {getTaskType(row.type)}

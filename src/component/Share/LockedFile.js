@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import {
-    withStyles,
+    Avatar,
     Button,
     Card,
-    Divider,
-    CardHeader,
-    CardContent,
     CardActions,
+    CardContent,
+    CardHeader,
+    Divider,
     TextField,
-    Avatar,
+    withStyles,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import { formatLocalTime } from "../../utils/datetime";
@@ -93,8 +93,7 @@ class LockedFileCompoment extends Component {
                         }
                         title={this.props.share.creator.nick + " 的加密分享"}
                         subheader={formatLocalTime(
-                            this.props.share.create_date,
-                            "YYYY-MM-DD H:mm:ss"
+                            this.props.share.create_date
                         )}
                     />
                     <Divider />

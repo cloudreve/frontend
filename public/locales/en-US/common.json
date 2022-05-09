@@ -10,6 +10,8 @@
   "select": "Select",
   "copyToClipboard": "Copy",
   "close": "Close",
+  "intlDateTime": "{{val, datetime}}",
+  "timeAgoLocaleCode": "en_US",
   "errors": {
     "40020": "Wrong password or email address.",
     "40017": "This account has been blocked.",

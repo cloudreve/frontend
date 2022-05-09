@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import API from "../../middleware/Api";
 
 import {
-    withStyles,
-    Paper,
     Avatar,
-    Typography,
-    Tabs,
+    Grid,
+    Paper,
     Tab,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-    Grid,
+    Tabs,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
 import { withRouter } from "react-router";
 import Pagination from "@material-ui/lab/Pagination";
@@ -373,8 +373,7 @@ class ProfileCompoment extends Component {
                                                             }
                                                         >
                                                             {formatLocalTime(
-                                                                row.create_date,
-                                                                "YYYY-MM-DD H:mm:ss"
+                                                                row.create_date
                                                             )}
                                                         </TableCell>
                                                         <TableCell

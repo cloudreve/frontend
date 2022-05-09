@@ -208,10 +208,7 @@ class TableRowCompoment extends Component {
                         })}
                     >
                         {" "}
-                        {formatLocalTime(
-                            this.props.file.date,
-                            "YYYY-MM-DD H:mm:ss"
-                        )}
+                        {formatLocalTime(this.props.file.date)}
                     </Typography>
                 </TableCell>
             </TableRow>

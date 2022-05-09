@@ -12,6 +12,7 @@ import ErrorBoundary from "./component/Placeholder/ErrorBoundary";
 import { createBrowserHistory } from "history";
 import { ConnectedRouter, routerMiddleware } from "connected-react-router";
 import i18next from "./i18n";
+import PageLoading from "./component/Placeholder/PageLoading";
 
 const Admin = React.lazy(() => import("./Admin"));
 
@@ -41,7 +42,7 @@ const store = createStore(cloureveApp(history), reduxEnhance);
 UpdateSiteConfig(store);
 
 ReactDOM.render(
-    <Suspense fallback={"Loading..."}>
+    <Suspense fallback={<PageLoading />}>
         <ErrorBoundary>
             <Provider store={store}>
                 <ConnectedRouter history={history}>

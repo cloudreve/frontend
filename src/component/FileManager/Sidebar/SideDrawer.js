@@ -22,6 +22,7 @@ import Slide from "@material-ui/core/Slide";
 import AppBar from "@material-ui/core/AppBar";
 import { formatLocalTime } from "../../../utils/datetime";
 import { navigateTo, toggleSnackbar } from "../../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
 
 const drawerWidth = 350;
 
@@ -89,6 +90,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function SideDrawer() {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const sideBarOpen = useSelector((state) => state.explorer.sideBarOpen);
     const selected = useSelector((state) => state.explorer.selected);
@@ -136,34 +138,38 @@ export default function SideDrawer() {
     const classes = useStyles();
     const propsItem = [
         {
-            label: "大小",
-            value: (d, t) =>
+            label: t("fileManager.size"),
+            value: (d, target) =>
                 sizeToString(d.size) +
-                "  (" +
-                d.size.toLocaleString() +
-                " 字节)",
+                t("fileManager.bytes", { bytes: d.size.toLocaleString() }),
             show: (d) => true,
         },
         {
-            label: "存储策略",
-            value: (d, t) => d.policy,
+            label: t("fileManager.storagePolicy"),
+            value: (d, target) => d.policy,
             show: (d) => d.type === "file",
         },
         {
-            label: "包含目录",
-            value: (d, t) => d.child_folder_num.toLocaleString() + " " + "个",
+            label: t("fileManager.childFolders"),
+            value: (d, target) =>
+                t("fileManager.childCount", {
+                    num: d.child_folder_num.toLocaleString(),
+                }),
             show: (d) => d.type === "dir",
         },
         {
-            label: "包含文件",
-            value: (d, t) => d.child_file_num.toLocaleString() + " " + "个",
+            label: t("fileManager.childFiles"),
+            value: (d, target) =>
+                t("fileManager.childCount", {
+                    num: d.child_file_num.toLocaleString(),
+                }),
             show: (d) => d.type === "dir",
         },
         {
-            label: "所在目录",
+            label: t("fileManager.parentFolder"),
             // eslint-disable-next-line react/display-name
-            value: (d, t) => {
-                const path = d.path === "" ? t.path : d.path;
+            value: (d, target) => {
+                const path = d.path === "" ? target.path : d.path;
                 const name = filename(path);
                 return (
                     <Tooltip title={path}>
@@ -171,7 +177,7 @@ export default function SideDrawer() {
                             href={"javascript:void"}
                             onClick={() => NavigateTo(path)}
                         >
-                            {name === "" ? "根目录" : name}
+                            {name === "" ? t("fileManager.rootFolder") : name}
                         </Link>
                     </Tooltip>
                 );
@@ -179,14 +185,13 @@ export default function SideDrawer() {
             show: (d) => true,
         },
         {
-            label: "修改于",
-            value: (d, t) =>
-                formatLocalTime(d.updated_at, "YYYY/MM/DD  H:mm:ss"),
+            label: t("fileManager.modifiedAt"),
+            value: (d, target) => formatLocalTime(d.updated_at),
             show: (d) => true,
         },
         {
-            label: "创建于",
-            value: (d) => formatLocalTime(d.created_at, "YYYY/MM/DD  H:mm:ss"),
+            label: t("fileManager.createdAt"),
+            value: (d) => formatLocalTime(d.created_at),
             show: (d) => true,
         },
     ];
@@ -219,10 +224,19 @@ export default function SideDrawer() {
                     })}
                     {target.type === "dir" && (
                         <Grid item xs={12} className={classes.propsTime}>
-                            统计于{" "}
-                            <TimeAgo
-                                datetime={details.query_date}
-                                locale="zh_CN"
+                            <Trans
+                                i18nKey="fileManager.statisticAt"
+                                components={[
+                                    <span key={0} />,
+                                    <TimeAgo
+                                        key={1}
+                                        datetime={details.query_date}
+                                        locale={t("timeAgoLocaleCode", {
+                                            ns: "common",
+                                        })}
+                                    />,
+                                    <span key={2} />,
+                                ]}
                             />
                         </Grid>
                     )}

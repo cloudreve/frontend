@@ -394,10 +394,7 @@ export default function Download() {
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        {formatLocalTime(
-                                            row.CreatedAt,
-                                            "YYYY-MM-DD H:mm:ss"
-                                        )}
+                                        {formatLocalTime(row.CreatedAt)}
                                     </TableCell>
                                     <TableCell>
                                         <Tooltip title={"删除"}>

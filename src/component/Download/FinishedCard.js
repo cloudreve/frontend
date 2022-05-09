@@ -414,10 +414,7 @@ export default function FinishedCard(props) {
                                     创建日期：
                                 </Grid>
                                 <Grid item xs={8} className={classes.infoValue}>
-                                    {formatLocalTime(
-                                        props.task.create,
-                                        "YYYY-MM-DD H:mm:ss"
-                                    )}
+                                    {formatLocalTime(props.task.create)}
                                 </Grid>
                             </Grid>
                             <Grid container xs={12} sm={6}>
@@ -425,10 +422,7 @@ export default function FinishedCard(props) {
                                     最后更新：
                                 </Grid>
                                 <Grid item xs={8} className={classes.infoValue}>
-                                    {formatLocalTime(
-                                        props.task.update,
-                                        "YYYY-MM-DD H:mm:ss"
-                                    )}
+                                    {formatLocalTime(props.task.update)}
                                 </Grid>
                             </Grid>
                         </Grid>

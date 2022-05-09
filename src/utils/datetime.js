@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import Auth from "../middleware/Auth";
+import i18next from "../i18n";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -14,8 +16,21 @@ export function refreshTimeZone() {
     timeZone = timeZone ? timeZone : defaultTimeZone;
 }
 
-export function formatLocalTime(time, format) {
-    return dayjs(time).tz(timeZone).format(format);
+export function formatLocalTime(time) {
+    return i18next.t("intlDateTime", {
+        ns: "common",
+        val: dayjs(time).tz(timeZone).toDate(),
+        formatParams: {
+            val: {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+            },
+        },
+    });
 }
 
 export function validateTimeZone(name) {

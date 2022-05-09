@@ -127,7 +127,18 @@
     "decompress": "解压缩",
     "createShareLink": "创建分享链接",
     "viewDetails": "详细信息",
-    "copy": "复制"
+    "copy": "复制",
+    "bytes": " ({{bytes}} 字节)",
+    "storagePolicy": "存储策略",
+    "inheritedFromParent": "跟随父目录",
+    "childFolders": "包含目录",
+    "childFiles": "包含文件",
+    "childCount": "{{num}} 个",
+    "parentFolder": "所在目录",
+    "rootFolder": "根目录",
+    "modifiedAt": "修改于",
+    "createdAt": "创建于",
+    "statisticAt": "统计于 <1></1>"
   },
   "modals": {
     "processing": "处理中...",

@@ -39,7 +39,7 @@ export default function Creator(props) {
             }
             return Math.round(props.share.expire / 3600) + " 小时后到期";
         }
-        return formatLocalTime(props.share.create_date, "YYYY-MM-DD H:mm:ss");
+        return formatLocalTime(props.share.create_date);
     };
 
     const userProfile = () => {

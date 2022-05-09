@@ -585,11 +585,7 @@ class UserSettingCompoment extends Component {
 
     toggleThemeMode = (current) => {
         const newMode =
-            current === null
-                ? "light"
-                : current === "light"
-                ? "dark"
-                : null;
+            current === null ? "light" : current === "light" ? "dark" : null;
         this.props.toggleDaylightMode();
         Auth.SetPreference("theme_mode", newMode);
     };
@@ -719,10 +715,7 @@ class UserSettingCompoment extends Component {
                                         className={classes.infoText}
                                         color="textSecondary"
                                     >
-                                        {formatLocalTime(
-                                            user.created_at,
-                                            "YYYY-MM-DD H:mm:ss"
-                                        )}
+                                        {formatLocalTime(user.created_at)}
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItem>

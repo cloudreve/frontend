@@ -339,10 +339,7 @@ class MyShareCompoment extends Component {
                                     }
                                     subheader={
                                         <span>
-                                            {formatLocalTime(
-                                                value.create_date,
-                                                "YYYY-MM-DD H:mm:ss"
-                                            )}
+                                            {formatLocalTime(value.create_date)}
                                             {this.isExpired(value) && (
                                                 <Chip
                                                     size="small"
