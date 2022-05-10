@@ -15,6 +15,7 @@ import {
 import { withRouter } from "react-router";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
+import { withTranslation } from "react-i18next";
 
 const styles = (theme) => ({
     card: {
@@ -75,7 +76,7 @@ class LockedFileCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         return (
             <div className={classes.layout}>
@@ -91,7 +92,9 @@ class LockedFileCompoment extends Component {
                                 }
                             />
                         }
-                        title={this.props.share.creator.nick + " 的加密分享"}
+                        title={t("share.privateShareTitle", {
+                            nick: this.props.share.creator.nick,
+                        })}
                         subheader={formatLocalTime(
                             this.props.share.create_date
                         )}
@@ -101,7 +104,7 @@ class LockedFileCompoment extends Component {
                         <form onSubmit={this.submit}>
                             <TextField
                                 id="pwd"
-                                label="输入分享密码"
+                                label={t("share.enterPassword")}
                                 value={this.state.pwd}
                                 onChange={this.handleChange("pwd")}
                                 margin="normal"
@@ -125,7 +128,7 @@ class LockedFileCompoment extends Component {
                                 this.state.pwd === "" || this.props.loading
                             }
                         >
-                            继续
+                            {t("share.continue")}
                         </Button>
                     </CardActions>
                 </Card>
@@ -137,6 +140,6 @@ class LockedFileCompoment extends Component {
 const LockedFile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(LockedFileCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(LockedFileCompoment))));
 
 export default LockedFile;

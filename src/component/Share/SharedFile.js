@@ -17,6 +17,7 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import { startDownload } from "../../redux/explorer/action";
+import { withTranslation } from "react-i18next";
 
 vhCheck();
 const styles = (theme) => ({
@@ -143,7 +144,7 @@ class SharedFileCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "请先登录",
+                    this.props.t("share.pleaseLogin"),
                     "warning"
                 );
                 return;
@@ -212,7 +213,7 @@ class SharedFileCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "此文件无法预览",
+                    this.props.t("share.cannotShare"),
                     "warning"
                 );
                 return;
@@ -232,7 +233,7 @@ class SharedFileCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         return (
             <div className={classes.layout}>
                 <Modals />
@@ -265,7 +266,7 @@ class SharedFileCompoment extends Component {
                                     onClick={this.scoreHandle(this.preview)}
                                     disabled={this.state.loading}
                                 >
-                                    预览
+                                    {t("share.preview")}
                                 </Button>
                             )}
                         </div>
@@ -277,7 +278,7 @@ class SharedFileCompoment extends Component {
                                 onClick={this.download}
                                 disabled={this.state.loading}
                             >
-                                下载
+                                {t("fileManager.download")}
                             </Button>
                         </div>
                     </div>
@@ -290,6 +291,6 @@ class SharedFileCompoment extends Component {
 const SharedFile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(SharedFileCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(SharedFileCompoment))));
 
 export default SharedFile;

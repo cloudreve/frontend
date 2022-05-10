@@ -38,6 +38,7 @@ import ToggleIcon from "material-ui-toggle-icon";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
 import Nothing from "../Placeholder/Nothing";
+import { withTranslation } from "react-i18next";
 
 const styles = (theme) => ({
     cardContainer: {
@@ -134,7 +135,7 @@ class MyShareCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "分享已取消",
+                    this.props.t("share.shareCanceled"),
                     "success"
                 );
                 if (oldList.length === 0) {
@@ -219,7 +220,12 @@ class MyShareCompoment extends Component {
                 });
             })
             .catch(() => {
-                this.props.toggleSnackbar("top", "right", "加载失败", "error");
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    this.props.t("share.listLoadingError"),
+                    "error"
+                );
             });
     };
 
@@ -242,14 +248,14 @@ class MyShareCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         return (
             <div className={classes.layout}>
                 <Grid container>
                     <Grid sm={6} xs={6}>
                         <Typography color="textSecondary" variant="h4">
-                            我的分享
+                            {t("share.sharedFiles")}
                         </Typography>
                     </Grid>
                     <Grid sm={6} xs={6} className={classes.orderSelect}>
@@ -260,22 +266,22 @@ class MyShareCompoment extends Component {
                                 value={this.state.orderBy}
                             >
                                 <MenuItem value={"created_at DESC"}>
-                                    创建日期由晚到早
+                                    {t("share.createdAtDesc")}
                                 </MenuItem>
                                 <MenuItem value={"created_at ASC"}>
-                                    创建日期由早到晚
+                                    {t("share.createdAtAsc")}
                                 </MenuItem>
                                 <MenuItem value={"downloads DESC"}>
-                                    下载次数由大到小
+                                    {t("share.downloadsDesc")}
                                 </MenuItem>
                                 <MenuItem value={"downloads ASC"}>
-                                    下载次数由小到大
+                                    {t("share.downloadsAsc")}
                                 </MenuItem>
                                 <MenuItem value={"views DESC"}>
-                                    浏览次数由大到小
+                                    {t("share.viewsDesc")}
                                 </MenuItem>
                                 <MenuItem value={"views ASC"}>
-                                    浏览次数由小到大
+                                    {t("share.viewsAsc")}
                                 </MenuItem>
                             </Select>
                         </FormControl>
@@ -283,7 +289,7 @@ class MyShareCompoment extends Component {
                 </Grid>
                 <Grid container spacing={24} className={classes.gird}>
                     {this.state.shareList.length === 0 && (
-                        <Nothing primary={"没有分享记录"} />
+                        <Nothing primary={t("share.noRecords")} />
                     )}
                     {this.state.shareList.map((value) => (
                         <Grid
@@ -324,7 +330,7 @@ class MyShareCompoment extends Component {
                                             title={
                                                 value.source
                                                     ? value.source.name
-                                                    : "[原始对象不存在]"
+                                                    : t("share.sourceNotFound")
                                             }
                                         >
                                             <Typography
@@ -333,7 +339,7 @@ class MyShareCompoment extends Component {
                                             >
                                                 {value.source
                                                     ? value.source.name
-                                                    : "[原始对象不存在]"}{" "}
+                                                    : t("share.sourceNotFound")}
                                             </Typography>
                                         </Tooltip>
                                     }
@@ -344,7 +350,7 @@ class MyShareCompoment extends Component {
                                                 <Chip
                                                     size="small"
                                                     className={classes.badge}
-                                                    label="已失效"
+                                                    label={t("share.expired")}
                                                 />
                                             )}
                                         </span>
@@ -358,7 +364,10 @@ class MyShareCompoment extends Component {
                                         textAlign: "right",
                                     }}
                                 >
-                                    <Tooltip placement="top" title="打开">
+                                    <Tooltip
+                                        placement="top"
+                                        title={t("fileManager.open")}
+                                    >
                                         <IconButton
                                             onClick={() =>
                                                 this.props.history.push(
@@ -378,7 +387,9 @@ class MyShareCompoment extends Component {
                                         <>
                                             <Tooltip
                                                 placement="top"
-                                                title="变更为公开分享"
+                                                title={t(
+                                                    "share.changeToPublic"
+                                                )}
                                                 onClick={() =>
                                                     this.changePermission(
                                                         value.key
@@ -393,7 +404,7 @@ class MyShareCompoment extends Component {
                                             </Tooltip>
                                             <Tooltip
                                                 placement="top"
-                                                title="查看密码"
+                                                title={t("share.viewPassword")}
                                                 onClick={() =>
                                                     this.showPwd(value.password)
                                                 }
@@ -409,7 +420,7 @@ class MyShareCompoment extends Component {
                                     {value.password === "" && (
                                         <Tooltip
                                             placement="top"
-                                            title="变更为私密分享"
+                                            title={t("share.changeToPrivate")}
                                             onClick={() =>
                                                 this.changePermission(value.key)
                                             }
@@ -425,8 +436,8 @@ class MyShareCompoment extends Component {
                                         placement="top"
                                         title={
                                             value.preview
-                                                ? "禁止预览"
-                                                : "允许预览"
+                                                ? t("share.disablePreview")
+                                                : t("share.enablePreview")
                                         }
                                         onClick={() =>
                                             this.changePreviewOption(value.key)
@@ -450,7 +461,7 @@ class MyShareCompoment extends Component {
                                     </Tooltip>
                                     <Tooltip
                                         placement="top"
-                                        title="取消分享"
+                                        title={t("share.cancelShare")}
                                         onClick={() =>
                                             this.removeShare(value.key)
                                         }
@@ -475,7 +486,7 @@ class MyShareCompoment extends Component {
                     open={this.state.showPwd !== null}
                     onClose={this.handleClose}
                 >
-                    <DialogTitle> 分享密码 </DialogTitle>{" "}
+                    <DialogTitle> {t("share.sharePassword")} </DialogTitle>{" "}
                     <DialogContent>
                         <TextField
                             id="standard-name"
@@ -486,7 +497,7 @@ class MyShareCompoment extends Component {
                     </DialogContent>{" "}
                     <DialogActions>
                         <Button onClick={this.handleClose} color="default">
-                            关闭{" "}
+                            {t("close", { ns: "common" })}
                         </Button>{" "}
                     </DialogActions>{" "}
                 </Dialog>{" "}
@@ -498,6 +509,6 @@ class MyShareCompoment extends Component {
 const MyShare = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(MyShareCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(MyShareCompoment))));
 
 export default MyShare;

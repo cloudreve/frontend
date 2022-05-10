@@ -9,6 +9,7 @@ import API from "../../middleware/Api";
 import { useDispatch } from "react-redux";
 import Editor from "for-editor";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     readMeContainer: {
@@ -66,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ReadMe(props) {
+    const { t } = useTranslation();
     const classes = useStyles();
     const theme = useTheme();
 
@@ -100,7 +102,7 @@ export default function ReadMe(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法读取 README 内容，" + error.message,
+                    t("share.readmeError", { msg: error.message }),
                     "error"
                 );
             })

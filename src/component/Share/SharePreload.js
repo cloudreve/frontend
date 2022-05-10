@@ -9,8 +9,10 @@ import LockedFile from "./LockedFile";
 import SharedFile from "./SharedFile";
 import SharedFolder from "./SharedFolder";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 export default function SharePreload() {
+    const { t } = useTranslation("application", { keyPrefix: "share" });
     const dispatch = useDispatch();
     const { id } = useParams();
 
@@ -32,9 +34,16 @@ export default function SharePreload() {
     useEffect(() => {
         if (share) {
             if (share.locked) {
-                SetSubTitle(share.creator.nick + "的加密分享");
+                SetSubTitle(
+                    t("privateShareTitle", { nick: share.creator.nick })
+                );
                 if (password !== "") {
-                    ToggleSnackbar("top", "right", "密码不正确", "warning");
+                    ToggleSnackbar(
+                        "top",
+                        "right",
+                        t("incorrectPassword"),
+                        "warning"
+                    );
                 }
             } else {
                 SetSubTitle(share.source.name);
@@ -75,7 +84,7 @@ export default function SharePreload() {
     return (
         <Suspense fallback={<PageLoading />}>
             {share === undefined && <PageLoading />}
-            {share === null && <Notice msg={"分享不存在或已过期"} />}
+            {share === null && <Notice msg={t("shareNotExist")} />}
             {share && share.locked && (
                 <LockedFile
                     loading={loading}

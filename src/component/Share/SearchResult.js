@@ -24,6 +24,7 @@ import { useLocation } from "react-router";
 import TimeAgo from "timeago-react";
 import { toggleSnackbar } from "../../redux/explorer";
 import Nothing from "../Placeholder/Nothing";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     cardContainer: {
@@ -72,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "right",
         marginTop: 5,
     },
+    cardAction: {
+        marginTop: 0,
+    },
 }));
 
 function useQuery() {
@@ -79,6 +83,8 @@ function useQuery() {
 }
 
 export default function SearchResult() {
+    const { t } = useTranslation("application", { keyPrefix: "share" });
+    const { t: tGlobal } = useTranslation();
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -114,7 +120,7 @@ export default function SearchResult() {
                 setShareList(response.data.items);
             })
             .catch(() => {
-                ToggleSnackbar("top", "right", "加载失败", "error");
+                ToggleSnackbar("top", "right", t("listLoadingError"), "error");
             });
     }, []);
 
@@ -123,7 +129,7 @@ export default function SearchResult() {
         if (keywords) {
             search(keywords, page, orderBy);
         } else {
-            ToggleSnackbar("top", "right", "请输入搜索关键词", "warning");
+            ToggleSnackbar("top", "right", t("enterKeywords"), "warning");
         }
     }, [location]);
 
@@ -144,7 +150,7 @@ export default function SearchResult() {
             <Grid container>
                 <Grid sm={6} xs={6}>
                     <Typography color="textSecondary" variant="h4">
-                        搜索结果
+                        {t("searchResult")}
                     </Typography>
                 </Grid>
                 <Grid sm={6} xs={6} className={classes.orderSelect}>
@@ -155,29 +161,29 @@ export default function SearchResult() {
                             value={orderBy}
                         >
                             <MenuItem value={"created_at DESC"}>
-                                创建日期由晚到早
+                                {t("createdAtDesc")}
                             </MenuItem>
                             <MenuItem value={"created_at ASC"}>
-                                创建日期由早到晚
+                                {t("createdAtAsc")}
                             </MenuItem>
                             <MenuItem value={"downloads DESC"}>
-                                下载次数由大到小
+                                {t("downloadsDesc")}
                             </MenuItem>
                             <MenuItem value={"downloads ASC"}>
-                                下载次数由小到大
+                                {t("downloadsAsc")}
                             </MenuItem>
                             <MenuItem value={"views DESC"}>
-                                浏览次数由大到小
+                                {t("viewsDesc")}
                             </MenuItem>
                             <MenuItem value={"views ASC"}>
-                                浏览次数由小到大
+                                {t("viewsAsc")}
                             </MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
             </Grid>
             <Grid container spacing={24} className={classes.gird}>
-                {shareList.length === 0 && <Nothing primary={"没有分享记录"} />}
+                {shareList.length === 0 && <Nothing primary={t("noRecords")} />}
                 {shareList.map((value) => (
                     <Grid
                         item
@@ -188,6 +194,9 @@ export default function SearchResult() {
                     >
                         <Card className={classes.card}>
                             <CardHeader
+                                classes={{
+                                    action: classes.cardAction,
+                                }}
                                 avatar={
                                     <div>
                                         {!value.is_dir && (
@@ -210,7 +219,10 @@ export default function SearchResult() {
                                     </div>
                                 }
                                 action={
-                                    <Tooltip placement="top" title="打开">
+                                    <Tooltip
+                                        placement="top"
+                                        title={tGlobal("fileManager.open")}
+                                    >
                                         <IconButton
                                             onClick={() =>
                                                 history.push("/s/" + value.key)
@@ -226,7 +238,7 @@ export default function SearchResult() {
                                         title={
                                             value.source
                                                 ? value.source.name
-                                                : "[原始对象不存在]"
+                                                : t("sourceNotFound")
                                         }
                                     >
                                         <Typography
@@ -235,16 +247,26 @@ export default function SearchResult() {
                                         >
                                             {value.source
                                                 ? value.source.name
-                                                : "[原始对象不存在]"}{" "}
+                                                : t("sourceNotFound")}
                                         </Typography>
                                     </Tooltip>
                                 }
                                 subheader={
                                     <span>
-                                        分享于{" "}
-                                        <TimeAgo
-                                            datetime={value.create_date}
-                                            locale="zh_CN"
+                                        <Trans
+                                            i18nKey="share.sharedAt"
+                                            components={[
+                                                <TimeAgo
+                                                    key={0}
+                                                    datetime={value.create_date}
+                                                    locale={tGlobal(
+                                                        "timeAgoLocaleCode",
+                                                        {
+                                                            ns: "common",
+                                                        }
+                                                    )}
+                                                />,
+                                            ]}
                                         />
                                     </span>
                                 }

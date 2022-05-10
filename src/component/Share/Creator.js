@@ -4,6 +4,7 @@ import { Avatar, Typography } from "@material-ui/core";
 import { useHistory } from "react-router";
 import Link from "@material-ui/core/Link";
 import { formatLocalTime } from "../../utils/datetime";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     boxHeader: {
@@ -27,17 +28,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Creator(props) {
+    const { t } = useTranslation("application", { keyPrefix: "share" });
     const classes = useStyles();
     const history = useHistory();
 
     const getSecondDes = () => {
         if (props.share.expire > 0) {
             if (props.share.expire >= 24 * 3600) {
-                return (
-                    Math.round(props.share.expire / (24 * 3600)) + " 天后到期"
-                );
+                return t("expireInXDays", {
+                    num: Math.round(props.share.expire / (24 * 3600)),
+                });
             }
-            return Math.round(props.share.expire / 3600) + " 小时后到期";
+
+            return t("expireInXHours", {
+                num: Math.round(props.share.expire / 3600),
+            });
         }
         return formatLocalTime(props.share.create_date);
     };
@@ -57,35 +62,45 @@ export default function Creator(props) {
             />
             <Typography variant="h6" className={classes.shareDes}>
                 {props.isFolder && (
-                    <>
-                        此分享由{" "}
-                        <Link
-                            onClick={() => userProfile()}
-                            href={"javascript:void(0)"}
-                            color="inherit"
-                        >
-                            {props.share.creator.nick}
-                        </Link>{" "}
-                        创建
-                    </>
+                    <Trans
+                        i18nKey="share.createdBy"
+                        values={{
+                            nick: props.share.creator.nick,
+                        }}
+                        components={[
+                            <Link
+                                key={0}
+                                onClick={() => userProfile()}
+                                href={"javascript:void(0)"}
+                                color="inherit"
+                            />,
+                        ]}
+                    />
                 )}
                 {!props.isFolder && (
-                    <>
-                        {" "}
-                        <Link
-                            onClick={() => userProfile()}
-                            href={"javascript:void(0)"}
-                            color="inherit"
-                        >
-                            {props.share.creator.nick}
-                        </Link>{" "}
-                        向您分享了 1 个文件
-                    </>
+                    <Trans
+                        i18nKey="share.sharedBy"
+                        values={{
+                            num: 1,
+                            nick: props.share.creator.nick,
+                        }}
+                        components={[
+                            <Link
+                                key={0}
+                                onClick={() => userProfile()}
+                                href={"javascript:void(0)"}
+                                color="inherit"
+                            />,
+                        ]}
+                    />
                 )}
             </Typography>
             <Typography className={classes.shareInfo}>
-                {props.share.views} 次浏览 • {props.share.downloads} 次下载 •{" "}
-                {getSecondDes()}
+                {t("statistics", {
+                    views: props.share.views,
+                    downloads: props.share.downloads,
+                    time: getSecondDes(),
+                })}
             </Typography>
         </div>
     );
