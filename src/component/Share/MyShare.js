@@ -287,7 +287,7 @@ class MyShareCompoment extends Component {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Grid container spacing={24} className={classes.gird}>
+                <Grid container spacing={2} className={classes.gird}>
                     {this.state.shareList.length === 0 && (
                         <Nothing primary={t("share.noRecords")} />
                     )}
@@ -295,7 +295,8 @@ class MyShareCompoment extends Component {
                         <Grid
                             item
                             xs={12}
-                            sm={4}
+                            sm={6}
+                            md={4}
                             key={value.id}
                             className={classes.cardContainer}
                         >
