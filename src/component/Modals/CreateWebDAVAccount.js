@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core";
-import { Dialog } from "@material-ui/core";
+import { Dialog, makeStyles } from "@material-ui/core";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { FolderOpenOutlined, LabelOutlined } from "@material-ui/icons";
 import PathSelector from "../FileManager/PathSelector";
+import { useTranslation } from "react-i18next";
+
 const useStyles = makeStyles((theme) => ({
     formGroup: {
         display: "flex",
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateWebDAVAccount(props) {
+    const { t } = useTranslation();
     const [value, setValue] = useState({
         name: "",
         path: "/",
@@ -77,7 +79,9 @@ export default function CreateWebDAVAccount(props) {
                 onClose={() => setPathSelectDialog(false)}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                    {t("navbar.addTagDialog.selectFolder")}
+                </DialogTitle>
                 <PathSelector
                     presentPath="/"
                     selected={[]}
@@ -86,14 +90,14 @@ export default function CreateWebDAVAccount(props) {
 
                 <DialogActions>
                     <Button onClick={() => setPathSelectDialog(false)}>
-                        取消
+                        {t("cancel", { ns: "common" })}
                     </Button>
                     <Button
                         onClick={selectPath}
                         color="primary"
                         disabled={selectedPath === ""}
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -108,7 +112,7 @@ export default function CreateWebDAVAccount(props) {
                             className={classes.input}
                             value={value.name}
                             onChange={handleInputChange("name")}
-                            label="备注名"
+                            label={t("setting.annotation")}
                         />
                     </div>
                     <div className={classes.formGroup}>
@@ -120,7 +124,7 @@ export default function CreateWebDAVAccount(props) {
                                 value={value.path}
                                 onChange={handleInputChange("path")}
                                 className={classes.input}
-                                label="相对根目录"
+                                label={t("setting.rootFolder")}
                             />
                             <br />
                             <Button
@@ -128,20 +132,22 @@ export default function CreateWebDAVAccount(props) {
                                 color="primary"
                                 onClick={() => setPathSelectDialog(true)}
                             >
-                                选择目录
+                                {t("navbar.addTagDialog.selectFolder")}
                             </Button>
                         </div>
                     </div>
                 </div>
             </div>
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <Button
                     disabled={value.path === "" || value.name === ""}
                     color="primary"
                     onClick={() => props.callback(value)}
                 >
-                    确定
+                    {t("ok", { ns: "common" })}
                 </Button>
             </DialogActions>
         </Dialog>

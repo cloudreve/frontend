@@ -69,6 +69,11 @@ export default function App() {
                         textTransform: "none",
                     },
                 },
+                MuiTab: {
+                    root: {
+                        textTransform: "none",
+                    },
+                },
             },
         });
         changeThemeColor(
@@ -232,11 +237,13 @@ export default function App() {
                             </Route>
 
                             <Route path="*">
-                                <NotFound  msg={t("pageNotFound", { ns: "common" })} />
+                                <NotFound
+                                    msg={t("pageNotFound", { ns: "common" })}
+                                />
                             </Route>
                         </Switch>
                     </main>
-                    <MusicPlayer/>
+                    <MusicPlayer />
                 </div>
             </ThemeProvider>
         </React.Fragment>

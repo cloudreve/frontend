@@ -1,20 +1,15 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { FormLabel, makeStyles } from "@material-ui/core";
+import React, { useCallback, useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    DialogContentText,
-    CircularProgress,
+    makeStyles,
 } from "@material-ui/core";
-import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
-import API from "../../middleware/Api";
 import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import {
     refreshTimeZone,
     timeZone,
@@ -22,11 +17,13 @@ import {
 } from "../../utils/datetime";
 import FormControl from "@material-ui/core/FormControl";
 import Auth from "../../middleware/Auth";
-import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
+import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({}));
 
 export default function TimeZoneDialog(props) {
+    const { t } = useTranslation();
     const [timeZoneValue, setTimeZoneValue] = useState(timeZone);
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -53,12 +50,14 @@ export default function TimeZoneDialog(props) {
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">更改时区</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("setting.timeZone")}
+            </DialogTitle>
 
             <DialogContent>
                 <FormControl>
                     <TextField
-                        label={"IANA 时区名称标识"}
+                        label={t("setting.timeZoneCode")}
                         value={timeZoneValue}
                         onChange={(e) => setTimeZoneValue(e.target.value)}
                     />
@@ -66,14 +65,16 @@ export default function TimeZoneDialog(props) {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <div className={classes.wrapper}>
                     <Button
                         color="primary"
                         disabled={timeZoneValue === ""}
                         onClick={() => saveZoneInfo()}
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                         {props.modalsLoading && (
                             <CircularProgress
                                 size={24}

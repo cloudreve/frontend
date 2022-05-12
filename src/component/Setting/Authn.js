@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
     Button,
     Dialog,
@@ -21,6 +21,7 @@ import { Add, Fingerprint, HighlightOff } from "@material-ui/icons";
 import API from "../../middleware/Api";
 import { bufferDecode, bufferEncode } from "../../utils";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     sectionTitle: {
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Authn(props) {
+    const { t } = useTranslation();
     const [selected, setSelected] = useState("");
     const [confirm, setConfirm] = useState(false);
     const dispatch = useDispatch();
@@ -61,7 +63,12 @@ export default function Authn(props) {
             id: id,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "凭证已删除", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    t("setting.authenticatorRemoved"),
+                    "success"
+                );
                 props.remove(id);
             })
             .catch((error) => {
@@ -76,7 +83,12 @@ export default function Authn(props) {
 
     const addCredential = () => {
         if (!navigator.credentials) {
-            ToggleSnackbar("top", "right", "当前浏览器或环境不支持", "warning");
+            ToggleSnackbar(
+                "top",
+                "right",
+                t("setting.browserNotSupported"),
+                "warning"
+            );
 
             return;
         }
@@ -129,7 +141,12 @@ export default function Authn(props) {
             })
             .then((response) => {
                 props.add(response.data);
-                ToggleSnackbar("top", "right", "验证器已添加", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    t("setting.authenticatorAdded"),
+                    "success"
+                );
                 return;
             })
             .catch((error) => {
@@ -141,23 +158,25 @@ export default function Authn(props) {
     return (
         <div>
             <Dialog open={confirm} onClose={() => setConfirm(false)}>
-                <DialogTitle>删除凭证</DialogTitle>
-                <DialogContent>确定要吊销这个凭证吗？</DialogContent>
+                <DialogTitle>{t("setting.removedAuthenticator")}</DialogTitle>
+                <DialogContent>
+                    {t("setting.removedAuthenticatorConfirm")}
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setConfirm(false)} color="default">
-                        取消
+                        {t("cancel", { ns: "common" })}
                     </Button>
                     <Button
                         onClick={() => deleteCredential(selected)}
                         color="primary"
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                     </Button>
                 </DialogActions>
             </Dialog>
 
             <Typography className={classes.sectionTitle} variant="subtitle2">
-                外部认证器
+                {t("setting.hardwareAuthenticator")}
             </Typography>
             <Paper>
                 <List className={classes.desenList}>
@@ -194,7 +213,9 @@ export default function Authn(props) {
                         <ListItemIcon className={classes.iconFix}>
                             <Add />
                         </ListItemIcon>
-                        <ListItemText primary="添加新验证器" />
+                        <ListItemText
+                            primary={t("setting.addNewAuthenticator")}
+                        />
 
                         <ListItemSecondaryAction
                             className={classes.flexContainer}

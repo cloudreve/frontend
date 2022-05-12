@@ -21,6 +21,7 @@ import TimeAgo from "timeago-react";
 import Link from "@material-ui/core/Link";
 import { toggleSnackbar } from "../../redux/explorer";
 import Nothing from "../Placeholder/Nothing";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WebDAV() {
+    const { t } = useTranslation();
     const [tab, setTab] = useState(0);
     const [create, setCreate] = useState(false);
     const [accounts, setAccounts] = useState([]);
@@ -67,12 +69,12 @@ export default function WebDAV() {
     const copyToClipboard = (text) => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
-            ToggleSnackbar("top", "center", "已复制到剪切板", "success");
+            ToggleSnackbar("top", "center", t("setting.copied"), "success");
         } else {
             ToggleSnackbar(
                 "top",
                 "center",
-                "当前浏览器不支持，请手动复制",
+                t("setting.pleaseManuallyCopy"),
                 "warning"
             );
         }
@@ -141,7 +143,7 @@ export default function WebDAV() {
                 onClose={() => setCreate(false)}
             />
             <Typography color="textSecondary" variant="h4">
-                WebDAV
+                {t("navbar.connect")}
             </Typography>
             <Paper elevation={3} className={classes.content}>
                 <Tabs
@@ -151,16 +153,16 @@ export default function WebDAV() {
                     onChange={(event, newValue) => setTab(newValue)}
                     aria-label="disabled tabs example"
                 >
-                    <Tab label="账号管理" />
+                    <Tab label={t("setting.webdavAccounts")} />
                 </Tabs>
                 <div className={classes.cardContent}>
                     {tab === 0 && (
                         <div>
                             <Alert severity="info">
-                                WebDAV的地址为：
-                                {window.location.origin + "/dav"}
-                                ；登录用户名统一为：{user.user_name}{" "}
-                                ；密码为所创建账号的密码。
+                                {t("setting.webdavHint", {
+                                    url: window.location.origin + "/dav",
+                                    name: user.user_name,
+                                })}
                             </Alert>
                             <TableContainer className={classes.tableContainer}>
                                 <Table
@@ -169,16 +171,20 @@ export default function WebDAV() {
                                 >
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>备注名</TableCell>
-                                            <TableCell>密码</TableCell>
-                                            <TableCell align="right">
-                                                根目录
+                                            <TableCell>
+                                                {t("setting.annotation")}
+                                            </TableCell>
+                                            <TableCell>
+                                                {t("login.password")}
                                             </TableCell>
                                             <TableCell align="right">
-                                                创建日期
+                                                {t("setting.rootFolder")}
                                             </TableCell>
                                             <TableCell align="right">
-                                                操作
+                                                {t("setting.createdAt")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {t("setting.action")}
                                             </TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -202,7 +208,9 @@ export default function WebDAV() {
                                                         }
                                                         href={"javascript:void"}
                                                     >
-                                                        复制
+                                                        {t("copy", {
+                                                            ns: "common",
+                                                        })}
                                                     </Link>
                                                 </TableCell>
                                                 <TableCell align="right">
@@ -229,7 +237,7 @@ export default function WebDAV() {
                                     </TableBody>
                                 </Table>
                                 {accounts.length === 0 && (
-                                    <Nothing primary={"没有记录"} />
+                                    <Nothing primary={t("setting.listEmpty")} />
                                 )}
                             </TableContainer>
                             <Button
@@ -238,7 +246,7 @@ export default function WebDAV() {
                                 variant="contained"
                                 color="secondary"
                             >
-                                创建新账号
+                                {t("setting.createNewAccount")}
                             </Button>
                         </div>
                     )}

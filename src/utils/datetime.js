@@ -7,13 +7,23 @@ import i18next from "../i18n";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const defaultTimeZone = "Asia/Shanghai";
+let userTimezone = "";
+try {
+    userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+} catch (e) {
+    console.log(e);
+}
+
+if (!userTimezone) {
+    userTimezone = "Asia/Shanghai";
+}
+
 const preferTimeZone = Auth.GetPreference("timeZone");
-export let timeZone = preferTimeZone ? preferTimeZone : defaultTimeZone;
+export let timeZone = preferTimeZone ? preferTimeZone : userTimezone;
 
 export function refreshTimeZone() {
     timeZone = Auth.GetPreference("timeZone");
-    timeZone = timeZone ? timeZone : defaultTimeZone;
+    timeZone = timeZone ? timeZone : userTimezone;
 }
 
 export function formatLocalTime(time) {
