@@ -30,6 +30,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -148,6 +149,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FinishedCard(props) {
+    const { t } = useTranslation("application", { keyPrefix: "download" });
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
@@ -177,7 +179,7 @@ export default function FinishedCard(props) {
         setLoading(true);
         API.delete("/aria2/task/" + props.task.gid)
             .then(() => {
-                ToggleSnackbar("top", "right", "删除成功", "success");
+                ToggleSnackbar("top", "right", t("taskDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -188,7 +190,7 @@ export default function FinishedCard(props) {
     };
 
     const getDownloadName = useCallback(() => {
-        return props.task.name === "." ? "[未知]" : props.task.name;
+        return props.task.name === "." ? t("unknownTaskName") : props.task.name;
     }, [props.task.name]);
 
     const activeFiles = useCallback(() => {
@@ -217,7 +219,7 @@ export default function FinishedCard(props) {
             const res = JSON.parse(error);
             return res.msg + "：" + res.error;
         } catch (e) {
-            return "文件转存失败";
+            return t("transferFailed");
         }
     };
 
@@ -246,7 +248,9 @@ export default function FinishedCard(props) {
                                     color="error"
                                     noWrap
                                 >
-                                    下载出错：{props.task.error}
+                                    {t("downloadFailed", {
+                                        msg: props.task.error,
+                                    })}
                                 </Typography>
                             </Tooltip>
                         )}
@@ -256,9 +260,9 @@ export default function FinishedCard(props) {
                                 color="textSecondary"
                                 noWrap
                             >
-                                已取消
+                                {t("canceledStatus")}
                                 {props.task.error !== "" && (
-                                    <span>：{props.task.error}</span>
+                                    <span>({props.task.error})</span>
                                 )}
                             </Typography>
                         )}
@@ -271,7 +275,7 @@ export default function FinishedCard(props) {
                                     }}
                                     noWrap
                                 >
-                                    已完成
+                                    {t("finishedStatus")}
                                 </Typography>
                             )}
                         {props.task.status === 4 &&
@@ -283,7 +287,7 @@ export default function FinishedCard(props) {
                                     }}
                                     noWrap
                                 >
-                                    已完成，转存排队中
+                                    {"transferring"}
                                 </Typography>
                             )}
                         {props.task.status === 4 &&
@@ -295,7 +299,7 @@ export default function FinishedCard(props) {
                                     }}
                                     noWrap
                                 >
-                                    已完成，转存处理中
+                                    {"transferring"}
                                 </Typography>
                             )}
                         {props.task.status === 4 &&
@@ -394,7 +398,7 @@ export default function FinishedCard(props) {
                                 )
                             }
                         >
-                            打开存放目录
+                            {t("openDstFolder")}
                         </Button>
                         <Button
                             className={classes.actionButton}
@@ -403,25 +407,25 @@ export default function FinishedCard(props) {
                             color="secondary"
                             disabled={loading}
                         >
-                            删除记录
+                            {t("deleteRecord")}
                         </Button>
                     </div>
                     <Divider />
                     <div className={classes.info}>
                         <Grid container>
                             <Grid container xs={12} sm={6}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    创建日期：
+                                <Grid item xs={5} className={classes.infoTitle}>
+                                    {t("createdAt")}
                                 </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
+                                <Grid item xs={7} className={classes.infoValue}>
                                     {formatLocalTime(props.task.create)}
                                 </Grid>
                             </Grid>
                             <Grid container xs={12} sm={6}>
-                                <Grid item xs={4} className={classes.infoTitle}>
-                                    最后更新：
+                                <Grid item xs={5} className={classes.infoTitle}>
+                                    {t("updatedAt")}
                                 </Grid>
-                                <Grid item xs={8} className={classes.infoValue}>
+                                <Grid item xs={7} className={classes.infoValue}>
                                     {formatLocalTime(props.task.update)}
                                 </Grid>
                             </Grid>

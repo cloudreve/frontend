@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    CircularProgress,
+    makeStyles,
 } from "@material-ui/core";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import MenuItem from "@material-ui/core/MenuItem";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SelectFileDialog(props) {
+    const { t } = useTranslation();
     const [files, setFiles] = useState(props.files);
 
     useEffect(() => {
@@ -74,7 +76,9 @@ export default function SelectFileDialog(props) {
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">选择要下载的文件</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("download.selectDownloadingFile")}
+            </DialogTitle>
             <DialogContent dividers={"paper"} className={classes.content}>
                 {files.map((v, k) => {
                     return (
@@ -96,14 +100,16 @@ export default function SelectFileDialog(props) {
                 })}
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <div className={classes.wrapper}>
                     <Button
                         color="primary"
                         onClick={submit}
                         disabled={props.modalsLoading}
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                         {props.modalsLoading && (
                             <CircularProgress
                                 size={24}

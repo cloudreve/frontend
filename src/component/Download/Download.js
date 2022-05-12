@@ -9,6 +9,7 @@ import FinishedCard from "./FinishedCard";
 import RemoteDownloadButton from "../Dial/Aria2";
 import Auth from "../../middleware/Auth";
 import Nothing from "../Placeholder/Nothing";
+import { withTranslation } from "react-i18next";
 
 const styles = (theme) => ({
     actions: {
@@ -151,7 +152,12 @@ class DownloadComponent extends Component {
                 });
             })
             .catch(() => {
-                this.props.toggleSnackbar("top", "right", "加载失败", "error");
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    this.props.t("download.failedToLoad"),
+                    "error"
+                );
                 this.setState({
                     loading: false,
                 });
@@ -159,7 +165,7 @@ class DownloadComponent extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
         const user = Auth.GetUser();
 
         return (
@@ -170,7 +176,7 @@ class DownloadComponent extends Component {
                     variant="h4"
                     className={classes.title}
                 >
-                    进行中
+                    {t("download.active")}
                     <IconButton
                         disabled={this.state.loading}
                         onClick={this.loadDownloading}
@@ -179,7 +185,7 @@ class DownloadComponent extends Component {
                     </IconButton>
                 </Typography>
                 {this.state.downloading.length === 0 && (
-                    <Nothing primary={"没有下载中的任务"} />
+                    <Nothing primary={t("download.activeEmpty")} />
                 )}
                 {this.state.downloading.map((value, k) => (
                     <DownloadingCard key={k} task={value} />
@@ -189,11 +195,11 @@ class DownloadComponent extends Component {
                     variant="h4"
                     className={classes.title}
                 >
-                    已完成
+                    {t("download.finished")}
                 </Typography>
                 <div className={classes.loadMore}>
                     {this.state.finishedList.length === 0 && (
-                        <Nothing primary={"没有已完成的任务"} />
+                        <Nothing primary={t("download.finishedEmpty")} />
                     )}
                     {this.state.finishedList.map((value, k) => {
                         if (value.files) {
@@ -207,7 +213,7 @@ class DownloadComponent extends Component {
                         disabled={!this.state.continue}
                         onClick={this.loadMore}
                     >
-                        加载更多
+                        {t("download.loadMore")}
                     </Button>
                 </div>
             </div>
@@ -218,6 +224,6 @@ class DownloadComponent extends Component {
 const Download = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(DownloadComponent));
+)(withStyles(styles)(withTranslation()(DownloadComponent)));
 
 export default Download;
