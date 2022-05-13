@@ -1,3 +1,5 @@
+import i18next from "./i18n";
+
 export const imgPreviewSuffix = [
     "bmp",
     "png",
@@ -17,7 +19,7 @@ export const msDocPreviewSuffix = [
     "xls",
 ];
 export const subtitleSuffix = ["ass", "srt", "vrr"];
-export const audioPreviewSuffix = ["mp3", "ogg", "wav", "flac","m4a"];
+export const audioPreviewSuffix = ["mp3", "ogg", "wav", "flac", "m4a"];
 export const videoPreviewSuffix = ["mp4", "mkv", "webm", "avi", "m3u8", "mov"];
 export const pdfPreviewSuffix = ["pdf"];
 export const editSuffix = ["md", "txt"];
@@ -116,29 +118,42 @@ export const encodingRequired = (name: any) => {
     return suffix === "zip";
 };
 
-const taskStatus = ["排队中", "处理中", "失败", "取消", "已完成"];
-const taskType = ["压缩", "解压缩", "文件中转", "导入外部目录"];
+const taskStatus = [
+    "setting.queueing",
+    "setting.processing",
+    "setting.failed",
+    "setting.canceled",
+    "setting.finished",
+];
+const taskType = [
+    "fileManager.compress",
+    "fileManager.decompress",
+    "setting.fileTransfer",
+    "setting.importFiles",
+];
 const taskProgress = [
-    "等待中",
-    "压缩中",
-    "解压缩中",
-    "下载中",
-    "转存中",
-    "索引中",
-    "插入中",
+    "setting.waiting",
+    "setting.compressing",
+    "setting.decompressing",
+    "setting.downloading",
+    "setting.transferring",
+    "setting.indexing",
+    "setting.listing",
 ];
 
 export const getTaskStatus = (status: any) => {
-    return taskStatus[status];
+    return i18next.t(taskStatus[status]);
 };
 
 export const getTaskType = (status: any) => {
-    return taskType[status];
+    return i18next.t(taskType[status]);
 };
 
 export const getTaskProgress = (type: any, status: any) => {
     if (type === 2) {
-        return "已完成 " + (status + 1) + " 个文件";
+        return i18next.t("setting.transferProgress", {
+            num: status,
+        });
     }
-    return taskProgress[status];
+    return i18next.t(taskProgress[status]);
 };

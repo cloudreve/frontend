@@ -34,6 +34,7 @@ import { hex2bin, sizeToString } from "../../utils";
 import TypeIcon from "../FileManager/TypeIcon";
 import SelectFileDialog from "../Modals/SelectFile";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 const ExpansionPanel = withStyles({
     root: {
         maxWidth: "100%",

@@ -390,6 +390,25 @@
     "createdAt": "创建日期",
     "action": "操作",
     "listEmpty": "没有记录",
-    "createNewAccount": "创建新账号"
+    "createNewAccount": "创建新账号",
+    "taskType": "任务类型",
+    "taskStatus": "状态",
+    "lastProgress": "最后进度",
+    "errorDetails": "错误信息",
+    "queueing": "排队中",
+    "processing": "处理中",
+    "failed": "失败",
+    "canceled": "取消",
+    "finished": "已完成",
+    "fileTransfer": "文件中转",
+    "importFiles": "导入外部目录",
+    "transferProgress": "已完成 {{num}} 个文件",
+    "waiting": "等待中",
+    "compressing": "压缩中",
+    "decompressing": "解压缩中",
+    "downloading": "下载中",
+    "transferring": "转存中",
+    "indexing": "索引中",
+    "listing": "插入中"
   }
 }

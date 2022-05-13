@@ -400,6 +400,25 @@
     "createdAt": "Created at",
     "action": "Action",
     "listEmpty": "No records.",
-    "createNewAccount": "Create new account"
+    "createNewAccount": "Create new account",
+    "taskType": "Task type",
+    "taskStatus": "Status",
+    "lastProgress": "Last progress",
+    "errorDetails": "Error details",
+    "queueing": "Queueing",
+    "processing": "Processing",
+    "failed": "Failed",
+    "canceled": "Canceled",
+    "finished": "Finished",
+    "fileTransfer": "File transfer",
+    "importFiles": "Import external files",
+    "transferProgress": "{{num}} files done",
+    "waiting": "Pending",
+    "compressing": "Compressing",
+    "decompressing": "Decompressing",
+    "downloading": "Downloading",
+    "transferring": "Transferring",
+    "indexing": "Indexing",
+    "listing": "Inserting"
   }
 }
