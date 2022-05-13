@@ -409,6 +409,13 @@
     "downloading": "下载中",
     "transferring": "转存中",
     "indexing": "索引中",
-    "listing": "插入中"
+    "listing": "插入中",
+    "allShares": "全部分享",
+    "trendingShares": "热门分享",
+    "totalShares": "分享总数",
+    "fileName": "文件名",
+    "shareDate": "分享日期",
+    "downloadNumber": "下载次数",
+    "viewNumber": "浏览次数"
   }
 }

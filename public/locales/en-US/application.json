@@ -359,7 +359,7 @@
     "uid": "UID",
     "nickname": "Nickname",
     "group": "Group",
-    "regTime": "Sign in date",
+    "regTime": "Sign up date",
     "privacyAndSecurity": "Privacy and security",
     "profilePage": "Public profile",
     "accountPassword": "Password",
@@ -419,6 +419,13 @@
     "downloading": "Downloading",
     "transferring": "Transferring",
     "indexing": "Indexing",
-    "listing": "Inserting"
+    "listing": "Inserting",
+    "allShares": "Shared",
+    "trendingShares": "Trending",
+    "totalShares": "Created shares",
+    "fileName": "File name",
+    "shareDate": "Shared at",
+    "downloadNumber": "Downloads",
+    "viewNumber": "Views"
   }
 }

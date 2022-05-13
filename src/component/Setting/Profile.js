@@ -20,6 +20,7 @@ import { withRouter } from "react-router";
 import Pagination from "@material-ui/lab/Pagination";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
+import { withTranslation } from "react-i18next";
 
 const styles = (theme) => ({
     layout: {
@@ -190,7 +191,7 @@ class ProfileCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         return (
             <div className={classes.layout}>
@@ -221,9 +222,9 @@ class ProfileCompoment extends Component {
                             onChange={this.handleChange}
                             centered
                         >
-                            <Tab label="全部分享" />
-                            <Tab label="热门分享" />
-                            <Tab label="个人资料" />
+                            <Tab label={t("setting.allShares")} />
+                            <Tab label={t("setting.trendingShares")} />
+                            <Tab label={t("setting.profile")} />
                         </Tabs>
                         {this.state.listType === 2 && (
                             <div className={classes.infoContainer}>
@@ -238,7 +239,7 @@ class ProfileCompoment extends Component {
                                             color="textSecondary"
                                             variant="h6"
                                         >
-                                            UID
+                                            {t("setting.uid")}
                                         </Typography>
                                         <Typography>
                                             {this.state.user.id}
@@ -254,7 +255,7 @@ class ProfileCompoment extends Component {
                                             color="textSecondary"
                                             variant="h6"
                                         >
-                                            昵称
+                                            {t("setting.nickname")}
                                         </Typography>
                                         <Typography>
                                             {this.state.user.nick}
@@ -270,7 +271,7 @@ class ProfileCompoment extends Component {
                                             color="textSecondary"
                                             variant="h6"
                                         >
-                                            用户组
+                                            {t("setting.group")}
                                         </Typography>
                                         <Typography>
                                             {this.state.user.group}
@@ -286,7 +287,7 @@ class ProfileCompoment extends Component {
                                             color="textSecondary"
                                             variant="h6"
                                         >
-                                            分享总数
+                                            {t("setting.totalShares")}
                                         </Typography>
                                         <Typography>
                                             {this.state.total}
@@ -302,7 +303,7 @@ class ProfileCompoment extends Component {
                                             color="textSecondary"
                                             variant="h6"
                                         >
-                                            注册日期
+                                            {t("setting.regTime")}
                                         </Typography>
                                         <Typography>
                                             {this.state.user.date}
@@ -318,13 +319,15 @@ class ProfileCompoment extends Component {
                                     <Table className={classes.table}>
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>文件名</TableCell>
+                                                <TableCell>
+                                                    {t("setting.fileName")}
+                                                </TableCell>
                                                 <TableCell
                                                     className={
                                                         classes.mobileHide
                                                     }
                                                 >
-                                                    分享日期
+                                                    {t("setting.shareDate")}
                                                 </TableCell>
                                                 <TableCell
                                                     className={[
@@ -332,7 +335,9 @@ class ProfileCompoment extends Component {
                                                         classes.mobileHide,
                                                     ]}
                                                 >
-                                                    下载次数
+                                                    {t(
+                                                        "setting.downloadNumber"
+                                                    )}
                                                 </TableCell>
                                                 <TableCell
                                                     className={[
@@ -340,7 +345,7 @@ class ProfileCompoment extends Component {
                                                         classes.mobileHide,
                                                     ]}
                                                 >
-                                                    浏览次数
+                                                    {t("setting.viewNumber")}
                                                 </TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -363,7 +368,11 @@ class ProfileCompoment extends Component {
                                                                 {row.source
                                                                     ? row.source
                                                                           .name
-                                                                    : "[已失效]"}
+                                                                    : "[" +
+                                                                      t(
+                                                                          "share.expired"
+                                                                      ) +
+                                                                      "]"}
                                                             </Typography>
                                                         </TableCell>
                                                         <TableCell
@@ -428,6 +437,6 @@ class ProfileCompoment extends Component {
 const Profile = connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(withRouter(ProfileCompoment)));
+)(withStyles(styles)(withRouter(withTranslation()(ProfileCompoment))));
 
 export default Profile;
