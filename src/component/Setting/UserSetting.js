@@ -49,6 +49,7 @@ import {
     ListAlt,
     PermContactCalendar,
     Schedule,
+    Translate,
 } from "@material-ui/icons";
 import Authn from "./Authn";
 import { formatLocalTime, timeZone } from "../../utils/datetime";
@@ -60,6 +61,8 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import { Trans, withTranslation } from "react-i18next";
+import { selectLanguage } from "../../redux/viewUpdate/action";
+import OptionSelector from "../Modals/OptionSelector";
 
 const styles = (theme) => ({
     layout: {
@@ -190,6 +193,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         changeView: (method) => {
             dispatch(changeViewMethod(method));
+        },
+        selectLanguage: () => {
+            dispatch(selectLanguage());
         },
     };
 };
@@ -1084,6 +1090,24 @@ class UserSettingCompoment extends Component {
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
+                            <Divider />
+                            <ListItem
+                                onClick={() => this.props.selectLanguage()}
+                                button
+                            >
+                                <ListItemIcon className={classes.iconFix}>
+                                    <Translate />
+                                </ListItemIcon>
+                                <ListItemText primary={t("setting.language")} />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
                         </List>
                     </Paper>
 
@@ -1371,6 +1395,7 @@ class UserSettingCompoment extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <OptionSelector />
             </div>
         );
     }

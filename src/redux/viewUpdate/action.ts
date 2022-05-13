@@ -1,6 +1,8 @@
 import { ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
 import Auth from "../../middleware/Auth";
+import { askForOption } from "../explorer/async";
+import i18next, { languages } from "../../i18n";
 
 export interface ActionSetSubtitle extends AnyAction {
     type: "SET_SUBTITLE";
@@ -97,5 +99,29 @@ export const changePageSize = (
                 page: page,
             })
         );
+    };
+};
+
+export const selectLanguage = (): ThunkAction<any, any, any, any> => {
+    return async (dispatch, getState) => {
+        let option: any;
+        let lng = "";
+        try {
+            const allOptions = languages.map((e) => {
+                return {
+                    key: e.code,
+                    name: e.displayName,
+                };
+            });
+            option = await dispatch(
+                askForOption(allOptions, i18next.t("setting.language"))
+            );
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+
+        lng = option.key;
+        await i18next.changeLanguage(lng);
     };
 };

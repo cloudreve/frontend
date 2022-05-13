@@ -439,6 +439,7 @@
     "fileName": "文件名",
     "shareDate": "分享日期",
     "downloadNumber": "下载次数",
-    "viewNumber": "浏览次数"
+    "viewNumber": "浏览次数",
+    "language": "语言"
   }
 }

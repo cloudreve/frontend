@@ -13,7 +13,11 @@ import {
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+    content: {
+        minWidth: 250,
+    },
+}));
 
 export default function OptionSelector() {
     const { t } = useTranslation("common");

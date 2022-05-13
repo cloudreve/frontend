@@ -22,4 +22,15 @@ i18n.on("languageChanged", (lng) => {
     document.documentElement.setAttribute("lang", lng);
 });
 
+export const languages = [
+    {
+        code: "en-US",
+        displayName: "English",
+    },
+    {
+        code: "zh-CN",
+        displayName: "简体中文",
+    },
+];
+
 export default i18n;
