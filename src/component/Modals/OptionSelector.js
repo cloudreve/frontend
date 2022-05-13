@@ -11,10 +11,12 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({}));
 
 export default function OptionSelector() {
+    const { t } = useTranslation("common");
     const classes = useStyles();
     const option = useSelector((state) => state.viewUpdate.modals.option);
 
@@ -45,7 +47,9 @@ export default function OptionSelector() {
                 </List>
             </DialogContent>
             <DialogActions>
-                <Button onClick={option && option.onClose}>取消</Button>
+                <Button onClick={option && option.onClose}>
+                    {t("cancel")}
+                </Button>
             </DialogActions>
         </Dialog>
     );

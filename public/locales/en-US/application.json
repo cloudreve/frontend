@@ -141,7 +141,27 @@
     "statisticAt": "Statistic at <1></1>",
     "musicPlayer": "Music player",
     "closeAndStop": "Close and stop",
-    "playInBackground": "Play in background"
+    "playInBackground": "Play in background",
+    "copyTo": "Copy to",
+    "copyToDst": "Copy to <0>{{dst}}</0>",
+    "errorReadFileContent": "Failed to read file content: {{msg}}",
+    "wordWrap": "Word wrap",
+    "pdfLoadingError": "Failed to load PDF: {{msg}}",
+    "subtitleSwitchTo": "Subtitle switched to: {{subtitle}}",
+    "noSubtitleAvailable": "No available subtitle files in the video folder (supported: ASS/SRT/VTT)",
+    "subtitle": "Subtitles",
+    "playlist": "Playlist",
+    "openInExternalPlayer": "Open in external player",
+    "searchResult": "Search Results",
+    "preparingBathDownload": "Preparing batch download...",
+    "preparingDownload": "Preparing to download...",
+    "browserBatchDownload": "Browser-side archiving",
+    "browserBatchDownloadDescription": "Downloaded and packaged by the browser in real time, not all environments are supported.",
+    "serverBatchDownload": "Server-side transit archiving",
+    "serverBatchDownloadDescription": "Archive by the server and sent to the client for download on-the-fly.",
+    "selectArchiveMethod": "Select archive method",
+    "batchDownloadStarted": "Batch download has started, please do not close this tab",
+    "batchDownloadError": "Failed to archive: {{msg}}"
   },
   "modals": {
     "processing": "Processing...",
@@ -265,7 +285,9 @@
     "ossFinishUploadError": "Unable to complete file upload: {{msg}} ({{code}})",
     "cosUploadFailed": "Upload failed: {{msg}} ({{code}})",
     "upyunUploadFailed": "Upload failed: {{msg}}",
-    "parseResponseError": "Unable to parse response: {{msg}} ({{content}})"
+    "parseResponseError": "Unable to parse response: {{msg}} ({{content}})",
+    "concurrentTaskNumber": "Concurrent task limit",
+    "dropFileHere": "Drop file to upload"
   },
   "share": {
     "expireInXDays": "Expire in $t(share.days, {\"count\": {{num}} })",

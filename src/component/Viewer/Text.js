@@ -10,6 +10,7 @@ import pathHelper from "../../utils/page";
 import TextLoading from "../Placeholder/TextLoading";
 import { toggleSnackbar } from "../../redux/explorer";
 import UseFileSubTitle from "../../hooks/fileSubtitle";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -42,6 +43,7 @@ function useQuery() {
 }
 
 export default function TextViewer() {
+    const { t } = useTranslation();
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
@@ -80,7 +82,9 @@ export default function TextViewer() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法读取文件内容，" + error.message,
+                    t("fileManager.errorReadFileContent", {
+                        msg: error.message,
+                    }),
                     "error"
                 );
             })
@@ -123,6 +127,7 @@ export default function TextViewer() {
                 {loading && <TextLoading />}
                 {!loading && (
                     <Editor
+                        language={t("forEditorLocaleCode", { ns: "common" })}
                         ref={$vm}
                         value={content}
                         onSave={() => save()}

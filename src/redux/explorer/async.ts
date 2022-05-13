@@ -1,5 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { setOptionModal } from "../viewUpdate/action";
+import i18next from "../../i18n";
 
 export const askForOption = (
     options: any,
@@ -17,7 +18,7 @@ export const askForOption = (
                     ...dialog,
                     onClose: () => {
                         dispatch(setOptionModal({ ...dialog, open: false }));
-                        reject("用户拒绝");
+                        reject(i18next.t("fileManager.userDenied"));
                     },
                     callback: (option: any) => {
                         resolve(option);

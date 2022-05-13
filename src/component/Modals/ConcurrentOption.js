@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { Input, InputLabel, makeStyles } from "@material-ui/core";
 import {
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    Input,
+    InputLabel,
+    makeStyles,
 } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Auth from "../../middleware/Auth";
+import { useTranslation } from "react-i18next";
+
 const useStyles = makeStyles((theme) => ({}));
 
 export default function ConcurrentOptionDialog({ open, onClose, onSave }) {
+    const { t } = useTranslation();
     const [count, setCount] = useState(
         Auth.GetPreferenceWithDefault("concurrent_limit", "5")
     );
@@ -25,12 +30,14 @@ export default function ConcurrentOptionDialog({ open, onClose, onSave }) {
             onClose={onClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">任务并行数量</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("uploader.setConcurrent")}
+            </DialogTitle>
 
             <DialogContent>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="component-helper">
-                        同时上传的任务数量
+                        {t("uploader.concurrentTaskNumber")}
                     </InputLabel>
                     <Input
                         type={"number"}
@@ -46,14 +53,16 @@ export default function ConcurrentOptionDialog({ open, onClose, onSave }) {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={onClose}>取消</Button>
+                <Button onClick={onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <div className={classes.wrapper}>
                     <Button
                         color="primary"
                         disabled={count === ""}
                         onClick={() => onSave(count)}
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                     </Button>
                 </div>
             </DialogActions>

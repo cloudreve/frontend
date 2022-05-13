@@ -20,7 +20,6 @@ import { bufferDecode, bufferEncode } from "../../utils/index";
 import { Fingerprint, VpnKey } from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
-import { ICPFooter } from "../Common/ICPFooter";
 import { useCaptcha } from "../../hooks/useCaptcha";
 import {
     applyThemes,
@@ -361,8 +360,6 @@ function LoginForm() {
                                 )}
                             </div>
                         </div>
-
-                        <ICPFooter />
                     </Paper>
 
                     {authn && (

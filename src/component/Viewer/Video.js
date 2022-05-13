@@ -17,6 +17,7 @@ import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
 import TextLoading from "../Placeholder/TextLoading";
 import SelectMenu from "./SelectMenu";
 import { getDownloadURL } from "../../services/file";
+import { useTranslation } from "react-i18next";
 
 const Artplayer = React.lazy(() =>
     import(
@@ -84,6 +85,7 @@ function useQuery() {
 }
 
 export default function VideoViewer() {
+    const { t } = useTranslation();
     const math = useRouteMatch();
     const location = useLocation();
     const query = useQuery();
@@ -187,7 +189,14 @@ export default function VideoViewer() {
             );
             art.subtitle.show = true;
             setSubtitleSelected(f.name);
-            ToggleSnackbar("top", "center", `字幕切换到：${f.name} `, "info");
+            ToggleSnackbar(
+                "top",
+                "center",
+                t("fileManager.subtitleSwitchTo", {
+                    subtitle: f.name,
+                }),
+                "info"
+            );
         }
     };
 
@@ -228,7 +237,7 @@ export default function VideoViewer() {
             ToggleSnackbar(
                 "top",
                 "right",
-                `视频目录下没有可用字幕文件 (支持：ASS/SRT/VTT)`,
+                t("fileManager.noSubtitleAvailable"),
                 "warning"
             );
             return;
@@ -276,6 +285,7 @@ export default function VideoViewer() {
                                 "webkit-playsinline": true,
                                 playsInline: true,
                             },
+                            lang: t("artPlayerLocaleCode", { ns: "common" }),
                         }}
                         className={classes.player}
                         getInstance={(a) => setArt(a)}
@@ -289,7 +299,7 @@ export default function VideoViewer() {
                     startIcon={<Subtitles />}
                     variant="outlined"
                 >
-                    选择字幕
+                    {t("fileManager.subtitle")}
                 </Button>
                 {playlist.length >= 2 && (
                     <Button
@@ -298,7 +308,7 @@ export default function VideoViewer() {
                         startIcon={<PlaylistPlay />}
                         variant="outlined"
                     >
-                        播放列表
+                        {t("fileManager.playlist")}
                     </Button>
                 )}
                 <Button
@@ -307,7 +317,7 @@ export default function VideoViewer() {
                     startIcon={<Launch />}
                     variant="outlined"
                 >
-                    用外部播放器打开
+                    {t("fileManager.openInExternalPlayer")}
                 </Button>
             </div>
             <SelectMenu

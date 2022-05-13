@@ -16,6 +16,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import { toggleSnackbar } from "../../redux/explorer";
 import UseFileSubTitle from "../../hooks/fileSubtitle";
+import { useTranslation } from "react-i18next";
 
 const MonacoEditor = React.lazy(() =>
     import(/* webpackChunkName: "codeEditor" */ "react-monaco-editor")
@@ -55,6 +56,7 @@ function useQuery() {
 }
 
 export default function CodeViewer() {
+    const { t } = useTranslation();
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
@@ -102,7 +104,9 @@ export default function CodeViewer() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "无法读取文件内容，" + error.message,
+                    t("fileManager.errorReadFileContent", {
+                        msg: error.message,
+                    }),
                     "error"
                 );
             })
@@ -142,7 +146,7 @@ export default function CodeViewer() {
                                     }
                                 />
                             }
-                            label="自动换行"
+                            label={t("fileManager.wordWrap")}
                         />
                     </FormControl>
                     <FormControl className={classes.formControl}>

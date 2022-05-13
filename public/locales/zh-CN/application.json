@@ -141,7 +141,28 @@
     "statisticAt": "统计于 <1></1>",
     "musicPlayer": "音频播放",
     "closeAndStop": "退出播放",
-    "playInBackground": "后台播放"
+    "playInBackground": "后台播放",
+    "copyTo": "复制到",
+    "copyToDst": "复制到 <0>{{dst}}</0>",
+    "errorReadFileContent": "无法读取文件内容：{{msg}}",
+    "wordWrap": "自动换行",
+    "pdfLoadingError": "PDF 加载失败：{{msg}}",
+    "subtitleSwitchTo": "字幕切换到：{{subtitle}}",
+    "noSubtitleAvailable": "视频目录下没有可用字幕文件 (支持：ASS/SRT/VTT)",
+    "subtitle": "选择字幕",
+    "playlist": "播放列表",
+    "openInExternalPlayer": "用外部播放器打开",
+    "searchResult": "搜索结果",
+    "preparingBathDownload": "正在准备打包下载...",
+    "preparingDownload": "获取下载地址...",
+    "browserBatchDownload": "浏览器端打包",
+    "browserBatchDownloadDescription": "由浏览器实时下载并打包，并非所有环境都支持。",
+    "serverBatchDownload": "服务端中转打包",
+    "serverBatchDownloadDescription": "由服务端中转打包并实时发送到客户端下载。",
+    "selectArchiveMethod": "选择打包下载方式",
+    "batchDownloadStarted": "打包下载已开始，请不要关闭此标签页",
+    "batchDownloadError": "打包遇到错误：{{msg}}",
+    "userDenied": "用户拒绝"
   },
   "modals": {
     "processing": "处理中...",
@@ -265,7 +286,9 @@
     "ossFinishUploadError": "无法完成文件上传: {{msg}} ({{code}})",
     "cosUploadFailed": "上传失败: {{msg}} ({{code}})",
     "upyunUploadFailed": "上传失败: {{msg}}",
-    "parseResponseError": "无法解析响应: {{msg}} ({{content}})"
+    "parseResponseError": "无法解析响应: {{msg}} ({{content}})",
+    "concurrentTaskNumber": "同时上传的任务数量",
+    "dropFileHere": "松开鼠标开始上传"
   },
   "share": {
     "expireInXDays": "{{num}} 天后到期",

@@ -12,6 +12,8 @@
   "close": "Close",
   "intlDateTime": "{{val, datetime}}",
   "timeAgoLocaleCode": "en_US",
+  "forEditorLocaleCode": "en",
+  "artPlayerLocaleCode": "en",
   "errors": {
     "40020": "Wrong password or email address.",
     "40017": "This account has been blocked.",

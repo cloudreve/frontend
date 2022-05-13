@@ -1,18 +1,23 @@
-import React, { useState, useCallback } from "react";
-import { makeStyles } from "@material-ui/core";
+import React, { useCallback, useState } from "react";
 import {
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle,
     DialogContentText,
-    CircularProgress,
+    DialogTitle,
+    makeStyles,
 } from "@material-ui/core";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import API from "../../middleware/Api";
-import { refreshFileList, setModalsLoading, toggleSnackbar } from "../../redux/explorer";
+import {
+    refreshFileList,
+    setModalsLoading,
+    toggleSnackbar,
+} from "../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -33,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CopyDialog(props) {
+    const { t } = useTranslation();
     const [selectedPath, setSelectedPath] = useState("");
     const [selectedPathName, setSelectedPathName] = useState("");
 
@@ -103,7 +109,9 @@ export default function CopyDialog(props) {
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">复制到</DialogTitle>
+            <DialogTitle id="form-dialog-title">
+                {t("fileManager.copyTo")}
+            </DialogTitle>
             <PathSelector
                 presentPath={props.presentPath}
                 selected={props.selected}
@@ -113,19 +121,27 @@ export default function CopyDialog(props) {
             {selectedPath !== "" && (
                 <DialogContent className={classes.contentFix}>
                     <DialogContentText>
-                        复制到 <strong>{selectedPathName}</strong>
+                        <Trans
+                            i18nKey={"fileManager.copyToDst"}
+                            values={{
+                                dst: selectedPathName,
+                            }}
+                            components={[<strong key={0} />]}
+                        />
                     </DialogContentText>
                 </DialogContent>
             )}
             <DialogActions>
-                <Button onClick={props.onClose}>取消</Button>
+                <Button onClick={props.onClose}>
+                    {t("cancel", { ns: "common" })}
+                </Button>
                 <div className={classes.wrapper}>
                     <Button
                         onClick={submitMove}
                         color="primary"
                         disabled={selectedPath === "" || props.modalsLoading}
                     >
-                        确定
+                        {t("ok", { ns: "common" })}
                         {props.modalsLoading && (
                             <CircularProgress
                                 size={24}

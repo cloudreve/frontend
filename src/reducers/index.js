@@ -4,6 +4,7 @@ import { combineReducers } from "../redux/combineReducers";
 import viewUpdate from "../redux/viewUpdate/reducer";
 import explorer from "../redux/explorer/reducer";
 import { connectRouter } from "connected-react-router";
+import i18next from "../i18n";
 
 const doNavigate = (path, state) => {
     window.currntPath = path;
@@ -140,7 +141,7 @@ const cloudreveApp = (state = defaultStatus, action) => {
         case "SEARCH_MY_FILE":
             return Object.assign({}, state, {
                 navigator: Object.assign({}, state.navigator, {
-                    path: "/搜索结果",
+                    path: "/" + i18next.t("fileManager.searchResult"),
                     refresh: !state.explorer.search
                         ? state.navigator.refresh
                         : !state.navigator.refresh,

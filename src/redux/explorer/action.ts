@@ -211,7 +211,9 @@ export const serverSideBatchDownload = (
     share: any
 ): ThunkAction<any, any, any, any> => {
     return (dispatch, getState): void => {
-        dispatch(openLoadingDialog("正在准备打包下载..."));
+        dispatch(
+            openLoadingDialog(i18next.t("fileManager.preparingBathDownload"))
+        );
         const {
             explorer: { selected },
             router: {
@@ -282,12 +284,19 @@ export const startDownload = (
             user &&
             !user.group.shareDownload
         ) {
-            dispatch(toggleSnackbar("top", "right", "请先登录", "warning"));
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    i18next.t("share.pleaseLogin"),
+                    "warning"
+                )
+            );
             return;
         }
 
         dispatch(changeContextMenu("file", false));
-        dispatch(openLoadingDialog("获取下载地址..."));
+        dispatch(openLoadingDialog(i18next.t("fileManager.preparingDownload")));
         try {
             const res = await getDownloadURL(file ? file : share);
             window.location.assign(res.data);
@@ -317,18 +326,24 @@ export const startBatchDownload = (
                         [
                             {
                                 key: "client",
-                                name: "浏览器端打包",
-                                description:
-                                    "由浏览器实时下载并打包，并非所有环境都支持。",
+                                name: i18next.t(
+                                    "fileManager.browserBatchDownload"
+                                ),
+                                description: i18next.t(
+                                    "fileManager.browserBatchDownloadDescription"
+                                ),
                             },
                             {
                                 key: "server",
-                                name: "服务端中转打包",
-                                description:
-                                    "由服务端中转打包并实时发送到客户端下载。",
+                                name: i18next.t(
+                                    "fileManager.serverBatchDownload"
+                                ),
+                                description: i18next.t(
+                                    "fileManager.serverBatchDownloadDescription"
+                                ),
                             },
                         ],
-                        "选择打包下载方式"
+                        i18next.t("fileManager.selectArchiveMethod")
                     )
                 );
             } catch (e) {
@@ -341,7 +356,7 @@ export const startBatchDownload = (
             }
         }
 
-        dispatch(openLoadingDialog("列取文件中..."));
+        dispatch(openLoadingDialog(i18next.t("modals.listingFiles")));
 
         let queue: CloudreveFile[] = [];
         try {
@@ -351,7 +366,9 @@ export const startBatchDownload = (
                 toggleSnackbar(
                     "top",
                     "right",
-                    `列取文件时出错：${e.message}`,
+                    i18next.t("modals.listingFileError", {
+                        message: e.message,
+                    }),
                     "warning"
                 )
             );
@@ -364,7 +381,7 @@ export const startBatchDownload = (
             toggleSnackbar(
                 "top",
                 "center",
-                `打包下载已开始，请不要关闭此标签页`,
+                i18next.t("fileManager.batchDownloadStarted"),
                 "info"
             )
         );
@@ -416,7 +433,9 @@ export const startBatchDownload = (
                     toggleSnackbar(
                         "top",
                         "right",
-                        `打包遇到错误：${e && e.message}`,
+                        i18next.t("modals.batchDownloadError", {
+                            message: e && e.message,
+                        }),
                         "warning"
                     );
                     dispatch(closeAllModals());
@@ -467,7 +486,14 @@ export const openPreview = (share: any) => {
         if (isShare) {
             const user = Auth.GetUser();
             if (!Auth.Check() && user && !user.group.shareDownload) {
-                dispatch(toggleSnackbar("top", "right", "请先登录", "warning"));
+                dispatch(
+                    toggleSnackbar(
+                        "top",
+                        "right",
+                        i18next.t("share.pleaseLogin"),
+                        "warning"
+                    )
+                );
                 dispatch(changeContextMenu("file", false));
                 return;
             }
