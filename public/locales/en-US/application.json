@@ -237,7 +237,7 @@
     "progressDescription": "{{uploaded}} uploaded, {{total}} total - {{percentage}}%",
     "progressDescriptionFull": "{{uploaded}} uploaded, {{total}} total - {{percentage}}% ({{speed}})",
     "progressDescriptionPlaceHolder": " - uploaded",
-    "uploadedTo": "Uploaded to <0></0>",
+    "uploadedTo": "Uploaded to ",
     "rootFolder": "Root folder",
     "unknownStatus": "Unknown",
     "resumed": "Resumed",
