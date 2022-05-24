@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "summary": "面板首页",
+    "settings": "参数设置",
+    "basicSetting": "站点信息",
+    "publicAccess": "注册与登录",
+    "email": "邮件",
+    "transportation": "传输与通信",
+    "appearance": "外观",
+    "image": "图像与预览",
+    "captcha": "验证码",
+    "storagePolicy": "存储策略",
+    "nodes": "离线下载节点",
+    "groups": "用户组",
+    "users": "用户",
+    "files": "文件",
+    "shares": "分享",
+    "tasks": "持久任务",
+    "remoteDownload": "离线下载",
+    "generalTasks": "常规任务",
+    "title": "仪表盘",
+    "dashboard": "Cloudreve 仪表盘"
+  },
+  "summary": {
+    "newsletterError": "Cloudreve 公告加载失败",
+    "confirmSiteURLTitle": "确定站点URL设置",
+    "siteURLNotSet": "您尚未设定站点URL，是否要将其设定为当前的 {{current}} ?",
+    "siteURLNotMatch": "您设置的站点URL与当前实际不一致，是否要将其设定为当前的 {{current}} ?",
+    "siteURLDescription": "此设置非常重要，请确保其与您站点的实际地址一致。你可以在 参数设置 - 站点信息 中更改此设置。",
+    "ignore": "忽略",
+    "changeIt": "更改",
+    "trend": "趋势",
+    "summary": "总计",
+    "totalUsers": "注册用户",
+    "totalFiles": "文件总数",
+    "publicShares": "公开分享总数",
+    "privateShares": "私密分享总数",
+    "homepage": "主页",
+    "documents": "文档",
+    "forum": "讨论社区",
+    "forumLink": "https://forum.cloudreve.org",
+    "telegramGroup": "Telegram 群组",
+    "telegramGroupLink": "https://t.me/cloudreve_official",
+    "buyPro": "购买捐助版",
+    "publishedAt": "发表于 <0></0>",
+    "newsTag": "notice"
+  },
+  "settings": {
+    "saved": "设置已更改"
+  }
+}

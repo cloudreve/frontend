@@ -44,6 +44,7 @@ import { useRouteMatch } from "react-router-dom";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
 import UserAvatar from "../Navbar/UserAvatar";
+import { useTranslation } from "react-i18next";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -178,92 +179,92 @@ const useStyles = makeStyles((theme) => ({
 
 const items = [
     {
-        title: "面板首页",
+        title: "nav.summary",
         icon: <Home />,
         path: "home",
     },
     {
-        title: "参数设置",
+        title: "nav.settings",
         icon: <Settings />,
         sub: [
             {
-                title: "站点信息",
+                title: "nav.basicSetting",
                 path: "basic",
                 icon: <Language />,
             },
             {
-                title: "注册与登录",
+                title: "nav.publicAccess",
                 path: "access",
                 icon: <Contacts />,
             },
             {
-                title: "邮件",
+                title: "nav.email",
                 path: "mail",
                 icon: <Mail />,
             },
             {
-                title: "传输与通信",
+                title: "nav.transportation",
                 path: "upload",
                 icon: <SettingsEthernet />,
             },
             {
-                title: "外观",
+                title: "nav.appearance",
                 path: "theme",
                 icon: <Palette />,
             },
             {
-                title: "图像与预览",
+                title: "nav.image",
                 path: "image",
                 icon: <Image />,
             },
             {
-                title: "验证码",
+                title: "nav.captcha",
                 path: "captcha",
                 icon: <Category />,
             },
         ],
     },
     {
-        title: "存储策略",
+        title: "nav.storagePolicy",
         icon: <Storage />,
         path: "policy",
     },
     {
-        title: "离线下载节点",
+        title: "nav.nodes",
         icon: <Contactless />,
         path: "node",
     },
     {
-        title: "用户组",
+        title: "nav.groups",
         icon: <Group />,
         path: "group",
     },
     {
-        title: "用户",
+        title: "nav.users",
         icon: <Person />,
         path: "user",
     },
     {
-        title: "文件",
+        title: "nav.files",
         icon: <InsertDriveFile />,
         path: "file",
     },
     {
-        title: "分享",
+        title: "nav.shares",
         icon: <Share />,
         path: "share",
     },
     {
-        title: "持久任务",
+        title: "nav.tasks",
         icon: <Assignment />,
         sub: [
             {
-                title: "离线下载",
+                title: "nav.remoteDownload",
                 path: "download",
                 icon: <CloudDownload />,
             },
             {
-                title: "常规任务",
+                title: "nav.generalTasks",
                 path: "task",
                 icon: <ListAlt />,
             },
@@ -272,6 +273,7 @@ const items = [
 ];
 
 export default function Dashboard({ content }) {
+    const { t } = useTranslation("dashboard");
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(!pathHelper.isMobile());
@@ -294,7 +296,7 @@ export default function Dashboard({ content }) {
     );
 
     useEffect(() => {
-        SetSubTitle("仪表盘");
+        SetSubTitle(t("nav.title"));
     }, []);
 
     useEffect(() => {
@@ -326,7 +328,7 @@ export default function Dashboard({ content }) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title} noWrap>
-                        Cloudreve 仪表盘
+                        {t("nav.dashboard")}
                     </Typography>
                     <UserAvatar />
                 </Toolbar>
@@ -385,7 +387,7 @@ export default function Dashboard({ content }) {
                                                 "/admin/" + item.path
                                             ),
                                         })}
-                                        primary={item.title}
+                                        primary={t(item.title)}
                                     />
                                 </ListItem>
                             );
@@ -405,7 +407,7 @@ export default function Dashboard({ content }) {
                                 >
                                     <ListItem button key={item.title}>
                                         <ListItemIcon>{item.icon}</ListItemIcon>
-                                        <ListItemText primary={item.title} />
+                                        <ListItemText primary={t(item.title)} />
                                     </ListItem>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
@@ -436,7 +438,7 @@ export default function Dashboard({ content }) {
                                                     {sub.icon}
                                                 </ListItemIcon>
                                                 <ListItemText
-                                                    primary={sub.title}
+                                                    primary={t(sub.title)}
                                                 />
                                             </ListItem>
                                         ))}
