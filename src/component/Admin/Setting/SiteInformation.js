@@ -11,6 +11,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SiteInformation() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
@@ -39,7 +41,6 @@ export default function SiteInformation() {
         siteName: "",
         siteTitle: "",
         siteDes: "",
-        siteICPId: "",
         siteScript: "",
         pwa_small_icon: "",
         pwa_medium_icon: "",
@@ -90,7 +91,7 @@ export default function SiteInformation() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t("saved"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -105,13 +106,13 @@ export default function SiteInformation() {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        基本信息
+                        {t("basicInformation")}
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    主标题
+                                    {t("mainTitle")}
                                 </InputLabel>
                                 <Input
                                     value={options.siteName}
@@ -119,42 +120,42 @@ export default function SiteInformation() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    站点的主标题
+                                    {t("mainTitleDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    副标题
+                                    {t("subTitle")}
                                 </InputLabel>
                                 <Input
                                     value={options.siteTitle}
                                     onChange={handleChange("siteTitle")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    站点的副标题
+                                    {t("subTitleDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    站点描述
+                                    {t("siteDescription")}
                                 </InputLabel>
                                 <Input
                                     value={options.siteDes}
                                     onChange={handleChange("siteDes")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    站点描述信息，可能会在分享页面摘要内展示
+                                    {t("siteDescriptionDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    站点URL
+                                    {t("siteURL")}
                                 </InputLabel>
                                 <Input
                                     type={"url"}
@@ -163,28 +164,14 @@ export default function SiteInformation() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    非常重要，请确保与实际情况一致。使用云存储策略、支付平台时，请填入可以被外网访问的地址。
+                                    {t("siteURLDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    网站备案号
-                                </InputLabel>
-                                <Input
-                                    value={options.siteICPId}
-                                    onChange={handleChange("siteICPId")}
-                                />
-                                <FormHelperText id="component-helper-text">
-                                    工信部网站ICP备案号
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className={classes.form}>
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="component-helper">
-                                    页脚代码
+                                    {t("customFooterHTML")}
                                 </InputLabel>
                                 <Input
                                     multiline
@@ -192,7 +179,7 @@ export default function SiteInformation() {
                                     onChange={handleChange("siteScript")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    在页面底部插入的自定义HTML代码
+                                    {t("customFooterHTMLDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -200,55 +187,55 @@ export default function SiteInformation() {
                 </div>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        渐进式应用 (PWA)
+                        {t("pwa")}
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    小图标
+                                    {t("smallIcon")}
                                 </InputLabel>
                                 <Input
                                     value={options.pwa_small_icon}
                                     onChange={handleChange("pwa_small_icon")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    扩展名为 ico 的小图标地址
+                                    {t("smallIconDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    中图标
+                                    {t("mediumIcon")}
                                 </InputLabel>
                                 <Input
                                     value={options.pwa_medium_icon}
                                     onChange={handleChange("pwa_medium_icon")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    192x192 的中等图标地址，png 格式
+                                    {t("mediumIconDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    大图标
+                                    {t("largeIcon")}
                                 </InputLabel>
                                 <Input
                                     value={options.pwa_large_icon}
                                     onChange={handleChange("pwa_large_icon")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    512x512 的大图标地址，png 格式
+                                    {t("largeIconDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    展示模式
+                                    {t("displayMode")}
                                 </InputLabel>
                                 <Select
                                     value={options.pwa_display}
@@ -268,22 +255,21 @@ export default function SiteInformation() {
                                     </MenuItem>
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    PWA 应用添加后的展示模式
+                                    {t("displayModeDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    主题色
+                                    {t("themeColor")}
                                 </InputLabel>
                                 <Input
                                     value={options.pwa_theme_color}
                                     onChange={handleChange("pwa_theme_color")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    CSS 色值，影响 PWA
-                                    启动画面上状态栏、内容页中状态栏、地址栏的颜色
+                                    {t("themeColorDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -292,7 +278,7 @@ export default function SiteInformation() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    背景色
+                                    {t("backgroundColor")}
                                 </InputLabel>
                                 <Input
                                     value={options.pwa_background_color}
@@ -301,7 +287,7 @@ export default function SiteInformation() {
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    CSS 色值
+                                    {t("backgroundColorDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -314,7 +300,7 @@ export default function SiteInformation() {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {t("save")}
                     </Button>
                 </div>
             </form>
