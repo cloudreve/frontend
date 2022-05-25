@@ -219,7 +219,12 @@ export default function WebDAV() {
                                                 <TableCell align="right">
                                                     <TimeAgo
                                                         datetime={row.CreatedAt}
-                                                        locale="zh_CN"
+                                                        locale={t(
+                                                            "timeAgoLocaleCode",
+                                                            {
+                                                                ns: "common",
+                                                            }
+                                                        )}
                                                     />
                                                 </TableCell>
                                                 <TableCell align="right">
