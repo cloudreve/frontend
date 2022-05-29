@@ -2,7 +2,7 @@ import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { Button, Paper } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useLocation, useParams, useRouteMatch } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import pathHelper from "../../utils/page";
 import UseFileSubTitle from "../../hooks/fileSubtitle";
 import { getPreviewURL } from "../../middleware/Api";
@@ -17,6 +17,7 @@ import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
 import TextLoading from "../Placeholder/TextLoading";
 import SelectMenu from "./SelectMenu";
 import { getDownloadURL } from "../../services/file";
+import { sortMethodFuncs } from "../../redux/explorer/action";
 import { useTranslation } from "react-i18next";
 
 const Artplayer = React.lazy(() =>
@@ -108,6 +109,8 @@ export default function VideoViewer() {
     const [playlistOpen, setPlaylistOpen] = useState(null);
     const [externalPlayerOpen, setExternalPlayerOpen] = useState(null);
     const isShare = pathHelper.isSharePage(location.pathname);
+    const sortMethod = useSelector((state) => state.viewUpdate.sortMethod);
+    const sortFunc = sortMethodFuncs[sortMethod];
 
     useEffect(() => {
         art &&
@@ -156,7 +159,7 @@ export default function VideoViewer() {
                         ""
                     ).then((res) => {
                         setFiles(
-                            res.data.objects.filter((o) => o.type === "file")
+                            res.data.objects.sort(sortFunc).filter((o) => o.type === "file")
                         );
                         setPlaylist(
                             res.data.objects.filter(
