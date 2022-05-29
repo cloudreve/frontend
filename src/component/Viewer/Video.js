@@ -205,16 +205,19 @@ export default function VideoViewer() {
 
     useEffect(() => {
         if (files.length > 0) {
+            const fileNameMatch = fileNameNoExt(title) + ".";
             const options = files.filter((f) => {
                 const fileType = f.name.split(".").pop().toLowerCase();
                 if (subtitleSuffix.indexOf(fileType) !== -1) {
-                    if (fileNameNoExt(f.name) === fileNameNoExt(title)) {
-                        switchSubtitle(f);
-                    }
                     return true;
                 }
                 return false;
+            }).sort((a, b) => {
+                return b.name.indexOf(fileNameMatch) - a.name.indexOf(fileNameMatch);
             });
+            if (options.length > 0 && options[0].name.indexOf(fileNameMatch) !== -1) {
+                switchSubtitle(options[0]);
+            }
             setSubtitles(options);
         }
     }, [files]);
