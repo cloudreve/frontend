@@ -209,14 +209,11 @@ export default function VideoViewer() {
             const fileNameMatch = fileNameNoExt(title) + ".";
             const options = files.filter((f) => {
                 const fileType = f.name.split(".").pop().toLowerCase();
-                if (subtitleSuffix.indexOf(fileType) !== -1) {
-                    return true;
-                }
-                return false;
+                return (subtitleSuffix.indexOf(fileType) !== -1) ? true : false;
             }).sort((a, b) => {
-                return b.name.indexOf(fileNameMatch) - a.name.indexOf(fileNameMatch);
+                return (a.name.startsWith(fileNameMatch) && !b.name.startsWith(fileNameMatch)) ? -1 : 0;
             });
-            if (options.length > 0 && options[0].name.indexOf(fileNameMatch) !== -1) {
+            if (options.length > 0 && options[0].name.startsWith(fileNameMatch)) {
                 switchSubtitle(options[0]);
             }
             setSubtitles(options);
@@ -224,6 +221,7 @@ export default function VideoViewer() {
     }, [files]);
 
     const switchVideo = (file) => {
+        setSubtitleSelected(null);
         if (isShare) {
             file.key = id;
         }
