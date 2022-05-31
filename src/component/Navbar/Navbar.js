@@ -64,6 +64,7 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import { startBatchDownload, startDownload } from "../../redux/explorer/action";
+import { basename } from "../../utils";
 import { withTranslation } from "react-i18next";
 
 vhCheck();
@@ -284,6 +285,7 @@ const styles = (theme) => ({
         overflowY: "auto",
     },
 });
+
 class NavbarCompoment extends Component {
     constructor(props) {
         super(props);
@@ -298,6 +300,7 @@ class NavbarCompoment extends Component {
             this.setState(() => ({ mobileOpen: false }));
         });
     }
+
     componentWillUnmount() {
         this.unlisten();
     }
@@ -371,6 +374,14 @@ class NavbarCompoment extends Component {
         const isSharePage = pathHelper.isSharePage(
             this.props.location.pathname
         );
+
+        const backDirectory = () => {
+            const query = new URLSearchParams(this.props.location.search);
+            const directory = basename(query.get("share_path")) || basename(query.get("p"));
+            const pathName = directory && isSharePage ? basename(this.props.location.pathname) : "/home";
+            this.props.history.push(pathName + "?path=" + encodeURIComponent(directory || "/"));
+            this.props.navigateTo(directory || "/");
+        };
 
         const drawer = (
             <div id="container" className={classes.upDrawer}>
@@ -589,9 +600,7 @@ class NavbarCompoment extends Component {
                                 variant="h6"
                                 color="inherit"
                                 noWrap
-                                onClick={() => {
-                                    this.props.history.push("/");
-                                }}
+                                onClick={backDirectory}
                             >
                                 {this.props.subTitle
                                     ? this.props.subTitle
@@ -894,6 +903,7 @@ class NavbarCompoment extends Component {
         );
     }
 }
+
 NavbarCompoment.propTypes = {
     classes: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
