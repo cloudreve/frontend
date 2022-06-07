@@ -14,6 +14,7 @@ import { Add, Menu } from "@material-ui/icons";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { useCallback, useState } from "react";
 import { CompactPicker } from "react-color";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     picker: {
@@ -37,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateTheme({ open, onClose, onSubmit }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
+    const { t: tGlobal } = useTranslation("common");
     const classes = useStyles();
     const [theme, setTheme] = useState({
         palette: {
@@ -66,7 +69,7 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                     <Grid spacing={2} md={8} xs={12} container>
                         <Grid md={6} xs={12} item>
                             <Typography variant="h6" gutterBottom>
-                                主色调
+                                {t("primaryColor")}
                             </Typography>
                             <TextField
                                 value={theme.palette.primary.main}
@@ -142,7 +145,7 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                         </Grid>
                         <Grid md={6} xs={12} item>
                             <Typography variant="h6" gutterBottom>
-                                辅色调
+                                {t("secondaryColor")}
                             </Typography>
                             <TextField
                                 value={theme.palette.secondary.main}
@@ -218,7 +221,7 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                         </Grid>
                         <Grid md={6} xs={12} item>
                             <Typography variant="h6" gutterBottom>
-                                主色调文字
+                                {t("primaryColorText")}
                             </Typography>
                             <TextField
                                 value={theme.palette.primary.contrastText}
@@ -256,7 +259,7 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                         </Grid>
                         <Grid md={6} xs={12} item>
                             <Typography variant="h6" gutterBottom>
-                                辅色调文字
+                                {t("secondaryColorText")}
                             </Typography>
                             <TextField
                                 value={theme.palette.secondary.contrastText}
@@ -324,7 +327,7 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
                                 <TextField
                                     fullWidth
                                     color={"secondary"}
-                                    label={"文字输入"}
+                                    label={"Text input"}
                                 />
                                 <div
                                     className={classes.fab}
@@ -341,10 +344,10 @@ export default function CreateTheme({ open, onClose, onSubmit }) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="default">
-                    取消
+                    {tGlobal("cancel")}
                 </Button>
                 <Button onClick={() => onSubmit(theme)} color="primary">
-                    创建
+                    {tGlobal("ok")}
                 </Button>
             </DialogActions>
         </Dialog>

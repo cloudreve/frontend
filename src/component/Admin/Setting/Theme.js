@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import CreateTheme from "../Dialogs/CreateTheme";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,6 +52,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Theme() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
+    const { t: tApp } = useTranslation();
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [theme, setTheme] = useState({});
@@ -73,11 +76,16 @@ export default function Theme() {
 
     const deleteTheme = (color) => {
         if (color === options.defaultTheme) {
-            ToggleSnackbar("top", "right", "不能删除默认配色", "warning");
+            ToggleSnackbar(
+                "top",
+                "right",
+                t("cannotDeleteDefaultTheme"),
+                "warning"
+            );
             return;
         }
         if (Object.keys(theme).length <= 1) {
-            ToggleSnackbar("top", "right", "请至少保留一个配色方案", "warning");
+            ToggleSnackbar("top", "right", t("keepAtLeastOneTheme"), "warning");
             return;
         }
         const themeCopy = { ...theme };
@@ -95,7 +103,7 @@ export default function Theme() {
             ToggleSnackbar(
                 "top",
                 "right",
-                "主色调不能与已有配色重复",
+                t("duplicatedThemePrimaryColor"),
                 "warning"
             );
             return;
@@ -157,7 +165,7 @@ export default function Theme() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t("saved"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -172,16 +180,18 @@ export default function Theme() {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        主题配色
+                        {t("themes")}
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <Table aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>关键色</TableCell>
-                                        <TableCell>色彩配置</TableCell>
-                                        <TableCell>操作</TableCell>
+                                        <TableCell>{t("colors")}</TableCell>
+                                        <TableCell>
+                                            {t("themeConfig")}
+                                        </TableCell>
+                                        <TableCell>{t("actions")}</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -225,7 +235,7 @@ export default function Theme() {
                                                     error={themeConfigError[k]}
                                                     helperText={
                                                         themeConfigError[k] &&
-                                                        "格式不正确"
+                                                        t("wrongFormat")
                                                     }
                                                     fullWidth
                                                     multiline
@@ -307,21 +317,22 @@ export default function Theme() {
                                     style={{ marginTop: 8 }}
                                     onClick={() => setCreate(true)}
                                 >
-                                    新建配色方案
+                                    {t("createNewTheme")}
                                 </Button>
                             </div>
                             <Alert severity="info" style={{ marginTop: 8 }}>
                                 <Typography variant="body2">
-                                    完整的配置项可在{" "}
-                                    <Link
-                                        href={
-                                            "https://material-ui.com/zh/customization/default-theme/"
-                                        }
-                                        target={"_blank"}
-                                    >
-                                        默认主题 - Material-UI
-                                    </Link>{" "}
-                                    查阅。
+                                    <Trans
+                                        i18nKey={"settings.themeConfigDes"}
+                                        ns={"dashboard"}
+                                        components={[
+                                            <Link
+                                                key={0}
+                                                href={t("themeConfigDoc")}
+                                                target={"_blank"}
+                                            />,
+                                        ]}
+                                    />
                                 </Typography>
                             </Alert>
                         </div>
@@ -329,7 +340,7 @@ export default function Theme() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    默认配色
+                                    {t("defaultTheme")}
                                 </InputLabel>
                                 <Select
                                     value={options.defaultTheme}
@@ -363,7 +374,7 @@ export default function Theme() {
                                     ))}
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    用户未指定偏好配色时，站点默认使用的配色方案
+                                    {t("defaultThemeDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -372,28 +383,32 @@ export default function Theme() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        界面
+                        {t("appearance")}
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    个人文件列表默认样式
+                                    {t("personalFileListView")}
                                 </InputLabel>
                                 <Select
                                     value={options.home_view_method}
                                     onChange={handleChange("home_view_method")}
                                     required
                                 >
-                                    <MenuItem value={"icon"}>大图标</MenuItem>
-                                    <MenuItem value={"smallIcon"}>
-                                        小图标
+                                    <MenuItem value={"icon"}>
+                                        {tApp("fileManager.gridViewLarge")}
                                     </MenuItem>
-                                    <MenuItem value={"list"}>列表</MenuItem>
+                                    <MenuItem value={"smallIcon"}>
+                                        {tApp("fileManager.gridViewSmall")}
+                                    </MenuItem>
+                                    <MenuItem value={"list"}>
+                                        {tApp("fileManager.listView")}
+                                    </MenuItem>
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    用户未指定偏好样式时，个人文件页面列表默认样式
+                                    {t("personalFileListViewDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -403,21 +418,25 @@ export default function Theme() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    目录分享页列表默认样式
+                                    {t("sharedFileListView")}
                                 </InputLabel>
                                 <Select
                                     value={options.share_view_method}
                                     onChange={handleChange("share_view_method")}
                                     required
                                 >
-                                    <MenuItem value={"icon"}>大图标</MenuItem>
-                                    <MenuItem value={"smallIcon"}>
-                                        小图标
+                                    <MenuItem value={"icon"}>
+                                        {tApp("fileManager.gridViewLarge")}
                                     </MenuItem>
-                                    <MenuItem value={"list"}>列表</MenuItem>
+                                    <MenuItem value={"smallIcon"}>
+                                        {tApp("fileManager.gridViewSmall")}
+                                    </MenuItem>
+                                    <MenuItem value={"list"}>
+                                        {tApp("fileManager.listView")}
+                                    </MenuItem>
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    用户未指定偏好样式时，目录分享页面的默认样式
+                                    {t("sharedFileListViewDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -431,7 +450,7 @@ export default function Theme() {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {t("save")}
                     </Button>
                 </div>
             </form>
