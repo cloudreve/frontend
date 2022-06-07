@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import SizeInput from "../Common/SizeInput";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UploadDownload() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
@@ -109,7 +111,7 @@ export default function UploadDownload() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t("saved"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -124,13 +126,13 @@ export default function UploadDownload() {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        存储与传输
+                        {t("transportation")}
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    Worker 数量
+                                    {t("workerNum")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -143,8 +145,7 @@ export default function UploadDownload() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    主机节点任务队列最多并行执行的任务数，保存后需要重启
-                                    Cloudreve 生效
+                                    {t("workerNumDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -152,7 +153,7 @@ export default function UploadDownload() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    中转并行传输
+                                    {t("transitParallelNum")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -167,7 +168,7 @@ export default function UploadDownload() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    任务队列中转任务传输时，最大并行协程数
+                                    {t("transitParallelNumDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -175,7 +176,7 @@ export default function UploadDownload() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    临时目录
+                                    {t("tempFolder")}
                                 </InputLabel>
                                 <Input
                                     value={options.temp_path}
@@ -183,7 +184,7 @@ export default function UploadDownload() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    用于存放解压缩、压缩等任务产生的临时文件的目录路径
+                                    {t("tempFolderDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -197,12 +198,12 @@ export default function UploadDownload() {
                                         required
                                         min={0}
                                         max={2147483647}
-                                        label={"文本文件在线编辑大小"}
+                                        label={t("textEditMaxSize")}
                                     />
                                 )}
 
                                 <FormHelperText id="component-helper-text">
-                                    文本文件可在线编辑的最大大小，超出此大小的文件无法在线编辑
+                                    {t("textEditMaxSizeDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -210,7 +211,7 @@ export default function UploadDownload() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    分片错误重试
+                                    {t("failedChunkRetry")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -223,7 +224,7 @@ export default function UploadDownload() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    分片上传失败后重试的最大次数，只适用于服务端上传或中转
+                                    {t("failedChunkRetryDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -242,11 +243,10 @@ export default function UploadDownload() {
                                             )}
                                         />
                                     }
-                                    label="缓存流式分片文件以用于重试"
+                                    label={t("cacheChunks")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    开启后，流式中转分片上传时会将分片数据缓存在系统临时目录，以便用于分片上传失败后的重试；
-                                    关闭后，流式中转分片上传不会额外占用硬盘空间，但分片上传失败后整个上传会立即失败。
+                                    {t("cacheChunksDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -265,10 +265,10 @@ export default function UploadDownload() {
                                             )}
                                         />
                                     }
-                                    label="上传校验失败时强制重置连接"
+                                    label={t("resetConnection")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    开启后，如果本次策略、头像等数据上传校验失败，服务器会强制重置连接
+                                    {t("resetConnectionDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -277,61 +277,56 @@ export default function UploadDownload() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        有效期 (秒)
+                        {t("expirationDuration")}
                     </Typography>
                     <div className={classes.formContainer}>
                         {[
                             {
-                                name: "打包下载",
+                                name: "batchDownload",
                                 field: "archive_timeout",
                             },
                             {
-                                name: "下载会话",
+                                name: "downloadSession",
                                 field: "download_timeout",
                             },
                             {
-                                name: "预览链接",
+                                name: "previewURL",
                                 field: "preview_timeout",
                             },
                             {
-                                name: "Office 文档预览连接",
+                                name: "docPreviewURL",
                                 field: "doc_preview_timeout",
                             },
                             {
-                                name: "上传会话",
+                                name: "uploadSession",
                                 field: "upload_session_timeout",
-                                des:
-                                    "在上传会话有效期内，对于支持的存储策略，用户可以断点续传未完成的任务。最大可设定的值受限于不同存储策略服务商的规则。",
+                                des: "uploadSessionDes",
                             },
                             {
-                                name: "分享下载会话",
+                                name: "downloadSessionForShared",
                                 field: "share_download_session_timeout",
-                                des:
-                                    "设定时间内重复下载分享文件，不会被记入总下载次数",
+                                des: "downloadSessionForSharedDes",
                             },
                             {
-                                name: "OneDrive 客户端上传监控间隔",
+                                name: "onedriveMonitorInterval",
                                 field: "onedrive_monitor_timeout",
-                                des:
-                                    "每间隔所设定时间，Cloudreve 会向 OneDrive 请求检查客户端上传情况已确保客户端上传可控",
+                                des: "onedriveMonitorIntervalDes",
                             },
                             {
-                                name: "OneDrive 回调等待",
+                                name: "onedriveCallbackTolerance",
                                 field: "onedrive_callback_check",
-                                des:
-                                    "OneDrive 客户端上传完成后，等待回调的最大时间，如果超出会被认为上传失败",
+                                des: "onedriveCallbackToleranceDes",
                             },
                             {
-                                name: "OneDrive 下载请求缓存",
+                                name: "onedriveDownloadURLCache",
                                 field: "onedrive_source_timeout",
-                                des:
-                                    "OneDrive 获取文件下载 URL 后可将结果缓存，减轻热门文件下载API请求频率",
+                                des: "onedriveDownloadURLCacheDes",
                             },
                         ].map((input) => (
                             <div key={input.name} className={classes.form}>
                                 <FormControl>
                                     <InputLabel htmlFor="component-helper">
-                                        {input.name}
+                                        {t(input.name)}
                                     </InputLabel>
                                     <Input
                                         type={"number"}
@@ -345,7 +340,7 @@ export default function UploadDownload() {
                                     />
                                     {input.des && (
                                         <FormHelperText id="component-helper-text">
-                                            {input.des}
+                                            {t(input.des)}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
@@ -356,42 +351,40 @@ export default function UploadDownload() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        节点通信
+                        {t("nodesCommunication")}
                     </Typography>
                     <div className={classes.formContainer}>
                         {[
                             {
-                                name: "从机API请求超时（秒）",
+                                name: "slaveAPIExpiration",
                                 field: "slave_api_timeout",
-                                des: "主机等待从机API请求响应的超时时间",
+                                des: "slaveAPIExpirationDes",
                             },
                             {
-                                name: "节点心跳间隔（秒）",
+                                name: "heartbeatInterval",
                                 field: "slave_ping_interval",
-                                des: "主机节点向从机节点发送心跳的间隔",
+                                des: "heartbeatIntervalDes",
                             },
                             {
-                                name: "心跳失败重试阈值",
+                                name: "heartbeatFailThreshold",
                                 field: "slave_node_retry",
-                                des:
-                                    "主机向从机发送心跳失败后，主机可最大重试的次数。重试失败后，节点会进入恢复模式",
+                                des: "heartbeatFailThresholdDes",
                             },
                             {
-                                name: "恢复模式心跳间隔（秒）",
+                                name: "heartbeatRecoverModeInterval",
                                 field: "slave_recover_interval",
-                                des:
-                                    "节点因异常被主机标记为恢复模式后，主机尝试重新连接节点的间隔",
+                                des: "heartbeatRecoverModeIntervalDes",
                             },
                             {
-                                name: "从机中转超时（秒）",
+                                name: "slaveTransitExpiration",
                                 field: "slave_transfer_timeout",
-                                des: "从机执行文件中转任务可消耗的最长时间",
+                                des: "slaveTransitExpirationDes",
                             },
                         ].map((input) => (
                             <div key={input.name} className={classes.form}>
                                 <FormControl>
                                     <InputLabel htmlFor="component-helper">
-                                        {input.name}
+                                        {t(input.name)}
                                     </InputLabel>
                                     <Input
                                         type={"number"}
@@ -404,7 +397,7 @@ export default function UploadDownload() {
                                         required
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        {input.des}
+                                        {t(input.des)}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -419,7 +412,7 @@ export default function UploadDownload() {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {t("save")}
                     </Button>
                 </div>
             </form>

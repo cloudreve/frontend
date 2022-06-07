@@ -287,7 +287,7 @@ export default function FinishedCard(props) {
                                     }}
                                     noWrap
                                 >
-                                    {"transferring"}
+                                    {t("transferring")}
                                 </Typography>
                             )}
                         {props.task.status === 4 &&
@@ -299,7 +299,7 @@ export default function FinishedCard(props) {
                                     }}
                                     noWrap
                                 >
-                                    {"transferring"}
+                                    {t("transferring")}
                                 </Typography>
                             )}
                         {props.task.status === 4 &&
