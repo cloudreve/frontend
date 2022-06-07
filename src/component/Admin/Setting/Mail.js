@@ -17,6 +17,7 @@ import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Mail() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
+    const { t: tVas } = useTranslation("dashboard", { keyPrefix: "vas" });
+    const { t: tGlobal } = useTranslation("common");
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [test, setTest] = useState(false);
@@ -103,7 +107,7 @@ export default function Mail() {
             to: tesInput,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "测试邮件已发送", "success");
+                ToggleSnackbar("top", "right", t("testMailSent"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -138,7 +142,7 @@ export default function Mail() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t("saved"), "success");
                 reload();
             })
             .catch((error) => {
@@ -156,22 +160,18 @@ export default function Mail() {
                 onClose={() => setTest(false)}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">发件测试</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                    {t("testSMTPSettings")}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <Typography>
-                            发送测试邮件前，请先保存已更改的邮件设置；
-                        </Typography>
-                        <Typography>
-                            邮件发送结果不会立即反馈，如果您长时间未收到测试邮件，请检查
-                            Cloudreve 在终端输出的错误日志。
-                        </Typography>
+                        <Typography>{t("testSMTPTooltip")}</Typography>
                     </DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
                         id="name"
-                        label="收件人地址"
+                        label={t("recipient")}
                         value={tesInput}
                         onChange={(e) => setTestInput(e.target.value)}
                         type="email"
@@ -180,14 +180,14 @@ export default function Mail() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setTest(false)} color="default">
-                        取消
+                        {tGlobal("cancel")}
                     </Button>
                     <Button
                         onClick={() => sendTestMail()}
                         disabled={loading}
                         color="primary"
                     >
-                        发送
+                        {t("send")}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -195,14 +195,14 @@ export default function Mail() {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        发信
+                        {t("smtp")}
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    发件人名
+                                    {t("senderName")}
                                 </InputLabel>
                                 <Input
                                     value={options.fromName}
@@ -210,7 +210,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    邮件中展示的发件人姓名
+                                    {t("senderNameDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -218,7 +218,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    发件人邮箱
+                                    {t("senderAddress")}
                                 </InputLabel>
                                 <Input
                                     type={"email"}
@@ -227,7 +227,7 @@ export default function Mail() {
                                     onChange={handleChange("fromAdress")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    发件邮箱的地址
+                                    {t("senderAddressDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -235,7 +235,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    SMTP 服务器
+                                    {t("smtpServer")}
                                 </InputLabel>
                                 <Input
                                     value={options.smtpHost}
@@ -243,7 +243,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    发件服务器地址，不含端口号
+                                    {t("smtpServerDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -251,7 +251,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    SMTP 端口
+                                    {t("smtpPort")}
                                 </InputLabel>
                                 <Input
                                     inputProps={{ min: 1, step: 1 }}
@@ -261,7 +261,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    发件服务器地址端口号
+                                    {t("smtpPortDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -269,7 +269,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    SMTP 用户名
+                                    {t("smtpUsername")}
                                 </InputLabel>
                                 <Input
                                     value={options.smtpUser}
@@ -277,7 +277,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    发信邮箱用户名，一般与邮箱地址相同
+                                    {t("smtpUsernameDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -285,7 +285,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    SMTP 密码
+                                    {t("smtpPassword")}
                                 </InputLabel>
                                 <Input
                                     type={"password"}
@@ -294,7 +294,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    发信邮箱密码
+                                    {t("smtpPasswordDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -302,7 +302,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    回信邮箱
+                                    {t("replyToAddress")}
                                 </InputLabel>
                                 <Input
                                     value={options.replyTo}
@@ -310,7 +310,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    用户回复系统发送的邮件时，用于接收回信的邮箱
+                                    {t("replyToAddressDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -328,13 +328,10 @@ export default function Mail() {
                                             )}
                                         />
                                     }
-                                    label="强制使用 SSL 连接"
+                                    label={t("enforceSSL")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    是否强制使用 SSL
-                                    加密连接。如果无法发送邮件，可关闭此项，
-                                    Cloudreve 会尝试使用 STARTTLS
-                                    并决定是否使用加密连接
+                                    {t("enforceSSLDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -342,7 +339,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    SMTP 连接有效期 (秒)
+                                    {t("smtpTTL")}
                                 </InputLabel>
                                 <Input
                                     inputProps={{ min: 1, step: 1 }}
@@ -352,8 +349,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    有效期内建立的 SMTP
-                                    连接会被新邮件发送请求复用
+                                    {t("smtpTTLDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -362,14 +358,14 @@ export default function Mail() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        邮件模板
+                        {t("emailTemplates")}
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    新用户激活
+                                    {t("activateNewUser")}
                                 </InputLabel>
                                 <Input
                                     value={options.mail_activation_template}
@@ -381,7 +377,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    新用户注册后激活邮件的模板
+                                    {t("activateNewUserDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -389,7 +385,7 @@ export default function Mail() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    重置密码
+                                    {t("resetPassword")}
                                 </InputLabel>
                                 <Input
                                     value={options.mail_reset_pwd_template}
@@ -401,7 +397,7 @@ export default function Mail() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    密码重置邮件模板
+                                    {t("resetPasswordDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -415,7 +411,7 @@ export default function Mail() {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {t("save")}
                     </Button>
                     {"   "}
                     <Button
@@ -424,7 +420,7 @@ export default function Mail() {
                         color={"primary"}
                         onClick={() => setTest(true)}
                     >
-                        发送测试邮件
+                        {t("sendTestEmail")}
                     </Button>
                 </div>
             </form>

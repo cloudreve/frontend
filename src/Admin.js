@@ -52,6 +52,18 @@ const theme = createTheme(
         palette: {
             background: {},
         },
+        overrides: {
+            MuiButton: {
+                root: {
+                    textTransform: "none",
+                },
+            },
+            MuiTab: {
+                root: {
+                    textTransform: "none",
+                },
+            },
+        },
     },
     zhCN
 );
