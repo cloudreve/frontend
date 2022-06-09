@@ -70,6 +70,14 @@ export default function EditPolicyPreload() {
                     .OptionsSerialized.file_type
                     ? response.data.OptionsSerialized.file_type.join(",")
                     : "";
+                response.data.OptionsSerialized.tps_limit = response.data
+                    .OptionsSerialized.tps_limit
+                    ? response.data.OptionsSerialized.tps_limit.toString()
+                    : 0;
+                response.data.OptionsSerialized.tps_limit_burst = response.data
+                    .OptionsSerialized.tps_limit_burst
+                    ? response.data.OptionsSerialized.tps_limit_burst.toString()
+                    : 0;
                 setPolicy(response.data);
                 setType(response.data.Type);
             })

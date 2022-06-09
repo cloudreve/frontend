@@ -22,6 +22,7 @@ import AlertDialog from "../../Dialogs/Alert";
 import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import { getNumber } from "../../../../utils";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -93,7 +94,7 @@ const steps = [
         optional: false,
     },
     {
-        title: "上传设置",
+        title: "传输设置",
         optional: false,
     },
     {
@@ -148,6 +149,8 @@ export default function OneDriveGuide(props) {
                       od_driver: "",
                       chunk_size: 50 << 20,
                       placeholder_with_size: "false",
+                      tps_limit: "0",
+                      tps_limit_burst: "0",
                   },
               }
     );
@@ -253,6 +256,12 @@ export default function OneDriveGuide(props) {
         policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
         policyCopy.OptionsSerialized.chunk_size = parseInt(
             policyCopy.OptionsSerialized.chunk_size
+        );
+        policyCopy.OptionsSerialized.tps_limit = parseFloat(
+            policyCopy.OptionsSerialized.tps_limit
+        );
+        policyCopy.OptionsSerialized.tps_limit_burst = parseInt(
+            policyCopy.OptionsSerialized.tps_limit_burst
         );
         policyCopy.OptionsSerialized.placeholder_with_size =
             policyCopy.OptionsSerialized.placeholder_with_size === "true";
@@ -1090,6 +1099,135 @@ export default function OneDriveGuide(props) {
                                     </RadioGroup>
                                 </FormControl>
                             </div>
+                        </div>
+                    </div>
+
+                    <div className={classes.subStepContainer}>
+                        <div className={classes.stepNumberContainer}>
+                            <div className={classes.stepNumber}>
+                                {getNumber(5, [
+                                    policy.MaxSize !== "0",
+                                    policy.OptionsSerialized.file_type !== "",
+                                ])}
+                            </div>
+                        </div>
+                        <div className={classes.subStepContent}>
+                            <Typography variant={"body2"}>
+                                是否限制 OneDrive API 请求频率？
+                            </Typography>
+
+                            <div className={classes.form}>
+                                <FormControl required component="fieldset">
+                                    <RadioGroup
+                                        required
+                                        value={
+                                            parseFloat(
+                                                policy.OptionsSerialized
+                                                    .tps_limit
+                                            ) === 0
+                                                ? "false"
+                                                : "true"
+                                        }
+                                        onChange={(e) => {
+                                            if (e.target.value === "true") {
+                                                setPolicy({
+                                                    ...policy,
+                                                    OptionsSerialized: {
+                                                        ...policy.OptionsSerialized,
+                                                        tps_limit: "5.0",
+                                                    },
+                                                });
+                                            } else {
+                                                setPolicy({
+                                                    ...policy,
+                                                    OptionsSerialized: {
+                                                        ...policy.OptionsSerialized,
+                                                        tps_limit: "0",
+                                                    },
+                                                });
+                                            }
+                                        }}
+                                        row
+                                    >
+                                        <FormControlLabel
+                                            value={"true"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="限制"
+                                        />
+                                        <FormControlLabel
+                                            value={"false"}
+                                            control={
+                                                <Radio color={"primary"} />
+                                            }
+                                            label="不限制"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+
+                            <Collapse
+                                in={
+                                    parseFloat(
+                                        policy.OptionsSerialized.tps_limit
+                                    ) !== 0
+                                }
+                            >
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            TPS 限制
+                                        </InputLabel>
+                                        <Input
+                                            type={"number"}
+                                            inputProps={{
+                                                step: 0.1,
+                                            }}
+                                            required
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .tps_limit
+                                            }
+                                            onChange={handleOptionChange(
+                                                "tps_limit"
+                                            )}
+                                        />
+                                        <FormHelperText>
+                                            限制此存储策略每秒向 OneDrive 发送
+                                            API
+                                            请求最大数量。超出此频率的请求会被限速。多个
+                                            Cloudreve
+                                            节点转存文件时，它们会各自使用自己的限流桶，请根据情况按比例调低此数值。
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            TPS 突发请求
+                                        </InputLabel>
+                                        <Input
+                                            type={"number"}
+                                            inputProps={{
+                                                step: 1,
+                                            }}
+                                            required
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .tps_limit_burst
+                                            }
+                                            onChange={handleOptionChange(
+                                                "tps_limit_burst"
+                                            )}
+                                        />
+                                        <FormHelperText>
+                                            请求空闲时，Cloudreve
+                                            可将指定数量的名额预留给未来的突发流量使用。
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+                            </Collapse>
                         </div>
                     </div>
 

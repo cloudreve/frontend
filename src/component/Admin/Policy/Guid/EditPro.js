@@ -60,6 +60,12 @@ export default function EditPro(props) {
         policyCopy.OptionsSerialized.chunk_size = parseInt(
             policyCopy.OptionsSerialized.chunk_size
         );
+        policyCopy.OptionsSerialized.tps_limit = parseFloat(
+            policyCopy.OptionsSerialized.tps_limit
+        );
+        policyCopy.OptionsSerialized.tps_limit_burst = parseInt(
+            policyCopy.OptionsSerialized.tps_limit_burst
+        );
         policyCopy.OptionsSerialized.placeholder_with_size =
             policyCopy.OptionsSerialized.placeholder_with_size === "true";
         policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
@@ -598,6 +604,56 @@ export default function EditPro(props) {
                                 </TableCell>
                                 <TableCell>
                                     是否在上传会话创建时就对用户存储进行预支，仅部分存储策略支持。
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    TPS 限制
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            type={"number"}
+                                            inputProps={{
+                                                step: 0.1,
+                                            }}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .tps_limit
+                                            }
+                                            onChange={handleOptionChange(
+                                                "tps_limit"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    仅 OneDrive 存储策略支持。
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    TPS 突发请求
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            type={"number"}
+                                            inputProps={{
+                                                step: 1,
+                                            }}
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .tps_limit_burst
+                                            }
+                                            onChange={handleOptionChange(
+                                                "tps_limit_burst"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    仅 OneDrive 存储策略支持。
                                 </TableCell>
                             </TableRow>
                         </TableBody>
