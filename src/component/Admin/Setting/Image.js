@@ -13,6 +13,7 @@ import SizeInput from "../Common/SizeInput";
 import Alert from "@material-ui/lab/Alert";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ImageSetting() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
@@ -94,7 +96,7 @@ export default function ImageSetting() {
             options: option,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "设置已更改", "success");
+                ToggleSnackbar("top", "right", t("saved"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -117,13 +119,13 @@ export default function ImageSetting() {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        头像
+                        {t("avatar")}
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    Gravatar 服务器
+                                    {t("gravatarServer")}
                                 </InputLabel>
                                 <Input
                                     type={"url"}
@@ -132,7 +134,7 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    Gravatar 服务器地址，可选择使用国内镜像
+                                    {t("gravatarServerDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -140,7 +142,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    头像存储路径
+                                    {t("avatarFilePath")}
                                 </InputLabel>
                                 <Input
                                     value={options.avatar_path}
@@ -148,7 +150,7 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    用户上传自定义头像的存储路径
+                                    {t("avatarFilePathDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -162,11 +164,11 @@ export default function ImageSetting() {
                                         required
                                         min={0}
                                         max={2147483647}
-                                        label={"头像文件大小限制"}
+                                        label={t("avatarSize")}
                                     />
                                 )}
                                 <FormHelperText id="component-helper-text">
-                                    用户可上传头像文件的最大大小
+                                    {t("avatarSizeDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -174,7 +176,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    小头像尺寸
+                                    {t("smallAvatarSize")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -192,7 +194,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    中头像尺寸
+                                    {t("mediumAvatarSize")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -210,7 +212,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    大头像尺寸
+                                    {t("largeAvatarSize")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -229,14 +231,14 @@ export default function ImageSetting() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        文件预览
+                        {t("filePreview")}
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    Office 文档预览服务
+                                    {t("officePreviewService")}
                                 </InputLabel>
                                 <Input
                                     value={options.office_preview_service}
@@ -246,12 +248,13 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    可使用以下替换变量：
+                                    {t("officePreviewServiceDes")}
                                     <br />
-                                    <code>{"{$src}"}</code> - 文件 URL
+                                    <code>{"{$src}"}</code> -{" "}
+                                    {t("officePreviewServiceSrcDes")}
                                     <br />
-                                    <code>{"{$srcB64}"}</code> - Base64
-                                    编码后的文件 URL
+                                    <code>{"{$srcB64}"}</code> -{" "}
+                                    {t("officePreviewServiceSrcB64Des ")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -260,20 +263,18 @@ export default function ImageSetting() {
 
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        缩略图
+                        {t("thumbnails")}
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
-                            <Alert severity="info">
-                                以下设置只针对本机存储策略有效。
-                            </Alert>
+                            <Alert severity="info">{t("localOnlyInfo")}</Alert>
                         </div>
 
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图宽度
+                                    {t("thumbWidth")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -291,7 +292,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图高度
+                                    {t("thumbHeight")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -309,7 +310,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图文件后缀
+                                    {t("thumbSuffix")}
                                 </InputLabel>
                                 <Input
                                     type={"text"}
@@ -323,7 +324,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图生成并行数量
+                                    {t("thumbConcurrent")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -338,7 +339,7 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    -1 表示自动决定
+                                    {t("thumbConcurrentDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -346,7 +347,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图格式
+                                    {t("thumbFormat")}
                                 </InputLabel>
                                 <Input
                                     type={"test"}
@@ -357,7 +358,7 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    可选：png/jpg
+                                    {t("thumbFormatDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -365,7 +366,7 @@ export default function ImageSetting() {
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
-                                    缩略图生成并行数量
+                                    {t("thumbQuality")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -381,7 +382,7 @@ export default function ImageSetting() {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    压缩质量百分比，只针对 jpg 编码有效
+                                    {t("thumbQualityDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -400,7 +401,7 @@ export default function ImageSetting() {
                                             )}
                                         />
                                     }
-                                    label="生成完成后立即回收内存"
+                                    label={t("thumbGC")}
                                 />
                             </FormControl>
                         </div>
@@ -414,7 +415,7 @@ export default function ImageSetting() {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {t("save")}
                     </Button>
                 </div>
             </form>

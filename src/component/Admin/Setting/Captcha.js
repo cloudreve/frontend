@@ -14,6 +14,7 @@ import Link from "@material-ui/core/Link";
 import { toggleSnackbar } from "../../../redux/explorer";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Captcha() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
