@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     cardContainer: {
@@ -36,48 +37,50 @@ const useStyles = makeStyles((theme) => ({
 
 const policies = [
     {
-        name: "本机存储",
+        name: "local",
         img: "local.png",
         path: "/admin/policy/add/local",
     },
     {
-        name: "从机存储",
+        name: "remote",
         img: "remote.png",
         path: "/admin/policy/add/remote",
     },
     {
-        name: "七牛",
+        name: "qiniu",
         img: "qiniu.png",
         path: "/admin/policy/add/qiniu",
     },
     {
-        name: "阿里云 OSS",
+        name: "oss",
         img: "oss.png",
         path: "/admin/policy/add/oss",
     },
     {
-        name: "又拍云",
+        name: "upyun",
         img: "upyun.png",
         path: "/admin/policy/add/upyun",
     },
     {
-        name: "腾讯云 COS",
+        name: "cos",
         img: "cos.png",
         path: "/admin/policy/add/cos",
     },
     {
-        name: "OneDrive",
+        name: "onedrive",
         img: "onedrive.png",
         path: "/admin/policy/add/onedrive",
     },
     {
-        name: "Amazon S3",
+        name: "s3",
         img: "s3.png",
         path: "/admin/policy/add/s3",
     },
 ];
 
 export default function AddPolicy({ open, onClose }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
+    const { t: tCommon } = useTranslation("common");
     const classes = useStyles();
 
     const location = useHistory();
@@ -91,7 +94,9 @@ export default function AddPolicy({ open, onClose }) {
             maxWidth={"sm"}
             fullWidth
         >
-            <DialogTitle id="alert-dialog-title">选择存储方式</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+                {t("selectAStorageProvider")}
+            </DialogTitle>
             <DialogContent dividers className={classes.bg}>
                 <Grid container spacing={2}>
                     {policies.map((v) => (
@@ -113,7 +118,7 @@ export default function AddPolicy({ open, onClose }) {
                                             variant="subtitle1"
                                             color="textSecondary"
                                         >
-                                            {v.name}
+                                            {t(v.name)}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
@@ -125,16 +130,14 @@ export default function AddPolicy({ open, onClose }) {
             <DialogActions className={classes.dialogFooter}>
                 <Button
                     onClick={() =>
-                        window.open(
-                            "https://docs.cloudreve.org/use/policy/compare"
-                        )
+                        window.open(t("comparesStoragePoliciesLink"))
                     }
                     color="primary"
                 >
-                    存储策略对比
+                    {t("comparesStoragePolicies")}
                 </Button>
                 <Button onClick={onClose} color="primary">
-                    取消
+                    {tCommon("cancel")}
                 </Button>
             </DialogActions>
         </Dialog>
