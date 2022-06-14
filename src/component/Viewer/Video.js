@@ -209,7 +209,7 @@ export default function VideoViewer() {
             const fileNameMatch = fileNameNoExt(title) + ".";
             const options = files.filter((f) => {
                 const fileType = f.name.split(".").pop().toLowerCase();
-                return (subtitleSuffix.indexOf(fileType) !== -1) ? true : false;
+                return subtitleSuffix.indexOf(fileType) !== -1;
             }).sort((a, b) => {
                 return (a.name.startsWith(fileNameMatch) && !b.name.startsWith(fileNameMatch)) ? -1 : 0;
             });
