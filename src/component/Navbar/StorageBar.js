@@ -15,6 +15,7 @@ import {
 import ButtonBase from "@material-ui/core/ButtonBase";
 import { withRouter } from "react-router";
 import { toggleSnackbar } from "../../redux/explorer";
+import { Link as RouterLink } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
