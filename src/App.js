@@ -6,7 +6,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AlertBar from "./component/Common/Snackbar";
 import { createMuiTheme, lighten } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { Redirect, Route, Switch, useRouteMatch, withRouter } from "react-router-dom";
 import Auth from "./middleware/Auth";
 import { CssBaseline, makeStyles, ThemeProvider } from "@material-ui/core";
 import { changeThemeColor } from "./utils";
@@ -34,12 +34,13 @@ import CodeViewer from "./component/Viewer/Code";
 import MusicPlayer from "./component/FileManager/MusicPlayer";
 import EpubViewer from "./component/Viewer/Epub";
 import { useTranslation } from "react-i18next";
+import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 const PDFViewer = React.lazy(() =>
     import(/* webpackChunkName: "pdf" */ "./component/Viewer/PDF")
 );
 
-export default function App() {
+export default withRouter(function App({ location }) {
     const themeConfig = useSelector((state) => state.siteConfig.theme);
     const isLogin = useSelector((state) => state.viewUpdate.isLogin);
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -108,144 +109,155 @@ export default function App() {
                     <Navbar />
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
-                        <Switch>
-                            <AuthRoute exact path={path} isLogin={isLogin}>
-                                <Redirect
-                                    to={{
-                                        pathname: "/home",
-                                    }}
-                                />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}home`} isLogin={isLogin}>
-                                <FileManager />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}video`} isLogin={isLogin}>
-                                <VideoPreview />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}text`} isLogin={isLogin}>
-                                <TextViewer />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}doc`} isLogin={isLogin}>
-                                <DocViewer />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
-                                <Suspense fallback={<PageLoading />}>
-                                    <PDFViewer />
-                                </Suspense>
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}code`} isLogin={isLogin}>
-                                <CodeViewer />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}epub`} isLogin={isLogin}>
-                                <EpubViewer />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
-                                <Download />
-                            </AuthRoute>
-
-                            <AuthRoute path={`${path}shares`} isLogin={isLogin}>
-                                <MyShare />
-                            </AuthRoute>
-
-                            <Route path={`${path}search`} isLogin={isLogin}>
-                                <SearchResult />
-                            </Route>
-
-                            <Route path={`${path}setting`} isLogin={isLogin}>
-                                <UserSetting />
-                            </Route>
-
-                            <AuthRoute
-                                path={`${path}profile/:id`}
-                                isLogin={isLogin}
+                        <TransitionGroup>
+                            <CSSTransition
+                                classNames={'fade'}
+                                appear={true}
+                                key={location.pathname}
+                                timeout={300}
+                                unmountOnExit={true}
                             >
-                                <Profile />
-                            </AuthRoute>
+                                <Switch location={location}>
+                                    <AuthRoute exact path={path} isLogin={isLogin}>
+                                        <Redirect
+                                            to={{
+                                                pathname: "/home",
+                                            }}
+                                        />
+                                    </AuthRoute>
 
-                            <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
-                                <WebDAV />
-                            </AuthRoute>
+                                    <AuthRoute path={`${path}home`} isLogin={isLogin}>
+                                        <FileManager />
+                                    </AuthRoute>
 
-                            <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
-                                <Tasks />
-                            </AuthRoute>
+                                    <AuthRoute path={`${path}video`} isLogin={isLogin}>
+                                        <VideoPreview />
+                                    </AuthRoute>
 
-                            <NoAuthRoute
-                                exact
-                                path={`${path}login`}
-                                isLogin={isLogin}
-                            >
-                                <LoginForm />
-                            </NoAuthRoute>
+                                    <AuthRoute path={`${path}text`} isLogin={isLogin}>
+                                        <TextViewer />
+                                    </AuthRoute>
 
-                            <NoAuthRoute
-                                exact
-                                path={`${path}signup`}
-                                isLogin={isLogin}
-                            >
-                                <Register />
-                            </NoAuthRoute>
+                                    <AuthRoute path={`${path}doc`} isLogin={isLogin}>
+                                        <DocViewer />
+                                    </AuthRoute>
 
-                            <Route path={`${path}activate`} exact>
-                                <Activation />
-                            </Route>
+                                    <AuthRoute path={`${path}pdf`} isLogin={isLogin}>
+                                        <Suspense fallback={<PageLoading />}>
+                                            <PDFViewer />
+                                        </Suspense>
+                                    </AuthRoute>
 
-                            <Route path={`${path}reset`} exact>
-                                <ResetForm />
-                            </Route>
+                                    <AuthRoute path={`${path}code`} isLogin={isLogin}>
+                                        <CodeViewer />
+                                    </AuthRoute>
 
-                            <Route path={`${path}forget`} exact>
-                                <Reset />
-                            </Route>
+                                    <AuthRoute path={`${path}epub`} isLogin={isLogin}>
+                                        <EpubViewer />
+                                    </AuthRoute>
 
-                            <Route exact path={`${path}s/:id`}>
-                                <SharePreload />
-                            </Route>
+                                    <AuthRoute path={`${path}aria2`} isLogin={isLogin}>
+                                        <Download />
+                                    </AuthRoute>
 
-                            <Route path={`${path}s/:id/video(/)*`}>
-                                <VideoPreview />
-                            </Route>
+                                    <AuthRoute path={`${path}shares`} isLogin={isLogin}>
+                                        <MyShare />
+                                    </AuthRoute>
 
-                            <Route path={`${path}s/:id/doc(/)*`}>
-                                <DocViewer />
-                            </Route>
+                                    <Route path={`${path}search`} isLogin={isLogin}>
+                                        <SearchResult />
+                                    </Route>
 
-                            <Route path={`${path}s/:id/text(/)*`}>
-                                <TextViewer />
-                            </Route>
+                                    <Route path={`${path}setting`} isLogin={isLogin}>
+                                        <UserSetting />
+                                    </Route>
 
-                            <Route path={`${path}s/:id/pdf(/)*`}>
-                                <Suspense fallback={<PageLoading />}>
-                                    <PDFViewer />
-                                </Suspense>
-                            </Route>
+                                    <AuthRoute
+                                        path={`${path}profile/:id`}
+                                        isLogin={isLogin}
+                                    >
+                                        <Profile />
+                                    </AuthRoute>
 
-                            <Route path={`${path}s/:id/code(/)*`}>
-                                <CodeViewer />
-                            </Route>
+                                    <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
+                                        <WebDAV />
+                                    </AuthRoute>
 
-                            <Route path={`${path}s/:id/epub(/)*`}>
-                                <EpubViewer />
-                            </Route>
+                                    <AuthRoute path={`${path}tasks`} isLogin={isLogin}>
+                                        <Tasks />
+                                    </AuthRoute>
 
-                            <Route path="*">
-                                <NotFound
-                                    msg={t("pageNotFound", { ns: "common" })}
-                                />
-                            </Route>
-                        </Switch>
+                                    <NoAuthRoute
+                                        exact
+                                        path={`${path}login`}
+                                        isLogin={isLogin}
+                                    >
+                                        <LoginForm />
+                                    </NoAuthRoute>
+
+                                    <NoAuthRoute
+                                        exact
+                                        path={`${path}signup`}
+                                        isLogin={isLogin}
+                                    >
+                                        <Register />
+                                    </NoAuthRoute>
+
+                                    <Route path={`${path}activate`} exact>
+                                        <Activation />
+                                    </Route>
+
+                                    <Route path={`${path}reset`} exact>
+                                        <ResetForm />
+                                    </Route>
+
+                                    <Route path={`${path}forget`} exact>
+                                        <Reset />
+                                    </Route>
+
+                                    <Route exact path={`${path}s/:id`}>
+                                        <SharePreload />
+                                    </Route>
+
+                                    <Route path={`${path}s/:id/video(/)*`}>
+                                        <VideoPreview />
+                                    </Route>
+
+                                    <Route path={`${path}s/:id/doc(/)*`}>
+                                        <DocViewer />
+                                    </Route>
+
+                                    <Route path={`${path}s/:id/text(/)*`}>
+                                        <TextViewer />
+                                    </Route>
+
+                                    <Route path={`${path}s/:id/pdf(/)*`}>
+                                        <Suspense fallback={<PageLoading />}>
+                                            <PDFViewer />
+                                        </Suspense>
+                                    </Route>
+
+                                    <Route path={`${path}s/:id/code(/)*`}>
+                                        <CodeViewer />
+                                    </Route>
+
+                                    <Route path={`${path}s/:id/epub(/)*`}>
+                                        <EpubViewer />
+                                    </Route>
+
+                                    <Route path="*">
+                                        <NotFound
+                                            msg={t("pageNotFound", { ns: "common" })}
+                                        />
+                                    </Route>
+                                </Switch>
+                            </CSSTransition>
+                        </TransitionGroup>
                     </main>
                     <MusicPlayer />
                 </div>
             </ThemeProvider>
         </React.Fragment>
     );
-}
+})
+

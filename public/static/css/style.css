@@ -1,0 +1,30 @@
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 2em;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* 动画相关样式 */
+.fade-enter, .fade-appear {
+  opacity: 0;
+}
+  
+.fade-enter.fade-enter-active, .fade-appear.fade-appear-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+  
+.fade-exit {
+    opacity: 1;
+}
+  
+.fade-exit.fade-exit-active {
+    opacity: 0;
+}
