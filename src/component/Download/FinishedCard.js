@@ -393,7 +393,7 @@ export default function FinishedCard(props) {
                             color="secondary"
                             onClick={() =>
                                 history.push(
-                                    "/#/home?path=" +
+                                    "/home?path=" +
                                         encodeURIComponent(props.task.dst)
                                 )
                             }
