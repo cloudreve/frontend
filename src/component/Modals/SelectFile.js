@@ -12,6 +12,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import MenuItem from "@material-ui/core/MenuItem";
+import { Virtuoso } from "react-virtuoso";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         padding: 0,
+    },
+    scroll: {
+        maxHeight: "calc(100vh - 200px)",
     },
 }));
 
@@ -75,14 +79,18 @@ export default function SelectFileDialog(props) {
             open={props.open}
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
+            fullWidth
         >
             <DialogTitle id="form-dialog-title">
                 {t("download.selectDownloadingFile")}
             </DialogTitle>
             <DialogContent dividers={"paper"} className={classes.content}>
-                {files.map((v, k) => {
-                    return (
-                        <MenuItem key={k}>
+                <Virtuoso
+                    style={{ height: 54 * files.length }}
+                    className={classes.scroll}
+                    data={files}
+                    itemContent={(index, v) => (
+                        <MenuItem key={index}>
                             <FormGroup row>
                                 <FormControlLabel
                                     control={
@@ -96,8 +104,8 @@ export default function SelectFileDialog(props) {
                                 />
                             </FormGroup>
                         </MenuItem>
-                    );
-                })}
+                    )}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.onClose}>
