@@ -206,21 +206,22 @@ export default function VideoViewer() {
 
     useEffect(() => {
         if (files.length > 0) {
+            const fileNameMatch = fileNameNoExt(title) + ".";
             const options = files.filter((f) => {
                 const fileType = f.name.split(".").pop().toLowerCase();
-                if (subtitleSuffix.indexOf(fileType) !== -1) {
-                    if (fileNameNoExt(f.name) === fileNameNoExt(title)) {
-                        switchSubtitle(f);
-                    }
-                    return true;
-                }
-                return false;
+                return subtitleSuffix.indexOf(fileType) !== -1;
+            }).sort((a, b) => {
+                return (a.name.startsWith(fileNameMatch) && !b.name.startsWith(fileNameMatch)) ? -1 : 0;
             });
+            if (options.length > 0 && options[0].name.startsWith(fileNameMatch)) {
+                switchSubtitle(options[0]);
+            }
             setSubtitles(options);
         }
     }, [files]);
 
     const switchVideo = (file) => {
+        setSubtitleSelected(null);
         if (isShare) {
             file.key = id;
         }
