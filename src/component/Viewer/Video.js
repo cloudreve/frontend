@@ -57,7 +57,8 @@ const externalPlayers = [
 const useStyles = makeStyles((theme) => ({
     layout: {
         width: "auto",
-        marginTop: "30px",
+        marginTop: 30,
+        marginBottom: 20,
         marginLeft: theme.spacing(3),
         marginRight: theme.spacing(3),
         [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
@@ -65,11 +66,11 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: "auto",
             marginRight: "auto",
         },
-        marginBottom: 50,
     },
     player: {
-        borderRadius: "4px",
-        height: 600,
+        borderRadius: 4,
+        height: "100vh",
+        maxHeight: "calc(100vh - 180px)",
     },
     actions: {
         marginTop: theme.spacing(2),
