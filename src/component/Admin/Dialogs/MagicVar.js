@@ -10,107 +10,110 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const magicVars = [
     {
         value: "{randomkey16}",
-        des: "16位随机字符",
+        des: "16digitsRandomString",
         example: "N6IimT5XZP324ACK",
         fileOnly: false,
     },
     {
         value: "{randomkey8}",
-        des: "8位随机字符",
+        des: "8digitsRandomString",
         example: "gWz78q30",
         fileOnly: false,
     },
     {
         value: "{timestamp}",
-        des: "秒级时间戳",
+        des: "secondTimestamp",
         example: "1582692933",
         fileOnly: false,
     },
     {
         value: "{timestamp_nano}",
-        des: "纳秒级时间戳",
+        des: "nanoTimestamp",
         example: "1582692933231834600",
         fileOnly: false,
     },
     {
         value: "{uid}",
-        des: "用户ID",
+        des: "uid",
         example: "1",
         fileOnly: false,
     },
     {
         value: "{originname}",
-        des: "原始文件名",
+        des: "originalFileName",
         example: "MyPico.mp4",
         fileOnly: true,
     },
     {
         value: "{ext}",
-        des: "文件扩展名",
+        des: "extension",
         example: ".jpg",
         fileOnly: true,
     },
     {
         value: "{uuid}",
-        des: "UUID V4",
+        des: "uuidV4",
         example: "31f0a770-659d-45bf-a5a9-166c06f33281",
         fileOnly: true,
     },
     {
         value: "{date}",
-        des: "日期",
+        des: "date",
         example: "20060102",
         fileOnly: false,
     },
     {
         value: "{datetime}",
-        des: "日期时间",
+        des: "dateAndTime",
         example: "20060102150405",
         fileOnly: false,
     },
     {
         value: "{year}",
-        des: "年份",
+        des: "year",
         example: "2006",
         fileOnly: false,
     },
     {
         value: "{month}",
-        des: "月份",
+        des: "month",
         example: "01",
         fileOnly: false,
     },
     {
         value: "{day}",
-        des: "日",
+        des: "day",
         example: "02",
         fileOnly: false,
     },
     {
         value: "{hour}",
-        des: "小时",
+        des: "hour",
         example: "15",
         fileOnly: false,
     },
     {
         value: "{minute}",
-        des: "分钟",
+        des: "minute",
         example: "04",
         fileOnly: false,
     },
     {
         value: "{second}",
-        des: "秒",
+        des: "second",
         example: "05",
         fileOnly: false,
     },
 ];
 
 export default function MagicVar({ isFile, open, onClose, isSlave }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy.magicVar" });
+    const { t: tCommon } = useTranslation("common");
     return (
         <Dialog
             open={open}
@@ -119,16 +122,16 @@ export default function MagicVar({ isFile, open, onClose, isSlave }) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                {isFile ? "文件名魔法变量" : "路径魔法变量"}
+                {isFile ? t("fileNameMagicVar") : t("pathMagicVar")}
             </DialogTitle>
             <DialogContent>
                 <TableContainer>
                     <Table size="small" aria-label="a dense table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>魔法变量</TableCell>
-                                <TableCell>描述</TableCell>
-                                <TableCell>示例</TableCell>
+                                <TableCell>{t("variable")}</TableCell>
+                                <TableCell>{t("description")}</TableCell>
+                                <TableCell>{t("example")}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -142,7 +145,7 @@ export default function MagicVar({ isFile, open, onClose, isSlave }) {
                                             >
                                                 {m.value}
                                             </TableCell>
-                                            <TableCell>{m.des}</TableCell>
+                                            <TableCell>{t(m.des)}</TableCell>
                                             <TableCell>{m.example}</TableCell>
                                         </TableRow>
                                     );
@@ -153,8 +156,8 @@ export default function MagicVar({ isFile, open, onClose, isSlave }) {
                                     <TableCell component="th" scope="row">
                                         {"{path}"}
                                     </TableCell>
-                                    <TableCell>用户上传路径</TableCell>
-                                    <TableCell>/我的文件/学习资料/</TableCell>
+                                    <TableCell>{t("userUploadPath")}</TableCell>
+                                    <TableCell>/MyFile/Documents/</TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
@@ -163,7 +166,7 @@ export default function MagicVar({ isFile, open, onClose, isSlave }) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
-                    关闭
+                    {tCommon("close")}
                 </Button>
             </DialogActions>
         </Dialog>

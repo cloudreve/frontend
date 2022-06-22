@@ -21,6 +21,7 @@ import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import MagicVar from "../../Dialogs/MagicVar";
 import { getNumber } from "../../../../utils";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -68,24 +69,25 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "上传路径",
+        title: "storagePathStep",
         optional: false,
     },
     {
-        title: "直链设置",
+        title: "sourceLinkStep",
         optional: false,
     },
     {
-        title: "上传设置",
+        title: "uploadSettingStep",
         optional: false,
     },
     {
-        title: "完成",
+        title: "finishStep",
         optional: false,
     },
 ];
 
 export default function LocalGuide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     const history = useHistory();
 
@@ -201,7 +203,7 @@ export default function LocalGuide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    props.policy ? t("policySaved") : t("policyAdded"),
                     "success"
                 );
                 setActiveStep(4);
@@ -219,7 +221,9 @@ export default function LocalGuide(props) {
     return (
         <div>
             <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"}本机存储策略
+                {props.policy
+                    ? t("editLocalStoragePolicy")
+                    : t("addLocalStoragePolicy")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
@@ -227,15 +231,19 @@ export default function LocalGuide(props) {
                     const labelProps = {};
                     if (label.optional) {
                         labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
+                            <Typography variant="caption">
+                                {t("optional")}
+                            </Typography>
                         );
                     }
                     if (isStepSkipped(index)) {
                         stepProps.completed = false;
                     }
                     return (
-                        <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
+                        <Step key={t(label.title)} {...stepProps}>
+                            <StepLabel {...labelProps}>
+                                {t(label.title)}
+                            </StepLabel>
                         </Step>
                     );
                 })}
@@ -251,24 +259,23 @@ export default function LocalGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("path");
-                                    }}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.pathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("path")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储目录
+                                        {t("pathOfFolderToStoreFiles")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -286,19 +293,18 @@ export default function LocalGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("file");
-                                    }}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("file")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -314,14 +320,14 @@ export default function LocalGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="开启重命名"
+                                            label={t("autoRenameStoredFile")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不开启"
+                                            label={t("keepOriginalFileName")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -331,7 +337,7 @@ export default function LocalGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            命名规则
+                                            {t("renameRule")}
                                         </InputLabel>
                                         <Input
                                             required={
@@ -355,7 +361,7 @@ export default function LocalGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -375,9 +381,9 @@ export default function LocalGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                {t("enableGettingPermanentSourceLink")}
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                                {t("enableGettingPermanentSourceLinkDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -395,14 +401,14 @@ export default function LocalGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许"
+                                            label={t("allowed")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="禁止"
+                                            label={t("forbidden")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -417,10 +423,9 @@ export default function LocalGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    是否要对下载/直链使用 CDN？
+                                    {t("useCDN")}
                                     <br />
-                                    开启后，用户访问文件时的 URL
-                                    中的域名部分会被替换为 CDN 域名。
+                                    {t("useCDNDes")}
                                 </Typography>
 
                                 <div className={classes.form}>
@@ -446,14 +451,14 @@ export default function LocalGuide(props) {
                                                 control={
                                                     <Radio color={"primary"} />
                                                 }
-                                                label="使用"
+                                                label={t("use")}
                                             />
                                             <FormControlLabel
                                                 value={"false"}
                                                 control={
                                                     <Radio color={"primary"} />
                                                 }
-                                                label="不使用"
+                                                label={t("notUse")}
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -468,7 +473,7 @@ export default function LocalGuide(props) {
                                 </div>
                                 <div className={classes.subStepContent}>
                                     <Typography variant={"body2"}>
-                                        选择协议并填写 CDN 域名
+                                        {t("cdnDomain")}
                                     </Typography>
 
                                     <div className={classes.form}>
@@ -479,7 +484,7 @@ export default function LocalGuide(props) {
                                                 policy.IsOriginLinkEnable ===
                                                     "true" && useCDN === "true"
                                             }
-                                            label={"CDN 前缀"}
+                                            label={t("cdnPrefix")}
                                         />
                                     </div>
                                 </div>
@@ -493,7 +498,7 @@ export default function LocalGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(0)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -501,7 +506,7 @@ export default function LocalGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -521,7 +526,7 @@ export default function LocalGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
+                                {t("limitFileSize")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -553,14 +558,14 @@ export default function LocalGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -575,7 +580,7 @@ export default function LocalGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入限制：
+                                    {t("enterSizeLimit")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <SizeInput
@@ -583,7 +588,7 @@ export default function LocalGuide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>
@@ -598,7 +603,7 @@ export default function LocalGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
+                                {t("limitFileExt")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -638,14 +643,14 @@ export default function LocalGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -662,13 +667,12 @@ export default function LocalGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
+                                    {t("enterFileExt")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            扩展名列表
+                                            {t("extList")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -696,10 +700,9 @@ export default function LocalGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请指定分片上传时的分片大小，填写为 0
-                                表示不使用分片上传。
+                                {t("chunkSizeLabel")}
                                 <br />
-                                启用分片上传后，用户上传的文件将会被切分成分片逐个上传到存储端，当上传中断后，用户可以选择从上次上传的分片后继续开始上传。
+                                {t("chunkSizeDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <SizeInput
@@ -707,7 +710,7 @@ export default function LocalGuide(props) {
                                     onChange={handleOptionChange("chunk_size")}
                                     min={0}
                                     max={9223372036854775807}
-                                    label={"分片上传大小"}
+                                    label={t("chunkSize")}
                                 />
                             </div>
                         </div>
@@ -719,7 +722,7 @@ export default function LocalGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(1)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -727,7 +730,7 @@ export default function LocalGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -736,15 +739,15 @@ export default function LocalGuide(props) {
             {activeStep === 3 && (
                 <form className={classes.stepContent} onSubmit={submitPolicy}>
                     <div className={classes.subStepContainer}>
-                        <div className={classes.stepNumberContainer}></div>
+                        <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                最后一步，为此存储策略命名：
+                                {t("nameThePolicy")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储策略名
+                                        {t("policyName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -761,7 +764,7 @@ export default function LocalGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(2)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -769,7 +772,7 @@ export default function LocalGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            完成
+                            {t("finish")}
                         </Button>
                     </div>
                 </form>
@@ -779,10 +782,10 @@ export default function LocalGuide(props) {
                 <>
                     <form className={classes.stepContent}>
                         <Typography>
-                            存储策略已{props.policy ? "保存" : "添加"}！
+                            {props.policy ? t("policySaved") : t("policyAdded")}
                         </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                            {t("furtherActions")}
                         </Typography>
                     </form>
                     <div className={classes.stepFooter}>
@@ -791,7 +794,7 @@ export default function LocalGuide(props) {
                             className={classes.button}
                             onClick={() => history.push("/admin/policy")}
                         >
-                            返回存储策略列表
+                            {t("backToList")}
                         </Button>
                     </div>
                 </>

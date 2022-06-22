@@ -18,10 +18,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
-import { policyTypeMap } from "../../../config";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import AddPolicy from "../Dialogs/AddPolicy";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,24 +47,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columns = [
-    { id: "#", label: "#", minWidth: 50 },
-    { id: "name", label: "名称", minWidth: 170 },
-    { id: "type", label: "类型", minWidth: 170 },
+    { id: "#", label: "sharp", minWidth: 50 },
+    { id: "name", label: "name", minWidth: 170 },
+    { id: "type", label: "type", minWidth: 170 },
     {
         id: "count",
-        label: "下属文件数",
+        label: "childFiles",
         minWidth: 50,
         align: "right",
     },
     {
         id: "size",
-        label: "数据量",
+        label: "totalSize",
         minWidth: 100,
         align: "right",
     },
     {
         id: "action",
-        label: "操作",
+        label: "actions",
         minWidth: 170,
         align: "right",
     },
@@ -75,6 +75,7 @@ function useQuery() {
 }
 
 export default function Policy() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     // const [loading, setLoading] = useState(false);
     // const [tab, setTab] = useState(0);
@@ -109,7 +110,7 @@ export default function Policy() {
 
     useEffect(() => {
         if (query.get("code") === "0") {
-            ToggleSnackbar("top", "right", "授权成功", "success");
+            ToggleSnackbar("top", "right", t("authSuccess"), "success");
         } else if (query.get("msg") && query.get("msg") !== "") {
             ToggleSnackbar(
                 "top",
@@ -145,7 +146,7 @@ export default function Policy() {
         API.delete("/admin/policy/" + id)
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "存储策略已删除", "success");
+                ToggleSnackbar("top", "right", t("policyDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -163,7 +164,7 @@ export default function Policy() {
                     onClick={() => setAddDialog(true)}
                     variant={"contained"}
                 >
-                    添加存储策略
+                    {t("newStoragePolicy")}
                 </Button>
                 <div className={classes.headerRight}>
                     <Select
@@ -173,22 +174,28 @@ export default function Policy() {
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
                     >
-                        <MenuItem value={"all"}>全部</MenuItem>
-                        <MenuItem value={"local"}>本机</MenuItem>
-                        <MenuItem value={"remote"}>从机</MenuItem>
-                        <MenuItem value={"qiniu"}>七牛</MenuItem>
-                        <MenuItem value={"upyun"}>又拍云</MenuItem>
-                        <MenuItem value={"oss"}>阿里云 OSS</MenuItem>
-                        <MenuItem value={"cos"}>腾讯云 COS</MenuItem>
-                        <MenuItem value={"onedrive"}>OneDrive</MenuItem>
-                        <MenuItem value={"s3"}>Amazon S3</MenuItem>
+                        {[
+                            "all",
+                            "local",
+                            "remote",
+                            "qiniu",
+                            "upyun",
+                            "oss",
+                            "cos",
+                            "onedrive",
+                            "s3",
+                        ].map((v) => (
+                            <MenuItem key={v} value={v}>
+                                {t(v)}
+                            </MenuItem>
+                        ))}
                     </Select>
                     <Button
                         color={"primary"}
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {t("refresh")}
                     </Button>
                 </div>
             </div>
@@ -204,7 +211,7 @@ export default function Policy() {
                                         align={column.align}
                                         style={{ minWidth: column.minWidth }}
                                     >
-                                        {column.label}
+                                        {t(column.label)}
                                     </TableCell>
                                 ))}
                             </TableRow>
@@ -214,11 +221,7 @@ export default function Policy() {
                                 <TableRow hover key={row.ID}>
                                     <TableCell>{row.ID}</TableCell>
                                     <TableCell>{row.Name}</TableCell>
-                                    <TableCell>
-                                        {policyTypeMap[row.Type] !==
-                                            undefined &&
-                                            policyTypeMap[row.Type]}
-                                    </TableCell>
+                                    <TableCell>{t(row.Type)}</TableCell>
                                     <TableCell align={"right"}>
                                         {statics[row.ID] !== undefined &&
                                             statics[row.ID][0].toLocaleString()}
@@ -228,7 +231,7 @@ export default function Policy() {
                                             sizeToString(statics[row.ID][1])}
                                     </TableCell>
                                     <TableCell align={"right"}>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip title={t("delete")}>
                                             <IconButton
                                                 onClick={() =>
                                                     deletePolicy(row.ID)
@@ -238,7 +241,7 @@ export default function Policy() {
                                                 <Delete />
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title={"编辑"}>
+                                        <Tooltip title={t("edit")}>
                                             <IconButton
                                                 onClick={(e) => {
                                                     setEditID(row.ID);
@@ -280,7 +283,7 @@ export default function Policy() {
                         history.push("/admin/policy/edit/pro/" + editID);
                     }}
                 >
-                    专家模式编辑
+                    {t("editInProMode")}
                 </MenuItem>
                 <MenuItem
                     onClick={(e) => {
@@ -288,7 +291,7 @@ export default function Policy() {
                         history.push("/admin/policy/edit/guide/" + editID);
                     }}
                 >
-                    向导模式编辑
+                    {t("editInWizardMode")}
                 </MenuItem>
             </Menu>
         </div>
