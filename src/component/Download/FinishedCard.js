@@ -17,10 +17,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Divider from "@material-ui/core/Divider";
 import { ExpandMore } from "@material-ui/icons";
 import classNames from "classnames";
-import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Table from "@material-ui/core/Table";
 import Badge from "@material-ui/core/Badge";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
@@ -30,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { formatLocalTime } from "../../utils/datetime";
 import { toggleSnackbar } from "../../redux/explorer";
+import { TableVirtuoso } from "react-virtuoso";
 import { useTranslation } from "react-i18next";
 
 const ExpansionPanel = withStyles({
@@ -128,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: "20px",
     },
     scroll: {
-        overflowY: "auto",
+        maxHeight: "300px",
     },
     action: {
         padding: theme.spacing(2),
@@ -329,61 +327,58 @@ export default function FinishedCard(props) {
                 <ExpansionPanelDetails>
                     <Divider />
                     {props.task.files.length > 1 && (
-                        <div className={classes.scroll}>
-                            <Table>
-                                <TableBody>
-                                    {activeFiles().map((value) => {
-                                        return (
-                                            <TableRow key={value.index}>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography
-                                                        className={
-                                                            classes.subFileName
-                                                        }
-                                                    >
-                                                        <TypeIcon
-                                                            className={
-                                                                classes.subFileIcon
-                                                            }
-                                                            fileName={
-                                                                value.path
-                                                            }
-                                                        />
-                                                        {value.path}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {" "}
-                                                        {sizeToString(
-                                                            value.length
-                                                        )}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(2)}
-                                                        %
-                                                    </Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
+                        <TableVirtuoso
+                            style={{ height: 85 * activeFiles().length }}
+                            className={classes.scroll}
+                            data={activeFiles()}
+                            itemContent={(index, value) => (
+                                <>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Typography
+                                            className={
+                                                classes.subFileName
+                                            }
+                                        >
+                                            <TypeIcon
+                                                className={
+                                                    classes.subFileIcon
+                                                }
+                                                fileName={
+                                                    value.path
+                                                }
+                                            />
+                                            {value.path}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Typography noWrap>
+                                            {" "}
+                                            {sizeToString(
+                                                value.length
+                                            )}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Typography noWrap>
+                                            {getPercent(
+                                                value.completedLength,
+                                                value.length
+                                            ).toFixed(2)}
+                                            %
+                                        </Typography>
+                                    </TableCell>
+                                </>
+                            )}
+                        />
                     )}
 
                     <div className={classes.action}>

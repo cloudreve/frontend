@@ -17,8 +17,6 @@ import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Grid from "@material-ui/core/Grid";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -34,6 +32,7 @@ import { hex2bin, sizeToString } from "../../utils";
 import TypeIcon from "../FileManager/TypeIcon";
 import SelectFileDialog from "../Modals/SelectFile";
 import { useHistory } from "react-router";
+import { TableVirtuoso } from "react-virtuoso";
 import { useTranslation } from "react-i18next";
 const ExpansionPanel = withStyles({
     root: {
@@ -130,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: "20px",
     },
     scroll: {
-        overflowY: "auto",
+        maxHeight: "300px",
     },
     action: {
         padding: theme.spacing(2),
@@ -401,132 +400,140 @@ export default function DownloadingCard(props) {
                 <ExpansionPanelDetails>
                     <Divider />
                     {task.info.bittorrent.mode === "multi" && (
-                        <div className={classes.scroll}>
-                            <Table size="small">
-                                <TableBody>
-                                    {activeFiles().map((value) => {
-                                        return (
-                                            <TableRow
-                                                key={value.index}
-                                                style={{
-                                                    background:
-                                                        "linear-gradient(to right, " +
-                                                        (theme.palette.type ===
+                        <TableVirtuoso
+                            style={{ height: 85 * activeFiles().length }}
+                            className={classes.scroll}
+                            components={{
+                                // eslint-disable-next-line react/display-name
+                                TableRow: (props) => {
+                                    const index = props["data-index"];
+                                    const value = activeFiles()[index];
+                                    return (
+                                        <TableRow
+                                            {...props}
+                                            key={index}
+                                            style={{
+                                                background:
+                                                    "linear-gradient(to right, " +
+                                                    (theme.palette.type ===
                                                         "dark"
-                                                            ? darken(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.4
-                                                              )
-                                                            : lighten(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.85
-                                                              )) +
-                                                        " 0%," +
-                                                        (theme.palette.type ===
+                                                        ? darken(
+                                                            theme.palette
+                                                                .primary
+                                                                .main,
+                                                            0.4
+                                                        )
+                                                        : lighten(
+                                                            theme.palette
+                                                                .primary
+                                                                .main,
+                                                            0.85
+                                                        )) +
+                                                    " 0%," +
+                                                    (theme.palette.type ===
                                                         "dark"
-                                                            ? darken(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.4
-                                                              )
-                                                            : lighten(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.85
-                                                              )) +
-                                                        " " +
-                                                        getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(0) +
-                                                        "%," +
-                                                        theme.palette.background
-                                                            .paper +
-                                                        " " +
-                                                        getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(0) +
-                                                        "%," +
-                                                        theme.palette.background
-                                                            .paper +
-                                                        " 100%)",
-                                                }}
+                                                        ? darken(
+                                                            theme.palette
+                                                                .primary
+                                                                .main,
+                                                            0.4
+                                                        )
+                                                        : lighten(
+                                                            theme.palette
+                                                                .primary
+                                                                .main,
+                                                            0.85
+                                                        )) +
+                                                    " " +
+                                                    getPercent(
+                                                        value.completedLength,
+                                                        value.length
+                                                    ).toFixed(0) +
+                                                    "%," +
+                                                    theme.palette.background
+                                                        .paper +
+                                                    " " +
+                                                    getPercent(
+                                                        value.completedLength,
+                                                        value.length
+                                                    ).toFixed(0) +
+                                                    "%," +
+                                                    theme.palette.background
+                                                        .paper +
+                                                    " 100%)",
+                                            }}
+                                        />
+                                    );
+                                },
+                            }}
+                            data={activeFiles()}
+                            itemContent={(index, value) => (
+                                <>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Typography
+                                            className={
+                                                classes.subFileName
+                                            }
+                                        >
+                                            <TypeIcon
+                                                className={
+                                                    classes.subFileIcon
+                                                }
+                                                fileName={
+                                                    value.path
+                                                }
+                                            />
+                                            {value.path}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Typography noWrap>
+                                            {" "}
+                                            {sizeToString(
+                                                value.length
+                                            )}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Typography noWrap>
+                                            {getPercent(
+                                                value.completedLength,
+                                                value.length
+                                            ).toFixed(2)}
+                                            %
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Tooltip
+                                            title={t(
+                                                "deleteThisFile"
+                                            )}
+                                        >
+                                            <IconButton
+                                                onClick={() =>
+                                                    deleteFile(
+                                                        value.index
+                                                    )
+                                                }
+                                                disabled={loading}
+                                                size={"small"}
                                             >
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography
-                                                        className={
-                                                            classes.subFileName
-                                                        }
-                                                    >
-                                                        <TypeIcon
-                                                            className={
-                                                                classes.subFileIcon
-                                                            }
-                                                            fileName={
-                                                                value.path
-                                                            }
-                                                        />
-                                                        {value.path}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {" "}
-                                                        {sizeToString(
-                                                            value.length
-                                                        )}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(2)}
-                                                        %
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Tooltip
-                                                        title={t(
-                                                            "deleteThisFile"
-                                                        )}
-                                                    >
-                                                        <IconButton
-                                                            onClick={() =>
-                                                                deleteFile(
-                                                                    value.index
-                                                                )
-                                                            }
-                                                            disabled={loading}
-                                                            size={"small"}
-                                                        >
-                                                            <HighlightOff />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                                <HighlightOff />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                </>
+                            )}
+                        />
                     )}
 
                     <div className={classes.action}>
