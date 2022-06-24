@@ -23,6 +23,7 @@ import { getNumber } from "../../../../utils";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import MagicVar from "../../Dialogs/MagicVar";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -82,36 +83,37 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "存储空间",
+        title: "storageBucket",
         optional: false,
     },
     {
-        title: "上传路径",
+        title: "storagePathStep",
         optional: false,
     },
     {
-        title: "直链设置",
+        title: "sourceLinkStep",
         optional: false,
     },
     {
-        title: "上传设置",
+        title: "uploadSettingStep",
         optional: false,
     },
     {
-        title: "跨域策略",
+        title: "corsSettingStep",
         optional: true,
     },
     {
-        title: "云函数回调",
+        title: "callbackFunctionStep",
         optional: true,
     },
     {
-        title: "完成",
+        title: "finishStep",
         optional: false,
     },
 ];
 
 export default function COSGuide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     const history = useHistory();
 
@@ -214,7 +216,7 @@ export default function COSGuide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    props.policy ? t("policySaved") : t("policyAdded"),
                     "success"
                 );
                 setActiveStep(4);
@@ -236,7 +238,7 @@ export default function COSGuide(props) {
             id: policyID,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "跨域策略已添加", "success");
+                ToggleSnackbar("top", "right", t("corsPolicyAdded"), "success");
                 setActiveStep(5);
             })
             .catch((error) => {
@@ -254,7 +256,12 @@ export default function COSGuide(props) {
             region: region,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "回调云函数已添加", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    t("callbackFunctionAdded"),
+                    "success"
+                );
                 setActiveStep(6);
             })
             .catch((error) => {
@@ -268,7 +275,9 @@ export default function COSGuide(props) {
     return (
         <div>
             <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"} 腾讯云 COS 存储策略
+                {props.policy
+                    ? t("editCOSStoragePolicy")
+                    : t("addCOSStoragePolicy")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
@@ -276,7 +285,9 @@ export default function COSGuide(props) {
                     const labelProps = {};
                     if (label.optional) {
                         labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
+                            <Typography variant="caption">
+                                {t("optional")}
+                            </Typography>
                         );
                     }
                     if (isStepSkipped(index)) {
@@ -284,7 +295,9 @@ export default function COSGuide(props) {
                     }
                     return (
                         <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
+                            <StepLabel {...labelProps}>
+                                {t(label.title)}
+                            </StepLabel>
                         </Step>
                     );
                 })}
@@ -304,10 +317,11 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用 腾讯云 COS 储策略前，请确保您在 参数设置
-                                - 站点信息 - 站点URL 中填写的
-                                地址与实际相符，并且
-                                <strong>能够被外网正常访问</strong>。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.wanSiteURLDes"}
+                                    components={[<strong key={0} />]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -318,16 +332,19 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                前往
-                                <Link
-                                    href={
-                                        "https://console.cloud.tencent.com/cos5"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    COS 管理控制台
-                                </Link>
-                                创建存储桶。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.createCOSBucketDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://console.cloud.tencent.com/cos5"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -338,19 +355,21 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                转到所创建存储桶的基础配置页面，将
-                                <code>空间名称</code>填写在下方：
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.cosBucketNameDes"}
+                                    components={[<code key={0} />]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        空间名称
+                                        {t("qiniuBucketName")}
                                     </InputLabel>
                                     <Input
                                         inputProps={{
                                             pattern: "[a-z0-9-]+-[0-9]+",
-                                            title:
-                                                "空间名格式不正确, 举例：ccc-1252109809",
+                                            title: t("cosBucketFormatError"),
                                         }}
                                         required
                                         value={policy.BucketName}
@@ -367,9 +386,11 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方选择您创建的空间的访问权限类型，推荐选择
-                                <code>私有读写</code>
-                                以获得更高的安全性，私有空间无法开启“获取直链”功能。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.cosBucketTypeDes"}
+                                    components={[<code key={0} />]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -384,14 +405,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="私有读写"
+                                            label={t("cosPrivateRW")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="公共读私有写"
+                                            label={t("cosPublicRW")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -405,16 +426,21 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                转到所创建 Bucket 的基础配置，填写
-                                <code>基本信息</code>栏目下 给出的{" "}
-                                <code>访问域名</code>
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.cosAccessDomainDes"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <DomainInput
                                     value={policy.Server}
                                     onChange={handleChange("Server")}
                                     required
-                                    label={"访问域名"}
+                                    label={t("accessDomain")}
                                 />
                             </div>
                         </div>
@@ -426,7 +452,7 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要使用配套的 腾讯云CDN 加速 COS 访问？
+                                {t("cosCDNDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -443,14 +469,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="使用"
+                                            label={t("use")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不使用"
+                                            label={t("notUse")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -465,25 +491,26 @@ export default function COSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    前往
-                                    <Link
-                                        href={
-                                            "https://console.cloud.tencent.com/cdn/access/guid"
-                                        }
-                                        target={"_blank"}
-                                    >
-                                        腾讯云 CDN 管理控制台
-                                    </Link>
-                                    创建 CDN 加速域名，并设定源站为刚创建的 COS
-                                    存储桶。在下方填写 CDN
-                                    加速域名，并选择是否使用 HTTPS：
+                                    <Trans
+                                        ns={"dashboard"}
+                                        i18nKey={"policy.cosCDNDomainDes"}
+                                        components={[
+                                            <Link
+                                                key={0}
+                                                href={
+                                                    "https://console.cloud.tencent.com/cdn/access/guid"
+                                                }
+                                                target={"_blank"}
+                                            />,
+                                        ]}
+                                    />
                                 </Typography>
                                 <div className={classes.form}>
                                     <DomainInput
                                         value={policy.BaseURL}
                                         onChange={handleChange("BaseURL")}
                                         required={useCDN === "true"}
-                                        label={"CDN 加速域名"}
+                                        label={t("bucketCDNDomain")}
                                     />
                                 </div>
                             </div>
@@ -498,29 +525,30 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在腾讯云
-                                <Link
-                                    href={
-                                        "https://console.cloud.tencent.com/cam/capi"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    访问密钥
-                                </Link>
-                                页面获取
-                                一对访问密钥，并填写在下方。请确保这对密钥拥有
-                                COS 和 SCF 服务的访问权限。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.cosCredentialDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://console.cloud.tencent.com/cam/capi"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        SecretId
+                                        {t("secretId")}
                                     </InputLabel>
                                     <Input
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格",
+                                            title: t("shouldNotContainSpace"),
                                         }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
@@ -530,13 +558,13 @@ export default function COSGuide(props) {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        SecretKey
+                                        {t("secretKey")}
                                     </InputLabel>
                                     <Input
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格",
+                                            title: t("shouldNotContainSpace"),
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -554,12 +582,12 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                为此存储策略命名：
+                                {t("nameThePolicyFirst")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储策略名
+                                        {t("policyName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -578,7 +606,7 @@ export default function COSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -598,25 +626,23 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("path");
-                                    }}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.pathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("path")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储目录
+                                        {t("pathOfFolderToStoreFiles")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -634,19 +660,18 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("file");
-                                    }}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("file")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -662,14 +687,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="开启重命名"
+                                            label={t("autoRenameStoredFile")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不开启"
+                                            label={t("keepOriginalFileName")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -679,7 +704,7 @@ export default function COSGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            命名规则
+                                            {t("renameRule")}
                                         </InputLabel>
                                         <Input
                                             required={
@@ -702,7 +727,7 @@ export default function COSGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(0)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>
                         <Button
                             disabled={loading}
@@ -710,7 +735,7 @@ export default function COSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -730,9 +755,9 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                {t("enableGettingPermanentSourceLink")}
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                                {t("enableGettingPermanentSourceLinkDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -748,7 +773,9 @@ export default function COSGuide(props) {
                                                 ToggleSnackbar(
                                                     "top",
                                                     "right",
-                                                    "私有空间无法开启此功能",
+                                                    t(
+                                                        "cannotEnableForPrivateBucket"
+                                                    ),
                                                     "warning"
                                                 );
                                                 return;
@@ -764,14 +791,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许"
+                                            label={t("allowed")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="禁止"
+                                            label={t("forbidden")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -785,7 +812,7 @@ export default function COSGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(1)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -793,7 +820,7 @@ export default function COSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -807,7 +834,7 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
+                                {t("limitFileSize")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -839,14 +866,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -861,7 +888,7 @@ export default function COSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入限制：
+                                    {t("enterSizeLimit")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <SizeInput
@@ -869,7 +896,7 @@ export default function COSGuide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>
@@ -884,7 +911,7 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
+                                {t("limitFileExt")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -924,14 +951,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -948,13 +975,12 @@ export default function COSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
+                                    {t("enterFileExt")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            扩展名列表
+                                            {t("extList")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -982,7 +1008,7 @@ export default function COSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要再用户开始上传时就创建占位符文件并扣除用户容量？开启后，可以防止用户恶意发起多个上传请求但不完成上传。
+                                {t("createPlaceholderDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -1003,14 +1029,14 @@ export default function COSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="创建占位符文件"
+                                            label={t("createPlaceholder")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不创建"
+                                            label={t("notCreatePlaceholder")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1024,7 +1050,7 @@ export default function COSGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(2)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -1032,7 +1058,7 @@ export default function COSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -1044,10 +1070,7 @@ export default function COSGuide(props) {
                         <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                COS 存储桶 需要正确配置跨域策略后才能使用 Web
-                                端上传文件，Cloudreve
-                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此
-                                Bucket 的跨域策略，此步骤可以跳过。
+                                {t("ossCORSDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <Button
@@ -1058,7 +1081,7 @@ export default function COSGuide(props) {
                                     onClick={() => createCORS()}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
-                                    让 Cloudreve 帮我设置
+                                    {t("letCloudreveHelpMe")}
                                 </Button>
                             </div>
                         </div>
@@ -1080,7 +1103,7 @@ export default function COSGuide(props) {
                                 });
                             }}
                         >
-                            跳过
+                            {t("skip")}
                         </Button>{" "}
                     </div>
                 </form>
@@ -1092,30 +1115,30 @@ export default function COSGuide(props) {
                         <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                COS 存储桶 客户端直传需要借助腾讯云的
-                                <Link
-                                    href={
-                                        "https://console.cloud.tencent.com/scf/index?rid=16"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    云函数
-                                </Link>
-                                产品以确保上传回调可控。如果您打算将此存储策略自用，或者分配给可信赖用户组，此步骤可以跳过。
-                                如果是作为公有使用，请务必创建回调云函数。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.cosCallbackDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://console.cloud.tencent.com/scf/index?rid=16"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                    ]}
+                                />
                                 <br />
                                 <br />
                             </Typography>
                             <Typography variant={"body2"}>
-                                Cloudreve 可以尝试帮你自动创建回调云函数，请选择
-                                COS 存储桶 所在地域后继续。
-                                创建可能会花费数秒钟，请耐心等待。创建前请确保您的腾讯云账号已开启云函数服务。
+                                {t("cosCallbackCreate")}
                             </Typography>
 
                             <div className={classes.form}>
                                 <FormControl>
                                     <InputLabel htmlFor="component-helper">
-                                        存储桶所在地区
+                                        {t("cosBucketRegion")}
                                     </InputLabel>
                                     <Select
                                         value={region}
@@ -1124,36 +1147,20 @@ export default function COSGuide(props) {
                                         }
                                         required
                                     >
-                                        <MenuItem value={"ap-beijing"}>
-                                            华北地区(北京)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-chengdu"}>
-                                            西南地区(成都)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-guangzhou"}>
-                                            华南地区(广州)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-guangzhou-open"}>
-                                            华南地区(广州Open)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-hongkong"}>
-                                            港澳台地区(中国香港)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-mumbai"}>
-                                            亚太南部(孟买)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-shanghai"}>
-                                            华东地区(上海)
-                                        </MenuItem>
-                                        <MenuItem value={"ap-singapore"}>
-                                            亚太东南(新加坡)
-                                        </MenuItem>
-                                        <MenuItem value={"na-siliconvalley"}>
-                                            美国西部(硅谷)
-                                        </MenuItem>
-                                        <MenuItem value={"na-toronto"}>
-                                            北美地区(多伦多)
-                                        </MenuItem>
+                                        {[
+                                            "ap-beijing",
+                                            "ap-chengdu",
+                                            "ap-guangzhou",
+                                            "ap-guangzhou-open",
+                                            "ap-hongkong",
+                                            "ap-mumbai",
+                                            "na-siliconvalley",
+                                            "na-toronto",
+                                        ].map((v) => (
+                                            <MenuItem key={v} value={v}>
+                                                {t(v)}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                 </FormControl>
                             </div>
@@ -1167,7 +1174,7 @@ export default function COSGuide(props) {
                                     onClick={() => creatCallback()}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
-                                    让 Cloudreve 帮我创建
+                                    {t("letCloudreveHelpMe")}
                                 </Button>
                             </div>
                         </div>
@@ -1189,7 +1196,7 @@ export default function COSGuide(props) {
                                 });
                             }}
                         >
-                            跳过
+                            {t("skip")}
                         </Button>{" "}
                     </div>
                 </form>
@@ -1199,10 +1206,10 @@ export default function COSGuide(props) {
                 <>
                     <form className={classes.stepContent}>
                         <Typography>
-                            存储策略已{props.policy ? "保存" : "添加"}！
+                            {props.policy ? t("policySaved") : t("policyAdded")}
                         </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                            {t("furtherActions")}
                         </Typography>
                     </form>
                     <div className={classes.stepFooter}>
@@ -1211,7 +1218,7 @@ export default function COSGuide(props) {
                             className={classes.button}
                             onClick={() => history.push("/admin/policy")}
                         >
-                            返回存储策略列表
+                            {t("backToList")}
                         </Button>
                     </div>
                 </>

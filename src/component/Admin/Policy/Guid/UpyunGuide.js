@@ -20,6 +20,7 @@ import API from "../../../../middleware/Api";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import MagicVar from "../../Dialogs/MagicVar";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -67,28 +68,29 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "存储空间",
+        title: "storageBucket",
         optional: false,
     },
     {
-        title: "上传路径",
+        title: "storagePathStep",
         optional: false,
     },
     {
-        title: "直链设置",
+        title: "sourceLinkStep",
         optional: false,
     },
     {
-        title: "上传限制",
+        title: "uploadSettingStep",
         optional: false,
     },
     {
-        title: "完成",
+        title: "finishStep",
         optional: false,
     },
 ];
 
 export default function UpyunGuide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     const history = useHistory();
 
@@ -181,7 +183,7 @@ export default function UpyunGuide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    props.policy ? t("policySaved") : t("policyAdded"),
                     "success"
                 );
                 setActiveStep(5);
@@ -199,7 +201,9 @@ export default function UpyunGuide(props) {
     return (
         <div>
             <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"} 又拍云 存储策略
+                {props.policy
+                    ? t("editUpyunStoragePolicy")
+                    : t("addUpyunStoragePolicy")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
@@ -215,7 +219,9 @@ export default function UpyunGuide(props) {
                     }
                     return (
                         <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
+                            <StepLabel {...labelProps}>
+                                {t(label.title)}
+                            </StepLabel>
                         </Step>
                     );
                 })}
@@ -235,9 +241,11 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用又拍云存储策略前，请确保您在 参数设置 -
-                                站点信息 - 站点URL 中填写的 地址与实际相符，并且
-                                <strong>能够被外网正常访问</strong>。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.wanSiteURLDes"}
+                                    components={[<strong key={0} />]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -248,16 +256,19 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                前往
-                                <Link
-                                    href={
-                                        "https://console.upyun.com/services/create/file/"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    又拍云面板
-                                </Link>
-                                创建云存储服务。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.createUpyunBucketDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://console.upyun.com/services/create/file/"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -268,12 +279,12 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方填写所创建的服务名称：
+                                {t("storageServiceNameDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        服务名称
+                                        {t("storageServiceName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -291,12 +302,12 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                为此服务创建或授权有读取、写入、删除权限的操作员，然后将操作员信息填写在下方：
+                                {t("operatorNameDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        操作员名
+                                        {t("operatorName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -308,7 +319,7 @@ export default function UpyunGuide(props) {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        操作员密码
+                                        {t("operatorPassword")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -326,15 +337,14 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                填写为云存储服务绑定的域名，并根据实际情况选择是否使用
-                                HTTPS：
+                                {t("upyunCDNDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <DomainInput
                                     value={policy.BaseURL}
                                     onChange={handleChange("BaseURL")}
                                     required
-                                    label={"加速域名"}
+                                    label={t("bucketCDNDomain")}
                                 />
                             </div>
                         </div>
@@ -346,10 +356,9 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                此步骤可保持默认并跳过，但是强烈建议您跟随此步骤操作。
+                                {t("upyunOptionalDes")}
                                 <br />
-                                前往所创建云存储服务的 功能配置 面板，转到
-                                访问配置 选项卡，开启 Token 防盗链并设定密码。
+                                {t("upyunTokenDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -364,14 +373,14 @@ export default function UpyunGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="已开启 Token 防盗链"
+                                            label={t("tokenEnabled")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="未开启 Token 防盗链"
+                                            label={t("tokenDisabled")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -386,12 +395,12 @@ export default function UpyunGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    填写您所设置的 Token 防盗链 密钥
+                                    {t("upyunTokenSecretDes")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            Token 防盗链 密钥
+                                            {t("upyunTokenSecret")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -417,7 +426,7 @@ export default function UpyunGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -437,25 +446,23 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("path");
-                                    }}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.pathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("path")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储目录
+                                        {t("pathOfFolderToStoreFiles")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -473,19 +480,18 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("file");
-                                    }}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("file")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -501,14 +507,14 @@ export default function UpyunGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="开启重命名"
+                                            label={t("autoRenameStoredFile")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不开启"
+                                            label={t("keepOriginalFileName")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -518,7 +524,7 @@ export default function UpyunGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            命名规则
+                                            {t("renameRule")}
                                         </InputLabel>
                                         <Input
                                             required={
@@ -541,7 +547,7 @@ export default function UpyunGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(0)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>
                         <Button
                             disabled={loading}
@@ -549,7 +555,7 @@ export default function UpyunGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -569,9 +575,9 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                {t("enableGettingPermanentSourceLink")}
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                                {t("enableGettingPermanentSourceLinkDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -587,7 +593,9 @@ export default function UpyunGuide(props) {
                                                 ToggleSnackbar(
                                                     "top",
                                                     "right",
-                                                    "开启 Token 防盗链后无法使用直链功能",
+                                                    t(
+                                                        "cannotEnableForTokenProtectedBucket"
+                                                    ),
                                                     "warning"
                                                 );
                                                 return;
@@ -603,14 +611,14 @@ export default function UpyunGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许"
+                                            label={t("allowed")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="禁止"
+                                            label={t("forbidden")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -624,7 +632,7 @@ export default function UpyunGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(1)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -632,7 +640,7 @@ export default function UpyunGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -652,7 +660,7 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
+                                {t("limitFileSize")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -684,14 +692,14 @@ export default function UpyunGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -706,7 +714,7 @@ export default function UpyunGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入限制：
+                                    {t("enterSizeLimit")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <SizeInput
@@ -714,7 +722,7 @@ export default function UpyunGuide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>
@@ -729,7 +737,7 @@ export default function UpyunGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
+                                {t("limitFileExt")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -769,14 +777,14 @@ export default function UpyunGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -793,13 +801,12 @@ export default function UpyunGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
+                                    {t("enterFileExt")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            扩展名列表
+                                            {t("extList")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -822,7 +829,7 @@ export default function UpyunGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(2)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -830,7 +837,7 @@ export default function UpyunGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -842,12 +849,12 @@ export default function UpyunGuide(props) {
                         <div className={classes.stepNumberContainer}></div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                最后一步，为此存储策略命名：
+                                {t("nameThePolicy")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储策略名
+                                        {t("policyName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -864,7 +871,7 @@ export default function UpyunGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(3)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -872,7 +879,7 @@ export default function UpyunGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            完成
+                            {t("finish")}
                         </Button>
                     </div>
                 </form>
@@ -882,10 +889,10 @@ export default function UpyunGuide(props) {
                 <>
                     <form className={classes.stepContent}>
                         <Typography>
-                            存储策略已{props.policy ? "保存" : "添加"}！
+                            {props.policy ? t("policySaved") : t("policyAdded")}
                         </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                            {t("furtherActions")}
                         </Typography>
                     </form>
                     <div className={classes.stepFooter}>
@@ -894,7 +901,7 @@ export default function UpyunGuide(props) {
                             className={classes.button}
                             onClick={() => history.push("/admin/policy")}
                         >
-                            返回存储策略列表
+                            {t("backToList")}
                         </Button>
                     </div>
                 </>
