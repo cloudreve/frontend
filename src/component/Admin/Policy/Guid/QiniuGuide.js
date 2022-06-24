@@ -217,7 +217,6 @@ export default function RemoteGuide(props) {
                     if (label.optional) {
                         labelProps.optional = (
                             <Typography variant="caption">
-                                {" "}
                                 {t("optional")}
                             </Typography>
                         );
@@ -251,7 +250,7 @@ export default function RemoteGuide(props) {
                             <Typography variant={"body2"}>
                                 <Trans
                                     ns={"dashboard"}
-                                    i18nKey={"policy.qiniuSiteURLDes"}
+                                    i18nKey={"policy.wanSiteURLDes"}
                                     components={[<strong key={0} />]}
                                 />
                             </Typography>
@@ -697,7 +696,7 @@ export default function RemoteGuide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>

@@ -21,6 +21,7 @@ import { getNumber } from "../../../../utils";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import MagicVar from "../../Dialogs/MagicVar";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -80,32 +81,33 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "存储空间",
+        title: "storageBucket",
         optional: false,
     },
     {
-        title: "上传路径",
+        title: "storagePathStep",
         optional: false,
     },
     {
-        title: "直链设置",
+        title: "sourceLinkStep",
         optional: false,
     },
     {
-        title: "上传设置",
+        title: "uploadSettingStep",
         optional: false,
     },
     {
-        title: "跨域策略",
+        title: "corsSettingStep",
         optional: true,
     },
     {
-        title: "完成",
+        title: "finishStep",
         optional: false,
     },
 ];
 
 export default function OSSGuide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     const history = useHistory();
 
@@ -218,7 +220,7 @@ export default function OSSGuide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    props.policy ? t("policySaved") : t("policyAdded"),
                     "success"
                 );
                 setActiveStep(4);
@@ -240,7 +242,7 @@ export default function OSSGuide(props) {
             id: policyID,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "跨域策略已添加", "success");
+                ToggleSnackbar("top", "right", t("corsPolicyAdded"), "success");
                 setActiveStep(5);
             })
             .catch((error) => {
@@ -254,7 +256,9 @@ export default function OSSGuide(props) {
     return (
         <div>
             <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"} 阿里云 OSS 存储策略
+                {props.policy
+                    ? t("editOSSStoragePolicy")
+                    : t("addOSSStoragePolicy")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
@@ -262,7 +266,9 @@ export default function OSSGuide(props) {
                     const labelProps = {};
                     if (label.optional) {
                         labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
+                            <Typography variant="caption">
+                                {t("optional")}
+                            </Typography>
                         );
                     }
                     if (isStepSkipped(index)) {
@@ -270,7 +276,9 @@ export default function OSSGuide(props) {
                     }
                     return (
                         <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
+                            <StepLabel {...labelProps}>
+                                {t(label.title)}
+                            </StepLabel>
                         </Step>
                     );
                 })}
@@ -290,10 +298,11 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在使用 阿里云 OSS 储策略前，请确保您在 参数设置
-                                - 站点信息 - 站点URL 中填写的
-                                地址与实际相符，并且
-                                <strong>能够被外网正常访问</strong>。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.wanSiteURLDes"}
+                                    components={[<strong key={0} />]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -304,18 +313,22 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                前往
-                                <Link
-                                    href={
-                                        "https://oss.console.aliyun.com/overview"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    OSS 管理控制台
-                                </Link>
-                                创建 Bucket。注意：创建空间类型只能选择
-                                <code>标准存储</code>或<code>低频访问</code>
-                                ，暂不支持<code>归档存储</code>
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.createOSSBucketDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://oss.console.aliyun.com/overview"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                        <code key={1} />,
+                                        <code key={2} />,
+                                        <code key={3} />,
+                                    ]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -326,13 +339,16 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方填写您创建 Bucket 时指定的
-                                <code>Bucket 名称</code>：
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.ossBucketNameDes"}
+                                    components={[<code key={0} />]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        Bucket 名称
+                                        {t("bucketName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -350,7 +366,7 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方选择您创建的空间的读写权限类型，推荐选择“私有”以获得更高的安全性，私有空间无法开启“获取直链”功能。
+                                {t("bucketTypeDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -365,14 +381,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="私有"
+                                            label={t("privateBucket")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="公共读"
+                                            label={t("publicReadBucket")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -386,15 +402,20 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                转到所创建 Bucket 的概览页面，填写
-                                <code>访问域名</code>栏目下
-                                <code>外网访问</code> 一行中间的{" "}
-                                <code>EndPoint（地域节点）</code>
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.ossEndpointDes"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                        <code key={2} />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        EndPoint
+                                        {t("endpoint")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -403,8 +424,7 @@ export default function OSSGuide(props) {
                                         inputProps={{
                                             pattern:
                                                 "(?:(?:(?<thld>[\\w\\-]*)(?:\\.))?(?<sld>[\\w\\-]*))\\.(?<tld>[\\w\\-]*)",
-                                            title:
-                                                "格式不合法，只需输入域名部分即可",
+                                            title: t("endpointDomainOnly"),
                                         }}
                                     />
                                 </FormControl>
@@ -418,12 +438,7 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                如果您的 Cloudreve
-                                部署在阿里云计算服务中，并且与 OSS
-                                处在同一可用区下，您可以额外指定使用内网
-                                EndPoint
-                                以节省流量开始。是否要在服务端发送请求时使用 OSS
-                                内网 EndPoint？
+                                {t("ossLANEndpointDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -442,14 +457,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="使用"
+                                            label={t("use")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不使用"
+                                            label={t("notUse")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -458,7 +473,7 @@ export default function OSSGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            内网 EndPoint
+                                            {t("intranetEndPoint")}
                                         </InputLabel>
                                         <Input
                                             required={useLanEndpoint}
@@ -472,8 +487,7 @@ export default function OSSGuide(props) {
                                             inputProps={{
                                                 pattern:
                                                     "(?:(?:(?<thld>[\\w\\-]*)(?:\\.))?(?<sld>[\\w\\-]*))\\.(?<tld>[\\w\\-]*)",
-                                                title:
-                                                    "格式不合法，只需输入域名部分即可",
+                                                title: t("endpointDomainOnly"),
                                             }}
                                         />
                                     </FormControl>
@@ -488,7 +502,7 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要使用配套的 阿里云CDN 加速 OSS 访问？
+                                {t("ossCDNDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -505,14 +519,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="使用"
+                                            label={t("use")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不使用"
+                                            label={t("notUse")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -527,25 +541,26 @@ export default function OSSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    前往
-                                    <Link
-                                        href={
-                                            "https://cdn.console.aliyun.com/domain/list"
-                                        }
-                                        target={"_blank"}
-                                    >
-                                        阿里云 CDN 管理控制台
-                                    </Link>
-                                    创建 CDN 加速域名，并设定源站为刚创建的 OSS
-                                    Bucket。在下方填写 CDN
-                                    加速域名，并选择是否使用 HTTPS：
+                                    <Trans
+                                        ns={"dashboard"}
+                                        i18nKey={"policy.createOSSCDNDes"}
+                                        components={[
+                                            <Link
+                                                key={0}
+                                                href={
+                                                    "https://cdn.console.aliyun.com/domain/list"
+                                                }
+                                                target={"_blank"}
+                                            />,
+                                        ]}
+                                    />
                                 </Typography>
                                 <div className={classes.form}>
                                     <DomainInput
                                         value={policy.BaseURL}
                                         onChange={handleChange("BaseURL")}
                                         required={useCDN === "true"}
-                                        label={"CDN 加速域名"}
+                                        label={t("bucketCDNDomain")}
                                     />
                                 </div>
                             </div>
@@ -560,16 +575,19 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在阿里云
-                                <Link
-                                    href={
-                                        "https://usercenter.console.aliyun.com/#/manage/ak"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    安全信息管理
-                                </Link>
-                                页面获取 用户 AccessKey，并填写在下方。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.ossAKDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://usercenter.console.aliyun.com/#/manage/ak"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
@@ -580,7 +598,7 @@ export default function OSSGuide(props) {
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格",
+                                            title: t("shouldNotContainSpace"),
                                         }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
@@ -596,7 +614,7 @@ export default function OSSGuide(props) {
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格",
+                                            title: t("shouldNotContainSpace"),
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -614,12 +632,12 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                为此存储策略命名：
+                                {t("nameThePolicyFirst")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储策略名
+                                        {t("policyName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -638,7 +656,7 @@ export default function OSSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -658,25 +676,23 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("path");
-                                    }}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.pathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("path")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储目录
+                                        {t("pathOfFolderToStoreFiles")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -694,19 +710,18 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("file");
-                                    }}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("file")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -722,14 +737,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="开启重命名"
+                                            label={t("autoRenameStoredFile")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不开启"
+                                            label={t("keepOriginalFileName")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -739,7 +754,7 @@ export default function OSSGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            命名规则
+                                            {t("renameRule")}
                                         </InputLabel>
                                         <Input
                                             required={
@@ -762,7 +777,7 @@ export default function OSSGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(0)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>
                         <Button
                             disabled={loading}
@@ -770,7 +785,7 @@ export default function OSSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -790,9 +805,9 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                {t("enableGettingPermanentSourceLink")}
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                                {t("enableGettingPermanentSourceLinkDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -808,7 +823,9 @@ export default function OSSGuide(props) {
                                                 ToggleSnackbar(
                                                     "top",
                                                     "right",
-                                                    "私有空间无法开启此功能",
+                                                    t(
+                                                        "cannotEnableForPrivateBucket"
+                                                    ),
                                                     "warning"
                                                 );
                                                 return;
@@ -824,14 +841,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许"
+                                            label={t("allowed")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="禁止"
+                                            label={t("forbidden")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -845,7 +862,7 @@ export default function OSSGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(1)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -853,7 +870,7 @@ export default function OSSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -867,7 +884,7 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
+                                {t("limitFileSize")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -899,14 +916,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -921,7 +938,7 @@ export default function OSSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入限制：
+                                    {t("enterSizeLimit")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <SizeInput
@@ -929,7 +946,7 @@ export default function OSSGuide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>
@@ -944,7 +961,7 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
+                                {t("limitFileExt")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -984,14 +1001,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1008,13 +1025,12 @@ export default function OSSGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
+                                    {t("enterFileExt")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            扩展名列表
+                                            {t("extList")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -1042,9 +1058,9 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请指定分片上传时的分片大小，范围 100 KB ~ 5 GB。
+                                {t("chunkSizeLabelOSS")}
                                 <br />
-                                启用分片上传后，用户上传的文件将会被切分成分片逐个上传到存储端，当上传中断后，用户可以选择从上次上传的分片后继续开始上传。
+                                {t("chunkSizeDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <SizeInput
@@ -1052,7 +1068,7 @@ export default function OSSGuide(props) {
                                     onChange={handleOptionChange("chunk_size")}
                                     min={100 * 1024}
                                     max={5368709120}
-                                    label={"分片上传大小"}
+                                    label={t("chunkSize")}
                                 />
                             </div>
                         </div>
@@ -1069,7 +1085,7 @@ export default function OSSGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要再用户开始上传时就创建占位符文件并扣除用户容量？开启后，可以防止用户恶意发起多个上传请求但不完成上传。
+                                {t("createPlaceholderDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -1090,14 +1106,14 @@ export default function OSSGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="创建占位符文件"
+                                            label={t("createPlaceholder")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不创建"
+                                            label={t("notCreatePlaceholder")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1111,7 +1127,7 @@ export default function OSSGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(2)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -1119,7 +1135,7 @@ export default function OSSGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -1131,10 +1147,7 @@ export default function OSSGuide(props) {
                         <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                OSS Bucket 需要正确配置跨域策略后才能使用 Web
-                                端上传文件，Cloudreve
-                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此
-                                Bucket 的跨域策略，此步骤可以跳过。
+                                {t("ossCORSDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <Button
@@ -1145,7 +1158,7 @@ export default function OSSGuide(props) {
                                     onClick={() => createCORS()}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
-                                    让 Cloudreve 帮我设置
+                                    {t("letCloudreveHelpMe")}
                                 </Button>
                             </div>
                         </div>
@@ -1167,7 +1180,7 @@ export default function OSSGuide(props) {
                                 });
                             }}
                         >
-                            跳过
+                            {t("skip")}
                         </Button>{" "}
                     </div>
                 </form>
@@ -1177,10 +1190,10 @@ export default function OSSGuide(props) {
                 <>
                     <form className={classes.stepContent}>
                         <Typography>
-                            存储策略已{props.policy ? "保存" : "添加"}！
+                            {props.policy ? t("policySaved") : t("policyAdded")}
                         </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                            {t("furtherActions")}
                         </Typography>
                     </form>
                     <div className={classes.stepFooter}>
@@ -1189,7 +1202,7 @@ export default function OSSGuide(props) {
                             className={classes.button}
                             onClick={() => history.push("/admin/policy")}
                         >
-                            返回存储策略列表
+                            {t("backToList")}
                         </Button>
                     </div>
                 </>
