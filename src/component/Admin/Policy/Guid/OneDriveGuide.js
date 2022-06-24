@@ -23,6 +23,7 @@ import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import { getNumber } from "../../../../utils";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -82,32 +83,33 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "应用授权",
+        title: "applicationRegistration",
         optional: false,
     },
     {
-        title: "上传路径",
+        title: "storagePathStep",
         optional: false,
     },
     {
-        title: "直链设置",
+        title: "sourceLinkStep",
         optional: false,
     },
     {
-        title: "传输设置",
+        title: "uploadSettingStep",
         optional: false,
     },
     {
-        title: "账号授权",
+        title: "grantAccess",
         optional: false,
     },
     {
-        title: "完成",
+        title: "finishStep",
         optional: false,
     },
 ];
 
 export default function OneDriveGuide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     const history = useHistory();
 
@@ -282,7 +284,7 @@ export default function OneDriveGuide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    props.policy ? t("policySaved") : t("policyAdded"),
                     "success"
                 );
                 setActiveStep(4);
@@ -303,13 +305,13 @@ export default function OneDriveGuide(props) {
             <AlertDialog
                 open={httpsAlert}
                 onClose={() => setHttpsAlert(false)}
-                title={"警告"}
-                msg={
-                    "您必须启用 HTTPS 才能使用 OneDrive/SharePoint 存储策略；启用后同步更改 参数设置 - 站点信息 - 站点URL。"
-                }
+                title={t("warning")}
+                msg={t("odHttpsWarning")}
             />
             <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"} OneDrive/SharePoint 存储策略
+                {props.policy
+                    ? t("editOdStoragePolicy")
+                    : t("addOdStoragePolicy")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
@@ -317,7 +319,9 @@ export default function OneDriveGuide(props) {
                     const labelProps = {};
                     if (label.optional) {
                         labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
+                            <Typography variant="caption">
+                                {t("optional")}
+                            </Typography>
                         );
                     }
                     if (isStepSkipped(index)) {
@@ -325,7 +329,9 @@ export default function OneDriveGuide(props) {
                     }
                     return (
                         <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
+                            <StepLabel {...labelProps}>
+                                {t(label.title)}
+                            </StepLabel>
                         </Step>
                     );
                 })}
@@ -345,26 +351,27 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                前往
-                                <Link
-                                    href={
-                                        "https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    Azure Active Directory 控制台 (国际版账号)
-                                </Link>{" "}
-                                或者{" "}
-                                <Link
-                                    href={
-                                        "https://portal.azure.cn/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"
-                                    }
-                                    target={"_blank"}
-                                >
-                                    Azure Active Directory 控制台 (世纪互联账号)
-                                </Link>
-                                并登录，登录后进入
-                                <code>Azure Active Directory</code>管理面板。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.creatAadAppDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            href={
+                                                "https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                        <Link
+                                            key={1}
+                                            href={
+                                                "https://portal.azure.cn/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview"
+                                            }
+                                            target={"_blank"}
+                                        />,
+                                        <code key={2} />,
+                                    ]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -375,8 +382,14 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                进入左侧 <code>应用注册</code> 菜单，并点击{" "}
-                                <code>新注册</code> 按钮。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.createAadAppDes2"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                    ]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -387,18 +400,22 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                填写应用注册表单。其中，名称可任取；
-                                <code>受支持的帐户类型</code> 选择为
-                                <code>
-                                    任何组织目录(任何 Azure AD 目录 -
-                                    多租户)中的帐户
-                                </code>
-                                ；<code>重定向 URI (可选)</code>
-                                请选择<code>Web</code>，并填写
-                                <code>
-                                    {policy.OptionsSerialized.od_redirect}
-                                </code>
-                                ； 其他保持默认即可
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.createAadAppDes3"}
+                                    values={{
+                                        url:
+                                            policy.OptionsSerialized
+                                                .od_redirect,
+                                    }}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                        <code key={2} />,
+                                        <code key={3} />,
+                                        <code key={4} />,
+                                    ]}
+                                />
                             </Typography>
                         </div>
                     </div>
@@ -409,14 +426,19 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                创建完成后进入应用管理的<code>概览</code>
-                                页面，复制<code>应用程序(客户端) ID</code>
-                                并填写在下方：
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.aadAppIDDes"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        应用程序(客户端) ID
+                                        {t("aadAppID")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -434,17 +456,21 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                进入应用管理页面左侧的<code>证书和密码</code>
-                                菜单，点击
-                                <code>新建客户端密码</code>
-                                按钮，<code>截止期限</code>选择为
-                                <code>从不</code>
-                                。创建完成后将客户端密码的值填写在下方：
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.addAppSecretDes"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                        <code key={2} />,
+                                        <code key={3} />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        客户端密码
+                                        {t("aadAppSecret")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -462,7 +488,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                选择您的 Microsoft 365 账号类型：
+                                {t("aadAccountCloudDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -479,7 +505,7 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="国际版"
+                                            label={t("multiTenant")}
                                         />
                                         <FormControlLabel
                                             value={
@@ -488,7 +514,7 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="世纪互联版"
+                                            label={t("gallatin")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -502,7 +528,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否将文件存放在 SharePoint 中？
+                                {t("sharePointDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -521,14 +547,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="存到指定 SharePoint 中"
+                                            label={t("saveToSharePoint")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="存到账号默认 OneDrive 驱动器中"
+                                            label={t("saveToOneDrive")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -537,7 +563,7 @@ export default function OneDriveGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            SharePoint 站点地址
+                                            {t("spSiteURL")}
                                         </InputLabel>
                                         <Input
                                             placeholder={
@@ -551,7 +577,7 @@ export default function OneDriveGuide(props) {
                                                 "od_driver"
                                             )}
                                             required={useSharePoint}
-                                            label={"SharePoint 站点地址"}
+                                            label={t("spSiteURL")}
                                         />
                                     </FormControl>
                                 </div>
@@ -565,7 +591,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要在文件下载时替换为使用自建的反代服务器？
+                                {t("odReverseProxyURLDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -584,14 +610,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="使用"
+                                            label={t("use")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不使用"
+                                            label={t("notUse")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -608,7 +634,7 @@ export default function OneDriveGuide(props) {
                                                 "od_proxy"
                                             )}
                                             required={useCDN}
-                                            label={"反代服务器地址"}
+                                            label={t("odReverseProxyURL")}
                                         />
                                     </FormControl>
                                 </div>
@@ -622,12 +648,12 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                为此存储策略命名：
+                                {t("nameThePolicyFirst")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储策略名
+                                        {t("policyName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -646,7 +672,7 @@ export default function OneDriveGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -666,25 +692,23 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("path");
-                                    }}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.pathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("path")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储目录
+                                        {t("pathOfFolderToStoreFiles")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -702,19 +726,18 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("file");
-                                    }}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("file")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -730,14 +753,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="开启重命名"
+                                            label={t("autoRenameStoredFile")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不开启"
+                                            label={t("keepOriginalFileName")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -747,7 +770,7 @@ export default function OneDriveGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            命名规则
+                                            {t("renameRule")}
                                         </InputLabel>
                                         <Input
                                             required={
@@ -770,7 +793,7 @@ export default function OneDriveGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(0)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>
                         <Button
                             disabled={loading}
@@ -778,7 +801,7 @@ export default function OneDriveGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -798,9 +821,9 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                {t("enableGettingPermanentSourceLink")}
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                                {t("enableGettingPermanentSourceLinkDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -820,14 +843,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许"
+                                            label={t("allowed")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="禁止"
+                                            label={t("forbidden")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -841,7 +864,7 @@ export default function OneDriveGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(1)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -849,7 +872,7 @@ export default function OneDriveGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -863,7 +886,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
+                                {t("limitFileSize")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -895,14 +918,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -917,7 +940,7 @@ export default function OneDriveGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入限制：
+                                    {t("enterSizeLimit")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <SizeInput
@@ -925,7 +948,7 @@ export default function OneDriveGuide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>
@@ -940,7 +963,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
+                                {t("limitFileExt")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -980,14 +1003,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1004,13 +1027,12 @@ export default function OneDriveGuide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
+                                    {t("enterFileExt")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            扩展名列表
+                                            {t("extList")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -1038,10 +1060,9 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请指定分片上传时的分片大小，OneDrive 要求必须为
-                                320 KiB (327,680 bytes) 的整数倍。
+                                {t("chunkSizeLabelOd")}
                                 <br />
-                                启用分片上传后，用户上传的文件将会被切分成分片逐个上传到存储端，当上传中断后，用户可以选择从上次上传的分片后继续开始上传。
+                                {t("chunkSizeDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <SizeInput
@@ -1049,7 +1070,7 @@ export default function OneDriveGuide(props) {
                                     onChange={handleOptionChange("chunk_size")}
                                     min={0}
                                     max={9223372036854775807}
-                                    label={"分片上传大小"}
+                                    label={t("chunkSize")}
                                 />
                             </div>
                         </div>
@@ -1066,7 +1087,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要再用户开始上传时就创建占位符文件并扣除用户容量？开启后，可以防止用户恶意发起多个上传请求但不完成上传。
+                                {t("createPlaceholderDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -1087,14 +1108,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="创建占位符文件"
+                                            label={t("createPlaceholder")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不创建"
+                                            label={t("notCreatePlaceholder")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1113,7 +1134,7 @@ export default function OneDriveGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制 OneDrive API 请求频率？
+                                {t("limitOdTPSDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -1154,14 +1175,14 @@ export default function OneDriveGuide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1177,7 +1198,7 @@ export default function OneDriveGuide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            TPS 限制
+                                            {t("tps")}
                                         </InputLabel>
                                         <Input
                                             type={"number"}
@@ -1194,18 +1215,14 @@ export default function OneDriveGuide(props) {
                                             )}
                                         />
                                         <FormHelperText>
-                                            限制此存储策略每秒向 OneDrive 发送
-                                            API
-                                            请求最大数量。超出此频率的请求会被限速。多个
-                                            Cloudreve
-                                            节点转存文件时，它们会各自使用自己的限流桶，请根据情况按比例调低此数值。
+                                            {t("tpsDes")}
                                         </FormHelperText>
                                     </FormControl>
                                 </div>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            TPS 突发请求
+                                            {t("tpsBurst")}
                                         </InputLabel>
                                         <Input
                                             type={"number"}
@@ -1222,8 +1239,7 @@ export default function OneDriveGuide(props) {
                                             )}
                                         />
                                         <FormHelperText>
-                                            请求空闲时，Cloudreve
-                                            可将指定数量的名额预留给未来的突发流量使用。
+                                            {t("tpsBurstDes")}
                                         </FormHelperText>
                                     </FormControl>
                                 </div>
@@ -1237,7 +1253,7 @@ export default function OneDriveGuide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(4)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -1245,7 +1261,7 @@ export default function OneDriveGuide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -1257,10 +1273,12 @@ export default function OneDriveGuide(props) {
                         <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                存储策略已{props.policy ? "保存" : "添加"}
-                                ，但是你需要点击下方按钮，并使用 OneDrive
-                                登录授权以完成初始化后才能使用。
-                                日后你可以在存储策略列表页面重新进行授权。
+                                {props.policy
+                                    ? t("policySaved")
+                                    : t("policyAdded")}
+                            </Typography>
+                            <Typography variant={"body2"}>
+                                {t("odOauthDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <Button
@@ -1271,7 +1289,7 @@ export default function OneDriveGuide(props) {
                                     onClick={statOAuth}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
-                                    转到授权页面
+                                    {t("gotoAuthPage")}
                                 </Button>
                             </div>
                         </div>
@@ -1283,9 +1301,11 @@ export default function OneDriveGuide(props) {
             {activeStep === 5 && (
                 <>
                     <form className={classes.stepContent}>
-                        <Typography>存储策略已添加！</Typography>
+                        <Typography>
+                            {props.policy ? t("policySaved") : t("policyAdded")}
+                        </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                            {t("furtherActions")}
                         </Typography>
                     </form>
                     <div className={classes.stepFooter}>
@@ -1294,7 +1314,7 @@ export default function OneDriveGuide(props) {
                             className={classes.button}
                             onClick={() => history.push("/admin/policy")}
                         >
-                            返回存储策略列表
+                            {t("backToList")}
                         </Button>
                     </div>
                 </>
