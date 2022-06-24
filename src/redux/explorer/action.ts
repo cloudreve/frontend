@@ -106,7 +106,7 @@ export const setShiftSelectedIds = (shiftSelectedIds: any) => {
 };
 
 type SortFunc = (a: CloudreveFile, b: CloudreveFile) => number;
-const sortMethodFuncs: Record<SortMethod, SortFunc> = {
+export const sortMethodFuncs: Record<SortMethod, SortFunc> = {
     sizePos: (a: CloudreveFile, b: CloudreveFile) => {
         return a.size - b.size;
     },
