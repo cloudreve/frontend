@@ -401,7 +401,7 @@
     "shouldNotContainSpace": "This cannot contain spaces.",
     "nameThePolicyFirst": "Name the storage policy:",
     "chunkSizeLabelOSS": "Specify the chunk size for resumable uploads. Allowed range is 100 KB - 5 GB.",
-    "ossCORSDes": "OSS bucket requires a CORS policy to enable uploading from browser. Cloudreve can set it up automatically for you, or you can set it up manually by following the steps in the documentation. If you have already set the CORS policy for this Bucket, this step can be skipped.",
+    "ossCORSDes": "This storage policy requires a CORS policy to enable uploading from browser. Cloudreve can set it up automatically for you, or you can set it up manually by following the steps in the documentation. If you have already set the CORS policy for this Bucket, this step can be skipped.",
     "letCloudreveHelpMe": "Let Cloudreve set it for me",
     "skip": "Skip",
     "editUpyunStoragePolicy": "Edit Upyun storage policy",
@@ -478,6 +478,17 @@
     "tpsBurst": "TPS burst",
     "tpsBurstDes": "When requested is idle, Cloudreve can reserve a specified number of slots for future bursts of traffic.",
     "odOauthDes": "However, you will need to click the button below and authorize with Microsoft account login to complete the initialization before you can use it. You can re-authorize later on the Storage Policy List page.",
-    "gotoAuthPage": "Go to authorization page"
+    "gotoAuthPage": "Go to authorization page",
+    "s3SelfHostWarning": "AWS S3 storage policies are currently only safe for your own use, or for trusted user groups.",
+    "editS3StoragePolicy": "Edit AWS S3 storage policy",
+    "addS3StoragePolicy": "Add AWS S3 storage policy",
+    "s3BucketDes": "Go to AWS S3 dashboard to create a bucket, enter the <0>Bucket name</0> you just created:",
+    "publicAccessDisabled": "Public read disabled",
+    "publicAccessEnabled": "Public read enabled",
+    "s3EndpointDes": "(Optional) Specify the EndPoint (geographical node) of the storage bucket in full URL format, e.g. <0>https://bucket.region.example.com</0>. Leaving it blank will use the system-generated default endpoint.",
+    "selectRegionDes": "Select the region where the storage bucket is located or enter the region code manually.",
+    "enterAccessCredentials": "Obtain a pair of access credential and fill in below:",
+    "accessKey": "AccessKey",
+    "chunkSizeLabelS3": "Specify the chunk size for resumable uploads. Allowed range is 5 MB - 5 GB."
   }
 }

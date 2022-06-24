@@ -453,7 +453,7 @@
     "warning": "警告",
     "odHttpsWarning": "您必须启用 HTTPS 才能使用 OneDrive/SharePoint 存储策略；启用后同步更改 参数设置 - 站点信息 - 站点URL。",
     "editOdStoragePolicy": "修改 OneDrive/SharePoint 存储策略",
-    "addOdStoragePolicy": "添加 OneDrive/SharePoint 云存储策略",
+    "addOdStoragePolicy": "添加 OneDrive/SharePoint 存储策略",
     "creatAadAppDes": "前往 <0>Azure Active Directory 控制台 (国际版账号)</0> 或者 <1>Azure Active Directory 控制台 (世纪互联账号)</1> 并登录，登录后进入<2>Azure Active Directory</2> 管理面板。",
     "createAadAppDes2": "进入左侧 <0>应用注册</0> 菜单，并点击 <1>新注册</1> 按钮。",
     "createAadAppDes3": "填写应用注册表单。其中，名称可任取；<0>受支持的帐户类型</0> 选择为 <1>任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户</1>；<2>重定向 URI (可选)</2> 请选择 <3>Web</3>，并填写 <4>{{url}}</4>； 其他保持默认即可",
@@ -477,6 +477,17 @@
     "tpsBurst": "TPS 突发请求",
     "tpsBurstDes": "请求空闲时，Cloudreve 可将指定数量的名额预留给未来的突发流量使用。",
     "odOauthDes": "但是你需要点击下方按钮，并使用 OneDrive 登录授权以完成初始化后才能使用。日后你可以在存储策略列表页面重新进行授权。",
-    "gotoAuthPage": "转到授权页面"
+    "gotoAuthPage": "转到授权页面",
+    "s3SelfHostWarning": "S3 类型存储策略目前仅可用于自己使用，或者是给受信任的用户组使用。",
+    "editS3StoragePolicy": "修改 AWS S3 存储策略",
+    "addS3StoragePolicy": "添加 AWS S3 存储策略",
+    "s3BucketDes": "前往 AWS S3 控制台创建存储桶，在下方填写您创建存储桶时指定的 <0>Bucket 名称</0>：",
+    "publicAccessDisabled": "阻止全部公共访问权限",
+    "publicAccessEnabled": "允许公共读取",
+    "s3EndpointDes": "(可选) 指定存储桶的 EndPoint（地域节点），填写为完整的 URL 格式，比如 <0>https://bucket.region.example.com</0>。留空则将使用系统生成的默认接入点。",
+    "selectRegionDes": "选择存储桶所在的区域，或者手动输入区域代码",
+    "enterAccessCredentials": "获取访问密钥，并填写在下方。",
+    "accessKey": "AccessKey",
+    "chunkSizeLabelS3": "请指定分片上传时的分片大小，范围 5 MB ~ 5 GB。"
   }
 }

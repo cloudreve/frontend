@@ -24,6 +24,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import AlertDialog from "../../Dialogs/Alert";
 import { toggleSnackbar } from "../../../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -92,27 +93,27 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = [
     {
-        title: "存储空间",
+        title: "storageBucket",
         optional: false,
     },
     {
-        title: "上传路径",
+        title: "storagePathStep",
         optional: false,
     },
     {
-        title: "直链设置",
+        title: "sourceLinkStep",
         optional: false,
     },
     {
-        title: "上传限制",
+        title: "uploadSettingStep",
         optional: false,
     },
     {
-        title: "跨域策略",
+        title: "corsSettingStep",
         optional: true,
     },
     {
-        title: "完成",
+        title: "finishStep",
         optional: false,
     },
 ];
@@ -144,6 +145,7 @@ const regions = {
 };
 
 export default function S3Guide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "policy" });
     const classes = useStyles();
     const history = useHistory();
 
@@ -248,7 +250,7 @@ export default function S3Guide(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "存储策略已" + (props.policy ? "保存" : "添加"),
+                    props.policy ? t("policySaved") : t("policyAdded"),
                     "success"
                 );
                 setActiveStep(4);
@@ -270,7 +272,7 @@ export default function S3Guide(props) {
             id: policyID,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "跨域策略已添加", "success");
+                ToggleSnackbar("top", "right", t("corsPolicyAdded"), "success");
                 setActiveStep(5);
             })
             .catch((error) => {
@@ -286,13 +288,13 @@ export default function S3Guide(props) {
             <AlertDialog
                 open={alertOpen}
                 onClose={() => setAlertOpen(false)}
-                title={"警告"}
-                msg={
-                    "S3 类型存储策略目前仅可用于自己使用，或者是给受信任的用户组使用。"
-                }
+                title={t("warning")}
+                msg={t("s3SelfHostWarning")}
             />
             <Typography variant={"h6"}>
-                {props.policy ? "修改" : "添加"} Amazon S3 存储策略
+                {props.policy
+                    ? t("editS3StoragePolicy")
+                    : t("addS3StoragePolicy")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
@@ -300,7 +302,9 @@ export default function S3Guide(props) {
                     const labelProps = {};
                     if (label.optional) {
                         labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
+                            <Typography variant="caption">
+                                {t("optional")}
+                            </Typography>
                         );
                     }
                     if (isStepSkipped(index)) {
@@ -308,7 +312,9 @@ export default function S3Guide(props) {
                     }
                     return (
                         <Step key={label.title} {...stepProps}>
-                            <StepLabel {...labelProps}>{label.title}</StepLabel>
+                            <StepLabel {...labelProps}>
+                                {t(label.title)}
+                            </StepLabel>
                         </Step>
                     );
                 })}
@@ -328,14 +334,16 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                前往 AWS S3
-                                控制台创建存储桶，在下方填写您创建存储桶时指定的
-                                <code>存储桶名称</code>：
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.s3BucketDes"}
+                                    components={[<code key={0} />]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储桶名称
+                                        {t("bucketName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -353,7 +361,7 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                在下方选择您创建的空间的公共访问权限类型，推荐选择“私有”以获得更高的安全性，私有空间无法开启“获取直链”功能。
+                                {t("bucketTypeDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -368,14 +376,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="阻止全部公共访问权限"
+                                            label={t("publicAccessDisabled")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许公共读取"
+                                            label={t("publicAccessEnabled")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -389,15 +397,16 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                (可选) 指定存储桶的 EndPoint（地域节点），
-                                填写为完整的 URL 格式，比如{" "}
-                                <code>https://bucket.region.example.com</code>。
-                                留空则将使用系统生成的默认接入点。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.s3EndpointDes"}
+                                    components={[<code key={0} />]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        EndPoint
+                                        {t("endpoint")}
                                     </InputLabel>
                                     <Input
                                         value={policy.Server}
@@ -414,7 +423,7 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                选择存储桶所在的区域，或者手动输入区域代码
+                                {t("selectRegionDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
@@ -450,7 +459,7 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要使用 CDN 加速访问？
+                                {t("useCDN")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -467,14 +476,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="使用"
+                                            label={t("use")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不使用"
+                                            label={t("notUse")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -489,14 +498,14 @@ export default function S3Guide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    CDN 加速域名
+                                    {t("bucketCDNDomain")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <DomainInput
                                         value={policy.BaseURL}
                                         onChange={handleChange("BaseURL")}
                                         required={useCDN === "true"}
-                                        label={"CDN 加速域名"}
+                                        label={t("bucketCDNDomain")}
                                     />
                                 </div>
                             </div>
@@ -511,18 +520,18 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                获取访问密钥，并填写在下方。
+                                {t("enterAccessCredentials")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        AccessKey
+                                        {t("accessKey")}
                                     </InputLabel>
                                     <Input
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格",
+                                            title: t("shouldNotContainSpace"),
                                         }}
                                         value={policy.AccessKey}
                                         onChange={handleChange("AccessKey")}
@@ -532,13 +541,13 @@ export default function S3Guide(props) {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        SecretKey
+                                        {t("secretKey")}
                                     </InputLabel>
                                     <Input
                                         required
                                         inputProps={{
                                             pattern: "\\S+",
-                                            title: "不能含有空格",
+                                            title: t("shouldNotContainSpace"),
                                         }}
                                         value={policy.SecretKey}
                                         onChange={handleChange("SecretKey")}
@@ -556,12 +565,12 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                为此存储策略命名：
+                                {t("nameThePolicyFirst")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储策略名
+                                        {t("policyName")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -580,7 +589,7 @@ export default function S3Guide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -600,23 +609,23 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请在下方输入文件的存储目录路径，可以为绝对路径或相对路径（相对于
-                                从机的
-                                Cloudreve）。路径中可以使用魔法变量，文件在上传时会自动替换这些变量为相应值；
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("path")}
-                                >
-                                    路径魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.pathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("path")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        存储目录
+                                        {t("pathOfFolderToStoreFiles")}
                                     </InputLabel>
                                     <Input
                                         required
@@ -634,17 +643,18 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    href={"javascript:void()"}
-                                    onClick={() => setMagicVar("file")}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={() => setMagicVar("file")}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -660,14 +670,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="开启重命名"
+                                            label={t("autoRenameStoredFile")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不开启"
+                                            label={t("keepOriginalFileName")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -677,7 +687,7 @@ export default function S3Guide(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            命名规则
+                                            {t("renameRule")}
                                         </InputLabel>
                                         <Input
                                             required={
@@ -700,7 +710,7 @@ export default function S3Guide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(0)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>
                         <Button
                             disabled={loading}
@@ -708,7 +718,7 @@ export default function S3Guide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -728,9 +738,9 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否允许获取文件永久直链？
+                                {t("enableGettingPermanentSourceLink")}
                                 <br />
-                                开启后，用户可以请求获得能直接访问到文件内容的直链，适用于图床应用或自用。
+                                {t("enableGettingPermanentSourceLinkDes")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -746,7 +756,9 @@ export default function S3Guide(props) {
                                                 ToggleSnackbar(
                                                     "top",
                                                     "right",
-                                                    "私有空间无法开启此功能",
+                                                    t(
+                                                        "cannotEnableForPrivateBucket"
+                                                    ),
                                                     "warning"
                                                 );
                                                 return;
@@ -762,14 +774,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="允许"
+                                            label={t("allowed")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="禁止"
+                                            label={t("forbidden")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -783,7 +795,7 @@ export default function S3Guide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(1)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -791,7 +803,7 @@ export default function S3Guide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -805,7 +817,7 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传的单文件大小？
+                                {t("limitFileSize")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -837,14 +849,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -859,7 +871,7 @@ export default function S3Guide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入限制：
+                                    {t("enterSizeLimit")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <SizeInput
@@ -867,7 +879,7 @@ export default function S3Guide(props) {
                                         onChange={handleChange("MaxSize")}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"单文件大小限制"}
+                                        label={t("maxSizeOfSingleFile")}
                                     />
                                 </div>
                             </div>
@@ -882,7 +894,7 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否限制上传文件扩展名？
+                                {t("limitFileExt")}
                             </Typography>
 
                             <div className={classes.form}>
@@ -922,14 +934,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="限制"
+                                            label={t("limit")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不限制"
+                                            label={t("notLimit")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -946,13 +958,12 @@ export default function S3Guide(props) {
                             </div>
                             <div className={classes.subStepContent}>
                                 <Typography variant={"body2"}>
-                                    输入允许上传的文件扩展名，多个请以半角逗号 ,
-                                    隔开
+                                    {t("enterFileExt")}
                                 </Typography>
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            扩展名列表
+                                            {t("extList")}
                                         </InputLabel>
                                         <Input
                                             value={
@@ -980,9 +991,9 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                请指定分片上传时的分片大小，范围 5 MB ~ 5 GB。
+                                {t("chunkSizeLabelS3")}
                                 <br />
-                                启用分片上传后，用户上传的文件将会被切分成分片逐个上传到存储端，当上传中断后，用户可以选择从上次上传的分片后继续开始上传。
+                                {t("chunkSizeDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <SizeInput
@@ -990,7 +1001,7 @@ export default function S3Guide(props) {
                                     onChange={handleOptionChange("chunk_size")}
                                     min={5 << 20}
                                     max={53687091200}
-                                    label={"分片上传大小"}
+                                    label={t("chunkSize")}
                                 />
                             </div>
                         </div>
@@ -1007,7 +1018,7 @@ export default function S3Guide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否要再用户开始上传时就创建占位符文件并扣除用户容量？开启后，可以防止用户恶意发起多个上传请求但不完成上传。
+                                {t("createPlaceholderDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">
@@ -1028,14 +1039,14 @@ export default function S3Guide(props) {
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="创建占位符文件"
+                                            label={t("createPlaceholder")}
                                         />
                                         <FormControlLabel
                                             value={"false"}
                                             control={
                                                 <Radio color={"primary"} />
                                             }
-                                            label="不创建"
+                                            label={t("notCreatePlaceholder")}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -1049,7 +1060,7 @@ export default function S3Guide(props) {
                             className={classes.button}
                             onClick={() => setActiveStep(2)}
                         >
-                            上一步
+                            {t("back")}
                         </Button>{" "}
                         <Button
                             disabled={loading}
@@ -1057,7 +1068,7 @@ export default function S3Guide(props) {
                             variant={"contained"}
                             color={"primary"}
                         >
-                            下一步
+                            {t("next")}
                         </Button>
                     </div>
                 </form>
@@ -1069,10 +1080,7 @@ export default function S3Guide(props) {
                         <div className={classes.stepNumberContainer} />
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                S3 Bucket 需要正确配置跨域策略后才能使用 Web
-                                端上传文件，Cloudreve
-                                可以帮您自动设置，您也可以参考文档步骤手动设置。如果您已设置过此
-                                Bucket 的跨域策略，此步骤可以跳过。
+                                {t("ossCORSDes")}
                             </Typography>
                             <div className={classes.form}>
                                 <Button
@@ -1083,7 +1091,7 @@ export default function S3Guide(props) {
                                     onClick={() => createCORS()}
                                     classes={{ label: classes.viewButtonLabel }}
                                 >
-                                    让 Cloudreve 帮我设置
+                                    {t("letCloudreveHelpMe")}
                                 </Button>
                             </div>
                         </div>
@@ -1105,7 +1113,7 @@ export default function S3Guide(props) {
                                 });
                             }}
                         >
-                            跳过
+                            {t("skip")}
                         </Button>{" "}
                     </div>
                 </form>
@@ -1115,10 +1123,10 @@ export default function S3Guide(props) {
                 <>
                     <form className={classes.stepContent}>
                         <Typography>
-                            存储策略已{props.policy ? "保存" : "添加"}！
+                            {props.policy ? t("policySaved") : t("policyAdded")}
                         </Typography>
                         <Typography variant={"body2"} color={"textSecondary"}>
-                            要使用此存储策略，请到用户组管理页面，为相应用户组绑定此存储策略。
+                            {t("furtherActions")}
                         </Typography>
                     </form>
                     <div className={classes.stepFooter}>
@@ -1127,7 +1135,7 @@ export default function S3Guide(props) {
                             className={classes.button}
                             onClick={() => history.push("/admin/policy")}
                         >
-                            返回存储策略列表
+                            {t("backToList")}
                         </Button>
                     </div>
                 </>
