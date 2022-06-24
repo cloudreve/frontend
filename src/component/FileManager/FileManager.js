@@ -39,7 +39,6 @@ const styles = (theme) => ({
         display: "flex",
         flexDirection: "column",
         overflowY: "auto",
-        minHeight: 500,
     },
 });
 
