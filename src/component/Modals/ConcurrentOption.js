@@ -22,6 +22,12 @@ export default function ConcurrentOptionDialog({ open, onClose, onSave }) {
     );
     const classes = useStyles();
 
+    const validateNumber = (event) => {
+        const value = event.target.value;
+        const setValue = value <= 20 ? value : count; 
+        setCount(setValue);
+    };
+
     return (
         <Dialog
             fullWidth
@@ -47,7 +53,7 @@ export default function ConcurrentOptionDialog({ open, onClose, onSave }) {
                             max: 20,
                         }}
                         value={count}
-                        onChange={(e) => setCount(e.target.value)}
+                        onChange={validateNumber}
                     />
                 </FormControl>
             </DialogContent>
