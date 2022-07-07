@@ -25,6 +25,7 @@ import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
 import UserFilter from "../Dialogs/UserFilter";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Group() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "user" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
@@ -135,7 +138,7 @@ export default function Group() {
         API.post("/admin/user/delete", { id: selected })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "用户已删除", "success");
+                ToggleSnackbar("top", "right", t("deleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -214,10 +217,10 @@ export default function Group() {
                     onClick={() => history.push("/admin/user/add")}
                     variant={"contained"}
                 >
-                    新建用户
+                    {t("new")}
                 </Button>
                 <div className={classes.headerRight}>
-                    <Tooltip title="过滤">
+                    <Tooltip title={t("filter")}>
                         <IconButton
                             style={{ marginRight: 8 }}
                             onClick={() => setFilterDialog(true)}
@@ -239,7 +242,7 @@ export default function Group() {
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {tDashboard("policy.refresh")}
                     </Button>
                 </div>
             </div>
@@ -252,9 +255,9 @@ export default function Group() {
                             color="inherit"
                             variant="subtitle1"
                         >
-                            已选择 {selected.length} 个对象
+                            {t("selectedObject", { num: selected.length })}
                         </Typography>
-                        <Tooltip title="删除">
+                        <Tooltip title={tDashboard("policy.delete")}>
                             <IconButton
                                 onClick={deleteBatch}
                                 disabled={loading}
@@ -298,7 +301,7 @@ export default function Group() {
                                             ])
                                         }
                                     >
-                                        #
+                                        {tDashboard("node.#")}
                                         {orderBy[0] === "id" ? (
                                             <span
                                                 className={
@@ -325,7 +328,7 @@ export default function Group() {
                                             ])
                                         }
                                     >
-                                        昵称
+                                        {t("nick")}
                                         {orderBy[0] === "nick" ? (
                                             <span
                                                 className={
@@ -352,7 +355,7 @@ export default function Group() {
                                             ])
                                         }
                                     >
-                                        Email
+                                        {t("email")}
                                         {orderBy[0] === "email" ? (
                                             <span
                                                 className={
@@ -367,10 +370,10 @@ export default function Group() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 70 }}>
-                                    用户组
+                                    {t("group")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 50 }}>
-                                    状态
+                                    {t("status")}
                                 </TableCell>
                                 <TableCell
                                     align={"right"}
@@ -388,7 +391,7 @@ export default function Group() {
                                             ])
                                         }
                                     >
-                                        已用空间
+                                        {t("usedStorage")}
                                         {orderBy[0] === "storage" ? (
                                             <span
                                                 className={
@@ -403,7 +406,7 @@ export default function Group() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 100 }}>
-                                    操作
+                                    {tDashboard("policy.actions")}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -446,7 +449,7 @@ export default function Group() {
                                                 }}
                                                 variant={"body2"}
                                             >
-                                                正常
+                                                {t("active")}
                                             </Typography>
                                         )}
                                         {row.Status === 1 && (
@@ -454,7 +457,7 @@ export default function Group() {
                                                 color={"textSecondary"}
                                                 variant={"body2"}
                                             >
-                                                未激活
+                                                {t("notActivated")}
                                             </Typography>
                                         )}
                                         {row.Status === 2 && (
@@ -462,7 +465,7 @@ export default function Group() {
                                                 color={"error"}
                                                 variant={"body2"}
                                             >
-                                                被封禁
+                                                {t("banned")}
                                             </Typography>
                                         )}
                                         {row.Status === 3 && (
@@ -470,7 +473,7 @@ export default function Group() {
                                                 color={"error"}
                                                 variant={"body2"}
                                             >
-                                                超额封禁
+                                                {t("bannedBySys")}
                                             </Typography>
                                         )}
                                     </TableCell>
@@ -478,7 +481,9 @@ export default function Group() {
                                         {sizeToString(row.Storage)}
                                     </TableCell>
                                     <TableCell>
-                                        <Tooltip title={"编辑"}>
+                                        <Tooltip
+                                            title={tDashboard("node.edit")}
+                                        >
                                             <IconButton
                                                 onClick={() =>
                                                     history.push(
@@ -491,7 +496,7 @@ export default function Group() {
                                                 <Edit />
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title={"封禁/解封"}>
+                                        <Tooltip title={t("toggleBan")}>
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() => block(row.ID)}
@@ -500,7 +505,9 @@ export default function Group() {
                                                 <Block />
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip
+                                            title={tDashboard("node.delete")}
+                                        >
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>

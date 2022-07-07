@@ -12,8 +12,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
+import { useTranslation } from "react-i18next";
 
 export default function UserFilter({ setFilter, setSearch, open, onClose }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "user" });
+    const { t: tCommon } = useTranslation("common");
     const [input, setInput] = useState({
         group_id: "all",
         status: "all",
@@ -70,11 +73,13 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+                {t("filterCondition")}
+            </DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
-                        用户组
+                        {t("group")}
                     </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -82,7 +87,7 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
                         value={input.group_id}
                         onChange={handleChange("group_id")}
                     >
-                        <MenuItem value={"all"}>全部</MenuItem>
+                        <MenuItem value={"all"}>{t("all")}</MenuItem>
                         {groups.map((v) => {
                             if (v.ID === 3) {
                                 return null;
@@ -97,7 +102,7 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
                 </FormControl>
                 <FormControl fullWidth style={{ marginTop: 16 }}>
                     <InputLabel id="demo-simple-select-label">
-                        用户状态
+                        {t("userStatus")}
                     </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -105,11 +110,11 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
                         value={input.status}
                         onChange={handleChange("status")}
                     >
-                        <MenuItem value={"all"}>全部</MenuItem>
-                        <MenuItem value={"0"}>正常</MenuItem>
-                        <MenuItem value={"1"}>未激活</MenuItem>
-                        <MenuItem value={"2"}>被封禁</MenuItem>
-                        <MenuItem value={"3"}>超额使用被封禁</MenuItem>
+                        <MenuItem value={"all"}>{t("all")}</MenuItem>
+                        <MenuItem value={"0"}>{t("active")}</MenuItem>
+                        <MenuItem value={"1"}>{t("notActivated")}</MenuItem>
+                        <MenuItem value={"2"}>{t("banned")}</MenuItem>
+                        <MenuItem value={"3"}>{t("bannedBySys")}</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl fullWidth style={{ marginTop: 16 }}>
@@ -117,16 +122,16 @@ export default function UserFilter({ setFilter, setSearch, open, onClose }) {
                         value={keywords}
                         onChange={(e) => setKeywords(e.target.value)}
                         id="standard-basic"
-                        label="搜索 昵称 / 用户名"
+                        label={t("searchNickUserName")}
                     />
                 </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="default">
-                    取消
+                    {tCommon("cancel")}
                 </Button>
                 <Button onClick={submit} color="primary">
-                    应用
+                    {t("apply")}
                 </Button>
             </DialogActions>
         </Dialog>

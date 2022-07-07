@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export default function UserForm(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "user" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(
@@ -93,7 +96,7 @@ export default function UserForm(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "用户已" + (props.user ? "保存" : "添加"),
+                    props.user ? t("saved") : t("added"),
                     "success"
                 );
             })
@@ -110,15 +113,15 @@ export default function UserForm(props) {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        {user.ID === 0 && "创建用户"}
-                        {user.ID !== 0 && "编辑 " + user.Nick}
+                        {user.ID === 0 && t("new")}
+                        {user.ID !== 0 && t("editUser", { nick: user.Nick })}
                     </Typography>
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    邮箱
+                                    {t("email")}
                                 </InputLabel>
                                 <Input
                                     value={user.Email}
@@ -132,7 +135,7 @@ export default function UserForm(props) {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    昵称
+                                    {t("nick")}
                                 </InputLabel>
                                 <Input
                                     value={user.Nick}
@@ -145,7 +148,7 @@ export default function UserForm(props) {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    密码
+                                    {t("password")}
                                 </InputLabel>
                                 <Input
                                     type={"password"}
@@ -154,7 +157,7 @@ export default function UserForm(props) {
                                     required={user.ID === 0}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    {user.ID !== 0 && "留空表示不修改"}
+                                    {user.ID !== 0 && t("passwordDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -162,7 +165,7 @@ export default function UserForm(props) {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    用户组
+                                    {t("group")}
                                 </InputLabel>
                                 <Select
                                     value={user.GroupID}
@@ -184,7 +187,7 @@ export default function UserForm(props) {
                                     })}
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    用户所属用户组
+                                    {t("groupDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -192,18 +195,24 @@ export default function UserForm(props) {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    状态
+                                    {t("status")}
                                 </InputLabel>
                                 <Select
                                     value={user.Status}
                                     onChange={handleChange("Status")}
                                     required
                                 >
-                                    <MenuItem value={"0"}>正常</MenuItem>
-                                    <MenuItem value={"1"}>未激活</MenuItem>
-                                    <MenuItem value={"2"}>被封禁</MenuItem>
+                                    <MenuItem value={"0"}>
+                                        {t("active")}
+                                    </MenuItem>
+                                    <MenuItem value={"1"}>
+                                        {t("notActivated")}
+                                    </MenuItem>
+                                    <MenuItem value={"2"}>
+                                        {t("banned")}
+                                    </MenuItem>
                                     <MenuItem value={"3"}>
-                                        超额使用被封禁
+                                        {t("bannedBySys")}
                                     </MenuItem>
                                 </Select>
                             </FormControl>
@@ -217,7 +226,7 @@ export default function UserForm(props) {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {tDashboard("settings.save")}
                     </Button>
                 </div>
             </form>
