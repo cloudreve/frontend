@@ -6,10 +6,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
-import API from "../../../../middleware/Api";
-import Alert from "@material-ui/lab/Alert";
-import Box from "@material-ui/core/Box";
 import { toggleSnackbar } from "../../../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -79,6 +77,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Metainfo(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "node" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
@@ -101,7 +101,7 @@ export default function Metainfo(props) {
                     <div className={classes.stepNumber}>1</div>
                 </div>
                 <div className={classes.subStepContent}>
-                    <Typography variant={"body2"}>为此节点命名：</Typography>
+                    <Typography variant={"body2"}>{t("nameNode")}</Typography>
                     <div className={classes.form}>
                         <FormControl fullWidth>
                             <Input
@@ -120,12 +120,12 @@ export default function Metainfo(props) {
                 </div>
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
-                        为此节点指定负载均衡权重，数值为整数。某些负载均衡策略会根据此数值加权选择节点
+                        {t("loadBalancerRankDes")}
                     </Typography>
                     <div className={classes.form}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="component-helper">
-                                负载均衡权重
+                                {t("loadBalancerRank")}
                             </InputLabel>
                             <Input
                                 type={"number"}
@@ -149,7 +149,7 @@ export default function Metainfo(props) {
                     variant={"contained"}
                     color={"primary"}
                 >
-                    下一步
+                    {tDashboard("policy.next")}
                 </Button>
             </div>
         </form>

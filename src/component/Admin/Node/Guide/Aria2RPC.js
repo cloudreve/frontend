@@ -16,6 +16,7 @@ import Box from "@material-ui/core/Box";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import API from "../../../../middleware/Api";
 import { toggleSnackbar } from "../../../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -85,6 +86,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Aria2RPC(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "node" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
@@ -107,7 +110,7 @@ export default function Aria2RPC(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "连接成功，Aria2 版本为：" + response.data,
+                    t("ariaSuccess", { version: response.data }),
                     "success"
                 );
             })
@@ -119,7 +122,7 @@ export default function Aria2RPC(props) {
             });
     };
 
-    const mode = props.node.Type === 0 ? "从机" : "主机";
+    const mode = props.node.Type === 0 ? t("slave") : t("master");
 
     return (
         <form
@@ -131,24 +134,30 @@ export default function Aria2RPC(props) {
         >
             <Alert severity="info" style={{ marginBottom: 10 }}>
                 <Typography variant="body2">
-                    Cloudreve 的离线下载功能由{" "}
-                    <Link href={"https://aria2.github.io/"} target={"_blank"}>
-                        Aria2
-                    </Link>{" "}
-                    驱动。如需使用，请在目标节点服务器上以和运行 Cloudreve
-                    相同的用户身份启动 Aria2， 并在 Aria2 的配置文件中开启 RPC
-                    服务，
-                    <Box component="span" fontWeight="fontWeightBold">
-                        Aria2 需要和{mode} Cloudreve 进程共用相同的文件系统。
-                    </Box>{" "}
-                    更多信息及指引请参考文档的{" "}
-                    <Link
-                        href={"https://docs.cloudreve.org/use/aria2"}
-                        target={"_blank"}
-                    >
-                        离线下载
-                    </Link>{" "}
-                    章节。
+                    <Trans
+                        ns={"dashboard"}
+                        i18nKey={"node.aria2Des"}
+                        values={{
+                            mode: mode,
+                        }}
+                        components={[
+                            <Link
+                                href={"https://aria2.github.io/"}
+                                target={"_blank"}
+                                key={0}
+                            />,
+                            <Box
+                                component="span"
+                                fontWeight="fontWeightBold"
+                                key={1}
+                            />,
+                            <Link
+                                href={t("aria2DocURL")}
+                                target={"_blank"}
+                                key={2}
+                            />,
+                        ]}
+                    />
                 </Typography>
             </Alert>
 
@@ -159,12 +168,12 @@ export default function Aria2RPC(props) {
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
                         {props.node.Type === 0
-                            ? "是否需要此节点接管离线下载任务？"
-                            : "是否需要主机接管离线下载任务？"}
+                            ? t("slaveTakeOverRemoteDownload")
+                            : t("masterTakeOverRemoteDownload")}
                         <br />
                         {props.node.Type === 0
-                            ? "开启后，用户的离线下载请求可以被分流到此节点处理。"
-                            : "开启后，用户的离线下载请求可以被分流到主机处理。"}
+                            ? t("routeTaskSlave")
+                            : t("routeTaskMaster")}
                     </Typography>
 
                     <div className={classes.form}>
@@ -180,12 +189,12 @@ export default function Aria2RPC(props) {
                                 <FormControlLabel
                                     value={"true"}
                                     control={<Radio color={"primary"} />}
-                                    label="启用"
+                                    label={t("enable")}
                                 />
                                 <FormControlLabel
                                     value={"false"}
                                     control={<Radio color={"primary"} />}
-                                    label="关闭"
+                                    label={t("disable")}
                                 />
                             </RadioGroup>
                         </FormControl>
@@ -200,24 +209,21 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            {props.node.Type === 0
-                                ? " 在目标节点服务器上与节点 "
-                                : "在与 "}
-                            Cloudreve 进程相同的文件系统环境下启动 Aria2
-                            进程。在启动 Aria2 时，需要在其配置文件中启用 RPC
-                            服务，并设定 RPC
-                            Secret，以便后续使用。以下为一个供参考的配置：
+                            {t("aria2ConfigDes", {
+                                target:
+                                    props.node.Type === 0
+                                        ? t("slaveNodeTarget")
+                                        : t("masterNodeTarget"),
+                            })}
                         </Typography>
                         <pre>
-                            # 启用 RPC 服务
+                            # {t("enableRPCComment")}
                             <br />
                             enable-rpc=true
-                            <br />
-                            # RPC 监听端口
+                            <br /># {t("rpcPortComment")}
                             <br />
                             rpc-listen-port=6800
-                            <br />
-                            # RPC 授权令牌，可自行设定
+                            <br /># {t("rpcSecretComment")}
                             <br />
                             rpc-secret=
                             {props.node.Aria2OptionsSerialized.token}
@@ -225,10 +231,7 @@ export default function Aria2RPC(props) {
                         </pre>
                         <Alert severity="info" style={{ marginBottom: 10 }}>
                             <Typography variant="body2">
-                                推荐在日常启动流程中，先启动 Aria2，再启动节点
-                                Cloudreve，这样节点 Cloudreve 可以向 Aria2
-                                订阅事件通知，下载状态变更处理更及时。当然，如果没有这一流程，节点
-                                Cloudreve 也会通过轮询追踪任务状态。
+                                {t("rpcConfigDes")}
                             </Typography>
                         </Alert>
                     </div>
@@ -240,16 +243,23 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            在下方填写{mode} Cloudreve 与 Aria2 通信的 RPC
-                            服务地址。一般可填写为
-                            <code>http://127.0.0.1:6800/</code>,其中端口号
-                            <code>6800</code>与上文配置文件中
-                            <code>rpc-listen-port</code>保持一致。
+                            <Trans
+                                ns={"dashboard"}
+                                i18nKey={"node.rpcServerDes"}
+                                values={{
+                                    mode: mode,
+                                }}
+                                components={[
+                                    <code key={0} />,
+                                    <code key={1} />,
+                                    <code key={2} />,
+                                ]}
+                            />
                         </Typography>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    RPC 服务器地址
+                                    {t("rpcServer")}
                                 </InputLabel>
                                 <Input
                                     required
@@ -262,9 +272,7 @@ export default function Aria2RPC(props) {
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    包含端口的完整 RPC
-                                    服务器地址，例如：http://127.0.0.1:6800/，留空表示不启用
-                                    Aria2 服务
+                                    {t("rpcServerHelpDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -277,8 +285,11 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            RPC 授权令牌，与 Aria2 配置文件中
-                            <code>rpc-secret</code>保持一致，未设置请留空。
+                            <Trans
+                                ns={"dashboard"}
+                                i18nKey={"node.rpcTokenDes"}
+                                components={[<code key={0} />]}
+                            />
                         </Typography>
                         <div className={classes.form}>
                             <Input
@@ -295,9 +306,11 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            在下方填写 Aria2 用作临时下载目录的 节点上的
-                            <strong>绝对路径</strong>，节点上的 Cloudreve
-                            进程需要此目录的读、写、执行权限。
+                            <Trans
+                                ns={"dashboard"}
+                                i18nKey={"node.aria2PathDes"}
+                                components={[<strong key={0} />]}
+                            />
                         </Typography>
                         <div className={classes.form}>
                             <Input
@@ -316,12 +329,12 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            在下方按需要填写一些 Aria2 额外参数信息。
+                            {t("aria2SettingDes")}
                         </Typography>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    状态刷新间隔 (秒)
+                                    {t("refreshInterval")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -339,14 +352,14 @@ export default function Aria2RPC(props) {
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    Cloudreve 向 Aria2 请求刷新任务状态的间隔。
+                                    {t("refreshIntervalDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    RPC 调用超时 (秒)
+                                    {t("rpcTimeout")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -364,14 +377,14 @@ export default function Aria2RPC(props) {
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    调用 RPC 服务时最长等待时间
+                                    {t("rpcTimeoutDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    全局任务参数
+                                    {t("globalOptions")}
                                 </InputLabel>
                                 <Input
                                     multiline
@@ -385,9 +398,7 @@ export default function Aria2RPC(props) {
                                     )}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    创建下载任务时携带的额外设置参数，以 JSON
-                                    编码后的格式书写，您可也可以将这些设置写在
-                                    Aria2 配置文件里，可用参数请查阅官方文档
+                                    {t("globalOptionsDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -400,11 +411,9 @@ export default function Aria2RPC(props) {
                     </div>
                     <div className={classes.subStepContent}>
                         <Typography variant={"body2"}>
-                            完成以上步骤后，你可以点击下方的测试按钮测试
-                            {mode}
-                            Cloudreve 向 Aria2 通信是否正常。
+                            {t("testAria2Des", { mode })}
                             {props.node.Type === 0 &&
-                                "在进行测试前请先确保您已进行并通过上一页面中的“从机通信测试”。"}
+                                t("testAria2DesSlaveAddition")}
                         </Typography>
                         <div className={classes.form}>
                             <Button
@@ -413,7 +422,7 @@ export default function Aria2RPC(props) {
                                 onClick={() => testAria2()}
                                 color={"primary"}
                             >
-                                测试 Aria2 通信
+                                {t("testAria2")}
                             </Button>
                         </div>
                     </div>
@@ -427,7 +436,7 @@ export default function Aria2RPC(props) {
                         className={classes.button}
                         onClick={props.onBack}
                     >
-                        上一步
+                        {tDashboard("policy.back")}
                     </Button>
                 )}
                 <Button
@@ -437,7 +446,7 @@ export default function Aria2RPC(props) {
                     color={"primary"}
                     onClick={props.onSubmit}
                 >
-                    下一步
+                    {tDashboard("policy.next")}
                 </Button>
             </div>
         </form>

@@ -1,16 +1,9 @@
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
-import API from "../../../../middleware/Api";
-import Alert from "@material-ui/lab/Alert";
-import Box from "@material-ui/core/Box";
 import { useHistory } from "react-router";
-import { toggleSnackbar } from "../../../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -80,14 +73,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Completed(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "node" });
     const classes = useStyles();
     const history = useHistory();
 
     return (
         <form className={classes.stepContent}>
-            <Typography>节点已保存！</Typography>
+            <Typography>{t("nodeSaved")}</Typography>
             <Typography variant={"body2"} color={"textSecondary"}>
-                如果您添加了新节点，还需要在节点列表手动启动节点才能正常使用。
+                {t("nodeSavedFutureAction")}
             </Typography>
 
             <div className={classes.stepFooter}>
@@ -96,7 +90,7 @@ export default function Completed(props) {
                     className={classes.button}
                     onClick={() => history.push("/admin/node")}
                 >
-                    返回节点列表
+                    {t("backToNodeList")}
                 </Button>
             </div>
         </form>

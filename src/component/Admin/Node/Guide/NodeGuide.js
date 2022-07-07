@@ -11,11 +11,12 @@ import API from "../../../../middleware/Api";
 import Metainfo from "./Metainfo";
 import Completed from "./Completed";
 import { toggleSnackbar } from "../../../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const steps = [
     {
         slaveOnly: true,
-        title: "通信配置",
+        title: "communication",
         optional: false,
         component: function show(p) {
             return <Communication {...p} />;
@@ -23,7 +24,7 @@ const steps = [
     },
     {
         slaveOnly: false,
-        title: "离线下载",
+        title: "remoteDownload",
         optional: false,
         component: function show(p) {
             return <Aria2RPC {...p} />;
@@ -31,7 +32,7 @@ const steps = [
     },
     {
         slaveOnly: false,
-        title: "杂项信息",
+        title: "otherSettings",
         optional: false,
         component: function show(p) {
             return <Metainfo {...p} />;
@@ -39,7 +40,7 @@ const steps = [
     },
     {
         slaveOnly: false,
-        title: "完成",
+        title: "finish",
         optional: false,
         component: function show(p) {
             return <Completed {...p} />;
@@ -48,6 +49,8 @@ const steps = [
 ];
 
 export default function NodeGuide(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "node" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
     const [loading, setLoading] = useState(false);
@@ -126,7 +129,7 @@ export default function NodeGuide(props) {
                     ToggleSnackbar(
                         "top",
                         "right",
-                        "节点已" + (props.node ? "保存" : "添加"),
+                        props.node ? t("nodeSavedNow") : t("nodeAdded"),
                         "success"
                     );
                     setActiveStep(activeStep + 1);
@@ -146,7 +149,7 @@ export default function NodeGuide(props) {
     return (
         <div>
             <Typography variant={"h6"}>
-                {props.node ? "修改" : "添加"} 节点
+                {props.node ? t("editNode") : t("addNode")}
             </Typography>
             <Stepper activeStep={activeStep}>
                 {usedSteps.map((label, index) => {
@@ -154,7 +157,9 @@ export default function NodeGuide(props) {
                     const labelProps = {};
                     if (label.optional) {
                         labelProps.optional = (
-                            <Typography variant="caption">可选</Typography>
+                            <Typography variant="caption">
+                                {tDashboard("policy.optional")}
+                            </Typography>
                         );
                     }
                     if (isStepSkipped(index)) {
@@ -164,7 +169,7 @@ export default function NodeGuide(props) {
                         return (
                             <Step key={label.title} {...stepProps}>
                                 <StepLabel {...labelProps}>
-                                    {label.title}
+                                    {t(label.title)}
                                 </StepLabel>
                             </Step>
                         );

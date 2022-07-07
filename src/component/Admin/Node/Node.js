@@ -14,18 +14,19 @@ import TablePagination from "@material-ui/core/TablePagination";
 import { useHistory } from "react-router";
 import IconButton from "@material-ui/core/IconButton";
 import {
-    Delete,
-    Edit,
     Cancel,
     CheckCircle,
-    PlayArrow,
+    Delete,
+    Edit,
     Pause,
+    PlayArrow,
 } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 import Chip from "@material-ui/core/Chip";
 import classNames from "classnames";
 import Box from "@material-ui/core/Box";
 import { toggleSnackbar } from "../../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -61,21 +62,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columns = [
-    { id: "#", label: "#", minWidth: 50 },
-    { id: "name", label: "名称", minWidth: 170 },
+    { id: "#", minWidth: 50 },
+    { id: "name", minWidth: 170 },
     {
         id: "status",
-        label: "当前状态",
         minWidth: 50,
     },
     {
         id: "features",
-        label: "已启用功能",
         minWidth: 170,
     },
     {
         id: "action",
-        label: "操作",
         minWidth: 170,
     },
 ];
@@ -83,11 +81,12 @@ const columns = [
 const features = [
     {
         field: "Aria2Enabled",
-        name: "离线下载",
+        name: "remoteDownload",
     },
 ];
 
 export default function Node() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "node" });
     const classes = useStyles();
     const [nodes, setNodes] = useState([]);
     const [isActive, setIsActive] = useState({});
@@ -129,7 +128,7 @@ export default function Node() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "节点已" + (desired === 1 ? "暂停使用" : "启用"),
+                    desired === 1 ? t("nodeDisabled") : t("nodeEnabled"),
                     "success"
                 );
             })
@@ -146,7 +145,7 @@ export default function Node() {
         API.delete("/admin/node/" + id)
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "节点已删除", "success");
+                ToggleSnackbar("top", "right", t("nodeDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -166,7 +165,7 @@ export default function Node() {
                 <Chip
                     className={classes.disabledBadge}
                     size="small"
-                    label="未启用"
+                    label={t("disabled")}
                 />
             );
         }
@@ -180,7 +179,7 @@ export default function Node() {
                         className={classes.disabledBadge}
                         size="small"
                         color="primary"
-                        label={feature.name}
+                        label={t(feature.name)}
                     />
                 );
             }
@@ -193,12 +192,12 @@ export default function Node() {
                     className={classes.verticalAlign}
                     fontSize="small"
                 />{" "}
-                <span className={classes.verticalAlign}>在线</span>
+                <span className={classes.verticalAlign}>{t("online")}</span>
             </Box>
         ) : (
             <Box color="error.main" fontSize="small">
                 <Cancel className={classes.verticalAlign} fontSize="small" />{" "}
-                <span className={classes.verticalAlign}>离线</span>
+                <span className={classes.verticalAlign}>{t("offline")}</span>
             </Box>
         );
 
@@ -210,7 +209,7 @@ export default function Node() {
                     onClick={() => history.push("/admin/node/add")}
                     variant={"contained"}
                 >
-                    接入新节点
+                    {t("addNewNode")}
                 </Button>
                 <div className={classes.headerRight}>
                     <Button
@@ -218,7 +217,7 @@ export default function Node() {
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {t("refresh")}
                     </Button>
                 </div>
             </div>
@@ -236,7 +235,7 @@ export default function Node() {
                                             minWidth: column.minWidthclassNames,
                                         }}
                                     >
-                                        {column.label}
+                                        {t(column.id)}
                                     </TableCell>
                                 ))}
                             </TableRow>
@@ -265,8 +264,8 @@ export default function Node() {
                                         <Tooltip
                                             title={
                                                 row.Status === 1
-                                                    ? "启用节点"
-                                                    : "暂停使用节点"
+                                                    ? t("enableNode")
+                                                    : t("disableNode")
                                             }
                                         >
                                             <IconButton
@@ -285,7 +284,7 @@ export default function Node() {
                                                 {row.Status !== 1 && <Pause />}
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title={"编辑"}>
+                                        <Tooltip title={t("edit")}>
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>
@@ -299,7 +298,7 @@ export default function Node() {
                                                 <Edit />
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip title={t("delete")}>
                                             <IconButton
                                                 onClick={() =>
                                                     deleteNode(row.ID)

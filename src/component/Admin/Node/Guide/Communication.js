@@ -10,6 +10,7 @@ import API from "../../../../middleware/Api";
 import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
 import { toggleSnackbar } from "../../../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -79,6 +80,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Communication(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "node" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
@@ -97,7 +100,12 @@ export default function Communication(props) {
             secret: props.node.SlaveKey,
         })
             .then(() => {
-                ToggleSnackbar("top", "right", "通信正常", "success");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    tDashboard("policy.communicationOK"),
+                    "success"
+                );
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -116,14 +124,11 @@ export default function Communication(props) {
             }}
         >
             <Alert severity="info" style={{ marginBottom: 10 }}>
-                您可以添加同样运行了 Cloudreve 的服务器作为从机端，
-                正常运行工作的从机端可以为主机分担某些异步任务（如离线下载）。
-                请参考下面向导部署并配置连接 Cloudreve 从机节点。
-                <Box fontWeight="fontWeightBold">
-                    如果你已经在目标服务器上部署了从机存储策略，您可以跳过本页面的某些步骤，
-                    只将从机密钥、服务器地址在这里填写并保持与从机存储策略中一致即可。
-                </Box>
-                在后续版本中，从机存储策略的相关配置会合并到这里。
+                <Trans
+                    ns={"dashboard"}
+                    i18nKey={"node.slaveNodeDes"}
+                    components={[<Box key={0} fontWeight="fontWeightBold" />]}
+                />
             </Alert>
 
             <div className={classes.subStepContainer}>
@@ -132,8 +137,7 @@ export default function Communication(props) {
                 </div>
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
-                        将和主站相同版本的 Cloudreve
-                        程序拷贝至要作为从机的服务器上。
+                        {tDashboard("policy.remoteCopyBinaryDescription")}
                     </Typography>
                 </div>
             </div>
@@ -144,13 +148,12 @@ export default function Communication(props) {
                 </div>
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
-                        下方为系统为您随机生成的从机端密钥，一般无需改动，如果有自定义需求，
-                        可将您的密钥填入下方：
+                        {tDashboard("policy.remoteSecretDescription")}
                     </Typography>
                     <div className={classes.form}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="component-helper">
-                                从机密钥
+                                {tDashboard("policy.remoteSecret")}
                             </InputLabel>
                             <Input
                                 required
@@ -171,12 +174,13 @@ export default function Communication(props) {
                 </div>
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
-                        修改从机配置文件。
+                        {tDashboard("policy.modifyRemoteConfig")}
                         <br />
-                        在从机端 Cloudreve 的同级目录下新建
-                        <code>conf.ini</code>
-                        文件，填入从机配置，启动/重启从机端 Cloudreve。
-                        以下为一个可供参考的配置例子，其中密钥部分已帮您填写为上一步所生成的。
+                        <Trans
+                            ns={"dashboard"}
+                            i18nKey={"policy.addRemoteConfigDes"}
+                            components={[<code key={0} />]}
+                        />
                     </Typography>
                     <pre>
                         [System]
@@ -190,42 +194,50 @@ export default function Communication(props) {
                         <br />
                         Secret = {props.node.SlaveKey}
                         <br />
-                        <br />;
-                        以下为可选的设置，对应主机节点的相关参数，可以通过配置文件应用到从机节点，请根据
                         <br />
-                        ; 实际情况调整。更改下面设置需要重启从机节点后生效。
+                        <Trans
+                            ns={"dashboard"}
+                            i18nKey={"node.overwriteDes"}
+                            components={[<br key={0} />, <br key={1} />]}
+                        />
                         <br />
                         [OptionOverwrite]
-                        <br />
-                        ; 任务队列最多并行执行的任务数
+                        <br />; {t("workerNumDes")}
                         <br />
                         max_worker_num = 50
-                        <br />
-                        ; 任务队列中转任务传输时，最大并行协程数
+                        <br />; {t("parallelTransferDes")}
                         <br />
                         max_parallel_transfer = 10
-                        <br />
-                        ; 中转分片上传失败后重试的最大次数
+                        <br />; {t("chunkRetriesDes")}
                         <br />
                         chunk_retries = 10
                     </pre>
                     <Typography variant={"body2"}>
-                        从机端配置文件格式大致与主站端相同，区别在于：
+                        {tDashboard("policy.remoteConfigDifference")}
                         <ul>
                             <li>
-                                <code>System</code>
-                                分区下的
-                                <code>mode</code>
-                                字段必须更改为<code>slave</code>
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.remoteConfigDifference1"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                        <code key={2} />,
+                                    ]}
+                                />
                             </li>
                             <li>
-                                必须指定<code>Slave</code>分区下的
-                                <code>Secret</code>
-                                字段，其值为第二步里填写或生成的密钥。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.remoteConfigDifference2"}
+                                    components={[
+                                        <code key={0} />,
+                                        <code key={1} />,
+                                    ]}
+                                />
                             </li>
                         </ul>
-                        一个从机 Cloudreve 实例可以对接多个 Cloudreve
-                        主节点，只需在所有主节点中添加此从机节点并保持密钥一致即可。
+                        {t("multipleMasterDes")}
                     </Typography>
                 </div>
             </div>
@@ -236,15 +248,14 @@ export default function Communication(props) {
                 </div>
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
-                        填写从机地址。
+                        {tDashboard("policy.inputRemoteAddress")}
                         <br />
-                        如果主站启用了 HTTPS，从机也需要启用，并在下方填入 HTTPS
-                        协议的地址。
+                        {tDashboard("policy.inputRemoteAddressDes")}
                     </Typography>
                     <div className={classes.form}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="component-helper">
-                                从机地址
+                                {tDashboard("policy.remoteAddress")}
                             </InputLabel>
                             <Input
                                 fullWidth
@@ -264,7 +275,7 @@ export default function Communication(props) {
                 </div>
                 <div className={classes.subStepContent}>
                     <Typography variant={"body2"}>
-                        完成以上步骤后，你可以点击下方的测试按钮测试通信是否正常。
+                        {tDashboard("policy.testCommunicationDes")}
                     </Typography>
                     <div className={classes.form}>
                         <Button
@@ -273,7 +284,7 @@ export default function Communication(props) {
                             onClick={() => testSlave()}
                             color={"primary"}
                         >
-                            测试从机通信
+                            {tDashboard("policy.testCommunication")}
                         </Button>
                     </div>
                 </div>
@@ -286,7 +297,7 @@ export default function Communication(props) {
                     variant={"contained"}
                     color={"primary"}
                 >
-                    下一步
+                    {tDashboard("policy.next")}
                 </Button>
             </div>
         </form>
