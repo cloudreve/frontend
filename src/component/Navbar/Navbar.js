@@ -397,22 +397,24 @@ class NavbarCompoment extends Component {
                                         primary={t("navbar.myShare")}
                                     />
                                 </ListItem>
-                                <ListItem
-                                    button
-                                    key="离线下载"
-                                    onClick={() =>
-                                        this.props.history.push("/aria2?")
-                                    }
-                                >
-                                    <ListItemIcon>
-                                        <DownloadIcon
-                                            className={classes.iconFix}
+                                {user.group.allowRemoteDownload && (
+                                    <ListItem
+                                        button
+                                        key="离线下载"
+                                        onClick={() =>
+                                            this.props.history.push("/aria2?")
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            <DownloadIcon
+                                                className={classes.iconFix}
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={t("navbar.remoteDownload")}
                                         />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={t("navbar.remoteDownload")}
-                                    />
-                                </ListItem>
+                                    </ListItem>
+                                )}
                                 {user.group.webdav && (
                                     <ListItem
                                         button

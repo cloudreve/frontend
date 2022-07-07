@@ -19,13 +19,13 @@ import Grid from "@material-ui/core/Grid";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
 import { ExpandMore, HighlightOff } from "@material-ui/icons";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import classNames from "classnames";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import TimeAgo from "timeago-react";
 import { toggleSnackbar } from "../../redux/explorer";
@@ -34,7 +34,9 @@ import { hex2bin, sizeToString } from "../../utils";
 import TypeIcon from "../FileManager/TypeIcon";
 import SelectFileDialog from "../Modals/SelectFile";
 import { useHistory } from "react-router";
+import { TableVirtuoso } from "react-virtuoso";
 import { useTranslation } from "react-i18next";
+
 const ExpansionPanel = withStyles({
     root: {
         maxWidth: "100%",
@@ -123,14 +125,26 @@ const useStyles = makeStyles((theme) => ({
     expanded: {
         transform: "rotate(180deg)",
     },
+    subFile: {
+        width: "100%",
+        minWidth: 300,
+        wordBreak: "break-all",
+    },
     subFileName: {
         display: "flex",
     },
     subFileIcon: {
         marginRight: "20px",
     },
+    subFileSize: {
+        minWidth: 120,
+    },
+    subFilePercent: {
+        minWidth: 105,
+    },
     scroll: {
-        overflowY: "auto",
+        overflow: "auto",
+        maxHeight: "300px",
     },
     action: {
         padding: theme.spacing(2),
@@ -325,6 +339,177 @@ export default function DownloadingCard(props) {
             });
     };
 
+    const subFileList = useMemo(() => {
+        const processStyle = (value) => ({
+            background:
+                "linear-gradient(to right, " +
+                (theme.palette.type ===
+                    "dark"
+                    ? darken(
+                        theme.palette
+                            .primary
+                            .main,
+                        0.4
+                    )
+                    : lighten(
+                        theme.palette
+                            .primary
+                            .main,
+                        0.85
+                    )) +
+                " 0%," +
+                (theme.palette.type ===
+                    "dark"
+                    ? darken(
+                        theme.palette
+                            .primary
+                            .main,
+                        0.4
+                    )
+                    : lighten(
+                        theme.palette
+                            .primary
+                            .main,
+                        0.85
+                    )) +
+                " " +
+                getPercent(
+                    value.completedLength,
+                    value.length
+                ).toFixed(0) +
+                "%," +
+                theme.palette.background
+                    .paper +
+                " " +
+                getPercent(
+                    value.completedLength,
+                    value.length
+                ).toFixed(0) +
+                "%," +
+                theme.palette.background
+                    .paper +
+                " 100%)",
+        });
+
+        const subFileCell = (value) => (
+            <>
+                <TableCell
+                    component="th"
+                    scope="row"
+                    className={classes.subFile}
+                >
+                    <Typography
+                        className={
+                            classes.subFileName
+                        }
+                    >
+                        <TypeIcon
+                            className={
+                                classes.subFileIcon
+                            }
+                            fileName={
+                                value.path
+                            }
+                        />
+                        {value.path}
+                    </Typography>
+                </TableCell>
+                <TableCell
+                    component="th"
+                    scope="row"
+                    className={classes.subFileSize}
+                >
+                    <Typography noWrap>
+                        {" "}
+                        {sizeToString(
+                            value.length
+                        )}
+                    </Typography>
+                </TableCell>
+                <TableCell
+                    component="th"
+                    scope="row"
+                    className={classes.subFilePercent}
+                >
+                    <Typography noWrap>
+                        {getPercent(
+                            value.completedLength,
+                            value.length
+                        ).toFixed(2)}
+                        %
+                    </Typography>
+                </TableCell>
+                <TableCell>
+                    <Tooltip
+                        title={t(
+                            "deleteThisFile"
+                        )}
+                    >
+                        <IconButton
+                            onClick={() =>
+                                deleteFile(
+                                    value.index
+                                )
+                            }
+                            disabled={loading}
+                            size={"small"}
+                        >
+                            <HighlightOff />
+                        </IconButton>
+                    </Tooltip>
+                </TableCell>
+            </>
+        );
+
+        return activeFiles().length > 5 ? (
+            <TableVirtuoso
+                style={{ height: 43 * activeFiles().length }}
+                className={classes.scroll}
+                components={{
+                    // eslint-disable-next-line react/display-name
+                    Table: (props) => <Table {...props} size={"small"} />,
+                    // eslint-disable-next-line react/display-name
+                    TableRow: (props) => {
+                        const index = props["data-index"];
+                        const value = activeFiles()[index];
+                        return (
+                            <TableRow
+                                {...props}
+                                key={index}
+                                style={processStyle(value)}
+                            />
+                        );
+                    },
+                }}
+                data={activeFiles()}
+                itemContent={(index, value) => (
+                    subFileCell(value)
+                )}
+            />
+        ) : (
+            <div className={classes.scroll}>
+                <Table size="small">
+                    <TableBody>
+                        {activeFiles().map((value) => {
+                            return (
+                                <TableRow
+                                    key={value.index}
+                                    style={processStyle(value)}
+                                >
+                                    {subFileCell(value)}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </div>
+        );
+    }, [
+        classes,
+        theme,
+        activeFiles,
+    ]);
+
     return (
         <Card className={classes.card}>
             <SelectFileDialog
@@ -400,135 +585,7 @@ export default function DownloadingCard(props) {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Divider />
-                    {task.info.bittorrent.mode === "multi" && (
-                        <div className={classes.scroll}>
-                            <Table size="small">
-                                <TableBody>
-                                    {activeFiles().map((value) => {
-                                        return (
-                                            <TableRow
-                                                key={value.index}
-                                                style={{
-                                                    background:
-                                                        "linear-gradient(to right, " +
-                                                        (theme.palette.type ===
-                                                        "dark"
-                                                            ? darken(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.4
-                                                              )
-                                                            : lighten(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.85
-                                                              )) +
-                                                        " 0%," +
-                                                        (theme.palette.type ===
-                                                        "dark"
-                                                            ? darken(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.4
-                                                              )
-                                                            : lighten(
-                                                                  theme.palette
-                                                                      .primary
-                                                                      .main,
-                                                                  0.85
-                                                              )) +
-                                                        " " +
-                                                        getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(0) +
-                                                        "%," +
-                                                        theme.palette.background
-                                                            .paper +
-                                                        " " +
-                                                        getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(0) +
-                                                        "%," +
-                                                        theme.palette.background
-                                                            .paper +
-                                                        " 100%)",
-                                                }}
-                                            >
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography
-                                                        className={
-                                                            classes.subFileName
-                                                        }
-                                                    >
-                                                        <TypeIcon
-                                                            className={
-                                                                classes.subFileIcon
-                                                            }
-                                                            fileName={
-                                                                value.path
-                                                            }
-                                                        />
-                                                        {value.path}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {" "}
-                                                        {sizeToString(
-                                                            value.length
-                                                        )}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell
-                                                    component="th"
-                                                    scope="row"
-                                                >
-                                                    <Typography noWrap>
-                                                        {getPercent(
-                                                            value.completedLength,
-                                                            value.length
-                                                        ).toFixed(2)}
-                                                        %
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Tooltip
-                                                        title={t(
-                                                            "deleteThisFile"
-                                                        )}
-                                                    >
-                                                        <IconButton
-                                                            onClick={() =>
-                                                                deleteFile(
-                                                                    value.index
-                                                                )
-                                                            }
-                                                            disabled={loading}
-                                                            size={"small"}
-                                                        >
-                                                            <HighlightOff />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-
+                    {task.info.bittorrent.mode === "multi" && subFileList}
                     <div className={classes.action}>
                         <Button
                             className={classes.actionButton}
