@@ -9,8 +9,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "share" });
+    const { t: tDashboard } = useTranslation("dashboard");
+    const { t: tCommon } = useTranslation("common");
     const [input, setInput] = useState({
         is_dir: "all",
         user_id: "",
@@ -48,11 +52,13 @@ export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+                {tDashboard("user.filterCondition")}
+            </DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
-                        源文件类型
+                        {t("srcType")}
                     </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -60,9 +66,11 @@ export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
                         value={input.is_dir}
                         onChange={handleChange("is_dir")}
                     >
-                        <MenuItem value={"all"}>全部</MenuItem>
-                        <MenuItem value={"1"}>目录</MenuItem>
-                        <MenuItem value={"0"}>文件</MenuItem>
+                        <MenuItem value={"all"}>
+                            {tDashboard("user.all")}
+                        </MenuItem>
+                        <MenuItem value={"1"}>{t("folder")}</MenuItem>
+                        <MenuItem value={"0"}>{t("file")}</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl fullWidth style={{ marginTop: 16 }}>
@@ -70,7 +78,7 @@ export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
                         value={input.user_id}
                         onChange={handleChange("user_id")}
                         id="standard-basic"
-                        label="上传者ID"
+                        label={tDashboard("file.uploaderID")}
                     />
                 </FormControl>
                 <FormControl fullWidth style={{ marginTop: 16 }}>
@@ -78,16 +86,16 @@ export default function ShareFilter({ setFilter, setSearch, open, onClose }) {
                         value={keywords}
                         onChange={(e) => setKeywords(e.target.value)}
                         id="standard-basic"
-                        label="搜索 文件名"
+                        label={tDashboard("file.searchFileName")}
                     />
                 </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="default">
-                    取消
+                    {tCommon("cancel")}
                 </Button>
                 <Button onClick={submit} color="primary">
-                    应用
+                    {tCommon("ok")}
                 </Button>
             </DialogActions>
         </Dialog>

@@ -714,5 +714,22 @@
     "recursivelyImport": "Recursively import",
     "recursivelyImportDes": "Whether to import all subdirectories under the directory recursively.",
     "createImportTask": "Create import task"
+  },
+  "share": {
+    "deleted": "Share deleted.",
+    "objectName": "Object name",
+    "views": "Views",
+    "downloads": "Downloads",
+    "price": "Price",
+    "autoExpire": "Auto expire",
+    "owner": "Owner",
+    "createdAt": "Created at",
+    "public": "Public",
+    "private": "Private",
+    "afterNDownloads":"After {{num}} download(s).",
+    "none": "None",
+    "srcType": "Source object type",
+    "folder": "Folder",
+    "file": "File"
   }
 }

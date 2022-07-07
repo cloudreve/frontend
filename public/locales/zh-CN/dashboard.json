@@ -713,5 +713,22 @@
     "recursivelyImport": "递归导入子目录",
     "recursivelyImportDes": "是否将目录下的所有子目录递归导入",
     "createImportTask": "创建导入任务"
+  },
+  "share": {
+    "deleted": "分享已删除",
+    "objectName": "对象名",
+    "views": "浏览",
+    "downloads": "下载",
+    "price": "积分",
+    "autoExpire": "自动过期",
+    "owner": "分享者",
+    "createdAt": "分享于",
+    "public": "公开",
+    "private": "私密",
+    "afterNDownloads":"{{num}} 次下载后",
+    "none": "无",
+    "srcType": "源文件类型",
+    "folder": "目录",
+    "file": "文件"
   }
 }

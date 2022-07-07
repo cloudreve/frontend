@@ -66,7 +66,6 @@ function useDebounce(value, delay) {
 
 export default function Import() {
     const { t } = useTranslation("dashboard", { keyPrefix: "file" });
-    const { t: tDashboard } = useTranslation("dashboard");
     const { t: tCommon } = useTranslation("common");
     const classes = useStyles();
     const [loading, setLoading] = useState(false);

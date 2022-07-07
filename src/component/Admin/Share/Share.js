@@ -24,6 +24,7 @@ import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import ShareFilter from "../Dialogs/ShareFilter";
 import { formatLocalTime } from "../../../utils/datetime";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Share() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "share" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [shares, setShares] = useState([]);
     const [page, setPage] = useState(1);
@@ -119,7 +122,7 @@ export default function Share() {
         API.post("/admin/share/delete", { id: [id] })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "分享已删除", "success");
+                ToggleSnackbar("top", "right", t("deleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -134,7 +137,7 @@ export default function Share() {
         API.post("/admin/share/delete", { id: selected })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "分享已删除", "success");
+                ToggleSnackbar("top", "right", t("deleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -186,7 +189,7 @@ export default function Share() {
             />
             <div className={classes.header}>
                 <div className={classes.headerRight}>
-                    <Tooltip title="过滤">
+                    <Tooltip title={tDashboard("user.filter")}>
                         <IconButton
                             style={{ marginRight: 8 }}
                             onClick={() => setFilterDialog(true)}
@@ -208,7 +211,7 @@ export default function Share() {
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {tDashboard("policy.refresh")}
                     </Button>
                 </div>
             </div>
@@ -221,9 +224,11 @@ export default function Share() {
                             color="inherit"
                             variant="subtitle1"
                         >
-                            已选择 {selected.length} 个对象
+                            {tDashboard("user.selectedObjects", {
+                                num: selected.length,
+                            })}
                         </Typography>
-                        <Tooltip title="删除">
+                        <Tooltip title={tDashboard("node.delete")}>
                             <IconButton
                                 onClick={deleteBatch}
                                 disabled={loading}
@@ -294,7 +299,7 @@ export default function Share() {
                                             ])
                                         }
                                     >
-                                        对象名
+                                        {t("objectName")}
                                         {orderBy[0] === "source_name" ? (
                                             <span
                                                 className={
@@ -309,7 +314,7 @@ export default function Share() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 70 }}>
-                                    类型
+                                    {tDashboard("policy.type")}
                                 </TableCell>
                                 <TableCell
                                     style={{ minWidth: 100 }}
@@ -327,7 +332,7 @@ export default function Share() {
                                             ])
                                         }
                                     >
-                                        浏览
+                                        {t("views")}
                                         {orderBy[0] === "views" ? (
                                             <span
                                                 className={
@@ -357,7 +362,7 @@ export default function Share() {
                                             ])
                                         }
                                     >
-                                        下载
+                                        {t("downloads")}
                                         {orderBy[0] === "downloads" ? (
                                             <span
                                                 className={
@@ -372,16 +377,16 @@ export default function Share() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 120 }}>
-                                    自动过期
+                                    {t("autoExpire")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 120 }}>
-                                    分享者
+                                    {t("owner")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    分享于
+                                    {t("createdAt")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 100 }}>
-                                    操作
+                                    {tDashboard("policy.actions")}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -421,7 +426,9 @@ export default function Share() {
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        {row.Password === "" ? "公开" : "私密"}
+                                        {row.Password === ""
+                                            ? t("public")
+                                            : t("private")}
                                     </TableCell>
                                     <TableCell align={"right"}>
                                         {row.Views}
@@ -431,8 +438,11 @@ export default function Share() {
                                     </TableCell>
                                     <TableCell>
                                         {row.RemainDownloads > -1 &&
-                                            row.RemainDownloads + " 次下载后"}
-                                        {row.RemainDownloads === -1 && "无"}
+                                            t("afterNDownloads", {
+                                                num: row.RemainDownloads,
+                                            })}
+                                        {row.RemainDownloads === -1 &&
+                                            t("none")}
                                     </TableCell>
                                     <TableCell>
                                         <Link
@@ -442,14 +452,18 @@ export default function Share() {
                                         >
                                             {users[row.UserID]
                                                 ? users[row.UserID].Nick
-                                                : "未知"}
+                                                : tDashboard(
+                                                      "file.unknownUploader"
+                                                  )}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
                                         {formatLocalTime(row.CreatedAt)}
                                     </TableCell>
                                     <TableCell>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip
+                                            title={tDashboard("node.delete")}
+                                        >
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>
