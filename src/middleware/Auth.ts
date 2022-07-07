@@ -34,10 +34,10 @@ const Auth = {
         localStorage.setItem("user_preference", JSON.stringify(Auth._preference));
     },
     GetPreference(key: string): any | null {
-        return Auth._preference[key] || null;
+        return Auth._preference[key] ?? null;
     },
     GetPreferenceWithDefault(key: string, defaultVal: any): any {
-        return Auth.GetPreference(key) || defaultVal;
+        return Auth.GetPreference(key) ?? defaultVal;
     },
 };
 
