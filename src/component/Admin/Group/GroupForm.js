@@ -16,6 +16,7 @@ import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import SizeInput from "../Common/SizeInput";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,6 +47,8 @@ const useStyles = makeStyles((theme) => ({
 // }
 
 export default function GroupForm(props) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "group" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [group, setGroup] = useState(
@@ -183,7 +186,7 @@ export default function GroupForm(props) {
                 groupCopy.OptionsSerialized.aria2_options
             );
         } catch (e) {
-            ToggleSnackbar("top", "right", "Aria2 设置项格式错误", "warning");
+            ToggleSnackbar("top", "right", t("aria2FormatError"), "warning");
             return;
         }
 
@@ -196,7 +199,7 @@ export default function GroupForm(props) {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "用户组已" + (props.group ? "保存" : "添加"),
+                    props.group ? t("saved") : t("added"),
                     "success"
                 );
             })
@@ -213,8 +216,8 @@ export default function GroupForm(props) {
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        {group.ID === 0 && "新建用户组"}
-                        {group.ID !== 0 && "编辑 " + group.Name}
+                        {group.ID === 0 && t("new")}
+                        {group.ID !== 0 && t("editGroup", { name: group.Name })}
                     </Typography>
 
                     <div className={classes.formContainer}>
@@ -223,7 +226,7 @@ export default function GroupForm(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            用户组名
+                                            {t("nameOfGroup")}
                                         </InputLabel>
                                         <Input
                                             value={group.Name}
@@ -231,7 +234,7 @@ export default function GroupForm(props) {
                                             required
                                         />
                                         <FormHelperText id="component-helper-text">
-                                            用户组的名称
+                                            {t("nameOfGroupDes")}
                                         </FormHelperText>
                                     </FormControl>
                                 </div>
@@ -239,7 +242,7 @@ export default function GroupForm(props) {
                                 <div className={classes.form}>
                                     <FormControl fullWidth>
                                         <InputLabel htmlFor="component-helper">
-                                            存储策略
+                                            {t("storagePolicy")}
                                         </InputLabel>
                                         <Select
                                             labelId="demo-mutiple-chip-label"
@@ -264,7 +267,7 @@ export default function GroupForm(props) {
                                             )}
                                         </Select>
                                         <FormHelperText id="component-helper-text">
-                                            指定用户组的存储策略。
+                                            {t("storageDes")}
                                         </FormHelperText>
                                     </FormControl>
                                 </div>
@@ -278,12 +281,12 @@ export default function GroupForm(props) {
                                             )}
                                             min={0}
                                             max={9223372036854775807}
-                                            label={"初始容量"}
+                                            label={t("initialStorageQuota")}
                                             required
                                         />
                                     </FormControl>
                                     <FormHelperText id="component-helper-text">
-                                        用户组下的用户初始可用最大容量
+                                        {t("initialStorageQuotaDes")}
                                     </FormHelperText>
                                 </div>
                             </>
@@ -296,14 +299,13 @@ export default function GroupForm(props) {
                                     onChange={handleChange("SpeedLimit")}
                                     min={0}
                                     max={9223372036854775807}
-                                    label={"下载限速"}
+                                    label={t("downloadSpeedLimit")}
                                     suffix={"/s"}
                                     required
                                 />
                             </FormControl>
                             <FormHelperText id="component-helper-text">
-                                填写为 0 表示不限制。开启限制后，
-                                此用户组下的用户下载所有支持限速的存储策略下的文件时，下载最大速度会被限制。
+                                {t("downloadSpeedLimitDes")}
                             </FormHelperText>
                         </div>
 
@@ -311,7 +313,7 @@ export default function GroupForm(props) {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        批量生成外链数量限制
+                                        {t("bathSourceLinkLimit")}
                                     </InputLabel>
                                     <Input
                                         multiline
@@ -328,8 +330,7 @@ export default function GroupForm(props) {
                                         )}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        对于支持的存储策略下的文件，允许用户单次批量获取外链的最大文件数量，填写为
-                                        0 或空表示不允许批量生成外链。
+                                        {t("bathSourceLinkLimitDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -350,10 +351,10 @@ export default function GroupForm(props) {
                                                 )}
                                             />
                                         }
-                                        label="允许创建分享"
+                                        label={t("allowCreateShareLink")}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        关闭后，用户无法创建分享链接
+                                        {t("allowCreateShareLinkDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -373,10 +374,10 @@ export default function GroupForm(props) {
                                             )}
                                         />
                                     }
-                                    label="允许下载分享"
+                                    label={t("allowDownloadShare")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    关闭后，用户无法下载别人创建的文件分享
+                                    {t("allowDownloadShareDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -396,11 +397,10 @@ export default function GroupForm(props) {
                                                 )}
                                             />
                                         }
-                                        label="WebDAV"
+                                        label={t("allowWabDAV")}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        关闭后，用户无法通过 WebDAV
-                                        协议连接至网盘
+                                        {t("allowWabDAVDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -421,10 +421,10 @@ export default function GroupForm(props) {
                                             )}
                                         />
                                     }
-                                    label="禁止多次下载请求"
+                                    label={t("disableMultipleDownload")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    只针对本机存储策略有效。开启后，用户无法使用多线程下载工具。
+                                    {t("disableMultipleDownloadDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -444,10 +444,10 @@ export default function GroupForm(props) {
                                                 )}
                                             />
                                         }
-                                        label="离线下载"
+                                        label={t("allowRemoteDownload")}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        是否允许用户创建离线下载任务
+                                        {t("allowRemoteDownloadDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -457,7 +457,7 @@ export default function GroupForm(props) {
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        Aria2 任务参数
+                                        {t("aria2Options")}
                                     </InputLabel>
                                     <Input
                                         multiline
@@ -470,17 +470,14 @@ export default function GroupForm(props) {
                                         )}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        此用户组创建离线下载任务时额外携带的参数，以
-                                        JSON
-                                        编码后的格式书写，您可也可以将这些设置写在
-                                        Aria2 配置文件里，可用参数请查阅官方文档
+                                        {t("aria2OptionsDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
                             <div className={classes.form}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="component-helper">
-                                        Aria2 批量下载最大数量
+                                        {t("aria2BatchSize")}
                                     </InputLabel>
                                     <Input
                                         multiline
@@ -497,7 +494,7 @@ export default function GroupForm(props) {
                                         )}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        允许用户单次批量创建的离线下载链接的最大数量
+                                        {t("aria2BatchSizeDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -517,11 +514,10 @@ export default function GroupForm(props) {
                                             )}
                                         />
                                     }
-                                    label="服务端打包下载"
+                                    label={t("serverSideBatchDownload")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    是否允许用户多选文件使用服务端中转打包下载，关闭后，用户仍然可以使用纯
-                                    Web 端打包下载功能。
+                                    {t("serverSideBatchDownloadDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -541,10 +537,10 @@ export default function GroupForm(props) {
                                                 )}
                                             />
                                         }
-                                        label="压缩/解压缩 任务"
+                                        label={t("compressTask")}
                                     />
                                     <FormHelperText id="component-helper-text">
-                                        是否用户创建 压缩/解压缩 任务
+                                        {t("compressTaskDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>
@@ -565,12 +561,11 @@ export default function GroupForm(props) {
                                         )}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"待压缩文件最大大小"}
+                                        label={t("compressSize")}
                                     />
                                 </FormControl>
                                 <FormHelperText id="component-helper-text">
-                                    用户可创建的压缩任务的文件最大总大小，填写为
-                                    0 表示不限制
+                                    {t("compressSizeDes")}
                                 </FormHelperText>
                             </div>
 
@@ -586,12 +581,11 @@ export default function GroupForm(props) {
                                         )}
                                         min={0}
                                         max={9223372036854775807}
-                                        label={"待解压文件最大大小"}
+                                        label={t("decompressSize")}
                                     />
                                 </FormControl>
                                 <FormHelperText id="component-helper-text">
-                                    用户可创建的解压缩任务的文件最大总大小，填写为
-                                    0 表示不限制
+                                    {t("decompressSizeDes")}
                                 </FormHelperText>
                             </div>
                         </Collapse>
@@ -604,7 +598,7 @@ export default function GroupForm(props) {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        保存
+                        {tDashboard("settings.save")}
                     </Button>
                 </div>
             </form>

@@ -17,6 +17,7 @@ import { useHistory, useLocation } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import { sizeToString } from "../../../utils";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,24 +43,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columns = [
-    { id: "#", label: "#", minWidth: 50 },
-    { id: "name", label: "名称", minWidth: 170 },
+    { id: "#", minWidth: 50 },
+    { id: "name", minWidth: 170 },
     { id: "type", label: "存储策略", minWidth: 170 },
     {
         id: "count",
-        label: "下属用户数",
         minWidth: 50,
         align: "right",
     },
     {
         id: "size",
-        label: "最大容量",
         minWidth: 100,
         align: "right",
     },
     {
         id: "action",
-        label: "操作",
         minWidth: 170,
         align: "right",
     },
@@ -70,6 +68,8 @@ function useQuery() {
 }
 
 export default function Group() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "group" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [groups, setGroups] = useState([]);
     const [statics, setStatics] = useState([]);
@@ -78,9 +78,7 @@ export default function Group() {
     const [total, setTotal] = useState(0);
     const [policies, setPolicies] = React.useState({});
 
-    const location = useLocation();
     const history = useHistory();
-    const query = useQuery();
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -127,7 +125,7 @@ export default function Group() {
         API.delete("/admin/group/" + id)
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "用户组已删除", "success");
+                ToggleSnackbar("top", "right", t("deleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -142,7 +140,7 @@ export default function Group() {
                     onClick={() => history.push("/admin/group/add")}
                     variant={"contained"}
                 >
-                    新建用户组
+                    {t("new")}
                 </Button>
                 <div className={classes.headerRight}>
                     <Button
@@ -150,7 +148,7 @@ export default function Group() {
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {tDashboard("policy.refresh")}
                     </Button>
                 </div>
             </div>
@@ -166,7 +164,7 @@ export default function Group() {
                                         align={column.align}
                                         style={{ minWidth: column.minWidth }}
                                     >
-                                        {column.label}
+                                        {t(column.id)}
                                     </TableCell>
                                 ))}
                             </TableRow>
@@ -201,7 +199,9 @@ export default function Group() {
                                             sizeToString(row.MaxStorage)}
                                     </TableCell>
                                     <TableCell align={"right"}>
-                                        <Tooltip title={"编辑"}>
+                                        <Tooltip
+                                            title={tDashboard("policy.edit")}
+                                        >
                                             <IconButton
                                                 onClick={() =>
                                                     history.push(
@@ -214,7 +214,9 @@ export default function Group() {
                                                 <Edit />
                                             </IconButton>
                                         </Tooltip>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip
+                                            title={tDashboard("policy.delete")}
+                                        >
                                             <IconButton
                                                 onClick={() =>
                                                     deletePolicy(row.ID)

@@ -4,8 +4,10 @@ import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
 import GroupForm from "./GroupForm";
 import { toggleSnackbar } from "../../../redux/explorer";
+import { useTranslation } from "react-i18next";
 
 export default function EditGroupPreload() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "group" });
     const [group, setGroup] = useState({});
 
     const { id } = useParams();
@@ -72,7 +74,7 @@ export default function EditGroupPreload() {
                         ToggleSnackbar(
                             "top",
                             "right",
-                            "Aria2 设置项格式错误",
+                            t("aria2FormatError"),
                             "warning"
                         );
                         return;
