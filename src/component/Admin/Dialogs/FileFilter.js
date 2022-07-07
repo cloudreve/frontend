@@ -12,8 +12,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
+import { useTranslation } from "react-i18next";
 
 export default function FileFilter({ setFilter, setSearch, open, onClose }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "file" });
+    const { t: tDashboard } = useTranslation("dashboard");
+    const { t: tCommon } = useTranslation("common");
     const [input, setInput] = useState({
         policy_id: "all",
         user_id: "",
@@ -74,11 +78,13 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
             fullWidth
             maxWidth={"xs"}
         >
-            <DialogTitle id="alert-dialog-title">过滤条件</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+                {tDashboard("user.filterCondition")}
+            </DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
-                        存储策略
+                        {t("storagePolicy")}
                     </InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
@@ -86,7 +92,9 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
                         value={input.policy_id}
                         onChange={handleChange("policy_id")}
                     >
-                        <MenuItem value={"all"}>全部</MenuItem>
+                        <MenuItem value={"all"}>
+                            {tDashboard("user.all")}
+                        </MenuItem>
                         {policies.map((v) => {
                             return (
                                 <MenuItem key={v.ID} value={v.ID.toString()}>
@@ -101,7 +109,7 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
                         value={input.user_id}
                         onChange={handleChange("user_id")}
                         id="standard-basic"
-                        label="上传者ID"
+                        label={t("uploaderID")}
                     />
                 </FormControl>
                 <FormControl fullWidth style={{ marginTop: 16 }}>
@@ -109,16 +117,16 @@ export default function FileFilter({ setFilter, setSearch, open, onClose }) {
                         value={keywords}
                         onChange={(e) => setKeywords(e.target.value)}
                         id="standard-basic"
-                        label="搜索 文件名"
+                        label={t("searchFileName")}
                     />
                 </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="default">
-                    取消
+                    {tCommon("cancel")}
                 </Button>
                 <Button onClick={submit} color="primary">
-                    应用
+                    {tDashboard("user.apply")}
                 </Button>
             </DialogActions>
         </Dialog>

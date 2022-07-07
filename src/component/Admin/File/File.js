@@ -27,6 +27,7 @@ import { sizeToString } from "../../../utils";
 import FileFilter from "../Dialogs/FileFilter";
 import { formatLocalTime } from "../../../utils/datetime";
 import Chip from "@material-ui/core/Chip";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -78,6 +79,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function File() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "file" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [page, setPage] = useState(1);
@@ -127,12 +130,7 @@ export default function File() {
         API.post("/admin/file/delete", { id: [id] })
             .then(() => {
                 loadList();
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    "删除任务将在后台执行",
-                    "success"
-                );
+                ToggleSnackbar("top", "right", t("deleteAsync"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -147,12 +145,7 @@ export default function File() {
         API.post("/admin/file/delete", { id: selected, force: force })
             .then(() => {
                 loadList();
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    "删除任务将在后台执行",
-                    "success"
-                );
+                ToggleSnackbar("top", "right", t("deleteAsync"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -211,10 +204,10 @@ export default function File() {
                         alignSelf: "center",
                     }}
                 >
-                    从外部导入
+                    {t("import")}
                 </Button>
                 <div className={classes.headerRight}>
-                    <Tooltip title="过滤">
+                    <Tooltip title={tDashboard("user.filter")}>
                         <IconButton
                             style={{ marginRight: 8 }}
                             onClick={() => setFilterDialog(true)}
@@ -236,7 +229,7 @@ export default function File() {
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {tDashboard("policy.refresh")}
                     </Button>
                 </div>
             </div>
@@ -249,9 +242,11 @@ export default function File() {
                             color="inherit"
                             variant="subtitle1"
                         >
-                            已选择 {selected.length} 个对象
+                            {tDashboard("user.selectedObjects", {
+                                num: selected.length,
+                            })}
                         </Typography>
-                        <Tooltip title="删除">
+                        <Tooltip title={tDashboard("policy.delete")}>
                             <IconButton
                                 onClick={deleteBatch(false)}
                                 disabled={loading}
@@ -260,7 +255,7 @@ export default function File() {
                                 <Delete />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="强制删除">
+                        <Tooltip title={t("forceDelete")}>
                             <IconButton
                                 onClick={deleteBatch(true)}
                                 disabled={loading}
@@ -331,7 +326,7 @@ export default function File() {
                                             ])
                                         }
                                     >
-                                        文件名
+                                        {t("name")}
                                         {orderBy[0] === "name" ? (
                                             <span
                                                 className={
@@ -361,7 +356,7 @@ export default function File() {
                                             ])
                                         }
                                     >
-                                        大小
+                                        {t("size")}
                                         {orderBy[0] === "size" ? (
                                             <span
                                                 className={
@@ -376,13 +371,13 @@ export default function File() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 120 }}>
-                                    上传者
+                                    {t("uploader")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    创建于
+                                    {t("createdAt")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 100 }}>
-                                    操作
+                                    {tDashboard("policy.actions")}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -419,7 +414,7 @@ export default function File() {
                                                         classes.disabledBadge
                                                     }
                                                     size="small"
-                                                    label="上传中"
+                                                    label={t("uploading")}
                                                 />
                                             )}
                                         </Link>
@@ -435,7 +430,7 @@ export default function File() {
                                         >
                                             {users[row.UserID]
                                                 ? users[row.UserID].Nick
-                                                : "未知"}
+                                                : t("unknownUploader")}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
@@ -445,7 +440,9 @@ export default function File() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip
+                                            title={tDashboard("policy.delete")}
+                                        >
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>

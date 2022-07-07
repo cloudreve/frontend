@@ -24,6 +24,7 @@ import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
 import API from "../../../middleware/Api";
 import PathSelector from "../../FileManager/PathSelector";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,6 +65,9 @@ function useDebounce(value, delay) {
 }
 
 export default function Import() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "file" });
+    const { t: tDashboard } = useTranslation("dashboard");
+    const { t: tCommon } = useTranslation("common");
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
@@ -105,7 +109,7 @@ export default function Import() {
     const submit = (e) => {
         e.preventDefault();
         if (user === null) {
-            ToggleSnackbar("top", "right", "请先选择目标用户", "warning");
+            ToggleSnackbar("top", "right", t("selectTargetUser"), "warning");
             return;
         }
         setLoading(true);
@@ -122,7 +126,7 @@ export default function Import() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "导入任务已创建，您可以在“持久任务”中查看执行情况",
+                    t("importTaskCreated"),
                     "success"
                 );
             })
@@ -200,7 +204,7 @@ export default function Import() {
                 ToggleSnackbar(
                     "top",
                     "right",
-                    "选择的存储策略只支持手动输入路径",
+                    t("manuallyPathOnly"),
                     "warning"
                 );
                 return;
@@ -208,7 +212,12 @@ export default function Import() {
             setSelectRemote(true);
         } else {
             if (user === null) {
-                ToggleSnackbar("top", "right", "请先选择目标用户", "warning");
+                ToggleSnackbar(
+                    "top",
+                    "right",
+                    t("selectTargetUser"),
+                    "warning"
+                );
                 return;
             }
             setSelectLocal(true);
@@ -222,7 +231,9 @@ export default function Import() {
                 onClose={() => setSelectRemote(false)}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                    {t("selectFolder")}
+                </DialogTitle>
                 <PathSelector
                     presentPath="/"
                     api={"/admin/file/folders/policy/" + options.policy}
@@ -240,7 +251,7 @@ export default function Import() {
                         onClick={() => setSelectRemote(false)}
                         color="primary"
                     >
-                        确定
+                        {tCommon("ok")}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -249,7 +260,9 @@ export default function Import() {
                 onClose={() => setSelectLocal(false)}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">选择目录</DialogTitle>
+                <DialogTitle id="form-dialog-title">
+                    {t("selectFolder")}
+                </DialogTitle>
                 <PathSelector
                     presentPath="/"
                     api={
@@ -270,27 +283,25 @@ export default function Import() {
                         onClick={() => setSelectLocal(false)}
                         color="primary"
                     >
-                        确定
+                        {tCommon("ok")}
                     </Button>
                 </DialogActions>
             </Dialog>
             <form onSubmit={submit}>
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
-                        导入外部目录
+                        {t("importExternalFolder")}
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
                             <Alert severity="info">
-                                您可以将存储策略中已有文件、目录结构导入到
-                                Cloudreve
-                                中，导入操作不会额外占用物理存储空间，但仍会正常扣除用户已用容量空间，空间不足时将停止导入。
+                                {t("importExternalFolderDes")}
                             </Alert>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    存储策略
+                                    {t("storagePolicy")}
                                 </InputLabel>
                                 <Select
                                     labelId="demo-mutiple-chip-label"
@@ -306,14 +317,14 @@ export default function Import() {
                                     ))}
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    选择要导入文件目前存储所在的存储策略
+                                    {t("storagePolicyDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    目标用户
+                                    {t("targetUser")}
                                 </InputLabel>
                                 <Input
                                     value={options.userInput}
@@ -369,7 +380,7 @@ export default function Import() {
                                     )}
                                 </Popper>
                                 <FormHelperText id="component-helper-text">
-                                    选择要将文件导入到哪个用户的文件系统中，可通过昵称、邮箱搜索用户
+                                    {t("targetUserDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -377,7 +388,7 @@ export default function Import() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    原始目录路径
+                                    {t("srcFolderPath")}
                                 </InputLabel>
 
                                 <Input
@@ -393,13 +404,13 @@ export default function Import() {
                                                 openPathSelector(true)
                                             }
                                         >
-                                            选择
+                                            {t("select")}
                                         </Button>
                                     }
                                 />
 
                                 <FormHelperText id="component-helper-text">
-                                    要导入的目录在存储端的路径
+                                    {t("selectSrcDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -407,7 +418,7 @@ export default function Import() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    目的目录路径
+                                    {t("dstFolderPath")}
                                 </InputLabel>
 
                                 <Input
@@ -423,13 +434,13 @@ export default function Import() {
                                                 openPathSelector(false)
                                             }
                                         >
-                                            选择
+                                            {t("select")}
                                         </Button>
                                     }
                                 />
 
                                 <FormHelperText id="component-helper-text">
-                                    要将目录导入到用户文件系统中的路径
+                                    {t("dstFolderPathDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -445,10 +456,10 @@ export default function Import() {
                                             )}
                                         />
                                     }
-                                    label="递归导入子目录"
+                                    label={t("recursivelyImport")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    是否将目录下的所有子目录递归导入
+                                    {t("recursivelyImportDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -462,7 +473,7 @@ export default function Import() {
                         variant={"contained"}
                         color={"primary"}
                     >
-                        创建导入任务
+                        {t("createImportTask")}
                     </Button>
                 </div>
             </form>
