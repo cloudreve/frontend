@@ -4,7 +4,7 @@ module.exports = function (app) {
     app.use(
         "/api",
         proxy({
-            target: "https://pan.huang1111.cn",
+            target: "http://localhost:5212",
             changeOrigin: true,
         })
     );
@@ -12,7 +12,7 @@ module.exports = function (app) {
     app.use(
         "/custom",
         proxy({
-            target: "https://pan.huang1111.cn",
+            target: "http://localhost:5212",
             changeOrigin: true,
         })
     );
