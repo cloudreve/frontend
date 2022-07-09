@@ -25,6 +25,10 @@ import {
 } from "./index";
 import { getDownloadURL } from "../../services/file";
 import i18next from "../../i18n";
+import {
+    getFileSystemDirectoryPaths,
+    saveFileToFileSystemDirectory,
+} from "../../utils/filesystem";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -444,6 +448,206 @@ export const startBatchDownload = (
     };
 };
 
+export const startDirectoryDownload = (
+    share: any
+): ThunkAction<any, any, any, any> => {
+    return async (dispatch, getState): Promise<void> => {
+        if (!window.showDirectoryPicker) {
+            return;
+        }
+        dispatch(changeContextMenu("file", false));
+        const {
+            explorer: { selected },
+            navigator: { path },
+        } = getState();
+
+        dispatch(openLoadingDialog(i18next.t("modals.listingFiles")));
+
+        let queue: CloudreveFile[] = [];
+        try {
+            queue = await walk(selected, share);
+        } catch (e) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    i18next.t("modals.listingFileError", {
+                        message: e.message,
+                    }),
+                    "warning"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
+        dispatch(closeAllModals());
+
+        try {
+            const handle = await window.showDirectoryPicker({
+                startIn: "downloads",
+                mode: "readwrite",
+            });
+            const fsPaths = await getFileSystemDirectoryPaths(handle);
+            const duplicates = queue
+                .map((file) =>
+                    trimPrefix(`${file.path}/${file.name}`, path + "/")
+                )
+                .filter((path) => fsPaths.includes(path));
+            let option: any;
+            if (duplicates.length > 0) {
+                try {
+                    option = await dispatch(
+                        askForOption(
+                            [
+                                {
+                                    key: "replace",
+                                    name: i18next.t(
+                                        "fileManager.directoryDownloadReplace"
+                                    ),
+                                    description: i18next.t(
+                                        "fileManager.directoryDownloadReplaceDescription",
+                                        {
+                                            duplicates: duplicates
+                                                .slice(
+                                                    0,
+                                                    duplicates.length >= 3
+                                                        ? 3
+                                                        : duplicates.length
+                                                )
+                                                .join(", "),
+                                            num: duplicates.length,
+                                        }
+                                    ),
+                                },
+                                {
+                                    key: "skip",
+                                    name: i18next.t(
+                                        "fileManager.directoryDownloadSkip"
+                                    ),
+                                    description: i18next.t(
+                                        "fileManager.directoryDownloadSkipDescription",
+                                        {
+                                            duplicates: duplicates
+                                                .slice(
+                                                    0,
+                                                    duplicates.length >= 3
+                                                        ? 3
+                                                        : duplicates.length
+                                                )
+                                                .join(", "),
+                                            num: duplicates.length,
+                                        }
+                                    ),
+                                },
+                            ],
+                            i18next.t(
+                                "fileManager.selectDirectoryDuplicationMethod"
+                            )
+                        )
+                    );
+                } catch (e) {
+                    return;
+                }
+            }
+            dispatch(closeAllModals());
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "center",
+                    i18next.t("fileManager.directoryDownloadStarted"),
+                    "info"
+                )
+            );
+            while (queue.length > 0) {
+                const next = queue.pop();
+                if (next && next.type === "file") {
+                    const previewPath = getPreviewPath(next);
+                    const url =
+                        getBaseURL() +
+                        (pathHelper.isSharePage(location.pathname)
+                            ? "/share/preview/" +
+                              share.key +
+                              (previewPath !== "" ? "?path=" + previewPath : "")
+                            : "/file/preview/" + next.id);
+                    const name = trimPrefix(
+                        pathJoin([next.path, next.name]),
+                        `${path}/`
+                    );
+                    try {
+                        console.log(name, duplicates);
+                        if (duplicates.includes(name)) {
+                            if (option === "skip") {
+                                toggleSnackbar(
+                                    "top",
+                                    "right",
+                                    i18next.t(
+                                        "modals.directoryDownloadSkipNotifiction",
+                                        {
+                                            name,
+                                        }
+                                    ),
+                                    "warning"
+                                );
+                                continue;
+                            } else {
+                                toggleSnackbar(
+                                    "top",
+                                    "right",
+                                    i18next.t(
+                                        "modals.directoryDownloadReplaceNotifiction",
+                                        {
+                                            name,
+                                        }
+                                    ),
+                                    "warning"
+                                );
+                            }
+                        }
+
+                        const res = await fetch(url, { cache: "no-cache" });
+                        await saveFileToFileSystemDirectory(
+                            handle,
+                            await res.blob(),
+                            name
+                        );
+                    } catch (e) {
+                        toggleSnackbar(
+                            "top",
+                            "right",
+                            i18next.t("modals.directoryDownloadError", {
+                                name,
+                                message: e && e.message,
+                            }),
+                            "warning"
+                        );
+                    }
+                }
+            }
+        } catch (e) {
+            console.log(e);
+            toggleSnackbar(
+                "top",
+                "right",
+                i18next.t("modals.directoryDownloadError", {
+                    message: e && e.message,
+                }),
+                "warning"
+            );
+            dispatch(closeAllModals());
+        }
+
+        dispatch(
+            toggleSnackbar(
+                "top",
+                "center",
+                i18next.t("fileManager.directoryDownloadFinished"),
+                "info"
+            )
+        );
+    };
+};
+
 export const getViewerURL = (
     viewer: string,
     file: any,
@@ -543,13 +747,8 @@ export const selectFile = (file: any, event: any, fileIndex: any) => {
         }
         const isMacbook = isMac();
         const { explorer } = getState();
-        const {
-            selected,
-            lastSelect,
-            dirList,
-            fileList,
-            shiftSelectedIds,
-        } = explorer;
+        const { selected, lastSelect, dirList, fileList, shiftSelectedIds } =
+            explorer;
         if (shiftKey && !ctrlKey && !metaKey && selected.length !== 0) {
             // shift 多选
             // 取消原有选择
