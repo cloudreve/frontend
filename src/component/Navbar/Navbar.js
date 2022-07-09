@@ -63,7 +63,7 @@ import {
     showImgPreivew,
     toggleSnackbar,
 } from "../../redux/explorer";
-import { startBatchDownload, startDownload } from "../../redux/explorer/action";
+import { startBatchDownload,startDirectoryDownload, startDownload } from "../../redux/explorer/action";
 import { withTranslation } from "react-i18next";
 
 vhCheck();
@@ -144,6 +144,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         startBatchDownload: (share) => {
             dispatch(startBatchDownload(share));
+        },
+        startDirectoryDownload: (share) => {
+            dispatch(startDirectoryDownload(share));
         },
         startDownload: (share, file) => {
             dispatch(startDownload(share, file));
@@ -332,6 +335,10 @@ class NavbarCompoment extends Component {
 
     openDownload = () => {
         this.props.startDownload(this.props.shareInfo, this.props.selected[0]);
+    };
+
+    openDirectoryDownload = (e) => {
+        this.props.startDirectoryDownload(this.props.shareInfo);
     };
 
     archiveDownload = (e) => {
@@ -688,6 +695,32 @@ class NavbarCompoment extends Component {
                                                 </Tooltip>
                                             </Grow>
                                         )}
+                                    {(this.props.isMultiple ||
+                                        (this.props.withFolder &&
+                                            window.showDirectoryPicker)) && (
+                                        <Grow
+                                            in={
+                                                this.props.isMultiple ||
+                                                (this.props.withFolder &&
+                                                    window.showDirectoryPicker)
+                                            }
+                                        >
+                                            <Tooltip
+                                                title={t(
+                                                    "fileManager.download"
+                                                )}
+                                            >
+                                                <IconButton
+                                                    color="inherit"
+                                                    onClick={() =>
+                                                        this.openDirectoryDownload()
+                                                    }
+                                                >
+                                                    <DownloadIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grow>
+                                    )}
                                     {(this.props.isMultiple ||
                                         this.props.withFolder) && (
                                         <Grow

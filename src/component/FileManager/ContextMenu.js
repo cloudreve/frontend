@@ -32,6 +32,7 @@ import {
     openPreview,
     setSelectedTarget,
     startBatchDownload,
+    startDirectoryDownload,
     startDownload,
     toggleObjectInfoSidebar,
 } from "../../redux/explorer/action";
@@ -174,6 +175,9 @@ const mapDispatchToProps = (dispatch) => {
         batchGetSource: () => {
             dispatch(batchGetSource());
         },
+        startDirectoryDownload:(share) => {
+            dispatch(startDirectoryDownload(share));
+        } 
     };
 };
 
@@ -195,6 +199,10 @@ class ContextMenuCompoment extends Component {
     openArchiveDownload = () => {
         this.props.startBatchDownload(this.props.share);
     };
+
+    openDirectoryDownload = () => {
+        this.props.startDirectoryDownload(this.props.share);
+    }
 
     openDownload = () => {
         this.props.startDownload(this.props.share, this.props.selected[0]);
@@ -458,6 +466,21 @@ class ContextMenuCompoment extends Component {
                                         <Divider className={classes.divider} />
                                     )}
                                 </div>
+                            )}
+
+                            {(this.props.isMultiple ||
+                                this.props.withFolder && window.showDirectoryPicker) && (
+                                <MenuItem
+                                    dense
+                                    onClick={() => this.openDirectoryDownload()}
+                                >
+                                    <StyledListItemIcon>
+                                            <DownloadIcon />
+                                        </StyledListItemIcon>
+                                        <Typography variant="inherit">
+                                            {t("fileManager.download")}
+                                        </Typography>
+                                </MenuItem>
                             )}
 
                             {(this.props.isMultiple ||

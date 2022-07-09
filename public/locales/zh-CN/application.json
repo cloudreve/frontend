@@ -162,7 +162,15 @@
     "selectArchiveMethod": "选择打包下载方式",
     "batchDownloadStarted": "打包下载已开始，请不要关闭此标签页",
     "batchDownloadError": "打包遇到错误：{{msg}}",
-    "userDenied": "用户拒绝"
+    "userDenied": "用户拒绝",
+    "directoryDownloadReplace": "替换对象",
+    "directoryDownloadReplaceDescription": "将会替换 {{duplicates}} 等共 {{num}} 个对象。",
+    "directoryDownloadSkip": "跳过对象",
+    "directoryDownloadSkipDescription": "将会跳过 {{duplicates}} 等共 {{num}} 个对象。",
+    "selectDirectoryDuplicationMethod": "重复对象处理方式",
+    "directoryDownloadStarted": "下载已开始，请不要关闭此标签页",
+    "directoryDownloadError": "下载 {{name}} 遇到错误：{{msg}}",
+    "directoryDownloadFinished": "下载完成"
   },
   "modals": {
     "processing": "处理中...",
@@ -221,7 +229,9 @@
     "allowPreview": "允许预览",
     "allowPreviewDescription": "是否允许在分享页面预览文件内容",
     "shareLink": "分享链接",
-    "sendLink": "发送链接"
+    "sendLink": "发送链接",
+    "directoryDownloadReplaceNotifiction": "已覆盖 {{name}}",
+    "directoryDownloadSkipNotifiction": "已跳过 {{name}}"
   },
   "uploader": {
     "fileNotMatchError": "所选择文件与原始文件不符",
