@@ -483,6 +483,7 @@ export const startDirectoryDownload = (
 
         dispatch(closeAllModals());
 
+        let failed = 0;
         try {
             const handle = await window.showDirectoryPicker({
                 startIn: "downloads",
@@ -575,32 +576,35 @@ export const startDirectoryDownload = (
                         `${path}/`
                     );
                     try {
-                        console.log(name, duplicates);
                         if (duplicates.includes(name)) {
-                            if (option === "skip") {
-                                toggleSnackbar(
-                                    "top",
-                                    "right",
-                                    i18next.t(
-                                        "modals.directoryDownloadSkipNotifiction",
-                                        {
-                                            name,
-                                        }
-                                    ),
-                                    "warning"
+                            if (option.key === "skip") {
+                                dispatch(
+                                    toggleSnackbar(
+                                        "top",
+                                        "right",
+                                        i18next.t(
+                                            "modals.directoryDownloadSkipNotifiction",
+                                            {
+                                                name,
+                                            }
+                                        ),
+                                        "warning"
+                                    )
                                 );
                                 continue;
                             } else {
-                                toggleSnackbar(
-                                    "top",
-                                    "right",
-                                    i18next.t(
-                                        "modals.directoryDownloadReplaceNotifiction",
-                                        {
-                                            name,
-                                        }
-                                    ),
-                                    "warning"
+                                dispatch(
+                                    toggleSnackbar(
+                                        "top",
+                                        "right",
+                                        i18next.t(
+                                            "modals.directoryDownloadReplaceNotifiction",
+                                            {
+                                                name,
+                                            }
+                                        ),
+                                        "warning"
+                                    )
                                 );
                             }
                         }
@@ -612,20 +616,22 @@ export const startDirectoryDownload = (
                             name
                         );
                     } catch (e) {
-                        toggleSnackbar(
-                            "top",
-                            "right",
-                            i18next.t("modals.directoryDownloadError", {
-                                name,
-                                message: e && e.message,
-                            }),
-                            "warning"
+                        failed++;
+                        dispatch(
+                            toggleSnackbar(
+                                "top",
+                                "right",
+                                i18next.t("modals.directoryDownloadError", {
+                                    name,
+                                    message: e && e.message,
+                                }),
+                                "warning"
+                            )
                         );
                     }
                 }
             }
         } catch (e) {
-            console.log(e);
             toggleSnackbar(
                 "top",
                 "right",
@@ -641,8 +647,15 @@ export const startDirectoryDownload = (
             toggleSnackbar(
                 "top",
                 "center",
-                i18next.t("fileManager.directoryDownloadFinished"),
-                "info"
+                failed === 0
+                    ? i18next.t("fileManager.directoryDownloadFinished")
+                    : i18next.t(
+                          "fileManager.directoryDownloadFinishedWithError",
+                          {
+                              failed,
+                          }
+                      ),
+                "success"
             )
         );
     };
