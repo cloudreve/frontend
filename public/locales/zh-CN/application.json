@@ -169,7 +169,6 @@
     "directoryDownloadSkipDescription": "将会跳过 {{duplicates}} 等共 {{num}} 个对象。",
     "selectDirectoryDuplicationMethod": "重复对象处理方式",
     "directoryDownloadStarted": "下载已开始，请不要关闭此标签页",
-    "directoryDownloadError": "下载 {{name}} 遇到错误：{{msg}}",
     "directoryDownloadFinished": "下载完成，无失败对象",
     "directoryDownloadFinishedWithError": "下载完成, 失败 {{failed}} 个对象"
   },
@@ -232,7 +231,12 @@
     "shareLink": "分享链接",
     "sendLink": "发送链接",
     "directoryDownloadReplaceNotifiction": "已覆盖 {{name}}",
-    "directoryDownloadSkipNotifiction": "已跳过 {{name}}"
+    "directoryDownloadSkipNotifiction": "已跳过 {{name}}",
+    "directoryDownloadTitle": "下载",
+    "directoryDownloadStarted": "开始下载 {{name}}",
+    "directoryDownloadFinished": "下载完成",
+    "directoryDownloadError": "遇到错误：{{msg}}",
+    "directoryDownloadErrorNotification": "下载 {{name}} 遇到错误：{{msg}}"
   },
   "uploader": {
     "fileNotMatchError": "所选择文件与原始文件不符",
@@ -270,7 +274,7 @@
     "hideCompletedTooltip": "列表中不显示已完成、失败、被取消的任务",
     "hideCompleted": "隐藏已完成任务",
     "addTimeAscTooltip": "最先添加的任务排在最前",
-    "addTimeAsc":"最先添加靠前",
+    "addTimeAsc": "最先添加靠前",
     "addTimeDescTooltip": "最后添加的任务排在最前",
     "addTimeDesc": "最后添加靠前",
     "showInstantSpeedTooltip": "单个任务上传速度展示为瞬时速度",
@@ -303,7 +307,7 @@
   },
   "share": {
     "expireInXDays": "{{num}} 天后到期",
-    "expireInXHours":"{{num}} 小时后到期",
+    "expireInXHours": "{{num}} 小时后到期",
     "createdBy": "此分享由 <0>{{nick}}</0> 创建",
     "sharedBy": "<0>{{nick}}</0> 向您分享了 {{num}} 个文件",
     "statistics": "{{views}} 次浏览 • {{downloads}} 次下载 • {{time}}",
@@ -316,9 +320,9 @@
     "createdAtDesc": "创建日期由晚到早",
     "createdAtAsc": "创建日期由早到晚",
     "downloadsDesc": "下载次数由大到小",
-    "downloadsAsc":"下载次数由小到大",
-    "viewsDesc":"浏览次数由大到小",
-    "viewsAsc":"浏览次数由小到大",
+    "downloadsAsc": "下载次数由小到大",
+    "viewsDesc": "浏览次数由大到小",
+    "viewsAsc": "浏览次数由小到大",
     "noRecords": "没有分享记录.",
     "sourceNotFound": "[原始对象不存在]",
     "expired": "已失效",

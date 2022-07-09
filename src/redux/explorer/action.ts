@@ -17,6 +17,7 @@ import { push } from "connected-react-router";
 import {
     changeContextMenu,
     closeAllModals,
+    openDirectoryDownloadDialog,
     openGetSourceDialog,
     openLoadingDialog,
     showAudioPreview,
@@ -484,18 +485,23 @@ export const startDirectoryDownload = (
         dispatch(closeAllModals());
 
         let failed = 0;
+        let duplicates: string[];
+        let option: any;
+        let handle: FileSystemDirectoryHandle;
         try {
-            const handle = await window.showDirectoryPicker({
+            handle = await window.showDirectoryPicker({
                 startIn: "downloads",
                 mode: "readwrite",
             });
             const fsPaths = await getFileSystemDirectoryPaths(handle);
-            const duplicates = queue
+            duplicates = queue
                 .map((file) =>
-                    trimPrefix(`${file.path}/${file.name}`, path + "/")
+                    trimPrefix(
+                        `${file.path}/${file.name}`,
+                        path === "/" ? "/" : path + "/"
+                    )
                 )
                 .filter((path) => fsPaths.includes(path));
-            let option: any;
             if (duplicates.length > 0) {
                 try {
                     option = await dispatch(
@@ -552,96 +558,118 @@ export const startDirectoryDownload = (
                 }
             }
             dispatch(closeAllModals());
-            dispatch(
-                toggleSnackbar(
-                    "top",
-                    "center",
-                    i18next.t("fileManager.directoryDownloadStarted"),
-                    "info"
-                )
-            );
-            while (queue.length > 0) {
-                const next = queue.pop();
-                if (next && next.type === "file") {
-                    const previewPath = getPreviewPath(next);
-                    const url =
-                        getBaseURL() +
-                        (pathHelper.isSharePage(location.pathname)
-                            ? "/share/preview/" +
-                              share.key +
-                              (previewPath !== "" ? "?path=" + previewPath : "")
-                            : "/file/preview/" + next.id);
-                    const name = trimPrefix(
-                        pathJoin([next.path, next.name]),
-                        `${path}/`
-                    );
-                    try {
-                        if (duplicates.includes(name)) {
-                            if (option.key === "skip") {
-                                dispatch(
-                                    toggleSnackbar(
-                                        "top",
-                                        "right",
-                                        i18next.t(
-                                            "modals.directoryDownloadSkipNotifiction",
-                                            {
-                                                name,
-                                            }
-                                        ),
-                                        "warning"
-                                    )
-                                );
-                                continue;
-                            } else {
-                                dispatch(
-                                    toggleSnackbar(
-                                        "top",
-                                        "right",
-                                        i18next.t(
-                                            "modals.directoryDownloadReplaceNotifiction",
-                                            {
-                                                name,
-                                            }
-                                        ),
-                                        "warning"
-                                    )
-                                );
-                            }
-                        }
-
-                        const res = await fetch(url, { cache: "no-cache" });
-                        await saveFileToFileSystemDirectory(
-                            handle,
-                            await res.blob(),
-                            name
-                        );
-                    } catch (e) {
-                        failed++;
-                        dispatch(
-                            toggleSnackbar(
-                                "top",
-                                "right",
-                                i18next.t("modals.directoryDownloadError", {
-                                    name,
-                                    message: e && e.message,
-                                }),
-                                "warning"
-                            )
-                        );
-                    }
-                }
-            }
         } catch (e) {
             toggleSnackbar(
                 "top",
                 "right",
-                i18next.t("modals.directoryDownloadError", {
+                i18next.t("modals.directoryDownloadErrorNotifiction", {
                     message: e && e.message,
+                    name: "",
                 }),
                 "warning"
             );
             dispatch(closeAllModals());
+            return;
         }
+        dispatch(
+            toggleSnackbar(
+                "top",
+                "center",
+                i18next.t("fileManager.directoryDownloadStarted"),
+                "info"
+            )
+        );
+        const updateLog = (log, done) => {
+            dispatch(openDirectoryDownloadDialog(true, log, done));
+            console.log(log);
+        };
+        let log = "";
+        while (queue.length > 0) {
+            const next = queue.pop();
+            if (next && next.type === "file") {
+                const previewPath = getPreviewPath(next);
+                const url =
+                    getBaseURL() +
+                    (pathHelper.isSharePage(location.pathname)
+                        ? "/share/preview/" +
+                          share.key +
+                          (previewPath !== "" ? "?path=" + previewPath : "")
+                        : "/file/preview/" + next.id);
+                const name = trimPrefix(
+                    pathJoin([next.path, next.name]),
+                    path === "/" ? "/" : path + "/"
+                );
+                log =
+                    (log === "" ? "" : log + "\n\n") +
+                    i18next.t("modals.directoryDownloadStarted", { name });
+                updateLog(log, false);
+                try {
+                    if (duplicates.includes(name)) {
+                        if (option.key === "skip") {
+                            log +=
+                                "  " +
+                                i18next.t(
+                                    "modals.directoryDownloadSkipNotifiction",
+                                    {
+                                        name,
+                                    }
+                                );
+                            updateLog(log, false);
+                            continue;
+                        } else {
+                            log +=
+                                "  " +
+                                i18next.t(
+                                    "modals.directoryDownloadReplaceNotifiction",
+                                    {
+                                        name,
+                                    }
+                                );
+                            updateLog(log, false);
+                        }
+                    }
+
+                    const res = await fetch(url, { cache: "no-cache" });
+                    await saveFileToFileSystemDirectory(
+                        handle,
+                        await res.blob(),
+                        name
+                    );
+                    log += "  " + i18next.t("modals.directoryDownloadFinished");
+                    updateLog(log, false);
+                } catch (e) {
+                    failed++;
+                    dispatch(
+                        toggleSnackbar(
+                            "top",
+                            "right",
+                            i18next.t(
+                                "modals.directoryDownloadErrorNotification",
+                                {
+                                    name,
+                                    msg: e && e.message,
+                                }
+                            ),
+                            "warning"
+                        )
+                    );
+                    log +=
+                        "  " +
+                        i18next.t("modals.directoryDownloadError", {
+                            msg: e.message,
+                        });
+                    updateLog(log, false);
+                }
+            }
+        }
+        log +=
+            "\n" +
+            (failed === 0
+                ? i18next.t("fileManager.directoryDownloadFinished")
+                : i18next.t("fileManager.directoryDownloadFinishedWithError", {
+                      failed,
+                  }));
+        updateLog(log, true);
 
         dispatch(
             toggleSnackbar(
