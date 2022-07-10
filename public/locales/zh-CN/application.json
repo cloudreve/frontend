@@ -170,7 +170,8 @@
     "selectDirectoryDuplicationMethod": "重复对象处理方式",
     "directoryDownloadStarted": "下载已开始，请不要关闭此标签页",
     "directoryDownloadFinished": "下载完成，无失败对象",
-    "directoryDownloadFinishedWithError": "下载完成, 失败 {{failed}} 个对象"
+    "directoryDownloadFinishedWithError": "下载完成, 失败 {{failed}} 个对象",
+    "directoryDownloadPermissionError": "无权限操作，请允许读写本地文件"
   },
   "modals": {
     "processing": "处理中...",

@@ -29,6 +29,7 @@ import i18next from "../../i18n";
 import {
     getFileSystemDirectoryPaths,
     saveFileToFileSystemDirectory,
+    verifyFileSystemRWPermission,
 } from "../../utils/filesystem";
 
 export interface ActionSetFileList extends AnyAction {
@@ -462,6 +463,7 @@ export const startDirectoryDownload = (
             navigator: { path },
         } = getState();
 
+        // list files to download
         dispatch(openLoadingDialog(i18next.t("modals.listingFiles")));
 
         let queue: CloudreveFile[] = [];
@@ -488,12 +490,26 @@ export const startDirectoryDownload = (
         let duplicates: string[];
         let option: any;
         let handle: FileSystemDirectoryHandle;
+        // preparation for downloading
         try {
+            // can't use suggestedName for showDirectoryPicker (only available showSaveFilePicker)
             handle = await window.showDirectoryPicker({
                 startIn: "downloads",
                 mode: "readwrite",
             });
-            const fsPaths = await getFileSystemDirectoryPaths(handle);
+            // we should obtain the readwrite permission for the directory at first
+            if (!(await verifyFileSystemRWPermission(handle))) {
+                throw new Error(
+                    i18next.t("fileManager.directoryDownloadPermissionError")
+                );
+            }
+            // get the files in the directory to compare with queue files
+            // parent: ""
+            const fsPaths = await getFileSystemDirectoryPaths(handle, "");
+
+            // path: / or /abc (no sep suffix)
+            // file.path: /abc/d (no sep suffix)
+            // fsPaths: ["abc/d/e.bin",]
             duplicates = queue
                 .map((file) =>
                     trimPrefix(
@@ -502,6 +518,8 @@ export const startDirectoryDownload = (
                     )
                 )
                 .filter((path) => fsPaths.includes(path));
+
+            // we should ask users for the duplication handle method
             if (duplicates.length > 0) {
                 try {
                     option = await dispatch(
@@ -515,6 +533,7 @@ export const startDirectoryDownload = (
                                     description: i18next.t(
                                         "fileManager.directoryDownloadReplaceDescription",
                                         {
+                                            // display the first three duplications
                                             duplicates: duplicates
                                                 .slice(
                                                     0,
@@ -559,18 +578,21 @@ export const startDirectoryDownload = (
             }
             dispatch(closeAllModals());
         } catch (e) {
-            toggleSnackbar(
-                "top",
-                "right",
-                i18next.t("modals.directoryDownloadErrorNotifiction", {
-                    message: e && e.message,
-                    name: "",
-                }),
-                "warning"
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    i18next.t("modals.directoryDownloadError", {
+                        msg: e && e.message,
+                    }),
+                    "error"
+                )
             );
             dispatch(closeAllModals());
             return;
         }
+
+        // start the download
         dispatch(
             toggleSnackbar(
                 "top",
@@ -579,14 +601,16 @@ export const startDirectoryDownload = (
                 "info"
             )
         );
+
         const updateLog = (log, done) => {
             dispatch(openDirectoryDownloadDialog(true, log, done));
-            console.log(log);
         };
         let log = "";
+
         while (queue.length > 0) {
             const next = queue.pop();
             if (next && next.type === "file") {
+                // donload url
                 const previewPath = getPreviewPath(next);
                 const url =
                     getBaseURL() +
@@ -595,10 +619,19 @@ export const startDirectoryDownload = (
                           share.key +
                           (previewPath !== "" ? "?path=" + previewPath : "")
                         : "/file/preview/" + next.id);
+
+                // path to save this file
+                // path: / or /abc (no sep suffix)
+                // next.path: /abc/d (no sep suffix)
+                // name: d/e.bin
                 const name = trimPrefix(
                     pathJoin([next.path, next.name]),
                     path === "/" ? "/" : path + "/"
                 );
+                // TODO: improve the display of log
+                // can we turn the upload queue component to the transition queue?
+                // then we can easily cancel or retry the download
+                // and the batch download queue can show as well.
                 log =
                     (log === "" ? "" : log + "\n\n") +
                     i18next.t("modals.directoryDownloadStarted", { name });
@@ -629,6 +662,7 @@ export const startDirectoryDownload = (
                         }
                     }
 
+                    // TODO: need concurrent task queue?
                     const res = await fetch(url, { cache: "no-cache" });
                     await saveFileToFileSystemDirectory(
                         handle,
