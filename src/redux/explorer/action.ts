@@ -457,6 +457,37 @@ export const startDirectoryDownload = (
         if (!window.showDirectoryPicker || !window.isSecureContext) {
             return;
         }
+        let handle: FileSystemDirectoryHandle;
+        // we should show directory picker at first
+        // https://web.dev/file-system-access/#:~:text=handle%3B%0A%7D-,Gotchas,-Sometimes%20processing%20the
+        try {
+            // can't use suggestedName for showDirectoryPicker (only available showSaveFilePicker)
+            handle = await window.showDirectoryPicker({
+                startIn: "downloads",
+                mode: "readwrite",
+            });
+            // we should obtain the readwrite permission for the directory at first
+            if (!(await verifyFileSystemRWPermission(handle))) {
+                throw new Error(
+                    i18next.t("fileManager.directoryDownloadPermissionError")
+                );
+            }
+            dispatch(closeAllModals());
+        } catch (e) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    i18next.t("modals.directoryDownloadError", {
+                        msg: e && e.message,
+                    }),
+                    "error"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
         dispatch(changeContextMenu("file", false));
         const {
             explorer: { selected },
@@ -487,110 +518,82 @@ export const startDirectoryDownload = (
         dispatch(closeAllModals());
 
         let failed = 0;
-        let duplicates: string[];
         let option: any;
-        let handle: FileSystemDirectoryHandle;
         // preparation for downloading
-        try {
-            // can't use suggestedName for showDirectoryPicker (only available showSaveFilePicker)
-            handle = await window.showDirectoryPicker({
-                startIn: "downloads",
-                mode: "readwrite",
-            });
-            // we should obtain the readwrite permission for the directory at first
-            if (!(await verifyFileSystemRWPermission(handle))) {
-                throw new Error(
-                    i18next.t("fileManager.directoryDownloadPermissionError")
-                );
-            }
-            // get the files in the directory to compare with queue files
-            // parent: ""
-            const fsPaths = await getFileSystemDirectoryPaths(handle, "");
+        // get the files in the directory to compare with queue files
+        // parent: ""
+        const fsPaths = await getFileSystemDirectoryPaths(handle, "");
 
-            // path: / or /abc (no sep suffix)
-            // file.path: /abc/d (no sep suffix)
-            // fsPaths: ["abc/d/e.bin",]
-            duplicates = queue
-                .map((file) =>
-                    trimPrefix(
-                        `${file.path}/${file.name}`,
-                        path === "/" ? "/" : path + "/"
-                    )
+        // path: / or /abc (no sep suffix)
+        // file.path: /abc/d (no sep suffix)
+        // fsPaths: ["abc/d/e.bin",]
+        const duplicates = queue
+            .map((file) =>
+                trimPrefix(
+                    `${file.path}/${file.name}`,
+                    path === "/" ? "/" : path + "/"
                 )
-                .filter((path) => fsPaths.includes(path));
+            )
+            .filter((path) => fsPaths.includes(path));
 
-            // we should ask users for the duplication handle method
-            if (duplicates.length > 0) {
-                try {
-                    option = await dispatch(
-                        askForOption(
-                            [
-                                {
-                                    key: "replace",
-                                    name: i18next.t(
-                                        "fileManager.directoryDownloadReplace"
-                                    ),
-                                    description: i18next.t(
-                                        "fileManager.directoryDownloadReplaceDescription",
-                                        {
-                                            // display the first three duplications
-                                            duplicates: duplicates
-                                                .slice(
-                                                    0,
-                                                    duplicates.length >= 3
-                                                        ? 3
-                                                        : duplicates.length
-                                                )
-                                                .join(", "),
-                                            num: duplicates.length,
-                                        }
-                                    ),
-                                },
-                                {
-                                    key: "skip",
-                                    name: i18next.t(
-                                        "fileManager.directoryDownloadSkip"
-                                    ),
-                                    description: i18next.t(
-                                        "fileManager.directoryDownloadSkipDescription",
-                                        {
-                                            duplicates: duplicates
-                                                .slice(
-                                                    0,
-                                                    duplicates.length >= 3
-                                                        ? 3
-                                                        : duplicates.length
-                                                )
-                                                .join(", "),
-                                            num: duplicates.length,
-                                        }
-                                    ),
-                                },
-                            ],
-                            i18next.t(
-                                "fileManager.selectDirectoryDuplicationMethod"
-                            )
+        // we should ask users for the duplication handle method
+        if (duplicates.length > 0) {
+            try {
+                option = await dispatch(
+                    askForOption(
+                        [
+                            {
+                                key: "replace",
+                                name: i18next.t(
+                                    "fileManager.directoryDownloadReplace"
+                                ),
+                                description: i18next.t(
+                                    "fileManager.directoryDownloadReplaceDescription",
+                                    {
+                                        // display the first three duplications
+                                        duplicates: duplicates
+                                            .slice(
+                                                0,
+                                                duplicates.length >= 3
+                                                    ? 3
+                                                    : duplicates.length
+                                            )
+                                            .join(", "),
+                                        num: duplicates.length,
+                                    }
+                                ),
+                            },
+                            {
+                                key: "skip",
+                                name: i18next.t(
+                                    "fileManager.directoryDownloadSkip"
+                                ),
+                                description: i18next.t(
+                                    "fileManager.directoryDownloadSkipDescription",
+                                    {
+                                        duplicates: duplicates
+                                            .slice(
+                                                0,
+                                                duplicates.length >= 3
+                                                    ? 3
+                                                    : duplicates.length
+                                            )
+                                            .join(", "),
+                                        num: duplicates.length,
+                                    }
+                                ),
+                            },
+                        ],
+                        i18next.t(
+                            "fileManager.selectDirectoryDuplicationMethod"
                         )
-                    );
-                } catch (e) {
-                    return;
-                }
+                    )
+                );
+            } catch (e) {
+                return;
             }
-            dispatch(closeAllModals());
-        } catch (e) {
-            dispatch(
-                toggleSnackbar(
-                    "top",
-                    "right",
-                    i18next.t("modals.directoryDownloadError", {
-                        msg: e && e.message,
-                    }),
-                    "error"
-                )
-            );
-            dispatch(closeAllModals());
-            return;
         }
+        dispatch(closeAllModals());
 
         // start the download
         dispatch(
