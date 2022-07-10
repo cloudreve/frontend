@@ -453,7 +453,7 @@ export const startDirectoryDownload = (
     share: any
 ): ThunkAction<any, any, any, any> => {
     return async (dispatch, getState): Promise<void> => {
-        if (!window.showDirectoryPicker) {
+        if (!window.showDirectoryPicker || !window.isSecureContext) {
             return;
         }
         dispatch(changeContextMenu("file", false));

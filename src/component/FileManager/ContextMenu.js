@@ -175,9 +175,9 @@ const mapDispatchToProps = (dispatch) => {
         batchGetSource: () => {
             dispatch(batchGetSource());
         },
-        startDirectoryDownload:(share) => {
+        startDirectoryDownload: (share) => {
             dispatch(startDirectoryDownload(share));
-        } 
+        },
     };
 };
 
@@ -202,7 +202,7 @@ class ContextMenuCompoment extends Component {
 
     openDirectoryDownload = () => {
         this.props.startDirectoryDownload(this.props.share);
-    }
+    };
 
     openDownload = () => {
         this.props.startDownload(this.props.share, this.props.selected[0]);
@@ -468,20 +468,23 @@ class ContextMenuCompoment extends Component {
                                 </div>
                             )}
 
-                            {(this.props.isMultiple ||
-                                this.props.withFolder && window.showDirectoryPicker) && (
-                                <MenuItem
-                                    dense
-                                    onClick={() => this.openDirectoryDownload()}
-                                >
-                                    <StyledListItemIcon>
+                            {(this.props.isMultiple || this.props.withFolder) &&
+                                window.showDirectoryPicker &&
+                                window.isSecureContext && (
+                                    <MenuItem
+                                        dense
+                                        onClick={() =>
+                                            this.openDirectoryDownload()
+                                        }
+                                    >
+                                        <StyledListItemIcon>
                                             <DownloadIcon />
                                         </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             {t("fileManager.download")}
                                         </Typography>
-                                </MenuItem>
-                            )}
+                                    </MenuItem>
+                                )}
 
                             {(this.props.isMultiple ||
                                 this.props.withFolder) && (

@@ -696,13 +696,13 @@ class NavbarCompoment extends Component {
                                             </Grow>
                                         )}
                                     {(this.props.isMultiple ||
-                                        (this.props.withFolder &&
-                                            window.showDirectoryPicker)) && (
+                                        this.props.withFolder) &&
+                                            window.showDirectoryPicker && window.isSecureContext && (
                                         <Grow
                                             in={
-                                                this.props.isMultiple ||
-                                                (this.props.withFolder &&
-                                                    window.showDirectoryPicker)
+                                                (this.props.isMultiple ||
+                                                    this.props.withFolder) &&
+                                                        window.showDirectoryPicker && window.isSecureContext
                                             }
                                         >
                                             <Tooltip
