@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import {
     Button,
     CircularProgress,
@@ -8,6 +8,9 @@ import {
     DialogContentText,
     DialogTitle,
     makeStyles,
+    FormControl,
+    FormControlLabel,
+    Checkbox,
 } from "@material-ui/core";
 import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
@@ -42,9 +45,19 @@ export default function DirectoryDownloadDialog(props) {
 
     const classes = useStyles();
 
+    const logRef = useRef();
+    const autoScroll = useRef(true);
+
+    useEffect(() => {
+        if (autoScroll.current && logRef.current) {
+            logRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+    }, [props.log]);
+
     return (
         <Dialog
             open={props.open}
+            // open
             onClose={props.onClose}
             aria-labelledby="form-dialog-title"
             fullWidth
@@ -54,22 +67,36 @@ export default function DirectoryDownloadDialog(props) {
             </DialogTitle>
 
             <DialogContent className={classes.contentFix}>
-                <DialogContentText>
-                    <TextField
-                        value={props.log}
-                        multiline
-                        fullWidth
-                        autoFocus
-                        id="standard-basic"
-                    />
-                </DialogContentText>
+                <TextField
+                    value={props.log}
+                    ref={logRef}
+                    multiline
+                    fullWidth
+                    autoFocus
+                    id="standard-basic"
+                />
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onClose}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={autoScroll.current}
+                            onChange={() =>
+                                (autoScroll.current = !autoScroll.current)
+                            }
+                        />
+                    }
+                    label={t("modals.directoryDownloadAutoscroll")}
+                />
+                <Button onClick={props.onClose} disabled>
                     {t("cancel", { ns: "common" })}
                 </Button>
                 <div className={classes.wrapper}>
-                    <Button color="primary" disabled={!props.done}>
+                    <Button
+                        color="primary"
+                        disabled={!props.done}
+                        onClick={props.onClose}
+                    >
                         {t("ok", { ns: "common" })}
                         {!props.done && (
                             <CircularProgress
