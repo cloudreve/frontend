@@ -787,14 +787,14 @@ class NavbarCompoment extends Component {
                                                         "fileManager.delete"
                                                     )}
                                                 >
-                                                    <IconButtuon
+                                                    <IconButton
                                                         color="inherit"
                                                         onClick={() =>
                                                             this.props.openRemoveDialog()
                                                         }
                                                     >
                                                         <DeleteIcon />
-                                                    </IconButtuon>
+                                                    </IconButton>
                                                 </Tooltip>
                                             </Grow>
 
