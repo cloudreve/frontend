@@ -24,6 +24,7 @@ import { getTaskProgress, getTaskStatus, getTaskType } from "../../../config";
 import API from "../../../middleware/Api";
 import ShareFilter from "../Dialogs/ShareFilter";
 import { formatLocalTime } from "../../../utils/datetime";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Task() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "task" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(1);
@@ -118,7 +121,7 @@ export default function Task() {
         API.post("/admin/task/delete", { id: [id] })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "任务已删除", "success");
+                ToggleSnackbar("top", "right", t("taskDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -133,7 +136,7 @@ export default function Task() {
         API.post("/admin/task/delete", { id: selected })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "任务已删除", "success");
+                ToggleSnackbar("top", "right", t("taskDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -180,7 +183,7 @@ export default function Task() {
             const res = JSON.parse(error);
             return res.msg;
         } catch (e) {
-            return "未知";
+            return t("unknown");
         }
     };
 
@@ -202,7 +205,7 @@ export default function Task() {
                         onClick={() => loadList()}
                         variant={"outlined"}
                     >
-                        刷新
+                        {tDashboard("policy.refresh")}
                     </Button>
                 </div>
             </div>
@@ -215,9 +218,11 @@ export default function Task() {
                             color="inherit"
                             variant="subtitle1"
                         >
-                            已选择 {selected.length} 个对象
+                            {tDashboard("user.selectedObjects", {
+                                num: selected.length,
+                            })}
                         </Typography>
-                        <Tooltip title="删除">
+                        <Tooltip title={tDashboard("policy.delete")}>
                             <IconButton
                                 onClick={deleteBatch}
                                 disabled={loading}
@@ -276,25 +281,25 @@ export default function Task() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 130 }}>
-                                    类型
+                                    {tDashboard("policy.type")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 90 }}>
-                                    状态
+                                    {tDashboard("user.status")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 90 }}>
-                                    最后进度
+                                    {t("lastProgress")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    错误信息
+                                    {t("errorMsg")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 100 }}>
-                                    创建者
+                                    {t("createdBy")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    创建于
+                                    {tDashboard("file.createdAt")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 80 }}>
-                                    操作
+                                    {tDashboard("policy.actions")}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -340,14 +345,16 @@ export default function Task() {
                                         >
                                             {users[row.UserID]
                                                 ? users[row.UserID].Nick
-                                                : "未知"}
+                                                : t("unknown")}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
                                         {formatLocalTime(row.CreatedAt)}
                                     </TableCell>
                                     <TableCell>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip
+                                            title={tDashboard("policy.delete")}
+                                        >
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>

@@ -731,5 +731,25 @@
     "srcType": "Source object type",
     "folder": "Folder",
     "file": "File"
+  },
+  "task": {
+    "taskDeleted": "Task deleted.",
+    "howToConfigAria2": "How to configure remote download?",
+    "srcURL": "Source URL",
+    "node": "Distributed node",
+    "createdBy": "Created by",
+    "ready": "Ready",
+    "downloading": "Downloading",
+    "paused": "Paused",
+    "error": "Error",
+    "finished": "Finished",
+    "canceled": "Canceled/Stopped",
+    "unknown": "Unknown",
+    "aria2Des": "Cloudreve's remote download support a master-slave decentralized mode. You can configure multiple Cloudreve slave nodes that can be used to handle remote download tasks, spreading the pressure on the master node. Of course, you can also configure to handle remote downloads only on the master node, which is the easiest way.",
+    "masterAria2Des": "If you only need to enable remote downloads on the master node, <0>click here</0> to edit the master node.",
+    "slaveAria2Des": "If you want to distribute remote download tasks on slave nodes, <0>click here</0> to add and configure a new node.",
+    "editGroupDes": "When you add multiple nodes that can be used for remote downloads, the master node will send remote download requests to these nodes in turn for processing. You may also need to <0>go here</0> to enable remote download permissions for the corresponding groups.",
+    "lastProgress": "Last progress",
+    "errorMsg": "Error message"
   }
 }

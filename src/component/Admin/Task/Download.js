@@ -27,6 +27,7 @@ import { formatLocalTime } from "../../../utils/datetime";
 import Aria2Helper from "./Aria2Helper";
 import HelpIcon from "@material-ui/icons/Help";
 import { Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,6 +74,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Download() {
+    const { t } = useTranslation("dashboard", { keyPrefix: "task" });
+    const { t: tDashboard } = useTranslation("dashboard");
     const classes = useStyles();
     const [downloads, setDownloads] = useState([]);
     const [page, setPage] = useState(1);
@@ -122,7 +125,7 @@ export default function Download() {
         API.post("/admin/download/delete", { id: [id] })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "任务已删除", "success");
+                ToggleSnackbar("top", "right", t("taskDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -137,7 +140,7 @@ export default function Download() {
         API.post("/admin/download/delete", { id: selected })
             .then(() => {
                 loadList();
-                ToggleSnackbar("top", "right", "任务已删除", "success");
+                ToggleSnackbar("top", "right", t("taskDeleted"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -197,14 +200,15 @@ export default function Download() {
                     onClick={() => loadList()}
                     variant={"outlined"}
                 >
-                    刷新
+                    {tDashboard("policy.refresh")}
                 </Button>
                 <div className={classes.headerRight}>
                     <Button
                         color={"primary"}
                         onClick={() => setHelperOpen(true)}
                     >
-                        <HelpIcon /> {"  "}如何配置离线下载
+                        <HelpIcon /> {"  "}
+                        {t("howToConfigAria2")}
                     </Button>
                 </div>
             </div>
@@ -217,9 +221,11 @@ export default function Download() {
                             color="inherit"
                             variant="subtitle1"
                         >
-                            已选择 {selected.length} 个对象
+                            {tDashboard("user.selectedObjects", {
+                                num: selected.length,
+                            })}
                         </Typography>
-                        <Tooltip title="删除">
+                        <Tooltip title={tDashboard("policy.delete")}>
                             <IconButton
                                 onClick={deleteBatch}
                                 disabled={loading}
@@ -278,13 +284,13 @@ export default function Download() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 130 }}>
-                                    源地址
+                                    {t("srcURL")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 90 }}>
-                                    状态
+                                    {tDashboard("user.status")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 90 }}>
-                                    处理节点
+                                    {t("node")}
                                 </TableCell>
                                 <TableCell
                                     style={{ minWidth: 150 }}
@@ -302,7 +308,7 @@ export default function Download() {
                                             ])
                                         }
                                     >
-                                        大小
+                                        {tDashboard("file.size")}
                                         {orderBy[0] === "total_size" ? (
                                             <span
                                                 className={
@@ -317,13 +323,13 @@ export default function Download() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell style={{ minWidth: 100 }}>
-                                    创建者
+                                    {t("createdBy")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 150 }}>
-                                    创建于
+                                    {tDashboard("file.createdAt")}
                                 </TableCell>
                                 <TableCell style={{ minWidth: 80 }}>
-                                    操作
+                                    {tDashboard("policy.actions")}
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -350,13 +356,13 @@ export default function Download() {
                                         {row.Source}
                                     </TableCell>
                                     <TableCell>
-                                        {row.Status === 0 && "就绪"}
-                                        {row.Status === 1 && "下载中"}
-                                        {row.Status === 2 && "暂停中"}
-                                        {row.Status === 3 && "出错"}
-                                        {row.Status === 4 && "完成"}
-                                        {row.Status === 5 && "取消/停止"}
-                                        {row.Status === 6 && "未知"}
+                                        {row.Status === 0 && t("ready")}
+                                        {row.Status === 1 && t("downloading")}
+                                        {row.Status === 2 && t("paused")}
+                                        {row.Status === 3 && t("error")}
+                                        {row.Status === 4 && t("finished")}
+                                        {row.Status === 5 && t("canceled")}
+                                        {row.Status === 6 && t("unknown")}
                                     </TableCell>
                                     <TableCell>
                                         {row.NodeID <= 1 && (
@@ -364,7 +370,7 @@ export default function Download() {
                                                 component={RouterLink}
                                                 to={"/admin/node/edit/1"}
                                             >
-                                                主机
+                                                {tDashboard("node.master")}
                                             </Link>
                                         )}
                                         {row.NodeID > 1 && (
@@ -375,7 +381,8 @@ export default function Download() {
                                                     row.NodeID
                                                 }
                                             >
-                                                从机#{row.NodeID}
+                                                {tDashboard("node.slave")}#
+                                                {row.NodeID}
                                             </Link>
                                         )}
                                     </TableCell>
@@ -390,14 +397,18 @@ export default function Download() {
                                         >
                                             {users[row.UserID]
                                                 ? users[row.UserID].Nick
-                                                : "未知"}
+                                                : tDashboard(
+                                                      "file.unknownUploader"
+                                                  )}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
                                         {formatLocalTime(row.CreatedAt)}
                                     </TableCell>
                                     <TableCell>
-                                        <Tooltip title={"删除"}>
+                                        <Tooltip
+                                            title={tDashboard("policy.delete")}
+                                        >
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>
