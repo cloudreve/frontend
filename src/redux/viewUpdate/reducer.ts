@@ -35,6 +35,9 @@ export interface ViewUpdateState {
         decompress: boolean;
         loading: boolean;
         loadingText: string;
+        directoryDownloading: boolean;
+        directoryDownloadLog: string;
+        directoryDownloadDone: boolean;
         option?: {
             options: {
                 open: boolean;
@@ -96,6 +99,9 @@ export const initState: ViewUpdateState = {
         decompress: false,
         loading: false,
         loadingText: "",
+        directoryDownloading: false,
+        directoryDownloadLog: "",
+        directoryDownloadDone: false,
     },
     snackbar: {
         toggle: false,
@@ -246,6 +252,15 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 }),
                 contextOpen: false,
             });
+        case "OPEN_DIRECTORY_DOWNLOAD_DIALOG":
+            return Object.assign({}, state, {
+                modals: Object.assign({}, state.modals, {
+                    directoryDownloading: action.downloading,
+                    directoryDownloadLog: action.log,
+                    directoryDownloadDone: action.done,
+                }),
+                contextOpen: false,
+            });
         case "CLOSE_CONTEXT_MENU":
             return Object.assign({}, state, {
                 contextOpen: false,
@@ -269,6 +284,9 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                     compress: false,
                     decompress: false,
                     option: undefined,
+                    directoryDownloading: false,
+                    directoryDownloadLog: "",
+                    directoryDownloadDone: false,
                 }),
             });
         case "TOGGLE_SNACKBAR":

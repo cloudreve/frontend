@@ -281,3 +281,12 @@ export const setSiteConfig = (config) => {
         config: config,
     };
 };
+
+export const openDirectoryDownloadDialog = (downloading, log, done) => {
+    return {
+        type: "OPEN_DIRECTORY_DOWNLOAD_DIALOG",
+        downloading,
+        log,
+        done,
+    };
+};

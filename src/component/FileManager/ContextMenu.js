@@ -18,7 +18,12 @@ import MoveIcon from "@material-ui/icons/Input";
 import LinkIcon from "@material-ui/icons/InsertLink";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import ShareIcon from "@material-ui/icons/Share";
-import { FolderUpload, MagnetOn, FilePlus } from "mdi-material-ui";
+import {
+    FolderDownload,
+    FolderUpload,
+    MagnetOn,
+    FilePlus,
+} from "mdi-material-ui";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -32,6 +37,7 @@ import {
     openPreview,
     setSelectedTarget,
     startBatchDownload,
+    startDirectoryDownload,
     startDownload,
     toggleObjectInfoSidebar,
 } from "../../redux/explorer/action";
@@ -174,6 +180,9 @@ const mapDispatchToProps = (dispatch) => {
         batchGetSource: () => {
             dispatch(batchGetSource());
         },
+        startDirectoryDownload: (share) => {
+            dispatch(startDirectoryDownload(share));
+        },
     };
 };
 
@@ -194,6 +203,10 @@ class ContextMenuCompoment extends Component {
 
     openArchiveDownload = () => {
         this.props.startBatchDownload(this.props.share);
+    };
+
+    openDirectoryDownload = () => {
+        this.props.startDirectoryDownload(this.props.share);
     };
 
     openDownload = () => {
@@ -459,6 +472,24 @@ class ContextMenuCompoment extends Component {
                                     )}
                                 </div>
                             )}
+
+                            {(this.props.isMultiple || this.props.withFolder) &&
+                                window.showDirectoryPicker &&
+                                window.isSecureContext && (
+                                    <MenuItem
+                                        dense
+                                        onClick={() =>
+                                            this.openDirectoryDownload()
+                                        }
+                                    >
+                                        <StyledListItemIcon>
+                                            <FolderDownload />
+                                        </StyledListItemIcon>
+                                        <Typography variant="inherit">
+                                            {t("fileManager.download")}
+                                        </Typography>
+                                    </MenuItem>
+                                )}
 
                             {(this.props.isMultiple ||
                                 this.props.withFolder) && (
