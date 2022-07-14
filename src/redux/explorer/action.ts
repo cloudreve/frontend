@@ -450,10 +450,15 @@ export const startBatchDownload = (
     };
 };
 
+let directoryDownloadAbortController: AbortController;
+export const cancelDirectoryDownload = () =>
+    directoryDownloadAbortController.abort();
+
 export const startDirectoryDownload = (
     share: any
 ): ThunkAction<any, any, any, any> => {
     return async (dispatch, getState): Promise<void> => {
+        directoryDownloadAbortController = new AbortController();
         if (!window.showDirectoryPicker || !window.isSecureContext) {
             return;
         }
@@ -643,7 +648,7 @@ export const startDirectoryDownload = (
                     if (duplicates.includes(name)) {
                         if (option.key === "skip") {
                             log +=
-                                "  " +
+                                "\n" +
                                 i18next.t(
                                     "modals.directoryDownloadSkipNotifiction",
                                     {
@@ -654,7 +659,7 @@ export const startDirectoryDownload = (
                             continue;
                         } else {
                             log +=
-                                "  " +
+                                "\n" +
                                 i18next.t(
                                     "modals.directoryDownloadReplaceNotifiction",
                                     {
@@ -666,15 +671,34 @@ export const startDirectoryDownload = (
                     }
 
                     // TODO: need concurrent task queue?
-                    const res = await fetch(url, { cache: "no-cache" });
+                    const res = await fetch(url, {
+                        cache: "no-cache",
+                        signal: directoryDownloadAbortController.signal,
+                    });
                     await saveFileToFileSystemDirectory(
                         handle,
                         await res.blob(),
                         name
                     );
-                    log += "  " + i18next.t("modals.directoryDownloadFinished");
+                    log += "\n" + i18next.t("modals.directoryDownloadFinished");
                     updateLog(log, false);
                 } catch (e) {
+                    if (e.name === "AbortError") {
+                        dispatch(
+                            toggleSnackbar(
+                                "top",
+                                "right",
+                                i18next.t("modals.directoryDownloadCancelled"),
+                                "warning"
+                            )
+                        );
+                        log +=
+                            "\n\n" +
+                            i18next.t("modals.directoryDownloadCancelled");
+                        updateLog(log, true);
+                        return;
+                    }
+
                     failed++;
                     dispatch(
                         toggleSnackbar(
@@ -691,7 +715,7 @@ export const startDirectoryDownload = (
                         )
                     );
                     log +=
-                        "  " +
+                        "\n" +
                         i18next.t("modals.directoryDownloadError", {
                             msg: e.message,
                         });

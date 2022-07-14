@@ -12,22 +12,16 @@ import {
     FormControlLabel,
     Checkbox,
 } from "@material-ui/core";
-import PathSelector from "../FileManager/PathSelector";
 import { useDispatch } from "react-redux";
 import TextField from "@material-ui/core/TextField";
-import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
-import { submitCompressTask } from "../../redux/explorer/action";
 import { useTranslation } from "react-i18next";
 import { useInterval } from "ahooks";
+import { cancelDirectoryDownload } from "../../redux/explorer/action";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
         padding: "10px 24px 0px 24px",
         backgroundColor: theme.palette.background.default,
-    },
-    wrapper: {
-        margin: theme.spacing(1),
-        position: "relative",
     },
     buttonProgress: {
         color: theme.palette.secondary.light,
@@ -41,8 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DirectoryDownloadDialog(props) {
     const { t } = useTranslation();
-
-    const dispatch = useDispatch();
 
     const classes = useStyles();
 
@@ -89,7 +81,9 @@ export default function DirectoryDownloadDialog(props) {
                     }
                     label={t("modals.directoryDownloadAutoscroll")}
                 />
-                <Button onClick={props.onClose} disabled>
+                <Button
+                    onClick={props.done ? props.onClose : cancelDirectoryDownload}
+                >
                     {t("cancel", { ns: "common" })}
                 </Button>
                 <div className={classes.wrapper}>

@@ -238,7 +238,8 @@
     "directoryDownloadFinished": "Download finished",
     "directoryDownloadError": "Error: {{msg}}",
     "directoryDownloadErrorNotification": "Error occurs while download {{name}}: {{msg}}",
-    "directoryDownloadAutoscroll": "Auto scroll"
+    "directoryDownloadAutoscroll": "Auto scroll",
+    "directoryDownloadCancelled": "Download cancelled"
   },
   "uploader": {
     "fileNotMatchError": "The selected file does not match the original file.",

@@ -238,7 +238,8 @@
     "directoryDownloadFinished": "下载完成",
     "directoryDownloadError": "遇到错误：{{msg}}",
     "directoryDownloadErrorNotification": "下载 {{name}} 遇到错误：{{msg}}",
-    "directoryDownloadAutoscroll": "自动滚动"
+    "directoryDownloadAutoscroll": "自动滚动",
+    "directoryDownloadCancelled": "已取消下载"
   },
   "uploader": {
     "fileNotMatchError": "所选择文件与原始文件不符",
