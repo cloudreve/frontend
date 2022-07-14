@@ -18,7 +18,12 @@ import MoveIcon from "@material-ui/icons/Input";
 import LinkIcon from "@material-ui/icons/InsertLink";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import ShareIcon from "@material-ui/icons/Share";
-import { FolderUpload, MagnetOn, FilePlus } from "mdi-material-ui";
+import {
+    FolderDownload,
+    FolderUpload,
+    MagnetOn,
+    FilePlus,
+} from "mdi-material-ui";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -478,7 +483,7 @@ class ContextMenuCompoment extends Component {
                                         }
                                     >
                                         <StyledListItemIcon>
-                                            <DownloadIcon />
+                                            <FolderDownload />
                                         </StyledListItemIcon>
                                         <Typography variant="inherit">
                                             {t("fileManager.download")}

@@ -19,7 +19,12 @@ import SezrchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
 import UserAvatar from "./UserAvatar";
 import UserInfo from "./UserInfo";
-import { AccountArrowRight, AccountPlus, LogoutVariant } from "mdi-material-ui";
+import {
+    FolderDownload,
+    AccountArrowRight,
+    AccountPlus,
+    LogoutVariant,
+} from "mdi-material-ui";
 import { withRouter } from "react-router-dom";
 import {
     AppBar,
@@ -63,7 +68,11 @@ import {
     showImgPreivew,
     toggleSnackbar,
 } from "../../redux/explorer";
-import { startBatchDownload,startDirectoryDownload, startDownload } from "../../redux/explorer/action";
+import {
+    startBatchDownload,
+    startDirectoryDownload,
+    startDownload,
+} from "../../redux/explorer/action";
 import { withTranslation } from "react-i18next";
 
 vhCheck();
@@ -697,30 +706,33 @@ class NavbarCompoment extends Component {
                                         )}
                                     {(this.props.isMultiple ||
                                         this.props.withFolder) &&
-                                            window.showDirectoryPicker && window.isSecureContext && (
-                                        <Grow
-                                            in={
-                                                (this.props.isMultiple ||
-                                                    this.props.withFolder) &&
-                                                        window.showDirectoryPicker && window.isSecureContext
-                                            }
-                                        >
-                                            <Tooltip
-                                                title={t(
-                                                    "fileManager.download"
-                                                )}
+                                        window.showDirectoryPicker &&
+                                        window.isSecureContext && (
+                                            <Grow
+                                                in={
+                                                    (this.props.isMultiple ||
+                                                        this.props
+                                                            .withFolder) &&
+                                                    window.showDirectoryPicker &&
+                                                    window.isSecureContext
+                                                }
                                             >
-                                                <IconButton
-                                                    color="inherit"
-                                                    onClick={() =>
-                                                        this.openDirectoryDownload()
-                                                    }
+                                                <Tooltip
+                                                    title={t(
+                                                        "fileManager.download"
+                                                    )}
                                                 >
-                                                    <DownloadIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </Grow>
-                                    )}
+                                                    <IconButton
+                                                        color="inherit"
+                                                        onClick={() =>
+                                                            this.openDirectoryDownload()
+                                                        }
+                                                    >
+                                                        <FolderDownload />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Grow>
+                                        )}
                                     {(this.props.isMultiple ||
                                         this.props.withFolder) && (
                                         <Grow
