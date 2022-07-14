@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import Loading from "../Modals/Loading";
 import CopyDialog from "../Modals/Copy";
+import DirectoryDownloadDialog from "../Modals/DirectoryDownload";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
 import DecompressDialog from "../Modals/Decompress";
@@ -1004,6 +1005,12 @@ class ModalsCompoment extends Component {
                     presentPath={this.props.path}
                     selected={this.props.selected}
                     modalsLoading={this.props.modalsLoading}
+                />
+                <DirectoryDownloadDialog
+                    open={this.props.modalsStatus.directoryDownloading}
+                    onClose={this.onClose}
+                    done={this.props.modalsStatus.directoryDownloadDone}
+                    log={this.props.modalsStatus.directoryDownloadLog}
                 />
             </div>
         );

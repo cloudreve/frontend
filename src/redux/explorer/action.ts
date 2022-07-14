@@ -17,6 +17,7 @@ import { push } from "connected-react-router";
 import {
     changeContextMenu,
     closeAllModals,
+    openDirectoryDownloadDialog,
     openGetSourceDialog,
     openLoadingDialog,
     showAudioPreview,
@@ -25,6 +26,11 @@ import {
 } from "./index";
 import { getDownloadURL } from "../../services/file";
 import i18next from "../../i18n";
+import {
+    getFileSystemDirectoryPaths,
+    saveFileToFileSystemDirectory,
+    verifyFileSystemRWPermission,
+} from "../../utils/filesystem";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -444,6 +450,306 @@ export const startBatchDownload = (
     };
 };
 
+let directoryDownloadAbortController: AbortController;
+export const cancelDirectoryDownload = () =>
+    directoryDownloadAbortController.abort();
+
+export const startDirectoryDownload = (
+    share: any
+): ThunkAction<any, any, any, any> => {
+    return async (dispatch, getState): Promise<void> => {
+        directoryDownloadAbortController = new AbortController();
+        if (!window.showDirectoryPicker || !window.isSecureContext) {
+            return;
+        }
+        let handle: FileSystemDirectoryHandle;
+        // we should show directory picker at first
+        // https://web.dev/file-system-access/#:~:text=handle%3B%0A%7D-,Gotchas,-Sometimes%20processing%20the
+        try {
+            // can't use suggestedName for showDirectoryPicker (only available showSaveFilePicker)
+            handle = await window.showDirectoryPicker({
+                startIn: "downloads",
+                mode: "readwrite",
+            });
+            // we should obtain the readwrite permission for the directory at first
+            if (!(await verifyFileSystemRWPermission(handle))) {
+                throw new Error(
+                    i18next.t("fileManager.directoryDownloadPermissionError")
+                );
+            }
+            dispatch(closeAllModals());
+        } catch (e) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    i18next.t("modals.directoryDownloadError", {
+                        msg: e && e.message,
+                    }),
+                    "error"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
+        dispatch(changeContextMenu("file", false));
+        const {
+            explorer: { selected },
+            navigator: { path },
+        } = getState();
+
+        // list files to download
+        dispatch(openLoadingDialog(i18next.t("modals.listingFiles")));
+
+        let queue: CloudreveFile[] = [];
+        try {
+            queue = await walk(selected, share);
+        } catch (e) {
+            dispatch(
+                toggleSnackbar(
+                    "top",
+                    "right",
+                    i18next.t("modals.listingFileError", {
+                        message: e.message,
+                    }),
+                    "warning"
+                )
+            );
+            dispatch(closeAllModals());
+            return;
+        }
+
+        dispatch(closeAllModals());
+
+        let failed = 0;
+        let option: any;
+        // preparation for downloading
+        // get the files in the directory to compare with queue files
+        // parent: ""
+        const fsPaths = await getFileSystemDirectoryPaths(handle, "");
+
+        // path: / or /abc (no sep suffix)
+        // file.path: /abc/d (no sep suffix)
+        // fsPaths: ["abc/d/e.bin",]
+        const duplicates = queue
+            .map((file) =>
+                trimPrefix(
+                    `${file.path}/${file.name}`,
+                    path === "/" ? "/" : path + "/"
+                )
+            )
+            .filter((path) => fsPaths.includes(path));
+
+        // we should ask users for the duplication handle method
+        if (duplicates.length > 0) {
+            try {
+                option = await dispatch(
+                    askForOption(
+                        [
+                            {
+                                key: "replace",
+                                name: i18next.t(
+                                    "fileManager.directoryDownloadReplace"
+                                ),
+                                description: i18next.t(
+                                    "fileManager.directoryDownloadReplaceDescription",
+                                    {
+                                        // display the first three duplications
+                                        duplicates: duplicates
+                                            .slice(
+                                                0,
+                                                duplicates.length >= 3
+                                                    ? 3
+                                                    : duplicates.length
+                                            )
+                                            .join(", "),
+                                        num: duplicates.length,
+                                    }
+                                ),
+                            },
+                            {
+                                key: "skip",
+                                name: i18next.t(
+                                    "fileManager.directoryDownloadSkip"
+                                ),
+                                description: i18next.t(
+                                    "fileManager.directoryDownloadSkipDescription",
+                                    {
+                                        duplicates: duplicates
+                                            .slice(
+                                                0,
+                                                duplicates.length >= 3
+                                                    ? 3
+                                                    : duplicates.length
+                                            )
+                                            .join(", "),
+                                        num: duplicates.length,
+                                    }
+                                ),
+                            },
+                        ],
+                        i18next.t(
+                            "fileManager.selectDirectoryDuplicationMethod"
+                        )
+                    )
+                );
+            } catch (e) {
+                return;
+            }
+        }
+        dispatch(closeAllModals());
+
+        // start the download
+        dispatch(
+            toggleSnackbar(
+                "top",
+                "center",
+                i18next.t("fileManager.directoryDownloadStarted"),
+                "info"
+            )
+        );
+
+        const updateLog = (log, done) => {
+            dispatch(openDirectoryDownloadDialog(true, log, done));
+        };
+        let log = "";
+
+        while (queue.length > 0) {
+            const next = queue.pop();
+            if (next && next.type === "file") {
+                // donload url
+                const previewPath = getPreviewPath(next);
+                const url =
+                    getBaseURL() +
+                    (pathHelper.isSharePage(location.pathname)
+                        ? "/share/preview/" +
+                          share.key +
+                          (previewPath !== "" ? "?path=" + previewPath : "")
+                        : "/file/preview/" + next.id);
+
+                // path to save this file
+                // path: / or /abc (no sep suffix)
+                // next.path: /abc/d (no sep suffix)
+                // name: d/e.bin
+                const name = trimPrefix(
+                    pathJoin([next.path, next.name]),
+                    path === "/" ? "/" : path + "/"
+                );
+                // TODO: improve the display of log
+                // can we turn the upload queue component to the transition queue?
+                // then we can easily cancel or retry the download
+                // and the batch download queue can show as well.
+                log =
+                    (log === "" ? "" : log + "\n\n") +
+                    i18next.t("modals.directoryDownloadStarted", { name });
+                updateLog(log, false);
+                try {
+                    if (duplicates.includes(name)) {
+                        if (option.key === "skip") {
+                            log +=
+                                "\n" +
+                                i18next.t(
+                                    "modals.directoryDownloadSkipNotifiction",
+                                    {
+                                        name,
+                                    }
+                                );
+                            updateLog(log, false);
+                            continue;
+                        } else {
+                            log +=
+                                "\n" +
+                                i18next.t(
+                                    "modals.directoryDownloadReplaceNotifiction",
+                                    {
+                                        name,
+                                    }
+                                );
+                            updateLog(log, false);
+                        }
+                    }
+
+                    // TODO: need concurrent task queue?
+                    const res = await fetch(url, {
+                        cache: "no-cache",
+                        signal: directoryDownloadAbortController.signal,
+                    });
+                    await saveFileToFileSystemDirectory(
+                        handle,
+                        await res.blob(),
+                        name
+                    );
+                    log += "\n" + i18next.t("modals.directoryDownloadFinished");
+                    updateLog(log, false);
+                } catch (e) {
+                    if (e.name === "AbortError") {
+                        dispatch(
+                            toggleSnackbar(
+                                "top",
+                                "right",
+                                i18next.t("modals.directoryDownloadCancelled"),
+                                "warning"
+                            )
+                        );
+                        log +=
+                            "\n\n" +
+                            i18next.t("modals.directoryDownloadCancelled");
+                        updateLog(log, true);
+                        return;
+                    }
+
+                    failed++;
+                    dispatch(
+                        toggleSnackbar(
+                            "top",
+                            "right",
+                            i18next.t(
+                                "modals.directoryDownloadErrorNotification",
+                                {
+                                    name,
+                                    msg: e && e.message,
+                                }
+                            ),
+                            "warning"
+                        )
+                    );
+                    log +=
+                        "\n" +
+                        i18next.t("modals.directoryDownloadError", {
+                            msg: e.message,
+                        });
+                    updateLog(log, false);
+                }
+            }
+        }
+        log +=
+            "\n" +
+            (failed === 0
+                ? i18next.t("fileManager.directoryDownloadFinished")
+                : i18next.t("fileManager.directoryDownloadFinishedWithError", {
+                      failed,
+                  }));
+        updateLog(log, true);
+
+        dispatch(
+            toggleSnackbar(
+                "top",
+                "center",
+                failed === 0
+                    ? i18next.t("fileManager.directoryDownloadFinished")
+                    : i18next.t(
+                          "fileManager.directoryDownloadFinishedWithError",
+                          {
+                              failed,
+                          }
+                      ),
+                "success"
+            )
+        );
+    };
+};
+
 export const getViewerURL = (
     viewer: string,
     file: any,
@@ -543,13 +849,8 @@ export const selectFile = (file: any, event: any, fileIndex: any) => {
         }
         const isMacbook = isMac();
         const { explorer } = getState();
-        const {
-            selected,
-            lastSelect,
-            dirList,
-            fileList,
-            shiftSelectedIds,
-        } = explorer;
+        const { selected, lastSelect, dirList, fileList, shiftSelectedIds } =
+            explorer;
         if (shiftKey && !ctrlKey && !metaKey && selected.length !== 0) {
             // shift 多选
             // 取消原有选择
