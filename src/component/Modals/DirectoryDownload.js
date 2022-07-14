@@ -18,6 +18,7 @@ import TextField from "@material-ui/core/TextField";
 import { setModalsLoading, toggleSnackbar } from "../../redux/explorer";
 import { submitCompressTask } from "../../redux/explorer/action";
 import { useTranslation } from "react-i18next";
+import { useInterval } from "ahooks";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -48,11 +49,11 @@ export default function DirectoryDownloadDialog(props) {
     const logRef = useRef();
     const autoScroll = useRef(true);
 
-    useEffect(() => {
-        if (autoScroll.current && logRef.current) {
+    useInterval(() => {
+        if (autoScroll.current && !props.done && logRef.current) {
             logRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
         }
-    }, [props.log]);
+    }, 1000);
 
     return (
         <Dialog
