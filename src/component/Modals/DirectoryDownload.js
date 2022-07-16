@@ -80,16 +80,13 @@ export default function DirectoryDownloadDialog(props) {
             </DialogContent>
             <DialogActions>
                 <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={autoScroll}
-                            onChange={() =>
-                                setAutoScroll((previous) => {
-                                    Auth.SetPreference("autoScroll", !previous);
-                                    return !previous;
-                                })
-                            }
-                        />
+                    control={<Checkbox />}
+                    checked={autoScroll}
+                    onChange={() =>
+                        setAutoScroll((previous) => {
+                            Auth.SetPreference("autoScroll", !previous);
+                            return !previous;
+                        })
                     }
                     label={t("modals.directoryDownloadAutoscroll")}
                 />
