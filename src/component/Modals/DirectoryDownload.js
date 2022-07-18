@@ -1,22 +1,20 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     Button,
     CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     makeStyles,
-    FormControl,
     FormControlLabel,
     Checkbox,
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import { useTranslation } from "react-i18next";
-import { useInterval } from "ahooks";
+import { useInterval, usePrevious, useGetState } from "ahooks";
 import { cancelDirectoryDownload } from "../../redux/explorer/action";
+import Auth from "../../middleware/Auth";
 
 const useStyles = makeStyles((theme) => ({
     contentFix: {
@@ -39,13 +37,25 @@ export default function DirectoryDownloadDialog(props) {
     const classes = useStyles();
 
     const logRef = useRef();
-    const autoScroll = useRef(true);
+    const [autoScroll, setAutoScroll] = useState(
+        Auth.GetPreferenceWithDefault("autoScroll", true)
+    );
+    const previousLog = usePrevious(props.log, (prev, next) => true);
+    const [timer, setTimer] = useState(-1);
 
     useInterval(() => {
-        if (autoScroll.current && !props.done && logRef.current) {
+        if (autoScroll && logRef.current && previousLog !== props.log) {
             logRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
         }
-    }, 1000);
+    }, timer);
+
+    useEffect(() => {
+        if (props.done) {
+            setTimer(-1);
+        } else if (props.open) {
+            setTimer(1000);
+        }
+    }, [props.done, props.open]);
 
     return (
         <Dialog
@@ -65,24 +75,25 @@ export default function DirectoryDownloadDialog(props) {
                     ref={logRef}
                     multiline
                     fullWidth
-                    autoFocus
                     id="standard-basic"
                 />
             </DialogContent>
             <DialogActions>
                 <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={autoScroll.current}
-                            onChange={() =>
-                                (autoScroll.current = !autoScroll.current)
-                            }
-                        />
+                    control={<Checkbox />}
+                    checked={autoScroll}
+                    onChange={() =>
+                        setAutoScroll((previous) => {
+                            Auth.SetPreference("autoScroll", !previous);
+                            return !previous;
+                        })
                     }
                     label={t("modals.directoryDownloadAutoscroll")}
                 />
                 <Button
-                    onClick={props.done ? props.onClose : cancelDirectoryDownload}
+                    onClick={
+                        props.done ? props.onClose : cancelDirectoryDownload
+                    }
                 >
                     {t("cancel", { ns: "common" })}
                 </Button>

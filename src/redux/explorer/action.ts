@@ -458,6 +458,8 @@ export const startDirectoryDownload = (
     share: any
 ): ThunkAction<any, any, any, any> => {
     return async (dispatch, getState): Promise<void> => {
+        dispatch(changeContextMenu("file", false));
+
         directoryDownloadAbortController = new AbortController();
         if (!window.showDirectoryPicker || !window.isSecureContext) {
             return;
@@ -493,7 +495,6 @@ export const startDirectoryDownload = (
             return;
         }
 
-        dispatch(changeContextMenu("file", false));
         const {
             explorer: { selected },
             navigator: { path },
