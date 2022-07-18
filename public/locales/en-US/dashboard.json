@@ -667,7 +667,7 @@
     "compressSize": "Maximum file size to be compressed",
     "compressSizeDes": "The maximum total file size of compression jobs that can be created by the user, fill in 0 to indicate no limit.",
     "decompressSize": "Maximum file size to be decompressed",
-    "decompressSizeDes": "The maximum total file size of decompression jobs that can be created by the user, fill in 0 to indicate no limit.",
+    "decompressSizeDes": "The maximum total file size of decompression jobs that can be created by the user, fill in 0 to indicate no limit."
   },
   "user": {
     "deleted": "User deleted.",
