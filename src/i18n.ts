@@ -8,7 +8,7 @@ i18n.use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        fallbackLng: "en-US",
+        fallbackLng: "zh-CN",
         debug: true,
         ns: ["common", "application"],
         load: "currentOnly",

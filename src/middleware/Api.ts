@@ -40,12 +40,18 @@ class AppError extends Error {
                 ns: "common",
                 message,
             });
+        } else if (i18next.exists(`errors.${code}`, { ns: "dashboard" })) {
+            this.message = i18next.t(`errors.${code}`, {
+                ns: "dashboard",
+                message,
+            });
         } else {
             this.message =
                 message || i18next.t("unknownError", { ns: "common" });
         }
 
-        this.message += error ? ` (${error})` : "";
+        this.message +=
+            error && !this.message.includes(error) ? ` (${error})` : "";
         this.stack = new Error().stack;
     }
 }

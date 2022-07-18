@@ -1,4 +1,16 @@
 {
+  "errors":{
+    "40036": "Default storage policy cannot be deleted.",
+    "40037": "{{message}} file(s) are using this policy, please delete those files first.",
+    "40038": "{{message}} group(s) are using this policy, please unlink those groups first.",
+    "40040": "Cannot perform such action on system group.",
+    "40041": "{{message}} users are still in this group, please delete or unlink those users first.",
+    "40042": "Cannot change the group of system user group.",
+    "40043": "Cannot perform such action on default user.",
+    "40046": "Cannot perform such action on master node.",
+    "50008": "Failed to update setting. ({{message}})",
+    "50009": "Failed to add CORS policy."
+  },
   "nav": {
     "summary": "Summary",
     "settings": "Settings",

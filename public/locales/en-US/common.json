@@ -15,11 +15,12 @@
   "forEditorLocaleCode": "en",
   "artPlayerLocaleCode": "en",
   "errors": {
+    "40006": "Not supported policy type.",
     "40020": "Wrong password or email address.",
     "40017": "This account has been blocked.",
     "40018": "This account is not activated.",
     "40019": "This feature is not enabled.",
-    "40001": "Wrong format of input parameters ({{message}}).",
+    "40001": "Invalid input parameters ({{message}}).",
     "40021": "User not found.",
     "40022": "Verification code not correct.",
     "40023": "Login session not exist.",
@@ -33,7 +34,12 @@
     "40032": "This email is already in use.",
     "40033": "This account is not activated, activation email has been resent.",
     "40034": "This user cannot be activated.",
+    "40035": "Storage policy not found.",
+    "40039": "Group not found.",
+    "40044": "File not found.",
+    "40045": "Failed to list objects under given folder.",
     "50001": "Database operation failed. ({{message}})",
-    "50002": "Failed to sign the URL or request. ({{message}})"
+    "50002": "Failed to sign the URL or request. ({{message}})",
+    "50005": "Internal error. ({{message}})"
   }
 }
