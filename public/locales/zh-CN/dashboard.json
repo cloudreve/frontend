@@ -260,6 +260,7 @@
     "tCaptchaSecretKeyDes": "<0>图形验证页面</0> 获取到的的 App Secret Key"
   },
   "policy": {
+    "sharp": "#",
     "name": "名称",
     "type": "类型",
     "childFiles": "下属文件数",
