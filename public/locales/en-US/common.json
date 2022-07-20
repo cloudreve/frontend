@@ -61,6 +61,7 @@
     "40055": "File metadata mismatch.",
     "40056": "Unsupported compressed file type.",
     "40057": "Available storage policy has changed, please refresh the file list and add this task again.",
+    "40058": "This share does not exist or already expired.",
     "50001": "Database operation failed. ({{message}})",
     "50002": "Failed to sign the URL or request. ({{message}})",
     "50004": "I/O operation failed. ({{message}})",
