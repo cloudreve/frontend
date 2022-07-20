@@ -31,7 +31,7 @@ const instance = axios.create({
     withCredentials: true,
 });
 
-class AppError extends Error {
+export class AppError extends Error {
     constructor(message: string | undefined, public code: any, error: any) {
         super(message);
         this.code = code;
