@@ -8,6 +8,8 @@
     "40042": "Cannot change the group of system user group.",
     "40043": "Cannot perform such action on default user.",
     "40046": "Cannot perform such action on master node.",
+    "40060": "Slave node cannot send callback request to master, please check master node setting: Basic - Site Information - Site URL, please make sure slave node can access this url. ({{message}})",
+    "40061": "Mismatched Cloudreve version. ({{message}})",
     "50008": "Failed to update setting. ({{message}})",
     "50009": "Failed to add CORS policy."
   },
