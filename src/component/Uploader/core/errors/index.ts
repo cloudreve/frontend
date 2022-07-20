@@ -7,6 +7,7 @@ import {
 } from "../types";
 import { sizeToString } from "../utils";
 import i18next from "../../../../i18n";
+import { AppError } from "../../../../middleware/Api";
 
 export enum UploaderErrorName {
     InvalidFile = "InvalidFile",
@@ -107,21 +108,18 @@ export class UnknownPolicyError extends UploaderError {
 
 // 后端 API 出错
 export class APIError extends UploaderError {
+    private appError: AppError;
     constructor(
         name: UploaderErrorName,
         message: string,
         protected response: Response<any>
     ) {
         super(name, message);
+        this.appError = new AppError(response.msg, response.code, response.msg);
     }
 
     public Message(): string {
-        let msg = `${this.message}: ${this.response.msg}`;
-        if (this.response.error) {
-            msg += ` (${this.response.error})`;
-        }
-
-        return msg;
+        return `${this.message}: ${this.appError.message}`;
     }
 
     public Retryable(): boolean {
