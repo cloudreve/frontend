@@ -363,6 +363,7 @@ export default function Download() {
                                         {row.Status === 4 && t("finished")}
                                         {row.Status === 5 && t("canceled")}
                                         {row.Status === 6 && t("unknown")}
+                                        {row.Status === 7 && t("seeding")}
                                     </TableCell>
                                     <TableCell>
                                         {row.NodeID <= 1 && (

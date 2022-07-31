@@ -452,6 +452,7 @@
     "canceled": "Canceled",
     "finished": "Finished",
     "fileTransfer": "File transfer",
+    "fileRecycle": "File recycle",
     "importFiles": "Import external files",
     "transferProgress": "{{num}} files done",
     "waiting": "Pending",
