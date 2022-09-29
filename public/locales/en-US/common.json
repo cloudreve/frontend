@@ -15,6 +15,7 @@
   "forEditorLocaleCode": "en",
   "artPlayerLocaleCode": "en",
   "errors": {
+    "401": "Please login.",
     "403": "You are not allowed to perform this action.",
     "404": "Resource not found.",
     "409": "Conflict. ({{message}})",
@@ -65,6 +66,7 @@
     "40057": "Available storage policy has changed, please refresh the file list and add this task again.",
     "40058": "This share does not exist or already expired.",
     "40069": "Incorrect password.",
+    "40070": "This share doesn't support preview.",
     "50001": "Database operation failed. ({{message}})",
     "50002": "Failed to sign the URL or request. ({{message}})",
     "50004": "I/O operation failed. ({{message}})",
