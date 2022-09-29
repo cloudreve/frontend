@@ -452,6 +452,7 @@
     "canceled": "取消",
     "finished": "已完成",
     "fileTransfer": "文件中转",
+    "fileRecycle": "文件回收",
     "importFiles": "导入外部目录",
     "transferProgress": "已完成 {{num}} 个文件",
     "waiting": "等待中",
