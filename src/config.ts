@@ -120,6 +120,7 @@ const taskType = [
     "fileManager.decompress",
     "setting.fileTransfer",
     "setting.importFiles",
+    "setting.fileRecycle",
 ];
 const taskProgress = [
     "setting.waiting",

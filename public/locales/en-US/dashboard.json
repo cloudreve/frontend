@@ -755,6 +755,7 @@
     "ready": "Ready",
     "downloading": "Downloading",
     "paused": "Paused",
+    "seeding": "Seeding",
     "error": "Error",
     "finished": "Finished",
     "canceled": "Canceled/Stopped",
