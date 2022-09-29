@@ -755,6 +755,7 @@
     "ready": "就绪",
     "downloading": "下载中",
     "paused": "暂停中",
+    "seeding": "做种中",
     "error": "出错",
     "finished": "完成",
     "canceled": "取消/停止",
