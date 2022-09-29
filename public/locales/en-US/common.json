@@ -67,6 +67,7 @@
     "40058": "This share does not exist or already expired.",
     "40069": "Incorrect password.",
     "40070": "This share doesn't support preview.",
+    "40071": "Invalid signature.",
     "50001": "Database operation failed. ({{message}})",
     "50002": "Failed to sign the URL or request. ({{message}})",
     "50004": "I/O operation failed. ({{message}})",
