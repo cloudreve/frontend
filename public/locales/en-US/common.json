@@ -21,6 +21,7 @@
     "40002": "Upload failed.",
     "40003": "Failed to create folder.",
     "40004": "Object with the same name already exist.",
+    "40005": "Signature expired.",
     "40006": "Not supported policy type.",
     "40007": "Current group have no permission to perform such action.",
     "40011": "Upload session not exist or expired.",
