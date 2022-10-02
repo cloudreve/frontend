@@ -198,7 +198,7 @@ export default function FinishedCard(props) {
                 ToggleSnackbar("top", "right", error.message, "error");
             })
             .then(() => {
-                window.location.reload();
+                props.deleteSelf();
             });
     };
 
