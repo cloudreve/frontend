@@ -156,15 +156,16 @@ class PathSelectorCompoment extends Component {
                                                 this.state.selectedTarget ===
                                                 index,
                                         })}
-                                        onClick={() =>
+                                        onClick={() => {
                                             this.enterFolder(
                                                 value.path === "/"
                                                     ? value.path + value.name
                                                     : value.path +
-                                                          "/" +
-                                                          value.name
-                                            )
-                                        }
+                                                    "/" +
+                                                    value.name
+                                            );
+                                            this.handleSelect(index);
+                                        }}
                                     >
                                         <RightIcon />
                                     </IconButton>
