@@ -298,6 +298,7 @@
     "chunkUploadError": "Failed to upload chunk [{{index}}].",
     "conflictError": "The upload task for files with the same name is already being processed.",
     "chunkUploadErrorWithMsg": "Chunk upload failed: {{msg}}",
+    "chunkUploadErrorWithRetryAfter": "(Please retry after {{retryAfter}}s)",
     "emptyFileError": "Uploading empty files to OneDrive is not supported, please create empty files via the Create File button.",
     "finishUploadError": "Unable to complete file upload.",
     "finishUploadErrorWithMsg": "Unable to complete file upload: {{msg}}",

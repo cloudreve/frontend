@@ -228,9 +228,23 @@ export class OneDriveChunkError extends UploaderError {
     }
 
     public Message(): string {
-        return i18next.t(`uploader.chunkUploadErrorWithMsg`, {
+        let msg =  i18next.t(`uploader.chunkUploadErrorWithMsg`, {
             msg: this.message,
         });
+
+        if (this.response.error.retryAfterSeconds != undefined){
+            msg += " "+i18next.t(`uploader.chunkUploadErrorWithRetryAfter`, {
+                retryAfter: this.response.error.retryAfterSeconds,
+            })
+        }
+
+        return msg;
+    }
+
+    public Retryable(): boolean {
+        return (
+            super.Retryable() || this.response.error.retryAfterSeconds != undefined
+        );
     }
 }
 

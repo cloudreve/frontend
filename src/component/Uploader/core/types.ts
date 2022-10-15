@@ -76,6 +76,7 @@ export interface OneDriveError {
         innererror?: {
             code: string;
         };
+        retryAfterSeconds?: number;
     };
 }
 
