@@ -14,7 +14,7 @@ try {
     console.log(e);
 }
 
-if (!userTimezone) {
+if (!userTimezone || userTimezone=="Etc/Unknown") {
     userTimezone = "Asia/Shanghai";
 }
 
