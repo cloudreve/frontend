@@ -101,6 +101,9 @@ export default function Authn(props) {
                 credentialCreationOptions.publicKey.user.id = bufferDecode(
                     credentialCreationOptions.publicKey.user.id
                 );
+                credentialCreationOptions.publicKey.authenticatorSelection = {
+                    userVerification: 'discouraged'
+                };
                 if (credentialCreationOptions.publicKey.excludeCredentials) {
                     for (
                         let i = 0;
