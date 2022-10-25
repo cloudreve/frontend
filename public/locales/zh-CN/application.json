@@ -298,6 +298,7 @@
     "chunkUploadError": "分片 [{{index}}] 上传失败",
     "conflictError": "同名文件的上传任务已经在处理中",
     "chunkUploadErrorWithMsg": "分片上传失败: {{msg}}",
+    "chunkUploadErrorWithRetryAfter": "（请在 {{retryAfter}} 秒后重试）",
     "emptyFileError": "暂不支持上传空文件至 OneDrive，请通过创建文件按钮创建空文件",
     "finishUploadError": "无法完成文件上传",
     "finishUploadErrorWithMsg": "无法完成文件上传: {{msg}}",
