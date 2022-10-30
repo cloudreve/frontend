@@ -1,43 +1,51 @@
-function getValueWithDefault(key, defaultValue) {
-    try {
-        return JSON.parse(localStorage.getItem(key) as string) || defaultValue;
-    } catch (e) {
-        return defaultValue;
-    }
-}
 const Auth = {
     isAuthenticated: false,
-    _user: getValueWithDefault("user", { anonymous: true, group: {}, tags: [] }),
-    _preference: getValueWithDefault("preference", {}),
     authenticate(cb: any) {
         Auth.SetUser(cb);
         Auth.isAuthenticated = true;
     },
     GetUser() {
-        return Auth._user;
+        return JSON.parse(localStorage.getItem("user") || "null");
     },
     SetUser(newUser: any) {
-        Auth._user = newUser;
         localStorage.setItem("user", JSON.stringify(newUser));
     },
     Check(): boolean {
-        return Auth.isAuthenticated || !Auth.GetUser().anonymous;
+        if (Auth.isAuthenticated) {
+            return true;
+        }
+        if (localStorage.getItem("user") !== null) {
+            return !Auth.GetUser().anonymous;
+        }
+        return false;
     },
     signout() {
         Auth.isAuthenticated = false;
         const oldUser = Auth.GetUser();
         oldUser.id = 0;
-        Auth.SetUser(oldUser);
+        localStorage.setItem("user", JSON.stringify(oldUser));
     },
     SetPreference(key: string, value: any) {
-        Auth._preference[key] = value;
-        localStorage.setItem("user_preference", JSON.stringify(Auth._preference));
+        let preference = JSON.parse(
+            localStorage.getItem("user_preference") || "{}"
+        );
+        preference = preference == null ? {} : preference;
+        preference[key] = value;
+        localStorage.setItem("user_preference", JSON.stringify(preference));
     },
     GetPreference(key: string): any | null {
-        return Auth._preference[key] ?? null;
+        const preference = JSON.parse(
+            localStorage.getItem("user_preference") || "{}"
+        );
+        if (preference && preference[key] !== undefined) {
+            return preference[key];
+        }
+        return null;
     },
     GetPreferenceWithDefault(key: string, defaultVal: any): any {
-        return Auth.GetPreference(key) ?? defaultVal;
+        return Auth.GetPreference(key) !== null
+            ? Auth.GetPreference(key)
+            : defaultVal;
     },
 };
 
