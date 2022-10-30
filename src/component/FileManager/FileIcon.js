@@ -45,7 +45,7 @@ const styles = (theme) => ({
     button: {
         border: "1px solid " + theme.palette.divider,
         width: "100%",
-        borderRadius: "6px",
+        borderRadius: theme.shape.borderRadius,
         boxSizing: "border-box",
         transition:
             "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
@@ -71,14 +71,14 @@ const styles = (theme) => ({
         overflow: "hidden",
         height: "150px",
         width: "100%",
-        borderRadius: "6px 6px 0 0",
+        borderRadius: "12px 12px 0 0",
         backgroundColor: theme.palette.background.default,
     },
     previewIcon: {
         overflow: "hidden",
         height: "149px",
         width: "100%",
-        borderRadius: "5px 5px 0 0",
+        borderRadius: "12px 12px 0 0",
         backgroundColor: theme.palette.background.paper,
         paddingTop: "50px",
     },
@@ -107,7 +107,7 @@ const styles = (theme) => ({
         display: "none",
     },
     loadingAnimation: {
-        borderRadius: "6px 6px 0 0",
+        borderRadius: "12px 12px 0 0",
         height: "100%",
         width: "100%",
     },

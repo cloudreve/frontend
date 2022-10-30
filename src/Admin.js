@@ -52,6 +52,9 @@ const theme = createTheme(
         palette: {
             background: {},
         },
+        shape:{
+            borderRadius:12,
+        },
         overrides: {
             MuiButton: {
                 root: {

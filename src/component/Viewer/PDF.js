@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme) => ({
         canvas: {
             width: "100% !important",
             height: "auto !important",
-            borderRadius: 4,
-        },
+            borderRadius: theme.shape.borderRadius,
+        }
     },
     paper: {
         marginBottom: theme.spacing(3),

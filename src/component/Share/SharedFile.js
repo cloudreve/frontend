@@ -65,7 +65,7 @@ const styles = (theme) => ({
         width: "100%",
         maxWidth: 440,
         backgroundColor: theme.palette.background.paper,
-        borderRadius: 12,
+        borderRadius: theme.shape.borderRadius,
         boxShadow: "0 8px 16px rgba(29,39,55,.25)",
         [theme.breakpoints.down("sm")]: {
             height: "calc(var(--vh, 100vh) - 56px)",

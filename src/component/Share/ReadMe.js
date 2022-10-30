@@ -127,7 +127,7 @@ export default function ReadMe(props) {
                         ref={$vm}
                         style={{
                             boxShadow: "none",
-                            borderRadius: 4,
+                            borderRadius: theme.shape.borderRadius,
                             backgroundColor: theme.palette.background.paper,
                         }}
                         height={"100%"}

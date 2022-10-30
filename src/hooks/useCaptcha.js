@@ -23,7 +23,7 @@ export const useStyle = makeStyles((theme) => ({
         },
     },
     captchaImage: {
-        borderRadius: 4,
+        borderRadius: theme.shape.borderRadius,
     },
 }));
 

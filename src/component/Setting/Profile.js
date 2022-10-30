@@ -36,6 +36,7 @@ const styles = (theme) => ({
         },
     },
     userNav: {
+        borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`,
         height: "270px",
         backgroundColor: theme.palette.primary.main,
         padding: "20px 20px 2em",
@@ -197,7 +198,7 @@ class ProfileCompoment extends Component {
             <div className={classes.layout}>
                 {this.state.user === null && <div></div>}
                 {this.state.user !== null && (
-                    <Paper square>
+                    <Paper>
                         <div className={classes.userNav}>
                             <div>
                                 <Avatar

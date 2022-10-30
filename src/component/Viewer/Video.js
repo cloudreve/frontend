@@ -69,7 +69,6 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     player: {
-        borderRadius: 4,
         height: "100vh",
         maxHeight: "calc(100vh - 180px)",
     },
@@ -80,6 +79,11 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         marginTop: theme.spacing(1),
     },
+    "@global": {
+        "video,.art-video-player,.art-bottom":{
+            borderRadius: theme.shape.borderRadius,
+        }
+    }
 }));
 
 function useQuery() {

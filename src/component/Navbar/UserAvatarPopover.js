@@ -89,7 +89,7 @@ class UserAvatarPopoverCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    "您已退出登录",
+                    this.props.t("login.loggedOut"),
                     "success"
                 );
                 Auth.signout();

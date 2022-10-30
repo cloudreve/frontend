@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 40,
     },
     editor: {
-        borderRadius: "4px",
+        borderRadius: theme.shape.borderRadius,
     },
     "@global": {
         ".overflow-guard": {
-            borderRadius: "4px!important",
+            borderRadius: "0 0 12px 12px!important",
         },
     },
     formControl: {

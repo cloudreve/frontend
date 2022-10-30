@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         height: "50px",
         border: "1px solid " + theme.palette.divider,
         width: "100%",
-        borderRadius: "6px",
+        borderRadius: theme.shape.borderRadius,
         boxSizing: "border-box",
         transition:
             "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",

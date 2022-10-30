@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 50,
     },
     player: {
-        borderRadius: "4px",
+        borderRadius: theme.shape.borderRadius,
     },
     root: {
         backgroundColor: "white",
-        borderRadius: "8px",
+        borderRadius: theme.shape.borderRadius,
     },
     "@global": {
         ".for-toolbar": {

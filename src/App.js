@@ -63,6 +63,10 @@ export default function App() {
                             : themeConfig.palette.primary.main,
                 },
             },
+            shape:{
+                ...themeConfig.shape,
+                borderRadius:12,
+            },
             overrides: {
                 MuiButton: {
                     root: {
@@ -73,7 +77,7 @@ export default function App() {
                     root: {
                         textTransform: "none",
                     },
-                },
+                }
             },
         });
         changeThemeColor(
