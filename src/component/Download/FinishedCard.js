@@ -155,9 +155,12 @@ const useStyles = makeStyles((theme) => ({
     },
     infoTitle: {
         fontWeight: 700,
+        textAlign: "left",
     },
     infoValue: {
         color: theme.palette.text.secondary,
+        textAlign: "left",
+        paddingLeft:theme.spacing(1),
     },
 }));
 
@@ -470,6 +473,14 @@ export default function FinishedCard(props) {
                                     {formatLocalTime(props.task.update)}
                                 </Grid>
                             </Grid>
+                            {props.task.node && <Grid container xs={12} sm={6}>
+                                <Grid item xs={5} className={classes.infoTitle}>
+                                    {t("downloadNode")}
+                                </Grid>
+                                <Grid item xs={7} className={classes.infoValue}>
+                                    {props.task.node}
+                                </Grid>
+                            </Grid>}
                         </Grid>
                     </div>
                 </ExpansionPanelDetails>

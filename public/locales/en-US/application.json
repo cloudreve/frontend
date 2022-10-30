@@ -378,6 +378,7 @@
     "InfoHash": "InfoHash: ",
     "seederCount": "Seeders:",
     "seeding": "Seeding: ",
+    "downloadNode": "Node: ",
     "isSeeding": "Yes",
     "notSeeding": "No",
     "chunkSize": "Chunk size:",
