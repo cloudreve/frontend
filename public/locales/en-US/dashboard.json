@@ -669,7 +669,9 @@
     "compressSize": "Maximum file size to be compressed",
     "compressSizeDes": "The maximum total file size of compression jobs that can be created by the user, fill in 0 to indicate no limit.",
     "decompressSize": "Maximum file size to be decompressed",
-    "decompressSizeDes": "The maximum total file size of decompression jobs that can be created by the user, fill in 0 to indicate no limit."
+    "decompressSizeDes": "The maximum total file size of decompression jobs that can be created by the user, fill in 0 to indicate no limit.",
+    "redirectedSource": "Use redirected source link",
+    "redirectedSourceDes": "When enabled, the source link to the file obtained by the user will be redirected by Cloudreve with a shorter link. When disabled, the source link to the file obtained by the user becomes the original URL to the file. Some policies produce non-redirected source links that do not remain persistent, see <0>Comparing Storage Policies</0>."
   },
   "user": {
     "deleted": "User deleted.",
