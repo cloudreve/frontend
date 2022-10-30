@@ -666,6 +666,7 @@ module.exports = function(webpackEnv) {
             // a route with query params (e.g. auth callbacks).
             new RegExp('/[^/?]+\\.[^/]+$'),
             new RegExp(/^\/api/),
+            new RegExp(/^\/f/),
             new RegExp(/^\/custom/),
           ],
         }),

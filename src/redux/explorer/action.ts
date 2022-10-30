@@ -1065,8 +1065,12 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
 
         API.post("/file/source", { items: items })
             .then((response) => {
-                console.log(response);
                 dispatch(closeAllModals());
+                if (response.data.length == 1 && response.data[0].error) {
+                    dispatch(toggleSnackbar("top", "right", response.data[0].error, "warning"));
+                    return
+                }
+
                 dispatch(
                     openGetSourceDialog(
                         response.data.length == 1
