@@ -2,7 +2,6 @@ import React, { Suspense, useCallback, useState } from "react";
 import {
     Divider,
     List,
-    ListItem,
     ListItemIcon,
     ListItemText,
     makeStyles,
@@ -21,6 +20,7 @@ import pathHelper from "../../utils/page";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiListItem from "@material-ui/core/ListItem";
 import { useDispatch } from "react-redux";
 import Auth from "../../middleware/Auth";
 import {
@@ -47,6 +47,12 @@ import API from "../../middleware/Api";
 import { navigateTo, searchMyFile, toggleSnackbar } from "../../redux/explorer";
 import { useTranslation } from "react-i18next";
 
+const ListItem = withStyles((theme) => ({
+    root: {
+        borderRadius:theme.shape.borderRadius,
+    },
+}))(MuiListItem);
+
 const ExpansionPanel = withStyles({
     root: {
         maxWidth: "100%",
@@ -62,11 +68,10 @@ const ExpansionPanel = withStyles({
     expanded: {},
 })(MuiExpansionPanel);
 
-const ExpansionPanelSummary = withStyles({
+const ExpansionPanelSummary = withStyles((theme) =>({
     root: {
         minHeight: 0,
         padding: 0,
-
         "&$expanded": {
             minHeight: 0,
         },
@@ -80,7 +85,7 @@ const ExpansionPanelSummary = withStyles({
         },
     },
     expanded: {},
-})(MuiExpansionPanelSummary);
+}))(MuiExpansionPanelSummary);
 
 const ExpansionPanelDetails = withStyles((theme) => ({
     root: {
@@ -112,6 +117,13 @@ const useStyles = makeStyles((theme) => ({
         overflow: "hidden",
         textOverflow: "ellipsis",
     },
+    paddingList:{
+        padding:theme.spacing(1),
+    },
+    paddingSummary:{
+        paddingLeft:theme.spacing(1),
+        paddingRight:theme.spacing(1),
+    }
 }));
 
 const icons = {
@@ -223,35 +235,38 @@ export default function FileTag() {
                     aria-controls="panel1d-content"
                     id="panel1d-header"
                 >
-                    <ListItem
-                        button
-                        key="我的文件"
-                        onClick={() =>
-                            !isHomePage && history.push("/home?path=%2F")
-                        }
-                    >
-                        <ListItemIcon>
-                            <KeyboardArrowRight
-                                className={classNames(
-                                    {
-                                        [classes.expanded]:
+                    <div className={classes.paddingSummary}>
+                        <ListItem
+                            button
+                            key="我的文件"
+                            onClick={() =>
+                                !isHomePage && history.push("/home?path=%2F")
+                            }
+                        >
+                            <ListItemIcon>
+                                <KeyboardArrowRight
+                                    className={classNames(
+                                        {
+                                            [classes.expanded]:
                                             tagOpen && isHomePage,
-                                        [classes.iconFix]: true,
-                                    },
-                                    classes.expand
+                                            [classes.iconFix]: true,
+                                        },
+                                        classes.expand
+                                    )}
+                                />
+                                {!(tagOpen && isHomePage) && (
+                                    <FolderShared className={classes.iconFix} />
                                 )}
-                            />
-                            {!(tagOpen && isHomePage) && (
-                                <FolderShared className={classes.iconFix} />
-                            )}
-                        </ListItemIcon>
-                        <ListItemText primary={t("navbar.myFiles")} />
-                    </ListItem>
+                            </ListItemIcon>
+                            <ListItemText primary={t("navbar.myFiles")} />
+                        </ListItem>
+                    </div>
+
                     <Divider />
                 </ExpansionPanelSummary>
 
                 <ExpansionPanelDetails>
-                    <List onMouseLeave={() => setTagHover(null)}>
+                    <List className={classes.paddingList} onMouseLeave={() => setTagHover(null)}>
                         <ListItem
                             button
                             id="pickfiles"

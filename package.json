@@ -102,6 +102,7 @@
     "semver": "6.3.0",
     "streamsaver": "^2.0.6",
     "style-loader": "1.0.0",
+    "styled-components": "^5.3.6",
     "terser-webpack-plugin": "1.4.1",
     "timeago-react": "^3.0.0",
     "ts-pnp": "1.1.4",

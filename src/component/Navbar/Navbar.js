@@ -33,7 +33,6 @@ import {
     Hidden,
     IconButton,
     List,
-    ListItem,
     ListItemIcon,
     ListItemText,
     SwipeableDrawer,
@@ -41,7 +40,7 @@ import {
     Tooltip,
     Typography,
     withStyles,
-    withTheme,
+    withTheme
 } from "@material-ui/core";
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
@@ -74,10 +73,17 @@ import {
     startDownload,
 } from "../../redux/explorer/action";
 import { withTranslation } from "react-i18next";
+import MuiListItem from "@material-ui/core/ListItem";
 
 vhCheck();
 const drawerWidth = 240;
 const drawerWidthMobile = 270;
+
+const ListItem = withStyles((theme) => ({
+    root: {
+        borderRadius:theme.shape.borderRadius,
+    },
+}))(MuiListItem);
 
 const mapStateToProps = (state) => {
     return {
@@ -295,6 +301,9 @@ const styles = (theme) => ({
     minStickDrawer: {
         overflowY: "auto",
     },
+    paddingList:{
+        padding:theme.spacing(1),
+    }
 });
 class NavbarCompoment extends Component {
     constructor(props) {
@@ -396,7 +405,7 @@ class NavbarCompoment extends Component {
                     <>
                         <div className={classes.minStickDrawer}>
                             <FileTag />
-                            <List>
+                            <List className={classes.paddingList}>
                                 <ListItem
                                     button
                                     key="我的分享"
