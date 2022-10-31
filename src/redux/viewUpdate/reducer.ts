@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import Auth from "../../middleware/Auth";
-import { SortMethod } from "../../types";
+import { CloudreveFile, SortMethod } from "../../types";
 
 export interface ViewUpdateState {
     isLogin: boolean;
@@ -27,7 +27,7 @@ export interface ViewUpdateState {
         share: boolean;
         music: boolean;
         remoteDownload: boolean;
-        torrentDownload: boolean;
+        remoteDownloadTorrent: CloudreveFile | null;
         getSource: string;
         copy: boolean;
         resave: boolean;
@@ -91,7 +91,7 @@ export const initState: ViewUpdateState = {
         share: false,
         music: false,
         remoteDownload: false,
-        torrentDownload: false,
+        remoteDownloadTorrent: null,
         getSource: "",
         copy: false,
         resave: false,
@@ -212,7 +212,8 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
         case "OPEN_TORRENT_DOWNLOAD_DIALOG":
             return Object.assign({}, state, {
                 modals: Object.assign({}, state.modals, {
-                    torrentDownload: true,
+                    remoteDownload: true,
+                    remoteDownloadTorrent: action.selected,
                 }),
                 contextOpen: false,
             });
@@ -276,7 +277,7 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                     share: false,
                     music: false,
                     remoteDownload: false,
-                    torrentDownload: false,
+                    remoteDownloadTorrent: null,
                     getSource: "",
                     resave: false,
                     copy: false,

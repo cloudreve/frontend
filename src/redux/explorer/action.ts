@@ -19,10 +19,10 @@ import {
     closeAllModals,
     openDirectoryDownloadDialog,
     openGetSourceDialog,
-    openLoadingDialog,
+    openLoadingDialog, openTorrentDownloadDialog,
     showAudioPreview,
     showImgPreivew,
-    toggleSnackbar,
+    toggleSnackbar
 } from "./index";
 import { getDownloadURL } from "../../services/file";
 import i18next from "../../i18n";
@@ -1094,3 +1094,13 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
             });
     };
 };
+
+export const openTorrentDownload = (): ThunkAction<any, any, any, any> => {
+    return (dispatch, getState): void => {
+        const {
+            explorer: { selected },
+        } = getState();
+        dispatch(openTorrentDownloadDialog(selected[0]));
+    };
+};
+

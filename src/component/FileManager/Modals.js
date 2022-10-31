@@ -32,6 +32,7 @@ import {
 import OptionSelector from "../Modals/OptionSelector";
 import { getDownloadURL } from "../../services/file";
 import { Trans, withTranslation } from "react-i18next";
+import RemoteDownload from "../Modals/RemoteDownload";
 
 const styles = (theme) => ({
     wrapper: {
@@ -100,8 +101,6 @@ class ModalsCompoment extends Component {
         secretShare: false,
         sharePwd: "",
         shareUrl: "",
-        downloadURL: "",
-        remoteDownloadPathSelect: false,
         purchaseCallback: null,
     };
 
@@ -413,83 +412,6 @@ class ModalsCompoment extends Component {
         //this.props.toggleSnackbar();
     };
 
-    submitTorrentDownload = (e) => {
-        e.preventDefault();
-        this.props.setModalsLoading(true);
-        API.post("/aria2/torrent/" + this.props.selected[0].id, {
-            dst:
-                this.state.selectedPath === "//"
-                    ? "/"
-                    : this.state.selectedPath,
-        })
-            .then(() => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    this.props.t("modals.taskCreated"),
-                    "success"
-                );
-                this.onClose();
-                this.props.setModalsLoading(false);
-            })
-            .catch((error) => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.props.setModalsLoading(false);
-            });
-    };
-
-    submitDownload = (e) => {
-        e.preventDefault();
-        this.props.setModalsLoading(true);
-        API.post("/aria2/url", {
-            url: this.state.downloadURL.split("\n"),
-            dst:
-                this.state.selectedPath === "//"
-                    ? "/"
-                    : this.state.selectedPath,
-        })
-            .then((response) => {
-                const failed = response.data
-                    .filter((r) => r.code !== 0)
-                    .map((r) => new AppError(r.msg, r.code, r.error).message);
-                if (failed.length > 0) {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        this.props.t("modals.taskCreateFailed", {
-                            failed: failed.length,
-                            details: failed.join(","),
-                        }),
-                        "warning"
-                    );
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        this.props.t("modals.taskCreated"),
-                        "success"
-                    );
-                }
-
-                this.onClose();
-                this.props.setModalsLoading(false);
-            })
-            .catch((error) => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.props.setModalsLoading(false);
-            });
-    };
-
     setMoveTarget = (folder) => {
         const path =
             folder.path === "/"
@@ -498,13 +420,6 @@ class ModalsCompoment extends Component {
         this.setState({
             selectedPath: path,
             selectedPathName: folder.name,
-        });
-    };
-
-    remoteDownloadNext = () => {
-        this.props.closeAllModals();
-        this.setState({
-            remoteDownloadPathSelect: true,
         });
     };
 
@@ -517,9 +432,7 @@ class ModalsCompoment extends Component {
             selectedPathName: "",
             secretShare: false,
             sharePwd: "",
-            downloadURL: "",
             shareUrl: "",
-            remoteDownloadPathSelect: false,
         });
         this.newNameSuffix = "";
         this.props.closeAllModals();
@@ -848,150 +761,14 @@ class ModalsCompoment extends Component {
                     setModalsLoading={this.props.setModalsLoading}
                     selected={this.props.selected}
                 />
-                <Dialog
+                <RemoteDownload
                     open={this.props.modalsStatus.remoteDownload}
                     onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                    fullWidth
-                >
-                    <DialogTitle id="form-dialog-title">
-                        {t("modals.newRemoteDownloadTitle")}
-                    </DialogTitle>
-
-                    <DialogContent>
-                        <DialogContentText>
-                            <TextField
-                                label={t("modals.remoteDownloadURL")}
-                                autoFocus
-                                fullWidth
-                                multiline
-                                id="downloadURL"
-                                onChange={this.handleInputChange}
-                                placeholder={t(
-                                    "modals.remoteDownloadURLDescription"
-                                )}
-                            />
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.onClose}>
-                            {t("cancel", { ns: "common" })}
-                        </Button>
-                        <Button
-                            onClick={this.remoteDownloadNext}
-                            color="primary"
-                            disabled={
-                                this.props.modalsLoading ||
-                                this.state.downloadURL === ""
-                            }
-                        >
-                            {t("ok", { ns: "common" })}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.state.remoteDownloadPathSelect}
-                    onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">
-                        {t("modals.remoteDownloadDst")}
-                    </DialogTitle>
-                    <PathSelector
-                        presentPath={this.props.path}
-                        selected={this.props.selected}
-                        onSelect={this.setMoveTarget}
-                    />
-
-                    {this.state.selectedPath !== "" && (
-                        <DialogContent className={classes.contentFix}>
-                            <DialogContentText>
-                                <Trans
-                                    i18nKey="modals.downloadTo"
-                                    values={{
-                                        name: this.state.selectedPathName,
-                                    }}
-                                    components={[<strong key={0} />]}
-                                />
-                            </DialogContentText>
-                        </DialogContent>
-                    )}
-                    <DialogActions>
-                        <Button onClick={this.onClose}>
-                            {t("cancel", { ns: "common" })}
-                        </Button>
-                        <div className={classes.wrapper}>
-                            <Button
-                                onClick={this.submitDownload}
-                                color="primary"
-                                disabled={
-                                    this.state.selectedPath === "" ||
-                                    this.props.modalsLoading
-                                }
-                            >
-                                {t("modals.createTask")}
-                                {this.props.modalsLoading && (
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.buttonProgress}
-                                    />
-                                )}
-                            </Button>
-                        </div>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={this.props.modalsStatus.torrentDownload}
-                    onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">
-                        {t("modals.remoteDownloadDst")}
-                    </DialogTitle>
-                    <PathSelector
-                        presentPath={this.props.path}
-                        selected={this.props.selected}
-                        onSelect={this.setMoveTarget}
-                    />
-
-                    {this.state.selectedPath !== "" && (
-                        <DialogContent className={classes.contentFix}>
-                            <DialogContentText>
-                                <Trans
-                                    i18nKey="modals.downloadTo"
-                                    values={{
-                                        name: this.state.selectedPathName,
-                                    }}
-                                    components={[<strong key={0} />]}
-                                />
-                            </DialogContentText>
-                        </DialogContent>
-                    )}
-                    <DialogActions>
-                        <Button onClick={this.onClose}>
-                            {t("cancel", { ns: "common" })}
-                        </Button>
-                        <div className={classes.wrapper}>
-                            <Button
-                                onClick={this.submitTorrentDownload}
-                                color="primary"
-                                disabled={
-                                    this.state.selectedPath === "" ||
-                                    this.props.modalsLoading
-                                }
-                            >
-                                {t("modals.createTask")}
-                                {this.props.modalsLoading && (
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.buttonProgress}
-                                    />
-                                )}
-                            </Button>
-                        </div>
-                    </DialogActions>
-                </Dialog>
-
+                    modalsLoading={this.props.modalsLoading}
+                    setModalsLoading={this.props.setModalsLoading}
+                    presentPath={this.props.path}
+                    torrent={this.props.modalsStatus.remoteDownloadTorrent}
+                />
                 <DecompressDialog
                     open={this.props.modalsStatus.decompress}
                     onClose={this.onClose}

@@ -197,7 +197,7 @@
     "newRemoteDownloadTitle": "New remote download task",
     "remoteDownloadURL": "Download target URL",
     "remoteDownloadURLDescription": "Paste the download URL, one URL per line, support HTTP(s) / FTP / Magnet link",
-    "remoteDownloadDst": "Select a download destination",
+    "remoteDownloadDst": "Download to",
     "createTask": "Creat task",
     "downloadTo": "Download to <0>{{name}}</0>",
     "decompressTo": "Decompress to",

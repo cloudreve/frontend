@@ -34,12 +34,12 @@ import pathHelper from "../../utils/page";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
     batchGetSource,
-    openPreview,
+    openPreview, openTorrentDownload,
     setSelectedTarget,
     startBatchDownload,
     startDirectoryDownload,
     startDownload,
-    toggleObjectInfoSidebar,
+    toggleObjectInfoSidebar
 } from "../../redux/explorer/action";
 import {
     changeContextMenu,
@@ -56,7 +56,6 @@ import {
     openRemoveDialog,
     openRenameDialog,
     openShareDialog,
-    openTorrentDownloadDialog,
     refreshFileList,
     setNavigatorLoadingStatus,
     showImgPreivew,
@@ -142,7 +141,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(openRemoteDownloadDialog());
         },
         openTorrentDownloadDialog: () => {
-            dispatch(openTorrentDownloadDialog());
+            dispatch(openTorrentDownload());
         },
         openCopyDialog: () => {
             dispatch(openCopyDialog());
