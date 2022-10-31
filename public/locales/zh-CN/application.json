@@ -378,6 +378,7 @@
     "InfoHash": "InfoHash：",
     "seederCount": "做种者：",
     "seeding": "做种中：",
+    "downloadNode": "节点：",
     "isSeeding": "是",
     "notSeeding": "否",
     "chunkSize": "分片大小：",
