@@ -698,7 +698,9 @@
     "editUser": "编辑 {{nick}}",
     "password": "密码",
     "passwordDes": "留空表示不修改",
-    "groupDes": "用户所属用户组"
+    "groupDes": "用户所属用户组",
+    "2FASecret": "二步验证密钥",
+    "2FASecretDes": "用户二步验证器的密钥，清空表示未启用。"
   },
   "file": {
     "name": "文件名",

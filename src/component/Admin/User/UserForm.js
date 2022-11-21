@@ -7,7 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect,useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
@@ -47,6 +47,7 @@ export default function UserForm(props) {
                   Password: "", // 为空时只读
                   Status: "0", // 转换类型
                   GroupID: "2", // 转换类型
+                  TwoFactor: "",
               }
     );
     const [groups, setGroups] = useState([]);
@@ -107,6 +108,21 @@ export default function UserForm(props) {
                 setLoading(false);
             });
     };
+
+    const groupSelections = useMemo(
+        () =>
+            groups.map((v) => {
+                if (v.ID === 3) {
+                    return null;
+                }
+                return (
+                    <MenuItem key={v.ID} value={v.ID.toString()}>
+                        {v.Name}
+                    </MenuItem>
+                );
+            }),
+        [groups]
+    );
 
     return (
         <div>
@@ -172,19 +188,7 @@ export default function UserForm(props) {
                                     onChange={handleChange("GroupID")}
                                     required
                                 >
-                                    {groups.map((v) => {
-                                        if (v.ID === 3) {
-                                            return null;
-                                        }
-                                        return (
-                                            <MenuItem
-                                                key={v.ID}
-                                                value={v.ID.toString()}
-                                            >
-                                                {v.Name}
-                                            </MenuItem>
-                                        );
-                                    })}
+                                    {groupSelections}
                                 </Select>
                                 <FormHelperText id="component-helper-text">
                                     {t("groupDes")}
@@ -216,6 +220,21 @@ export default function UserForm(props) {
                                     </MenuItem>
                                 </Select>
                             </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {t("2FASecret")}
+                                </InputLabel>
+                                <Input
+                                    value={user.TwoFactor}
+                                    onChange={handleChange("TwoFactor")}
+                                />
+                            </FormControl>
+                            <FormHelperText id="component-helper-text">
+                                {t("2FASecretDes")}
+                            </FormHelperText>
                         </div>
                     </div>
                 </div>

@@ -698,7 +698,9 @@
     "editUser": "Edit {{nick}}",
     "password": "Password",
     "passwordDes": "Leave blank means no modification.",
-    "groupDes": "Group that the user belongs to."
+    "groupDes": "Group that the user belongs to.",
+    "2FASecret": "2FA Secret",
+    "2FASecretDes": "Secret of the 2FA authenticator, leave blank to disable 2FA."
   },
   "file": {
     "name": "File name",
