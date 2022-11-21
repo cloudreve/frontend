@@ -29,6 +29,7 @@ import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { Status } from "../core/uploader/base";
 import Auth from "../../../middleware/Auth";
 import { useTranslation } from "react-i18next";
+import { useUpload } from "../UseUpload";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -234,6 +235,15 @@ export default function TaskList({
         refreshList,
     ]);
 
+    const retryFailed = () => {
+        taskList.forEach((task) => {
+            if (task.status === Status.error) {
+                task.reset();
+                task.start();
+            }
+        });
+    };
+
     return (
         <>
             <MoreActions
@@ -256,6 +266,7 @@ export default function TaskList({
                     Auth.SetPreference("task_sorter", v);
                     setSorter(v);
                 }}
+                retryFailed={retryFailed}
                 cleanFinished={() =>
                     setUploaders((u) => u.filter(filters["ongoing"]))
                 }
@@ -326,7 +337,8 @@ export default function TaskList({
                                     >
                                         <ExpandMoreIcon
                                             className={classnames({
-                                                [classes.expandIconExpanded]: expanded,
+                                                [classes.expandIconExpanded]:
+                                                    expanded,
                                                 [classes.expandIcon]: true,
                                             })}
                                         />

@@ -17,7 +17,7 @@ import { DeleteEmpty } from "mdi-material-ui";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ConcurrentOptionDialog from "../../Modals/ConcurrentOption";
 import Auth from "../../../middleware/Auth";
-import { ClearAll } from "@material-ui/icons";
+import { ClearAll, Replay } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +38,7 @@ export default function MoreActions({
     sorter,
     setSorter,
     cleanFinished,
+    retryFailed,
 }) {
     const { t } = useTranslation("application", { keyPrefix: "uploader" });
     const classes = useStyles();
@@ -48,9 +49,10 @@ export default function MoreActions({
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    const RefreshStorage = useCallback(() => dispatch(refreshStorage()), [
-        dispatch,
-    ]);
+    const RefreshStorage = useCallback(
+        () => dispatch(refreshStorage()),
+        [dispatch]
+    );
 
     const actionClicked = (next) => () => {
         onClose();
@@ -137,6 +139,13 @@ export default function MoreActions({
                 onClick: () => cleanFinished(),
                 icon: <DeleteIcon />,
                 text: t("cleanCompleted"),
+                divider: false,
+            },
+            {
+                tooltip: t("retryFailedTasksTooltip"),
+                onClick: () => retryFailed(),
+                icon: <Replay />,
+                text: t("retryFailedTasks"),
                 divider: true,
             },
             {

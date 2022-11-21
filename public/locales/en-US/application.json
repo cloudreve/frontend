@@ -288,6 +288,8 @@
     "cleanAllSession": "Clear all upload sessions",
     "cleanCompletedTooltip": "Clear completed, failed, and cancelled tasks",
     "cleanCompleted": "Clear completed tasks",
+    "retryFailedTasks": "Retry all failed tasks",
+    "retryFailedTasksTooltip": "Retry all failed tasks in current queue",
     "setConcurrentTooltip": "Set the max number of tasks that can be uploaded simultaneously.",
     "setConcurrent": "Set concurrent task limit",
     "sizeExceedLimitError": "File size exceeds storage policy limits. (Maximum: {{max}})",
