@@ -17,12 +17,14 @@ import { push } from "connected-react-router";
 import {
     changeContextMenu,
     closeAllModals,
+    navigateTo,
     openDirectoryDownloadDialog,
     openGetSourceDialog,
-    openLoadingDialog, openTorrentDownloadDialog,
+    openLoadingDialog,
+    openTorrentDownloadDialog,
     showAudioPreview,
     showImgPreivew,
-    toggleSnackbar
+    toggleSnackbar,
 } from "./index";
 import { getDownloadURL } from "../../services/file";
 import i18next from "../../i18n";
@@ -1067,8 +1069,15 @@ export const batchGetSource = (): ThunkAction<any, any, any, any> => {
             .then((response) => {
                 dispatch(closeAllModals());
                 if (response.data.length == 1 && response.data[0].error) {
-                    dispatch(toggleSnackbar("top", "right", response.data[0].error, "warning"));
-                    return
+                    dispatch(
+                        toggleSnackbar(
+                            "top",
+                            "right",
+                            response.data[0].error,
+                            "warning"
+                        )
+                    );
+                    return;
                 }
 
                 dispatch(
@@ -1104,3 +1113,32 @@ export const openTorrentDownload = (): ThunkAction<any, any, any, any> => {
     };
 };
 
+export const openParentFolder = (): ThunkAction<any, any, any, any> => {
+    return async (dispatch, getState): Promise<any> => {
+        const {
+            explorer: { selected },
+        } = getState();
+
+        dispatch(openLoadingDialog(i18next.t("modals.processing")));
+        API.get(
+            "/object/property/" +
+            selected[0].id +
+            "?trace_root=true&is_folder=" +
+            (selected[0].type === "dir").toString()
+        )
+            .then((response) => {
+                const path =
+                    response.data.path === ""
+                        ? selected[0].path
+                        : response.data.path;
+                dispatch(navigateTo(path));
+                dispatch(closeAllModals());
+            })
+            .catch((error) => {
+                dispatch(
+                    toggleSnackbar("top", "right", error.message, "warning")
+                );
+                dispatch(closeAllModals());
+            });
+    };
+};
