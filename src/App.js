@@ -98,12 +98,6 @@ export default function App() {
             minWidth: 0,
         },
         toolbar: theme.mixins.toolbar,
-        "@global": {
-            "input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus,input:-webkit-autofill:active":
-                {
-                    "-webkit-box-shadow": "0 0 0 30px white inset !important",
-                },
-        },
     }));
 
     const classes = useStyles();
