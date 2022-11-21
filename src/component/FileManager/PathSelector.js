@@ -89,8 +89,22 @@ class PathSelectorCompoment extends Component {
                         }) === -1
                     );
                 });
+                dirList.forEach((value) => {
+                    value.displayName = value.name;
+                })
                 if (toBeLoad === "/") {
-                    dirList.unshift({ name: "/", path: "" });
+                    dirList.unshift({ name: "/", path: "", displayName: "/" });
+                } else {
+                    let path = toBeLoad;
+                    let name = toBeLoad;
+                    for (let i = 0; i < 2; i++) {
+                        const paths = path.split("/");
+                        name = paths.pop();
+                        name = name === "" ? "/" : name;
+                        path = paths.join("/");
+
+                    }
+                    dirList.unshift({ name: name, path: path, displayName: ".." });
                 }
                 this.setState({
                     presentPath: toBeLoad,
@@ -141,12 +155,12 @@ class PathSelectorCompoment extends Component {
                             </ListItemIcon>
                             <ListItemText
                                 classes={{ primary: classes.primary }}
-                                primary={value.name}
+                                primary={value.displayName}
                                 primaryTypographyProps={{
                                     style: { whiteSpace: "normal" },
                                 }}
                             />
-                            {value.name !== "/" && (
+                            {index !== 0 && (
                                 <ListItemSecondaryAction
                                     className={classes.buttonIcon}
                                 >

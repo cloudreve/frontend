@@ -226,6 +226,7 @@ class ModalsCompoment extends Component {
                 this.onClose();
                 this.props.refreshFileList();
                 this.props.setModalsLoading(false);
+                this.DragSelectedPath = "";
             })
             .catch((error) => {
                 this.props.toggleSnackbar(
@@ -235,6 +236,7 @@ class ModalsCompoment extends Component {
                     "error"
                 );
                 this.props.setModalsLoading(false);
+                this.DragSelectedPath = "";
             })
             .then(() => {
                 this.props.closeAllModals();
