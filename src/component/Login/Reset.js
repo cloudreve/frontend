@@ -10,6 +10,7 @@ import {
     Link,
     makeStyles,
     Paper,
+    TextField,
     Typography,
 } from "@material-ui/core";
 import API from "../../middleware/Api";
@@ -18,6 +19,10 @@ import { useCaptcha } from "../../hooks/useCaptcha";
 import { toggleSnackbar } from "../../redux/explorer";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { EmailOutlined } from "@material-ui/icons";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -90,6 +95,8 @@ function Reset() {
         captchaRefreshRef,
         captchaParamsRef,
     } = useCaptcha();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const submit = (e) => {
         e.preventDefault();
@@ -131,13 +138,21 @@ function Reset() {
                 </Typography>
                 <form className={classes.form} onSubmit={submit}>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">
-                            {t("login.email")}
-                        </InputLabel>
-                        <Input
-                            id="email"
-                            type="email"
-                            name="email"
+                        <TextField
+                            variant={"outlined"}
+                            label={t("login.email")}
+                            inputProps={{
+                                name: "email",
+                                id: "email",
+                                type: "email",
+                            }}
+                            InputProps={{
+                                startAdornment: !isMobile && (
+                                    <InputAdornment position="start">
+                                        <EmailOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}
                             onChange={handleInputChange("email")}
                             autoComplete
                             value={input.email}

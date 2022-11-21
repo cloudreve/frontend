@@ -6,18 +6,22 @@ import {
     Button,
     Divider,
     FormControl,
-    Input,
-    InputLabel,
     Link,
     makeStyles,
     Paper,
+    TextField,
     Typography,
 } from "@material-ui/core";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { bufferDecode, bufferEncode } from "../../utils/index";
-import { Fingerprint, VpnKey } from "@material-ui/icons";
+import {
+    EmailOutlined,
+    Fingerprint,
+    VpnKey,
+    VpnKeyOutlined,
+} from "@material-ui/icons";
 import VpnIcon from "@material-ui/icons/VpnKeyOutlined";
 import { useLocation } from "react-router";
 import { useCaptcha } from "../../hooks/useCaptcha";
@@ -27,6 +31,9 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import { useTranslation } from "react-i18next";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -96,6 +103,8 @@ function LoginForm() {
     );
     const title = useSelector((state) => state.siteConfig.title);
     const authn = useSelector((state) => state.siteConfig.authn);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
@@ -103,9 +112,10 @@ function LoginForm() {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
-    const ApplyThemes = useCallback((theme) => dispatch(applyThemes(theme)), [
-        dispatch,
-    ]);
+    const ApplyThemes = useCallback(
+        (theme) => dispatch(applyThemes(theme)),
+        [dispatch]
+    );
     const SetSessionStatus = useCallback(
         (status) => dispatch(setSessionStatus(status)),
         [dispatch]
@@ -269,30 +279,46 @@ function LoginForm() {
                         {!useAuthn && (
                             <form className={classes.form} onSubmit={login}>
                                 <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="email">
-                                        {t("login.email")}
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        name="email"
+                                    <TextField
+                                        label={t("login.email")}
+                                        variant={"outlined"}
+                                        inputProps={{
+                                            id: "email",
+                                            type: "email",
+                                            name: "email",
+                                        }}
                                         onChange={(e) =>
                                             setEmail(e.target.value)
                                         }
+                                        InputProps={{
+                                            startAdornment: !isMobile && (
+                                                <InputAdornment position="start">
+                                                    <EmailOutlined />
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                         autoComplete
                                         value={email}
                                         autoFocus
                                     />
                                 </FormControl>
                                 <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="password">
-                                        {t("login.password")}
-                                    </InputLabel>
-                                    <Input
-                                        name="password"
+                                    <TextField
+                                        variant={"outlined"}
+                                        label={t("login.password")}
+                                        inputProps={{
+                                            name: "password",
+                                            type: "password",
+                                            id: "password",
+                                        }}
                                         onChange={(e) => setPwd(e.target.value)}
-                                        type="password"
-                                        id="password"
+                                        InputProps={{
+                                            startAdornment: !isMobile && (
+                                                <InputAdornment position="start">
+                                                    <VpnKeyOutlined />
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                         value={pwd}
                                         autoComplete
                                     />
@@ -317,19 +343,26 @@ function LoginForm() {
                         {useAuthn && (
                             <form className={classes.form}>
                                 <FormControl margin="normal" required fullWidth>
-                                    <InputLabel htmlFor="email">
-                                        {t("login.email")}
-                                    </InputLabel>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        name="email"
+                                    <TextField
+                                        variant={"outlined"}
+                                        label={t("login.email")}
+                                        InputProps={{
+                                            id: "email",
+                                            type: "email",
+                                            name: "email",
+                                            startAdornment: !isMobile && (
+                                                <InputAdornment position="start">
+                                                    <EmailOutlined />
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                         onChange={(e) =>
                                             setEmail(e.target.value)
                                         }
                                         autoComplete
                                         value={email}
                                         autoFocus
+                                        required
                                     />
                                 </FormControl>
                                 <Button
@@ -403,13 +436,14 @@ function LoginForm() {
                     </Typography>
                     <form className={classes.form} onSubmit={twoFALogin}>
                         <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="code">
-                                {t("login.input2FACode")}
-                            </InputLabel>
-                            <Input
-                                id="code"
-                                type="number"
-                                name="code"
+                            <TextField
+                                label={t("login.input2FACode")}
+                                variant={"outlined"}
+                                inputProps={{
+                                    id: "code",
+                                    type: "number",
+                                    name: "code",
+                                }}
                                 onChange={(event) =>
                                     setFACode(event.target.value)
                                 }

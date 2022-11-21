@@ -7,7 +7,14 @@ import React, {
 } from "react";
 import { useDispatch } from "react-redux";
 import API from "../middleware/Api";
-import { FormControl, Input, InputLabel } from "@material-ui/core";
+import {
+    FormControl,
+    Input,
+    InputAdornment,
+    InputLabel,
+    makeStyles,
+    TextField,
+} from "@material-ui/core";
 import Placeholder from "../component/Placeholder/Captcha";
 import { defaultValidate, useStyle } from "./useCaptcha";
 import { toggleSnackbar } from "../redux/explorer";
@@ -56,34 +63,40 @@ const NormalCaptcha = forwardRef(function NormalCaptcha(
     }, [captcha]);
 
     return (
-        <div className={classes.captchaContainer}>
+        <div className={classes.captchaInputContainer}>
             <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="captcha">{t("login.captcha")}</InputLabel>
-                <Input
-                    name="captcha"
+                <TextField
+                    variant={"outlined"}
+                    label={t("login.captcha")}
+                    inputProps={{
+                        name: "captcha",
+                        id: "captcha",
+                    }}
                     onChange={(e) => setCaptcha(e.target.value)}
-                    type="text"
-                    id="captcha"
                     value={captcha}
                     autoComplete
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position={"end"}>
+                                <div
+                                    className={classes.captchaImageContainer}
+                                    title={t("login.clickToRefresh")}
+                                >
+                                    {captchaData === null && <Placeholder />}
+                                    {captchaData !== null && (
+                                        <img
+                                            className={classes.captchaImage}
+                                            src={captchaData}
+                                            alt="captcha"
+                                            onClick={refreshCaptcha}
+                                        />
+                                    )}
+                                </div>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
             </FormControl>{" "}
-            <div
-                className={classes.captchaImageContainer}
-                title={t("login.clickToRefresh")}
-            >
-                {captchaData === null && (
-                    <Placeholder />
-                )}
-                {captchaData !== null && (
-                    <img
-                        className={classes.captchaImage}
-                        src={captchaData}
-                        alt="captcha"
-                        onClick={refreshCaptcha}
-                    />
-                )}
-            </div>
         </div>
     );
 });

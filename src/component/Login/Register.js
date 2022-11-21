@@ -11,6 +11,7 @@ import {
     Link,
     makeStyles,
     Paper,
+    TextField,
     Typography,
 } from "@material-ui/core";
 import { Link as RouterLink, useHistory } from "react-router-dom";
@@ -19,6 +20,10 @@ import EmailIcon from "@material-ui/icons/EmailOutlined";
 import { useCaptcha } from "../../hooks/useCaptcha";
 import { toggleSnackbar } from "../../redux/explorer";
 import { useTranslation } from "react-i18next";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { EmailOutlined, VpnKeyOutlined } from "@material-ui/icons";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -93,6 +98,8 @@ function Register() {
         [dispatch]
     );
     const history = useHistory();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const handleInputChange = (name) => (e) => {
         setInput({
@@ -169,13 +176,21 @@ function Register() {
 
                         <form className={classes.form} onSubmit={register}>
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="email">
-                                    {t("login.email")}
-                                </InputLabel>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
+                                <TextField
+                                    variant={"outlined"}
+                                    label={t("login.email")}
+                                    inputProps={{
+                                        name: "email",
+                                        type: "email",
+                                        id: "email",
+                                    }}
+                                    InputProps={{
+                                        startAdornment: !isMobile && (
+                                            <InputAdornment position="start">
+                                                <EmailOutlined />
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     onChange={handleInputChange("email")}
                                     autoComplete
                                     value={input.email}
@@ -183,29 +198,45 @@ function Register() {
                                 />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">
-                                    {t("login.password")}
-                                </InputLabel>
-                                <Input
-                                    name="password"
+                                <TextField
+                                    variant={"outlined"}
+                                    label={t("login.password")}
+                                    inputProps={{
+                                        name: "password",
+                                        type: "password",
+                                        id: "password",
+                                    }}
+                                    InputProps={{
+                                        startAdornment: !isMobile && (
+                                            <InputAdornment position="start">
+                                                <VpnKeyOutlined />
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     onChange={handleInputChange("password")}
-                                    type="password"
-                                    id="password"
                                     value={input.password}
                                     autoComplete
                                 />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">
-                                    {t("login.repeatPassword")}
-                                </InputLabel>
-                                <Input
-                                    name="pwdRepeat"
+                                <TextField
+                                    label={t("login.repeatPassword")}
+                                    variant={"outlined"}
+                                    inputProps={{
+                                        name: "pwdRepeat",
+                                        type: "password",
+                                        id: "pwdRepeat",
+                                    }}
                                     onChange={handleInputChange(
                                         "password_repeat"
                                     )}
-                                    type="password"
-                                    id="pwdRepeat"
+                                    InputProps={{
+                                        startAdornment: !isMobile && (
+                                            <InputAdornment position="start">
+                                                <VpnKeyOutlined />
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     value={input.password_repeat}
                                     autoComplete
                                 />

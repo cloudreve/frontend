@@ -5,11 +5,10 @@ import {
     Button,
     Divider,
     FormControl,
-    Input,
-    InputLabel,
     Link,
     makeStyles,
     Paper,
+    TextField,
     Typography,
 } from "@material-ui/core";
 import { Link as RouterLink, useHistory } from "react-router-dom";
@@ -18,6 +17,10 @@ import { useLocation } from "react-router";
 import KeyIcon from "@material-ui/icons/VpnKeyOutlined";
 import { toggleSnackbar } from "../../redux/explorer";
 import { useTranslation } from "react-i18next";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { VpnKeyOutlined } from "@material-ui/icons";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -84,6 +87,8 @@ function ResetForm() {
         [dispatch]
     );
     const history = useHistory();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const submit = (e) => {
         e.preventDefault();
@@ -131,13 +136,21 @@ function ResetForm() {
                 </Typography>
                 <form className={classes.form} onSubmit={submit}>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">
-                            {t("login.newPassword")}
-                        </InputLabel>
-                        <Input
-                            id="pwd"
-                            type="password"
-                            name="pwd"
+                        <TextField
+                            variant={"outlined"}
+                            label={t("login.newPassword")}
+                            inputProps={{
+                                type: "password",
+                                id: "pwd",
+                                name: "pwd",
+                            }}
+                            InputProps={{
+                                startAdornment: !isMobile && (
+                                    <InputAdornment position="start">
+                                        <VpnKeyOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}
                             onChange={handleInputChange("password")}
                             autoComplete
                             value={input.password}
@@ -145,13 +158,21 @@ function ResetForm() {
                         />
                     </FormControl>
                     <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">
-                            {t("login.repeatNewPassword")}
-                        </InputLabel>
-                        <Input
-                            id="pwdRepeat"
-                            type="password"
-                            name="pwdRepeat"
+                        <TextField
+                            variant={"outlined"}
+                            label={t("login.repeatNewPassword")}
+                            inputProps={{
+                                type: "password",
+                                id: "pwdRepeat",
+                                name: "pwdRepeat",
+                            }}
+                            InputProps={{
+                                startAdornment: !isMobile && (
+                                    <InputAdornment position="start">
+                                        <VpnKeyOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}
                             onChange={handleInputChange("password_repeat")}
                             autoComplete
                             value={input.password_repeat}

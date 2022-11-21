@@ -63,9 +63,9 @@ export default function App() {
                             : themeConfig.palette.primary.main,
                 },
             },
-            shape:{
+            shape: {
                 ...themeConfig.shape,
-                borderRadius:12,
+                borderRadius: 12,
             },
             overrides: {
                 MuiButton: {
@@ -77,7 +77,7 @@ export default function App() {
                     root: {
                         textTransform: "none",
                     },
-                }
+                },
             },
         });
         changeThemeColor(
@@ -98,6 +98,12 @@ export default function App() {
             minWidth: 0,
         },
         toolbar: theme.mixins.toolbar,
+        "@global": {
+            "input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus,input:-webkit-autofill:active":
+                {
+                    "-webkit-box-shadow": "0 0 0 30px white inset !important",
+                },
+        },
     }));
 
     const classes = useStyles();
