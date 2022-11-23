@@ -19,7 +19,7 @@
     "repeatNewPassword": "重复新密码",
     "repeatPassword": "重复密码",
     "resetPassword": "重设密码",
-    "backToSingIn": "返回登陆",
+    "backToSingIn": "返回登录",
     "sendMeAnEmail": "发送密码重置邮件",
     "resetEmailSent": "密码重置邮件已发送，请注意查收",
     "browserNotSupport": "当前浏览器或环境不支持",
