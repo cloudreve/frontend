@@ -670,8 +670,8 @@
     "compressSizeDes": "用户可创建的压缩任务的文件最大总大小，填写为 0 表示不限制",
     "decompressSize": "待解压文件最大大小",
     "decompressSizeDes": "用户可创建的解压缩任务的文件最大总大小，填写为 0 表示不限制",
-    "redirectedSource": "使用重定向的直链",
-    "redirectedSourceDes": "开启后，用户获取的文件直链将由 Cloudreve 中转，链接较短。关闭后，用户获取的文件直链会变成文件的原始链接。部分存储策略获取的非中转直链无法保持永久有效，请参阅 <0>比较存储策略</0>。"
+    "redirectedSource": "使用重定向的外链",
+    "redirectedSourceDes": "开启后，用户获取的文件外链将由 Cloudreve 中转，链接较短。关闭后，用户获取的文件外链会变成文件的原始链接。部分存储策略获取的非中转外链无法保持永久有效，请参阅 <0>比较存储策略</0>。"
   },
   "user": {
     "deleted": "用户已删除",
@@ -698,7 +698,9 @@
     "editUser": "编辑 {{nick}}",
     "password": "密码",
     "passwordDes": "留空表示不修改",
-    "groupDes": "用户所属用户组"
+    "groupDes": "用户所属用户组",
+    "2FASecret": "二步验证密钥",
+    "2FASecretDes": "用户二步验证器的密钥，清空表示未启用。"
   },
   "file": {
     "name": "文件名",
