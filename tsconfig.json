@@ -23,6 +23,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
   },
   "include": [
     "src/**/*"

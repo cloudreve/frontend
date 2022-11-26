@@ -7,6 +7,7 @@ import DarkModeSwitcher from "./DarkModeSwitcher";
 import Avatar from "@material-ui/core/Avatar";
 import { setUserPopover } from "../../redux/explorer";
 import { withTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const mapStateToProps = (state) => {
     return {
@@ -116,7 +117,10 @@ class UserInfoCompoment extends Component {
                             />
                         )}
                     </a>
-                    <DarkModeSwitcher position="left" />
+                    <div>
+                        <LanguageSwitcher position="left" />
+                        <DarkModeSwitcher position="left" />
+                    </div>
                 </div>
                 <div className={classes.storageCircle}>
                     <Typography
