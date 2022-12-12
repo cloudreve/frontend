@@ -474,6 +474,11 @@
     "shareDate": "分享日期",
     "downloadNumber": "下载次数",
     "viewNumber": "浏览次数",
-    "language": "语言"
+    "language": "语言",
+    "iOSApp": "iOS 客户端",
+    "connectByiOS": "通过 iOS 设备连接到 <0>{{title}}</0>",
+    "downloadOurApp": "下载并安装我们的 iOS 应用：",
+    "fillInEndpoint": "在 “站点地址” 中填入 “{{url}}”；",
+    "loginApp": "输入您的用户名及密码完成登录。"
   }
 }

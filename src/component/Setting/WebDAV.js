@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -22,6 +22,7 @@ import Link from "@material-ui/core/Link";
 import { toggleSnackbar } from "../../redux/explorer";
 import Nothing from "../Placeholder/Nothing";
 import { useTranslation } from "react-i18next";
+import AppPromotion from "./AppPromotion";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -59,6 +60,7 @@ export default function WebDAV() {
     const [create, setCreate] = useState(false);
     const [accounts, setAccounts] = useState([]);
 
+    const appPromotion = useSelector((state) => state.siteConfig.app_promotion);
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
@@ -154,6 +156,7 @@ export default function WebDAV() {
                     aria-label="disabled tabs example"
                 >
                     <Tab label={t("setting.webdavAccounts")} />
+                    {appPromotion && <Tab label={t("setting.iOSApp")} />}
                 </Tabs>
                 <div className={classes.cardContent}>
                     {tab === 0 && (
@@ -255,6 +258,7 @@ export default function WebDAV() {
                             </Button>
                         </div>
                     )}
+                    {tab === 1 && <AppPromotion />}
                 </div>
             </Paper>
         </div>

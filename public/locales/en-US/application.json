@@ -474,6 +474,11 @@
     "shareDate": "Shared at",
     "downloadNumber": "Downloads",
     "viewNumber": "Views",
-    "language": "Language"
+    "language": "Language",
+    "iOSApp": "iOS App",
+    "connectByiOS": "Connect to <0>{{title}}</0> through iOS devices.",
+    "downloadOurApp": "Download our iOS App:",
+    "fillInEndpoint": "Enter \"{{url}}\" as the \"Endpoint\";",
+    "loginApp": "Sign in using your Email and password."
   }
 }
