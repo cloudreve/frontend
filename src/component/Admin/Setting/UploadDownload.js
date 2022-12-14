@@ -60,6 +60,7 @@ export default function UploadDownload() {
         slave_recover_interval: "0",
         slave_transfer_timeout: "0",
         use_temp_chunk_buffer: "1",
+        public_resource_maxage: "0",
     });
 
     const handleCheckChange = (name) => (event) => {
@@ -296,6 +297,11 @@ export default function UploadDownload() {
                             {
                                 name: "docPreviewURL",
                                 field: "doc_preview_timeout",
+                            },
+                            {
+                                name: "staticResourceCache",
+                                field: "public_resource_maxage",
+                                des: "staticResourceCacheDes",
                             },
                             {
                                 name: "uploadSession",

@@ -257,7 +257,9 @@
     "tCaptchaAppID": "APPID",
     "tCaptchaAppIDDes": "You can find it at <0>Captcha Management Page</0>.",
     "tCaptchaSecretKey": "App Secret Key",
-    "tCaptchaSecretKeyDes": "You can find it at <0>Captcha Management Page</0>."
+    "tCaptchaSecretKeyDes": "You can find it at <0>Captcha Management Page</0>.",
+    "staticResourceCache": "Public static resources cache",
+    "staticResourceCacheDes": "Max age of cache for public accessible static resources (e.g. local policy source link, download link)."
   },
   "policy": {
     "sharp": "#",
