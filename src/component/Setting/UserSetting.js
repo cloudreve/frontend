@@ -949,6 +949,24 @@ class UserSettingCompoment extends Component {
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
+                            <Divider />
+                            <ListItem
+                                onClick={() => this.props.selectLanguage()}
+                                button
+                            >
+                                <ListItemIcon className={classes.iconFix}>
+                                    <Translate />
+                                </ListItemIcon>
+                                <ListItemText primary={t("setting.language")} />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
                         </List>
                     </Paper>
                     {user.group.webdav && (
@@ -1045,7 +1063,7 @@ class UserSettingCompoment extends Component {
                         className={classes.sectionTitle}
                         variant="subtitle2"
                     >
-                        关于 Cloudreve
+                        {t("setting.aboutCloudreve")}
                     </Typography>
                     <Paper>
                         <List className={classes.desenList}>
@@ -1060,7 +1078,7 @@ class UserSettingCompoment extends Component {
                                 <ListItemIcon className={classes.iconFix}>
                                     <GitHub />
                                 </ListItemIcon>
-                                <ListItemText primary="GitHub 仓库" />
+                                <ListItemText primary={t("setting.githubRepo")} />
 
                                 <ListItemSecondaryAction
                                     className={classes.flexContainer}
@@ -1080,25 +1098,7 @@ class UserSettingCompoment extends Component {
                                 <ListItemIcon className={classes.iconFix}>
                                     <Home />
                                 </ListItemIcon>
-                                <ListItemText primary="主页" />
-
-                                <ListItemSecondaryAction
-                                    className={classes.flexContainer}
-                                >
-                                    <RightIcon
-                                        className={classes.rightIconWithText}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                            <ListItem
-                                onClick={() => this.props.selectLanguage()}
-                                button
-                            >
-                                <ListItemIcon className={classes.iconFix}>
-                                    <Translate />
-                                </ListItemIcon>
-                                <ListItemText primary={t("setting.language")} />
+                                <ListItemText primary={t("setting.homepage")} />
 
                                 <ListItemSecondaryAction
                                     className={classes.flexContainer}

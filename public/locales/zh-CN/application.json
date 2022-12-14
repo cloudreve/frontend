@@ -479,6 +479,9 @@
     "connectByiOS": "通过 iOS 设备连接到 <0>{{title}}</0>",
     "downloadOurApp": "下载并安装我们的 iOS 应用：",
     "fillInEndpoint": "在 “站点地址” 中填入 “{{url}}”；",
-    "loginApp": "输入您的用户名及密码完成登录。"
+    "loginApp": "输入您的用户名及密码完成登录。",
+    "aboutCloudreve": "关于 Cloudreve",
+    "githubRepo": "GitHub 仓库",
+    "homepage": "主页"
   }
 }
