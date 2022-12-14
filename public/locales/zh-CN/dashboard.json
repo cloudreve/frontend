@@ -79,7 +79,7 @@
     "mediumIcon": "中图标",
     "mediumIconDes": "192x192 的中等图标地址，png 格式",
     "largeIcon": "大图标",
-    "largeIconDes": "512x512 的大图标地址，png 格式",
+    "largeIconDes": "512x512 的大图标地址，png 格式。此图标还会被用于在 iOS 客户端切换站点时展示",
     "displayMode": "展示模式",
     "displayModeDes": "PWA 应用添加后的展示模式",
     "themeColor": "主题色",
