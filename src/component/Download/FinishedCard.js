@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
     infoValue: {
         color: theme.palette.text.secondary,
         textAlign: "left",
-        paddingLeft:theme.spacing(1),
+        paddingLeft: theme.spacing(1),
     },
 }));
 
@@ -247,18 +247,10 @@ export default function FinishedCard(props) {
                     scope="row"
                     className={classes.subFile}
                 >
-                    <Typography
-                        className={
-                            classes.subFileName
-                        }
-                    >
+                    <Typography className={classes.subFileName}>
                         <TypeIcon
-                            className={
-                                classes.subFileIcon
-                            }
-                            fileName={
-                                value.path
-                            }
+                            className={classes.subFileIcon}
+                            fileName={value.path}
                         />
                         {value.path}
                     </Typography>
@@ -270,9 +262,7 @@ export default function FinishedCard(props) {
                 >
                     <Typography noWrap>
                         {" "}
-                        {sizeToString(
-                            value.length
-                        )}
+                        {sizeToString(value.length)}
                     </Typography>
                 </TableCell>
                 <TableCell
@@ -300,9 +290,7 @@ export default function FinishedCard(props) {
                     Table: (props) => <Table {...props} />,
                 }}
                 data={activeFiles()}
-                itemContent={(index, value) => (
-                    subFileCell(value)
-                )}
+                itemContent={(index, value) => subFileCell(value)}
             />
         ) : (
             <div className={classes.scroll}>
@@ -319,10 +307,7 @@ export default function FinishedCard(props) {
                 </Table>
             </div>
         );
-    }, [
-        classes,
-        activeFiles,
-    ]);
+    }, [classes, activeFiles]);
 
     return (
         <Card className={classes.card}>
@@ -405,13 +390,17 @@ export default function FinishedCard(props) {
                             )}
                         {props.task.status === 4 &&
                             props.task.task_status === 2 && (
-                                <Typography
-                                    variant="body2"
-                                    color={"error"}
-                                    noWrap
+                                <Tooltip
+                                    title={getTaskError(props.task.task_error)}
                                 >
-                                    {getTaskError(props.task.task_error)}
-                                </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color={"error"}
+                                        noWrap
+                                    >
+                                        {getTaskError(props.task.task_error)}
+                                    </Typography>
+                                </Tooltip>
                             )}
                     </CardContent>
                     <CardContent className={classes.contentSide}>
@@ -473,14 +462,24 @@ export default function FinishedCard(props) {
                                     {formatLocalTime(props.task.update)}
                                 </Grid>
                             </Grid>
-                            {props.task.node && <Grid container xs={12} sm={6}>
-                                <Grid item xs={5} className={classes.infoTitle}>
-                                    {t("downloadNode")}
+                            {props.task.node && (
+                                <Grid container xs={12} sm={6}>
+                                    <Grid
+                                        item
+                                        xs={5}
+                                        className={classes.infoTitle}
+                                    >
+                                        {t("downloadNode")}
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        xs={7}
+                                        className={classes.infoValue}
+                                    >
+                                        {props.task.node}
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={7} className={classes.infoValue}>
-                                    {props.task.node}
-                                </Grid>
-                            </Grid>}
+                            )}
                         </Grid>
                     </div>
                 </ExpansionPanelDetails>
