@@ -211,7 +211,7 @@ export default function WebDAV() {
                                                         }
                                                         href={"javascript:void"}
                                                     >
-                                                        {t("copy", {
+                                                        {t("copyToClipboard", {
                                                             ns: "common",
                                                         })}
                                                     </Link>
