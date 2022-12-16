@@ -808,7 +808,6 @@ export default function S3Guide(props) {
                                                     ),
                                                     "warning"
                                                 );
-                                                return;
                                             }
                                             handleChange("IsOriginLinkEnable")(
                                                 e

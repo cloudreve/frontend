@@ -390,7 +390,7 @@
     "qiniuCredentialDes": "在七牛控制面板进入 个人中心 - 密钥管理，在下方填写获得到的 AK、SK。",
     "ak": "AK",
     "sk": "SK",
-    "cannotEnableForPrivateBucket": "私有空间无法开启此功能",
+    "cannotEnableForPrivateBucket": "私有空间开启外链功能后，还需要在用户组里设置开启“使用重定向的外链”，否则无法正常生成外链",
     "limitMimeType": "是否限制上传文件 MimeType？",
     "mimeTypeDes": "输入允许上传的 MimeType，多个请以半角逗号 , 隔开。七牛服务器会侦测文件内容以判断 MimeType，再用判断值跟指定值进行匹配，匹配成功则允许上传。",
     "mimeTypeList": "MimeType 列表",

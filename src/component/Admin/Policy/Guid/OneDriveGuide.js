@@ -267,9 +267,8 @@ export default function OneDriveGuide(props) {
         );
         policyCopy.OptionsSerialized.placeholder_with_size =
             policyCopy.OptionsSerialized.placeholder_with_size === "true";
-        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
-            ","
-        );
+        policyCopy.OptionsSerialized.file_type =
+            policyCopy.OptionsSerialized.file_type.split(",");
         if (
             policyCopy.OptionsSerialized.file_type.length === 1 &&
             policyCopy.OptionsSerialized.file_type[0] === ""
@@ -404,9 +403,8 @@ export default function OneDriveGuide(props) {
                                     ns={"dashboard"}
                                     i18nKey={"policy.createAadAppDes3"}
                                     values={{
-                                        url:
-                                            policy.OptionsSerialized
-                                                .od_redirect,
+                                        url: policy.OptionsSerialized
+                                            .od_redirect,
                                     }}
                                     components={[
                                         <code key={0} />,
@@ -832,6 +830,19 @@ export default function OneDriveGuide(props) {
                                         required
                                         value={policy.IsOriginLinkEnable}
                                         onChange={(e) => {
+                                            if (
+                                                policy.IsPrivate === "true" &&
+                                                e.target.value === "true"
+                                            ) {
+                                                ToggleSnackbar(
+                                                    "top",
+                                                    "right",
+                                                    t(
+                                                        "cannotEnableForPrivateBucket"
+                                                    ),
+                                                    "warning"
+                                                );
+                                            }
                                             handleChange("IsOriginLinkEnable")(
                                                 e
                                             );

@@ -390,7 +390,7 @@
     "qiniuCredentialDes": "Go to Personal Center - Credential Management in the Qiniu dashboard and fill in the obtained AK, SK.",
     "ak": "AK",
     "sk": "SK",
-    "cannotEnableForPrivateBucket": "This feature is not supported under private bucket.",
+    "cannotEnableForPrivateBucket": "If this feature is enabled for private bucket, you need to enable \"Use redirected source link\" for user groups.",
     "limitMimeType": "Do you want to limit MimeTypes of file that can be uploaded?",
     "mimeTypeDes": "Enter the MimeType of the allowed files, and separate multiple MimeTypes with a comma. Qiniu will detect the file content to determine the MimeType, and allow the upload if the MimeType is presented in your list.",
     "mimeTypeList": "MimeTypes list",

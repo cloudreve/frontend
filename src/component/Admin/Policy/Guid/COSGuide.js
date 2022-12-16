@@ -199,9 +199,8 @@ export default function COSGuide(props) {
         );
         policyCopy.OptionsSerialized.placeholder_with_size =
             policyCopy.OptionsSerialized.placeholder_with_size === "true";
-        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
-            ","
-        );
+        policyCopy.OptionsSerialized.file_type =
+            policyCopy.OptionsSerialized.file_type.split(",");
         if (
             policyCopy.OptionsSerialized.file_type.length === 1 &&
             policyCopy.OptionsSerialized.file_type[0] === ""
@@ -778,7 +777,6 @@ export default function COSGuide(props) {
                                                     ),
                                                     "warning"
                                                 );
-                                                return;
                                             }
                                             handleChange("IsOriginLinkEnable")(
                                                 e
