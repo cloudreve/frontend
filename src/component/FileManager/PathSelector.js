@@ -17,6 +17,7 @@ import {
 } from "@material-ui/core";
 import API from "../../middleware/Api";
 import { toggleSnackbar } from "../../redux/explorer";
+import { withTranslation } from "react-i18next";
 
 const mapStateToProps = (state) => {
     return {
@@ -91,20 +92,23 @@ class PathSelectorCompoment extends Component {
                 });
                 dirList.forEach((value) => {
                     value.displayName = value.name;
-                })
+                });
                 if (toBeLoad === "/") {
                     dirList.unshift({ name: "/", path: "", displayName: "/" });
                 } else {
                     let path = toBeLoad;
                     let name = toBeLoad;
-                    for (let i = 0; i < 2; i++) {
-                        const paths = path.split("/");
-                        name = paths.pop();
-                        name = name === "" ? "/" : name;
-                        path = paths.join("/");
-
-                    }
-                    dirList.unshift({ name: name, path: path, displayName: ".." });
+                    const paths = path.split("/");
+                    name = paths.pop();
+                    name = name === "" ? "/" : name;
+                    path = paths.join("/");
+                    dirList.unshift({
+                        name: name,
+                        path: path,
+                        displayName: this.props.t(
+                            "fileManager.backToParentFolder"
+                        ),
+                    });
                 }
                 this.setState({
                     presentPath: toBeLoad,
@@ -128,19 +132,11 @@ class PathSelectorCompoment extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, t } = this.props;
 
         return (
             <div className={classes.container}>
                 <MenuList className={classes.selector}>
-                    {this.state.presentPath !== "/" && (
-                        <MenuItem onClick={this.back}>
-                            <ListItemIcon>
-                                <UpIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="返回上一层" />
-                        </MenuItem>
-                    )}
                     {this.state.dirList.map((value, index) => (
                         <MenuItem
                             classes={{
@@ -160,7 +156,7 @@ class PathSelectorCompoment extends Component {
                                     style: { whiteSpace: "normal" },
                                 }}
                             />
-                            {index !== 0 && (
+                            {(index !== 0 || value.name !== "/") && (
                                 <ListItemSecondaryAction
                                     className={classes.buttonIcon}
                                 >
@@ -171,16 +167,20 @@ class PathSelectorCompoment extends Component {
                                                 index,
                                         })}
                                         onClick={() =>
-                                            this.enterFolder(
-                                                value.path === "/"
-                                                    ? value.path + value.name
-                                                    : value.path +
-                                                          "/" +
-                                                          value.name
-                                            )
+                                            index === 0
+                                                ? this.back()
+                                                : this.enterFolder(
+                                                      value.path === "/"
+                                                          ? value.path +
+                                                                value.name
+                                                          : value.path +
+                                                                "/" +
+                                                                value.name
+                                                  )
                                         }
                                     >
-                                        <RightIcon />
+                                        {index === 0 && <UpIcon />}
+                                        {index !== 0 && <RightIcon />}
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             )}
@@ -201,4 +201,4 @@ PathSelectorCompoment.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(PathSelectorCompoment));
+)(withStyles(styles)(withTranslation()(PathSelectorCompoment)));

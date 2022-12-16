@@ -172,7 +172,7 @@
     "directoryDownloadStarted": "Download started, please do not close this tab.",
     "directoryDownloadFinished": "Download finished, no failed objects.",
     "directoryDownloadFinishedWithError": "Download finished, {{failed}} object failed.",
-    "directoryDownloadPermissionError": "Permission denied, please allow read and write local files."
+    "directoryDownloadPermissionError": "Permission denied, please allow read and write local files.",
   },
   "modals": {
     "processing": "Processing...",
