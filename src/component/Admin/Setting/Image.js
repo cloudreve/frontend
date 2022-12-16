@@ -254,7 +254,7 @@ export default function ImageSetting() {
                                     {t("officePreviewServiceSrcDes")}
                                     <br />
                                     <code>{"{$srcB64}"}</code> -{" "}
-                                    {t("officePreviewServiceSrcB64Des ")}
+                                    {t("officePreviewServiceSrcB64Des")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
