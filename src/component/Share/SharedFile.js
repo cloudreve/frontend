@@ -13,6 +13,7 @@ import {
     openMusicDialog,
     openResaveDialog,
     setSelectedTarget,
+    showAudioPreview,
     showImgPreivew,
     toggleSnackbar,
 } from "../../redux/explorer";
@@ -105,8 +106,8 @@ const mapDispatchToProps = (dispatch) => {
         toggleSnackbar: (vertical, horizontal, msg, color) => {
             dispatch(toggleSnackbar(vertical, horizontal, msg, color));
         },
-        openMusicDialog: () => {
-            dispatch(openMusicDialog());
+        openMusicDialog: (first) => {
+            dispatch(showAudioPreview(first));
         },
         setSelectedTarget: (targets) => {
             dispatch(setSelectedTarget(targets));
@@ -166,13 +167,11 @@ class SharedFileCompoment extends Component {
                 );
                 return;
             case "audio":
-                this.props.setSelectedTarget([
-                    {
-                        key: this.props.share.key,
-                        type: "share",
-                    },
-                ]);
-                this.props.openMusicDialog();
+                this.props.openMusicDialog({
+                    key: this.props.share.key,
+                    name: this.props.share.source.name,
+                    type: "share",
+                });
                 return;
             case "video":
                 this.props.history.push(

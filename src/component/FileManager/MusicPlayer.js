@@ -103,6 +103,9 @@ class MusicPlayerComponent extends Component {
                     //isOpen: true,
                 });
                 this.props.audioPreviewSetIsOpen(true);
+                this.props.showAudioPreview(
+                    explorer.initState.audioPreview.first
+                );
                 return;
             }
             // eslint-disable-next-line
