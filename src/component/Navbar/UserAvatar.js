@@ -18,6 +18,7 @@ import DarkModeSwitcher from "./DarkModeSwitcher";
 import { Home } from "@material-ui/icons";
 import { setUserPopover } from "../../redux/explorer";
 import { withTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const mapStateToProps = (state) => {
     return {
@@ -110,6 +111,7 @@ class UserAvatarCompoment extends Component {
                     <div>
                         {!isAdminPage && (
                             <>
+                                <LanguageSwitcher position="top" />
                                 <DarkModeSwitcher position="top" />
                                 {loginCheck && (
                                     <>
