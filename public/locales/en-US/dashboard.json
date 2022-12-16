@@ -211,6 +211,7 @@
     "officePreviewServiceDes": "You can use following magic variables：",
     "officePreviewServiceSrcDes": "File URL",
     "officePreviewServiceSrcB64Des": " Base64 encoded file URL",
+    "officePreviewServiceName": "File name",
     "thumbnails": "Thumbnails",
     "localOnlyInfo": "The following settings only apply to local storage policies.",
     "thumbWidth": "Width",

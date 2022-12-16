@@ -211,6 +211,7 @@
     "officePreviewServiceDes": "可使用以下替换变量：",
     "officePreviewServiceSrcDes": "文件 URL",
     "officePreviewServiceSrcB64Des": " Base64 编码后的文件 URL",
+    "officePreviewServiceName": "文件名",
     "thumbnails": "缩略图",
     "localOnlyInfo": "以下设置只针对本机存储策略有效。",
     "thumbWidth": "缩略图宽度",
