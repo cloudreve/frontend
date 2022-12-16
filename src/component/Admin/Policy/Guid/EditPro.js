@@ -70,9 +70,10 @@ export default function EditPro(props) {
         );
         policyCopy.OptionsSerialized.placeholder_with_size =
             policyCopy.OptionsSerialized.placeholder_with_size === "true";
-        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
-            ","
-        );
+        policyCopy.OptionsSerialized.s3_path_style =
+            policyCopy.OptionsSerialized.s3_path_style === "true";
+        policyCopy.OptionsSerialized.file_type =
+            policyCopy.OptionsSerialized.file_type.split(",");
         if (
             policyCopy.OptionsSerialized.file_type.length === 1 &&
             policyCopy.OptionsSerialized.file_type[0] === ""
@@ -639,6 +640,42 @@ export default function EditPro(props) {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>{t("odOnly")}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    {t("usePathEndpoint")}
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <RadioGroup
+                                            required
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .s3_path_style
+                                            }
+                                            onChange={handleOptionChange(
+                                                "s3_path_style"
+                                            )}
+                                            row
+                                        >
+                                            <FormControlLabel
+                                                value={"true"}
+                                                control={
+                                                    <Radio color={"primary"} />
+                                                }
+                                                label={t("yes")}
+                                            />
+                                            <FormControlLabel
+                                                value={"false"}
+                                                control={
+                                                    <Radio color={"primary"} />
+                                                }
+                                                label={t("no")}
+                                            />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>{t("s3Only")}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

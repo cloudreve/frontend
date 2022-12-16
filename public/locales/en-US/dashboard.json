@@ -382,7 +382,7 @@
     "createQiniuBucket": "Go to <0>Qiniu dashboard</0> to create a storage bucket.。",
     "enterQiniuBucket": "Enter the \"bucket name\" you just created:",
     "qiniuBucketName": "Bucket name",
-    "bucketTypeDes": "Select the type of bucket you just created. We recommend selecting \"Private bucket\" for higher security, private bucket does not support \"Get Source Link\" feature.",
+    "bucketTypeDes": "Select the type of bucket you just created. We recommend selecting \"Private bucket\" for higher security.",
     "privateBucket": "Private bucket",
     "publicBucket": "Public bucket",
     "bucketCDNDes": "Fill in the CDN-accelerated domain name you have bound for the storage bucket.",
@@ -552,7 +552,10 @@
     "chunkSizeBytesDes": "Size of chunk for resumable uploads. Only supported in partial storage policy.",
     "placeHolderWithSize": "Use placeholder before uploading",
     "placeHolderWithSizeDes": "Whether to create a placeholder file before uploading .Only supported in partial storage policy.",
-    "saveChanges": "Save changes"
+    "saveChanges": "Save changes",
+    "s3EndpointPathStyle": "Select the format of the S3 Endpoint address, or if you don't know what to select, just leave to the default. Some third-party S3-compatible storage policies may require this option to work. When turned on, we will force to use of path-like format addresses, such as <0>http://s3.amazonaws.com/BUCKET/KEY</0>.",
+    "usePathEndpoint": "Force path style",
+    "useHostnameEndpoint": "Use host name if possible"
   },
   "node": {
     "#": "#",

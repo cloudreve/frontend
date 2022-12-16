@@ -65,6 +65,10 @@ export default function EditPolicyPreload() {
                     .data.OptionsSerialized.placeholder_with_size
                     ? "true"
                     : "false";
+                response.data.OptionsSerialized.s3_path_style = response.data
+                    .OptionsSerialized.s3_path_style
+                    ? "true"
+                    : "false";
 
                 response.data.OptionsSerialized.file_type = response.data
                     .OptionsSerialized.file_type

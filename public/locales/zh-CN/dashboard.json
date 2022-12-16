@@ -382,7 +382,7 @@
     "createQiniuBucket": "前往 <0>七牛控制面板</0> 创建对象存储资源。",
     "enterQiniuBucket": "在下方填写您在七牛创建存储空间时指定的“存储空间名称”：",
     "qiniuBucketName": "存储空间名称",
-    "bucketTypeDes": "在下方选择您创建的空间类型，推荐选择“私有空间”以获得更高的安全性，私有空间无法开启“获取直链”功能。",
+    "bucketTypeDes": "在下方选择您创建的空间类型，推荐选择“私有空间”以获得更高的安全性。",
     "privateBucket": "私有",
     "publicBucket": "公有",
     "bucketCDNDes": "填写您为存储空间绑定的 CDN 加速域名。",
@@ -552,7 +552,10 @@
     "chunkSizeBytesDes": "分片上传时单个分片的大小，仅部分存储策略支持",
     "placeHolderWithSize": "上传前预支用户存储",
     "placeHolderWithSizeDes": "是否在上传会话创建时就对用户存储进行预支，仅部分存储策略支持",
-    "saveChanges": "保存更改"
+    "saveChanges": "保存更改",
+    "s3EndpointPathStyle": "选择 S3 Endpoint 地址的格式，如果您不知道该选什么，保持默认即可。某些第三方 S3 兼容存储策略可能需要更改此选项。开启后，将会强制使用路径格式地址，比如 <0>http://s3.amazonaws.com/BUCKET/KEY</0>。",
+    "usePathEndpoint": "强制路径格式",
+    "useHostnameEndpoint": "主机名优先"
   },
   "node": {
     "#": "#",
