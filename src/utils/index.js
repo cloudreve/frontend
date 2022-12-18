@@ -1,3 +1,5 @@
+import { getResumeCtx } from "../component/Uploader/core/utils";
+
 export const sizeToString = (bytes) => {
     if (bytes === 0 || bytes === "0") return "0 B";
     const k = 1024;
@@ -153,3 +155,12 @@ export function vhCheck() {
     const vh = window.innerHeight;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
 }
+
+export const removeI18nCache = () => {
+    for (let i = 0, len = localStorage.length; i < len; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("i18next_res_")) {
+            localStorage.removeItem(key);
+        }
+    }
+};

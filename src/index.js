@@ -13,6 +13,7 @@ import { createBrowserHistory } from "history";
 import { ConnectedRouter, routerMiddleware } from "connected-react-router";
 import i18next from "./i18n";
 import PageLoading from "./component/Placeholder/PageLoading";
+import { removeI18nCache } from "./utils";
 
 const Admin = React.lazy(() => import("./Admin"));
 
@@ -21,6 +22,7 @@ if (window.location.hash !== "") {
 }
 serviceWorker.register({
     onUpdate: (registration) => {
+        removeI18nCache();
         alert(i18next.t("newVersionRefresh", { ns: "common" }));
         if (registration && registration.waiting) {
             registration.waiting.postMessage({ type: "SKIP_WAITING" });
