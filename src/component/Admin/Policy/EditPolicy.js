@@ -14,6 +14,7 @@ import QiniuGuide from "./Guid/QiniuGuide";
 import RemoteGuide from "./Guid/RemoteGuide";
 import UpyunGuide from "./Guid/UpyunGuide";
 import S3Guide from "./Guid/S3Guide";
+import { transformResponse } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,43 +46,7 @@ export default function EditPolicyPreload() {
         setType("");
         API.get("/admin/policy/" + id)
             .then((response) => {
-                response.data.IsOriginLinkEnable = response.data
-                    .IsOriginLinkEnable
-                    ? "true"
-                    : "false";
-                response.data.AutoRename = response.data.AutoRename
-                    ? "true"
-                    : "false";
-                response.data.MaxSize = response.data.MaxSize.toString();
-                response.data.OptionsSerialized.chunk_size = response.data
-                    .OptionsSerialized.chunk_size
-                    ? response.data.OptionsSerialized.chunk_size.toString()
-                    : 0;
-                response.data.IsPrivate = response.data.IsPrivate
-                    ? "true"
-                    : "false";
-
-                response.data.OptionsSerialized.placeholder_with_size = response
-                    .data.OptionsSerialized.placeholder_with_size
-                    ? "true"
-                    : "false";
-                response.data.OptionsSerialized.s3_path_style = response.data
-                    .OptionsSerialized.s3_path_style
-                    ? "true"
-                    : "false";
-
-                response.data.OptionsSerialized.file_type = response.data
-                    .OptionsSerialized.file_type
-                    ? response.data.OptionsSerialized.file_type.join(",")
-                    : "";
-                response.data.OptionsSerialized.tps_limit = response.data
-                    .OptionsSerialized.tps_limit
-                    ? response.data.OptionsSerialized.tps_limit.toString()
-                    : 0;
-                response.data.OptionsSerialized.tps_limit_burst = response.data
-                    .OptionsSerialized.tps_limit_burst
-                    ? response.data.OptionsSerialized.tps_limit_burst.toString()
-                    : 0;
+                response = transformResponse(response);
                 setPolicy(response.data);
                 setType(response.data.Type);
             })

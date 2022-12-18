@@ -23,6 +23,7 @@ import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
 import MagicVar from "../../Dialogs/MagicVar";
 import { Trans, useTranslation } from "react-i18next";
+import { transformPolicyRequest } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -195,7 +196,7 @@ export default function RemoteGuide(props) {
         e.preventDefault();
         setLoading(true);
 
-        const policyCopy = { ...policy };
+        let policyCopy = { ...policy };
         policyCopy.OptionsSerialized = { ...policyCopy.OptionsSerialized };
 
         // 处理存储策略
@@ -204,25 +205,7 @@ export default function RemoteGuide(props) {
         }
 
         // 类型转换
-        policyCopy.AutoRename = policyCopy.AutoRename === "true";
-        policyCopy.IsOriginLinkEnable =
-            policyCopy.IsOriginLinkEnable === "true";
-        policyCopy.MaxSize = parseInt(policyCopy.MaxSize);
-        policyCopy.OptionsSerialized.chunk_size = parseInt(
-            policyCopy.OptionsSerialized.chunk_size
-        );
-        policyCopy.OptionsSerialized.placeholder_with_size =
-            policyCopy.OptionsSerialized.placeholder_with_size === "true";
-        policyCopy.IsPrivate = policyCopy.IsPrivate === "true";
-        policyCopy.OptionsSerialized.file_type = policyCopy.OptionsSerialized.file_type.split(
-            ","
-        );
-        if (
-            policyCopy.OptionsSerialized.file_type.length === 1 &&
-            policyCopy.OptionsSerialized.file_type[0] === ""
-        ) {
-            policyCopy.OptionsSerialized.file_type = [];
-        }
+        policyCopy = transformPolicyRequest(policyCopy);
 
         API.post("/admin/policy", {
             policy: policyCopy,
