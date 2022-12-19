@@ -255,7 +255,7 @@ export default function Group() {
                             color="inherit"
                             variant="subtitle1"
                         >
-                            {t("selectedObject", { num: selected.length })}
+                            {t("selectedObjects", { num: selected.length })}
                         </Typography>
                         <Tooltip title={tDashboard("policy.delete")}>
                             <IconButton
@@ -443,9 +443,8 @@ export default function Group() {
                                         {row.Status === 0 && (
                                             <Typography
                                                 style={{
-                                                    color:
-                                                        theme.palette.success
-                                                            .main,
+                                                    color: theme.palette.success
+                                                        .main,
                                                 }}
                                                 variant={"body2"}
                                             >
