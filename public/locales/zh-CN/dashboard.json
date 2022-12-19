@@ -99,7 +99,7 @@
     "captchaForLoginDes": "是否启用登录表单验证码",
     "captchaForReset": "找回密码验证码",
     "captchaForResetDes": "是否启用找回密码表单验证码",
-    "webauthnDes": "是否允许用户使用绑定的外部验证器登录，站点必须启动 HTTPS 才能使用。",
+    "webauthnDes": "是否允许用户使用绑定的外部验证器登录，站点必须启用 HTTPS 才能使用。",
     "webauthn": "外部验证器登录",
     "defaultGroup": "默认用户组",
     "defaultGroupDes": "用户注册后的初始用户组",
