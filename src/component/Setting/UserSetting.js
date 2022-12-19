@@ -41,7 +41,7 @@ import { blue, green, yellow } from "@material-ui/core/colors";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
-import QRCode from "qrcode-react";
+import { QRCodeSVG } from "qrcode.react";
 import {
     Brightness3,
     GitHub,
@@ -1262,7 +1262,7 @@ class UserSettingCompoment extends Component {
                         <div className={classes.flexContainerResponse}>
                             {!this.state.settings.two_factor && (
                                 <div className={classes.qrcode}>
-                                    <QRCode
+                                    <QRCodeSVG
                                         value={
                                             "otpauth://totp/" +
                                             this.props.title +
