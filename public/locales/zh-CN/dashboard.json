@@ -260,7 +260,7 @@
     "tCaptchaSecretKey": "App Secret Key",
     "tCaptchaSecretKeyDes": "<0>图形验证页面</0> 获取到的的 App Secret Key",
     "staticResourceCache": "静态公共资源缓存",
-    "staticResourceCacheDes": "公共可访问的静态资源（如：本机策略直链、文件下载连接）的缓存有效期"
+    "staticResourceCacheDes": "公共可访问的静态资源（如：本机策略直链、文件下载链接）的缓存有效期"
   },
   "policy": {
     "sharp": "#",
