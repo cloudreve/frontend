@@ -41,7 +41,6 @@ export default function UploadDownload() {
         max_worker_num: "1",
         max_parallel_transfer: "1",
         temp_path: "",
-        maxEditSize: "",
         chunk_retries: "0",
         archive_timeout: "0",
         download_timeout: "0",
@@ -186,25 +185,6 @@ export default function UploadDownload() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     {t("tempFolderDes")}
-                                </FormHelperText>
-                            </FormControl>
-                        </div>
-
-                        <div className={classes.form}>
-                            <FormControl>
-                                {options.maxEditSize !== "" && (
-                                    <SizeInput
-                                        value={options.maxEditSize}
-                                        onChange={handleChange("maxEditSize")}
-                                        required
-                                        min={0}
-                                        max={2147483647}
-                                        label={t("textEditMaxSize")}
-                                    />
-                                )}
-
-                                <FormHelperText id="component-helper-text">
-                                    {t("textEditMaxSizeDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>

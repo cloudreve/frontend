@@ -13,7 +13,8 @@ import SizeInput from "../Common/SizeInput";
 import Alert from "@material-ui/lab/Alert";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,6 +54,10 @@ export default function ImageSetting() {
         thumb_encode_method: "",
         thumb_gc_after_gen: "0",
         thumb_encode_quality: "",
+        maxEditSize: "",
+        wopi_enabled: "0",
+        wopi_endpoint: "",
+        wopi_session_timeout: "0",
     });
 
     const handleChange = (name) => (event) => {
@@ -82,6 +87,17 @@ export default function ImageSetting() {
         // eslint-disable-next-line
     }, []);
 
+    const reload = () => {
+        API.get("/admin/reload/wopi")
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            .then(() => {})
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            })
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            .then(() => {});
+    };
+
     const submit = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -97,6 +113,7 @@ export default function ImageSetting() {
         })
             .then(() => {
                 ToggleSnackbar("top", "right", t("saved"), "success");
+                reload();
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -236,7 +253,7 @@ export default function ImageSetting() {
 
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
-                            <FormControl>
+                            <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
                                     {t("officePreviewService")}
                                 </InputLabel>
@@ -261,6 +278,109 @@ export default function ImageSetting() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                {options.maxEditSize !== "" && (
+                                    <SizeInput
+                                        value={options.maxEditSize}
+                                        onChange={handleChange("maxEditSize")}
+                                        required
+                                        min={0}
+                                        max={2147483647}
+                                        label={t("textEditMaxSize")}
+                                    />
+                                )}
+
+                                <FormHelperText id="component-helper-text">
+                                    {t("textEditMaxSizeDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={classes.root}>
+                    <Typography variant="h6" gutterBottom>
+                        {t("wopiClient")}
+                    </Typography>
+
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <Alert severity="info">
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"settings.wopiClientDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            target={"_blank"}
+                                            href={t("wopiDocLink")}
+                                        />,
+                                    ]}
+                                />
+                            </Alert>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.wopi_enabled === "1"
+                                            }
+                                            onChange={handleCheckChange(
+                                                "wopi_enabled"
+                                            )}
+                                        />
+                                    }
+                                    label={t("enableWopi")}
+                                />
+                            </FormControl>
+                        </div>
+
+                        {options.wopi_enabled === "1" && (
+                            <>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            {t("wopiEndpoint")}
+                                        </InputLabel>
+                                        <Input
+                                            value={options.wopi_endpoint}
+                                            onChange={handleChange(
+                                                "wopi_endpoint"
+                                            )}
+                                            required
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            {t("wopiEndpointDes")}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            {t("wopiSessionTtl")}
+                                        </InputLabel>
+                                        <Input
+                                            inputProps={{ min: 1, step: 1 }}
+                                            type={"number"}
+                                            value={options.wopi_session_timeout}
+                                            onChange={handleChange(
+                                                "wopi_session_timeout"
+                                            )}
+                                            required
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            {t("wopiSessionTtlDes")}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

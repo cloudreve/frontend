@@ -140,8 +140,8 @@
     "transitParallelNumDes": "任务队列中转任务传输时，最大并行协程数",
     "tempFolder": "临时目录",
     "tempFolderDes": "用于存放解压缩、压缩等任务产生的临时文件的目录路径",
-    "textEditMaxSize": "文本文件在线编辑大小",
-    "textEditMaxSizeDes": "文本文件可在线编辑的最大大小，超出此大小的文件无法在线编辑",
+    "textEditMaxSize": "文档在线编辑最大尺寸",
+    "textEditMaxSizeDes": "文档文件可在线编辑的最大大小，超出此大小的文件无法在线编辑。此项设置适用于纯文本文件、代码文件、Office 文档 （WOPI）",
     "failedChunkRetry": "分片错误重试",
     "failedChunkRetryDes": "分片上传失败后重试的最大次数，只适用于服务端上传或中转",
     "cacheChunks": "缓存流式分片文件以用于重试",
@@ -260,7 +260,15 @@
     "tCaptchaSecretKey": "App Secret Key",
     "tCaptchaSecretKeyDes": "<0>图形验证页面</0> 获取到的的 App Secret Key",
     "staticResourceCache": "静态公共资源缓存",
-    "staticResourceCacheDes": "公共可访问的静态资源（如：本机策略直链、文件下载链接）的缓存有效期"
+    "staticResourceCacheDes": "公共可访问的静态资源（如：本机策略直链、文件下载链接）的缓存有效期",
+    "wopiClient": "WOPI 客户端",
+    "wopiClientDes": "通过对接支持 WOPI 协议的在线文档处理系统，扩展 Cloudreve 的文档在线预览和编辑能力。详情请参考 <0>官方文档</0>。",
+    "wopiDocLink": "https://docs.cloudreve.org/use/wopi",
+    "enableWopi": "使用 WOPI",
+    "wopiEndpoint": "WOPI Discovery Endpoint",
+    "wopiEndpointDes": "WOPI 客户端发现 API 的端点地址",
+    "wopiSessionTtl": "编辑会话有效期（秒）",
+    "wopiSessionTtlDes": "用户打开在线编辑文档会话的有效期，超出此期限的会话无法继续保存新更改"
   },
   "policy": {
     "sharp": "#",
