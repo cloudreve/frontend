@@ -111,6 +111,7 @@
     "name": "名称",
     "size": "大小",
     "lastModified": "修改日期",
+    "currentFolder": "当前目录",
     "backToParentFolder": "上级目录",
     "folders": "文件夹",
     "files": "文件",

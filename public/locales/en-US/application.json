@@ -111,6 +111,7 @@
     "name": "Name",
     "size": "Size",
     "lastModified": "Last modified",
+    "currentFolder": "Current Folder",
     "backToParentFolder": "Back to the parent",
     "folders": "Folders",
     "files": "Files",
