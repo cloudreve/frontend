@@ -478,10 +478,10 @@
     "iOSApp": "iOS 用戶端",
     "connectByiOS": "通過 iOS 設備連接到 <0>{{title}}</0>",
     "downloadOurApp": "下載並安裝我們的 iOS 應用：",
-    "fillInEndpoint": "在 “站點地址” 中填入 “{{url}}”；",
-    "loginApp": "輸入您的使用者名稱及密碼完成登錄。",
+    "fillInEndpoint": "使用我們的 iOS 應用掃描下方二維碼（其他掃碼應用無效）：",
+    "loginApp": "完成綁定，你可以開始使用 iOS 客戶端了。如果掃碼綁定遇到問題，你也可以嘗試手動輸入用戶名和密碼登錄。",
     "aboutCloudreve": "關於 Cloudreve",
     "githubRepo": "GitHub 倉庫",
-    "homepage": "首頁"
+    "homepage": "主頁"
   }
 }

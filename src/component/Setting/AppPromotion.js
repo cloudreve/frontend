@@ -5,6 +5,7 @@ import { useTheme, fade } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { useSelector } from "react-redux";
 import Link from "@material-ui/core/Link";
+import AppQRCode from "./AppQRCode";
 
 const PhoneSkeleton = () => {
     const theme = useTheme();
@@ -150,10 +151,11 @@ export default function AppPromotion() {
                             </li>
                             <li>
                                 <Typography variant="h6" component="p">
-                                    {t("fillInEndpoint", {
-                                        url: window.location.origin,
-                                    })}
+                                    {t("fillInEndpoint")}
                                 </Typography>
+                                <Box marginTop={1}>
+                                    <AppQRCode />
+                                </Box>
                             </li>
                             <li>
                                 <Typography variant="h6" component="p">

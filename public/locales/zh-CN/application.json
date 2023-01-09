@@ -479,8 +479,8 @@
     "iOSApp": "iOS 客户端",
     "connectByiOS": "通过 iOS 设备连接到 <0>{{title}}</0>",
     "downloadOurApp": "下载并安装我们的 iOS 应用：",
-    "fillInEndpoint": "在 “站点地址” 中填入 “{{url}}”；",
-    "loginApp": "输入您的用户名及密码完成登录。",
+    "fillInEndpoint": "使用我们的 iOS 应用扫描下方二维码（其他扫码应用无效）：",
+    "loginApp": "完成绑定，你可以开始使用 iOS 客户端了。如果扫码绑定遇到问题，你也可以尝试手动输入用户名和密码登录。",
     "aboutCloudreve": "关于 Cloudreve",
     "githubRepo": "GitHub 仓库",
     "homepage": "主页"
