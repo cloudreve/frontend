@@ -98,17 +98,20 @@ class PathSelectorCompoment extends Component {
                 } else {
                     let path = toBeLoad;
                     let name = toBeLoad;
-                    const paths = path.split("/");
-                    name = paths.pop();
-                    name = name === "" ? "/" : name;
-                    path = paths.join("/");
-                    dirList.unshift({
-                        name: name,
-                        path: path,
-                        displayName: this.props.t(
-                            "fileManager.backToParentFolder"
-                        ),
-                    });
+                    const displayNames = ["fileManager.currentFolder", "fileManager.backToParentFolder"];
+                    for (let i = 0; i < 2; i++) {
+                        const paths = path.split("/");
+                        name = paths.pop();
+                        name = name === "" ? "/" : name;
+                        path = paths.join("/");
+                        dirList.unshift({
+                            name: name,
+                            path: path,
+                            displayName: this.props.t(
+                                displayNames[i]
+                            ),
+                        });
+                    }
                 }
                 this.setState({
                     presentPath: toBeLoad,
@@ -134,6 +137,24 @@ class PathSelectorCompoment extends Component {
     render() {
         const { classes, t } = this.props;
 
+        const showActionIcon = (index) => {
+            if (this.state.presentPath === "/") {
+                return index !== 0;
+            }
+            return index !== 1;
+        };
+
+        const actionIcon = (index) => {
+            if (this.state.presentPath === "/") {
+                return <RightIcon />;
+            }
+
+            if (index === 0) {
+                return <UpIcon />;
+            }
+            return <RightIcon />;
+        };
+
         return (
             <div className={classes.container}>
                 <MenuList className={classes.selector}>
@@ -156,7 +177,7 @@ class PathSelectorCompoment extends Component {
                                     style: { whiteSpace: "normal" },
                                 }}
                             />
-                            {(index !== 0 || value.name !== "/") && (
+                            {showActionIcon(index) && (
                                 <ListItemSecondaryAction
                                     className={classes.buttonIcon}
                                 >
@@ -179,8 +200,7 @@ class PathSelectorCompoment extends Component {
                                                   )
                                         }
                                     >
-                                        {index === 0 && <UpIcon />}
-                                        {index !== 0 && <RightIcon />}
+                                        {actionIcon(index)}
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             )}
