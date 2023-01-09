@@ -9,7 +9,7 @@ export const imgPreviewSuffix = [
     "svg",
     "webp",
 ];
-export const msDocPreviewSuffix = [
+export let msDocPreviewSuffix = [
     "ppt",
     "pptx",
     "pps",
@@ -147,4 +147,8 @@ export const getTaskProgress = (type: any, status: any) => {
         });
     }
     return i18next.t(taskProgress[status]);
+};
+
+export const setWopiExts = (exts: string[]) => {
+    msDocPreviewSuffix = exts;
 };

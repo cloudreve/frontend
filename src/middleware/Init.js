@@ -7,6 +7,7 @@ import {
     toggleSnackbar,
 } from "../redux/explorer";
 import i18next from "../i18n";
+import { msDocPreviewSuffix, setWopiExts } from "../config";
 
 const initUserConfig = (siteConfig) => {
     if (siteConfig.user !== undefined && !siteConfig.user.anonymous) {
@@ -46,6 +47,7 @@ export const InitSiteConfig = (rawStore) => {
 
     // 更改站点标题
     document.title = rawStore.siteConfig.title;
+
     return rawStore;
 };
 
@@ -60,6 +62,11 @@ export async function UpdateSiteConfig(store) {
                 "siteConfigCache",
                 JSON.stringify(response.data)
             );
+
+            // 更新 office WOPI 预览后缀
+            if (response.data.wopi_exts) {
+                setWopiExts(response.data.wopi_exts);
+            }
 
             // 偏爱的列表样式
             const preferListMethod = Auth.GetPreference("view_method");
