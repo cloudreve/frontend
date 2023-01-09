@@ -14,7 +14,7 @@ i18n.use(ChainedBackend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        fallbackLng: "zh-CN",
+        fallbackLng: "en-US",
         debug: true,
         ns: ["common", "application"],
         load: "currentOnly",
@@ -47,6 +47,10 @@ export const languages = [
     {
         code: "zh-CN",
         displayName: "简体中文",
+    },
+    {
+        code: "zh-TW",
+        displayName: "繁體中文",
     },
 ];
 
