@@ -335,7 +335,7 @@ class UserSettingCompoment extends Component {
                 this.props.toggleSnackbar(
                     "top",
                     "right",
-                    this.props.t("nickChanged"),
+                    this.props.t("setting.nickChanged"),
                     "success"
                 );
                 this.setState({
