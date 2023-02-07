@@ -18,7 +18,6 @@ import API from "../../../middleware/Api";
 import SizeInput from "../Common/SizeInput";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -158,7 +157,8 @@ export default function GroupForm(props) {
             "one_time_download",
             "share_download",
             "aria2",
-            "redirected_source"
+            "redirected_source",
+            "advance_delete"
         ].forEach((v) => {
             if (groupCopy.OptionsSerialized[v] !== undefined) {
                 groupCopy.OptionsSerialized[v] =
@@ -622,6 +622,31 @@ export default function GroupForm(props) {
                                                 />,
                                             ]}
                                         />
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
+
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.OptionsSerialized
+                                                        .advance_delete ===
+                                                    "true"
+                                                }
+                                                onChange={handleOptionCheckChange(
+                                                    "advance_delete"
+                                                )}
+                                            />
+                                        }
+                                        label={t("advanceDelete")}
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        {t("advanceDeleteDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>

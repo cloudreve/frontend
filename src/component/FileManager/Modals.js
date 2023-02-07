@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import PathSelector from "./PathSelector";
-import API, { AppError } from "../../middleware/Api";
+import API from "../../middleware/Api";
 import {
     Button,
     CircularProgress,
@@ -33,6 +33,7 @@ import OptionSelector from "../Modals/OptionSelector";
 import { getDownloadURL } from "../../services/file";
 import { Trans, withTranslation } from "react-i18next";
 import RemoteDownload from "../Modals/RemoteDownload";
+import Delete from "../Modals/Delete";
 
 const styles = (theme) => ({
     wrapper: {
@@ -146,51 +147,6 @@ class ModalsCompoment extends Component {
                     "error"
                 );
                 this.onClose();
-            });
-    };
-
-    submitRemove = (e) => {
-        e.preventDefault();
-        this.props.setModalsLoading(true);
-        const dirs = [],
-            items = [];
-        // eslint-disable-next-line
-        this.props.selected.map((value) => {
-            if (value.type === "dir") {
-                dirs.push(value.id);
-            } else {
-                items.push(value.id);
-            }
-        });
-        API.delete("/object", {
-            data: {
-                items: items,
-                dirs: dirs,
-            },
-        })
-            .then((response) => {
-                if (response.rawData.code === 0) {
-                    this.onClose();
-                    setTimeout(this.props.refreshFileList, 500);
-                } else {
-                    this.props.toggleSnackbar(
-                        "top",
-                        "right",
-                        response.rawData.msg,
-                        "warning"
-                    );
-                }
-                this.props.setModalsLoading(false);
-                this.props.refreshStorage();
-            })
-            .catch((error) => {
-                this.props.toggleSnackbar(
-                    "top",
-                    "right",
-                    error.message,
-                    "error"
-                );
-                this.props.setModalsLoading(false);
             });
     };
 
@@ -708,54 +664,15 @@ class ModalsCompoment extends Component {
                         </div>
                     </DialogActions>
                 </Dialog>
-                <Dialog
+                <Delete
                     open={this.props.modalsStatus.remove}
                     onClose={this.onClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">
-                        {t("modals.deleteTitle")}
-                    </DialogTitle>
-
-                    <DialogContent>
-                        <DialogContentText>
-                            {this.props.selected.length === 1 && (
-                                <Trans
-                                    i18nKey="modals.deleteOneDescription"
-                                    values={{
-                                        name: this.props.selected[0].name,
-                                    }}
-                                    components={[<strong key={0} />]}
-                                />
-                            )}
-                            {this.props.selected.length > 1 &&
-                                t("modals.deleteMultipleDescription", {
-                                    num: this.props.selected.length,
-                                })}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.onClose}>
-                            {t("cancel", { ns: "common" })}
-                        </Button>
-                        <div className={classes.wrapper}>
-                            <Button
-                                onClick={this.submitRemove}
-                                color="primary"
-                                disabled={this.props.modalsLoading}
-                            >
-                                {t("ok", { ns: "common" })}
-                                {this.props.modalsLoading && (
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.buttonProgress}
-                                    />
-                                )}
-                            </Button>
-                        </div>
-                    </DialogActions>
-                </Dialog>
-
+                    modalsLoading={this.props.modalsLoading}
+                    setModalsLoading={this.props.setModalsLoading}
+                    selected={this.props.selected}
+                    refreshFileList={this.props.refreshFileList}
+                    refreshStorage={this.props.refreshStorage}
+                />
                 <CreatShare
                     open={this.props.modalsStatus.share}
                     onClose={this.onClose}

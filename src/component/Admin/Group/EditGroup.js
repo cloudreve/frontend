@@ -33,7 +33,8 @@ export default function EditGroupPreload() {
                     "one_time_download",
                     "share_download",
                     "aria2",
-                    "redirected_source"
+                    "redirected_source",
+                    "advance_delete"
                 ].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
                         response.data.OptionsSerialized[v] = response.data

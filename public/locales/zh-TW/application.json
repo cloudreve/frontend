@@ -241,7 +241,12 @@
     "directoryDownloadError": "遇到錯誤：{{msg}}",
     "directoryDownloadErrorNotification": "下載 {{name}} 遇到錯誤：{{msg}}",
     "directoryDownloadAutoscroll": "自動滾動",
-    "directoryDownloadCancelled": "已取消下載"
+    "directoryDownloadCancelled": "已取消下載",
+    "advanceOptions": "高級選項",
+    "forceDelete": "強制刪除文件",
+    "forceDeleteDes": "強制刪除文件記錄，無論物理文件是否被成功刪除",
+    "unlinkOnly": "僅解除鏈接",
+    "unlinkOnlyDes": "僅刪除文件記錄，物理文件不會被刪除"
   },
   "uploader": {
     "fileNotMatchError": "所選擇文件與原始文件不符",
