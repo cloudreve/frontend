@@ -745,7 +745,8 @@
     "dstFolderPathDes": "Path in the user's file system to hold all imported files.",
     "recursivelyImport": "Recursively import",
     "recursivelyImportDes": "Whether to import all subdirectories under the directory recursively.",
-    "createImportTask": "Create import task"
+    "createImportTask": "Create import task",
+    "unlink": "Unlink (Keep physical file)"
   },
   "share": {
     "deleted": "Share deleted.",

@@ -745,7 +745,8 @@
     "dstFolderPathDes": "要將目錄導入到用戶文件系統中的路徑",
     "recursivelyImport": "遞迴導入子目錄",
     "recursivelyImportDes": "是否將目錄下的所有子目錄遞迴導入",
-    "createImportTask": "創建導入任務"
+    "createImportTask": "創建導入任務",
+    "unlink": "解除關聯（保留物理文件）"
   },
   "share": {
     "deleted": "分享已刪除",
