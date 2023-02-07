@@ -15,7 +15,7 @@ import Alert from "@material-ui/lab/Alert";
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
 import IconButton from "@material-ui/core/IconButton";
-import { Delete, ToggleOff, ToggleOn } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
 import Link from "@material-ui/core/Link";
@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import AppPromotion from "./AppPromotion";
 import Tooltip from "@material-ui/core/Tooltip";
 import ToggleIcon from "material-ui-toggle-icon";
+import { Pencil, PencilOff } from "mdi-material-ui";
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -118,13 +119,15 @@ export default function WebDAV() {
         API.patch("/webdav/accounts", {
             id: account.ID,
             readonly: !account.Readonly,
-        }).then((response) => {
-            account.Readonly = response.data.readonly;
-            const accountCopy = [...accounts];
-            setAccounts(accountCopy);
-        }).catch((error) => {
-            ToggleSnackbar("top", "right", error.message, "error");
-        });
+        })
+            .then((response) => {
+                account.Readonly = response.data.readonly;
+                const accountCopy = [...accounts];
+                setAccounts(accountCopy);
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
     };
 
     const addAccount = (account) => {
@@ -252,23 +255,36 @@ export default function WebDAV() {
                                                         placement="top"
                                                         title={
                                                             row.Readonly
-                                                                ? t("setting.readonlyOff")
-                                                                : t("setting.readonlyOn")
+                                                                ? t(
+                                                                      "setting.readonlyOff"
+                                                                  )
+                                                                : t(
+                                                                      "setting.readonlyOn"
+                                                                  )
                                                         }
                                                         onClick={() =>
-                                                            toggleAccountReadonly(id)
-                                                        }>
+                                                            toggleAccountReadonly(
+                                                                id
+                                                            )
+                                                        }
+                                                    >
                                                         <IconButton>
                                                             <ToggleIcon
-                                                                on={row.Readonly}
+                                                                on={
+                                                                    row.Readonly
+                                                                }
                                                                 onIcon={
-                                                                    <ToggleOn
-                                                                        fontSize={"small"}
+                                                                    <PencilOff
+                                                                        fontSize={
+                                                                            "small"
+                                                                        }
                                                                     />
                                                                 }
                                                                 offIcon={
-                                                                    <ToggleOff
-                                                                        fontSize={"small"}
+                                                                    <Pencil
+                                                                        fontSize={
+                                                                            "small"
+                                                                        }
                                                                     />
                                                                 }
                                                             />
