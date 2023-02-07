@@ -17,7 +17,7 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import { Delete, DeleteForever, FilterList } from "@material-ui/icons";
+import { Delete, DeleteForever, FilterList,LinkOff } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -125,9 +125,9 @@ export default function File() {
         loadList();
     }, [page, pageSize, orderBy, filter, search]);
 
-    const deletePolicy = (id) => {
+    const deleteFile = (id, unlink = false) => {
         setLoading(true);
-        API.post("/admin/file/delete", { id: [id] })
+        API.post("/admin/file/delete", { id: [id], unlink })
             .then(() => {
                 loadList();
                 ToggleSnackbar("top", "right", t("deleteAsync"), "success");
@@ -140,20 +140,22 @@ export default function File() {
             });
     };
 
-    const deleteBatch = (force) => () => {
-        setLoading(true);
-        API.post("/admin/file/delete", { id: selected, force: force })
-            .then(() => {
-                loadList();
-                ToggleSnackbar("top", "right", t("deleteAsync"), "success");
-            })
-            .catch((error) => {
-                ToggleSnackbar("top", "right", error.message, "error");
-            })
-            .then(() => {
-                setLoading(false);
-            });
-    };
+    const deleteBatch =
+        (force, unlink = false) =>
+        () => {
+            setLoading(true);
+            API.post("/admin/file/delete", { id: selected, force, unlink })
+                .then(() => {
+                    loadList();
+                    ToggleSnackbar("top", "right", t("deleteAsync"), "success");
+                })
+                .catch((error) => {
+                    ToggleSnackbar("top", "right", error.message, "error");
+                })
+                .then(() => {
+                    setLoading(false);
+                });
+        };
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -262,6 +264,15 @@ export default function File() {
                                 aria-label="delete"
                             >
                                 <DeleteForever />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title={tDashboard("file.unlink")}>
+                            <IconButton
+                                disabled={loading}
+                                onClick={deleteBatch(true, true)}
+                                size={"small"}
+                            >
+                                <LinkOff />
                             </IconButton>
                         </Tooltip>
                     </Toolbar>
@@ -446,11 +457,24 @@ export default function File() {
                                             <IconButton
                                                 disabled={loading}
                                                 onClick={() =>
-                                                    deletePolicy(row.ID)
+                                                    deleteFile(row.ID)
                                                 }
                                                 size={"small"}
                                             >
                                                 <Delete />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip
+                                            title={tDashboard("file.unlink")}
+                                        >
+                                            <IconButton
+                                                disabled={loading}
+                                                onClick={() =>
+                                                    deleteFile(row.ID, true)
+                                                }
+                                                size={"small"}
+                                            >
+                                                <LinkOff />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>

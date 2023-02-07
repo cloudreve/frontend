@@ -745,7 +745,8 @@
     "dstFolderPathDes": "要将目录导入到用户文件系统中的路径",
     "recursivelyImport": "递归导入子目录",
     "recursivelyImportDes": "是否将目录下的所有子目录递归导入",
-    "createImportTask": "创建导入任务"
+    "createImportTask": "创建导入任务",
+    "unlink": "解除关联（保留物理文件）"
   },
   "share": {
     "deleted": "分享已删除",
