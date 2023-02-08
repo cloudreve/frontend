@@ -292,7 +292,9 @@ export default function WebDAV() {
                                                     </Tooltip>
                                                     <Tooltip
                                                         placement="top"
-                                                        title={t("setting.delete")}
+                                                        title={t(
+                                                            "setting.delete"
+                                                        )}
                                                         onClick={() =>
                                                             deleteAccount(id)
                                                         }
