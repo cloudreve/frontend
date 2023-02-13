@@ -150,7 +150,12 @@ function LoginForm() {
         // 设置登录状态
         SetSessionStatus(true);
 
-        history.push("/home");
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        if (query.get("redirect")) {
+            history.push(query.get("redirect"));
+        } else {
+            history.push("/home");
+        }
         ToggleSnackbar("top", "right", t("login.success"), "success");
 
         localStorage.removeItem("siteConfigCache");

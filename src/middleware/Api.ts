@@ -68,7 +68,11 @@ instance.interceptors.response.use(
             // Login expired
             if (response.rawData.code === 401) {
                 Auth.signout();
-                window.location.href = "/login";
+                window.location.href =
+                    "/login?redirect=" +
+                    encodeURIComponent(
+                        window.location.pathname + window.location.search
+                    );
             }
 
             // Non-admin
