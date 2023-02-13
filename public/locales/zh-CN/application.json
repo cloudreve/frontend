@@ -397,7 +397,8 @@
     "downloadFailed": "下载出错：{{msg}}",
     "canceledStatus": "已取消",
     "finishedStatus": "已完成",
-    "transferring": "已完成，转存排队中",
+    "pending": "已完成，转存排队中",
+    "transferring": "已完成，转存中",
     "deleteRecord": "删除记录",
     "createdAt": "创建日期："
   },

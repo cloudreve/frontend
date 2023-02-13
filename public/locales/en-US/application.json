@@ -398,7 +398,7 @@
     "canceledStatus": "Canceled",
     "finishedStatus": "Finished",
     "pending": "Finished, transfer pending in queue",
-    "transferring": "Finished, transfering",
+    "transferring": "Finished, transferring",
     "deleteRecord": "Delete record",
     "createdAt": "Created at: "
   },

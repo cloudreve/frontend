@@ -373,7 +373,7 @@ export default function FinishedCard(props) {
                                     }}
                                     noWrap
                                 >
-                                    {t("transferring")}
+                                    {t("pending")}
                                 </Typography>
                             )}
                         {props.task.status === 4 &&
