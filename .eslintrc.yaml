@@ -38,3 +38,6 @@ overrides:
   - files: ['*.js', '*.jsx']
     rules:
       '@typescript-eslint/camelcase': 0
+  - files: ['config/*.js', 'scripts/*.js']
+    rules:
+      '@typescript-eslint/no-var-requires': 0
