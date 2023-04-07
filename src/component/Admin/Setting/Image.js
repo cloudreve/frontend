@@ -15,6 +15,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { Trans, useTranslation } from "react-i18next";
 import Link from "@material-ui/core/Link";
+import ThumbGenerators from "./ThumbGenerators";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +59,20 @@ export default function ImageSetting() {
         wopi_enabled: "0",
         wopi_endpoint: "",
         wopi_session_timeout: "0",
+        thumb_builtin_enabled: "0",
+        thumb_vips_enabled: "0",
+        thumb_vips_exts: "",
+        thumb_ffmpeg_enabled: "0",
+        thumb_vips_path: "",
+        thumb_ffmpeg_path: "",
+        thumb_ffmpeg_exts: "",
+        thumb_ffmpeg_seek: "",
+        thumb_libreoffice_path: "",
+        thumb_libreoffice_enabled: "0",
+        thumb_libreoffice_exts: "",
+        thumb_proxy_enabled: "0",
+        thumb_proxy_policy: "[]",
+        thumb_max_src_size: "",
     });
 
     const handleChange = (name) => (event) => {
@@ -388,12 +403,26 @@ export default function ImageSetting() {
                     <Typography variant="h6" gutterBottom>
                         {t("thumbnails")}
                     </Typography>
+                    <div className={classes.form}>
+                        <Alert severity="info">
+                            <Trans
+                                ns={"dashboard"}
+                                i18nKey={"settings.thumbnailDoc"}
+                                components={[
+                                    <Link
+                                        key={0}
+                                        target={"_blank"}
+                                        href={t("thumbnailDocLink")}
+                                    />,
+                                ]}
+                            />
+                        </Alert>
+                    </div>
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t("thumbnailBasic")}
+                    </Typography>
 
                     <div className={classes.formContainer}>
-                        <div className={classes.form}>
-                            <Alert severity="info">{t("localOnlyInfo")}</Alert>
-                        </div>
-
                         <div className={classes.form}>
                             <FormControl>
                                 <InputLabel htmlFor="component-helper">
@@ -512,6 +541,26 @@ export default function ImageSetting() {
 
                         <div className={classes.form}>
                             <FormControl fullWidth>
+                                {options.thumb_max_src_size !== "" && (
+                                    <SizeInput
+                                        value={options.thumb_max_src_size}
+                                        onChange={handleChange(
+                                            "thumb_max_src_size"
+                                        )}
+                                        required
+                                        min={0}
+                                        max={2147483647}
+                                        label={t("thumbMaxSize")}
+                                    />
+                                )}
+                                <FormHelperText id="component-helper-text">
+                                    {t("thumbMaxSizeDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
                                 <FormControlLabel
                                     control={
                                         <Switch
@@ -527,6 +576,24 @@ export default function ImageSetting() {
                                     label={t("thumbGC")}
                                 />
                             </FormControl>
+                        </div>
+                    </div>
+
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t("generators")}
+                    </Typography>
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <Alert severity="info">
+                                {t("generatorProxyWarning")}
+                            </Alert>
+                        </div>
+
+                        <div className={classes.form}>
+                            <ThumbGenerators
+                                options={options}
+                                setOptions={setOptions}
+                            />
                         </div>
                     </div>
                 </div>

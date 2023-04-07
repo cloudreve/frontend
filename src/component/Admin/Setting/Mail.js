@@ -103,7 +103,7 @@ export default function Mail() {
 
     const sendTestMail = () => {
         setLoading(true);
-        API.post("/admin/mailTest", {
+        API.post("/admin/test/mail", {
             to: tesInput,
         })
             .then(() => {
