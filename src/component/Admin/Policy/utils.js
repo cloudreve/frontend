@@ -1,10 +1,8 @@
 const boolFields = ["IsOriginLinkEnable", "AutoRename", "IsPrivate"];
-
 const numberFields = ["MaxSize"];
-
 const boolFieldsInOptions = ["placeholder_with_size", "s3_path_style"];
-
 const numberFieldsInOptions = ["chunk_size", "tps_limit", "tps_limit_burst"];
+const listJsonFieldsInOptions = ["file_type", "thumb_exts"];
 
 export const transformResponse = (response) => {
     boolFields.forEach(
@@ -28,10 +26,13 @@ export const transformResponse = (response) => {
                 ? response.data.OptionsSerialized[field].toString()
                 : 0)
     );
-    response.data.OptionsSerialized.file_type = response.data.OptionsSerialized
-        .file_type
-        ? response.data.OptionsSerialized.file_type.join(",")
-        : "";
+
+    listJsonFieldsInOptions.forEach((field) => {
+        response.data.OptionsSerialized[field] = response.data
+            .OptionsSerialized[field]
+            ? response.data.OptionsSerialized[field].join(",")
+            : "";
+    });
     return response;
 };
 
@@ -54,14 +55,16 @@ export const transformPolicyRequest = (policyCopy) => {
             ))
     );
 
-    policyCopy.OptionsSerialized.file_type =
-        policyCopy.OptionsSerialized.file_type.split(",");
-    if (
-        policyCopy.OptionsSerialized.file_type.length === 1 &&
-        policyCopy.OptionsSerialized.file_type[0] === ""
-    ) {
-        policyCopy.OptionsSerialized.file_type = [];
-    }
+    listJsonFieldsInOptions.forEach((field) => {
+        policyCopy.OptionsSerialized[field] =
+            policyCopy.OptionsSerialized[field].split(",");
+        if (
+            policyCopy.OptionsSerialized[field].length === 1 &&
+            policyCopy.OptionsSerialized[field][0] === ""
+        ) {
+            policyCopy.OptionsSerialized[field] = [];
+        }
+    });
 
     return policyCopy;
 };

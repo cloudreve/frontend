@@ -16,6 +16,7 @@ import Switch from "@material-ui/core/Switch";
 import { Trans, useTranslation } from "react-i18next";
 import Link from "@material-ui/core/Link";
 import ThumbGenerators from "./ThumbGenerators";
+import PolicySelector from "../Common/PolicySelector";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,7 +72,7 @@ export default function ImageSetting() {
         thumb_libreoffice_enabled: "0",
         thumb_libreoffice_exts: "",
         thumb_proxy_enabled: "0",
-        thumb_proxy_policy: "[]",
+        thumb_proxy_policy: [],
         thumb_max_src_size: "",
     });
 
@@ -94,6 +95,11 @@ export default function ImageSetting() {
             keys: Object.keys(options),
         })
             .then((response) => {
+                response.data.thumb_proxy_policy = JSON.parse(
+                    response.data.thumb_proxy_policy
+                ).map((v) => {
+                    return v.toString();
+                });
                 setOptions(response.data);
             })
             .catch((error) => {
@@ -118,9 +124,14 @@ export default function ImageSetting() {
         setLoading(true);
         const option = [];
         Object.keys(options).forEach((k) => {
+            let value = options[k];
+            if (k === "thumb_proxy_policy") {
+                value = JSON.stringify(value.map((v) => parseInt(v)));
+            }
+
             option.push({
                 key: k,
-                value: options[k],
+                value,
             });
         });
         API.patch("/admin/setting", {
@@ -584,17 +595,56 @@ export default function ImageSetting() {
                     </Typography>
                     <div className={classes.formContainer}>
                         <div className={classes.form}>
+                            <ThumbGenerators
+                                options={options}
+                                setOptions={setOptions}
+                            />
+                        </div>
+                    </div>
+
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t("generatorProxy")}
+                    </Typography>
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
                             <Alert severity="info">
                                 {t("generatorProxyWarning")}
                             </Alert>
                         </div>
 
                         <div className={classes.form}>
-                            <ThumbGenerators
-                                options={options}
-                                setOptions={setOptions}
-                            />
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.thumb_proxy_enabled ===
+                                                "1"
+                                            }
+                                            onChange={handleCheckChange(
+                                                "thumb_proxy_enabled"
+                                            )}
+                                        />
+                                    }
+                                    label={t("enableThumbProxy")}
+                                />
+                            </FormControl>
                         </div>
+                        {options.thumb_proxy_enabled === "1" && (
+                            <>
+                                <div className={classes.form}>
+                                    <PolicySelector
+                                        value={options.thumb_proxy_policy}
+                                        onChange={handleChange(
+                                            "thumb_proxy_policy"
+                                        )}
+                                        filter={(t) => t.Type !== "local"}
+                                        label={t("proxyPolicyList")}
+                                        helperText={t("proxyPolicyListDes")}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

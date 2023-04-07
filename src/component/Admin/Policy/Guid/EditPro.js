@@ -133,7 +133,7 @@ export default function EditPro(props) {
                                         />
                                     </FormControl>
                                 </TableCell>
-                                <TableCell>存储端 Endpoint</TableCell>
+                                <TableCell>{t("policyEndpoint")}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
@@ -652,6 +652,26 @@ export default function EditPro(props) {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>{t("s3Only")}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component="th" scope="row">
+                                    {t("allowedFileExtension")}
+                                </TableCell>
+                                <TableCell>
+                                    <FormControl>
+                                        <Input
+                                            multiline
+                                            value={
+                                                policy.OptionsSerialized
+                                                    .thumb_exts
+                                            }
+                                            onChange={handleOptionChange(
+                                                "thumb_exts"
+                                            )}
+                                        />
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>{t("thumbExtDes")}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
