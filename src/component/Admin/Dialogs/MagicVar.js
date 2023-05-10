@@ -50,6 +50,12 @@ const magicVars = [
         fileOnly: true,
     },
     {
+        value: "{originname_without_ext}",
+        des: "originFileNameNoext",
+        example: "MyPico",
+        fileOnly: true,
+    },
+    {
         value: "{ext}",
         des: "extension",
         example: ".jpg",
