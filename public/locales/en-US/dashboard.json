@@ -381,6 +381,7 @@
       "nanoTimestamp": "Nano timestamp",
       "uid": "User ID",
       "originalFileName": "Original file name",
+      "originFileNameNoext": "Original file name without ext",
       "extension": "File extension name",
       "uuidV4": "UUID V4",
       "date": "Date",

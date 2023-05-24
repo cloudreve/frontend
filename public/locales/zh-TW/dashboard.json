@@ -381,6 +381,7 @@
       "nanoTimestamp": "奈秒級時間戳",
       "uid": "用戶 ID",
       "originalFileName": "原始檔案名",
+      "originFileNameNoext": "原始檔案名無副檔名",
       "extension": "文件副檔名",
       "uuidV4": "UUID V4",
       "date": "日期",
