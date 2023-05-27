@@ -218,7 +218,7 @@ export default function OneDriveGuide(props) {
 
     const statOAuth = () => {
         setLoading(true);
-        API.get("/admin/policy/" + policyID + "/oauth")
+        API.get("/admin/policy/" + policyID + "/oauth/onedrive")
             .then((response) => {
                 window.location.href = response.data;
             })
