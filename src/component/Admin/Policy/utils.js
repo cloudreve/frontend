@@ -56,8 +56,11 @@ export const transformPolicyRequest = (policyCopy) => {
     );
 
     listJsonFieldsInOptions.forEach((field) => {
-        policyCopy.OptionsSerialized[field] =
-            policyCopy.OptionsSerialized[field].split(",");
+        policyCopy.OptionsSerialized[field] = policyCopy.OptionsSerialized[
+            field
+        ]
+            ? policyCopy.OptionsSerialized[field].split(",")
+            : [];
         if (
             policyCopy.OptionsSerialized[field].length === 1 &&
             policyCopy.OptionsSerialized[field][0] === ""
