@@ -28,7 +28,10 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const eslint = require('eslint');
 const CopyPlugin = require('copy-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-
+const crypto = require("crypto");
+const crypto_orig_createHash = crypto.createHash;
+crypto.createHash = (algorithm) =>
+    crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
 const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
