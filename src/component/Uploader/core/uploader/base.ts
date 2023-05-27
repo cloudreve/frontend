@@ -127,6 +127,7 @@ export default abstract class Base {
                     name: this.task.file.name,
                     policy_id: this.task.policy.id,
                     last_modified: this.task.file.lastModified,
+                    mime_type: this.task.file.type,
                 },
                 this.cancelToken.token
             );

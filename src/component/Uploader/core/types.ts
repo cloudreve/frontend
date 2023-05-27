@@ -52,6 +52,8 @@ export interface UploadSessionRequest {
     name: string;
     policy_id: number;
     last_modified?: number;
+
+    mime_type?: string;
 }
 
 export interface UploadCredential {
