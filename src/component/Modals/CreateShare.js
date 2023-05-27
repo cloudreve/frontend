@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
+    Input,
     makeStyles,
     TextField,
 } from "@material-ui/core";
@@ -62,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     },
     scoreCalc: {
         marginTop: 10,
+    },
+    expireLabel: {
+        whiteSpace: "nowrap",
     },
 }));
 
@@ -129,6 +133,8 @@ export default function CreatShare(props) {
         expire: false,
         preview: true,
     });
+    const [customExpires, setCustomExpires] = React.useState(3600);
+    const [customDownloads, setCustomDownloads] = React.useState(10);
 
     const handleChange = (prop) => (event) => {
         // 输入密码
@@ -209,8 +215,15 @@ export default function CreatShare(props) {
             id: props.selected[0].id,
             is_dir: props.selected[0].type === "dir",
             password: values.password,
-            downloads: shareOption.expire ? values.downloads : -1,
-            expire: values.expires,
+            downloads: shareOption.expire
+                ? values.downloads === -1
+                    ? parseInt(customDownloads)
+                    : values.downloads
+                : -1,
+            expire:
+                values.expires === -1
+                    ? parseInt(customExpires)
+                    : values.expires,
             preview: shareOption.preview,
         };
         lastSubmit.current = submitFormBody;
@@ -372,55 +385,105 @@ export default function CreatShare(props) {
                                         marginRight: 10,
                                     }}
                                 >
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={values.downloads}
-                                        onChange={handleChange("downloads")}
-                                    >
-                                        {[1, 2, 3, 4, 5, 20, 50, 100].map(
-                                            (v) => (
-                                                <MenuItem value={v} key={v}>
-                                                    {t(
-                                                        "modals.downloadLimitOptions",
-                                                        { num: v }
-                                                    )}
-                                                </MenuItem>
-                                            )
-                                        )}
-                                    </Select>
+                                    {values.downloads >= 0 && (
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={values.downloads}
+                                            onChange={handleChange("downloads")}
+                                        >
+                                            {[1, 2, 3, 4, 5, 20, 50, 100].map(
+                                                (v) => (
+                                                    <MenuItem value={v} key={v}>
+                                                        {t(
+                                                            "modals.downloadLimitOptions",
+                                                            { num: v }
+                                                        )}
+                                                    </MenuItem>
+                                                )
+                                            )}
+                                            <MenuItem value={-1}>
+                                                <em>{t("modals.custom")}</em>
+                                            </MenuItem>
+                                        </Select>
+                                    )}
+                                    {values.downloads === -1 && (
+                                        <Input
+                                            id="outlined-basic"
+                                            type="number"
+                                            inputProps={{
+                                                min: 1,
+                                            }}
+                                            value={customDownloads}
+                                            onChange={(e) =>
+                                                setCustomDownloads(
+                                                    e.target.value
+                                                )
+                                            }
+                                            endAdornment={
+                                                <InputAdornment position="start">
+                                                    {t("modals.downloads")}
+                                                </InputAdornment>
+                                            }
+                                        />
+                                    )}
                                 </FormControl>
-                                <Typography>{t("modals.or")}</Typography>
+                                <Typography className={classes.expireLabel}>
+                                    {t("modals.or")}
+                                </Typography>
                                 <FormControl
                                     style={{
                                         marginRight: 10,
                                         marginLeft: 10,
                                     }}
                                 >
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={values.expires}
-                                        onChange={handleChange("expires")}
-                                    >
-                                        <MenuItem value={300}>
-                                            {t("modals.5minutes")}
-                                        </MenuItem>
-                                        <MenuItem value={3600}>
-                                            {t("modals.1hour")}
-                                        </MenuItem>
-                                        <MenuItem value={24 * 3600}>
-                                            {t("modals.1day")}
-                                        </MenuItem>
-                                        <MenuItem value={7 * 24 * 3600}>
-                                            {t("modals.7days")}
-                                        </MenuItem>
-                                        <MenuItem value={30 * 24 * 3600}>
-                                            {t("modals.30days")}
-                                        </MenuItem>
-                                    </Select>
+                                    {values.expires >= 0 && (
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={values.expires}
+                                            onChange={handleChange("expires")}
+                                        >
+                                            <MenuItem value={300}>
+                                                {t("modals.5minutes")}
+                                            </MenuItem>
+                                            <MenuItem value={3600}>
+                                                {t("modals.1hour")}
+                                            </MenuItem>
+                                            <MenuItem value={24 * 3600}>
+                                                {t("modals.1day")}
+                                            </MenuItem>
+                                            <MenuItem value={7 * 24 * 3600}>
+                                                {t("modals.7days")}
+                                            </MenuItem>
+                                            <MenuItem value={30 * 24 * 3600}>
+                                                {t("modals.30days")}
+                                            </MenuItem>
+                                            <MenuItem value={-1}>
+                                                <em>{t("modals.custom")}</em>
+                                            </MenuItem>
+                                        </Select>
+                                    )}
+                                    {values.expires === -1 && (
+                                        <Input
+                                            id="outlined-basic"
+                                            type="number"
+                                            inputProps={{
+                                                min: 1,
+                                            }}
+                                            value={customExpires}
+                                            onChange={(e) =>
+                                                setCustomExpires(e.target.value)
+                                            }
+                                            endAdornment={
+                                                <InputAdornment position="start">
+                                                    {t("modals.seconds")}
+                                                </InputAdornment>
+                                            }
+                                        />
+                                    )}
                                 </FormControl>
-                                <Typography>
+                                <Typography className={classes.expireLabel}>
                                     {t("modals.downloadSuffix")}
                                 </Typography>
                             </ExpansionPanelDetails>
