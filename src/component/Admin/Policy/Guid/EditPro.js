@@ -655,7 +655,7 @@ export default function EditPro(props) {
                             </TableRow>
                             <TableRow>
                                 <TableCell component="th" scope="row">
-                                    {t("allowedFileExtension")}
+                                    {t("thumbExt")}
                                 </TableCell>
                                 <TableCell>
                                     <FormControl>
