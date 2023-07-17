@@ -4,11 +4,12 @@ import ViewListIcon from "@material-ui/icons/ViewList";
 import ViewSmallIcon from "@material-ui/icons/ViewComfy";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import TextTotateVerticalIcon from "@material-ui/icons/TextRotateVertical";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
 import Avatar from "@material-ui/core/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import Auth from "../../../middleware/Auth";
 import { changeViewMethod, setShareUserPopover } from "../../../redux/explorer";
-import { changeSortMethod } from "../../../redux/explorer/action";
+import { changeSortMethod, startBatchDownload } from "../../../redux/explorer/action";
 import { FormatPageBreak } from "mdi-material-ui";
 import pathHelper from "../../../utils/page";
 import { changePageSize } from "../../../redux/viewUpdate/action";
@@ -54,6 +55,10 @@ export default function SubActions({ isSmall, inherit }) {
     const SetShareUserPopover = useCallback(
         (e) => dispatch(setShareUserPopover(e)),
         [dispatch]
+    );
+    const StartBatchDownloadAll = useCallback(
+        () => dispatch(startBatchDownload(share)),
+        [dispatch, share]
     );
     const ChangePageSize = useCallback((e) => dispatch(changePageSize(e)), [
         dispatch,
@@ -102,6 +107,15 @@ export default function SubActions({ isSmall, inherit }) {
     const classes = useStyles();
     return (
         <>
+            <IconButton
+                title={t("batchDownload")}
+                className={classes.sideButton}
+                onClick={StartBatchDownloadAll}
+                color={inherit ? "inherit" : "default"}
+            >
+                <DownloadIcon fontSize={isSmall ? "small" : "default"} />
+            </IconButton>
+
             {viewMethod === "icon" && (
                 <IconButton
                     title={t("listView")}
