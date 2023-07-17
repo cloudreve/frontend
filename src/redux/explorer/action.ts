@@ -223,14 +223,15 @@ export const serverSideBatchDownload = (
             openLoadingDialog(i18next.t("fileManager.preparingBathDownload"))
         );
         const {
-            explorer: { selected },
+            explorer: { selected, fileList, dirList },
             router: {
                 location: { pathname },
             },
         } = getState();
-        const dirs: any[] = [],
-            items: any[] = [];
-        selected.map((value) => {
+        const dirs: string[] = [],
+            items: string[] = [];
+        const fileSources: CloudreveFile[] = selected.length ? selected : [...dirList, ...fileList];
+        fileSources.map((value) => {
             if (value.type === "dir") {
                 dirs.push(value.id);
             } else {
@@ -246,7 +247,7 @@ export const serverSideBatchDownload = (
         };
         if (pathHelper.isSharePage(pathname)) {
             reqURL = "/share/archive/" + share.key;
-            postBody["path"] = selected[0].path;
+            postBody["path"] = fileSources[0].path;
         }
 
         API.post(reqURL, postBody)
@@ -322,7 +323,7 @@ export const startBatchDownload = (
     return async (dispatch, getState): Promise<void> => {
         dispatch(changeContextMenu("file", false));
         const {
-            explorer: { selected },
+            explorer: { selected, fileList, dirList },
         } = getState();
 
         const user = Auth.GetUser();
@@ -368,7 +369,8 @@ export const startBatchDownload = (
 
         let queue: CloudreveFile[] = [];
         try {
-            queue = await walk(selected, share);
+            const walkSources = selected.length ? selected : [...dirList, ...fileList];
+            queue = await walk(walkSources, share);
         } catch (e) {
             dispatch(
                 toggleSnackbar(
