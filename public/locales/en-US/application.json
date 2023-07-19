@@ -457,6 +457,8 @@
     "action": "Action",
     "readonlyOn": "Turn on readonly",
     "readonlyOff": "Turn off readonly",
+    "useProxyOn": "Turn on reverse proxy",
+    "useProxyOff": "Turn off reverse proxy",
     "delete": "Delete",
     "listEmpty": "No records.",
     "createNewAccount": "Create new account",

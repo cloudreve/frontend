@@ -15,7 +15,7 @@ import Alert from "@material-ui/lab/Alert";
 import Auth from "../../middleware/Auth";
 import API from "../../middleware/Api";
 import IconButton from "@material-ui/core/IconButton";
-import { Delete } from "@material-ui/icons";
+import { Cloud, CloudOff, Delete } from "@material-ui/icons";
 import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
 import Link from "@material-ui/core/Link";
@@ -122,6 +122,22 @@ export default function WebDAV() {
         })
             .then((response) => {
                 account.Readonly = response.data.readonly;
+                const accountCopy = [...accounts];
+                setAccounts(accountCopy);
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
+    const toggleAccountUseProxy = (id) => {
+        const account = accounts[id];
+        API.patch("/webdav/accounts", {
+            id: account.ID,
+            use_proxy: !account.UseProxy,
+        })
+            .then((response) => {
+                account.UseProxy = response.data.use_proxy;
                 const accountCopy = [...accounts];
                 setAccounts(accountCopy);
             })
@@ -290,6 +306,45 @@ export default function WebDAV() {
                                                             />
                                                         </IconButton>
                                                     </Tooltip>
+                                                    {user.group.allowWebDAVProxy && (<Tooltip
+                                                        placement="top"
+                                                        title={
+                                                            row.UseProxy
+                                                                ? t(
+                                                                    "setting.useProxyOff"
+                                                                )
+                                                                : t(
+                                                                    "setting.useProxyOn"
+                                                                )
+                                                        }
+                                                        onClick={() =>
+                                                            toggleAccountUseProxy(
+                                                                id
+                                                            )
+                                                        }
+                                                    >
+                                                        <IconButton>
+                                                            <ToggleIcon
+                                                                on={
+                                                                    row.UseProxy
+                                                                }
+                                                                onIcon={
+                                                                    <CloudOff
+                                                                        fontSize={
+                                                                            "small"
+                                                                        }
+                                                                    />
+                                                                }
+                                                                offIcon={
+                                                                    <Cloud
+                                                                        fontSize={
+                                                                            "small"
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </IconButton>
+                                                    </Tooltip>)}
                                                     <Tooltip
                                                         placement="top"
                                                         title={t(

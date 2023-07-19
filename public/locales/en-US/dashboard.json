@@ -700,6 +700,8 @@
     "allowDownloadShareDes": "If disabled, user cannot download shared files.",
     "allowWabDAV": "WebDAV",
     "allowWabDAVDes": "If disabled, users cannot connect to the storage via the WebDAV protocol",
+    "allowWabDAVProxy": "WebDAV Proxy",
+    "allowWabDAVProxyDes": "If enabled, users can configure the WebDAV to proxy traffic when downloading files",
     "disableMultipleDownload": "Disable multiple download requests",
     "disableMultipleDownloadDes": "Valid only for local storage policies. When disabled, users cannot use the multi-threaded download tool.",
     "allowRemoteDownload": "Remote download",

@@ -457,6 +457,8 @@
     "action": "操作",
     "readonlyOn": "開啓只讀",
     "readonlyOff": "關閉只讀",
+    "useProxyOn": "開啓反代",
+    "useProxyOff": "關閉反代",
     "delete": "刪除",
     "listEmpty": "沒有記錄",
     "createNewAccount": "創建新帳號",

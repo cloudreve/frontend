@@ -32,6 +32,7 @@ export default function EditGroupPreload() {
                     "archive_task",
                     "one_time_download",
                     "share_download",
+                    "webdav_proxy",
                     "aria2",
                     "redirected_source",
                     "advance_delete"
