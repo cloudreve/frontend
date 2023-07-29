@@ -700,6 +700,8 @@
     "allowDownloadShareDes": "关闭后，用户无法下载别人创建的文件分享",
     "allowWabDAV": "WebDAV",
     "allowWabDAVDes": "关闭后，用户无法通过 WebDAV 协议连接至网盘",
+    "allowWabDAVProxy": "WebDAV 代理",
+    "allowWabDAVProxyDes": "启用后, 用户可以配置 WebDAV 代理下载文件的流量",
     "disableMultipleDownload": "禁止多次下载请求",
     "disableMultipleDownloadDes": "只针对本机存储策略有效。开启后，用户无法使用多线程下载工具。",
     "allowRemoteDownload": "离线下载",

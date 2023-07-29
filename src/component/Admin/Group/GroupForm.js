@@ -156,6 +156,7 @@ export default function GroupForm(props) {
             "archive_task",
             "one_time_download",
             "share_download",
+            "webdav_proxy",
             "aria2",
             "redirected_source",
             "advance_delete"
@@ -404,6 +405,30 @@ export default function GroupForm(props) {
                                     />
                                     <FormHelperText id="component-helper-text">
                                         {t("allowWabDAVDes")}
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
+
+                        {group.ID !== 3 && group.WebDAVEnabled === "true" && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.OptionsSerialized.webdav_proxy ===
+                                                    "true"
+                                                }
+                                                onChange={handleOptionCheckChange(
+                                                    "webdav_proxy"
+                                                )}
+                                            />
+                                        }
+                                        label={t("allowWabDAVProxy")}
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        {t("allowWabDAVProxyDes")}
                                     </FormHelperText>
                                 </FormControl>
                             </div>

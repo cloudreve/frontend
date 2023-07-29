@@ -700,6 +700,8 @@
     "allowDownloadShareDes": "關閉後，用戶無法下載別人創建的文件分享",
     "allowWabDAV": "WebDAV",
     "allowWabDAVDes": "關閉後，用戶無法通過 WebDAV 協議連接至網路硬碟",
+    "allowWabDAVProxy": "WebDAV 代理",
+    "allowWabDAVProxyDes": "啓用後, 用戶可以配置 WebDAV 代理下載文件的流量",
     "disableMultipleDownload": "禁止多次下載請求",
     "disableMultipleDownloadDes": "只針對本機儲存策略有效。開啟後，用戶無法使用多執行緒下載工具。",
     "allowRemoteDownload": "離線下載",
