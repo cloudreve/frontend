@@ -83,6 +83,16 @@ class DownloadComponent extends Component {
         continue: true,
     };
 
+    deleteFinished = (index) => {
+        return () => {
+            this.setState({
+                finishedList: this.state.finishedList.filter((_, itemIndex) => {
+                    return index !== itemIndex;
+                })
+            });
+        };
+    };
+
     componentDidMount = () => {
         this.loadDownloading();
     };
@@ -203,7 +213,11 @@ class DownloadComponent extends Component {
                     )}
                     {this.state.finishedList.map((value, k) => {
                         if (value.files) {
-                            return <FinishedCard key={k} task={value} />;
+                            return <FinishedCard
+                                key={k}
+                                task={value}
+                                deleteSelf={this.deleteFinished(k)}
+                            />;
                         }
                         return null;
                     })}
