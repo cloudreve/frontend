@@ -613,6 +613,9 @@ class NavbarCompoment extends Component {
                             <Typography
                                 variant="h6"
                                 color="inherit"
+                                style={{
+                                    cursor: "pointer",
+                                }}
                                 noWrap
                                 onClick={() => {
                                     this.props.history.push("/");
