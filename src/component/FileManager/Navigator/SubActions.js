@@ -3,7 +3,6 @@ import { IconButton, makeStyles, Menu, MenuItem } from "@material-ui/core";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import ViewSmallIcon from "@material-ui/icons/ViewComfy";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import TextTotateVerticalIcon from "@material-ui/icons/TextRotateVertical";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import Avatar from "@material-ui/core/Avatar";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +13,7 @@ import { FormatPageBreak } from "mdi-material-ui";
 import pathHelper from "../../../utils/page";
 import { changePageSize } from "../../../redux/viewUpdate/action";
 import { useTranslation } from "react-i18next";
+import Sort from "../Sort";
 
 const useStyles = makeStyles((theme) => ({
     sideButton: {
@@ -21,17 +21,6 @@ const useStyles = makeStyles((theme) => ({
         marginRight: "5px",
     },
 }));
-
-const sortOptions = [
-    "A-Z",
-    "Z-A",
-    "oldestUploaded",
-    "newestUploaded",
-    "oldestModified",
-    "newestModified",
-    "smallest",
-    "largest",
-];
 
 const paginationOption = ["50", "100", "200", "500", "1000"];
 
@@ -63,29 +52,14 @@ export default function SubActions({ isSmall, inherit }) {
     const ChangePageSize = useCallback((e) => dispatch(changePageSize(e)), [
         dispatch,
     ]);
-    const [anchorSort, setAnchorSort] = useState(null);
     const [anchorPagination, setAnchorPagination] = useState(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const showSortOptions = (e) => {
-        setAnchorSort(e.currentTarget);
-    };
     const showPaginationOptions = (e) => {
         setAnchorPagination(e.currentTarget);
     };
-    const handleMenuItemClick = (e, index) => {
-        setSelectedIndex(index);
-        const optionsTable = {
-            0: "namePos",
-            1: "nameRev",
-            2: "timePos",
-            3: "timeRev",
-            4: "modifyTimePos",
-            5: "modifyTimeRev",
-            6: "sizePos",
-            7: "sizeRes",
-        };
-        ChangeSortMethod(optionsTable[index]);
-        setAnchorSort(null);
+
+    /** change sort */
+    const onChangeSort = (value) => {
+        ChangeSortMethod(value);
     };
     const handlePaginationChange = (s) => {
         ChangePageSize(s);
@@ -181,32 +155,12 @@ export default function SubActions({ isSmall, inherit }) {
                 </MenuItem>
             </Menu>
 
-            <IconButton
-                title={t("sortMethod")}
+            <Sort
+                isSmall={isSmall}
+                inherit={inherit}
                 className={classes.sideButton}
-                onClick={showSortOptions}
-                color={inherit ? "inherit" : "default"}
-            >
-                <TextTotateVerticalIcon
-                    fontSize={isSmall ? "small" : "default"}
-                />
-            </IconButton>
-            <Menu
-                id="sort-menu"
-                anchorEl={anchorSort}
-                open={Boolean(anchorSort)}
-                onClose={() => setAnchorSort(null)}
-            >
-                {sortOptions.map((option, index) => (
-                    <MenuItem
-                        key={option}
-                        selected={index === selectedIndex}
-                        onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                        {t("sortMethods." + option)}
-                    </MenuItem>
-                ))}
-            </Menu>
+                onChange={onChangeSort}
+            />
             {share && (
                 <IconButton
                     title={t("shareCreateBy", { nick: share.creator.nick })}
