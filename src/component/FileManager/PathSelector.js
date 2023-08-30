@@ -15,11 +15,10 @@ import {
     MenuList,
     withStyles,
 } from "@material-ui/core";
-import Sort from './Sort';
+import Sort, { sortMethodFuncs } from './Sort';
 import API from "../../middleware/Api";
 import { toggleSnackbar } from "../../redux/explorer";
 import { withTranslation } from "react-i18next";
-import { sortMethodFuncs } from "../../redux/explorer/action";
 
 const mapStateToProps = (state) => {
     return {

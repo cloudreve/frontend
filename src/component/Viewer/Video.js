@@ -17,7 +17,7 @@ import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
 import TextLoading from "../Placeholder/TextLoading";
 import SelectMenu from "./SelectMenu";
 import { getDownloadURL } from "../../services/file";
-import { sortMethodFuncs } from "../../redux/explorer/action";
+import { sortMethodFuncs } from "../FileManager/Sort";
 import { useTranslation } from "react-i18next";
 
 const Artplayer = React.lazy(() =>
