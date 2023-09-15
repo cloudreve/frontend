@@ -167,12 +167,12 @@ export default function App() {
                                 <UserSetting />
                             </Route>
 
-                            <AuthRoute
+                            <Route
                                 path={`${path}profile/:id`}
                                 isLogin={isLogin}
                             >
                                 <Profile />
-                            </AuthRoute>
+                            </Route>
 
                             <AuthRoute path={`${path}webdav`} isLogin={isLogin}>
                                 <WebDAV />
