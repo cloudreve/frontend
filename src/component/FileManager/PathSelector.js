@@ -15,6 +15,7 @@ import {
     MenuList,
     withStyles,
 } from "@material-ui/core";
+import Sort, { sortMethodFuncs } from './Sort';
 import API from "../../middleware/Api";
 import { toggleSnackbar } from "../../redux/explorer";
 import { withTranslation } from "react-i18next";
@@ -53,14 +54,27 @@ const styles = (theme) => ({
         maxHeight: "330px",
         overflowY: " auto",
     },
+    sortWrapper: {
+        textAlign: "right",
+        paddingRight: "30px",
+    },
+    sortButton: {
+        padding: "0",
+    },
 });
-
 class PathSelectorCompoment extends Component {
     state = {
         presentPath: "/",
+        sortBy: '',
         dirList: [],
         selectedTarget: null,
     };
+    /**
+     * the source dir list from api `/directory`
+     *
+     * `state.dirList` is a sorted copy of it
+     */
+    sourceDirList = []
 
     componentDidMount = () => {
         const toBeLoad = this.props.presentPath;
@@ -93,31 +107,11 @@ class PathSelectorCompoment extends Component {
                 dirList.forEach((value) => {
                     value.displayName = value.name;
                 });
-                if (toBeLoad === "/") {
-                    dirList.unshift({ name: "/", path: "", displayName: "/" });
-                } else {
-                    let path = toBeLoad;
-                    let name = toBeLoad;
-                    const displayNames = ["fileManager.currentFolder", "fileManager.backToParentFolder"];
-                    for (let i = 0; i < 2; i++) {
-                        const paths = path.split("/");
-                        name = paths.pop();
-                        name = name === "" ? "/" : name;
-                        path = paths.join("/");
-                        dirList.unshift({
-                            name: name,
-                            path: path,
-                            displayName: this.props.t(
-                                displayNames[i]
-                            ),
-                        });
-                    }
-                }
+                this.sourceDirList = dirList
                 this.setState({
                     presentPath: toBeLoad,
-                    dirList: dirList,
                     selectedTarget: null,
-                });
+                }, this.updateDirList);
             })
             .catch((error) => {
                 this.props.toggleSnackbar(
@@ -134,6 +128,51 @@ class PathSelectorCompoment extends Component {
         this.props.onSelect(this.state.dirList[index]);
     };
 
+
+    /**
+     * change sort type
+     * @param {Event} event
+     */
+    onChangeSort = (sortBy) => {
+        this.setState({ sortBy }, this.updateDirList)
+    };
+    
+    /**
+     * sort dir list, and handle parent dirs
+     */
+    updateDirList = () => {
+        const { state, sourceDirList } = this
+        const { sortBy, presentPath } = state
+
+        // copy
+        const dirList = [...sourceDirList]
+        // sort
+        const sortMethod = sortMethodFuncs[sortBy]
+        if (sortMethod) dirList.sort(sortMethod)
+
+        // add root/parent dirs to top
+        if (presentPath === "/") {
+            dirList.unshift({ name: "/", path: "", displayName: "/" });
+        } else {
+            let path = presentPath;
+            let name = presentPath;
+            const displayNames = ["fileManager.currentFolder", "fileManager.backToParentFolder"];
+            for (let i = 0; i < 2; i++) {
+                const paths = path.split("/");
+                name = paths.pop();
+                name = name === "" ? "/" : name;
+                path = paths.join("/");
+                dirList.unshift({
+                    name: name,
+                    path: path,
+                    displayName: this.props.t(
+                        displayNames[i]
+                    ),
+                });
+            }
+        }
+        this.setState({ dirList })
+    }
     render() {
         const { classes, t } = this.props;
 
@@ -157,6 +196,9 @@ class PathSelectorCompoment extends Component {
 
         return (
             <div className={classes.container}>
+                <div className={classes.sortWrapper}>
+                    <Sort value={this.state.sortBy} isSmall className={classes.sortButton} onChange={this.onChangeSort} />
+                </div>
                 <MenuList className={classes.selector}>
                     {this.state.dirList.map((value, index) => (
                         <MenuItem

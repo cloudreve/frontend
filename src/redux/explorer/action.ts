@@ -33,6 +33,7 @@ import {
     saveFileToFileSystemDirectory,
     verifyFileSystemRWPermission,
 } from "../../utils/filesystem";
+import { sortMethodFuncs } from "../../component/FileManager/Sort";
 
 export interface ActionSetFileList extends AnyAction {
     type: "SET_FILE_LIST";
@@ -111,42 +112,6 @@ export const setShiftSelectedIds = (shiftSelectedIds: any) => {
         type: "SET_SHIFT_SELECTED_IDS",
         shiftSelectedIds,
     };
-};
-
-type SortFunc = (a: CloudreveFile, b: CloudreveFile) => number;
-export const sortMethodFuncs: Record<SortMethod, SortFunc> = {
-    sizePos: (a: CloudreveFile, b: CloudreveFile) => {
-        return a.size - b.size;
-    },
-    sizeRes: (a: CloudreveFile, b: CloudreveFile) => {
-        return b.size - a.size;
-    },
-    namePos: (a: CloudreveFile, b: CloudreveFile) => {
-        return a.name.localeCompare(
-            b.name,
-            navigator.languages[0] || navigator.language,
-            { numeric: true, ignorePunctuation: true }
-        );
-    },
-    nameRev: (a: CloudreveFile, b: CloudreveFile) => {
-        return b.name.localeCompare(
-            a.name,
-            navigator.languages[0] || navigator.language,
-            { numeric: true, ignorePunctuation: true }
-        );
-    },
-    timePos: (a: CloudreveFile, b: CloudreveFile) => {
-        return Date.parse(a.create_date) - Date.parse(b.create_date);
-    },
-    timeRev: (a: CloudreveFile, b: CloudreveFile) => {
-        return Date.parse(b.create_date) - Date.parse(a.create_date);
-    },
-    modifyTimePos: (a: CloudreveFile, b: CloudreveFile) => {
-        return Date.parse(a.date) - Date.parse(b.date);
-    },
-    modifyTimeRev: (a: CloudreveFile, b: CloudreveFile) => {
-        return Date.parse(b.date) - Date.parse(a.date);
-    },
 };
 
 export const selectAll = (): ThunkAction<any, any, any, any> => {
