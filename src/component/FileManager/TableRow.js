@@ -21,6 +21,7 @@ import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import Grow from "@material-ui/core/Grow";
 import { formatLocalTime } from "../../utils/datetime";
 import FileName from "./FileName";
+import FolderShared from "@material-ui/icons/FolderShared";
 
 const styles = (theme) => ({
     selected: {
@@ -116,7 +117,9 @@ class TableRowCompoment extends Component {
 
         let icon;
         if (this.props.file.type === "dir") {
-            icon = <FolderIcon className={classes.icon} />;
+            icon = this.props.file.key === "group"
+                ? <FolderShared className={classes.icon} />
+                : <FolderIcon className={classes.icon} />;
         } else if (this.props.file.type === "up") {
             icon = <KeyboardReturnIcon className={classes.icon} />;
         } else {

@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import statusHelper from "../../utils/page";
 import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import FolderShared from "@material-ui/icons/FolderShared";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -107,7 +108,8 @@ export default function Folder({ folder, isActive, onIconClick }) {
                     [classes.iconNotSelected]: !isSelected,
                 })}
             >
-                {!isSelected && <FolderIcon />}
+                {!isSelected && folder.key !== "group" && <FolderIcon />}
+                {!isSelected && folder.key === "group" && <FolderShared />}
                 {isSelected && (
                     <CheckCircleRoundedIcon className={classes.checkIcon} />
                 )}
