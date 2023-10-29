@@ -35,7 +35,8 @@ export default function EditGroupPreload() {
                     "webdav_proxy",
                     "aria2",
                     "redirected_source",
-                    "advance_delete"
+                    "advance_delete",
+                    "group_folder_enabled"
                 ].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
                         response.data.OptionsSerialized[v] = response.data

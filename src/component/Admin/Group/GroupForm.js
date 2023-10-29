@@ -71,6 +71,8 @@ export default function GroupForm(props) {
                       decompress_size: "0",
                       source_batch: "0",
                       aria2_batch: "1",
+                      group_folder_enabled: "false",
+                      group_folder: "",
                   },
               }
     );
@@ -159,7 +161,8 @@ export default function GroupForm(props) {
             "webdav_proxy",
             "aria2",
             "redirected_source",
-            "advance_delete"
+            "advance_delete",
+            "group_folder_enabled"
         ].forEach((v) => {
             if (groupCopy.OptionsSerialized[v] !== undefined) {
                 groupCopy.OptionsSerialized[v] =
@@ -673,6 +676,42 @@ export default function GroupForm(props) {
                                     <FormHelperText id="component-helper-text">
                                         {t("advanceDeleteDes")}
                                     </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
+
+                        {group.ID !== 3 && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={
+                                                    group.OptionsSerialized
+                                                        .group_folder_enabled ===
+                                                    "true"
+                                                }
+                                                onChange={handleOptionCheckChange(
+                                                    "group_folder_enabled"
+                                                )}
+                                            />
+                                        }
+                                        label={t("groupFolder")}
+                                    />
+                                    <Input
+                                        disabled={group.OptionsSerialized
+                                                .group_folder_enabled !==
+                                            "true"
+                                        }
+                                        singleline
+                                        value={
+                                            group.OptionsSerialized
+                                                .group_folder
+                                        }
+                                        onChange={handleOptionChange(
+                                            "group_folder"
+                                        )}
+                                    />
                                 </FormControl>
                             </div>
                         )}

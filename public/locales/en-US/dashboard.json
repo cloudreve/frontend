@@ -721,7 +721,8 @@
     "redirectedSource": "Use redirected source link",
     "redirectedSourceDes": "When enabled, the source link to the file obtained by the user will be redirected by Cloudreve with a shorter link. When disabled, the source link to the file obtained by the user becomes the original URL to the file. Some policies produce non-redirected source links that do not remain persistent, see <0>Comparing Storage Policies</0>.",
     "advanceDelete": "Allow advanced file deletion options",
-    "advanceDeleteDes": "Once enabled, users can choose whether to force deletion and whether to unlink only physical links when deleting files. These options are similar to the administration dashboard when deleting files."
+    "advanceDeleteDes": "Once enabled, users can choose whether to force deletion and whether to unlink only physical links when deleting files. These options are similar to the administration dashboard when deleting files.",
+    "groupFolder": "Group folder"
   },
   "user": {
     "deleted": "User deleted.",
