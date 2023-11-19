@@ -17,7 +17,7 @@ import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
 import TextLoading from "../Placeholder/TextLoading";
 import SelectMenu from "./SelectMenu";
 import { getDownloadURL } from "../../services/file";
-import { sortMethodFuncs } from "../FileManager/Sort";
+import { sortMethodFuncs } from "../../redux/explorer/action";
 import { useTranslation } from "react-i18next";
 
 const Artplayer = React.lazy(() =>
@@ -26,32 +26,34 @@ const Artplayer = React.lazy(() =>
     )
 );
 
+const domain = document.location.protocol + "//" + window.location.host;
+
 const externalPlayers = [
     {
         name: "PotPlayer",
-        url: (source, title) => `potplayer://${source}`,
+        url: (source, title) => `potplayer://${domain}${source}`,
     },
     {
         name: "VLC",
-        url: (source, title) => `vlc://${source}`,
+        url: (source, title) => `vlc://${domain}${source}`,
     },
     {
         name: "IINA",
-        url: (source, title) => `iina://weblink?url=${source}`,
+        url: (source, title) => `iina://weblink?url=${domain}${source}`,
     },
     {
         name: "nPlayer",
-        url: (source, title) => `nplayer-${source}`,
+        url: (source, title) => `nplayer-${domain}${source}`,
     },
     {
         name: "MXPlayer (Free)",
         url: (source, title) =>
-            `intent:${source}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`,
+            `intent:${domain}${source}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`,
     },
     {
         name: "MXPlayer (Pro)",
         url: (source, title) =>
-            `intent:${source}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`,
+            `intent:${domain}${source}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`,
     },
 ];
 
@@ -80,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
     },
     "@global": {
-        "video,.art-video-player,.art-bottom":{
+        "video,.art-video-player,.art-bottom": {
             borderRadius: theme.shape.borderRadius,
         }
     }
