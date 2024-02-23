@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import ShareIcon from "@material-ui/icons/Share";
 import MusicNote from "@material-ui/icons/MusicNote";
 import BackIcon from "@material-ui/icons/ArrowBack";
+import SdStorage from "@material-ui/icons/SdStorage";
 import OpenIcon from "@material-ui/icons/OpenInNew";
 import DownloadIcon from "@material-ui/icons/CloudDownload";
 import RenameIcon from "@material-ui/icons/BorderColor";
@@ -72,6 +73,7 @@ import {
     startDirectoryDownload,
     startDownload,
 } from "../../redux/explorer/action";
+import PolicySwitcher from "./PolicySwitcher";
 import { withTranslation } from "react-i18next";
 import MuiListItem from "@material-ui/core/ListItem";
 
@@ -323,14 +325,14 @@ class NavbarCompoment extends Component {
         this.unlisten();
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         changeThemeColor(
             this.props.selected.length <= 1 &&
                 !(!this.props.isMultiple && this.props.withFile)
                 ? this.props.theme.palette.primary.main
                 : this.props.theme.palette.background.default
         );
-    }
+    };
 
     UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (
@@ -440,24 +442,34 @@ class NavbarCompoment extends Component {
                                         />
                                     </ListItem>
                                 )}
-                                {user.group.webdav && (
-                                    <ListItem
-                                        button
-                                        key="WebDAV"
-                                        onClick={() =>
-                                            this.props.history.push("/webdav?")
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            <Devices
-                                                className={classes.iconFix}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={t("navbar.connect")}
+                                <ListItem
+                                    button
+                                    key="容量配额"
+                                    onClick={() =>
+                                        this.props.history.push("/quota?")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <SdStorage
+                                            className={classes.iconFix}
                                         />
-                                    </ListItem>
-                                )}
+                                    </ListItemIcon>
+                                    <ListItemText primary={t("vas.quota")} />
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key="WebDAV"
+                                    onClick={() =>
+                                        this.props.history.push("/connect?")
+                                    }
+                                >
+                                    <ListItemIcon>
+                                        <Devices className={classes.iconFix} />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={t("navbar.connect")}
+                                    />
+                                </ListItem>
 
                                 <ListItem
                                     button
@@ -901,9 +913,13 @@ class NavbarCompoment extends Component {
 
                         {this.props.selected.length === 0 && <UserAvatar />}
                         {this.props.selected.length === 0 &&
-                            pathHelper.isMobile() &&
-                            (isHomePage || this.props.shareInfo) && (
-                                <SubActions inherit />
+                            pathHelper.isMobile() && (
+                                <>
+                                    {isHomePage && <PolicySwitcher />}
+                                    {(isHomePage || this.props.shareInfo) && (
+                                        <SubActions inherit />
+                                    )}
+                                </>
                             )}
                     </Toolbar>
                 </AppBar>

@@ -1,29 +1,29 @@
-import { Dialog } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Fade from "@material-ui/core/Fade";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import React, { useCallback, useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
+import API from "../../../middleware/Api";
+import { useDispatch } from "react-redux";
+import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Alert from "@material-ui/lab/Alert";
+import Fade from "@material-ui/core/Fade";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
-import Select from "@material-ui/core/Select";
-import { makeStyles } from "@material-ui/core/styles";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Chip from "@material-ui/core/Chip";
+import { Dialog } from "@material-ui/core";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import PathSelector from "../../FileManager/PathSelector";
+import DialogActions from "@material-ui/core/DialogActions";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
-import Alert from "@material-ui/lab/Alert";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
-import API from "../../../middleware/Api";
-import PathSelector from "../../FileManager/PathSelector";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -365,7 +365,7 @@ export default function Import() {
                                             >
                                                 {users.map((u) => (
                                                     <MenuItem
-                                                        key={u.Email}
+                                                        key={u.ID}
                                                         onClick={() =>
                                                             selectUser(u)
                                                         }

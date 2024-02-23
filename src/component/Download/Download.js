@@ -1,13 +1,13 @@
-import { Button, IconButton, Typography, withStyles } from "@material-ui/core";
-import RefreshIcon from "@material-ui/icons/Refresh";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleSnackbar } from "../../redux/explorer";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import API from "../../middleware/Api";
+import { Button, IconButton, Typography, withStyles } from "@material-ui/core";
 import DownloadingCard from "./DownloadingCard";
 import FinishedCard from "./FinishedCard";
 import RemoteDownloadButton from "../Dial/Aria2";
 import Auth from "../../middleware/Auth";
+import { toggleSnackbar } from "../../redux/explorer";
 import Nothing from "../Placeholder/Nothing";
 import { withTranslation } from "react-i18next";
 

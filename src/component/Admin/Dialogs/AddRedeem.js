@@ -1,20 +1,21 @@
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
+import React, { useCallback, useState } from "react";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
 import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useCallback, useState } from "react";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
 import { toggleSnackbar } from "../../../redux/explorer";
-import API from "../../../middleware/Api";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     formContainer: {
@@ -23,6 +24,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function AddRedeem({ open, onClose, products, onSuccess }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "vas" });
+    const { t: tCommon } = useTranslation("common");
+    const { t: tApp } = useTranslation();
     const classes = useStyles();
     const [input, setInput] = useState({
         num: 1,
@@ -85,13 +89,15 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
             maxWidth={"xs"}
         >
             <form onSubmit={submit}>
-                <DialogTitle id="alert-dialog-title">生成兑换码</DialogTitle>
+                <DialogTitle id="alert-dialog-title">
+                    {t("generateGiftCode")}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    生成数量
+                                    {t("numberOfCodes")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -105,7 +111,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    激活码批量生成数量
+                                    {t("numberOfCodesDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -113,7 +119,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    对应商品
+                                    {t("linkedProduct")}
                                 </InputLabel>
                                 <Select
                                     value={input.id}
@@ -130,7 +136,9 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                                             {v.name}
                                         </MenuItem>
                                     ))}
-                                    <MenuItem value={0}>积分</MenuItem>
+                                    <MenuItem value={0}>
+                                        {tApp("vas.credits")}
+                                    </MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
@@ -138,7 +146,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    商品数量
+                                    {t("productQyt")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -151,7 +159,7 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    对于积分类商品，此处为积分数量，其他商品为时长倍数
+                                    {t("productQytDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -163,10 +171,10 @@ export default function AddRedeem({ open, onClose, products, onSuccess }) {
                         onClick={onClose}
                         color="default"
                     >
-                        取消
+                        {tCommon("cancel")}
                     </Button>
                     <Button disabled={loading} type={"submit"} color="primary">
-                        确定
+                        {tCommon("ok")}
                     </Button>
                 </DialogActions>
             </form>

@@ -1,20 +1,21 @@
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
+import React, { useEffect, useState } from "react";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
 import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 import { makeStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
-import React, { useEffect, useState } from "react";
 import API from "../../../middleware/Api";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     formContainer: {
@@ -22,18 +23,40 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function AddGroup({ open, onClose, onSubmit }) {
+const defaultGroup = {
+    name: "",
+    group_id: 2,
+    time: "",
+    price: "",
+    score: "",
+    des: "",
+    highlight: false,
+};
+
+const groupEditToForm = (target) => {
+    return {
+        ...target,
+        time: (target.time / 86400).toString(),
+        price: (target.price / 100).toString(),
+        score: target.score.toString(),
+        des: target.des.join("\n"),
+    };
+};
+
+export default function AddGroup({ open, onClose, onSubmit, groupEdit }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "vas" });
+    const { t: tCommon } = useTranslation("common");
     const classes = useStyles();
     const [groups, setGroups] = useState([]);
-    const [group, setGroup] = useState({
-        name: "",
-        group_id: 2,
-        time: "",
-        price: "",
-        score: "",
-        des: "",
-        highlight: false,
-    });
+    const [group, setGroup] = useState(defaultGroup);
+
+    useEffect(() => {
+        if (groupEdit) {
+            setGroup(groupEditToForm(groupEdit));
+        } else {
+            setGroup(defaultGroup);
+        }
+    }, [groupEdit]);
 
     useEffect(() => {
         if (open && groups.length === 0) {
@@ -67,9 +90,9 @@ export default function AddGroup({ open, onClose, onSubmit }) {
         groupCopy.time = parseInt(groupCopy.time) * 86400;
         groupCopy.price = parseInt(groupCopy.price) * 100;
         groupCopy.score = parseInt(groupCopy.score);
-        groupCopy.id = new Date().valueOf();
+        groupCopy.id = groupEdit ? groupEdit.id : new Date().valueOf();
         groupCopy.des = groupCopy.des.split("\n");
-        onSubmit(groupCopy);
+        onSubmit(groupCopy, groupEdit !== null);
     };
 
     return (
@@ -83,14 +106,14 @@ export default function AddGroup({ open, onClose, onSubmit }) {
         >
             <form onSubmit={submit}>
                 <DialogTitle id="alert-dialog-title">
-                    添加可购用户组
+                    {groupEdit ? t("editMembership") : t("addMembership")}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    名称
+                                    {t("name")}
                                 </InputLabel>
                                 <Input
                                     value={group.name}
@@ -98,7 +121,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    商品展示名称
+                                    {t("productNameDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -106,7 +129,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    用户组
+                                    {t("group")}
                                 </InputLabel>
                                 <Select
                                     value={group.group_id}
@@ -125,7 +148,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     })}
                                 </Select>
                                 <FormHelperText id="component-helper-text">
-                                    购买后升级的用户组
+                                    {t("groupDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -133,7 +156,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    有效期 (天)
+                                    {t("durationDay")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -146,7 +169,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    单位购买时间的有效期
+                                    {t("durationGroupDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -154,7 +177,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    单价 (元)
+                                    {t("priceYuan")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -167,7 +190,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    用户组的单价
+                                    {t("groupPriceDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -175,7 +198,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    单价 (积分)
+                                    {t("priceCredits")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -188,8 +211,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    使用积分购买时的价格，填写为 0
-                                    表示不能使用积分购买
+                                    {t("priceCreditsDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -197,7 +219,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    商品描述 (一行一个)
+                                    {t("productDescription")}
                                 </InputLabel>
                                 <Input
                                     value={group.des}
@@ -207,7 +229,7 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    购买页面展示的商品描述
+                                    {t("productDescriptionDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -223,10 +245,10 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                                             )}
                                         />
                                     }
-                                    label="突出展示"
+                                    label={t("highlight")}
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    开启后，在商品选择页面会被突出展示
+                                    {t("highlightDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -234,10 +256,10 @@ export default function AddGroup({ open, onClose, onSubmit }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="default">
-                        取消
+                        {tCommon("cancel")}
                     </Button>
                     <Button type={"submit"} color="primary">
-                        确定
+                        {tCommon("ok")}
                     </Button>
                 </DialogActions>
             </form>

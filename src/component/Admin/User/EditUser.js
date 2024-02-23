@@ -22,7 +22,7 @@ export default function EditUserPreload() {
         API.get("/admin/user/" + id)
             .then((response) => {
                 // 整型转换
-                ["Status", "GroupID"].forEach((v) => {
+                ["Status", "GroupID", "Score"].forEach((v) => {
                     response.data[v] = response.data[v].toString();
                 });
                 setUser(response.data);

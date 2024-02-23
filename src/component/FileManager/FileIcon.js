@@ -1,3 +1,10 @@
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classNames from "classnames";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import ContentLoader from "react-content-loader";
+import { baseURL } from "../../middleware/Api";
 import {
     ButtonBase,
     Divider,
@@ -6,18 +13,11 @@ import {
     Typography,
     withStyles,
 } from "@material-ui/core";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import ContentLoader from "react-content-loader";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import { baseURL } from "../../middleware/Api";
-import pathHelper from "../../utils/page";
 import TypeIcon from "./TypeIcon";
-import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+import { withRouter } from "react-router";
+import pathHelper from "../../utils/page";
 import statusHelper from "../../utils/page";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
 import Grow from "@material-ui/core/Grow";
 import FileName from "./FileName";
 
@@ -187,53 +187,53 @@ class FileIconCompoment extends Component {
                     )}
                 >
                     {this.props.file.thumb && !this.state.showPicIcon && (
-                        <div className={classes.preview}>
-                            <LazyLoadImage
-                                className={classNames(
-                                    {
-                                        [classes.hide]: this.state.loading,
-                                        [classes.picPreview]:
-                                            !this.state.loading,
-                                    },
-                                    classes.noDrag
-                                )}
-                                src={
-                                    baseURL +
-                                    (isSharePage && this.props.shareInfo
-                                        ? "/share/thumb/" +
-                                          this.props.shareInfo.key +
-                                          "/" +
-                                          this.props.file.id +
-                                          "?path=" +
-                                          encodeURIComponent(
-                                              this.props.file.path
-                                          )
-                                        : "/file/thumb/" + this.props.file.id)
-                                }
-                                afterLoad={() =>
-                                    this.setState({ loading: false })
-                                }
-                                beforeLoad={() =>
-                                    this.setState({ loading: true })
-                                }
-                                onError={() =>
-                                    this.setState({ showPicIcon: true })
-                                }
-                            />
-                            <ContentLoader
-                                height={150}
-                                width={170}
-                                className={classNames(
-                                    {
-                                        [classes.hide]: !this.state.loading,
-                                    },
-                                    classes.loadingAnimation
-                                )}
-                            >
+                            <div className={classes.preview}>
+                                <LazyLoadImage
+                                    className={classNames(
+                                        {
+                                            [classes.hide]: this.state.loading,
+                                            [classes.picPreview]:
+                                                !this.state.loading,
+                                        },
+                                        classes.noDrag
+                                    )}
+                                    src={
+                                        baseURL +
+                                        (isSharePage && this.props.shareInfo
+                                            ? "/share/thumb/" +
+                                              this.props.shareInfo.key +
+                                              "/" +
+                                              this.props.file.id +
+                                              "?path=" +
+                                              encodeURIComponent(
+                                                  this.props.file.path
+                                              )
+                                            : "/file/thumb/" + this.props.file.id)
+                                    }
+                                    afterLoad={() =>
+                                        this.setState({ loading: false })
+                                    }
+                                    beforeLoad={() =>
+                                        this.setState({ loading: true })
+                                    }
+                                    onError={() =>
+                                        this.setState({ showPicIcon: true })
+                                    }
+                                />
+                                <ContentLoader
+                                    height={150}
+                                    width={170}
+                                    className={classNames(
+                                        {
+                                            [classes.hide]: !this.state.loading,
+                                        },
+                                        classes.loadingAnimation
+                                    )}
+                                >
                                 <rect x="0" y="0" width="100%" height="150" />
-                            </ContentLoader>
-                        </div>
-                    )}
+                                </ContentLoader>
+                            </div>
+                        )}
                     {(!this.props.file.thumb || this.state.showPicIcon) && (
                         <div className={classes.previewIcon}>
                             <TypeIcon
@@ -274,8 +274,7 @@ class FileIconCompoment extends Component {
                                 variant="body2"
                                 className={classNames(classes.folderName, {
                                     [classes.folderNameSelected]: isSelected,
-                                    [classes.folderNameNotSelected]:
-                                        !isSelected,
+                                    [classes.folderNameNotSelected]: !isSelected,
                                     [classes.shareFix]: this.props.share,
                                 })}
                             >

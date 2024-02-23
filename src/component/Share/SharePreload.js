@@ -51,6 +51,7 @@ export default function SharePreload() {
         } else {
             SetSubTitle();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [share, SetSubTitle, ToggleSnackbar]);
 
     useEffect(() => {

@@ -13,6 +13,7 @@ import {
     withStyles,
 } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import Link from "@material-ui/core/Link";
 import { withRouter } from "react-router";
 import { toggleSnackbar } from "../../redux/explorer";
 import { Link as RouterLink } from "react-router-dom";
@@ -110,7 +111,7 @@ class StorageBarCompoment extends Component {
                     this.props.toggleSnackbar(
                         "top",
                         "right",
-                        this.props.t("navbar.exceedQuota"),
+                        this.props.t("vas.exceedQuota"),
                         "warning"
                     );
                 } else {
@@ -135,13 +136,23 @@ class StorageBarCompoment extends Component {
                 className={classes.stickFooter}
             >
                 <Divider />
-                <ButtonBase>
+                <ButtonBase onClick={() => this.props.history.push("/quota")}>
                     <div className={classes.storageContainer}>
                         <StorageIcon className={classes.iconFix} />
                         <div className={classes.detail}>
                             <Typography variant={"subtitle2"}>
-                                {t("navbar.storage")}
+                                {t("navbar.storage") + " "}
+                                {this.state.showExpand && (
+                                    <Link
+                                        component={RouterLink}
+                                        color={"secondary"}
+                                        to={"/buy"}
+                                    >
+                                        {t("vas.extendStorage")}
+                                    </Link>
+                                )}
                             </Typography>
+
                             <LinearProgress
                                 className={classes.bar}
                                 color="secondary"

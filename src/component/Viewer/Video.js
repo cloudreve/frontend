@@ -13,7 +13,7 @@ import { getViewerURL } from "../../redux/explorer/action";
 import { subtitleSuffix, videoPreviewSuffix } from "../../config";
 import { toggleSnackbar } from "../../redux/explorer";
 import { pathJoin } from "../Uploader/core/utils";
-import { Launch, PlaylistPlay, Subtitles } from "@material-ui/icons";
+import { Launch, PlaylistPlay, Subtitles/*, SubtitlesOutlined*/ } from "@material-ui/icons";
 import TextLoading from "../Placeholder/TextLoading";
 import SelectMenu from "./SelectMenu";
 import { getDownloadURL } from "../../services/file";
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
     },
     "@global": {
-        "video,.art-video-player,.art-bottom":{
+        "video,.art-video-player,.art-bottom": {
             borderRadius: theme.shape.borderRadius,
         }
     }
@@ -183,6 +183,11 @@ export default function VideoViewer() {
 
     const switchSubtitle = (f) => {
         if (art !== null) {
+            // if (f.name === subtitleSelected) {
+            //     setSubtitleSelected('');
+            //     art.subtitle.show = false;
+            //     return;
+            // }
             const fileType = f.name.split(".").pop().toLowerCase();
             art.subtitle.switch(
                 getPreviewURL(
@@ -225,7 +230,7 @@ export default function VideoViewer() {
     }, [files]);
 
     const switchVideo = (file) => {
-        setSubtitleSelected(null);
+        setSubtitleSelected('');
         if (isShare) {
             file.key = id;
         }
@@ -295,6 +300,13 @@ export default function VideoViewer() {
                                 playsInline: true,
                             },
                             lang: t("artPlayerLocaleCode", { ns: "common" }),
+                            subtitle: {
+                                style: {
+                                    color: 'var(--theme)', //#fe9200
+                                    // fontSize: '22px',// bottom: '15px',
+                                    'text-shadow': '#0009 1px 0 1px, #0009 0 1px 1px, #0009 -1px 0 1px, #0009 0 -1px 1px, #0009 1px 1px 1px, #0009 -1px -1px 1px, #0009 1px -1px 1px, #0009 -1px 1px 1px',
+                                }
+                            },
                         }}
                         className={classes.player}
                         getInstance={(a) => setArt(a)}
@@ -305,8 +317,18 @@ export default function VideoViewer() {
                 <Button
                     onClick={startSelectSubTitle}
                     className={classes.actionButton}
-                    startIcon={<Subtitles />}
+                    startIcon={/*(subtitleSelected !== '' && !art.subtitle.show) ? (<SubtitlesOutlined />) : */(<Subtitles />)}
                     variant="outlined"
+                    onContextMenu={(e) => {
+                        e.preventDefault();
+                        if (subtitleSelected !== '') {
+                            if (art.subtitle.show) {
+                                art.subtitle.show = false;
+                            } else {
+                                art.subtitle.show = true;
+                            }
+                        }
+                    }}
                 >
                     {t("fileManager.subtitle")}
                 </Button>

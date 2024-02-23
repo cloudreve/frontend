@@ -6,6 +6,7 @@ import DateIcon from "@material-ui/icons/DateRange";
 import EmailIcon from "@material-ui/icons/Email";
 import HomeIcon from "@material-ui/icons/Home";
 import LinkIcon from "@material-ui/icons/Phonelink";
+import AlarmOff from "@material-ui/icons/AlarmOff";
 import InputIcon from "@material-ui/icons/Input";
 import SecurityIcon from "@material-ui/icons/Security";
 import NickIcon from "@material-ui/icons/PermContactCalendar";
@@ -18,34 +19,36 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import RightIcon from "@material-ui/icons/KeyboardArrowRight";
 import {
-    ListItemIcon,
-    withStyles,
-    Button,
-    Divider,
-    TextField,
     Avatar,
-    Paper,
-    Typography,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    ListItemAvatar,
+    Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    Divider,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    Paper,
     Switch,
+    TextField,
+    Tooltip,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
+import SettingsInputHdmi from "@material-ui/icons/SettingsInputHdmi";
 import { blue, green, yellow } from "@material-ui/core/colors";
 import API from "../../middleware/Api";
 import Auth from "../../middleware/Auth";
 import { withRouter } from "react-router";
+import TimeAgo from "timeago-react";
 import { QRCodeSVG } from "qrcode.react";
 import {
     Brightness3,
-    GitHub,
-    Home,
+    ConfirmationNumber,
     ListAlt,
     PermContactCalendar,
     Schedule,
@@ -54,6 +57,7 @@ import {
 import Authn from "./Authn";
 import { formatLocalTime, timeZone } from "../../utils/datetime";
 import TimeZoneDialog from "../Modals/TimeZone";
+import BindPhone from "../Modals/BindPhone";
 import {
     applyThemes,
     changeViewMethod,
@@ -223,19 +227,13 @@ class UserSettingCompoment extends Component {
         showWebDavUserName: false,
         changeWebDavPwd: false,
         groupBackModal: false,
-        changePolicy: false,
         changeTimeZone: false,
+        bindPhone: false,
         settings: {
             uid: 0,
             group_expires: 0,
-            policy: {
-                current: {
-                    name: "-",
-                    id: "",
-                },
-                options: [],
-            },
             qq: "",
+            phone: "",
             homepage: true,
             two_factor: "",
             two_fa_secret: "",
@@ -257,7 +255,7 @@ class UserSettingCompoment extends Component {
             showWebDavUserName: false,
             changeWebDavPwd: false,
             groupBackModal: false,
-            changePolicy: false,
+            bindPhone: false,
         });
     };
 
@@ -284,6 +282,27 @@ class UserSettingCompoment extends Component {
                 this.setState({
                     settings: response.data,
                 });
+            })
+            .catch((error) => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
+            });
+    };
+
+    doChangeGroup = () => {
+        API.patch("/user/setting/vip", {})
+            .then(() => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    this.props.t("vas.cancelSubscription"),
+                    "success"
+                );
+                this.handleClose();
             })
             .catch((error) => {
                 this.props.toggleSnackbar(
@@ -350,6 +369,45 @@ class UserSettingCompoment extends Component {
                     error.message,
                     "error"
                 );
+                this.setState({
+                    loading: "",
+                });
+            });
+    };
+
+    bindQQ = () => {
+        this.setState({
+            loading: "nick",
+        });
+        API.patch("/user/setting/qq", {})
+            .then((response) => {
+                if (response.data === "") {
+                    this.props.toggleSnackbar(
+                        "top",
+                        "right",
+                        this.props.t("vas.qqUnlinked"),
+                        "success"
+                    );
+                    this.setState({
+                        settings: {
+                            ...this.state.settings,
+                            qq: false,
+                        },
+                    });
+                } else {
+                    window.location.href = response.data;
+                }
+                this.handleClose();
+            })
+            .catch((error) => {
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    error.message,
+                    "error"
+                );
+            })
+            .then(() => {
                 this.setState({
                     loading: "",
                 });
@@ -609,6 +667,10 @@ class UserSettingCompoment extends Component {
         Auth.SetPreference("theme_mode", newMode);
     };
 
+    bindPhone = () => {
+        this.setState({ bindPhone: true });
+    };
+
     render() {
         const { classes, t } = this.props;
         const user = Auth.GetUser();
@@ -706,8 +768,36 @@ class UserSettingCompoment extends Component {
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItem>
+                            {/*<Divider />*/}
+                            {/*<ListItem button onClick={() => this.bindPhone()}>*/}
+                            {/*    <ListItemIcon className={classes.iconFix}>*/}
+                            {/*        <SettingsInputHdmi />*/}
+                            {/*    </ListItemIcon>*/}
+                            {/*    <ListItemText primary="手机号" />*/}
+
+                            {/*    <ListItemSecondaryAction*/}
+                            {/*        className={classes.flexContainer}*/}
+                            {/*    >*/}
+                            {/*        <Typography*/}
+                            {/*            className={classes.infoTextWithIcon}*/}
+                            {/*            color="textSecondary"*/}
+                            {/*        >*/}
+                            {/*            {this.state.settings.phone*/}
+                            {/*                ? this.state.settings.phone*/}
+                            {/*                : "绑定"}*/}
+                            {/*        </Typography>*/}
+                            {/*        <RightIcon*/}
+                            {/*            className={classes.rightIconWithText}*/}
+                            {/*        />*/}
+                            {/*    </ListItemSecondaryAction>*/}
+                            {/*</ListItem>*/}
                             <Divider />
-                            <ListItem button>
+                            <ListItem
+                                button
+                                onClick={() =>
+                                    this.props.history.push("/buy?tab=1")
+                                }
+                            >
                                 <ListItemIcon className={classes.iconFix}>
                                     <GroupIcon />
                                 </ListItemIcon>
@@ -719,6 +809,106 @@ class UserSettingCompoment extends Component {
                                         color="textSecondary"
                                     >
                                         {user.group.name}
+                                        {this.state.settings.group_expires && (
+                                            <span>
+                                                <Tooltip
+                                                    key={0}
+                                                    title={formatLocalTime(
+                                                        this.state.settings
+                                                            .group_expires
+                                                    )}
+                                                >
+                                                    <Trans
+                                                        i18nKey="vas.groupExpire"
+                                                        components={[
+                                                            <TimeAgo
+                                                                key={0}
+                                                                datetime={
+                                                                    this.state
+                                                                        .settings
+                                                                        .group_expires
+                                                                }
+                                                                locale={t(
+                                                                    "timeAgoLocaleCode",
+                                                                    {
+                                                                        ns: "common",
+                                                                    }
+                                                                )}
+                                                            />,
+                                                        ]}
+                                                    />
+                                                </Tooltip>
+                                            </span>
+                                        )}
+                                    </Typography>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            {this.state.settings.group_expires && (
+                                <div>
+                                    <Divider />
+                                    <ListItem
+                                        button
+                                        onClick={() =>
+                                            this.setState({
+                                                groupBackModal: true,
+                                            })
+                                        }
+                                    >
+                                        <ListItemIcon
+                                            className={classes.iconFix}
+                                        >
+                                            <AlarmOff />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={t(
+                                                "vas.manuallyCancelSubscription"
+                                            )}
+                                        />
+
+                                        <ListItemSecondaryAction>
+                                            <RightIcon
+                                                className={classes.rightIcon}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                </div>
+                            )}
+                            <Divider />
+                            <ListItem button onClick={() => this.bindQQ()}>
+                                <ListItemIcon className={classes.iconFix}>
+                                    <SettingsInputHdmi />
+                                </ListItemIcon>
+                                <ListItemText primary={t("vas.qqAccount")} />
+
+                                <ListItemSecondaryAction
+                                    className={classes.flexContainer}
+                                >
+                                    <Typography
+                                        className={classes.infoTextWithIcon}
+                                        color="textSecondary"
+                                    >
+                                        {this.state.settings.qq
+                                            ? t("vas.unlink")
+                                            : t("vas.connect")}
+                                    </Typography>
+                                    <RightIcon
+                                        className={classes.rightIconWithText}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider />
+                            <ListItem button>
+                                <ListItemIcon className={classes.iconFix}>
+                                    <ConfirmationNumber />
+                                </ListItemIcon>
+                                <ListItemText primary={t("vas.credits")} />
+
+                                <ListItemSecondaryAction>
+                                    <Typography
+                                        className={classes.infoText}
+                                        color="textSecondary"
+                                    >
+                                        {user.score}
                                     </Typography>
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -1034,7 +1224,7 @@ class UserSettingCompoment extends Component {
                                     <ListItem
                                         button
                                         onClick={() =>
-                                            this.props.history.push("/webdav?")
+                                            this.props.history.push("/connect?")
                                         }
                                     >
                                         <ListItemIcon
@@ -1058,61 +1248,13 @@ class UserSettingCompoment extends Component {
                             </Paper>
                         </div>
                     )}
-
-                    <Typography
-                        className={classes.sectionTitle}
-                        variant="subtitle2"
-                    >
-                        {t("setting.aboutCloudreve")}
-                    </Typography>
-                    <Paper>
-                        <List className={classes.desenList}>
-                            <ListItem
-                                button
-                                onClick={() =>
-                                    window.open(
-                                        "https://github.com/cloudreve/cloudreve"
-                                    )
-                                }
-                            >
-                                <ListItemIcon className={classes.iconFix}>
-                                    <GitHub />
-                                </ListItemIcon>
-                                <ListItemText primary={t("setting.githubRepo")} />
-
-                                <ListItemSecondaryAction
-                                    className={classes.flexContainer}
-                                >
-                                    <RightIcon
-                                        className={classes.rightIconWithText}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider />
-                            <ListItem
-                                button
-                                onClick={() =>
-                                    window.open("https://cloudreve.org")
-                                }
-                            >
-                                <ListItemIcon className={classes.iconFix}>
-                                    <Home />
-                                </ListItemIcon>
-                                <ListItemText primary={t("setting.homepage")} />
-
-                                <ListItemSecondaryAction
-                                    className={classes.flexContainer}
-                                >
-                                    <RightIcon
-                                        className={classes.rightIconWithText}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        </List>
-                    </Paper>
-
                     <div className={classes.paddingBottom} />
                 </div>
+                <BindPhone
+                    phone={this.state.settings.phone}
+                    onClose={this.handleClose}
+                    open={this.state.bindPhone}
+                />
                 <TimeZoneDialog
                     onClose={() => this.setState({ changeTimeZone: false })}
                     open={this.state.changeTimeZone}
@@ -1189,6 +1331,25 @@ class UserSettingCompoment extends Component {
                                 this.state.nick === ""
                             }
                         >
+                            {t("ok", { ns: "common" })}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.groupBackModal}
+                    onClose={this.handleClose}
+                >
+                    <DialogTitle>
+                        {t("vas.cancelSubscriptionTitle")}
+                    </DialogTitle>
+                    <DialogContent>
+                        {t("vas.cancelSubscriptionWarning")}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="default">
+                            {t("cancel", { ns: "common" })}
+                        </Button>
+                        <Button onClick={this.doChangeGroup} color="primary">
                             {t("ok", { ns: "common" })}
                         </Button>
                     </DialogActions>

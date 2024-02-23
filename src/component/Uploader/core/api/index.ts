@@ -175,7 +175,7 @@ export async function s3LikeUploadChunk(
     onProgress: (p: Progress) => void,
     cancel: CancelToken
 ): Promise<string> {
-    const res = await request<string>(url, {
+    const res = await request<string>(decodeURIComponent(url), {
         method: "put",
         headers: {
             "content-type": "application/octet-stream",

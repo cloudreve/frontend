@@ -28,19 +28,17 @@ const cdBackendConfig = {
 };
 
 export function request<T = any>(url: string, config?: AxiosRequestConfig) {
-    return axios
-        .request<T>({ ...baseConfig, ...config, url })
-        .catch((err) => {
-            if (axios.isCancel(err)) {
-                throw new RequestCanceledError();
-            }
+    return axios.request<T>({ ...baseConfig, ...config, url }).catch((err) => {
+        if (axios.isCancel(err)) {
+            throw new RequestCanceledError();
+        }
 
-            if (err instanceof TransformResponseError) {
-                throw err;
-            }
+        if (err instanceof TransformResponseError) {
+            throw err;
+        }
 
-            throw new HTTPError(err, url);
-        });
+        throw new HTTPError(err, url);
+    });
 }
 
 export function requestAPI<T = any>(url: string, config?: AxiosRequestConfig) {

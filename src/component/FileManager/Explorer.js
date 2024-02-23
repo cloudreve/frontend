@@ -1,3 +1,15 @@
+import React, { useCallback, useEffect, useMemo } from "react";
+import explorer, {
+    changeContextMenu,
+    openRemoveDialog,
+    setSelectedTarget,
+} from "../../redux/explorer";
+import ObjectIcon from "./ObjectIcon";
+import ContextMenu from "./ContextMenu";
+import classNames from "classnames";
+import ImgPreivew from "./ImgPreview";
+import pathHelper from "../../utils/page";
+import { isMac } from "../../utils";
 import {
     CircularProgress,
     Grid,
@@ -9,20 +21,8 @@ import {
     TableRow,
     Typography,
 } from "@material-ui/core";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import classNames from "classnames";
-import React, { useCallback, useEffect, useMemo } from "react";
 import { configure, GlobalHotKeys } from "react-hotkeys";
-import explorer, {
-    changeContextMenu,
-    openRemoveDialog,
-    setSelectedTarget,
-} from "../../redux/explorer";
-import { isMac } from "../../utils";
-import pathHelper from "../../utils/page";
-import ContextMenu from "./ContextMenu";
-import ImgPreivew from "./ImgPreview";
-import ObjectIcon from "./ObjectIcon";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Nothing from "../Placeholder/Nothing";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";

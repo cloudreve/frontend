@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -11,6 +11,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import SizeInput from "../Common/SizeInput";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
     formContainer: {
@@ -18,15 +19,37 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function AddPack({ open, onClose, onSubmit }) {
+const packEditToForm = (target) => {
+    return {
+        ...target,
+        size: target.size.toString(),
+        time: (target.time / 86400).toString(),
+        price: (target.price / 100).toString(),
+        score: target.score.toString(),
+    };
+};
+
+const defaultPack = {
+    name: "",
+    size: "1073741824",
+    time: "",
+    price: "",
+    score: "",
+};
+
+export default function AddPack({ open, onClose, onSubmit, packEdit }) {
+    const { t } = useTranslation("dashboard", { keyPrefix: "vas" });
+    const { t: tCommon } = useTranslation("common");
     const classes = useStyles();
-    const [pack, setPack] = useState({
-        name: "",
-        size: "1073741824",
-        time: "",
-        price: "",
-        score: "",
-    });
+    const [pack, setPack] = useState(defaultPack);
+
+    useEffect(() => {
+        if (packEdit) {
+            setPack(packEditToForm(packEdit));
+        } else {
+            setPack(defaultPack);
+        }
+    }, [packEdit]);
 
     const handleChange = (name) => (event) => {
         setPack({
@@ -42,8 +65,8 @@ export default function AddPack({ open, onClose, onSubmit }) {
         packCopy.time = parseInt(packCopy.time) * 86400;
         packCopy.price = parseInt(packCopy.price) * 100;
         packCopy.score = parseInt(packCopy.score);
-        packCopy.id = new Date().valueOf();
-        onSubmit(packCopy);
+        packCopy.id = packEdit ? packEdit.id : new Date().valueOf();
+        onSubmit(packCopy, packEdit !== null);
     };
 
     return (
@@ -55,13 +78,15 @@ export default function AddPack({ open, onClose, onSubmit }) {
             maxWidth={"xs"}
         >
             <form onSubmit={submit}>
-                <DialogTitle id="alert-dialog-title">添加容量包</DialogTitle>
+                <DialogTitle id="alert-dialog-title">
+                    {packEdit ? t("editStoragePack") : t("addStoragePack")}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    名称
+                                    {t("name")}
                                 </InputLabel>
                                 <Input
                                     value={pack.name}
@@ -69,7 +94,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    商品展示名称
+                                    {t("productNameDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -80,12 +105,12 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     value={pack.size}
                                     onChange={handleChange("size")}
                                     min={1}
-                                    label={"大小"}
+                                    label={t("size")}
                                     max={9223372036854775807}
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    容量包的大小
+                                    {t("packSizeDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -93,7 +118,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    有效期 (天)
+                                    {t("durationDay")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -106,7 +131,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    每个容量包的有效期
+                                    {t("durationDayDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -114,7 +139,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    单价 (元)
+                                    {t("priceYuan")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -127,7 +152,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    容量包的单价
+                                    {t("packPriceDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -135,7 +160,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                         <div className={classes.formContainer}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
-                                    单价 (积分)
+                                    {t("priceCredits")}
                                 </InputLabel>
                                 <Input
                                     type={"number"}
@@ -148,8 +173,7 @@ export default function AddPack({ open, onClose, onSubmit }) {
                                     required
                                 />
                                 <FormHelperText id="component-helper-text">
-                                    使用积分购买时的价格，填写为 0
-                                    表示不能使用积分购买
+                                    {t("priceCreditsDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>
@@ -157,10 +181,10 @@ export default function AddPack({ open, onClose, onSubmit }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="default">
-                        取消
+                        {tCommon("cancel")}
                     </Button>
                     <Button type={"submit"} color="primary">
-                        确定
+                        {tCommon("ok")}
                     </Button>
                 </DialogActions>
             </form>

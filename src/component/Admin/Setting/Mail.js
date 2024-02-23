@@ -1,22 +1,22 @@
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../redux/explorer";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
 import API from "../../../middleware/Api";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { useDispatch } from "react-redux";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import TextField from "@material-ui/core/TextField";
+import DialogActions from "@material-ui/core/DialogActions";
+import { toggleSnackbar } from "../../../redux/explorer";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +59,7 @@ export default function Mail() {
         smtpPass: "",
         smtpEncryption: "",
         mail_keepalive: "30",
+        over_used_template: "",
         mail_activation_template: "",
         mail_reset_pwd_template: "",
     });
@@ -378,6 +379,26 @@ export default function Mail() {
                                 />
                                 <FormHelperText id="component-helper-text">
                                     {t("activateNewUserDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {tVas("overuseReminder")}
+                                </InputLabel>
+                                <Input
+                                    value={options.over_used_template}
+                                    onChange={handleChange(
+                                        "over_used_template"
+                                    )}
+                                    multiline
+                                    rowsMax="10"
+                                    required
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("overuseReminderDes")}
                                 </FormHelperText>
                             </FormControl>
                         </div>

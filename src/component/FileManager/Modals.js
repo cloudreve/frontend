@@ -19,8 +19,10 @@ import CopyDialog from "../Modals/Copy";
 import DirectoryDownloadDialog from "../Modals/DirectoryDownload";
 import CreatShare from "../Modals/CreateShare";
 import { withRouter } from "react-router-dom";
+import PurchaseShareDialog from "../Modals/PurchaseShare";
 import DecompressDialog from "../Modals/Decompress";
 import CompressDialog from "../Modals/Compress";
+import RelocateDialog from "../Modals/Relocate";
 import {
     closeAllModals,
     openLoadingDialog,
@@ -30,7 +32,6 @@ import {
     toggleSnackbar,
 } from "../../redux/explorer";
 import OptionSelector from "../Modals/OptionSelector";
-import { getDownloadURL } from "../../services/file";
 import { Trans, withTranslation } from "react-i18next";
 import RemoteDownload from "../Modals/RemoteDownload";
 import Delete from "../Modals/Delete";
@@ -128,16 +129,25 @@ class ModalsCompoment extends Component {
         }
     };
 
-    scoreHandler = (callback) => {
-        callback();
-    };
-
-    Download = () => {
-        getDownloadURL(this.props.selected[0])
-            .then((response) => {
-                window.location.assign(response.data);
+    submitResave = (e) => {
+        e.preventDefault();
+        this.props.setModalsLoading(true);
+        API.post("/share/save/" + window.shareKey, {
+            path:
+                this.state.selectedPath === "//"
+                    ? "/"
+                    : this.state.selectedPath,
+        })
+            .then(() => {
                 this.onClose();
-                this.downloaded = true;
+                this.props.toggleSnackbar(
+                    "top",
+                    "right",
+                    this.props.t("vas.fileSaved"),
+                    "success"
+                );
+                this.props.refreshFileList();
+                this.props.setModalsLoading(false);
             })
             .catch((error) => {
                 this.props.toggleSnackbar(
@@ -146,7 +156,7 @@ class ModalsCompoment extends Component {
                     error.message,
                     "error"
                 );
-                this.onClose();
+                this.props.setModalsLoading(false);
             });
     };
 
@@ -419,6 +429,7 @@ class ModalsCompoment extends Component {
             <div>
                 <Loading />
                 <OptionSelector />
+                <PurchaseShareDialog />
                 <Dialog
                     open={this.props.modalsStatus.getSource}
                     onClose={this.onClose}
@@ -664,6 +675,57 @@ class ModalsCompoment extends Component {
                         </div>
                     </DialogActions>
                 </Dialog>
+                <Dialog
+                    open={this.props.modalsStatus.resave}
+                    onClose={this.onClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">
+                        {t("modals.saveToTitle")}
+                    </DialogTitle>
+                    <PathSelector
+                        presentPath={this.props.path}
+                        selected={this.props.selected}
+                        onSelect={this.setMoveTarget}
+                    />
+
+                    {this.state.selectedPath !== "" && (
+                        <DialogContent className={classes.contentFix}>
+                            <DialogContentText>
+                                <Trans
+                                    i18nKey="modals.saveToTitleDescription"
+                                    values={{
+                                        name: this.state.selectedPathName,
+                                    }}
+                                    components={[<strong key={0} />]}
+                                />
+                            </DialogContentText>
+                        </DialogContent>
+                    )}
+                    <DialogActions>
+                        <Button onClick={this.onClose}>
+                            {t("cancel", { ns: "common" })}
+                        </Button>
+                        <div className={classes.wrapper}>
+                            <Button
+                                onClick={this.submitResave}
+                                color="primary"
+                                disabled={
+                                    this.state.selectedPath === "" ||
+                                    this.props.modalsLoading
+                                }
+                            >
+                                {t("ok", { ns: "common" })}
+                                {this.props.modalsLoading && (
+                                    <CircularProgress
+                                        size={24}
+                                        className={classes.buttonProgress}
+                                    />
+                                )}
+                            </Button>
+                        </div>
+                    </DialogActions>
+                </Dialog>
                 <Delete
                     open={this.props.modalsStatus.remove}
                     onClose={this.onClose}
@@ -699,6 +761,12 @@ class ModalsCompoment extends Component {
                     open={this.props.modalsStatus.compress}
                     onClose={this.onClose}
                     presentPath={this.props.path}
+                    selected={this.props.selected}
+                    modalsLoading={this.props.modalsLoading}
+                />
+                <RelocateDialog
+                    open={this.props.modalsStatus.relocate}
+                    onClose={this.onClose}
                     selected={this.props.selected}
                     modalsLoading={this.props.modalsLoading}
                 />
