@@ -1,31 +1,31 @@
-import { lighten } from "@material-ui/core";
-import Badge from "@material-ui/core/Badge";
-import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import { Delete, DeleteForever, FilterList,LinkOff } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-import { toggleSnackbar } from "../../../redux/explorer";
+import { makeStyles } from "@material-ui/core/styles";
 import API from "../../../middleware/Api";
+import { useDispatch } from "react-redux";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 import { sizeToString } from "../../../utils";
+import TableBody from "@material-ui/core/TableBody";
+import TablePagination from "@material-ui/core/TablePagination";
+import { useHistory } from "react-router";
+import IconButton from "@material-ui/core/IconButton";
+import { Delete, DeleteForever, FilterList, LinkOff } from "@material-ui/icons";
+import Tooltip from "@material-ui/core/Tooltip";
+import Checkbox from "@material-ui/core/Checkbox";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { lighten } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Badge from "@material-ui/core/Badge";
 import FileFilter from "../Dialogs/FileFilter";
 import { formatLocalTime } from "../../../utils/datetime";
+import { toggleSnackbar } from "../../../redux/explorer";
 import Chip from "@material-ui/core/Chip";
 import { useTranslation } from "react-i18next";
 
@@ -95,6 +95,7 @@ export default function File() {
     const [loading, setLoading] = useState(false);
 
     const history = useHistory();
+
     const dispatch = useDispatch();
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>

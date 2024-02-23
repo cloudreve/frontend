@@ -40,6 +40,11 @@ export class AppError extends Error {
                 ns: "common",
                 message,
             });
+        } else if (i18next.exists(`vasErrors.${code}`, { ns: "common" })) {
+            this.message = i18next.t(`vasErrors.${code}`, {
+                ns: "common",
+                message,
+            });
         } else if (i18next.exists(`errors.${code}`, { ns: "dashboard" })) {
             this.message = i18next.t(`errors.${code}`, {
                 ns: "dashboard",
@@ -78,6 +83,11 @@ instance.interceptors.response.use(
             // Non-admin
             if (response.rawData.code === 40008) {
                 window.location.href = "/home";
+            }
+
+            // Not binding mobile phone
+            if (response.rawData.code === 40010) {
+                window.location.href = "/setting?modal=phone";
             }
             throw new AppError(
                 response.rawData.msg,

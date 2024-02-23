@@ -8,12 +8,12 @@ import { Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
 import createTheme from "@material-ui/core/styles/createMuiTheme";
 import { zhCN } from "@material-ui/core/locale";
-
 import Index from "./component/Admin/Index";
 import SiteInformation from "./component/Admin/Setting/SiteInformation";
 import Access from "./component/Admin/Setting/Access";
 import Mail from "./component/Admin/Setting/Mail";
 import UploadDownload from "./component/Admin/Setting/UploadDownload";
+import VAS from "./component/Admin/Setting/VAS";
 import Theme from "./component/Admin/Setting/Theme";
 import ImageSetting from "./component/Admin/Setting/Image";
 import Policy from "./component/Admin/Policy/Policy";
@@ -27,9 +27,11 @@ import UserForm from "./component/Admin/User/UserForm";
 import EditUserPreload from "./component/Admin/User/EditUser";
 import File from "./component/Admin/File/File";
 import Share from "./component/Admin/Share/Share";
+import Order from "./component/Admin/Order/Order";
 import Download from "./component/Admin/Task/Download";
 import Task from "./component/Admin/Task/Task";
 import Import from "./component/Admin/File/Import";
+import ReportList from "./component/Admin/Report/ReportList";
 import Captcha from "./component/Admin/Setting/Captcha";
 import Node from "./component/Admin/Node/Node";
 import AddNode from "./component/Admin/Node/AddNode";
@@ -120,6 +122,10 @@ export default function Admin() {
                                         <UploadDownload />
                                     </Route>
 
+                                    <Route path={`${path}/vas`}>
+                                        <VAS />
+                                    </Route>
+
                                     <Route path={`${path}/theme`}>
                                         <Theme />
                                     </Route>
@@ -189,12 +195,20 @@ export default function Admin() {
                                         <Share />
                                     </Route>
 
+                                    <Route path={`${path}/order`} exact>
+                                        <Order />
+                                    </Route>
+
                                     <Route path={`${path}/download`} exact>
                                         <Download />
                                     </Route>
 
                                     <Route path={`${path}/task`} exact>
                                         <Task />
+                                    </Route>
+
+                                    <Route path={`${path}/report`} exact>
+                                        <ReportList />
                                     </Route>
 
                                     <Route path={`${path}/node`} exact>

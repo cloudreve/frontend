@@ -1,18 +1,21 @@
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import { makeStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../redux/explorer";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
 import API from "../../../middleware/Api";
+import { useDispatch } from "react-redux";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import AlertDialog from "../Dialogs/Alert";
+import Alert from "@material-ui/lab/Alert";
+import FileSelector from "../Common/FileSelector";
+import { toggleSnackbar } from "../../../redux/explorer";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +42,7 @@ export default function Access() {
     const { t: tVas } = useTranslation("dashboard", { keyPrefix: "vas" });
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
+    const [initCompleted, setInitComplete] = useState(false);
     const [options, setOptions] = useState({
         register_enabled: "1",
         default_group: "1",
@@ -46,7 +50,14 @@ export default function Access() {
         login_captcha: "0",
         reg_captcha: "0",
         forget_captcha: "0",
+        qq_login: "0",
+        qq_direct_login: "0",
+        qq_login_id: "",
+        qq_login_key: "",
         authn_enabled: "0",
+        mail_domain_filter: "0",
+        mail_domain_filter_list: "",
+        initial_files: "[]",
     });
     const [siteURL, setSiteURL] = useState("");
     const [groups, setGroups] = useState([]);
@@ -86,6 +97,7 @@ export default function Access() {
                 setSiteURL(response.data.siteURL);
                 delete response.data.siteURL;
                 setOptions(response.data);
+                setInitComplete(true);
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -306,6 +318,171 @@ export default function Access() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                {initCompleted && (
+                                    <FileSelector
+                                        label={tVas("initialFiles")}
+                                        value={JSON.parse(
+                                            options.initial_files
+                                        )}
+                                        onChange={(v) =>
+                                            handleInputChange("initial_files")({
+                                                target: { value: v },
+                                            })
+                                        }
+                                    />
+                                )}
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("initialFilesDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl>
+                                <InputLabel htmlFor="component-helper">
+                                    {tVas("filterEmailProvider")}
+                                </InputLabel>
+                                <Select
+                                    value={options.mail_domain_filter}
+                                    onChange={handleInputChange(
+                                        "mail_domain_filter"
+                                    )}
+                                    required
+                                >
+                                    {[
+                                        tVas("filterEmailProviderDisabled"),
+                                        tVas("filterEmailProviderWhitelist"),
+                                        tVas("filterEmailProviderBlacklist"),
+                                    ].map((v, i) => (
+                                        <MenuItem key={i} value={i.toString()}>
+                                            {v}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("filterEmailProviderDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        {options.mail_domain_filter !== "0" && (
+                            <div className={classes.form}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="component-helper">
+                                        {tVas("filterEmailProviderRule")}
+                                    </InputLabel>
+                                    <Input
+                                        value={options.mail_domain_filter_list}
+                                        onChange={handleChange(
+                                            "mail_domain_filter_list"
+                                        )}
+                                        multiline
+                                        rowsMax="10"
+                                    />
+                                    <FormHelperText id="component-helper-text">
+                                        {tVas("filterEmailProviderRuleDes")}
+                                    </FormHelperText>
+                                </FormControl>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className={classes.root}>
+                    <Typography variant="h6" gutterBottom>
+                        {tVas("qqConnect")}
+                    </Typography>
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <Alert severity="info">
+                                {tVas("qqConnectHint", {
+                                    url: siteURL.endsWith("/")
+                                        ? siteURL + "login/qq"
+                                        : siteURL + "/login/qq",
+                                })}
+                            </Alert>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={options.qq_login === "1"}
+                                            onChange={handleChange("qq_login")}
+                                        />
+                                    }
+                                    label={tVas("enableQQConnect")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("enableQQConnectDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+
+                        {options.qq_login === "1" && (
+                            <>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <FormControlLabel
+                                            control={
+                                                <Switch
+                                                    checked={
+                                                        options.qq_direct_login ===
+                                                        "1"
+                                                    }
+                                                    onChange={handleChange(
+                                                        "qq_direct_login"
+                                                    )}
+                                                />
+                                            }
+                                            label={tVas("loginWithoutBinding")}
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            {tVas("loginWithoutBindingDes")}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            {tVas("appid")}
+                                        </InputLabel>
+                                        <Input
+                                            required
+                                            value={options.qq_login_id}
+                                            onChange={handleInputChange(
+                                                "qq_login_id"
+                                            )}
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            {tVas("appidDes")}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            {tVas("appKey")}
+                                        </InputLabel>
+                                        <Input
+                                            required
+                                            value={options.qq_login_key}
+                                            onChange={handleInputChange(
+                                                "qq_login_key"
+                                            )}
+                                        />
+                                        <FormHelperText id="component-helper-text">
+                                            {tVas("appKeyDes")}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 

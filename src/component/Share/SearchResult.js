@@ -92,18 +92,18 @@ export default function SearchResult() {
     const location = useLocation();
     const history = useHistory();
 
+    const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(0);
+    const [shareList, setShareList] = useState([]);
+    const [orderBy, setOrderBy] = useState("created_at DESC");
+
     const ToggleSnackbar = useCallback(
         (vertical, horizontal, msg, color) =>
             dispatch(toggleSnackbar(vertical, horizontal, msg, color)),
         [dispatch]
     );
 
-    const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [shareList, setShareList] = useState([]);
-    const [orderBy, setOrderBy] = useState("created_at DESC");
-
-    const search = useCallback((keywords, page, orderBy) => {
+    const search = (keywords, page, orderBy) => {
         const order = orderBy.split(" ");
         API.get(
             "/share/search?page=" +
@@ -122,7 +122,7 @@ export default function SearchResult() {
             .catch(() => {
                 ToggleSnackbar("top", "right", t("listLoadingError"), "error");
             });
-    }, []);
+    };
 
     useEffect(() => {
         const keywords = query.get("keywords");

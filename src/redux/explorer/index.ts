@@ -291,3 +291,10 @@ export const openDirectoryDownloadDialog = (downloading, log, done) => {
         done,
     };
 };
+
+export const confirmPurchase = (purchase) => {
+    return {
+        type: "CONFIRM_PURCHASE",
+        purchase: purchase,
+    };
+};

@@ -1,17 +1,17 @@
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useCallback, useEffect,useMemo, useState } from "react";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
+import API from "../../../middleware/Api";
 import { useDispatch } from "react-redux";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import { useHistory } from "react-router";
 import { toggleSnackbar } from "../../../redux/explorer";
-import API from "../../../middleware/Api";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +47,7 @@ export default function UserForm(props) {
                   Password: "", // 为空时只读
                   Status: "0", // 转换类型
                   GroupID: "2", // 转换类型
+                  Score: "0", // 转换类型
                   TwoFactor: "",
               }
     );
@@ -219,6 +220,24 @@ export default function UserForm(props) {
                                         {t("bannedBySys")}
                                     </MenuItem>
                                 </Select>
+                            </FormControl>
+                        </div>
+
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {tDashboard("vas.credits")}
+                                </InputLabel>
+                                <Input
+                                    type={"number"}
+                                    inputProps={{
+                                        min: 0,
+                                        step: 1,
+                                    }}
+                                    value={user.Score}
+                                    onChange={handleChange("Score")}
+                                    required
+                                />
                             </FormControl>
                         </div>
 

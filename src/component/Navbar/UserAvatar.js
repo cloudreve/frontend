@@ -15,6 +15,7 @@ import {
 import { withRouter } from "react-router-dom";
 import pathHelper from "../../utils/page";
 import DarkModeSwitcher from "./DarkModeSwitcher";
+import PolicySwitcher from "./PolicySwitcher";
 import { Home } from "@material-ui/icons";
 import { setUserPopover } from "../../redux/explorer";
 import { withTranslation } from "react-i18next";
@@ -113,6 +114,7 @@ class UserAvatarCompoment extends Component {
                                 <DarkModeSwitcher position="top" />
                                 {loginCheck && (
                                     <>
+                                        <PolicySwitcher />
                                         <Tooltip
                                             title={t("navbar.setting")}
                                             placement="bottom"

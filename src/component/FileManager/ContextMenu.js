@@ -1,3 +1,25 @@
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { isCompressFile, isPreviewable, isTorrent } from "../../config";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
+import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
+import OpenFolderIcon from "@material-ui/icons/FolderOpen";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import ShareIcon from "@material-ui/icons/Share";
+import RenameIcon from "@material-ui/icons/BorderColor";
+import MoveIcon from "@material-ui/icons/Input";
+import LinkIcon from "@material-ui/icons/InsertLink";
+import DeleteIcon from "@material-ui/icons/Delete";
+import OpenIcon from "@material-ui/icons/OpenInNew";
+import {
+    FolderDownload,
+    FilePlus,
+    FolderUpload,
+    MagnetOn,
+    Transfer,
+} from "mdi-material-ui";
 import {
     Divider,
     ListItemIcon,
@@ -5,32 +27,11 @@ import {
     Typography,
     withStyles,
 } from "@material-ui/core";
-import Menu from "@material-ui/core/Menu";
-import { Archive, InfoOutlined, Unarchive } from "@material-ui/icons";
-import RenameIcon from "@material-ui/icons/BorderColor";
-import DownloadIcon from "@material-ui/icons/CloudDownload";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import NewFolderIcon from "@material-ui/icons/CreateNewFolder";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import OpenFolderIcon from "@material-ui/icons/FolderOpen";
-import MoveIcon from "@material-ui/icons/Input";
-import LinkIcon from "@material-ui/icons/InsertLink";
-import OpenIcon from "@material-ui/icons/OpenInNew";
-import ShareIcon from "@material-ui/icons/Share";
-import {
-    FolderDownload,
-    FolderUpload,
-    MagnetOn,
-    FilePlus,
-} from "mdi-material-ui";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import { isCompressFile, isPreviewable, isTorrent } from "../../config";
-import Auth from "../../middleware/Auth";
 import pathHelper from "../../utils/page";
+import { withRouter } from "react-router-dom";
+import Auth from "../../middleware/Auth";
+import { Archive, InfoOutlined, Unarchive } from "@material-ui/icons";
+import Menu from "@material-ui/core/Menu";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import {
     batchGetSource,
@@ -54,6 +55,7 @@ import {
     openLoadingDialog,
     openMoveDialog,
     openMusicDialog,
+    openRelocateDialog,
     openRemoteDownloadDialog,
     openRemoveDialog,
     openRenameDialog,
@@ -159,6 +161,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         refreshFileList: () => {
             dispatch(refreshFileList());
+        },
+        openRelocateDialog: () => {
+            dispatch(openRelocateDialog());
         },
         openPreview: (share) => {
             dispatch(openPreview(share));
@@ -607,6 +612,22 @@ class ContextMenuCompoment extends Component {
                                     </StyledListItemIcon>
                                     <Typography variant="inherit">
                                         {t("fileManager.compress")}
+                                    </Typography>
+                                </MenuItem>
+                            )}
+
+                            {isHomePage && user.group.relocate && (
+                                <MenuItem
+                                    dense
+                                    onClick={() =>
+                                        this.props.openRelocateDialog()
+                                    }
+                                >
+                                    <StyledListItemIcon>
+                                        <Transfer />
+                                    </StyledListItemIcon>
+                                    <Typography variant="inherit">
+                                        {t("vas.migrateStoragePolicy")}
                                     </Typography>
                                 </MenuItem>
                             )}

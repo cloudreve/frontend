@@ -1,27 +1,27 @@
-import Button from "@material-ui/core/Button";
-import Collapse from "@material-ui/core/Collapse";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import Link from "@material-ui/core/Link";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Stepper from "@material-ui/core/Stepper";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Alert from "@material-ui/lab/Alert";
 import React, { useCallback, useState } from "react";
+import Stepper from "@material-ui/core/Stepper";
+import StepLabel from "@material-ui/core/StepLabel";
+import Step from "@material-ui/core/Step";
+import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-import { toggleSnackbar } from "../../../../redux/explorer";
+import Link from "@material-ui/core/Link";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import Collapse from "@material-ui/core/Collapse";
+import Button from "@material-ui/core/Button";
 import API from "../../../../middleware/Api";
-import { getNumber, randomStr } from "../../../../utils";
+import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
-import MagicVar from "../../Dialogs/MagicVar";
+import { useHistory } from "react-router";
+import Alert from "@material-ui/lab/Alert";
+import { getNumber, randomStr } from "../../../../utils";
+import { toggleSnackbar } from "../../../../redux/explorer";
 import { Trans, useTranslation } from "react-i18next";
 import { transformPolicyRequest } from "../utils";
 
@@ -462,13 +462,13 @@ export default function RemoteGuide(props) {
                             <Typography variant={"body2"}>
                                 <Trans
                                     ns={"dashboard"}
-                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    i18nKey={"policy.pathMagicVarDesRemote"}
                                     components={[
                                         <Link
                                             key={0}
                                             color={"secondary"}
                                             href={"javascript:void()"}
-                                            onClick={() => setMagicVar("file")}
+                                            onClick={() => setMagicVar("path")}
                                         />,
                                     ]}
                                 />
@@ -494,19 +494,21 @@ export default function RemoteGuide(props) {
                         </div>
                         <div className={classes.subStepContent}>
                             <Typography variant={"body2"}>
-                                是否需要对存储的物理文件进行重命名？此处的重命名不会影响最终呈现给用户的
-                                文件名。文件名也可使用魔法变量，
-                                可用魔法变量可参考{" "}
-                                <Link
-                                    color={"secondary"}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setMagicVar("file");
-                                    }}
-                                >
-                                    文件名魔法变量列表
-                                </Link>{" "}
-                                。
+                                <Trans
+                                    ns={"dashboard"}
+                                    i18nKey={"policy.filePathMagicVarDes"}
+                                    components={[
+                                        <Link
+                                            key={0}
+                                            color={"secondary"}
+                                            href={"javascript:void()"}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setMagicVar("file");
+                                            }}
+                                        />,
+                                    ]}
+                                />
                             </Typography>
                             <div className={classes.form}>
                                 <FormControl required component="fieldset">

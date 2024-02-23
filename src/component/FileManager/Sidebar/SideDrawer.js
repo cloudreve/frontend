@@ -150,6 +150,14 @@ export default function SideDrawer() {
             show: (d) => d.type === "file",
         },
         {
+            label: t("fileManager.storagePolicy"),
+            value: (d, target) =>
+                d.policy === ""
+                    ? t("fileManager.inheritedFromParent")
+                    : d.policy,
+            show: (d) => d.type === "dir",
+        },
+        {
             label: t("fileManager.childFolders"),
             value: (d, target) =>
                 t("fileManager.childCount", {
