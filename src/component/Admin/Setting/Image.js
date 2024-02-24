@@ -1,15 +1,15 @@
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../redux/explorer";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
 import API from "../../../middleware/Api";
+import { useDispatch } from "react-redux";
 import SizeInput from "../Common/SizeInput";
+import { toggleSnackbar } from "../../../redux/explorer";
 import Alert from "@material-ui/lab/Alert";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
@@ -414,7 +414,7 @@ export default function ImageSetting() {
                     <Typography variant="h6" gutterBottom>
                         {t("thumbnails")}
                     </Typography>
-                    <div className={classes.form}>
+                        <div className={classes.form}>
                         <Alert severity="info">
                             <Trans
                                 ns={"dashboard"}
@@ -428,7 +428,7 @@ export default function ImageSetting() {
                                 ]}
                             />
                         </Alert>
-                    </div>
+                        </div>
                     <Typography variant="subtitle1" gutterBottom>
                         {t("thumbnailBasic")}
                     </Typography>

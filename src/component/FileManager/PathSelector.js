@@ -62,6 +62,7 @@ const styles = (theme) => ({
         padding: "0",
     },
 });
+
 class PathSelectorCompoment extends Component {
     state = {
         presentPath: "/",
@@ -110,6 +111,7 @@ class PathSelectorCompoment extends Component {
                 this.sourceDirList = dirList
                 this.setState({
                     presentPath: toBeLoad,
+                    dirList: dirList,
                     selectedTarget: null,
                 }, this.updateDirList);
             })

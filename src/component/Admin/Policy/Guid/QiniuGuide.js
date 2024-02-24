@@ -1,29 +1,28 @@
-import Button from "@material-ui/core/Button";
-import Collapse from "@material-ui/core/Collapse";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import Link from "@material-ui/core/Link";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Stepper from "@material-ui/core/Stepper";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import React, { useCallback, useState } from "react";
+import Stepper from "@material-ui/core/Stepper";
+import StepLabel from "@material-ui/core/StepLabel";
+import Step from "@material-ui/core/Step";
+import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-import { toggleSnackbar } from "../../../../redux/explorer";
+import Link from "@material-ui/core/Link";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import Collapse from "@material-ui/core/Collapse";
+import Button from "@material-ui/core/Button";
 import API from "../../../../middleware/Api";
-import { getNumber } from "../../../../utils";
+import MagicVar from "../../Dialogs/MagicVar";
 import DomainInput from "../../Common/DomainInput";
 import SizeInput from "../../Common/SizeInput";
-import MagicVar from "../../Dialogs/MagicVar";
+import { useHistory } from "react-router";
+import { getNumber } from "../../../../utils";
+import { toggleSnackbar } from "../../../../redux/explorer";
 import { Trans, useTranslation } from "react-i18next";
 import { transformPolicyRequest } from "../utils";
-
 
 const useStyles = makeStyles((theme) => ({
     stepContent: {
@@ -101,7 +100,6 @@ export default function RemoteGuide(props) {
     const [loading, setLoading] = useState(false);
     const [skipped] = React.useState(new Set());
     const [magicVar, setMagicVar] = useState("");
-    // const [useCDN, setUseCDN] = useState("false");
     const [policy, setPolicy] = useState(
         props.policy
             ? props.policy

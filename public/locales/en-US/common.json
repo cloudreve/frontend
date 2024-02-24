@@ -74,5 +74,17 @@
     "50005": "Internal error.",
     "50010": "Desired node is unavailable.",
     "50011": "Failed to query file metadata."
+  },
+  "vasErrors": {
+    "40031": "This email provider is forbidden, please change to another one.",
+    "40059": "You cannot save your own share.",
+    "40062": "Insufficient credits.",
+    "40063": "Your current membership has not yet expired, please go to settings page to manually unsubscribe the membership. first.",
+    "40064": "You are already in this membership.",
+    "40065": "Invalid gift code.",
+    "40066": "You already have a QQ account linked, please unlink it first.",
+    "40067": "This QQ account is already linked to other account.",
+    "40068": "This QQ account is not linked to any account.",
+    "40072": "You are administrator, you cannot purchase other group."
   }
 }

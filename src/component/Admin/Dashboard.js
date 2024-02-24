@@ -1,22 +1,26 @@
-import { withStyles } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import Divider from "@material-ui/core/Divider";
+import React, { useCallback, useEffect, useState } from "react";
+import clsx from "clsx";
+import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
-import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import IconButton from "@material-ui/core/IconButton";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import UserAvatar from "../Navbar/UserAvatar";
 import {
     Assignment,
+    AttachMoney,
     Category,
     CloudDownload,
+    Contactless,
     Contacts,
     Group,
     Home,
@@ -27,23 +31,22 @@ import {
     Mail,
     Palette,
     Person,
+    Report,
     Settings,
     SettingsEthernet,
     Share,
+    ShoppingCart,
     Storage,
-    Contactless,
 } from "@material-ui/icons";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import MenuIcon from "@material-ui/icons/Menu";
-import clsx from "clsx";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { withStyles } from "@material-ui/core";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import { useHistory, useLocation } from "react-router";
 import { useRouteMatch } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { changeSubTitle } from "../../redux/viewUpdate/action";
 import pathHelper from "../../utils/page";
-import UserAvatar from "../Navbar/UserAvatar";
 import { useTranslation } from "react-i18next";
 
 const ExpansionPanel = withStyles({
@@ -208,6 +211,11 @@ const items = [
                 icon: <SettingsEthernet />,
             },
             {
+                title: "vas.vas",
+                path: "vas",
+                icon: <AttachMoney />,
+            },
+            {
                 title: "nav.appearance",
                 path: "theme",
                 icon: <Palette />,
@@ -253,6 +261,16 @@ const items = [
         title: "nav.shares",
         icon: <Share />,
         path: "share",
+    },
+    {
+        title: "vas.reports",
+        icon: <Report />,
+        path: "report",
+    },
+    {
+        title: "vas.orders",
+        icon: <ShoppingCart />,
+        path: "order",
     },
     {
         title: "nav.tasks",
@@ -393,6 +411,7 @@ export default function Dashboard({ content }) {
                             );
                         }
                         return (
+                            // eslint-disable-next-line react/jsx-key
                             <ExpansionPanel
                                 key={item.title}
                                 square

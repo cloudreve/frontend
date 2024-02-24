@@ -1,6 +1,6 @@
 {
-  "name": "cloudreve-frontend",
-  "version": "3.8.3",
+  "name": "cloudreve-frontend-plus",
+  "version": "3.8.3+1.1",
   "private": true,
   "dependencies": {
     "@babel/core": "7.6.0",
@@ -77,7 +77,7 @@
     "react-async-script": "^1.1.1",
     "react-color": "^2.18.0",
     "react-content-loader": "^5.0.2",
-    "react-dev-utils": "9",
+    "react-dev-utils": "^9.1.0",
     "react-dnd": "^9.5.1",
     "react-dnd-html5-backend": "^9.5.1",
     "react-dom": "^16.12.0",
@@ -113,7 +113,8 @@
     "webpack": "4.41.0",
     "webpack-dev-server": "3.11.3",
     "webpack-manifest-plugin": "2.1.1",
-    "workbox-webpack-plugin": "4.3.1"
+    "workbox-webpack-plugin": "4.3.1",
+    "yarn": "^1.22.4"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -189,7 +190,8 @@
   },
   "devDependencies": {
     "copy-webpack-plugin": "^5.1.1",
-    "eslint-plugin-react-hooks": "^4.0.0"
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "prettier": "2.7.1"
   },
   "husky": {
     "hooks": {

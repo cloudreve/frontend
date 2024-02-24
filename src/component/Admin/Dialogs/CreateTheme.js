@@ -1,19 +1,19 @@
-import AppBar from "@material-ui/core/AppBar";
+import React, { useCallback, useState } from "react";
+import DialogContent from "@material-ui/core/DialogContent";
+import { CompactPicker } from "react-color";
+import Typography from "@material-ui/core/Typography";
+import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
 import { Add, Menu } from "@material-ui/icons";
 import { ThemeProvider } from "@material-ui/styles";
-import React, { useCallback, useState } from "react";
-import { CompactPicker } from "react-color";
+import Fab from "@material-ui/core/Fab";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({

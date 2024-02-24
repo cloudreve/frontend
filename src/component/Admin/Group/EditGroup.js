@@ -30,12 +30,15 @@ export default function EditGroupPreload() {
                 [
                     "archive_download",
                     "archive_task",
+                    "relocate",
                     "one_time_download",
                     "share_download",
                     "webdav_proxy",
+                    "share_free",
                     "aria2",
                     "redirected_source",
-                    "advance_delete"
+                    "advance_delete",
+                    "select_node",
                 ].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
                         response.data.OptionsSerialized[v] = response.data
@@ -56,12 +59,22 @@ export default function EditGroupPreload() {
                     "aria2_batch",
                 ].forEach((v) => {
                     if (response.data.OptionsSerialized[v] !== undefined) {
-                        response.data.OptionsSerialized[
-                            v
-                        ] = response.data.OptionsSerialized[v].toString();
+                        response.data.OptionsSerialized[v] =
+                            response.data.OptionsSerialized[v].toString();
                     }
                 });
-                response.data.PolicyList = response.data.PolicyList[0];
+                response.data.PolicyList = response.data.PolicyList.map((v) => {
+                    return v.toString();
+                });
+
+                response.data.OptionsSerialized.available_nodes = response.data
+                    .OptionsSerialized.available_nodes
+                    ? response.data.OptionsSerialized.available_nodes.map(
+                          (v) => {
+                              return v.toString();
+                          }
+                      )
+                    : [];
 
                 // JSON转换
                 if (
@@ -70,9 +83,10 @@ export default function EditGroupPreload() {
                     response.data.OptionsSerialized.aria2_options = "{}";
                 } else {
                     try {
-                        response.data.OptionsSerialized.aria2_options = JSON.stringify(
-                            response.data.OptionsSerialized.aria2_options
-                        );
+                        response.data.OptionsSerialized.aria2_options =
+                            JSON.stringify(
+                                response.data.OptionsSerialized.aria2_options
+                            );
                     } catch (e) {
                         ToggleSnackbar(
                             "top",

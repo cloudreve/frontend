@@ -1,11 +1,13 @@
 import {
     Button,
+    Card,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
     Grid,
     List,
+    Popover,
     Slider,
     withStyles,
 } from "@material-ui/core";
@@ -18,6 +20,10 @@ import PlayArrow from "@material-ui/icons/PlayArrow";
 import PlayNext from "@material-ui/icons/SkipNext";
 import PlayPrev from "@material-ui/icons/SkipPrevious";
 import Pause from "@material-ui/icons/Pause";
+import VolumeUp from '@material-ui/icons/VolumeUp';
+import VolumeDown from '@material-ui/icons/VolumeDown';
+import VolumeMute from '@material-ui/icons/VolumeMute';
+import VolumeOff from '@material-ui/icons/VolumeOff';
 import { Repeat, RepeatOne, Shuffle } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
@@ -44,6 +50,11 @@ const styles = (theme) => ({
     },
     slider_root: {
         "vertical-align": "middle",
+    },
+    setvol: {
+        width: 200,
+        height: 28,
+        "line-height": "42px",
     },
 });
 
@@ -75,11 +86,14 @@ class MusicPlayerComponent extends Component {
         items: [],
         currentIndex: 0,
         //isOpen: false,
-        //isPlay:false,
+        isPlay: false,
         currentTime: 0,
         duration: 0,
         progressText: "00:00/00:00",
         looptype: 0,
+        volume: 0.8,
+        openPropEl: null,
+        mute: false,
     };
     myAudioRef = React.createRef();
 
@@ -201,6 +215,7 @@ class MusicPlayerComponent extends Component {
     };
 
     readyPlay = () => {
+        this.myAudioRef.current.volume = this.state.volume;
         this.play();
     };
 
@@ -227,9 +242,9 @@ class MusicPlayerComponent extends Component {
 
     play = () => {
         this.myAudioRef.current.play();
-        /*this.setState({
+        this.setState({
             isPlay: true
-        });*/
+        });
         this.props.audioPreviewSetPlaying(
             this.state.items[this.state.currentIndex].intro,
             false
@@ -240,9 +255,9 @@ class MusicPlayerComponent extends Component {
         if (this.myAudioRef.current) {
             this.myAudioRef.current.pause();
         }
-        /*this.setState({
+        this.setState({
             isPlay: false
-        })*/
+        })
         this.props.audioPreviewSetPlaying(
             this.state.items[this.state.currentIndex]?.intro,
             true
@@ -417,18 +432,9 @@ class MusicPlayerComponent extends Component {
                             <IconButton
                                 edge="end"
                                 aria-label=""
-                                onClick={this.pause}
+                                onClick={this.playOrPaues}
                             >
-                                <Pause />
-                            </IconButton>
-                        </Grid>
-                        <Grid item>
-                            <IconButton
-                                edge="end"
-                                aria-label=""
-                                onClick={this.play}
-                            >
-                                <PlayArrow />
+                                {this.state.isPlay ? (<Pause />) : (<PlayArrow />)}
                             </IconButton>
                         </Grid>
                         <Grid item>
@@ -439,6 +445,58 @@ class MusicPlayerComponent extends Component {
                             >
                                 <PlayNext />
                             </IconButton>
+                        </Grid>
+                        <Grid item>
+                            <IconButton
+                                edge="end"
+                                aria-label=""
+                                onClick={(e) => { this.setState({ openPropEl: e.currentTarget }) }}
+                                onContextMenu={(e) => {
+                                    e.preventDefault();
+                                    if (this.state.mute) {
+                                        this.setState({ mute: false });
+                                        this.myAudioRef.current.muted = false;
+                                    } else {
+                                        this.setState({ mute: true });
+                                        this.myAudioRef.current.muted = true;
+                                    }
+                                }}
+                            >
+                                {this.state.mute ? (
+                                    <VolumeOff />
+                                ) : this.state.volume >= 0.7 ? (
+                                    <VolumeUp />
+                                ) : this.state.volume <= 0.3 ? (
+                                    <VolumeMute />
+                                ) : (
+                                    <VolumeDown />
+                                )}
+                            </IconButton>
+                            <Popover
+                                id="volume-controller"
+                                open={Boolean(this.state.openPropEl)}
+                                anchorEl={this.state.openPropEl}
+                                onClose={() => { this.setState({ openPropEl: null }) }}
+                                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                                transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+                            >
+                                <Card className={classes.setvol}>
+                                    <Grid container spacing={2}>
+                                        <Grid item><VolumeDown /></Grid>
+                                        <Grid item xs><Slider
+                                            aria-labelledby="continuous-slider"
+                                            value={this.state.volume}
+                                            min={0} max={1} step={0.01} defaultValue={this.state.volume}
+                                            onChange={(e, vol) => {
+                                                this.setState({ volume: vol });
+                                                this.myAudioRef.current.volume = vol;
+                                            }}
+                                            style={{ padding: "13px 0" }}
+                                        /></Grid>
+                                        <Grid item><VolumeUp /></Grid>
+                                    </Grid>
+                                </Card>
+                            </Popover>
                         </Grid>
                     </Grid>
                 </DialogContent>

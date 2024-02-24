@@ -154,14 +154,6 @@ export function vhCheck() {
     document.documentElement.style.setProperty("--vh", `${vh}px`);
 }
 
-export const removeI18nCache = () => {
-    Object.keys(localStorage).forEach(function (key) {
-        if (key && key.startsWith("i18next_res_")) {
-            localStorage.removeItem(key);
-        }
-    });
-};
-
 export const getSelectItemStyles = (name, personName, theme) => {
     return {
         fontWeight:
@@ -169,4 +161,12 @@ export const getSelectItemStyles = (name, personName, theme) => {
                 ? theme.typography.fontWeightRegular
                 : theme.typography.fontWeightMedium,
     };
+};
+
+export const removeI18nCache = () => {
+    Object.keys(localStorage).forEach(function (key) {
+        if (key && key.startsWith("i18next_res_")) {
+            localStorage.removeItem(key);
+        }
+    });
 };

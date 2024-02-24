@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import Paper from "@material-ui/core/Paper";
@@ -18,8 +18,10 @@ import IconButton from "@material-ui/core/IconButton";
 import { Cloud, CloudOff, Delete } from "@material-ui/icons";
 import CreateWebDAVAccount from "../Modals/CreateWebDAVAccount";
 import TimeAgo from "timeago-react";
+import CreateWebDAVMount from "../Modals/CreateWebDAVMount";
 import Link from "@material-ui/core/Link";
 import { toggleSnackbar } from "../../redux/explorer";
+import { useLocation } from "react-router";
 import Nothing from "../Placeholder/Nothing";
 import { useTranslation } from "react-i18next";
 import AppPromotion from "./AppPromotion";
@@ -59,9 +61,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WebDAV() {
     const { t } = useTranslation();
-    const [tab, setTab] = useState(0);
+    const query = parseInt(
+        new URLSearchParams(useLocation().search).get("tab")
+    );
+    const [tab, setTab] = useState(query ? query : 0);
     const [create, setCreate] = useState(false);
+    const [mount, setMount] = useState(false);
     const [accounts, setAccounts] = useState([]);
+    const [folders, setFolders] = useState([]);
 
     const appPromotion = useSelector((state) => state.siteConfig.app_promotion);
     const dispatch = useDispatch();
@@ -89,6 +96,7 @@ export default function WebDAV() {
         API.get("/webdav/accounts")
             .then((response) => {
                 setAccounts(response.data.accounts);
+                setFolders(response.data.folders);
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -108,6 +116,21 @@ export default function WebDAV() {
                     return i !== id;
                 });
                 setAccounts(accountCopy);
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
+    const deleteMount = (id) => {
+        const folder = folders[id];
+        API.delete("/webdav/mount/" + folder.id)
+            .then(() => {
+                let folderCopy = [...folders];
+                folderCopy = folderCopy.filter((v, i) => {
+                    return i !== id;
+                });
+                setFolders(folderCopy);
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -170,6 +193,20 @@ export default function WebDAV() {
             });
     };
 
+    const addMount = (mountInfo) => {
+        setMount(false);
+        API.post("/webdav/mount", {
+            path: mountInfo.path,
+            policy: mountInfo.policy,
+        })
+            .then(() => {
+                loadList();
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            });
+    };
+
     const classes = useStyles();
     const user = Auth.GetUser();
 
@@ -179,6 +216,11 @@ export default function WebDAV() {
                 callback={addAccount}
                 open={create}
                 onClose={() => setCreate(false)}
+            />
+            <CreateWebDAVMount
+                callback={addMount}
+                open={mount}
+                onClose={() => setMount(false)}
             />
             <Typography color="textSecondary" variant="h4">
                 {t("navbar.connect")}
@@ -192,6 +234,7 @@ export default function WebDAV() {
                     aria-label="disabled tabs example"
                 >
                     <Tab label={t("setting.webdavAccounts")} />
+                    <Tab label={t("vas.mountPolicy")} />
                     {appPromotion && <Tab label={t("setting.iOSApp")} />}
                 </Tabs>
                 <div className={classes.cardContent}>
@@ -379,7 +422,71 @@ export default function WebDAV() {
                             </Button>
                         </div>
                     )}
-                    {tab === 1 && <AppPromotion />}
+                    {tab === 1 && (
+                        <div>
+                            <Alert severity="info">
+                                {t("vas.mountDescription")}
+                            </Alert>
+                            <TableContainer className={classes.tableContainer}>
+                                <Table
+                                    size="small"
+                                    className={classes.table}
+                                    aria-label="simple table"
+                                >
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>
+                                                {t("fileManager.folders")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {t("fileManager.storagePolicy")}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {t("setting.action")}
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {folders.map((row, id) => (
+                                            <TableRow key={id}>
+                                                <TableCell
+                                                    component="th"
+                                                    scope="row"
+                                                >
+                                                    {row.name}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    {row.policy_name}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <IconButton
+                                                        size={"small"}
+                                                        onClick={() =>
+                                                            deleteMount(id)
+                                                        }
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                {folders.length === 0 && (
+                                    <Nothing primary={t("setting.listEmpty")} />
+                                )}
+                            </TableContainer>
+                            <Button
+                                onClick={() => setMount(true)}
+                                className={classes.create}
+                                variant="contained"
+                                color="secondary"
+                            >
+                                {t("vas.mountNewFolder")}
+                            </Button>
+                        </div>
+                    )}
+                    {tab === 2 && <AppPromotion />}
                 </div>
             </Paper>
         </div>

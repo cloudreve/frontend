@@ -12,8 +12,7 @@ import {
     makeStyles,
     TextField,
 } from "@material-ui/core";
-import { toggleSnackbar } from "../../redux/explorer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API from "../../middleware/Api";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -22,6 +21,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import LockIcon from "@material-ui/icons/Lock";
 import TimerIcon from "@material-ui/icons/Timer";
 import CasinoIcon from "@material-ui/icons/Casino";
+import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Divider from "@material-ui/core/Divider";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -38,6 +38,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import ToggleIcon from "material-ui-toggle-icon";
+import { toggleSnackbar } from "../../redux/explorer";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -119,7 +120,10 @@ export default function CreatShare(props) {
         [dispatch]
     );
 
+    const scoreEnabled = useSelector((state) => state.siteConfig.score_enabled);
+    const scoreRate = useSelector((state) => state.siteConfig.share_score_rate);
     const lastSubmit = useRef(null);
+
     const [expanded, setExpanded] = React.useState(false);
     const [shareURL, setShareURL] = React.useState("");
     const [values, setValues] = React.useState({
@@ -127,10 +131,12 @@ export default function CreatShare(props) {
         downloads: 1,
         expires: 24 * 3600,
         showPassword: false,
+        score: 0,
     });
     const [shareOption, setShareOption] = React.useState({
         password: false,
         expire: false,
+        score: false,
         preview: true,
     });
     const [customExpires, setCustomExpires] = React.useState(3600);
@@ -143,6 +149,15 @@ export default function CreatShare(props) {
                 setShareOption({ ...shareOption, password: false });
             } else {
                 setShareOption({ ...shareOption, password: true });
+            }
+        }
+
+        // 输入积分
+        if (prop === "score") {
+            if (event.target.value == "0") {
+                setShareOption({ ...shareOption, score: false });
+            } else {
+                setShareOption({ ...shareOption, score: true });
             }
         }
 
@@ -178,6 +193,12 @@ export default function CreatShare(props) {
             setValues({
                 ...values,
                 password: "",
+            });
+        }
+        if (prop === "score" && shareOption[prop]) {
+            setValues({
+                ...values,
+                score: 0,
             });
         }
         setShareOption({ ...shareOption, [prop]: !shareOption[prop] });
@@ -224,6 +245,7 @@ export default function CreatShare(props) {
                 values.expires === -1
                     ? parseInt(customExpires)
                     : values.expires,
+            score: parseInt(values.score),
             preview: shareOption.preview,
         };
         lastSubmit.current = submitFormBody;
@@ -236,10 +258,12 @@ export default function CreatShare(props) {
                     downloads: 1,
                     expires: 24 * 3600,
                     showPassword: false,
+                    score: 0,
                 });
                 setShareOption({
                     password: false,
                     expire: false,
+                    score: false,
                 });
                 props.setModalsLoading(false);
             })
@@ -488,6 +512,68 @@ export default function CreatShare(props) {
                                 </Typography>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
+                        {scoreEnabled && (
+                            <ExpansionPanel
+                                expanded={expanded === "score"}
+                                onChange={handleExpand("score")}
+                            >
+                                <ExpansionPanelSummary
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <ListItem button>
+                                        <ListItemIcon>
+                                            <AccountBalanceWalletIcon />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={t("vas.payToDownload")}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <Checkbox
+                                                checked={shareOption.score}
+                                                onChange={handleCheck("score")}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                </ExpansionPanelSummary>
+
+                                <ExpansionPanelDetails
+                                    className={classes.noFlex}
+                                >
+                                    <FormControl
+                                        variant="outlined"
+                                        color="secondary"
+                                        fullWidth
+                                    >
+                                        <InputLabel htmlFor="filled-adornment-password">
+                                            {t("vas.creditToBePaid")}
+                                        </InputLabel>
+                                        <OutlinedInput
+                                            fullWidth
+                                            id="outlined-adornment-password"
+                                            type="number"
+                                            inputProps={{ min: 0 }}
+                                            value={values.score}
+                                            onChange={handleChange("score")}
+                                            labelWidth={180}
+                                        />
+                                    </FormControl>
+                                    {values.score !== 0 && scoreRate !== "100" && (
+                                        <Typography
+                                            variant="body2"
+                                            className={classes.scoreCalc}
+                                        >
+                                            {t("vas.creditGainPredict", {
+                                                num: Math.ceil(
+                                                    (values.score * scoreRate) /
+                                                        100
+                                                ),
+                                            })}
+                                        </Typography>
+                                    )}
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )}
                         <ExpansionPanel
                             expanded={expanded === "preview"}
                             onChange={handleExpand("preview")}

@@ -184,13 +184,6 @@ export default function FinishedCard(props) {
         setExpanded(!!newExpanded);
     };
 
-    const getPercent = (completed, total) => {
-        if (total === 0) {
-            return 0;
-        }
-        return (completed / total) * 100;
-    };
-
     const cancel = () => {
         setLoading(true);
         API.delete("/aria2/task/" + props.task.gid)
@@ -203,6 +196,13 @@ export default function FinishedCard(props) {
             .then(() => {
                 window.location.reload();
             });
+    };
+
+    const getPercent = (completed, total) => {
+        if (total == 0) {
+            return 0;
+        }
+        return (completed / total) * 100;
     };
 
     const getDownloadName = useCallback(() => {

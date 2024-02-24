@@ -41,6 +41,11 @@ export interface ExplorerState {
     fileSave: boolean;
     sideBarOpen: boolean;
     currentPolicy?: Policy;
+    purchase?: {
+        callback: any;
+        onClose: any;
+        score: number;
+    };
 }
 
 export const initState: ExplorerState = {
@@ -259,6 +264,11 @@ const explorer = (
             return {
                 ...state,
                 currentPolicy: action.policy,
+            };
+        case "CONFIRM_PURCHASE":
+            return {
+                ...state,
+                purchase: action.purchase,
             };
         default:
             return state;

@@ -32,7 +32,6 @@ import DropDown from "./DropDown";
 import pathHelper from "../../../utils/page";
 import classNames from "classnames";
 import Auth from "../../../middleware/Auth";
-import Avatar from "@material-ui/core/Avatar";
 import { Archive } from "@material-ui/icons";
 import { FilePlus } from "mdi-material-ui";
 import SubActions from "./SubActions";
@@ -371,6 +370,7 @@ class NavigatorComponent extends Component {
                             </ListItemIcon>
                             {t("fileManager.newFolder")}
                         </MenuItem>
+
                         <MenuItem onClick={() => this.performAction("newFile")}>
                             <ListItemIcon>
                                 <FilePlus />
@@ -390,6 +390,7 @@ class NavigatorComponent extends Component {
                     },
                     classes.container
                 )}
+                id={"drag-layer-inherit"}
             >
                 <div className={classes.navigatorContainer}>
                     <div className={classes.nav} ref={this.element}>

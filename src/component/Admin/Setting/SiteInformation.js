@@ -1,17 +1,26 @@
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { toggleSnackbar } from "../../../redux/explorer";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
 import API from "../../../middleware/Api";
-import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { toggleSnackbar } from "../../../redux/explorer";
+import { Trans, useTranslation } from "react-i18next";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { green } from "@material-ui/core/colors";
+import { Cancel, CheckCircle, Sync } from "@material-ui/icons";
+import IconButton from "@material-ui/core/IconButton";
+import { Tooltip } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
+import Link from "@material-ui/core/Link";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,26 +43,52 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SiteInformation() {
     const { t } = useTranslation("dashboard", { keyPrefix: "settings" });
+    const { t: tVas } = useTranslation("dashboard", { keyPrefix: "vas" });
+    const { t: tGlobal } = useTranslation("dashboard");
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState({
         siteURL: "",
         siteName: "",
         siteTitle: "",
+        siteKeywords: "",
         siteDes: "",
         siteScript: "",
+        siteNotice: "",
         pwa_small_icon: "",
         pwa_medium_icon: "",
         pwa_large_icon: "",
         pwa_display: "",
         pwa_theme_color: "",
         pwa_background_color: "",
+        vol_content: "",
+        show_app_promotion: "0",
+        app_feedback_link: "",
+        app_forum_link: "",
     });
+
+    const vol = useMemo(() => {
+        if (options.vol_content) {
+            const volJson = atob(options.vol_content);
+            return JSON.parse(volJson);
+        }
+    }, [options]);
 
     const handleChange = (name) => (event) => {
         setOptions({
             ...options,
             [name]: event.target.value,
+        });
+    };
+
+    const handleOptionChange = (name) => (event) => {
+        let value = event.target.value;
+        if (event.target.checked !== undefined) {
+            value = event.target.checked ? "1" : "0";
+        }
+        setOptions({
+            ...options,
+            [name]: value,
         });
     };
 
@@ -64,7 +99,7 @@ export default function SiteInformation() {
         [dispatch]
     );
 
-    useEffect(() => {
+    const refresh = () =>
         API.post("/admin/setting", {
             keys: Object.keys(options),
         })
@@ -74,6 +109,9 @@ export default function SiteInformation() {
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
+
+    useEffect(() => {
+        refresh();
         // eslint-disable-next-line
     }, []);
 
@@ -92,6 +130,21 @@ export default function SiteInformation() {
         })
             .then(() => {
                 ToggleSnackbar("top", "right", t("saved"), "success");
+            })
+            .catch((error) => {
+                ToggleSnackbar("top", "right", error.message, "error");
+            })
+            .then(() => {
+                setLoading(false);
+            });
+    };
+
+    const syncVol = () => {
+        setLoading(true);
+        API.get("/admin/vol/sync")
+            .then(() => {
+                refresh();
+                ToggleSnackbar("top", "right", tVas("volSynced"), "success");
             })
             .catch((error) => {
                 ToggleSnackbar("top", "right", error.message, "error");
@@ -141,6 +194,20 @@ export default function SiteInformation() {
                         <div className={classes.form}>
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="component-helper">
+                                    {t("siteKeywords")}
+                                </InputLabel>
+                                <Input
+                                    value={options.siteKeywords}
+                                    onChange={handleChange("siteKeywords")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {t("siteKeywordsDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
                                     {t("siteDescription")}
                                 </InputLabel>
                                 <Input
@@ -183,8 +250,149 @@ export default function SiteInformation() {
                                 </FormHelperText>
                             </FormControl>
                         </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {t("announcement")}
+                                </InputLabel>
+                                <Input
+                                    placeholder={t("supportHTML")}
+                                    multiline
+                                    value={options.siteNotice}
+                                    onChange={handleChange("siteNotice")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {t("announcementDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
                     </div>
                 </div>
+
+                <div className={classes.root}>
+                    <Typography variant="h6" gutterBottom>
+                        {tVas("mobileApp")}
+                    </Typography>
+                    <div className={classes.formContainer}>
+                        <div className={classes.form}>
+                            <Alert severity="info">
+                                <Typography variant="body2">
+                                    <Trans
+                                        ns={"dashboard"}
+                                        i18nKey={"vas.volPurchase"}
+                                        components={[
+                                            <Link
+                                                key={0}
+                                                href={
+                                                    "https://cloudreve.org/login"
+                                                }
+                                                target={"_blank"}
+                                            />,
+                                            <Link
+                                                key={1}
+                                                href={
+                                                    "https://cloudreve.org/ios"
+                                                }
+                                                target={"_blank"}
+                                            />,
+                                        ]}
+                                    />
+                                </Typography>
+                            </Alert>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {tVas("iosVol")}
+                                </InputLabel>
+                                <Input
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            {vol ? (
+                                                <CheckCircle
+                                                    style={{
+                                                        color: green[500],
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Cancel color={"error"} />
+                                            )}
+                                        </InputAdornment>
+                                    }
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <Tooltip
+                                                title={tVas("syncLicense")}
+                                            >
+                                                <IconButton
+                                                    disabled={loading}
+                                                    onClick={() => syncVol()}
+                                                    aria-label="toggle password visibility"
+                                                >
+                                                    <Sync />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </InputAdornment>
+                                    }
+                                    readOnly
+                                    value={
+                                        vol ? vol.domain : tGlobal("share.none")
+                                    }
+                                />
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={
+                                                options.show_app_promotion ===
+                                                "1"
+                                            }
+                                            onChange={handleOptionChange(
+                                                "show_app_promotion"
+                                            )}
+                                        />
+                                    }
+                                    label={tVas("showAppPromotion")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("showAppPromotionDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {tVas("appFeedback")}
+                                </InputLabel>
+                                <Input
+                                    value={options.app_feedback_link}
+                                    onChange={handleChange("app_feedback_link")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("appLinkDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                        <div className={classes.form}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="component-helper">
+                                    {tVas("appForum")}
+                                </InputLabel>
+                                <Input
+                                    value={options.app_forum_link}
+                                    onChange={handleChange("app_forum_link")}
+                                />
+                                <FormHelperText id="component-helper-text">
+                                    {tVas("appLinkDes")}
+                                </FormHelperText>
+                            </FormControl>
+                        </div>
+                    </div>
+                </div>
+
                 <div className={classes.root}>
                     <Typography variant="h6" gutterBottom>
                         {t("pwa")}

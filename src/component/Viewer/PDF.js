@@ -11,7 +11,8 @@ import { toggleSnackbar } from "../../redux/explorer";
 import UseFileSubTitle from "../../hooks/fileSubtitle";
 import { useTranslation } from "react-i18next";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdn.staticfile.org/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const useStyles = makeStyles((theme) => ({
     layout: {

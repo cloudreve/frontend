@@ -102,6 +102,7 @@ function LoginForm() {
         (state) => state.siteConfig.registerEnabled
     );
     const title = useSelector((state) => state.siteConfig.title);
+    const QQLogin = useSelector((state) => state.siteConfig.QQLogin);
     const authn = useSelector((state) => state.siteConfig.authn);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -254,6 +255,18 @@ function LoginForm() {
             });
     };
 
+    const initQQLogin = () => {
+        setLoading(true);
+        API.post("/user/qq")
+            .then((response) => {
+                window.location.href = response.data;
+            })
+            .catch((error) => {
+                setLoading(false);
+                ToggleSnackbar("top", "right", error.message, "warning");
+            });
+    };
+
     const twoFALogin = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -329,20 +342,46 @@ function LoginForm() {
                                     />
                                 </FormControl>
                                 {loginCaptcha && <CaptchaRender />}
-
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={
-                                        loading ||
-                                        (loginCaptcha ? captchaLoading : false)
-                                    }
-                                    className={classes.submit}
-                                >
-                                    {t("login.signIn")}
-                                </Button>
+                                {QQLogin && (
+                                    <div className={classes.buttonContainer}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            disabled={loading}
+                                            className={classes.submit}
+                                        >
+                                            {t("login.signIn")}
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            style={{ marginLeft: "10px" }}
+                                            disabled={loading}
+                                            className={classes.submit}
+                                            onClick={initQQLogin}
+                                        >
+                                            {t("vas.loginWithQQ")}
+                                        </Button>
+                                    </div>
+                                )}
+                                {!QQLogin && (
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={
+                                            loading ||
+                                            (loginCaptcha
+                                                ? captchaLoading
+                                                : false)
+                                        }
+                                        className={classes.submit}
+                                    >
+                                        {t("login.signIn")}
+                                    </Button>
+                                )}
                             </form>
                         )}
                         {useAuthn && (

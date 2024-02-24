@@ -1,22 +1,26 @@
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
-import { blue, green, red, yellow } from "@material-ui/core/colors";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Divider from "@material-ui/core/Divider";
+import React, { useCallback, useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import {
+    CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
+import { ResponsiveContainer } from "recharts/lib/component/ResponsiveContainer";
+import { makeStyles } from "@material-ui/core/styles";
+import pathHelper from "../../utils/page";
+import API from "../../middleware/Api";
+import { useDispatch } from "react-redux";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
 import {
     Description,
     Favorite,
@@ -30,23 +34,19 @@ import {
     Public,
     Telegram,
 } from "@material-ui/icons";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { blue, green, red, yellow } from "@material-ui/core/colors";
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import {
-    CartesianGrid,
-    Legend,
-    Line,
-    LineChart,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
-import { ResponsiveContainer } from "recharts/lib/component/ResponsiveContainer";
 import TimeAgo from "timeago-react";
+import Chip from "@material-ui/core/Chip";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
 import { toggleSnackbar } from "../../redux/explorer";
-import API from "../../middleware/Api";
-import pathHelper from "../../utils/page";
 import { Trans, useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
@@ -99,8 +99,8 @@ export default function Index() {
     const { t } = useTranslation("dashboard");
     const classes = useStyles();
     const [lineData, setLineData] = useState([]);
-    const [news, setNews] = useState([]);
-    const [newsUsers, setNewsUsers] = useState({});
+    // const [news, setNews] = useState([]);
+    // const [newsUsers, setNewsUsers] = useState({});
     const [open, setOpen] = React.useState(false);
     const [siteURL, setSiteURL] = React.useState("");
     const [statistics, setStatistics] = useState({
@@ -171,26 +171,26 @@ export default function Index() {
                 ToggleSnackbar("top", "right", error.message, "error");
             });
 
-        axios
-            .get("/api/v3/admin/news?tag=" + t("summary.newsTag"))
-            .then((response) => {
-                setNews(response.data.data);
-                const res = {};
-                response.data.included.forEach((v) => {
-                    if (v.type === "users") {
-                        res[v.id] = v.attributes;
-                    }
-                });
-                setNewsUsers(res);
-            })
-            .catch((error) => {
-                ToggleSnackbar(
-                    "top",
-                    "right",
-                    t("summary.newsletterError"),
-                    "warning"
-                );
-            });
+        // axios
+        //     .get("/api/v3/admin/news?tag=" + t("summary.newsTag"))
+        //     .then((response) => {
+        //         setNews(response.data.data);
+        //         const res = {};
+        //         response.data.included.forEach((v) => {
+        //             if (v.type === "users") {
+        //                 res[v.id] = v.attributes;
+        //             }
+        //         });
+        //         setNewsUsers(res);
+        //     })
+        //     .catch((error) => {
+        //         ToggleSnackbar(
+        //             "top",
+        //             "right",
+        //             t("summary.newsletterError"),
+        //             "warning"
+        //         );
+        //     });
     }, []);
 
     return (
@@ -335,8 +335,8 @@ export default function Index() {
                             </Typography>
                             <Typography className={classes.version}>
                                 {version.backend}{" "}
-                                {version.is_pro === "true" && (
-                                    <Chip size="small" label="Pro" />
+                                {version.is_plus === "true" && (
+                                    <Chip size="small" label="Plus" />
                                 )}
                             </Typography>
                         </div>
@@ -369,7 +369,7 @@ export default function Index() {
                                 <ListItemIcon>
                                     <GitHub />
                                 </ListItemIcon>
-                                <ListItemText primary="GitHub" />
+                                <ListItemText primary={t("summary.github")} />
                                 <ListItemIcon className={classes.iconRight}>
                                     <Launch />
                                 </ListItemIcon>
@@ -423,7 +423,7 @@ export default function Index() {
                             <ListItem
                                 button
                                 onClick={() =>
-                                    window.open("https://cloudreve.org/pro")
+                                    window.open("https://docs.cloudreve.org/use/pro/jie-shao")
                                 }
                             >
                                 <ListItemIcon style={{ color: "#ff789d" }}>
@@ -438,7 +438,7 @@ export default function Index() {
                     </div>
                 </Paper>
             </Grid>
-            <Grid item xs={12} md={8} lg={9}>
+            {/* <Grid item xs={12} md={8} lg={9}>
                 <Paper className={classes.paper}>
                     <List>
                         {news &&
@@ -521,7 +521,7 @@ export default function Index() {
                             ))}
                     </List>
                 </Paper>
-            </Grid>
+            </Grid> */}
         </Grid>
     );
 }

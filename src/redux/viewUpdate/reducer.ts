@@ -2,6 +2,12 @@ import { AnyAction } from "redux";
 import Auth from "../../middleware/Auth";
 import { CloudreveFile, SortMethod } from "../../types";
 
+declare global {
+    interface Window {
+        shareKey: any;
+    }
+}
+
 export interface ViewUpdateState {
     isLogin: boolean;
     open: boolean;
@@ -33,6 +39,7 @@ export interface ViewUpdateState {
         resave: boolean;
         compress: boolean;
         decompress: boolean;
+        relocate: boolean;
         loading: boolean;
         loadingText: string;
         directoryDownloading: boolean;
@@ -96,6 +103,7 @@ export const initState: ViewUpdateState = {
         copy: false,
         resave: false,
         compress: false,
+        relocate: false,
         decompress: false,
         loading: false,
         loadingText: "",
@@ -173,7 +181,7 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 contextOpen: false,
             });
         case "OPEN_RESAVE_DIALOG":
-            // window.shareKey = action.key;
+            window.shareKey = action.key;
             return Object.assign({}, state, {
                 modals: Object.assign({}, state.modals, {
                     resave: true,
@@ -238,6 +246,13 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                 }),
                 contextOpen: false,
             });
+        case "OPEN_RELOCATE_DIALOG":
+            return Object.assign({}, state, {
+                modals: Object.assign({}, state.modals, {
+                    relocate: true,
+                }),
+                contextOpen: false,
+            });
         case "OPEN_COPY_DIALOG":
             return Object.assign({}, state, {
                 modals: Object.assign({}, state.modals, {
@@ -282,6 +297,7 @@ const viewUpdate = (state: ViewUpdateState = initState, action: AnyAction) => {
                     resave: false,
                     copy: false,
                     loading: false,
+                    relocate: false,
                     compress: false,
                     decompress: false,
                     option: undefined,

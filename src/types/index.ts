@@ -23,3 +23,9 @@ export enum BatchDownloadMethod {
     ClientStream,
     ServerArchive,
 }
+
+declare global {
+    interface Window {
+        baseConfig?: (f: (response: any, e: any) => any) => any;
+    }
+}

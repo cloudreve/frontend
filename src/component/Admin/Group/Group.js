@@ -1,22 +1,22 @@
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Tooltip from "@material-ui/core/Tooltip";
-import { Delete, Edit } from "@material-ui/icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory, useLocation } from "react-router";
-import { toggleSnackbar } from "../../../redux/explorer";
+import { makeStyles } from "@material-ui/core/styles";
 import API from "../../../middleware/Api";
+import { useDispatch } from "react-redux";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 import { sizeToString } from "../../../utils";
+import TableBody from "@material-ui/core/TableBody";
+import TablePagination from "@material-ui/core/TablePagination";
+import { useHistory, useLocation } from "react-router";
+import IconButton from "@material-ui/core/IconButton";
+import { Delete, Edit } from "@material-ui/icons";
+import Tooltip from "@material-ui/core/Tooltip";
+import { toggleSnackbar } from "../../../redux/explorer";
 import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
