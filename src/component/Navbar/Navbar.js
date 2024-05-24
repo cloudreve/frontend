@@ -15,7 +15,7 @@ import { isPreviewable } from "../../config";
 import { changeThemeColor, sizeToString, vhCheck } from "../../utils";
 import Uploader from "../Uploader/Uploader.js";
 import pathHelper from "../../utils/page";
-import SezrchBar from "./SearchBar";
+import SearchBar from "./SearchBar";
 import StorageBar from "./StorageBar";
 import UserAvatar from "./UserAvatar";
 import UserInfo from "./UserInfo";
@@ -653,7 +653,7 @@ class NavbarCompoment extends Component {
                                     })}
                                 </Typography>
                             )}
-                        {this.props.selected.length === 0 && <SezrchBar />}
+                        {this.props.selected.length === 0 && <SearchBar />}
                         <div className={classes.grow} />
                         {this.props.selected.length > 0 &&
                             (isHomePage || isSharePage) && (
