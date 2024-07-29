@@ -74,6 +74,9 @@ export default function ImageSetting() {
         thumb_proxy_enabled: "0",
         thumb_proxy_policy: [],
         thumb_max_src_size: "",
+        thumb_libraw_enabled: "0",
+        thumb_libraw_path: "",
+        thumb_libraw_exts: "",
     });
 
     const handleChange = (name) => (event) => {

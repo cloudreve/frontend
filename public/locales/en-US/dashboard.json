@@ -231,6 +231,8 @@
     "thumbDependencyWarning": "LibreOffice generators depend on Cloudreve built-in or VIPS generators, please enable either one.",
     "ffmpeg": "FFmpeg",
     "ffmpegDes": "Use FFmpeg to generate video thumbnails.",
+    "libRaw": "LibRaw",
+    "libRawDes": "Use LibRaw to process RAW images",
     "executable": "Executable",
     "executableDes": "The address or command of the third-party generator executable.",
     "executableTest": "Test",
