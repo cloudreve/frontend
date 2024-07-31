@@ -231,6 +231,8 @@
     "thumbDependencyWarning": "I generatori di LibreOffice dipendono dai generatori integrati di Cloudreve o VIPS, abilita uno dei due.",
     "ffmpeg": "FFmpeg",
     "ffmpegDes": "Usa FFmpeg per generare le miniature dei video.",
+    "libRaw": "LibRaw",
+    "libRawDes": "Utilizzo di LibRaw per elaborare le immagini Raw",
     "executable": "Eseguibile",
     "executableDes": "L'indirizzo o il comando dell'eseguibile del generatore di terze parti.",
     "executableTest": "Prova",

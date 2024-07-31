@@ -231,6 +231,8 @@
     "thumbDependencyWarning": "LibreOffice 生成器依赖于 Cloudreve 内置 或 VIPS 生成器，请开启其中任一生成器。",
     "ffmpeg": "FFmpeg",
     "ffmpegDes": "使用 FFmpeg 生成视频缩略图。",
+    "libRaw": "LibRaw",
+    "libRawDes": "使用 LibRaw 处理 RAW 图像。",
     "executable": "可执行文件",
     "executableDes": "第三方生成器可执行文件的地址或命令",
     "executableTest": "测试",

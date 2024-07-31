@@ -84,6 +84,19 @@ const generators = [
         ],
     },
     {
+        name: "libRaw",
+        des: "libRawDes",
+        enableFlag: "thumb_libraw_enabled",
+        executableSetting: "thumb_libraw_path",
+        inputs: [
+            {
+                name: "thumb_libraw_exts",
+                label: "generatorExts",
+                des: "generatorExtsDes",
+            },
+        ],
+    },
+    {
         name: "cloudreveBuiltin",
         des: "cloudreveBuiltinDes",
         enableFlag: "thumb_builtin_enabled",
