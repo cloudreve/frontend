@@ -26,32 +26,69 @@ const Artplayer = React.lazy(() =>
     )
 );
 
+const domain = document.location.protocol + "//" + window.location.host;
+
 const externalPlayers = [
     {
         name: "PotPlayer",
-        url: (source, title) => `potplayer://${source}`,
+        url: (source, title) => {
+            if (source.startsWith('/')) {
+                return `potplayer://${domain}${source}`
+            } else {
+                return `potplayer://${source}`
+            }
+        },
     },
     {
         name: "VLC",
-        url: (source, title) => `vlc://${source}`,
+        url: (source, title) => {
+            if (source.startsWith('/')) {
+                return `vlc://${domain}${source}`
+            } else {
+                return `vlc://${source}`
+            }
+        },
     },
     {
         name: "IINA",
-        url: (source, title) => `iina://weblink?url=${source}`,
+        url: (source, title) => {
+            if (source.startsWith('/')) {
+                return `iina://weblink?url=${domain}${source}`
+            } else {
+                return `iina://weblink?url=${source}`
+            }
+        },
     },
     {
         name: "nPlayer",
-        url: (source, title) => `nplayer-${source}`,
+        url: (source, title) => {
+            if (source.startsWith('/')) {
+                return `nplayer-${domain}${source}`
+            } else {
+                return `nplayer-${source}`
+            }
+        },
     },
     {
         name: "MXPlayer (Free)",
-        url: (source, title) =>
-            `intent:${source}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`,
+        url: (source, title) => {
+            if (source.startsWith('/')) {
+                return `intent:${domain}${source}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
+            } else {
+                return `intent:${source}#Intent;package=com.mxtech.videoplayer.ad;S.title=${title};end`
+            }
+        },
     },
     {
         name: "MXPlayer (Pro)",
-        url: (source, title) =>
-            `intent:${source}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`,
+        url: (source, title) => {
+            if (source.startsWith('/')) {
+                return `intent:${domain}${source}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`
+            } else {
+                return `intent:${source}#Intent;package=com.mxtech.videoplayer.pro;S.title=${title};end`
+            }
+        },
+
     },
 ];
 
@@ -80,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
     },
     "@global": {
-        "video,.art-video-player,.art-bottom":{
+        "video,.art-video-player,.art-bottom": {
             borderRadius: theme.shape.borderRadius,
         }
     }
