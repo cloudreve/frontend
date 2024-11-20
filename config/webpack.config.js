@@ -678,6 +678,19 @@ module.exports = function(webpackEnv) {
             new RegExp(/^\/f\//),
             new RegExp(/^\/custom/),
           ],
+          runtimeCaching: [
+            {
+                urlPattern: new RegExp(/.*\/thumb\/.*/i),
+                handler: 'StaleWhileRevalidate',
+                options: {
+                    cacheName: 'thumbnail-cache',
+                    expiration: {
+                        maxEntries: 100,
+                        maxAgeSeconds: 30 * 24 * 60 * 60,
+                    },
+                },
+            }
+          ]
         }),
       // TypeScript type checking
       useTypeScript &&
