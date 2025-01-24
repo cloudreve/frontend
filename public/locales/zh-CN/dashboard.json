@@ -452,6 +452,7 @@
     "intranetEndPoint": "内网 EndPoint",
     "ossCDNDes": "是否要使用配套的 阿里云CDN 加速 OSS 访问？",
     "createOSSCDNDes": "前往 <0>阿里云 CDN 管理控制台</0> 创建 CDN 加速域名，并设定源站为刚创建的 OSS Bucket。在下方填写 CDN 加速域名，并选择是否使用 HTTPS：",
+    "ossAKCDNDes": "为防止用户绕过CDN刷流量，请单独再获取一个阿里云AccessKey，并填写在下方。",
     "ossAKDes": "在阿里云 <0>安全信息管理</0> 页面获取 用户 AccessKey，并填写在下方。",
     "shouldNotContainSpace": "不能含有空格",
     "nameThePolicyFirst": "为此存储策略命名：",

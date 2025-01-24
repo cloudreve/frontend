@@ -143,6 +143,8 @@ export default function OSSGuide(props) {
                       server_side_endpoint: "",
                       chunk_size: 25 << 20,
                       placeholder_with_size: "false",
+                      cdn_access_key: "",
+                      cdn_secret_key: "",
                   },
               }
     );
@@ -534,7 +536,7 @@ export default function OSSGuide(props) {
                                                     "https://cdn.console.aliyun.com/domain/list"
                                                 }
                                                 target={"_blank"}
-                                            />,
+                                            />
                                         ]}
                                     />
                                 </Typography>
@@ -545,6 +547,43 @@ export default function OSSGuide(props) {
                                         required={useCDN === "true"}
                                         label={t("bucketCDNDomain")}
                                     />
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <Typography variant={"body2"}>
+                                    {t("ossAKCDNDes")}
+                                </Typography>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            AccessKey ID
+                                        </InputLabel>
+                                        <Input
+                                            required
+                                            inputProps={{
+                                                pattern: "\\S+",
+                                                title: t("shouldNotContainSpace")
+                                            }}
+                                            value={policy.OptionsSerialized.cdn_access_key}
+                                            onChange={handleOptionChange("cdn_access_key")}
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className={classes.form}>
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="component-helper">
+                                            Access Key Secret
+                                        </InputLabel>
+                                        <Input
+                                            required
+                                            inputProps={{
+                                                pattern: "\\S+",
+                                                title: t("shouldNotContainSpace")
+                                            }}
+                                            value={policy.OptionsSerialized.cdn_secret_key}
+                                            onChange={handleOptionChange("cdn_secret_key")}
+                                        />
+                                    </FormControl>
                                 </div>
                             </div>
                         </div>
@@ -568,7 +607,7 @@ export default function OSSGuide(props) {
                                                 "https://usercenter.console.aliyun.com/#/manage/ak"
                                             }
                                             target={"_blank"}
-                                        />,
+                                        />
                                     ]}
                                 />
                             </Typography>
