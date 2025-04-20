@@ -1,5 +1,5 @@
-import Base from "../uploader/base";
 import { ProcessingTaskDuplicatedError } from "../errors";
+import Base from "../uploader/base";
 
 export interface QueueContent {
     uploader: Base;
@@ -8,10 +8,13 @@ export interface QueueContent {
 }
 
 export class Pool {
-    queue: Array<QueueContent> = [];
-    processing: Array<QueueContent> = [];
+  queue: Array<QueueContent> = [];
+  processing: Array<QueueContent> = [];
+  onPoolEmpty?: () => void;
 
-    constructor(public limit: number) {}
+  constructor(public limit: number, onPoolEmpty?: () => void) {
+    this.onPoolEmpty = onPoolEmpty;
+  }
 
     enqueue(uploader: Base) {
         return new Promise<void>((resolve, reject) => {
@@ -26,6 +29,9 @@ export class Pool {
 
     release(item: QueueContent) {
         this.processing = this.processing.filter((v) => v !== item);
+        if (this.queue.length === 0 && this.processing.length === 0) {
+            this.onPoolEmpty?.();
+        }
         this.check();
     }
 

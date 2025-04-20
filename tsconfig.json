@@ -1,34 +1,31 @@
 {
   "compilerOptions": {
-    "lib": [
-      "es6",
-      "dom"
+    "types": [
+      "@types/webappsec-credential-management",
+      "vite-plugin-pwa/react"
     ],
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "noImplicitAny": false,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "esModuleInterop": true,
+
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "target": "ES2017",
-    "jsx": "react",
-    "removeComments": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": false,
-    "strictBindCallApply": true,
-    "noImplicitReturns": true,
-    "alwaysStrict": true,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
