@@ -1,6 +1,6 @@
 import path from "path-browserify";
-import SessionManager from "../session";
 import { FileType, Metadata } from "../api/explorer.ts";
+import SessionManager from "../session";
 
 export const CrUriPrefix = "cloudreve://";
 const HttpUriPrefix = "http://";
@@ -75,7 +75,7 @@ export default class CrUri {
   }
 
   public is_search(): boolean {
-    return this.url.searchParams.size > 0;
+    return !!this.url.searchParams.keys().next().value;
   }
 
   public query(key: string): string[] {
@@ -93,10 +93,7 @@ export default class CrUri {
     });
     if (param.name) {
       if (this.fs() == Filesystem.trash) {
-        this.addQuery(
-          UriQuery.metadata_prefix + Metadata.restore_uri,
-          encodeURI(param.name.join(" ")),
-        );
+        this.addQuery(UriQuery.metadata_prefix + Metadata.restore_uri, encodeURI(param.name.join(" ")));
       } else {
         param.name.forEach((name) => this.addQuery(UriQuery.name, name));
       }
@@ -111,10 +108,7 @@ export default class CrUri {
       this.addQuery(UriQuery.category, param.category);
     }
     if (param.type !== undefined) {
-      this.addQuery(
-        UriQuery.type,
-        param.type == FileType.folder ? "folder" : "file",
-      );
+      this.addQuery(UriQuery.type, param.type == FileType.folder ? "folder" : "file");
     }
     if (param.metadata) {
       Object.entries(param.metadata).forEach(([k, v]) => {
@@ -226,10 +220,7 @@ export default class CrUri {
   }
 
   public join(...paths: string[]): this {
-    this.url.pathname = path.join(
-      this.url.pathname,
-      ...paths.map((p) => encodeURI(p)),
-    );
+    this.url.pathname = path.join(this.url.pathname, ...paths.map((p) => encodeURI(p)));
     return this;
   }
 
@@ -251,9 +242,7 @@ export default class CrUri {
   }
 
   public root_id(): string {
-    return `${this.fs()}/${this.url.username}/${
-      SessionManager.currentLoginOrNull()?.user.id ?? "0"
-    }`;
+    return `${this.fs()}/${this.url.username}/${SessionManager.currentLoginOrNull()?.user.id ?? "0"}`;
   }
 
   public base(excludeSearch: boolean = true): string {
@@ -265,10 +254,7 @@ export default class CrUri {
 
     // remove ending slash
 
-    return newUri
-      .toString()
-      .replace(HttpUriPrefix, CrUriPrefix)
-      .replace(/\/$/, "");
+    return newUri.toString().replace(HttpUriPrefix, CrUriPrefix).replace(/\/$/, "");
   }
 
   // pure_uri returns the uri without searching query string, with exceptions.
@@ -297,10 +283,7 @@ export default class CrUri {
   }
 
   public toString(): string {
-    return this.url
-      .toString()
-      .replace(HttpUriPrefix, CrUriPrefix)
-      .replace(/\/$/, "");
+    return this.url.toString().replace(HttpUriPrefix, CrUriPrefix).replace(/\/$/, "");
   }
 }
 
