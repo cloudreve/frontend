@@ -867,11 +867,24 @@ export function dialogBasedMoveCopy(index: number, files: FileResponse[], isCopy
   };
 }
 
-export function createShareShortcut(path: string): AppThunk {
-  return async (dispatch, _getState) => {
+export function createShareShortcut(index: number): AppThunk {
+  return async (dispatch, getState) => {
+    const fm = getState().fileManager[index];
+    const base = fm?.path_root;
+    const isSingleFile = fm?.list?.single_file_view;
+    const files = fm?.list?.files;
+    if (!base || !isSingleFile || !files || files.length != 1) {
+      return;
+    }
+
+    let shortcutPath = base;
+    if (isSingleFile && files && files.length > 0) {
+      shortcutPath = files[0].path;
+    }
+
     const dst = await dispatch(selectPath(PathSelectionVariantOptions.shortcut, defaultPath));
     const dstCrUri = new CrUri(dst);
-    const shareCrUri = new CrUri(path);
+    const shareCrUri = new CrUri(shortcutPath);
     const shareInfo = await dispatch(queueLoadShareInfo(shareCrUri));
     if (!shareInfo.name || !shareInfo.owner) {
       return;
@@ -884,7 +897,7 @@ export function createShareShortcut(path: string): AppThunk {
         type: shareInfo.source_type == FileType.file ? "file" : "folder",
         uri: dstCrUri.toString(),
         metadata: {
-          [Metadata.share_redirect]: path,
+          [Metadata.share_redirect]: shortcutPath,
           [Metadata.share_owner]: shareInfo.owner.id,
         },
         err_on_conflict: true,

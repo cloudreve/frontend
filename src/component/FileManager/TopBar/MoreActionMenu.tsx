@@ -24,9 +24,6 @@ const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
   const { t } = useTranslation();
   const fmIndex = useContext(FmIndexContext);
   const fs = useAppSelector((state) => state.fileManager[fmIndex].current_fs);
-  const base = useAppSelector((state) => state.fileManager[fmIndex].path_root);
-  const isSingleFile = useAppSelector((state) => state.fileManager[fmIndex].list?.single_file_view);
-  const files = useAppSelector((state) => state.fileManager[fmIndex].list?.files);
   const dispatch = useAppDispatch();
   const isLogin = !!SessionManager.currentLoginOrNull();
   const theme = useTheme();
@@ -43,13 +40,9 @@ const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
   }, [dispatch, onClose, fmIndex]);
 
   const onCreateShortcutClicked = useCallback(() => {
-    if (isSingleFile && files && files.length > 0) {
-      dispatch(createShareShortcut(files[0].path));
-    } else if (base) {
-      dispatch(createShareShortcut(base));
-    }
+    dispatch(createShareShortcut(fmIndex));
     onClose && onClose({}, "escapeKeyDown");
-  }, [dispatch, onClose, base, isSingleFile, files]);
+  }, [dispatch, onClose, fmIndex]);
 
   const onSelectAllClicked = useCallback(() => {
     onClose && onClose({}, "escapeKeyDown");
