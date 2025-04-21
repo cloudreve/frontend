@@ -905,8 +905,10 @@ export function goToSharedLink(index: number, file: FileResponse): AppThunk {
     const shareUri = file.metadata?.[Metadata.share_redirect];
     if (shareUri) {
       // Add a delay for animation to close the context menu
+      const shareUriParsed = new CrUri(shareUri);
+      shareUriParsed.setPath("");
       setTimeout(() => {
-        dispatch(navigateToPath(index, shareUri));
+        dispatch(navigateToPath(index, shareUriParsed.toString()));
       }, contextMenuCloseAnimationDelay);
     }
   };
@@ -1137,6 +1139,38 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
       "modals.generatingSourceLinks",
     );
     dispatch(setDirectLinkDialog({ open: true, res }));
+  };
+}
+
+// Single file symbolic links might be invalid if original file is renamed by its owner,
+// we need to refresh the symbolic links by getting the latest file list
+export function refreshSingleFileSymbolicLinks(file: FileResponse): AppThunk<Promise<FileResponse>> {
+  return async (dispatch, _getState) => {
+    if (file.type != FileType.file || !file?.metadata?.[Metadata.share_redirect]) {
+      return file;
+    }
+    const currentUrl = new CrUri(getFileLinkedUri(file));
+    const latestList = await dispatch(
+      getFileList({
+        uri: currentUrl.setPath("").toString(),
+        page_size: 50,
+      }),
+    );
+    if (latestList.files.length != 1) {
+      return file;
+    }
+    const latestFile = latestList.files[0];
+    if (!latestFile) {
+      return file;
+    }
+
+    if (latestFile.path != file?.metadata?.[Metadata.share_redirect]) {
+      // File renamed, update file share_redirect
+      dispatch(
+        patchFileMetadata(FileManagerIndex.main, [file], [{ key: Metadata.share_redirect, value: latestFile.path }]),
+      );
+    }
+    return latestFile;
   };
 }
 

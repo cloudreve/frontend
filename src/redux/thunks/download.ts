@@ -17,13 +17,10 @@ import {
 } from "../../util/filesystem.ts";
 import "../../util/zip.js";
 import { closeContextMenu } from "../fileManagerSlice.ts";
-import {
-  DialogSelectOption,
-  setBatchDownloadLog,
-} from "../globalStateSlice.ts";
+import { DialogSelectOption, setBatchDownloadLog } from "../globalStateSlice.ts";
 import { AppThunk } from "../store.ts";
 import { promiseId, selectOption } from "./dialog.ts";
-import { longRunningTaskWithSnackbar, walk, walkAll } from "./file.ts";
+import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks, walk, walkAll } from "./file.ts";
 
 const streamSaverParam = "stream_saver";
 
@@ -54,17 +51,13 @@ export function downloadFiles(index: number, files: FileResponse[]): AppThunk {
 export function downloadMultipleFiles(files: FileResponse[]): AppThunk {
   return async (dispatch, _getState) => {
     // Prepare download options
-    const options: MultipleDownloadOption[] = [
-      MultipleDownloadOption.StreamSaver,
-    ];
+    const options: MultipleDownloadOption[] = [MultipleDownloadOption.StreamSaver];
     // @ts-ignore
     if (window.isSecureContext && window.showDirectoryPicker) {
       options.push(MultipleDownloadOption.Browser);
     }
 
-    const groupPermission = new Boolset(
-      SessionManager.currentUser()?.group?.permission,
-    );
+    const groupPermission = new Boolset(SessionManager.currentUser()?.group?.permission);
     if (
       groupPermission.enabled(GroupPermission.archive_download) &&
       (files.length > 1 || !files[0].metadata?.[Metadata.share_redirect])
@@ -76,10 +69,7 @@ export function downloadMultipleFiles(files: FileResponse[]): AppThunk {
     if (options.length > 1) {
       try {
         finalOption = (await dispatch(
-          selectOption(
-            getDownloadSelectOption(options),
-            "fileManager.selectArchiveMethod",
-          ),
+          selectOption(getDownloadSelectOption(options), "fileManager.selectArchiveMethod"),
         )) as MultipleDownloadOption;
       } catch (e) {
         // User cancel selection
@@ -136,14 +126,10 @@ export function browserBatchDownload(files: FileResponse[]): AppThunk {
       // we should obtain the readwrite permission for the directory at first
       if (!(await verifyFileSystemRWPermission(handle))) {
         enqueueSnackbar({
-          message: i18next.t(
-            "application:fileManager.directoryDownloadPermissionError",
-          ),
+          message: i18next.t("application:fileManager.directoryDownloadPermissionError"),
           variant: "error",
         });
-        throw new Error(
-          i18next.t("application:fileManager.directoryDownloadPermissionError"),
-        );
+        throw new Error(i18next.t("application:fileManager.directoryDownloadPermissionError"));
       }
     } catch (e) {
       return;
@@ -199,9 +185,7 @@ function startBrowserBatchDownloadTo(
               failed++;
               continue;
             }
-            const name =
-              (relativePath == "" ? "" : relativePath + "/") +
-              childFiles[i].name;
+            const name = (relativePath == "" ? "" : relativePath + "/") + childFiles[i].name;
             if (fsPaths.has(name)) {
               if (skipAll) {
                 appendLog(
@@ -223,10 +207,7 @@ function startBrowserBatchDownloadTo(
                 let overwriteOption = DownloadOverwriteOption.Skip;
                 try {
                   overwriteOption = (await dispatch(
-                    selectOption(
-                      getDownloadOverwriteOption(name),
-                      "fileManager.selectDirectoryDuplicationMethod",
-                    ),
+                    selectOption(getDownloadOverwriteOption(name), "fileManager.selectDirectoryDuplicationMethod"),
                   )) as DownloadOverwriteOption;
                 } catch (e) {
                   // User cancel, use skip option
@@ -248,9 +229,7 @@ function startBrowserBatchDownloadTo(
                   );
                   skipAll = true;
                   continue;
-                } else if (
-                  overwriteOption == DownloadOverwriteOption.OverwriteAll
-                ) {
+                } else if (overwriteOption == DownloadOverwriteOption.OverwriteAll) {
                   appendLog(
                     i18next.t("modals.directoryDownloadReplaceNotifiction", {
                       name,
@@ -272,14 +251,8 @@ function startBrowserBatchDownloadTo(
               const res = await fetch(entityUrls.urls[i], {
                 signal: cancelSignals[downloadId].signal,
               });
-              await saveFileToFileSystemDirectory(
-                handle,
-                await res.blob(),
-                name,
-              );
-              appendLog(
-                i18next.t("modals.directoryDownloadFinished", { name }),
-              );
+              await saveFileToFileSystemDirectory(handle, await res.blob(), name);
+              appendLog(i18next.t("modals.directoryDownloadFinished", { name }));
             } catch (e) {
               // User cancel download
               if (e instanceof Error && e.name == "AbortError") {
@@ -312,9 +285,7 @@ function startBrowserBatchDownloadTo(
     if (failed === 0) {
       appendLog(i18next.t("fileManager.directoryDownloadFinished"));
     } else {
-      appendLog(
-        i18next.t("fileManager.directoryDownloadFinishedWithError", { failed }),
-      );
+      appendLog(i18next.t("fileManager.directoryDownloadFinishedWithError", { failed }));
     }
   };
 }
@@ -322,15 +293,10 @@ function startBrowserBatchDownloadTo(
 export function streamSaverDownload(files: FileResponse[]): AppThunk {
   return async (dispatch, getState) => {
     const allFiles = (
-      await longRunningTaskWithSnackbar(
-        dispatch(walkAll(files)),
-        "application:fileManager.preparingBathDownload",
-      )
+      await longRunningTaskWithSnackbar(dispatch(walkAll(files)), "application:fileManager.preparingBathDownload")
     ).filter((f) => f.type == FileType.file);
 
-    const fileStream = streamSaver.createWriteStream(
-      formatLocalTime(dayjs()) + ".zip",
-    );
+    const fileStream = streamSaver.createWriteStream(formatLocalTime(dayjs()) + ".zip");
     const {
       siteConfig: {
         explorer: {
@@ -379,10 +345,7 @@ export function streamSaverDownload(files: FileResponse[]): AppThunk {
 
     if (window.WritableStream && readableZipStream.pipeTo) {
       try {
-        await longRunningTaskWithSnackbar(
-          readableZipStream.pipeTo(fileStream),
-          "fileManager.batchDownloadStarted",
-        );
+        await longRunningTaskWithSnackbar(readableZipStream.pipeTo(fileStream), "fileManager.batchDownloadStarted");
       } catch (e) {
         console.log(e);
       }
@@ -390,11 +353,13 @@ export function streamSaverDownload(files: FileResponse[]): AppThunk {
   };
 }
 
-export function downloadSingleFile(
-  file: FileResponse,
-  preferredEntity?: string,
-): AppThunk {
+export function downloadSingleFile(file: FileResponse, preferredEntity?: string): AppThunk {
   return async (dispatch, _getState) => {
+    const isSharedFile = file.metadata?.[Metadata.share_redirect] ?? false;
+    if (isSharedFile) {
+      file = await dispatch(refreshSingleFileSymbolicLinks(file));
+    }
+
     const urlRes = await longRunningTaskWithSnackbar(
       dispatch(
         getFileEntityUrl({
@@ -427,9 +392,7 @@ export function downloadSingleFile(
           variant: "loading",
           persist: true,
         });
-        return readableStream
-          .pipeTo(fileStream)
-          .finally(() => closeSnackbar(downloadingSnackbar));
+        return readableStream.pipeTo(fileStream).finally(() => closeSnackbar(downloadingSnackbar));
       }
     } else {
       window.location.assign(urlRes.urls[0]);
@@ -437,9 +400,7 @@ export function downloadSingleFile(
   };
 }
 
-const getDownloadSelectOption = (
-  options: MultipleDownloadOption[],
-): DialogSelectOption[] => {
+const getDownloadSelectOption = (options: MultipleDownloadOption[]): DialogSelectOption[] => {
   return options.map((option): DialogSelectOption => {
     switch (option) {
       case MultipleDownloadOption.Backend:
@@ -468,10 +429,7 @@ const getDownloadOverwriteOption = (name: string): DialogSelectOption[] => {
   return [
     {
       name: i18next.t("fileManager.directoryDownloadReplace"),
-      description: i18next.t(
-        "fileManager.directoryDownloadReplaceDescription",
-        { name },
-      ),
+      description: i18next.t("fileManager.directoryDownloadReplaceDescription", { name }),
       value: DownloadOverwriteOption.Overwrite,
     },
     {
@@ -483,18 +441,12 @@ const getDownloadOverwriteOption = (name: string): DialogSelectOption[] => {
     },
     {
       name: i18next.t("fileManager.directoryDownloadReplaceAll"),
-      description: i18next.t(
-        "fileManager.directoryDownloadReplaceAllDescription",
-        { name },
-      ),
+      description: i18next.t("fileManager.directoryDownloadReplaceAllDescription", { name }),
       value: DownloadOverwriteOption.OverwriteAll,
     },
     {
       name: i18next.t("fileManager.directoryDownloadSkipAll"),
-      description: i18next.t(
-        "fileManager.directoryDownloadSkipAllDescription",
-        { name },
-      ),
+      description: i18next.t("fileManager.directoryDownloadSkipAllDescription", { name }),
       value: DownloadOverwriteOption.SkipAll,
     },
   ];

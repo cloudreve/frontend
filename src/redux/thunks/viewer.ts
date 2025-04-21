@@ -32,7 +32,7 @@ import {
 import { Viewers, ViewersByID } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { askSaveAs, askStaleVersionAction } from "./dialog.ts";
-import { longRunningTaskWithSnackbar } from "./file.ts";
+import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks } from "./file.ts";
 
 export interface ExpandedViewerSetting {
   [key: string]: Viewer[];
@@ -112,8 +112,13 @@ export function openViewer(file: FileResponse, viewer: Viewer, size: number, pre
         action: DefaultCloseAction,
       });
     }
+
+    const isSharedFile = file.metadata?.[Metadata.share_redirect] ?? false;
+    if (isSharedFile) {
+      file = await dispatch(refreshSingleFileSymbolicLinks(file));
+    }
+
     if (viewer.type == ViewerType.builtin) {
-      const isSharedFile = file.metadata?.[Metadata.share_redirect] ?? false;
       let primaryEntity = file.primary_entity;
       if (isSharedFile) {
         const fileInfo = await dispatch(getFileInfo({ uri: getFileLinkedUri(file) }));
