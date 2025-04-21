@@ -114,6 +114,8 @@ export function openViewer(file: FileResponse, viewer: Viewer, size: number, pre
     }
 
     const isSharedFile = file.metadata?.[Metadata.share_redirect] ?? false;
+    const originalFileId = file.id;
+
     if (isSharedFile) {
       file = await dispatch(refreshSingleFileSymbolicLinks(file));
     }
@@ -128,7 +130,7 @@ export function openViewer(file: FileResponse, viewer: Viewer, size: number, pre
         case builtInViewers.image: {
           // open image viewer
           const fm = getState().fileManager[FileManagerIndex.main];
-          const fileIndex = fm.list?.files?.findIndex((f) => f.id == file.id);
+          const fileIndex = fm.list?.files?.findIndex((f) => f.id == originalFileId);
           dispatch(setSearchPopup(false));
           dispatch(
             setImageViewer({
@@ -215,8 +217,9 @@ export function openViewer(file: FileResponse, viewer: Viewer, size: number, pre
             files = [file];
           } else {
             fm.list?.files?.forEach((f) => {
-              if (f.id == file.id) {
+              if (f.id == originalFileId) {
                 fileIndex = files.length;
+                f = {...file}
               }
 
               if (viewer.exts.indexOf(fileExtension(f.name) ?? "") > -1) {
