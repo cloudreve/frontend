@@ -181,7 +181,7 @@ const Wopi = () => {
           id={"office_frame"}
           name={"office_frame"}
           sandbox={
-            "allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-popups-to-escape-sandbox"
+            "allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-popups-to-escape-sandbox allow-downloads allow-modals"
           }
           allowFullScreen={true}
           sx={{
