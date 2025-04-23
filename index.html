@@ -48,21 +48,35 @@
         transform: scale(0.8);
         animation: fadeIn 0.6s ease-out 0.3s forwards;
       }
-      #app-loader .spinner::after {
-        content: "";
-        position: absolute;
-        top: -4px;
-        left: -4px;
-        width: 100%;
-        height: 100%;
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-radius: 50%;
-        border-top-color: var(--defaultThemeColor);
-        animation: spin 1s ease-in-out infinite;
+      #app-loader .spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
       }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
+      #app-loader .spinner svg {
+        display: block;
+      }
+      #app-loader .spinner .stroke {
+        stroke: var(--defaultThemeColor);
+        stroke-linecap: round;
+        animation: spinDash 1.4s ease-in-out infinite;
+      }
+      #app-loader .spinner .background {
+        stroke: rgba(0, 0, 0, 0.1)
+      }
+
+      @keyframes spinDash {
+        0% {
+          stroke-dasharray: 1px, 200px;
+          stroke-dashoffset: 0;
+        }
+        50% {
+          stroke-dasharray: 100px, 200px;
+          stroke-dashoffset: -15px;
+        }
+        100% {
+          stroke-dasharray: 1px, 200px;
+          stroke-dashoffset: -126px;
         }
       }
       @keyframes fadeIn {
@@ -77,7 +91,12 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="app-loader">
       <div class="logo"></div>
-      <div class="spinner"></div>
+      <div class="spinner">
+        <svg viewBox="22 22 44 44">
+          <circle class="background" cx="44" cy="44" r="20" fill="none" stroke-width="4"></circle>
+          <circle class="stroke" cx="44" cy="44" r="20" fill="none" stroke-width="4"></circle>
+        </svg>
+      </div>
     </div>
     <script async type="module" src="/src/main.tsx"></script>
     <div id="root"></div>
