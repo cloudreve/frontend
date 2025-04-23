@@ -167,12 +167,11 @@ const SignUp = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         icon={<MailOutlined />}
                         value={email}
-                        autoFocus
+                        autoFocus={true}
                       />
                     </FormControl>
                     <FormControl variant="standard" margin="normal" required fullWidth>
                       <OutlineIconTextField
-                        autoFocus={true}
                         variant={"outlined"}
                         label={t("login.password")}
                         inputProps={{
@@ -190,13 +189,12 @@ const SignUp = () => {
                     </FormControl>
                     <FormControl variant="standard" margin="normal" required fullWidth>
                       <OutlineIconTextField
-                        autoFocus={true}
                         variant={"outlined"}
                         label={t("login.repeatPassword")}
                         inputProps={{
-                          name: "password",
+                          name: "repeatPassword",
                           type: "password",
-                          id: "password",
+                          id: "repeatPassword",
                           required: "true",
                           minLength: 6,
                         }}
