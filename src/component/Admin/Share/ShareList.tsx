@@ -278,7 +278,7 @@ const ShareList = () => {
                     {t("share.price")}
                   </TableSortLabel>
                 </NoWrapTableCell>
-                <NoWrapTableCell width={100}>{t("share.autoExpire")}</NoWrapTableCell>
+                <NoWrapTableCell width={150}>{t("share.autoExpire")}</NoWrapTableCell>
                 <NoWrapTableCell width={150}>{t("share.owner")}</NoWrapTableCell>
                 <NoWrapTableCell width={180}>
                   <TableSortLabel
