@@ -38,6 +38,15 @@ export default defineConfig({
       ],
     }),
     {
+        name: "load-stylesheet-async",
+        transformIndexHtml(html) {
+          return html.replace(
+            /<link rel="stylesheet" crossorigin href="(.+?)">/g,
+            `<link rel="stylesheet" crossorigin href="$1" media="print" onload="this.media='all'">`
+          );
+        },
+    },
+    {
       name: "generate-version",
       async writeBundle(outputOptions) {
         const version = {
