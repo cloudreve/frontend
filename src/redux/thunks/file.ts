@@ -521,6 +521,7 @@ function processFileListDiff(index: number, deleted: FileResponse[], refreshIfNe
   return async (dispatch, getState) => {
     const fm = getState().fileManager[index];
     let potentialParents: string[] = [];
+    dispatch(removeTreeCache({ index, value: deleted.map((f) => f.path) }));
     if (!fm.path) {
       return;
     }
@@ -579,8 +580,6 @@ function processFileListDiff(index: number, deleted: FileResponse[], refreshIfNe
     ) {
       dispatch(navigateToPath(index, newNavigatePath));
     }
-
-    dispatch(removeTreeCache({ index, value: deleted.map((f) => f.path) }));
   };
 }
 

@@ -1,26 +1,14 @@
-import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
-import ViewerDialog, { ViewerLoading } from "./ViewerDialog.tsx";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  closeWopiViewer,
-  setVersionControlDialog,
-  WopiViewerState,
-} from "../../redux/globalStateSlice.ts";
 import { Box, ListItemText, Menu, useTheme } from "@mui/material";
-import useActionDisplayOpt, {
-  canUpdate,
-} from "../FileManager/ContextMenu/useActionDisplayOpt.ts";
-import { SquareMenuItem } from "../FileManager/ContextMenu/ContextMenu.tsx";
 import i18n from "i18next";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { closeWopiViewer, setVersionControlDialog, WopiViewerState } from "../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
 import { openShareDialog } from "../../redux/thunks/file.ts";
+import { SquareMenuItem } from "../FileManager/ContextMenu/ContextMenu.tsx";
+import useActionDisplayOpt, { canUpdate } from "../FileManager/ContextMenu/useActionDisplayOpt.ts";
 import { FileManagerIndex } from "../FileManager/FileManager.tsx";
+import ViewerDialog, { ViewerLoading } from "./ViewerDialog.tsx";
 
 const WopiForm = ({
   replacedSrc,
@@ -37,24 +25,9 @@ const WopiForm = ({
     onSubmit();
   }, [viewerState]);
   return (
-    <form
-      ref={formRef}
-      id="office_form"
-      name="office_form"
-      target="office_frame"
-      action={replacedSrc}
-      method="post"
-    >
-      <input
-        name="access_token"
-        value={viewerState.session.access_token}
-        type="hidden"
-      />
-      <input
-        name="access_token_ttl"
-        value={viewerState.session.expires}
-        type="hidden"
-      />
+    <form ref={formRef} id="office_form" name="office_form" target="office_frame" action={replacedSrc} method="post">
+      <input name="access_token" value={viewerState.session.access_token} type="hidden" />
+      <input name="access_token_ttl" value={viewerState.session.expires} type="hidden" />
     </form>
   );
 };
@@ -65,9 +38,7 @@ const Wopi = () => {
   const theme = useTheme();
   const viewerState = useAppSelector((state) => state.globalState.wopiViewer);
 
-  const displayOpt = useActionDisplayOpt(
-    viewerState?.file ? [viewerState?.file] : [],
-  );
+  const displayOpt = useActionDisplayOpt(viewerState?.file ? [viewerState?.file] : []);
   const canEdit = canUpdate(displayOpt);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -99,7 +70,7 @@ const Wopi = () => {
       return;
     }
 
-    if (msg.MessageId === "UI_Sharing") {
+    if (msg.MessageId === "UI_Sharing" || msg.MessageId === "UI_Share") {
       dispatch(openShareDialog(FileManagerIndex.main, viewerState?.file));
     } else if (msg.MessageId == "UI_FileVersions") {
       dispatch(setVersionControlDialog({ open: true, file: viewerState.file }));
