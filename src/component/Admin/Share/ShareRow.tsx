@@ -94,7 +94,7 @@ const ShareRow = ({
           <Skeleton variant="text" width={50} />
         </NoWrapTableCell>
         <NoWrapTableCell>
-          <Skeleton variant="text" width={50} />
+          <Skeleton variant="text" width={130} />
         </NoWrapTableCell>
         <NoWrapTableCell>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -172,11 +172,9 @@ const ShareRow = ({
       <NoWrapTableCell>
         <NoWrapTypography variant="inherit">{share?.price}</NoWrapTypography>
       </NoWrapTableCell>
-      <NoWrapTableCell>
-        <NoWrapTypography variant="inherit">
-          <ShareExpires expires={share?.expire} remain_downloads={share?.remain_downloads} />
-        </NoWrapTypography>
-      </NoWrapTableCell>
+      <TableCell>
+        <ShareExpires expires={share?.expires} remain_downloads={share?.remain_downloads} />
+      </TableCell>
       <NoWrapTableCell>
         {share?.edges?.user && (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

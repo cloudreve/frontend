@@ -523,7 +523,7 @@ export interface Share extends CommonMixin {
   password?: string;
   views?: number;
   downloads?: number;
-  expire?: string;
+  expires?: string;
   remain_downloads?: number;
   edges: {
     user?: User;
