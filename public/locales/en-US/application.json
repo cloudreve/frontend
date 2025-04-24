@@ -111,6 +111,10 @@
     "dashboard": "Dashboard"
   },
   "fileManager": {
+    "quality": "Quality",
+    "audioTrack": "Audio",
+    "auto": "Auto",
+    "default": "Default",
     "shareWithMeEmpty": "No shared files found",
     "shareWithMeEmptyDes": "If you need to see others' shares here, please save the shortcut to any location in your files when you visit a shared link.",
     "selectAll": "Select all",

@@ -3833,6 +3833,11 @@ artplayer-plugin-chapter@^1.0.0:
   resolved "https://registry.yarnpkg.com/artplayer-plugin-chapter/-/artplayer-plugin-chapter-1.0.0.tgz#cb921176bc76550d9238498774d76bd0ed41b05f"
   integrity sha512-moT7syJPeXQIv4xgm5QVucZB/5n0yMqfR6iscAyxyUIBJ08cVRmazBGRA82BSBZPqmgvSmH6bl0u8pMyEI+VcQ==
 
+artplayer-plugin-hls-control@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/artplayer-plugin-hls-control/-/artplayer-plugin-hls-control-1.0.1.tgz#7d28905340d5c04121df450f80ca0eb2878ce773"
+  integrity sha512-rbOeH/mzqgZuosOtxJ9NERil6siOLd9K7nsCRWARrSyT+zH3xdDo0WunYgDQiATniNySicxZ//ex/pPLxYECUg==
+
 artplayer@5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/artplayer/-/artplayer-5.2.2.tgz#889643a8e3ce12042def839b20a02e8538bafb0c"
@@ -5300,6 +5305,11 @@ highlight-words-core@^1.2.0:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/highlight-words-core/-/highlight-words-core-1.2.3.tgz#781f37b2a220bf998114e4ef8c8cb6c7a4802ea8"
   integrity sha512-m1O9HW3/GNHxzSIXWw1wCNXXsgLlxrP0OI6+ycGUhiUHkikqW3OrwVHz+lxeNBe5yqLESdIcj8PowHQ2zLvUvQ==
+
+hls.js@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.6.2.tgz#02272bea644b5f61f71741256618d6b629ae7834"
+  integrity sha512-rx+pETSCJEDThm/JCm8CuadcAC410cVjb1XVXFNDKFuylaayHk1+tFxhkjvnMDAfqsJHxZXDAJ3Uc2d5xQyWlQ==
 
 hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-statics@^3.3.2:
   version "3.3.2"

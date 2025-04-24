@@ -112,6 +112,10 @@
     "dashboard": "管理面板"
   },
   "fileManager": {
+    "quality": "清晰度",
+    "audioTrack": "音軌",
+    "auto": "自動",
+    "default": "預設",
     "shareWithMeEmpty": "沒有找到別人的分享",
     "shareWithMeEmptyDes": "如需要在此看到別人的分享，請在訪問別人分享連結時，在右上角將快捷方式保存到你的文件中的任意位置。",
     "selectAll": "全選",
