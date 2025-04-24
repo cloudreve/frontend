@@ -196,7 +196,7 @@ const TaskCard = ({ loading, showProgress, onLoad, task }: TaskCardProps) => {
               )}
             </Typography>
 
-            <Typography color={"text.secondary"} variant={"inherit"}>
+            <Typography color={"text.secondary"} variant={"inherit"} sx={{ display: "flex", alignItems: "center" }}>
               {loading || !task ? (
                 <Skeleton variant={"text"} width={50} />
               ) : (
