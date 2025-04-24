@@ -1,14 +1,14 @@
-import { FileResponse, Share, ShareCreateService } from "../../api/explorer.ts";
-import { AppThunk } from "../store.ts";
-import { ShareSetting } from "../../component/FileManager/Dialogs/Share/ShareSetting.tsx";
-import { getFileInfo, getShareInfo, sendCreateShare, sendUpdateShare } from "../../api/api.ts";
-import { fileUpdated } from "../fileManagerSlice.ts";
-import CrUri from "../../util/uri.ts";
-import { addShareInfo, setManageShareDialog, setShareLinkDialog } from "../globalStateSlice.ts";
-import { longRunningTaskWithSnackbar } from "./file.ts";
-import { enqueueSnackbar } from "notistack";
-import { DefaultCloseAction } from "../../component/Common/Snackbar/snackbar.tsx";
 import i18next from "i18next";
+import { enqueueSnackbar } from "notistack";
+import { getFileInfo, getFileList, getShareInfo, sendCreateShare, sendUpdateShare } from "../../api/api.ts";
+import { FileResponse, Share, ShareCreateService } from "../../api/explorer.ts";
+import { DefaultCloseAction } from "../../component/Common/Snackbar/snackbar.tsx";
+import { ShareSetting } from "../../component/FileManager/Dialogs/Share/ShareSetting.tsx";
+import CrUri from "../../util/uri.ts";
+import { fileUpdated } from "../fileManagerSlice.ts";
+import { addShareInfo, setManageShareDialog, setShareLinkDialog } from "../globalStateSlice.ts";
+import { AppThunk } from "../store.ts";
+import { longRunningTaskWithSnackbar } from "./file.ts";
 
 export function createOrUpdateShareLink(
   index: number,
@@ -104,11 +104,11 @@ export function queueLoadShareInfo(uri: CrUri, countViews: boolean = false): App
   };
 }
 
-export function openShareEditByID(shareId: string, password?: string): AppThunk {
+export function openShareEditByID(shareId: string, password?: string, singleFile?: boolean): AppThunk {
   return async (dispatch) => {
     try {
       const { share, file } = await longRunningTaskWithSnackbar(
-        dispatch(getFileAndShareById(shareId, password)),
+        dispatch(getFileAndShareById(shareId, password, singleFile)),
         "application:uploader.processing",
       );
       dispatch(
@@ -128,6 +128,7 @@ export function openShareEditByID(shareId: string, password?: string): AppThunk 
 function getFileAndShareById(
   shareId: string,
   password?: string,
+  singleFile?: boolean,
 ): AppThunk<
   Promise<{
     share: Share;
@@ -147,7 +148,12 @@ function getFileAndShareById(
       throw e;
     }
 
-    const file = await dispatch(getFileInfo({ uri: share.source_uri ?? "" }));
+    let file: FileResponse | undefined = undefined;
+    if (singleFile) {
+      file = (await dispatch(getFileList({ uri: share.source_uri ?? "", page_size: 50 })))?.files[0];
+    } else {
+      file = await dispatch(getFileInfo({ uri: share.source_uri ?? "" }));
+    }
     return { share, file };
   };
 }

@@ -68,7 +68,7 @@ const ActionMenu = ({ share, onShareDeleted, onClose, ...rest }: ActionMenuProps
   }, [t, share.id, onClose, dispatch, enqueueSnackbar]);
 
   const openEdit = useCallback(() => {
-    dispatch(openShareEditByID(share.id, share.password));
+    dispatch(openShareEditByID(share.id, share.password, share.source_type == FileType.file));
     onClose && onClose({}, "backdropClick");
   }, [dispatch, share, onClose]);
 
