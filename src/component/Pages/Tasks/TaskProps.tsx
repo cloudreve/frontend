@@ -95,7 +95,16 @@ const TaskProps = ({ task }: TaskPropsProps) => {
           }
         />
       )}
-      {task.summary?.props.src_str && <TaskPropsBlock label={t("setting.input")} value={task.summary?.props.src_str} />}
+      {task.summary?.props.src_str && (
+        <TaskPropsBlock
+          label={t("setting.input")}
+          value={
+            <Stack sx={{ maxHeight: 80, overflowY: "auto" }}>
+              <Typography variant="inherit">{task.summary?.props.src_str}</Typography>
+            </Stack>
+          }
+        />
+      )}
       {task.summary?.props.src_multiple && (
         <TaskPropsBlock
           label={t("setting.input")}
@@ -103,8 +112,9 @@ const TaskProps = ({ task }: TaskPropsProps) => {
             <Stack
               spacing={0.5}
               sx={{
-                maxHeight: 300,
-                overflowY: "scroll",
+                maxHeight: 160,
+                overflowY: "auto",
+                padding: "2px 0",
               }}
             >
               {task.summary?.props.src_multiple.map((src, index) => (

@@ -6,7 +6,6 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -21,8 +20,6 @@ import { useAppDispatch } from "../../../redux/hooks.ts";
 import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { fileBase, sizeToString } from "../../../util";
 import {
-  NoWrapTableCell,
-  NoWrapTypography,
   StyledCheckbox,
   StyledTableContainerPaper,
 } from "../../Common/StyledComponents.tsx";
@@ -43,6 +40,7 @@ const DownloadFileList = ({ taskId, summary, downloading, readonly }: DownloadFi
   }>({});
   const [changeApplied, setChangeApplied] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
+  const [height, setHeight] = useState(33);
   const files = summary?.props?.download?.files;
   const { t } = useTranslation();
   const theme = useTheme();
@@ -107,9 +105,12 @@ const DownloadFileList = ({ taskId, summary, downloading, readonly }: DownloadFi
         <TableContainer component={StyledTableContainerPaper}>
           <TableVirtuoso
             style={{
-              height: 33 * (files?.length ?? 0) + 0.5,
+              height: height,
               overflow: "auto",
               maxHeight: 300,
+            }}
+            totalListHeightChanged={(h) => {
+              setHeight(h + 0.5);
             }}
             components={{
               // eslint-disable-next-line react/display-name
@@ -124,7 +125,6 @@ const DownloadFileList = ({ taskId, summary, downloading, readonly }: DownloadFi
                     {...props}
                     key={index}
                     sx={{
-                      height: "33px",
                       background: `linear-gradient(to right, ${progressColor} 0%,${progressColor} ${percentage}%,${progressBgColor} ${percentage}%,${progressBgColor} 100%)`,
                     }}
                   />
@@ -134,7 +134,7 @@ const DownloadFileList = ({ taskId, summary, downloading, readonly }: DownloadFi
             data={files}
             itemContent={(_index, value) => (
               <>
-                <TableCell width={50} sx={{ height: "33px" }} component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{ height: 33, minWidth: 50 }}>
                   <StyledCheckbox
                     onChange={(e) => {
                       setFileSelected(value, e.target.checked);
@@ -145,16 +145,8 @@ const DownloadFileList = ({ taskId, summary, downloading, readonly }: DownloadFi
                     size="small"
                   />
                 </TableCell>
-                <NoWrapTableCell
-                  component="th"
-                  scope="row"
-                  sx={{
-                    minWidth: 300,
-                    height: "33px",
-                    wordBreak: "break-all",
-                  }}
-                >
-                  <Typography variant={"body2"} sx={{ display: "flex" }}>
+                <TableCell component="th" scope="row" sx={{ minWidth: 300, width: "100%" }}>
+                  <Typography variant={"body2"} sx={{ display: "flex", alignItems: "center" }}>
                     <FileIcon
                       sx={{ px: 0, py: 0, mr: 1, height: "20px" }}
                       variant={"small"}
@@ -166,17 +158,15 @@ const DownloadFileList = ({ taskId, summary, downloading, readonly }: DownloadFi
                         name: value.name,
                       }}
                     />
-                    <Tooltip title={value.name}>
-                      <NoWrapTypography variant="inherit">{fileBase(value.name)}</NoWrapTypography>
-                    </Tooltip>
+                    <Typography variant="inherit">{fileBase(value.name)}</Typography>
                   </Typography>
-                </NoWrapTableCell>
-                <TableCell width={120} component="th" scope="row">
+                </TableCell>
+                <TableCell component="th" scope="row" sx={{ minWidth: 120 }}>
                   <Typography noWrap variant={"body2"}>
                     {sizeToString(value.size)}
                   </Typography>
                 </TableCell>
-                <TableCell width={105} component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{ minWidth: 105 }}>
                   <Typography noWrap variant={"body2"}>
                     {((value.progress ?? 0) * 100).toFixed(2)} %
                   </Typography>

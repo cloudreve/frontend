@@ -62,7 +62,7 @@ const TaskDetail = ({ task, downloading }: TaskDetailProps) => {
           <Typography variant={"subtitle1"} fontWeight={600}>
             {t("setting.retryErrorHistory")}
           </Typography>
-          <TableContainer component={StyledTableContainerPaper}>
+          <TableContainer component={StyledTableContainerPaper} sx={{ maxHeight: 300 }}>
             <Table sx={{ width: "100%" }} size="small">
               <TableHead>
                 <TableRow>
