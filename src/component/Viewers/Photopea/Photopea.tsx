@@ -254,6 +254,7 @@ const Photopea = () => {
             component={"iframe"}
             title={"ms"}
             src={src}
+            allowFullScreen
           />
         )}
       </ViewerDialog>
