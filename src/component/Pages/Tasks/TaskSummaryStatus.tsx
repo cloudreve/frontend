@@ -78,7 +78,6 @@ const TaskSummaryStatus = ({ type, status, summary, error, simplified }: TaskSum
           return (
             <Box
               sx={{
-                ml: 1,
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
