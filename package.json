@@ -43,6 +43,7 @@
     "lodash": "^4.17.21",
     "material-ui-popup-state": "^5.0.10",
     "monaco-editor": "^0.49.0",
+    "mpegts.js": "^1.8.0",
     "mui-one-time-password-input": "^2.0.1",
     "notistack": "^3.0.1",
     "nuqs": "^2.3.1",
