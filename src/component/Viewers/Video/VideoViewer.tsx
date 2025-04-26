@@ -100,7 +100,7 @@ const VideoViewer = () => {
     }
 
     const firstLoad = !currentExpire.current;
-    const isM3u8 = viewerState.file.name.endsWith(".m3u8");
+    const isM3u8 = fileExtension(viewerState.file.name) === "m3u8";
     if (isM3u8) {
       // For m3u8, use masked url
       const crFileUrl = new CrUri(getFileLinkedUri(viewerState.file));

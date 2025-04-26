@@ -1,4 +1,5 @@
 import { Box, BoxProps } from "@mui/material";
+import { fileExtension } from "../../../util";
 import Artplayer from "artplayer";
 import artplayerPluginChapter from "artplayer-plugin-chapter";
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
@@ -143,7 +144,7 @@ export default function Player({
       opts.plugins.push(artplayerPluginChapter({ chapters }));
     }
 
-    if (option.title.endsWith(".m3u8")) {
+    if (fileExtension(option.title) === "m3u8") {
       opts.plugins.push(
         artplayerPluginHlsControl({
           quality: {
