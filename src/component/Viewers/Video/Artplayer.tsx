@@ -127,6 +127,7 @@ export default function Player({
   ...rest
 }: PlayerProps) {
   const artRef = useRef<Artplayer>();
+  const ext = fileExtension(option.title);
 
   useEffect(() => {
     const opts = {
@@ -138,13 +139,14 @@ export default function Player({
         m3u8: playM3u8(m3u8UrlTransform, getEntityUrl),
         flv: playFlv,
       },
+      type: ext,
     };
 
     if (chapters) {
       opts.plugins.push(artplayerPluginChapter({ chapters }));
     }
 
-    if (fileExtension(option.title) === "m3u8") {
+    if (ext === "m3u8") {
       opts.plugins.push(
         artplayerPluginHlsControl({
           quality: {
