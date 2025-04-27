@@ -205,7 +205,9 @@ export const App = () => {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW(swUrl, r) {},
+    onRegisteredSW(swUrl, r) {
+      removeI18nCache();
+    },
     onRegisterError(error) {
       console.log("SW registration error", error);
     },
