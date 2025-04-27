@@ -622,7 +622,12 @@
     "copyLinkToClipboard": "Copy link to clipboard"
   },
   "download": {
+    "noFilesFound": "No files found",
+    "filterByName": "Filter by name",
+    "selectAll": "Select all",
+    "reverseSelect": "Reverse select",
     "cancelTaskConfirm": "Are you sure to cancel this download task?",
+    "saveChanges": "Save changes",
     "failedToLoad": "Failed to load.",
     "active": "Active",
     "finished": "Finished",

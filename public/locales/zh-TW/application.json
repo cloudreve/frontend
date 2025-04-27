@@ -622,6 +622,10 @@
     "copyLinkToClipboard": "復制連結到剪下板"
   },
   "download": {
+    "noFilesFound": "沒有找到任何檔案",
+    "filterByName": "按名稱過濾",
+    "selectAll": "全選",
+    "reverseSelect": "反選",
     "cancelTaskConfirm": "確定要取消此任務嗎？",
     "saveChanges": "儲存更改",
     "failedToLoad": "載入失敗",
