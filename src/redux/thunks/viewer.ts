@@ -219,7 +219,7 @@ export function openViewer(file: FileResponse, viewer: Viewer, size: number, pre
             fm.list?.files?.forEach((f) => {
               if (f.id == originalFileId) {
                 fileIndex = files.length;
-                f = {...file}
+                f = { ...file };
               }
 
               if (viewer.exts.indexOf(fileExtension(f.name) ?? "") > -1) {
@@ -282,8 +282,14 @@ export function openCustomViewer(file: FileResponse, viewer: Viewer, preferredVe
       url = url.replace(`{$${key}}`, vars[key]);
     }
 
+    // if not start with http or https, it's a custom scheme
+    if (!url.startsWith("http") && !url.startsWith("https")) {
+      window.location.assign(url);
+      return;
+    }
+
     if (isTrueVal(viewer.props?.openInNew ?? "")) {
-      window.open(url);
+      window.window.open(url);
       return;
     }
 
