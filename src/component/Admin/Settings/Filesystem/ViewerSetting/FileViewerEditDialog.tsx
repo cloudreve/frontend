@@ -90,7 +90,7 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
   const { t } = useTranslation("dashboard");
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-  const [viewerShadowed, setViewerShadowed] = useState({ ...viewer });
+  const [viewerShadowed, setViewerShadowed] = useState<Viewer | undefined>(undefined);
   const formRef = React.useRef<HTMLFormElement>(null);
   const [magicVarOpen, setMagicVarOpen] = useState(false);
   const [wopiCached, setWopiCached] = useState("");
@@ -101,7 +101,7 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
   useEffect(() => {
     setViewerShadowed({ ...viewer });
     setWopiCached("");
-  }, [viewer]);
+  }, [viewer, setWopiCached, setViewerShadowed]);
 
   const onSubmit = useCallback(() => {
     if (formRef.current && !formRef.current.checkValidity()) {
@@ -110,6 +110,9 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
     }
 
     let changed = viewerShadowed;
+    if (!viewerShadowed || !changed) {
+      return;
+    }
 
     if (wopiCached != "") {
       try {
@@ -136,6 +139,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
     e.preventDefault();
   }, []);
 
+  if (!viewerShadowed) {
+    return null;
+  }
+
   return (
     <DraggableDialog
       title={t("settings.editViewerTitle", {
@@ -161,10 +168,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                 required={!withDefaultIcon}
                 value={viewerShadowed.icon}
                 onChange={(e) => {
-                  setViewerShadowed({
-                    ...viewerShadowed,
+                  setViewerShadowed((v) => ({
+                    ...(v as Viewer),
                     icon: e.target.value,
-                  });
+                  }));
                 }}
               />
               {withDefaultIcon && <NoMarginHelperText>{t("settings.builtInIconUrlDes")}</NoMarginHelperText>}
@@ -175,10 +182,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                 required
                 value={viewerShadowed.display_name}
                 onChange={(e) => {
-                  setViewerShadowed({
-                    ...viewerShadowed,
+                  setViewerShadowed((v) => ({
+                    ...(v as Viewer),
                     display_name: e.target.value,
-                  });
+                  }));
                 }}
               />
               <NoMarginHelperText>{t("settings.displayNameDes")}</NoMarginHelperText>
@@ -190,10 +197,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                 required
                 value={viewerShadowed.exts.join()}
                 onChange={(e) =>
-                  setViewerShadowed({
-                    ...viewerShadowed,
+                  setViewerShadowed((v) => ({
+                    ...(v as Viewer),
                     exts: e.target.value.split(",").map((ext) => ext.trim()),
-                  })
+                  }))
                 }
               />
             </SettingForm>
@@ -204,10 +211,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                   required
                   value={viewerShadowed.url}
                   onChange={(e) =>
-                    setViewerShadowed({
-                      ...viewerShadowed,
+                    setViewerShadowed((v) => ({
+                      ...(v as Viewer),
                       url: e.target.value,
-                    })
+                    }))
                   }
                 />
                 <NoMarginHelperText>
@@ -227,10 +234,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                   allowZero={true}
                   value={viewerShadowed.max_size ?? 0}
                   onChange={(e) =>
-                    setViewerShadowed({
-                      ...viewerShadowed,
+                    setViewerShadowed((v) => ({
+                      ...(v as Viewer),
                       max_size: e ? e : undefined,
-                    })
+                    }))
                   }
                 />
                 <NoMarginHelperText>{t("settings.maxSizeDes")}</NoMarginHelperText>
@@ -243,13 +250,13 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                     <Switch
                       checked={isTrueVal(viewerShadowed.props?.openInNew ?? "")}
                       onChange={(e) =>
-                        setViewerShadowed({
-                          ...viewerShadowed,
+                        setViewerShadowed((v) => ({
+                          ...(v as Viewer),
                           props: {
-                            ...viewerShadowed.props,
+                            ...(v?.props ?? {}),
                             openInNew: e.target.checked.toString(),
                           },
-                        })
+                        }))
                       }
                     />
                   }
@@ -265,13 +272,13 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                   required
                   value={viewerShadowed.props?.host ?? ""}
                   onChange={(e) =>
-                    setViewerShadowed({
-                      ...viewerShadowed,
+                    setViewerShadowed((v) => ({
+                      ...(v as Viewer),
                       props: {
-                        ...viewerShadowed.props,
+                        ...(v?.props ?? {}),
                         host: e.target.value,
                       },
-                    })
+                    }))
                   }
                 />
                 <NoMarginHelperText>{t("settings.drawioHostDes")}</NoMarginHelperText>
@@ -325,12 +332,12 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                               required
                               onChange={(e) => {
                                 const newExt = e.target.value as string;
-                                setViewerShadowed({
-                                  ...viewerShadowed,
-                                  templates: viewerShadowed.templates?.map((template, index) =>
+                                setViewerShadowed((v) => ({
+                                  ...(v as Viewer),
+                                  templates: (v?.templates ?? []).map((template, index) =>
                                     index == i ? { ...template, ext: newExt } : template,
                                   ),
-                                });
+                                }));
                               }}
                             >
                               {viewerShadowed.exts.map((ext) => (
@@ -354,9 +361,9 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                               required
                               value={t.display_name}
                               onChange={(e) => {
-                                setViewerShadowed({
-                                  ...viewerShadowed,
-                                  templates: viewerShadowed.templates?.map((template, index) =>
+                                setViewerShadowed((v) => ({
+                                  ...(v as Viewer),
+                                  templates: (v?.templates ?? []).map((template, index) =>
                                     index == i
                                       ? {
                                           ...template,
@@ -364,7 +371,7 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                                         }
                                       : template,
                                   ),
-                                });
+                                }));
                               }}
                             />
                           </NoWrapTableCell>
@@ -372,10 +379,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                             <IconButton
                               size={"small"}
                               onClick={() =>
-                                setViewerShadowed({
-                                  ...viewerShadowed,
-                                  templates: viewerShadowed.templates?.filter((_, index) => index != i),
-                                })
+                                setViewerShadowed((v) => ({
+                                  ...(v as Viewer),
+                                  templates: (v?.templates ?? []).filter((_, index) => index != i),
+                                }))
                               }
                             >
                               <Dismiss fontSize={"small"} />
@@ -392,13 +399,10 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                 variant={"contained"}
                 startIcon={<Add />}
                 onClick={() =>
-                  setViewerShadowed({
-                    ...viewerShadowed,
-                    templates: [
-                      ...(viewerShadowed.templates ?? []),
-                      { ext: viewerShadowed.exts?.[0] ?? "", display_name: "" },
-                    ],
-                  })
+                  setViewerShadowed((v) => ({
+                    ...(v as Viewer),
+                    templates: [...(v?.templates ?? []), { ext: viewerShadowed.exts?.[0] ?? "", display_name: "" }],
+                  }))
                 }
               >
                 {t("settings.addNewFileAction")}
