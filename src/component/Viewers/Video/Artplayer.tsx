@@ -1,8 +1,10 @@
 import { Box, BoxProps } from "@mui/material";
+import { fileExtension } from "../../../util";
 import Artplayer from "artplayer";
 import artplayerPluginChapter from "artplayer-plugin-chapter";
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
 import Hls, { HlsConfig } from "hls.js";
+import mpegts from 'mpegts.js';
 import i18next from "i18next";
 import { useEffect, useRef } from "react";
 import "./artplayer.css";
@@ -96,6 +98,26 @@ const playM3u8 =
     }
   };
 
+const playFlv =
+  (video: HTMLVideoElement, url: string, art: Artplayer) => {
+    if (mpegts.isSupported()) {
+      if (art.flv) art.flv.destroy();
+      const flv = mpegts.createPlayer({
+        type: 'flv',
+        url: url,
+      }, {
+        lazyLoadMaxDuration: 5 * 60,
+        accurateSeek: true,
+      });
+      flv.attachMediaElement(video);
+      flv.load();
+      art.flv = flv;
+      art.on('destroy', () => flv.destroy());
+    } else {
+      art.notice.show = 'Unsupported playback format: flv';
+    }
+  };
+
 export default function Player({
   option,
   chapters,
@@ -105,12 +127,27 @@ export default function Player({
   ...rest
 }: PlayerProps) {
   const artRef = useRef<Artplayer>();
+  const ext = fileExtension(option.title);
 
   useEffect(() => {
     const opts = {
       ...option,
-      plugins: [
-        ...option.plugins,
+      plugins: [...option.plugins],
+      container: artRef.current,
+      customType: {
+        ...option.customType,
+        m3u8: playM3u8(m3u8UrlTransform, getEntityUrl),
+        flv: playFlv,
+      },
+      type: ext,
+    };
+
+    if (chapters) {
+      opts.plugins.push(artplayerPluginChapter({ chapters }));
+    }
+
+    if (ext === "m3u8") {
+      opts.plugins.push(
         artplayerPluginHlsControl({
           quality: {
             // Show qualitys in control
@@ -135,17 +172,9 @@ export default function Player({
             auto: i18next.t("application:fileManager.auto"),
           },
         }),
-      ],
-      container: artRef.current,
-      customType: {
-        ...option.customType,
-        m3u8: playM3u8(m3u8UrlTransform, getEntityUrl),
-      },
-    };
-
-    if (chapters) {
-      opts.plugins.push(artplayerPluginChapter({ chapters }));
+      );
     }
+
     const art = new Artplayer(opts);
 
     if (getInstance && typeof getInstance === "function") {
