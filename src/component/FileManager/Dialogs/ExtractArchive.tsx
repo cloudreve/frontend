@@ -24,6 +24,7 @@ import Translate from "../../Icons/Translate.tsx";
 import { FileManagerIndex } from "../FileManager.tsx";
 
 const encodings = [
+  "gb18030",
   "ibm866",
   "iso8859_2",
   "iso8859_3",
