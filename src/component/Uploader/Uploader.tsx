@@ -78,8 +78,10 @@ const Uploader = () => {
       },
       onProactiveFileAdded: taskAdded(),
       onPoolEmpty: () => {
-        dispatch(refreshFileList(0));
-        dispatch(updateUserCapacity(0));
+        setTimeout(() => {
+          dispatch(refreshFileList(0));
+          dispatch(updateUserCapacity(0));
+        }, 1000);
       },
     });
   }, []);

@@ -1,4 +1,14 @@
-import { Box, IconButton, ListItemIcon, ListItemText, Menu, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Artplayer from "artplayer";
 import dayjs from "dayjs";
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -32,6 +42,7 @@ const VideoViewer = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const viewerState = useAppSelector((state) => state.globalState.videoViewer);
 
   const [loaded, setLoaded] = useState(false);
@@ -257,7 +268,6 @@ const VideoViewer = () => {
       let realUrl = "";
       if (isPlaylist) {
         // Loading playlist
-
         if (!currentUrl.current) {
           return url;
         }
@@ -435,12 +445,16 @@ const VideoViewer = () => {
           option={{
             title: viewerState?.file?.name,
             theme: theme.palette.primary.main,
+            id: viewerState?.file?.path,
+            autoPlayback: true,
+            subtitleOffset: true,
+            fastForward: true,
             flip: true,
             setting: true,
             playbackRate: true,
             aspectRatio: true,
             hotkey: true,
-            pip: true,
+            pip: !isMobile,
             fullscreen: true,
             fullscreenWeb: true,
             autoHeight: true,

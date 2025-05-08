@@ -3,12 +3,12 @@ import { fileExtension } from "../../../util";
 import Artplayer from "artplayer";
 import artplayerPluginChapter from "artplayer-plugin-chapter";
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
+import { CrMaskedPrefix } from "./VideoViewer";
 import Hls, { HlsConfig } from "hls.js";
 import mpegts from 'mpegts.js';
 import i18next from "i18next";
 import { useEffect, useRef } from "react";
 import "./artplayer.css";
-export const CrMaskedPrefix = "https://cloudreve_masked/";
 
 export interface PlayerProps extends BoxProps {
   option: any;
@@ -32,16 +32,12 @@ const playM3u8 =
             super(config);
             var load = this.load.bind(this);
             this.load = function (context, config, callbacks) {
-              console.log("fragment loader", context);
               if (urlTransform) {
                 urlTransform(context.url).then((url) => {
-                  console.log(url);
-                  console.log({ ...context, frag: { ...context.frag, relurl: url, _url: url }, url });
                   const complete = callbacks.onSuccess;
                   callbacks.onSuccess = (loaderResponse, stats, successContext, networkDetails) => {
                     // Do something with loaderResponse.data
                     loaderResponse.url = url;
-                    console.log("fragment loader success", loaderResponse);
                     complete(loaderResponse, stats, successContext, networkDetails);
                   };
                   load({ ...context, frag: { ...context.frag, relurl: url, _url: url }, url }, config, callbacks);
@@ -57,15 +53,12 @@ const playM3u8 =
             super(config);
             var load = this.load.bind(this);
             this.load = function (context, config, callbacks) {
-              console.log("playlist loader", context);
               if (urlTransform) {
                 urlTransform(context.url, true).then((url) => {
-                  console.log(url);
                   const complete = callbacks.onSuccess;
                   callbacks.onSuccess = (loaderResponse, stats, successContext, networkDetails) => {
                     // Do something with loaderResponse.data
                     loaderResponse.url = url;
-                    console.log("playlist loader success", loaderResponse);
                     complete(loaderResponse, stats, successContext, networkDetails);
                   };
                   load({ ...context, url }, config, callbacks);
@@ -77,7 +70,6 @@ const playM3u8 =
           }
         },
         xhrSetup: async (xhr, url) => {
-          console.log("xhrSetup", xhr, url);
           // Always send cookies, even for cross-origin calls.
           if (url.startsWith(CrMaskedPrefix)) {
             if (getEntityUrl) {
@@ -103,7 +95,7 @@ const playFlv =
     if (mpegts.isSupported()) {
       if (art.flv) art.flv.destroy();
       const flv = mpegts.createPlayer({
-        type: 'flv',
+        type: "flv",
         url: url,
       }, {
         lazyLoadMaxDuration: 5 * 60,
@@ -112,9 +104,9 @@ const playFlv =
       flv.attachMediaElement(video);
       flv.load();
       art.flv = flv;
-      art.on('destroy', () => flv.destroy());
+      art.on("destroy", () => flv.destroy());
     } else {
-      art.notice.show = 'Unsupported playback format: flv';
+      art.notice.show = "Unsupported playback format: flv";
     }
   };
 
