@@ -150,7 +150,8 @@ function getFileAndShareById(
 
     let file: FileResponse | undefined = undefined;
     if (singleFile) {
-      file = (await dispatch(getFileList({ uri: share.source_uri ?? "", page_size: 50 })))?.files[0];
+      const root = new CrUri(share.source_uri ?? "");
+      file = await dispatch(getFileInfo({ uri: root.join(share.name ?? "").toString() }));
     } else {
       file = await dispatch(getFileInfo({ uri: share.source_uri ?? "" }));
     }

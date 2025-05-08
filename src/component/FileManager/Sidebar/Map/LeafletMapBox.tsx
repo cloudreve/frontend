@@ -1,8 +1,18 @@
-import "leaflet/dist/leaflet.css";
-import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import { Box, useTheme } from "@mui/material";
-import { MapLoaderProps } from "./MapLoader.tsx";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { useMemo } from "react";
+import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
+import { MapLoaderProps } from "./MapLoader.tsx";
+
+// @ts-ignore
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl: "/static/img/marker-icon.png", // .src removed
+  iconRetinaUrl: "/static/img/marker-icon-2x.png", // .src removed
+  shadowUrl: "/static/img/marker-shadow.png", // .src removed
+});
 
 /*
    Majority users of Cloudreve in China prefer not to include Ukraine flag. Feel free to remove it if you want to display it.
@@ -18,14 +28,7 @@ const FlagRemoval = () => {
   return null;
 };
 
-const LeafletMapBox = ({
-  center,
-  height,
-  mapProvider,
-  googleTileType,
-  sx,
-  ...rest
-}: MapLoaderProps) => {
+const LeafletMapBox = ({ center, height, mapProvider, googleTileType, sx, ...rest }: MapLoaderProps) => {
   const theme = useTheme();
   const googleTileUrl = useMemo(() => {
     switch (googleTileType) {
