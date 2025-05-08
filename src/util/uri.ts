@@ -196,11 +196,11 @@ export default class CrUri {
   }
 
   public path(): string {
-    return decodeURI(this.url.pathname);
+    return this.url.pathname;
   }
 
   public setPath(path: string): this {
-    this.url.pathname = encodeURI(path);
+    this.url.pathname = path;
     return this;
   }
 
@@ -216,16 +216,18 @@ export default class CrUri {
 
   // path without leading slash
   public path_trimmed(): string {
-    return decodeURI(this.url.pathname).slice(1);
+    return this.url.pathname.slice(1);
   }
 
   public join(...paths: string[]): this {
-    this.url.pathname = path.join(this.url.pathname, ...paths.map((p) => encodeURI(p)));
+    this.url.pathname = path.join(this.url.pathname, ...paths.map((p) => encodeURIComponent(p)));
     return this;
   }
 
   public elements(): string[] {
-    const res = this.path_trimmed().split("/");
+    const res = this.path_trimmed()
+      .split("/")
+      .map((p) => decodeURIComponent(p));
     if (res.length == 1 && res[0] == "") {
       return [];
     }
