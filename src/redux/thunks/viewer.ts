@@ -282,8 +282,8 @@ export function openCustomViewer(file: FileResponse, viewer: Viewer, preferredVe
       url = url.replace(`{$${key}}`, vars[key]);
     }
 
-    // if not start with http or https, it's a custom scheme
-    if (!url.startsWith("http") && !url.startsWith("https")) {
+    // if url matches custom scheme pattern like nplayer://xxx, use window.location.assign
+    if (/^(?!https?:\/\/)[a-zA-Z0-9]+:\/\//.test(url)) {
       window.location.assign(url);
       return;
     }
