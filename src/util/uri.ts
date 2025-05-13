@@ -196,11 +196,14 @@ export default class CrUri {
   }
 
   public path(): string {
-    return this.url.pathname;
+    return decodeURIComponent(this.url.pathname);
   }
 
   public setPath(path: string): this {
-    this.url.pathname = path;
+    this.url.pathname = path
+      .split("/")
+      .map((p) => encodeURIComponent(p))
+      .join("/");
     return this;
   }
 

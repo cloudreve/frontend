@@ -333,7 +333,7 @@ const VideoViewer = () => {
       url = url.replace(CrMaskedPrefix, "");
       const currentFileUrl = new CrUri(getFileLinkedUri(viewerState.file));
       const base = new CrUri(currentFileUrl.base());
-      const realUrl = base.join(url);
+      const realUrl = base.join(...url.split("/"));
       try {
         const res = await dispatch(getFileEntityUrl({ uris: [realUrl.toString()] }));
         return res.urls[0];

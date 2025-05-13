@@ -1,34 +1,16 @@
+import { Box, ClickAwayListener, Menu, styled, TextField, useMediaQuery, useTheme } from "@mui/material";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useIsOverflow } from "../../../hooks/useOverflow.tsx";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import {
-  Box,
-  ClickAwayListener,
-  Menu,
-  styled,
-  TextField,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import BreadcrumbButton, {
-  BreadcrumbButtonBase,
-  BreadcrumbButtonProps,
-} from "./BreadcrumbButton.tsx";
+import { navigateToPath } from "../../../redux/thunks/filemanager.ts";
+import { mergeRefs } from "../../../util";
 import CrUri from "../../../util/uri.ts";
 import ChevronRight from "../../Icons/ChevronRight.tsx";
 import MoreHorizontal from "../../Icons/MoreHorizontal.tsx";
-import { useIsOverflow } from "../../../hooks/useOverflow.tsx";
-import { mergeRefs } from "../../../util";
-import BreadcrumbHiddenItem from "./BreadcrumbHiddenItem.tsx";
 import { NoOpDropUri, useFileDrag } from "../Dnd/DndWrappedFile.tsx";
-import { navigateToPath } from "../../../redux/thunks/filemanager.ts";
 import { FmIndexContext } from "../FmIndexContext.tsx";
+import BreadcrumbButton, { BreadcrumbButtonBase, BreadcrumbButtonProps } from "./BreadcrumbButton.tsx";
+import BreadcrumbHiddenItem from "./BreadcrumbHiddenItem.tsx";
 
 const PathTextField = styled(TextField)(() => ({
   "& .MuiOutlinedInput-notchedOutline": {
@@ -63,9 +45,7 @@ const useBreadcrumb = (targetPath?: string) => {
 
   const index = useContext(FmIndexContext);
 
-  const base = useAppSelector(
-    (s) => s.fileManager[index].path_root_with_category,
-  );
+  const base = useAppSelector((s) => s.fileManager[index].path_root_with_category);
   const path = useAppSelector((s) => s.fileManager[index].path);
   const elements = useAppSelector((s) => s.fileManager[index].path_elements);
 
@@ -204,10 +184,7 @@ const Breadcrumb = (props: BreadcrumbProps) => {
         onClick={onEdit}
       >
         {editing && (
-          <ClickAwayListener
-            mouseEvent={"onMouseDown"}
-            onClickAway={() => submitNewPath()}
-          >
+          <ClickAwayListener mouseEvent={"onMouseDown"} onClickAway={() => submitNewPath()}>
             <PathTextField
               autoFocus
               onFocus={(e) => {
@@ -257,17 +234,11 @@ const Breadcrumb = (props: BreadcrumbProps) => {
         slotProps={{
           list: {
             dense: true,
-          }
+          },
         }}
       >
         {hidedButtons &&
-          hidedButtons.map((b) => (
-            <BreadcrumbHiddenItem
-              key={b.path}
-              onClose={() => setAnchorEl(null)}
-              {...b}
-            />
-          ))}
+          hidedButtons.map((b) => <BreadcrumbHiddenItem key={b.path} onClose={() => setAnchorEl(null)} {...b} />)}
       </Menu>
     </>
   );

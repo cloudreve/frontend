@@ -1,13 +1,13 @@
-import React, { useContext, useMemo } from "react";
-import TreeFile from "./TreeFile.tsx";
-import CrUri, { Filesystem } from "../../../util/uri.ts";
-import { useAppSelector } from "../../../redux/hooks.ts";
-import { useTranslation } from "react-i18next";
-import { useBreadcrumbButtons } from "../TopBar/BreadcrumbButton.tsx";
-import path from "path-browserify";
 import { Box } from "@mui/material";
+import path from "path-browserify";
+import React, { useContext, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../../redux/hooks.ts";
+import CrUri, { Filesystem } from "../../../util/uri.ts";
 import SideNavItem from "../../Frame/NavBar/SideNavItem.tsx";
 import { FmIndexContext } from "../FmIndexContext.tsx";
+import { useBreadcrumbButtons } from "../TopBar/BreadcrumbButton.tsx";
+import TreeFile from "./TreeFile.tsx";
 
 export interface TreeFilesProps {
   path: string;
@@ -26,24 +26,12 @@ export const pinedPrefix = "Pined";
 const TreeFiles = React.memo(
   React.forwardRef(
     (
-      {
-        path: p,
-        level,
-        elements,
-        labelOverwrite,
-        notLoaded,
-        pinned,
-        flatten,
-        canDrop,
-        ...rest
-      }: TreeFilesProps,
+      { path: p, level, elements, labelOverwrite, notLoaded, pinned, flatten, canDrop, ...rest }: TreeFilesProps,
       ref: React.Ref<HTMLLIElement>,
     ) => {
       const { t } = useTranslation();
       const fmIndex = useContext(FmIndexContext);
-      const parentsCache = useAppSelector(
-        (state) => state.fileManager[fmIndex].tree[p],
-      );
+      const parentsCache = useAppSelector((state) => state.fileManager[fmIndex].tree[p]);
       const [limit, setLimit] = React.useState(50);
       const uri = useMemo(() => new CrUri(p), [p]);
       const nodeId = useMemo(() => {
@@ -54,10 +42,7 @@ const TreeFiles = React.memo(
         return p;
       }, [pinned, p, flatten]);
       const [loading, displayName, startIcon, onClick] = useBreadcrumbButtons({
-        name:
-          parentsCache && parentsCache.file
-            ? parentsCache.file.name
-            : path.basename(uri.path()),
+        name: parentsCache && parentsCache.file ? parentsCache.file.name : path.basename(uri.path()),
         is_latest: false,
         path: p,
       });
@@ -109,10 +94,7 @@ const TreeFiles = React.memo(
       }, [p, elements, parentsCache, limit]);
 
       const shadowChild = useMemo(() => {
-        if (
-          flatten ||
-          (parentsCache?.children && parentsCache.children.length == 0)
-        ) {
+        if (flatten || (parentsCache?.children && parentsCache.children.length == 0)) {
           return null;
         }
         return <Box />;
@@ -150,11 +132,7 @@ const TreeFiles = React.memo(
               : shadowChild}
           </TreeFile>
           {limit < childTreeFiles.length ? (
-            <SideNavItem
-              level={level + 1}
-              label={t("navbar.showMore")}
-              onClick={() => setLimit((l) => l + 50)}
-            />
+            <SideNavItem level={level + 1} label={t("navbar.showMore")} onClick={() => setLimit((l) => l + 50)} />
           ) : null}
         </>
       );
