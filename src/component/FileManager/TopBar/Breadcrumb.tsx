@@ -209,8 +209,12 @@ const Breadcrumb = (props: BreadcrumbProps) => {
             onClickAway={() => submitNewPath()}
           >
             <PathTextField
-              onFocus={(e) => e.target.select()}
+              autoFocus
+              onFocus={(e) => {
+                e.target.select();
+              }}
               fullWidth
+              onClick={(e) => e.stopPropagation()}
               InputProps={{
                 readOnly: props.displayOnly,
               }}
@@ -219,7 +223,6 @@ const Breadcrumb = (props: BreadcrumbProps) => {
                   submitNewPath();
                 }
               }}
-              autoFocus
               value={editedPath}
               onChange={(e) => setEditedPath(e.target.value)}
             />
