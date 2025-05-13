@@ -140,7 +140,7 @@ const SecuritySetting = ({ setting, setSetting }: ProfileSettingProps) => {
                 inputProps={{
                   type: "password",
                   minLength: 6,
-                  maxLength: 64,
+                  maxLength: 128,
                 }}
               />
               <DenseFilledTextField
@@ -152,7 +152,7 @@ const SecuritySetting = ({ setting, setSetting }: ProfileSettingProps) => {
                 inputProps={{
                   type: "password",
                   minLength: 6,
-                  maxLength: 64,
+                  maxLength: 128,
                 }}
               />
               <Box>

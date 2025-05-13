@@ -180,6 +180,7 @@ const SignUp = () => {
                           id: "password",
                           required: "true",
                           minLength: 6,
+                          maxLength: 128,
                         }}
                         onChange={(e) => setPassword(e.target.value)}
                         icon={<Password />}
@@ -197,6 +198,7 @@ const SignUp = () => {
                           id: "repeatPassword",
                           required: "true",
                           minLength: 6,
+                          maxLength: 128,
                         }}
                         onChange={(e) => setPasswordRepeat(e.target.value)}
                         icon={<Password />}
