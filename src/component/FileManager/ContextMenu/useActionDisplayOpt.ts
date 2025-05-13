@@ -224,7 +224,7 @@ export const getActionOpt = (
   display.showDownload =
     display.hasReadable && display.orCapability && display.orCapability.enabled(NavigatorCapability.download_file);
   display.showDirectLink =
-    display.hasOwned &&
+    (display.hasOwned || groupBs.enabled(GroupPermission.is_admin)) &&
     display.orCapability &&
     (currentUserAnonymous?.group?.direct_link_batch_size ?? 0) >= targets.length &&
     display.orCapability.enabled(NavigatorCapability.download_file);
