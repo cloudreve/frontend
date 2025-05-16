@@ -263,8 +263,8 @@ export function openCustomViewer(file: FileResponse, viewer: Viewer, preferredVe
     const currentUser = SessionManager.currentUser();
 
     const vars: { [key: string]: string } = {
-      src: encodeURIComponent(entityUrl.urls[0]),
-      src_raw: entityUrl.urls[0],
+      src: encodeURIComponent(entityUrl.urls[0].url),
+      src_raw: entityUrl.urls[0].url,
       name: encodeURIComponent(file.name),
       version: preferredVersion ? preferredVersion : "",
       id: file.id,

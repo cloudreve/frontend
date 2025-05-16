@@ -23,9 +23,7 @@ export interface IPhotoProps extends React.HTMLAttributes<HTMLElement> {
   broken: boolean;
   onPhotoLoad: (params: IPhotoLoadedParams) => void;
   loadingElement?: JSX.Element;
-  brokenElement?:
-    | JSX.Element
-    | ((photoProps: BrokenElementParams) => JSX.Element);
+  brokenElement?: JSX.Element | ((photoProps: BrokenElementParams) => JSX.Element);
 }
 
 export default function Photo({
@@ -51,7 +49,7 @@ export default function Photo({
       }),
     )
       .then((res) => {
-        setImageSrc(res.urls[0]);
+        setImageSrc(res.urls[0].url);
       })
       .catch((e) => {
         if (mountedRef.current) {
@@ -96,11 +94,7 @@ export default function Photo({
           />
         )}
         {!loaded && (
-          <FacebookCircularProgress
-            sx={{ position: "absolute", top: 0 }}
-            fgColor={"#fff"}
-            bgColor={grey[800]}
-          />
+          <FacebookCircularProgress sx={{ position: "absolute", top: 0 }} fgColor={"#fff"} bgColor={grey[800]} />
         )}
       </>
     );
@@ -109,9 +103,7 @@ export default function Photo({
   if (brokenElement) {
     return (
       <span className="PhotoView__icon">
-        {typeof brokenElement === "function"
-          ? brokenElement({ src: imageSrc ?? "" })
-          : brokenElement}
+        {typeof brokenElement === "function" ? brokenElement({ src: imageSrc ?? "" }) : brokenElement}
       </span>
     );
   }

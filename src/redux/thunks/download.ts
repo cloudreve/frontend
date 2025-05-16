@@ -22,8 +22,6 @@ import { AppThunk } from "../store.ts";
 import { promiseId, selectOption } from "./dialog.ts";
 import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks, walk, walkAll } from "./file.ts";
 
-const streamSaverParam = "stream_saver";
-
 enum MultipleDownloadOption {
   Browser,
   StreamSaver,
@@ -99,7 +97,7 @@ export function backendBatchDownload(files: FileResponse[]): AppThunk {
       "application:fileManager.preparingBathDownload",
     );
 
-    window.location.assign(downloadUrl.urls[0]);
+    window.location.assign(downloadUrl.urls[0].url);
   };
 }
 
@@ -248,7 +246,7 @@ function startBrowserBatchDownloadTo(
 
             appendLog(i18next.t("modals.directoryDownloadStarted", { name }));
             try {
-              const res = await fetch(entityUrls.urls[i], {
+              const res = await fetch(entityUrls.urls[i].url, {
                 signal: cancelSignals[downloadId].signal,
               });
               await saveFileToFileSystemDirectory(handle, await res.blob(), name);
@@ -333,7 +331,7 @@ export function streamSaverDownload(files: FileResponse[]): AppThunk {
             if (!url) {
               continue;
             }
-            const res = await fetch(url);
+            const res = await fetch(url.url);
             const stream = () => res.body;
             ctrl.enqueue({ name: batch[i].relativePath, stream });
           }
@@ -371,13 +369,11 @@ export function downloadSingleFile(file: FileResponse, preferredEntity?: string)
       "application:fileManager.preparingDownload",
     );
 
-    const downloadUrl = new URL(urlRes.urls[0]);
-    const streamSaverName = downloadUrl.searchParams.get(streamSaverParam);
+    const streamSaverName = urlRes.urls[0].stream_saver_display_name;
     if (streamSaverName) {
       // remove streamSaverParam from query
-      downloadUrl.searchParams.delete(streamSaverParam);
       const fileStream = streamSaver.createWriteStream(streamSaverName);
-      const res = await fetch(downloadUrl.toString());
+      const res = await fetch(urlRes.urls[0].url);
       const readableStream = res.body;
       if (!readableStream) {
         return;
@@ -395,7 +391,7 @@ export function downloadSingleFile(file: FileResponse, preferredEntity?: string)
         return readableStream.pipeTo(fileStream).finally(() => closeSnackbar(downloadingSnackbar));
       }
     } else {
-      window.location.assign(urlRes.urls[0]);
+      window.location.assign(urlRes.urls[0].url);
     }
   };
 }

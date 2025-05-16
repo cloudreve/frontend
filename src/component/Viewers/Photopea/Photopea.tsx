@@ -1,20 +1,15 @@
-import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  closePhotopeaViewer,
-  GeneralViewerState,
-} from "../../../redux/globalStateSlice.ts";
 import { Box, Button, ButtonGroup, ListItemText, Menu } from "@mui/material";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getFileEntityUrl } from "../../../api/api.ts";
-import { fileExtension, getFileLinkedUri } from "../../../util";
+import { closePhotopeaViewer, GeneralViewerState } from "../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { savePhotopea } from "../../../redux/thunks/viewer.ts";
-import useActionDisplayOpt, {
-  canUpdate,
-} from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
-import CaretDown from "../../Icons/CaretDown.tsx";
+import { fileExtension, getFileLinkedUri } from "../../../util";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
+import useActionDisplayOpt, { canUpdate } from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
+import CaretDown from "../../Icons/CaretDown.tsx";
+import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
 import SaveAsNewFormat from "./SaveAsNewFormat.tsx";
 
 const photopeiaOrigin = "https://www.photopea.com";
@@ -23,10 +18,7 @@ const photopeiaUrl =
 const saveCommand = "SAVE";
 const savePSDCommand = "SAVEPSD";
 
-const appendBuffer = function (
-  buffer1: ArrayBuffer,
-  buffer2: ArrayBuffer,
-): ArrayBuffer {
+const appendBuffer = function (buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer {
   var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
   tmp.set(new Uint8Array(buffer1), 0);
   tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
@@ -41,13 +33,9 @@ const saveOpt = {
 const Photopea = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const viewerState = useAppSelector(
-    (state) => state.globalState.photopeaViewer,
-  );
+  const viewerState = useAppSelector((state) => state.globalState.photopeaViewer);
 
-  const displayOpt = useActionDisplayOpt(
-    viewerState?.file ? [viewerState?.file] : [],
-  );
+  const displayOpt = useActionDisplayOpt(viewerState?.file ? [viewerState?.file] : []);
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -88,7 +76,7 @@ const Photopea = () => {
       }),
     )
       .then((res) => {
-        entityUrl.current = res.urls[0];
+        entityUrl.current = res.urls[0].url;
         setSrc(photopeiaUrl);
       })
       .catch(() => {
@@ -110,10 +98,7 @@ const Photopea = () => {
       }
     }
 
-    pp.current.contentWindow?.postMessage(
-      `app.activeDocument.saveToOE("${ext}")`,
-      "*",
-    );
+    pp.current.contentWindow?.postMessage(`app.activeDocument.saveToOE("${ext}")`, "*");
     saveStarted.current = newFile ? saveOpt.saveAs : saveOpt.started;
   };
 
@@ -124,15 +109,10 @@ const Photopea = () => {
     console.log(e);
     if (e.data == "done") {
       if (doneCount.current == 0) {
-        pp.current?.contentWindow?.postMessage(
-          `app.open("${entityUrl.current}","",false)`,
-          "*",
-        );
+        pp.current?.contentWindow?.postMessage(`app.open("${entityUrl.current}","",false)`, "*");
       } else if (doneCount.current == 2) {
         pp.current?.contentWindow?.postMessage(
-          `app.activeDocument.name="${
-            currentState.current?.file.name.replace(/"/g, '\\"') ?? ""
-          }"`,
+          `app.activeDocument.name="${currentState.current?.file.name.replace(/"/g, '\\"') ?? ""}"`,
           "*",
         );
         setLoaded(true);
@@ -161,11 +141,7 @@ const Photopea = () => {
     dispatch(closePhotopeaViewer());
   }, [dispatch]);
 
-  const onLoad = useCallback(
-    (e: React.SyntheticEvent<HTMLIFrameElement>) =>
-      (pp.current = e.currentTarget),
-    [],
-  );
+  const onLoad = useCallback((e: React.SyntheticEvent<HTMLIFrameElement>) => (pp.current = e.currentTarget), []);
 
   const openMore = useCallback(
     (e: React.MouseEvent<any>) => {
@@ -200,11 +176,7 @@ const Photopea = () => {
         readOnly={!supportUpdate.current}
         actions={
           supportUpdate.current ? (
-            <ButtonGroup
-              disabled={loading || !loaded}
-              disableElevation
-              variant="contained"
-            >
+            <ButtonGroup disabled={loading || !loaded} disableElevation variant="contained">
               <Button onClick={() => save()} variant={"contained"}>
                 {t("fileManager.save")}
               </Button>

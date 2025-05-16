@@ -37,7 +37,7 @@ const ImageEditor = () => {
         }),
       )
         .then((res) => {
-          setImageSrc(res.urls[0]);
+          setImageSrc(res.urls[0].url);
         })
         .catch(() => {
           dispatch(switchToImageViewer());

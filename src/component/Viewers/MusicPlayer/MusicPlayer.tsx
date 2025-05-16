@@ -58,7 +58,7 @@ const MusicPlayer = () => {
               entity: playerState.version,
             }),
           );
-          audio.current.src = res.urls[0];
+          audio.current.src = res.urls[0].url;
           audio.current.currentTime = 0;
           audio.current.play();
           audio.current.volume = latestVolume ?? volume;
@@ -83,10 +83,7 @@ const MusicPlayer = () => {
           if (isNext) {
             playIndex(((index ?? 0) + 1) % playerState?.files.length);
           } else {
-            playIndex(
-              ((index ?? 0) - 1 + playerState?.files.length) %
-                playerState?.files.length,
-            );
+            playIndex(((index ?? 0) - 1 + playerState?.files.length) % playerState?.files.length);
           }
           break;
         case LoopMode.single_repeat:
@@ -94,9 +91,7 @@ const MusicPlayer = () => {
           break;
         case LoopMode.shuffle:
           if (isNext) {
-            const nextIndex = Math.floor(
-              Math.random() * playerState?.files.length,
-            );
+            const nextIndex = Math.floor(Math.random() * playerState?.files.length);
             playIndex(nextIndex);
           } else {
             playHistory.current.pop();
@@ -124,9 +119,7 @@ const MusicPlayer = () => {
   }, []);
 
   const playingTooltip = playerState
-    ? `[${(index ?? 0) + 1}/${playerState.files.length}] ${playerState?.files[
-        index ?? 0
-      ]?.name}`
+    ? `[${(index ?? 0) + 1}/${playerState.files.length}] ${playerState?.files[index ?? 0]?.name}`
     : "";
 
   const onPlayerPopoverClose = useCallback(() => {

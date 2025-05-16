@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
-import ViewerDialog, { ViewerLoading } from "./ViewerDialog.tsx";
-import React, { useCallback, useEffect, useState } from "react";
-import { closePdfViewer } from "../../redux/globalStateSlice.ts";
 import { Box, useTheme } from "@mui/material";
-import { getFileEntityUrl } from "../../api/api.ts";
-import { getFileLinkedUri } from "../../util";
 import i18next from "i18next";
+import { useCallback, useEffect, useState } from "react";
+import { getFileEntityUrl } from "../../api/api.ts";
+import { closePdfViewer } from "../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
+import { getFileLinkedUri } from "../../util";
+import ViewerDialog, { ViewerLoading } from "./ViewerDialog.tsx";
 
 const viewerBase = "/pdfviewer.html";
 
@@ -31,7 +31,7 @@ const PdfViewer = () => {
     )
       .then((res) => {
         const search = new URLSearchParams();
-        search.set("file", res.urls[0]);
+        search.set("file", res.urls[0].url);
         search.set("lng", i18next.language);
         search.set("darkMode", theme.palette.mode == "dark" ? "2" : "1");
         setSrc(`${viewerBase}?${search.toString()}`);

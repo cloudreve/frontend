@@ -284,8 +284,13 @@ export interface FileURLService extends MultipleUriService {
 }
 
 export interface FileURLResponse {
-  urls: string[];
+  urls: EntityURLResponse[];
   expires: string;
+}
+
+export interface EntityURLResponse {
+  url: string;
+  stream_saver_display_name?: string;
 }
 
 export interface GetFileInfoService {

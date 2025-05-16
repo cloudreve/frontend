@@ -967,7 +967,7 @@ export function getEntityContent(file: FileResponse, version?: string): AppThunk
       }),
     );
     try {
-      const data = await fetch(urls.urls[0]);
+      const data = await fetch(urls.urls[0].url);
       if (!data.ok) {
         throw new Error(`Failed to load file, response code ${data.status}`);
       }

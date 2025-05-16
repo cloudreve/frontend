@@ -1,12 +1,12 @@
-import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
-import React, { Suspense, useCallback, useEffect, useState } from "react";
-import { closeEpubViewer } from "../../../redux/globalStateSlice.ts";
 import { Box, useTheme } from "@mui/material";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getFileEntityUrl } from "../../../api/api.ts";
-import { getFileLinkedUri } from "../../../util";
+import { closeEpubViewer } from "../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import SessionManager, { UserSettings } from "../../../session";
+import { getFileLinkedUri } from "../../../util";
+import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
 
 const Epub = React.lazy(() => import("./Epub.tsx"));
 
@@ -23,10 +23,7 @@ const EpubViewer = () => {
     (epubcifi: string) => {
       setLocation(epubcifi);
       if (viewerState?.file) {
-        SessionManager.set(
-          `${UserSettings.BookLocationPrefix}_${viewerState.file.id}`,
-          epubcifi,
-        );
+        SessionManager.set(`${UserSettings.BookLocationPrefix}_${viewerState.file.id}`, epubcifi);
       }
     },
     [viewerState?.file],
@@ -46,10 +43,8 @@ const EpubViewer = () => {
       }),
     )
       .then((res) => {
-        setSrc(res.urls[0]);
-        const location = SessionManager.get(
-          `${UserSettings.BookLocationPrefix}_${viewerState.file.id}`,
-        );
+        setSrc(res.urls[0].url);
+        const location = SessionManager.get(`${UserSettings.BookLocationPrefix}_${viewerState.file.id}`);
         if (location) {
           setLocation(location);
         }

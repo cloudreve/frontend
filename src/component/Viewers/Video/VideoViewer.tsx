@@ -80,7 +80,7 @@ const VideoViewer = () => {
           }),
         );
 
-        art.subtitle.switch(subtitleUrl.urls[0], {
+        art.subtitle.switch(subtitleUrl.urls[0].url, {
           type: fileExtension(subtitle.name) ?? "",
         });
         art.subtitle.show = true;
@@ -129,7 +129,7 @@ const VideoViewer = () => {
     )
       .then((res) => {
         const current = art.currentTime;
-        currentUrl.current = res.urls[0];
+        currentUrl.current = res.urls[0].url;
 
         let timeOut = dayjs(res.expires).diff(dayjs(), "millisecond") - srcRefreshMargin;
         if (timeOut < 0) {
@@ -137,7 +137,7 @@ const VideoViewer = () => {
         }
         currentExpire.current = setTimeout(refreshSrc, timeOut);
 
-        art.switchUrl(res.urls[0]).then(() => {
+        art.switchUrl(res.urls[0].url).then(() => {
           art.currentTime = current;
         });
 
@@ -336,7 +336,7 @@ const VideoViewer = () => {
       const realUrl = base.join(...url.split("/"));
       try {
         const res = await dispatch(getFileEntityUrl({ uris: [realUrl.toString()] }));
-        return res.urls[0];
+        return res.urls[0].url;
       } catch (e) {
         console.error(e);
         return url;
