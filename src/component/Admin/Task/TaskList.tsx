@@ -263,7 +263,7 @@ const TaskList = () => {
                   </TableSortLabel>
                 </NoWrapTableCell>
                 <NoWrapTableCell width={400}>{t("task.content")}</NoWrapTableCell>
-                <NoWrapTableCell width={100}>{t("task.status")}</NoWrapTableCell>
+                <NoWrapTableCell width={120}>{t("task.status")}</NoWrapTableCell>
                 <NoWrapTableCell width={150}>{t("file.creator")}</NoWrapTableCell>
                 <NoWrapTableCell width={100}>{t("task.node")}</NoWrapTableCell>
                 <NoWrapTableCell width={180}>
