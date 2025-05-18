@@ -8,7 +8,7 @@ import { DenseSelect } from "../../Common/StyledComponents";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu";
 
 export interface SinglePolicySelectionInputProps {
-  value: number;
+  value: number | undefined;
   onChange: (value: number) => void;
   emptyValue?: number;
   emptyText?: string;

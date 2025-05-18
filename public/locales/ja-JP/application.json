@@ -706,6 +706,10 @@
     "sendTask": "タスク送信",
     "sendTaskDes": "処理ノードにタスクを送信します。",
     "downloaded": "ダウンロード済み",
+    "importingFiles": "ファイルをインポート",
+    "importingFilesDes": "ファイルを検索し、指定されたフォルダにインポートします。",
+    "importedFiles": "インポート済みファイル",
+    "indexedFiles": "インデックス済みファイル",
     "extractedFiles": "解凍済みファイル数",
     "extractedFilesSize": "解凍済みファイルサイズ",
     "extractingFiles": "ファイル解凍",
@@ -822,7 +826,8 @@
     "loginApp": "バインドが完了したら、クライアントを使用できます。QRコードによるバインドに問題がある場合は、ユーザー名とパスワードを手動で入力してログインすることもできます。",
     "relocateFileTo": "<0></0>{{more}} のストレージポリシーを {{policy}} に変更します",
     "extractFileTo": "<0></0>{{more}} を <1></1> に解凍します",
-    "createArchiveTo": "<0></0>{{more}} を <1></1> に圧縮します"
+    "createArchiveTo": "<0></0>{{more}} を <1></1> に圧縮します",
+    "importFileTo": "{{policy}} のファイルを <1></1> に導入します"
   },
   "vas": {
     "points": "ポイント",

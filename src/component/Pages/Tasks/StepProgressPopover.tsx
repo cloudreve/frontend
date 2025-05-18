@@ -1,16 +1,12 @@
 import { Box, Divider, PopoverProps, Typography } from "@mui/material";
 import HoverPopover from "material-ui-popup-state/HoverPopover";
 import { useCallback, useEffect, useState } from "react";
-import {
-  TaskProgress,
-  TaskProgresses,
-  TaskResponse,
-} from "../../../api/workflow.ts";
-import { useAppDispatch } from "../../../redux/hooks.ts";
-import { getTasksPhaseProgress } from "../../../api/api.ts";
 import { useTranslation } from "react-i18next";
-import StepProgressBar from "./StepProgressBar.tsx";
+import { getTasksPhaseProgress } from "../../../api/api.ts";
+import { TaskProgress, TaskProgresses, TaskResponse } from "../../../api/workflow.ts";
+import { useAppDispatch } from "../../../redux/hooks.ts";
 import { sizeToString } from "../../../util";
+import StepProgressBar from "./StepProgressBar.tsx";
 
 export interface StepProgressPopoverProps extends PopoverProps {
   task: TaskResponse;
@@ -26,6 +22,8 @@ export const ProgressKeys = {
   extract_count: "extract_count",
   extract_size: "extract_size",
   download: "download",
+  imported: "imported",
+  indexed: "indexed",
 };
 
 const ProgressBar = ({ pkey, p }: { pkey: string; p: TaskProgress }) => {
@@ -35,6 +33,27 @@ const ProgressBar = ({ pkey, p }: { pkey: string; p: TaskProgress }) => {
       <StepProgressBar
         title={t("setting.relocatedEntities")}
         secondary={`${p.current} / ${p.total}`}
+        progress={(100 * p.current) / Math.max(p.total, 1)}
+      />
+    );
+  }
+
+  if (pkey == ProgressKeys.imported) {
+    return (
+      <StepProgressBar
+        title={t("setting.importedFiles")}
+        secondary={`${p.current} / ${p.total}`}
+        progress={(100 * p.current) / Math.max(p.total, 1)}
+      />
+    );
+  }
+
+  if (pkey == ProgressKeys.indexed) {
+    return (
+      <StepProgressBar
+        indeterminate={p.total == 0}
+        title={t("setting.indexedFiles")}
+        secondary={`${p.current}`}
         progress={(100 * p.current) / Math.max(p.total, 1)}
       />
     );
@@ -148,17 +167,11 @@ const ProgressBar = ({ pkey, p }: { pkey: string; p: TaskProgress }) => {
   }
 };
 
-const StepProgressPopover = ({
-  task,
-  open,
-  ...rest
-}: StepProgressPopoverProps) => {
+const StepProgressPopover = ({ task, open, ...rest }: StepProgressPopoverProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const stopPropagation = useCallback((e: any) => e.stopPropagation(), []);
-  const [progress, setProgress] = useState<TaskProgresses | undefined>(
-    undefined,
-  );
+  const [progress, setProgress] = useState<TaskProgresses | undefined>(undefined);
 
   useEffect(() => {
     if (open) {
@@ -188,9 +201,7 @@ const StepProgressPopover = ({
           Object.keys(progress).map((key, index) => (
             <>
               <ProgressBar pkey={key} p={progress[key]} />
-              {index < Object.keys(progress).length - 1 && (
-                <Divider sx={{ pt: 1, mb: 0.5 }} />
-              )}
+              {index < Object.keys(progress).length - 1 && <Divider sx={{ pt: 1, mb: 0.5 }} />}
             </>
           ))}
         {progress && Object.keys(progress).length == 0 && (

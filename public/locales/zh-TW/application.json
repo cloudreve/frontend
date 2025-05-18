@@ -706,6 +706,10 @@
     "sendTask": "傳送任務",
     "sendTaskDes": "將任務傳送到處理節點。",
     "downloaded": "已下載",
+    "importingFiles": "匯入檔案",
+    "importingFilesDes": "檢索檔案並將其匯入到指定目錄。",
+    "importedFiles": "已匯入檔案",
+    "indexedFiles": "已索引檔案",
     "extractedFiles": "已解壓檔案數量",
     "extractedFilesSize": "已解壓檔案大小",
     "extractingFiles": "解壓檔案",
@@ -822,7 +826,8 @@
     "loginApp": "完成繫結，你可以開始使用客戶端了。如果掃碼繫結遇到問題，你也可以嘗試手動輸入使用者名稱和密碼登入。",
     "relocateFileTo": "將 <0></0>{{more}} 的儲存策略轉移至 {{policy}}",
     "extractFileTo": "將 <0></0>{{more}} 解壓縮至 <1></1>",
-    "createArchiveTo": "將 <0></0>{{more}} 打包至 <1></1>"
+    "createArchiveTo": "將 <0></0>{{more}} 打包至 <1></1>",
+    "importFileTo": "將 {{policy}} 中的文件導入至 <0></0>"
   },
   "vas": {
     "points": "積分",

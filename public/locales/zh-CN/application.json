@@ -706,6 +706,10 @@
     "sendTask": "发送任务",
     "sendTaskDes": "将任务发送到处理节点。",
     "downloaded": "已下载",
+    "importingFiles": "导入文件",
+    "importingFilesDes": "检索文件并将其导入到指定目录。",
+    "importedFiles": "已导入文件",
+    "indexedFiles": "已索引文件",
     "extractedFiles": "已解压文件数量",
     "extractedFilesSize": "已解压文件大小",
     "extractingFiles": "解压文件",
@@ -822,7 +826,8 @@
     "loginApp": "完成绑定，你可以开始使用客户端了。如果扫码绑定遇到问题，你也可以尝试手动输入用户名和密码登录。",
     "relocateFileTo": "将 <0></0>{{more}} 的存储策略转移至 {{policy}}",
     "extractFileTo": "将 <0></0>{{more}} 解压缩至 <1></1>",
-    "createArchiveTo": "将 <0></0>{{more}} 打包至 <1></1>"
+    "createArchiveTo": "将 <0></0>{{more}} 打包至 <1></1>",
+    "importFileTo": "将 {{policy}} 中的文件导入至 <0></0>"
   },
   "vas": {
     "points": "积分",

@@ -1,14 +1,9 @@
-import {
-  NodeTypes,
-  TaskResponse,
-  TaskStatus,
-  TaskType,
-} from "../../../api/workflow.ts";
-import { useEffect, useMemo, useState } from "react";
 import { Box, Stepper, useMediaQuery, useTheme } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import TaskProgressStep from "./TaskProgressStep.tsx";
+import { NodeTypes, TaskResponse, TaskStatus, TaskType } from "../../../api/workflow.ts";
 import PieceProgress from "./PieceProgress.tsx";
+import TaskProgressStep from "./TaskProgressStep.tsx";
 
 export interface TaskProgressProps {
   task: TaskResponse;
@@ -76,6 +71,18 @@ const stepOptions: {
         description: "setting.awaitSeedingDes",
       },
       completedStep,
+    ],
+  ],
+  [TaskType.import]: [
+    // Master
+    [
+      queueingStep,
+      {
+        title: "setting.importingFiles",
+        state: "",
+        description: "setting.importingFilesDes",
+        supportProgress: true,
+      },
     ],
   ],
   [TaskType.relocate]: [
@@ -188,9 +195,7 @@ const TaskProgress = ({ task }: TaskProgressProps) => {
   const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
   const steps = useMemo((): StepModel[] => {
-    return (
-      stepOptions[task.type]?.[task.node?.type == NodeTypes.slave ? 1 : 0] ?? []
-    );
+    return stepOptions[task.type]?.[task.node?.type == NodeTypes.slave ? 1 : 0] ?? [];
   }, [task.id, task.node?.type]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -216,10 +221,7 @@ const TaskProgress = ({ task }: TaskProgressProps) => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Stepper
-        activeStep={activeStep}
-        orientation={isMobile ? "vertical" : "horizontal"}
-      >
+      <Stepper activeStep={activeStep} orientation={isMobile ? "vertical" : "horizontal"}>
         {steps.map((step, index) => (
           <TaskProgressStep
             progressing={activeStep == index && task.status != TaskStatus.error}

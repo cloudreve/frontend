@@ -94,6 +94,7 @@ import {
 import {
   ArchiveWorkflowService,
   DownloadWorkflowService,
+  ImportWorkflowService,
   ListTaskService,
   SetDownloadFilesService,
   TaskListResponse,
@@ -1943,6 +1944,23 @@ export function sendCalibrateUserStorage(id: number): ThunkResponse<UserEnt> {
       send(
         `/admin/user/${id}/calibrate`,
         { method: "POST" },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function sendImport(req: ImportWorkflowService): ThunkResponse<TaskResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        "/workflow/import",
+        {
+          data: req,
+          method: "POST",
+        },
         {
           ...defaultOpts,
         },

@@ -129,6 +129,7 @@ const TaskFilterPopover = ({
               TaskType.entity_recycle_routine,
               TaskType.explicit_entity_recycle,
               TaskType.upload_sentinel_check,
+              TaskType.import,
             ].map((type) => (
               <SquareMenuItem key={type} value={type}>
                 <ListItemText

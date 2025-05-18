@@ -707,6 +707,10 @@
     "sendTask": "Send task",
     "sendTaskDes": "Send the task to a node to process.",
     "downloaded": "Downloaded",
+    "importingFiles": "Import files",
+    "importingFilesDes": "Index files and importing them to the specified folder.",
+    "importedFiles": "Imported files",
+    "indexedFiles": "Indexed files",
     "extractedFiles": "Extracted files",
     "extractedFilesSize": "Extracted files size",
     "extractingFiles": "Extracting files",
@@ -822,7 +826,8 @@
     "loginApp": "You can start using the App now. If you encounter problems with the QR Code, you can also try to manually enter your username and password to log in.",
     "relocateFileTo": "Relocate storage policy to {{policy}} for <0></0>{{more}}",
     "extractFileTo": "Extract <0></0>{{more}} to <1></1>",
-    "createArchiveTo": "Create archive file to <1></1> for <0></0>{{more}}"
+    "createArchiveTo": "Create archive file to <1></1> for <0></0>{{more}}",
+    "importFileTo": "Import files from {{policy}} to <0></0>"
   },
   "vas": {
     "points": "Points",

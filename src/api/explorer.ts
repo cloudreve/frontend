@@ -366,6 +366,7 @@ export const AuditLogType = {
   add_passkey: 52,
   remove_passkey: 53,
   redeem_gift_code: 54,
+  file_imported: 55,
 };
 
 export interface MultipleUriService {

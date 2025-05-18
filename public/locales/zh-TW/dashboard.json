@@ -556,6 +556,7 @@
     "toggleAll": "啟用/禁用所有事件",
     "toggleAllDes": "啟用或禁用此類別中的所有事件。",
     "event": {
+      "file_imported": "外部檔案導入",
       "server_start": "伺服器啟動",
       "user_signup": "使用者注冊",
       "email_sent": "郵件傳送",
@@ -1156,23 +1157,33 @@
     "searchFileName": "搜尋檔名",
     "storagePolicy": "儲存策略",
     "selectTargetUser": "請先選擇目標使用者",
-    "importTaskCreated": "匯入任務已建立，你可以在“持久任務”中檢視執行情況",
+    "importTaskCreated": "匯入任務已建立，你可以在“後臺任務”中檢視執行情況",
     "manuallyPathOnly": "選擇的儲存策略只支援手動輸入路徑",
     "selectFolder": "選擇目錄",
+    "import": "匯入",
     "importExternalFolder": "匯入外部目錄",
-    "importExternalFolderDes": "你可以將儲存策略中已有檔案、目錄結構匯入到 Cloudreve 中，匯入操作不會額外佔用物理儲存空間，但仍會正常扣除使用者已用容量空間，空間不足時將停止匯入。",
-    "storagePolicyDes": "選擇要匯入檔案目前儲存所在的儲存策略",
+    "importExternalFolderDes": "你可以將儲存策略中已有檔案、目錄結構匯入到 Cloudreve 中，匯入操作不會額外佔用物理儲存空間，但仍會正常扣除使用者已用容量空間。",
+    "storagePolicyDes": "選擇要匯入檔案目前儲存所在的儲存策略。",
     "targetUser": "目標使用者",
-    "targetUserDes": "選擇要將檔案匯入到哪個使用者的檔案系統中，可通過暱稱、郵箱搜尋使用者",
+    "targetUserDes": "選擇要將檔案匯入到哪個使用者的檔案系統中。",
     "srcFolderPath": "原始目錄路徑",
     "select": "選擇",
     "selectSrcDes": "要匯入的目錄在儲存端的路徑",
     "dstFolderPath": "目的目錄路徑",
-    "dstFolderPathDes": "要將目錄匯入到使用者檔案系統中的路徑",
+    "dstFolderPathDes": "要將目錄匯入到使用者檔案系統中的路徑。",
     "recursivelyImport": "遞迴匯入子目錄",
-    "recursivelyImportDes": "是否將目錄下的所有子目錄遞迴匯入",
+    "recursivelyImportDes": "是否將目錄下的所有子目錄遞迴匯入。",
     "createImportTask": "建立匯入任務",
-    "unlink": "解除關聯（保留物理檔案）"
+    "unlink": "解除關聯（保留物理檔案）",
+    "searchUser": "搜尋使用者昵稱或郵箱...",
+    "extractMediaMeta": "提取媒体信息",
+    "extractMediaMetaDes": "是否在匯入檔案的同時嘗試提取每個檔案的媒體資訊。",
+    "importWarning": "注意事項",
+    "importWarnings": [
+      "匯入後，物理檔案將由 Cloudreve 接管，後續請不要在外部修改此檔案；",
+      "不要重複匯入相同的檔案；",
+      "如果使用者檔案衝突，此檔案會被跳過；"
+    ]
   },
   "entity": {
     "refenenceCount": "引用次數",
@@ -1238,6 +1249,7 @@
     "file": "檔案"
   },
   "task": {
+    "import": "導入檔案",
     "confirmDelete": "確認要刪除這個任務?",
     "confirmBatchDelete": "確認要刪除 {{num}} 個任務?",
     "deleteXTasks": "刪除 {{num}} 個任務",

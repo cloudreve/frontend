@@ -11,6 +11,7 @@ const userTaskTypes: string[] = [
   TaskType.create_archive,
   TaskType.extract_archive,
   TaskType.remote_download,
+  TaskType.import,
 ];
 
 export interface TaskContentProps {

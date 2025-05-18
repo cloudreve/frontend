@@ -51,6 +51,7 @@ export const eventCategories = {
     description: "settings.fileEventsDes",
     events: [
       AuditLogType.file_create,
+      AuditLogType.file_imported,
       AuditLogType.file_rename,
       AuditLogType.set_file_permission,
       AuditLogType.entity_uploaded,

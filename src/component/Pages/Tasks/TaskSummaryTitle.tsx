@@ -88,6 +88,26 @@ const TaskSummaryTitle = ({ type, summary, isInDashboard = false }: TaskSummaryT
           }}
         />
       );
+    case TaskType.import:
+      return (
+        <Trans
+          i18nKey="setting.importFileTo"
+          values={{
+            policy: policyOption
+              ? policyOption.find((p) => p.id == summary?.props.dst_policy_id)?.name ?? "Unknown"
+              : "",
+          }}
+          components={[
+            <StyledFileBadge
+              variant={"outlined"}
+              simplifiedFile={{
+                type: FileType.folder,
+                path: summary?.props.dst ? summary?.props.dst : newMyUri("").toString(),
+              }}
+            />,
+          ]}
+        />
+      );
     default:
       return (
         <Trans

@@ -137,11 +137,17 @@ const TaskProps = ({ task }: TaskPropsProps) => {
           value={
             <FileBadge
               variant={"outlined"}
-              clickable={task.type == TaskType.remote_download || task.type == TaskType.extract_archive}
+              clickable={
+                task.type == TaskType.remote_download ||
+                task.type == TaskType.extract_archive ||
+                task.type == TaskType.import
+              }
               simplifiedFile={{
                 path: task.summary?.props.dst,
                 type:
-                  task.type == TaskType.remote_download || task.type == TaskType.extract_archive
+                  task.type == TaskType.remote_download ||
+                  task.type == TaskType.extract_archive ||
+                  task.type == TaskType.import
                     ? FileType.folder
                     : FileType.file,
               }}

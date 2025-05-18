@@ -563,6 +563,7 @@
     "toggleAll": "Toggle all",
     "toggleAllDes": "Enable or disable all events in this category.",
     "event": {
+      "file_imported": "External file imported",
       "server_start": "Server start",
       "user_signup": "User signup",
       "email_sent": "Email sent",
@@ -1173,14 +1174,15 @@
     "searchFileName": "Search file name",
     "storagePolicy": "Storage policy",
     "selectTargetUser": "Select target user",
-    "importTaskCreated": "Import task created, you can view its status in the Tasks - General.",
+    "importTaskCreated": "Import task created, you can view its status in the background tasks list.",
     "manuallyPathOnly": "The selected storage policy only supports manually inputting path.",
     "selectFolder": "Select folder",
+    "import": "Import",
     "importExternalFolder": "Import external folders",
-    "importExternalFolderDes": "You can import existing files and directory structures from your storage policy into Cloudreve. The import operation will not take up additional physical storage, but will still deduct the user's used storage quota as normal. The import will be halted when there is not enough quota.",
+    "importExternalFolderDes": "You can import existing files and directory structures from your storage policy into Cloudreve. The import operation will not take up additional physical storage, but will still deduct the user's used storage quota as normal.",
     "storagePolicyDes": "Select the storage policy where the files to be imported are currently stored.",
     "targetUser": "Target user",
-    "targetUserDes": "Select which user's file system you want to import the files to, you can search users by nickname or email.",
+    "targetUserDes": "Select which user's file system you want to import the files to.",
     "srcFolderPath": "Source folder path",
     "select": "Select",
     "selectSrcDes": "The path of the directory to be imported on the storage side.",
@@ -1189,7 +1191,16 @@
     "recursivelyImport": "Recursively import",
     "recursivelyImportDes": "Whether to import all subdirectories under the directory recursively.",
     "createImportTask": "Create import task",
-    "unlink": "Unlink (Keep physical file)"
+    "unlink": "Unlink (Keep physical file)",
+    "searchUser": "Search user by name or email...",
+    "extractMediaMeta": "Extract media information",
+    "extractMediaMetaDes": "Whether to extract media information for each file during import.",
+    "importWarning": "Warning",
+    "importWarnings": [
+      "After import, the physical file will be taken over by Cloudreve, please do not modify it externally afterwards.",
+      "Do not import the same file multiple times.",
+      "If the user's file conflicts, this file will be skipped."
+    ]
   },
   "entity": {
     "refenenceCount": "Reference count",

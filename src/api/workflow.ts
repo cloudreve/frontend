@@ -100,6 +100,15 @@ export interface DownloadWorkflowService {
   dst: string;
 }
 
+export interface ImportWorkflowService {
+  src: string;
+  dst: string;
+  extract_media_meta?: boolean;
+  user_id: string;
+  recursive?: boolean;
+  policy_id: number;
+}
+
 export interface ListTaskService {
   page_size: number;
   category: ListTaskCategory;
@@ -120,6 +129,7 @@ export enum TaskType {
   entity_recycle_routine = "entity_recycle_routine",
   explicit_entity_recycle = "explicit_entity_recycle",
   upload_sentinel_check = "upload_sentinel_check",
+  import = "import",
 }
 
 export enum TaskStatus {

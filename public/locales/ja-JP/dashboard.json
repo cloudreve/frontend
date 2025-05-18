@@ -559,6 +559,7 @@
     "toggleAll": "全イベントの有効化/無効化",
     "toggleAllDes": "このカテゴリ内の全イベントを有効化または無効化します。",
     "event": {
+      "file_imported": "外部ファイル導入",
       "server_start": "サーバー起動",
       "user_signup": "ユーザー登録",
       "email_sent": "メール送信",
@@ -1162,11 +1163,12 @@
     "importTaskCreated": "インポートタスクが作成されました。「永続タスク」で実行状況を確認できます",
     "manuallyPathOnly": "選択されたストレージポリシーは手動でパスを入力するのみサポートしています",
     "selectFolder": "ディレクトリを選択",
+    "import": "インポート",
     "importExternalFolder": "外部ディレクトリのインポート",
-    "importExternalFolderDes": "ストレージポリシーにある既存のファイル、ディレクトリ構造をCloudreveにインポートできます。インポート操作は物理ストレージ容量を消費しませんが、ユーザーの使用済み容量は通常通り減算されます。容量不足の場合はインポートが停止します。",
+    "importExternalFolderDes": "ストレージポリシーにある既存のファイル、ディレクトリ構造をCloudreveにインポートできます。インポート操作は物理ストレージ容量を消費しませんが、ユーザーの使用済み容量は通常通り減算されます。",
     "storagePolicyDes": "インポート対象ファイルの保存先のストレージポリシーを選択",
     "targetUser": "対象ユーザー",
-    "targetUserDes": "ファイルをインポートするユーザーのファイルシステムを選択してください。ニックネームまたはメールアドレスでユーザーを検索できます。",
+    "targetUserDes": "ファイルをインポートするユーザーのファイルシステムを選択してください。",
     "srcFolderPath": "元のディレクトリパス",
     "select": "選択",
     "selectSrcDes": "ストレージ上のインポート対象ディレクトリのパス",
@@ -1175,7 +1177,16 @@
     "recursivelyImport": "再帰的にサブディレクトリをインポート",
     "recursivelyImportDes": "ディレクトリ内のすべてのサブディレクトリを再帰的にインポートしますか？",
     "createImportTask": "インポートタスクの作成",
-    "unlink": "関連付け解除（物理ファイルは保持）"
+    "unlink": "関連付け解除（物理ファイルは保持）",
+    "searchUser": "ニックネームまたはメールアドレスでユーザーを検索...",
+    "extractMediaMeta": "メディア情報の抽出",
+    "extractMediaMetaDes": "インポート時に各ファイルのメディア情報を抽出するかどうか。",
+    "importWarning": "注意事項",
+    "importWarnings": [
+      "インポート後、物理ファイルはCloudreveに移行されます。外部での変更はお控えください。",
+      "同じファイルを複数回インポートしないでください。",
+      "ユーザーのファイルが衝突した場合、このファイルはスキップされます。"
+    ]
   },
   "entity": {
     "refenenceCount": "参照回数",
@@ -1241,6 +1252,7 @@
     "file": "ファイル"
   },
   "task": {
+    "import": "ファイルのインポート",
     "confirmDelete": "このタスクを削除しますか？",
     "confirmBatchDelete": "{{num}}個のタスクを削除しますか？",
     "deleteXTasks": "{{num}}個のタスクを削除",

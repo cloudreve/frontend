@@ -26,6 +26,7 @@ import { File } from "../../../api/dashboard";
 import { useAppDispatch } from "../../../redux/hooks";
 import { confirmOperation } from "../../../redux/thunks/dialog";
 import { NoWrapTableCell, SecondaryButton, StyledTableContainerPaper } from "../../Common/StyledComponents";
+import ArrowImport from "../../Icons/ArrowImport";
 import ArrowSync from "../../Icons/ArrowSync";
 import Filter from "../../Icons/Filter";
 import PageContainer from "../../Pages/PageContainer";
@@ -36,6 +37,7 @@ import UserDialog from "../User/UserDialog/UserDialog";
 import FileDialog from "./FileDialog/FileDialog";
 import FileFilterPopover from "./FileFilterPopover";
 import FileRow from "./FileRow";
+import { ImportFileDialog } from "./ImportFileDialog";
 
 export const StoragePolicyQuery = "storage_policy";
 export const OwnerQuery = "owner";
@@ -62,6 +64,7 @@ const FileSetting = () => {
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [createNewOpen, setCreateNewOpen] = useState(false);
+  const [importFileDialogOpen, setImportFileDialogOpen] = useState(false);
   const filterPopupState = usePopupState({
     variant: "popover",
     popupId: "userFilterPopover",
@@ -200,9 +203,14 @@ const FileSetting = () => {
         }}
       />
       <UserDialog open={userDialogOpen} onClose={() => setUserDialogOpen(false)} userID={userDialogID} />
+      <ImportFileDialog open={importFileDialogOpen} onClose={() => setImportFileDialogOpen(false)} />
       <Container maxWidth="xl">
         <PageHeader title={t("dashboard:nav.files")} />
         <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+          <Button onClick={() => setImportFileDialogOpen(true)} variant={"contained"} startIcon={<ArrowImport />}>
+            {t("file.import")}
+          </Button>
+
           <FileFilterPopover
             {...bindPopover(filterPopupState)}
             storagePolicy={storagePolicy}
