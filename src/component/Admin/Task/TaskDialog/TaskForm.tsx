@@ -29,9 +29,10 @@ import UserAvatar from "../../../Common/User/UserAvatar";
 import FileBadge from "../../../FileManager/FileBadge";
 import SettingForm from "../../../Pages/Setting/SettingForm";
 import DownloadFileList from "../../../Pages/Tasks/DownloadFileList";
+import TaskProgress from "../../../Pages/Tasks/TaskProgress";
 import { getTaskStatusText } from "../../../Pages/Tasks/TaskProps";
 import UserDialog from "../../User/UserDialog/UserDialog";
-import { processTaskContent } from "../TaskContent";
+import { processTaskContent, userTaskTypes } from "../TaskContent";
 import BlobErrors from "./BlobErrors";
 dayjs.extend(duration);
 
@@ -64,6 +65,10 @@ const TaskForm = ({ values }: { values: Task }) => {
       }
     }
     return res;
+  }, [values]);
+
+  const isUserTask = useMemo(() => {
+    return userTaskTypes.includes(values.type ?? "");
   }, [values]);
 
   return (
@@ -222,6 +227,18 @@ const TaskForm = ({ values }: { values: Task }) => {
           {processedSummary?.props?.download && (
             <SettingForm title={t("application:setting.fileList")} noContainer lgWidth={12}>
               <DownloadFileList taskId={""} summary={processedSummary} readonly={true} />
+            </SettingForm>
+          )}
+
+          {isUserTask && (
+            <SettingForm title={t("application:setting.taskProgress")} noContainer lgWidth={12}>
+              <TaskProgress
+                taskId={values.task_hash_id ?? ""}
+                taskStatus={values.status?.toString() ?? ""}
+                taskType={values.type ?? ""}
+                summary={values.summary}
+                node={values.node ? { type: values.node.type?.toString() ?? "" } : undefined}
+              />
             </SettingForm>
           )}
 

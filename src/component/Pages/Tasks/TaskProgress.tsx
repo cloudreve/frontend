@@ -1,12 +1,18 @@
 import { Box, Stepper, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NodeTypes, TaskResponse, TaskStatus, TaskType } from "../../../api/workflow.ts";
+import { NodeTypes, TaskStatus, TaskSummary, TaskType } from "../../../api/workflow.ts";
 import PieceProgress from "./PieceProgress.tsx";
 import TaskProgressStep from "./TaskProgressStep.tsx";
 
 export interface TaskProgressProps {
-  task: TaskResponse;
+  taskId: string;
+  taskStatus: string;
+  taskType: string;
+  summary?: TaskSummary;
+  node?: {
+    type: string;
+  };
 }
 
 interface StepModel {
@@ -191,56 +197,52 @@ const stepOptions: {
   ],
 };
 
-const TaskProgress = ({ task }: TaskProgressProps) => {
+const TaskProgress = ({ taskId, taskStatus, taskType, summary, node }: TaskProgressProps) => {
   const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
   const steps = useMemo((): StepModel[] => {
-    return stepOptions[task.type]?.[task.node?.type == NodeTypes.slave ? 1 : 0] ?? [];
-  }, [task.id, task.node?.type]);
+    return stepOptions[taskType]?.[node?.type == NodeTypes.slave ? 1 : 0] ?? [];
+  }, [taskId, node?.type]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    if (task.status == TaskStatus.queued) {
+    if (taskStatus == TaskStatus.queued) {
       setActiveStep(0);
       return;
     }
-    if (task.status == TaskStatus.completed) {
+    if (taskStatus == TaskStatus.completed) {
       setActiveStep(steps.length);
       return;
     }
     let active = 1;
     for (let i = 1; i < steps.length; i++) {
-      if (steps[i].state == task.summary?.phase) {
+      if (steps[i].state == summary?.phase) {
         active = i;
       }
     }
 
     setActiveStep(active);
-  }, [steps, task]);
+  }, [steps, taskStatus, summary?.phase]);
 
   return (
     <Box sx={{ p: 2 }}>
       <Stepper activeStep={activeStep} orientation={isMobile ? "vertical" : "horizontal"}>
         {steps.map((step, index) => (
           <TaskProgressStep
-            progressing={activeStep == index && task.status != TaskStatus.error}
-            task={task}
+            progressing={activeStep == index && taskStatus != TaskStatus.error}
+            taskId={taskId}
+            taskStatus={taskStatus}
             description={step.description}
             title={step.title}
             showProgress={step.supportProgress}
-            key={task.id + "_" + step.title}
+            key={taskId + "_" + step.title}
           />
         ))}
       </Stepper>
-      {task.type == TaskType.remote_download &&
-        task.summary?.props.download?.pieces &&
-        task.summary?.phase == "monitor" && (
-          <PieceProgress
-            total={task.summary?.props.download.num_pieces ?? 1}
-            pieces={task.summary.props.download?.pieces}
-          />
-        )}
+      {taskType == TaskType.remote_download && summary?.props.download?.pieces && summary?.phase == "monitor" && (
+        <PieceProgress total={summary?.props.download.num_pieces ?? 1} pieces={summary?.props.download?.pieces} />
+      )}
     </Box>
   );
 };

@@ -510,6 +510,7 @@ export interface Task extends CommonMixin {
   };
 
   user_hash_id?: string;
+  task_hash_id?: string;
   summary?: TaskSummary;
   node?: Node;
 }

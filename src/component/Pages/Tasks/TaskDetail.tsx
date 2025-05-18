@@ -47,7 +47,13 @@ const TaskDetail = ({ task, downloading }: TaskDetailProps) => {
           </Alert>
         )}
         {task.status == TaskStatus.error && <Alert severity={"error"}>{task.error}</Alert>}
-        <TaskProgress task={task} />
+        <TaskProgress
+          taskId={task.id}
+          taskStatus={task.status}
+          taskType={task.type}
+          summary={task.summary}
+          node={task.node}
+        />
         <Divider />
       </Stack>
       <Stack spacing={1}>

@@ -6,7 +6,7 @@ import { TaskSummary, TaskType } from "../../../api/workflow";
 import CrUri, { Filesystem } from "../../../util/uri";
 import TaskSummaryTitle from "../../Pages/Tasks/TaskSummaryTitle";
 
-const userTaskTypes: string[] = [
+export const userTaskTypes: string[] = [
   TaskType.relocate,
   TaskType.create_archive,
   TaskType.extract_archive,

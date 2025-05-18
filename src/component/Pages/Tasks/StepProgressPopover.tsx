@@ -3,13 +3,13 @@ import HoverPopover from "material-ui-popup-state/HoverPopover";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getTasksPhaseProgress } from "../../../api/api.ts";
-import { TaskProgress, TaskProgresses, TaskResponse } from "../../../api/workflow.ts";
+import { TaskProgress, TaskProgresses } from "../../../api/workflow.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import { sizeToString } from "../../../util";
 import StepProgressBar from "./StepProgressBar.tsx";
 
 export interface StepProgressPopoverProps extends PopoverProps {
-  task: TaskResponse;
+  taskId: string;
 }
 
 export const ProgressKeys = {
@@ -167,7 +167,7 @@ const ProgressBar = ({ pkey, p }: { pkey: string; p: TaskProgress }) => {
   }
 };
 
-const StepProgressPopover = ({ task, open, ...rest }: StepProgressPopoverProps) => {
+const StepProgressPopover = ({ taskId, open, ...rest }: StepProgressPopoverProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const stopPropagation = useCallback((e: any) => e.stopPropagation(), []);
@@ -175,9 +175,9 @@ const StepProgressPopover = ({ task, open, ...rest }: StepProgressPopoverProps) 
 
   useEffect(() => {
     if (open) {
-      dispatch(getTasksPhaseProgress(task.id)).then((res) => setProgress(res));
+      dispatch(getTasksPhaseProgress(taskId)).then((res) => setProgress(res));
     }
-  }, [open, task]);
+  }, [open, taskId]);
 
   return (
     <HoverPopover
