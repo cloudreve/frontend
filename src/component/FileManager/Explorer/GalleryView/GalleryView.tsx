@@ -1,19 +1,12 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useTranslation } from "react-i18next";
 import { Box, ImageList } from "@mui/material";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import { mergeRefs } from "../../../../util";
+import DndWrappedFile from "../../Dnd/DndWrappedFile.tsx";
 import { FmIndexContext } from "../../FmIndexContext.tsx";
 import { FmFile, loadingPlaceHolderNumb } from "../GridView/GridView.tsx";
-import DndWrappedFile from "../../Dnd/DndWrappedFile.tsx";
 import GalleryImage from "./GalleryImage.tsx";
-import { mergeRefs } from "../../../../util";
 
 const GalleryView = React.forwardRef(
   (
@@ -31,18 +24,10 @@ const GalleryView = React.forwardRef(
     const [boxHeight, setBoxHeight] = useState(0);
     const [col, setCol] = useState(0);
 
-    const files = useAppSelector(
-      (state) => state.fileManager[fmIndex].list?.files,
-    );
-    const pagination = useAppSelector(
-      (state) => state.fileManager[fmIndex].list?.pagination,
-    );
-    const search_params = useAppSelector(
-      (state) => state.fileManager[fmIndex]?.search_params,
-    );
-    const galleryWidth = useAppSelector(
-      (state) => state.fileManager[fmIndex].galleryWidth,
-    );
+    const files = useAppSelector((state) => state.fileManager[fmIndex].list?.files);
+    const pagination = useAppSelector((state) => state.fileManager[fmIndex].list?.pagination);
+    const search_params = useAppSelector((state) => state.fileManager[fmIndex]?.search_params);
+    const galleryWidth = useAppSelector((state) => state.fileManager[fmIndex].galleryWidth);
 
     const mergedRef = useCallback(
       (val: any) => {
@@ -79,6 +64,7 @@ const GalleryView = React.forwardRef(
 
     const resizeGallery = useCallback(
       (containerWidth: number, boxSize: number) => {
+        console.log(containerWidth / boxSize);
         const boxCount = Math.floor(containerWidth / boxSize);
         const newCols = Math.max(1, boxCount);
         const boxHeight = containerWidth / newCols;
@@ -99,12 +85,11 @@ const GalleryView = React.forwardRef(
     }, [galleryWidth]);
 
     return (
-      <Box ref={mergedRef} component={"div"} {...rest} sx={{}}>
+      <Box ref={mergedRef} component={"div"} {...rest}>
         <ImageList
           gap={2}
           cols={col}
           rowHeight={boxHeight}
-          variant="quilted"
           sx={{
             overflow: "hidden",
             margin: 0,
@@ -113,6 +98,7 @@ const GalleryView = React.forwardRef(
           {list.map((file, index) => (
             <DndWrappedFile
               key={file.id}
+              boxHeight={boxHeight}
               component={GalleryImage}
               search={search_params}
               index={index}

@@ -1,6 +1,14 @@
-import { FileBlockProps } from "../Explorer.tsx";
+import { CheckCircle } from "@mui/icons-material";
+import { Box, Fade, IconButton, ImageListItem, ImageListItemBar, lighten, styled } from "@mui/material";
 import React, { memo, useCallback, useEffect, useState } from "react";
+import { TransitionGroup } from "react-transition-group";
+import { FileType, Metadata } from "../../../../api/explorer.ts";
 import { useAppDispatch } from "../../../../redux/hooks.ts";
+import { fileIconClicked, loadFileThumb } from "../../../../redux/thunks/file.ts";
+import { navigateReconcile } from "../../../../redux/thunks/filemanager.ts";
+import CheckUnchecked from "../../../Icons/CheckUnchecked.tsx";
+import { FileBlockProps } from "../Explorer.tsx";
+import FileIcon from "../FileIcon.tsx";
 import {
   LargeIconContainer,
   ThumbBox,
@@ -8,25 +16,6 @@ import {
   ThumbLoadingPlaceholder,
   useFileBlockState,
 } from "../GridView/GridFile.tsx";
-import { navigateReconcile } from "../../../../redux/thunks/filemanager.ts";
-import {
-  Box,
-  Fade,
-  IconButton,
-  ImageListItem,
-  ImageListItemBar,
-  lighten,
-  styled,
-} from "@mui/material";
-import {
-  fileIconClicked,
-  loadFileThumb,
-} from "../../../../redux/thunks/file.ts";
-import FileIcon from "../FileIcon.tsx";
-import { TransitionGroup } from "react-transition-group";
-import { FileType, Metadata } from "../../../../api/explorer.ts";
-import CheckUnchecked from "../../../Icons/CheckUnchecked.tsx";
-import { CheckCircle } from "@mui/icons-material";
 
 const StyledImageListItem = styled(ImageListItem)<{
   transparent?: boolean;
@@ -38,12 +27,7 @@ const StyledImageListItem = styled(ImageListItem)<{
     pointerEvents: disabled ? "none" : "auto",
     cursor: "pointer",
     boxShadow: isDropOver ? `0 0 0 2px ${theme.palette.primary.light}` : "none",
-    transition: theme.transitions.create([
-      "height",
-      "width",
-      "opacity",
-      "box-shadow",
-    ]),
+    transition: theme.transitions.create(["height", "width", "opacity", "box-shadow"]),
   };
 });
 
@@ -74,9 +58,7 @@ const GalleryImage = memo((props: FileBlockProps) => {
   const [hovered, setHovered] = useState(false);
 
   // undefined: not loaded, null: no thumb
-  const [thumbSrc, setThumbSrc] = useState<string | undefined | null>(
-    noThumb ? null : undefined,
-  );
+  const [thumbSrc, setThumbSrc] = useState<string | undefined | null>(noThumb ? null : undefined);
   const [imageLoading, setImageLoading] = useState(true);
 
   const tryLoadThumbSrc = useCallback(async () => {
@@ -105,10 +87,7 @@ const GalleryImage = memo((props: FileBlockProps) => {
       return;
     }
 
-    if (
-      (file.metadata && file.metadata[Metadata.thumbDisabled] !== undefined) ||
-      showLock
-    ) {
+    if ((file.metadata && file.metadata[Metadata.thumbDisabled] !== undefined) || showLock) {
       // No thumb available
       setThumbSrc(null);
       return;
@@ -127,7 +106,7 @@ const GalleryImage = memo((props: FileBlockProps) => {
 
   return (
     <StyledImageListItem
-      onClick={onDoubleClicked}
+      onClick={file.type == FileType.folder ? onClick : onDoubleClicked}
       transparent={isDragging || fileDisabled}
       isDropOver={isDropOver && !isDragging}
       disabled={disabled}
@@ -143,10 +122,7 @@ const GalleryImage = memo((props: FileBlockProps) => {
               <ThumbBoxContainer
                 sx={{
                   p: isSelected ? "10%" : 0,
-                  backgroundColor: (theme) =>
-                    isSelected
-                      ? lighten(theme.palette.primary.light, 0.85)
-                      : "initial",
+                  backgroundColor: (theme) => (isSelected ? lighten(theme.palette.primary.light, 0.85) : "initial"),
                   transition: (theme) =>
                     theme.transitions.create(["padding"], {
                       duration: theme.transitions.duration.shortest,
@@ -182,12 +158,12 @@ const GalleryImage = memo((props: FileBlockProps) => {
           <Fade key={"icon"}>
             <LargeIconContainer>
               <FileIcon
-                variant={"large"}
+                variant={"largeMobile"}
                 iconProps={{
                   sx: {
-                    fontSize: "64px",
-                    height: "96px",
-                    width: "96px",
+                    fontSize: "48px",
+                    height: "64px",
+                    width: "64px",
                   },
                 }}
                 file={file}
@@ -200,17 +176,11 @@ const GalleryImage = memo((props: FileBlockProps) => {
       <Fade in={!isLoadingIndicator && (hovered || !!isSelected)}>
         <ImageListItemBar
           sx={{
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-              "rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)",
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " + "rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)",
           }}
           position="top"
           actionIcon={
-            <IconButton
-              onClick={onIconClick}
-              size={"small"}
-              sx={{ color: "white", mb: 1 }}
-            >
+            <IconButton onClick={onIconClick} size={"small"} sx={{ color: "white", mb: 1 }}>
               <TransitionGroup
                 style={{
                   width: 20,
