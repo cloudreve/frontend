@@ -385,6 +385,7 @@
     "targetExisted": "目標已存在",
     "users": "使用者",
     "groups": "使用者組",
+    "noResults": "沒有結果",
     "resetToDefault": "重置為預設",
     "duplicateTag": "標籤 \"{{tag}}\" 已存在",
     "colorForTag": "自定義新標籤顏色",

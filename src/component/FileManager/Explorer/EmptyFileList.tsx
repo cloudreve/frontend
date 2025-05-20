@@ -27,7 +27,6 @@ import BorderInside from "../../Icons/BorderInside.tsx";
 import FolderLink from "../../Icons/FolderLink.tsx";
 import MoreHorizontal from "../../Icons/MoreHorizontal.tsx";
 import PinOutlined from "../../Icons/PinOutlined.tsx";
-import StorageOutlined from "../../Icons/StorageOutlined.tsx";
 import { DenseDivider, SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
 import { FmIndexContext } from "../FmIndexContext.tsx";
 import { ActionButton, ActionButtonGroup } from "../TopBar/TopActions.tsx";
@@ -102,11 +101,6 @@ export const SharedWithMeEmpty = () => {
               <Tooltip enterDelay={200} title={t("application:fileManager.refresh")}>
                 <ActionButton>
                   <ArrowSync fontSize={"small"} />
-                </ActionButton>
-              </Tooltip>
-              <Tooltip enterDelay={200} title={t("application:vas.switchFolderPolicy")}>
-                <ActionButton>
-                  <StorageOutlined fontSize={"small"} />
                 </ActionButton>
               </Tooltip>
               <ActionButton

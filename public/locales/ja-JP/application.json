@@ -385,6 +385,7 @@
     "targetExisted": "ターゲットは既に存在します",
     "users": "ユーザー",
     "groups": "ユーザーグループ",
+    "noResults": "結果がありません",
     "resetToDefault": "デフォルトに戻す",
     "duplicateTag": "タグ \"{{tag}}\" は既に存在します",
     "colorForTag": "新しいタグの色をカスタマイズ",

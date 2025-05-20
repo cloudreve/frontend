@@ -1,5 +1,5 @@
 import { ListItemIcon, ListItemText, MenuProps, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
+import { usePopupState } from "material-ui-popup-state/hooks";
 import { useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { clearSelected } from "../../../redux/fileManagerSlice.ts";
@@ -15,9 +15,7 @@ import BorderAll from "../../Icons/BorderAll.tsx";
 import BorderInside from "../../Icons/BorderInside.tsx";
 import FolderLink from "../../Icons/FolderLink.tsx";
 import PinOutlined from "../../Icons/PinOutlined.tsx";
-import StorageOutlined from "../../Icons/StorageOutlined.tsx";
 import { DenseDivider, SquareMenu, SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
-import { FileManagerIndex } from "../FileManager.tsx";
 import { FmIndexContext } from "../FmIndexContext.tsx";
 
 const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
@@ -88,14 +86,6 @@ const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
             </ListItemIcon>
             <ListItemText>{t("application:fileManager.refresh")}</ListItemText>
           </SquareMenuItem>
-          {fmIndex == FileManagerIndex.main && (
-            <SquareMenuItem {...bindTrigger(mountPopupState)}>
-              <ListItemIcon>
-                <StorageOutlined fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>{t("application:vas.switchFolderPolicy")}</ListItemText>
-            </SquareMenuItem>
-          )}
         </>
       )}
       {isLogin && (
