@@ -266,7 +266,7 @@ export const PlayerPopup = ({
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <CoverImage>
             {!thumbSrc && <MusicNote1 fontSize={"large"} />}
-            {thumbSrc && <img src={thumbSrc} alt="cover" />}
+            {thumbSrc && <img src={thumbSrc} onError={() => setThumbSrc(null)} alt="cover" />}
           </CoverImage>
           <Box sx={{ ml: 1.5, minWidth: 0, maxWidth: "210px", width: "100%" }}>
             {file && file.metadata && file.metadata[Metadata.music_artist] && (
