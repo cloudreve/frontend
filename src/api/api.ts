@@ -231,7 +231,7 @@ export function sendRefreshToken(req: RefreshTokenRequest): ThunkResponse<Token>
   };
 }
 
-export function getFileList(req: ListFileService): ThunkResponse<ListResponse> {
+export function getFileList(req: ListFileService, skipSnackbar = true): ThunkResponse<ListResponse> {
   return async (dispatch, _getState) => {
     return await dispatch(
       send(
@@ -282,7 +282,7 @@ export function getUserInfo(uid: string): ThunkResponse<User> {
         },
         {
           ...defaultOpts,
-          bypassSnackbar: (_e) => true,
+          bypassSnackbar: (_e) => skipSnackbar,
         },
       ),
     );

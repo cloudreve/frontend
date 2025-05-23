@@ -1163,10 +1163,13 @@ export function refreshSingleFileSymbolicLinks(file: FileResponse): AppThunk<Pro
     }
     const currentUrl = new CrUri(getFileLinkedUri(file));
     const latestList = await dispatch(
-      getFileList({
-        uri: currentUrl.setPath("").toString(),
-        page_size: 50,
-      }),
+      getFileList(
+        {
+          uri: currentUrl.setPath("").toString(),
+          page_size: 50,
+        },
+        false,
+      ),
     );
     if (latestList.files.length != 1) {
       return file;
