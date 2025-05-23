@@ -1,56 +1,45 @@
 import { Button, Skeleton, styled, SvgIconProps, Tooltip } from "@mui/material";
+import { bindHover, bindPopover } from "material-ui-popup-state";
+import { usePopupState } from "material-ui-popup-state/hooks";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import CrUri, {
-  Filesystem,
-  UriQuery,
-  UriSearchCategory,
-} from "../../../util/uri.ts";
 import { useTranslation } from "react-i18next";
-import Home from "../../Icons/Home.tsx";
+import { Share } from "../../../api/explorer.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
+import { navigateToPath, openContextUrlFromUri } from "../../../redux/thunks/filemanager.ts";
+import { queueLoadShareInfo } from "../../../redux/thunks/share.ts";
+import PageTitle from "../../../router/PageTitle.tsx";
+import SessionManager from "../../../session";
+import CrUri, { Filesystem, UriQuery, UriSearchCategory } from "../../../util/uri.ts";
+import { NoWrapBox } from "../../Common/StyledComponents.tsx";
+import UserAvatar from "../../Common/User/UserAvatar.tsx";
 import CaretDown from "../../Icons/CaretDown.tsx";
-import HomeOutlined from "../../Icons/HomeOutlined.tsx";
 import Delete from "../../Icons/Delete.tsx";
 import DeleteOutlined from "../../Icons/DeleteOutlined.tsx";
-import PeopleTeam from "../../Icons/PeopleTeam.tsx";
-import PeopleTeamOutlined from "../../Icons/PeopleTeamOutlined.tsx";
-import UserAvatar from "../../Common/User/UserAvatar.tsx";
+import DocumentText from "../../Icons/DocumentText.tsx";
+import DocumentTextOutlined from "../../Icons/DocumentTextOutlined.tsx";
+import Home from "../../Icons/Home.tsx";
+import HomeOutlined from "../../Icons/HomeOutlined.tsx";
 import Image from "../../Icons/Image.tsx";
 import ImageOutlined from "../../Icons/ImageOutlined.tsx";
-import Video from "../../Icons/Video.tsx";
-import VideoOutlined from "../../Icons/VideoOutlined.tsx";
+import LinkDismiss from "../../Icons/LinkDismiss.tsx";
 import MusicNote1 from "../../Icons/MusicNote1.tsx";
 import MusicNote1Outlined from "../../Icons/MusicNote1Outlined.tsx";
-import DocumentTextOutlined from "../../Icons/DocumentTextOutlined.tsx";
-import DocumentText from "../../Icons/DocumentText.tsx";
+import PeopleTeam from "../../Icons/PeopleTeam.tsx";
+import PeopleTeamOutlined from "../../Icons/PeopleTeamOutlined.tsx";
+import Video from "../../Icons/Video.tsx";
+import VideoOutlined from "../../Icons/VideoOutlined.tsx";
 import { useFileDrag } from "../Dnd/DndWrappedFile.tsx";
-import {
-  navigateToPath,
-  openContextUrlFromUri,
-} from "../../../redux/thunks/filemanager.ts";
-import { FmIndexContext } from "../FmIndexContext.tsx";
-import { queueLoadShareInfo } from "../../../redux/thunks/share.ts";
-import LinkDismiss from "../../Icons/LinkDismiss.tsx";
-import { usePopupState } from "material-ui-popup-state/hooks";
-import { bindHover, bindPopover } from "material-ui-popup-state";
-import ShareInfoPopover from "./ShareInfoPopover.tsx";
-import SessionManager from "../../../session";
-import { NoWrapBox } from "../../Common/StyledComponents.tsx";
-import { Share } from "../../../api/explorer.ts";
 import { FileManagerIndex } from "../FileManager.tsx";
-import PageTitle from "../../../router/PageTitle.tsx";
+import { FmIndexContext } from "../FmIndexContext.tsx";
+import ShareInfoPopover from "./ShareInfoPopover.tsx";
 
-export const BreadcrumbButtonBase = styled(Button)<{ isDropOver?: boolean }>(
-  ({ theme, isDropOver }) => ({
-    color: theme.palette.text.secondary,
-    transition: "all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
-    transitionProperty: "background-color,opacity,box-shadow",
-    boxShadow: isDropOver
-      ? `inset 0 0 0 2px ${theme.palette.primary.light}`
-      : "none",
-    minHeight: theme.spacing(4),
-  }),
-);
+export const BreadcrumbButtonBase = styled(Button)<{ isDropOver?: boolean }>(({ theme, isDropOver }) => ({
+  color: theme.palette.text.secondary,
+  transition: "all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
+  transitionProperty: "background-color,opacity,box-shadow",
+  boxShadow: isDropOver ? `inset 0 0 0 2px ${theme.palette.primary.light}` : "none",
+  minHeight: theme.spacing(4),
+}));
 
 export interface BreadcrumbButtonProps {
   path: string;
@@ -79,9 +68,7 @@ export const useBreadcrumbButtons = ({
   const dispatch = useAppDispatch();
   const fmIndex = useContext(FmIndexContext);
   const [loading, setLoading] = useState(false);
-  const [shareInfo, setShareInfo] = useState<Share | undefined | null>(
-    undefined,
-  );
+  const [shareInfo, setShareInfo] = useState<Share | undefined | null>(undefined);
 
   const uri = useMemo(() => {
     return new CrUri(path);
@@ -194,12 +181,7 @@ export const useBreadcrumbButtons = ({
             if (!current || current.user.id != uri.id()) {
               return {
                 Element: (props: { [key: string]: any }) => (
-                  <UserAvatar
-                    sx={{ width: 20, height: 20 }}
-                    overwriteTextSize
-                    uid={uid}
-                    {...props}
-                  />
+                  <UserAvatar sx={{ width: 20, height: 20 }} overwriteTextSize key={uid} uid={uid} {...props} />
                 ),
               };
             }
@@ -216,6 +198,7 @@ export const useBreadcrumbButtons = ({
                 <UserAvatar
                   sx={{ width: 20, height: 20 }}
                   overwriteTextSize
+                  key={shareInfo.owner.id}
                   user={shareInfo.owner}
                   {...props}
                 />
@@ -234,27 +217,19 @@ export const useBreadcrumbButtons = ({
   return [loading, displayName, startIcon, onClick, shareInfo] as const;
 };
 
-const BreadcrumbButton = ({
-  name,
-  is_root,
-  is_latest,
-  path,
-  displayOnly,
-  ...rest
-}: BreadcrumbButtonProps) => {
+const BreadcrumbButton = ({ name, is_root, is_latest, path, displayOnly, ...rest }: BreadcrumbButtonProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const fmIndex = useContext(FmIndexContext);
 
-  const [loading, displayName, startIcon, onClick, shareInfo] =
-    useBreadcrumbButtons({
-      name,
-      is_latest,
-      path,
-      displayOnly,
-      is_root,
-      count_share_views: true,
-    });
+  const [loading, displayName, startIcon, onClick, shareInfo] = useBreadcrumbButtons({
+    name,
+    is_latest,
+    path,
+    displayOnly,
+    is_root,
+    count_share_views: true,
+  });
   const maxWidth = is_latest ? "300px" : is_root ? "initial" : "100px";
   const StartIcon = useMemo(() => {
     if (loading) {
@@ -281,34 +256,22 @@ const BreadcrumbButton = ({
 
   return (
     <>
-      {is_latest && !displayOnly && fmIndex == FileManagerIndex.main && (
-        <PageTitle title={displayName} />
-      )}
+      {is_latest && !displayOnly && fmIndex == FileManagerIndex.main && <PageTitle title={displayName} />}
       <BreadcrumbButtonBase
         onClick={onClick}
         size={"small"}
         isDropOver={isOver}
         sx={{
           transition: (theme) =>
-            theme.transitions.create(
-              ["max-width", "color", "background-color"],
-              {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.standard,
-              },
-            ),
-          color: (theme) =>
-            is_latest && !displayOnly
-              ? theme.palette.text.primary
-              : theme.palette.text.secondary,
+            theme.transitions.create(["max-width", "color", "background-color"], {
+              easing: theme.transitions.easing.easeInOut,
+              duration: theme.transitions.duration.standard,
+            }),
+          color: (theme) => (is_latest && !displayOnly ? theme.palette.text.primary : theme.palette.text.secondary),
           maxWidth: maxWidth,
         }}
         startIcon={StartIcon}
-        endIcon={
-          is_latest && !is_root && !displayOnly ? (
-            <CaretDown sx={{ fontSize: "12px!important" }} />
-          ) : undefined
-        }
+        endIcon={is_latest && !is_root && !displayOnly ? <CaretDown sx={{ fontSize: "12px!important" }} /> : undefined}
         ref={drop}
         {...(shareInfo ? bindHover(popupState) : {})}
         {...rest}
@@ -321,11 +284,7 @@ const BreadcrumbButton = ({
         )}
       </BreadcrumbButtonBase>
       {shareInfo && displayName && (
-        <ShareInfoPopover
-          displayName={displayName}
-          shareInfo={shareInfo}
-          {...bindPopover(popupState)}
-        />
+        <ShareInfoPopover displayName={displayName} shareInfo={shareInfo} {...bindPopover(popupState)} />
       )}
     </>
   );
