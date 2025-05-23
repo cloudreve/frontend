@@ -67,7 +67,7 @@ const SharesInput = (props: SharesInputProps) => {
   useEffect(() => {
     let active = true;
 
-    if (inputValue === "" || inputValue.length < 2) {
+    if (inputValue === "") {
       setOptions([]);
       return undefined;
     }
