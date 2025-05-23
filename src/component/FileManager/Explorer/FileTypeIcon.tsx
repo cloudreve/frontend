@@ -150,6 +150,7 @@ const FileTypeIcon = ({ name, fileType, notLoaded, sx, hideUnknown, customizedCo
         sx={{
           width: "24px",
           height: "24px",
+          objectFit: "contain",
           ...sx,
         }}
         src={IconComponent.img}
