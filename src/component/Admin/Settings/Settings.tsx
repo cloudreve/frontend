@@ -196,7 +196,6 @@ const Settings = () => {
                     "avatar_size",
                     "avatar_size_l",
                     "gravatar_server",
-                    "default_symbolics",
                   ]}
                 >
                   <UserSession />

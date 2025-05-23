@@ -108,12 +108,9 @@ const UserSession = () => {
                 <NoMarginHelperText>{t("settings.defaultGroupDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
-            <SettingForm title={t("settings.defaultSymbolics")} lgWidth={5}>
+            <SettingForm title={t("settings.defaultSymbolics")} lgWidth={5} pro>
               <FormControl>
-                <SharesInput
-                  value={defaultSymbolics}
-                  onChange={(shares) => setSettings({ default_symbolics: JSON.stringify(shares) })}
-                />
+                <SharesInput/>
                 <NoMarginHelperText>
                   <Trans
                     i18nKey="settings.defaultSymbolicsDes"
