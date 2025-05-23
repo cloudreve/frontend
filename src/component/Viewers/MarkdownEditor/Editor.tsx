@@ -5,6 +5,7 @@ import {
   ChangeAdmonitionType,
   ChangeCodeMirrorLanguage,
   codeBlockPlugin,
+  CodeMirrorEditor,
   codeMirrorPlugin,
   CodeToggle,
   ConditionalContents,
@@ -184,7 +185,10 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
             tablePlugin(),
             thematicBreakPlugin(),
             frontmatterPlugin(),
-            codeBlockPlugin({ defaultCodeBlockLanguage: "" }),
+            codeBlockPlugin({
+              defaultCodeBlockLanguage: "",
+              codeBlockEditorDescriptors: [{ priority: -10, match: (_) => true, Editor: CodeMirrorEditor }],
+            }),
             codeMirrorPlugin({
               codeBlockLanguages: {
                 js: "JavaScript",
