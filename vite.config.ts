@@ -18,12 +18,7 @@ export default defineConfig({
       manifest: false,
       workbox: {
         maximumFileSizeToCacheInBytes: 10000000,
-        navigateFallbackDenylist: [
-          /^\/pdfviewer.html/,
-          /^\/api\/(.+)/,
-          /^\/f\/(.+)/,
-          /^\/s\/(.+)/,
-        ],
+        navigateFallbackDenylist: [/^\/pdfviewer.html/, /^\/api\/(.+)/, /^\/f\/(.+)/, /^\/s\/(.+)/],
       },
       devOptions: {
         enabled: true,
@@ -38,13 +33,13 @@ export default defineConfig({
       ],
     }),
     {
-        name: "load-stylesheet-async",
-        transformIndexHtml(html) {
-          return html.replace(
-            /<link rel="stylesheet" crossorigin href="(.+?)">/g,
-            `<link rel="stylesheet" crossorigin href="$1" media="print" onload="this.media='all'">`
-          );
-        },
+      name: "load-stylesheet-async",
+      transformIndexHtml(html) {
+        return html.replace(
+          /<link rel="stylesheet" crossorigin href="(.+?)">/g,
+          `<link rel="stylesheet" crossorigin href="$1" media="print" onload="this.media='all'">`,
+        );
+      },
     },
     {
       name: "generate-version",
@@ -66,6 +61,18 @@ export default defineConfig({
   },
   build: {
     outDir: "build", // keep same as v3 with minimal changes
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes("monaco-editor")) {
+            return `monaco`;
+          }
+          if (id.includes("@codemirror")) {
+            return "codemirror";
+          }
+        },
+      },
+    },
   },
   server: {
     host: "0.0.0.0",
