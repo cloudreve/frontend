@@ -49,6 +49,7 @@
     "continue": "下一步",
     "back": "上一步",
     "logout": "退出登入",
+    "signingOut": "正在退出登入...",
     "loggedOut": "您已退出登入",
     "clickToRefresh": "點選重新整理驗證碼"
   },

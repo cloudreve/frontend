@@ -49,6 +49,7 @@
     "continue": "次へ",
     "back": "前へ",
     "logout": "ログアウト",
+    "signingOut": "ログアウト中...",
     "loggedOut": "ログアウトしました",
     "clickToRefresh": "CAPTCHAを再読み込み"
   },

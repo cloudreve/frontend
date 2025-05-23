@@ -49,6 +49,7 @@
     "continue": "下一步",
     "back": "上一步",
     "logout": "退出登录",
+    "signingOut": "正在退出登录...",
     "loggedOut": "您已退出登录",
     "clickToRefresh": "点击刷新验证码"
   },

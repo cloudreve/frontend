@@ -48,6 +48,7 @@
     "continue": "Next",
     "back": "Back",
     "logout": "Sign out",
+    "signingOut": "Signing out...",
     "loggedOut": "You are signed out now.",
     "clickToRefresh": "Click to refresh"
   },

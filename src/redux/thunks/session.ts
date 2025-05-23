@@ -1,11 +1,12 @@
 import i18next from "i18next";
-import { getUserInfo } from "../../api/api.ts";
+import { getUserInfo, sendSignout } from "../../api/api.ts";
 import { LoginResponse, User } from "../../api/user.ts";
 import { router } from "../../router";
 import SessionManager, { UserSettings } from "../../session";
 import { refreshTimeZone } from "../../util/datetime.ts";
 import { clearSessionCache } from "../fileManagerSlice.ts";
 import {
+  closeMusicPlayer,
   setDarkMode,
   setDrawerWidth,
   setPolicyOptionCache,
@@ -13,6 +14,7 @@ import {
   setUserInfoCache,
 } from "../globalStateSlice.ts";
 import { AppThunk } from "../store.ts";
+import { longRunningTaskWithSnackbar } from "./file.ts";
 import { updateSiteConfig } from "./site.ts";
 
 export function refreshUserSession(session: LoginResponse, redirect: string | null): AppThunk {
@@ -54,5 +56,23 @@ export function loadUserInfo(uid: string): AppThunk<Promise<User>> {
     const user = await dispatch(getUserInfo(uid));
     dispatch(setUserInfoCache([uid, user]));
     return user;
+  };
+}
+
+export function signout(): AppThunk<void> {
+  return async (dispatch, _getState) => {
+    const current = SessionManager.currentLoginOrNull();
+    if (!current) {
+      return;
+    }
+
+    await longRunningTaskWithSnackbar(
+      dispatch(sendSignout({ refresh_token: current.token.refresh_token })),
+      "application:login.signingOut",
+    );
+
+    router.navigate("/session");
+    dispatch(closeMusicPlayer());
+    SessionManager.signOutCurrent();
   };
 }

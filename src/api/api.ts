@@ -231,6 +231,24 @@ export function sendRefreshToken(req: RefreshTokenRequest): ThunkResponse<Token>
   };
 }
 
+export function sendSignout(req: RefreshTokenRequest): ThunkResponse<string> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        "/session/token",
+        {
+          data: req,
+          method: "DELETE",
+        },
+        {
+          ...defaultOpts,
+          noCredential: true,
+        },
+      ),
+    );
+  };
+}
+
 export function getFileList(req: ListFileService, skipSnackbar = true): ThunkResponse<ListResponse> {
   return async (dispatch, _getState) => {
     return await dispatch(

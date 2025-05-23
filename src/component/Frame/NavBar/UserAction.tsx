@@ -18,8 +18,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { GroupPermission } from "../../../api/user.ts";
-import { closeMusicPlayer } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
+import { signout } from "../../../redux/thunks/session.ts";
 import SessionManager, { Session } from "../../../session";
 import { GroupBS } from "../../../session/utils.ts";
 import UserAvatar from "../../Common/User/UserAvatar.tsx";
@@ -55,9 +55,7 @@ const UserPopover = ({ open, onClose, ...rest }: PopoverProps) => {
   };
 
   const signOut = useCallback(() => {
-    SessionManager.signOutCurrent();
-    dispatch(closeMusicPlayer());
-    navigate("/session");
+    dispatch(signout());
     onClose && onClose({}, "backdropClick");
   }, []);
 
