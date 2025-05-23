@@ -118,6 +118,7 @@ const UserAvatar = memo(
               slotProps={{
                 img: {
                   loading: "lazy",
+                  alt: "",
                 },
               }}
               {...rest}
