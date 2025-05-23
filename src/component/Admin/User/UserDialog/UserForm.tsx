@@ -14,7 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { sendCalibrateUserStorage } from "../../../../api/api";
 import { UserStatus } from "../../../../api/dashboard";
@@ -24,9 +24,10 @@ import { DenseFilledTextField, DenseSelect, SecondaryButton } from "../../../Com
 import UserAvatar from "../../../Common/User/UserAvatar";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu";
 import Delete from "../../../Icons/Delete";
-import SettingForm from "../../../Pages/Setting/SettingForm";
+import SettingForm, { ProChip } from "../../../Pages/Setting/SettingForm";
 import { CapacityBar } from "../../../Pages/Setting/StorageSetting";
 import GroupSelectionInput from "../../Common/GroupSelectionInput";
+import ProDialog from "../../Common/ProDialog";
 import { NoMarginHelperText } from "../../Settings/Settings";
 import { UserDialogContext } from "./UserDialog";
 
@@ -37,6 +38,7 @@ const UserForm = ({ reload, setLoading }: { reload: () => void; setLoading: (loa
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation("dashboard");
   const { formRef, values, setUser } = useContext(UserDialogContext);
+  const [proOpen, setProOpen] = useState(false);
 
   const removeAvatar = useCallback(() => {
     setUser((prev) => ({ ...prev, avatar: undefined }));
@@ -55,10 +57,6 @@ const UserForm = ({ reload, setLoading }: { reload: () => void; setLoading: (loa
     },
     [setUser],
   );
-
-  const openUserFiles = useCallback(() => {
-    window.open(`/home?path=${encodeURIComponent(`cloudreve://${values.hash_id}@my`)}`, "_blank");
-  }, [values.id]);
 
   const onStatusChange = useCallback(
     (e: SelectChangeEvent<unknown>) => {
@@ -111,6 +109,7 @@ const UserForm = ({ reload, setLoading }: { reload: () => void; setLoading: (loa
 
   return (
     <Box component={"form"} ref={formRef} onSubmit={(e) => e.preventDefault()}>
+      <ProDialog open={proOpen} onClose={() => setProOpen(false)} />
       <Stack spacing={isMobile ? 2 : 3} direction={isMobile ? "column" : "row"}>
         <Stack spacing={isMobile ? 2 : 3} direction={"column"} sx={{ minWidth: 200 }}>
           <SettingForm title={t("user.avatar")} noContainer lgWidth={12}>
@@ -149,8 +148,13 @@ const UserForm = ({ reload, setLoading }: { reload: () => void; setLoading: (loa
             </Typography>
           </SettingForm>
           <Box>
-            <SecondaryButton sx={{ mt: 1 }} onClick={openUserFiles} variant="contained" startIcon={<OpenInNew />}>
-              {t("user.openUserFiles")}
+            <SecondaryButton
+              sx={{ mt: 1 }}
+              onClick={() => setProOpen(true)}
+              variant="contained"
+              startIcon={<OpenInNew />}
+            >
+              {t("user.openUserFiles")} <ProChip label="Pro" color="primary" size="small" />
             </SecondaryButton>
           </Box>
         </Stack>
