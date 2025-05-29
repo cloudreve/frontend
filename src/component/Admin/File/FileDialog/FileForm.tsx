@@ -1,11 +1,15 @@
-import { Box, Grid2 as Grid, Link, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { Box, Grid2 as Grid, Link, Skeleton, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
+import { getFileInfo } from "../../../../api/api";
+import { FileType } from "../../../../api/explorer";
 import { useAppDispatch } from "../../../../redux/hooks";
 import { sizeToString } from "../../../../util";
+import CrUri from "../../../../util/uri";
 import { DenseFilledTextField, NoWrapTypography } from "../../../Common/StyledComponents";
 import UserAvatar from "../../../Common/User/UserAvatar";
+import FileBadge from "../../../FileManager/FileBadge";
 import SettingForm from "../../../Pages/Setting/SettingForm";
 import SinglePolicySelectionInput from "../../Common/SinglePolicySelectionInput";
 import UserDialog from "../../User/UserDialog/UserDialog";
@@ -13,6 +17,11 @@ import { FileDialogContext } from "./FileDialog";
 import FileDirectLinks from "./FileDirectLinks";
 import FileEntity from "./FileEntity";
 import FileMetadata from "./FileMetadata";
+
+const StyledFileBadge = styled(FileBadge)(({ theme }) => ({
+  minHeight: "40px",
+  border: `1px solid ${theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.23)" : "rgba(255, 255, 255, 0.23)"}`,
+}));
 
 const FileForm = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +31,23 @@ const FileForm = () => {
   const { formRef, values, setFile } = useContext(FileDialogContext);
   const [userDialogOpen, setUserDialogOpen] = useState(false);
   const [userDialogID, setUserDialogID] = useState<number>(0);
+  const [fileParentLoading, setFileParentLoading] = useState(true);
+  const [fileParent, setFileParent] = useState<string | null>(null);
+
+  useEffect(() => {
+    setFileParentLoading(true);
+    dispatch(getFileInfo({ id: values.file_hash_id }, true))
+      .then((res) => {
+        const crUri = new CrUri(res.path);
+        setFileParent(crUri.parent().toString());
+      })
+      .catch(() => {
+        setFileParent(null);
+      })
+      .finally(() => {
+        setFileParentLoading(false);
+      });
+  }, [values.id]);
 
   const onNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +130,21 @@ const FileForm = () => {
           <SettingForm title={t("file.name")} noContainer lgWidth={6}>
             <DenseFilledTextField fullWidth value={values.name} required onChange={onNameChange} />
           </SettingForm>
-          <SettingForm title={t("file.primaryStoragePolicy")} noContainer lgWidth={6} pro>
+          <SettingForm title={t("application:fileManager.parentFolder")} noContainer lgWidth={3}>
+            {!fileParentLoading && (
+              <>
+                {fileParent && (
+                  <StyledFileBadge
+                    variant={"outlined"}
+                    simplifiedFile={{ path: fileParent, type: FileType.folder }}
+                  />
+                )}
+                {!fileParent && "-"}
+              </>
+            )}
+            {fileParentLoading && <Skeleton variant="text" width={100} height={40} />}
+          </SettingForm>
+          <SettingForm title={t("file.primaryStoragePolicy")} noContainer lgWidth={3} pro>
             <SinglePolicySelectionInput simplified value={values.storage_policy_files ?? 0} onChange={() => {}} />
           </SettingForm>
           <SettingForm title={t("file.metadata")} noContainer lgWidth={6}>

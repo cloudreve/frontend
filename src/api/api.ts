@@ -617,7 +617,7 @@ export function getFileEntityUrl(req: FileURLService): ThunkResponse<FileURLResp
   };
 }
 
-export function getFileInfo(req: GetFileInfoService): ThunkResponse<FileResponse> {
+export function getFileInfo(req: GetFileInfoService, skipError = false): ThunkResponse<FileResponse> {
   return async (dispatch, _getState) => {
     return await dispatch(
       send(
@@ -628,6 +628,7 @@ export function getFileInfo(req: GetFileInfoService): ThunkResponse<FileResponse
         },
         {
           ...defaultOpts,
+          bypassSnackbar: () => skipError,
         },
       ),
     );

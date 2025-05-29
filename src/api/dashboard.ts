@@ -382,6 +382,7 @@ export interface File extends CommonMixin {
   };
 
   user_hash_id?: string;
+  file_hash_id?: string;
   direct_link_map?: Record<number, string>;
 }
 

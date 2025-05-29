@@ -294,7 +294,8 @@ export interface EntityURLResponse {
 }
 
 export interface GetFileInfoService {
-  uri: string;
+  uri?: string;
+  id?: string;
   extended?: boolean;
   folder_summary?: boolean;
 }
