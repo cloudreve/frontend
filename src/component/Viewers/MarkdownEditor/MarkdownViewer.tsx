@@ -1,24 +1,15 @@
+import { LoadingButton } from "@mui/lab";
+import { Box, Button, ButtonGroup, ListItemText, Menu, useTheme } from "@mui/material";
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
-import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { closeMarkdownViewer } from "../../../redux/globalStateSlice.ts";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  ListItemText,
-  Menu,
-  useTheme,
-} from "@mui/material";
-import useActionDisplayOpt, {
-  canUpdate,
-} from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
-import CaretDown from "../../Icons/CaretDown.tsx";
-import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { getEntityContent } from "../../../redux/thunks/file.ts";
 import { saveMarkdown } from "../../../redux/thunks/viewer.ts";
-import { LoadingButton } from "@mui/lab";
+import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
+import useActionDisplayOpt, { canUpdate } from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
+import CaretDown from "../../Icons/CaretDown.tsx";
+import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
 
 const MarkdownEditor = lazy(() => import("./Editor.tsx"));
 
@@ -26,13 +17,9 @@ const MarkdownViewer = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const viewerState = useAppSelector(
-    (state) => state.globalState.markdownViewer,
-  );
+  const viewerState = useAppSelector((state) => state.globalState.markdownViewer);
 
-  const displayOpt = useActionDisplayOpt(
-    viewerState?.file ? [viewerState?.file] : [],
-  );
+  const displayOpt = useActionDisplayOpt(viewerState?.file ? [viewerState?.file] : []);
   const supportUpdate = canUpdate(displayOpt);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
@@ -40,9 +27,8 @@ const MarkdownViewer = () => {
   const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [optionAnchorEl, setOptionAnchorEl] = useState<null | HTMLElement>(
-    null,
-  );
+  const [optionAnchorEl, setOptionAnchorEl] = useState<null | HTMLElement>(null);
+  const saveFunction = useRef(() => {});
 
   const loadContent = useCallback(() => {
     if (!viewerState || !viewerState.open) {
@@ -90,14 +76,7 @@ const MarkdownViewer = () => {
       }
 
       setLoading(true);
-      dispatch(
-        saveMarkdown(
-          changedValue,
-          viewerState.file,
-          viewerState.version,
-          saveAs,
-        ),
-      )
+      dispatch(saveMarkdown(changedValue, viewerState.file, viewerState.version, saveAs))
         .then(() => {
           setSaved(true);
         })
@@ -113,6 +92,20 @@ const MarkdownViewer = () => {
     setSaved(false);
   }, []);
 
+  const onSaveShortcut = useCallback(() => {
+    if (!saved && supportUpdate) {
+      onSave(false);
+    }
+  }, [saved, supportUpdate, onSave]);
+
+  useEffect(() => {
+    saveFunction.current = () => {
+      if (!saved && supportUpdate) {
+        onSave(false);
+      }
+    };
+  }, [saved, supportUpdate, onSave]);
+
   return (
     <ViewerDialog
       file={viewerState?.file}
@@ -121,16 +114,8 @@ const MarkdownViewer = () => {
       actions={
         <Box sx={{ display: "flex", gap: 1 }}>
           {supportUpdate && (
-            <ButtonGroup
-              disabled={loading || !loaded || saved}
-              disableElevation
-              variant="contained"
-            >
-              <LoadingButton
-                loading={loading}
-                variant={"contained"}
-                onClick={() => onSave(false)}
-              >
+            <ButtonGroup disabled={loading || !loaded || saved} disableElevation variant="contained">
+              <LoadingButton loading={loading} variant={"contained"} onClick={() => onSave(false)}>
                 <span>{t("fileManager.save")}</span>
               </LoadingButton>
               <Button size="small" onClick={openMore}>
@@ -173,6 +158,7 @@ const MarkdownViewer = () => {
             darkMode={theme.palette.mode === "dark"}
             initialValue={value}
             onChange={(v) => onChange(v as string)}
+            onSaveShortcut={onSaveShortcut}
           />
         </Suspense>
       )}

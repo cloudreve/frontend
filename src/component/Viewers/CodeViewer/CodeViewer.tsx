@@ -1,6 +1,7 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, ButtonGroup, IconButton, ListItemIcon, ListItemText, Menu, useTheme } from "@mui/material";
-import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { useTranslation } from "react-i18next";
 import { closeCodeViewer } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
@@ -106,6 +107,7 @@ const CodeViewer = () => {
   const [optionAnchorEl, setOptionAnchorEl] = useState<null | HTMLElement>(null);
   const [language, setLng] = useState<string | null>(null);
   const [wordWrap, setWordWrap] = useState<"off" | "on" | "wordWrapColumn" | "bounded">("off");
+  const saveFunction = useRef<() => void>(() => {});
 
   const loadContent = useCallback(
     (charset?: string) => {
@@ -183,6 +185,22 @@ const CodeViewer = () => {
     setValue(v);
     setSaved(false);
   }, []);
+
+  useEffect(() => {
+    saveFunction.current = () => {
+      if (!saved && supportUpdate) {
+        onSave(false);
+      }
+    };
+  }, [saved, supportUpdate, onSave]);
+
+  useHotkeys(
+    ["Control+s", "Meta+s"],
+    () => {
+      saveFunction.current();
+    },
+    { preventDefault: true },
+  );
 
   return (
     <ViewerDialog
@@ -282,6 +300,7 @@ const CodeViewer = () => {
             }}
           >
             <MonacoEditor
+              onSave={saveFunction}
               theme={theme.palette.mode === "dark" ? "vs-dark" : "vs"}
               options={{
                 readOnly: !supportUpdate,

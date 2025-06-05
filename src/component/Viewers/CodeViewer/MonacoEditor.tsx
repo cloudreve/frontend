@@ -105,6 +105,8 @@ export interface MonacoEditorProps extends MonacoEditorBaseProps {
   uri?: (monaco: typeof monacoEditor) => monacoEditor.Uri;
 
   minHeight?: string | number;
+
+  onSave?: React.MutableRefObject<() => void>;
 }
 
 // ============ Diff Editor ============
@@ -203,6 +205,7 @@ function MonacoEditor({
   onBlur,
   className,
   uri,
+  onSave,
 }: MonacoEditorProps) {
   const containerElement = useRef<HTMLDivElement | null>(null);
 
@@ -241,6 +244,11 @@ function MonacoEditor({
 
     _subscriptionBlur.current = editor.current.onDidBlurEditorText((event) => {
       onBlur?.(editor.current.getValue());
+    });
+
+    // Add key binding for Ctrl+S or Meta+S (Cmd+S on Mac)
+    editor.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+      onSave?.current();
     });
   };
 

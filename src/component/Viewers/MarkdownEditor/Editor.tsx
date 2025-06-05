@@ -52,6 +52,7 @@ export interface MarkdownEditorProps {
   initialValue: string;
   onChange: (value: string) => void;
   readOnly?: boolean;
+  onSaveShortcut?: () => void;
 }
 
 function whenInAdmonition(editorInFocus: EditorInFocus | null) {
@@ -90,6 +91,12 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
         display: "flex",
         flexDirection: "column",
         minHeight: "calc(100vh - 200px)",
+      }}
+      onKeyDown={(e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+          e.preventDefault();
+          props.onSaveShortcut?.();
+        }
       }}
     >
       {nsLoaded && (
