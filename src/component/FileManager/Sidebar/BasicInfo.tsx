@@ -1,15 +1,16 @@
-import { FileResponse, FileType, FolderSummary, Metadata } from "../../../api/explorer.ts";
-import { useTranslation } from "react-i18next";
 import { Link, Skeleton, Typography } from "@mui/material";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import InfoRow from "./InfoRow.tsx";
+import dayjs from "dayjs";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { getFileInfo, sendPatchViewSync } from "../../../api/api.ts";
+import { ExplorerView, FileResponse, FileType, FolderSummary, Metadata } from "../../../api/explorer.ts";
+import { useAppDispatch } from "../../../redux/hooks.ts";
+import SessionManager from "../../../session/index.ts";
 import { sizeToString } from "../../../util";
-import FileBadge from "../FileBadge.tsx";
 import CrUri from "../../../util/uri.ts";
 import TimeBadge from "../../Common/TimeBadge.tsx";
-import { useAppDispatch } from "../../../redux/hooks.ts";
-import { getFileInfo } from "../../../api/api.ts";
-import dayjs from "dayjs";
+import FileBadge from "../FileBadge.tsx";
+import InfoRow from "./InfoRow.tsx";
 
 export interface BasicInfoProps {
   target: FileResponse;
@@ -23,6 +24,12 @@ const BasicInfo = ({ target }: BasicInfoProps) => {
   const [folderSummary, setFolderSummary] = useState<FolderSummary | undefined | null>(null);
   useEffect(() => {
     setFolderSummary(null);
+  }, [target]);
+
+  const [viewSetting, setViewSetting] = useState<ExplorerView | undefined>(undefined);
+
+  useEffect(() => {
+    setViewSetting(target?.extended_info?.view);
   }, [target]);
 
   const isSymbolicLink = useMemo(() => {
@@ -66,6 +73,10 @@ const BasicInfo = ({ target }: BasicInfoProps) => {
 
   const targetCrUri = useMemo(() => {
     return new CrUri(target.path);
+  }, [target]);
+
+  const viewSyncEnabled = useMemo(() => {
+    return !SessionManager.currentLoginOrNull()?.user?.disable_view_sync;
   }, [target]);
 
   const restoreParent = useMemo(() => {
@@ -116,6 +127,16 @@ const BasicInfo = ({ target }: BasicInfoProps) => {
       folders,
     });
   }, [folderSummary, t]);
+
+  const handleDeleteViewSetting = useCallback(() => {
+    dispatch(sendPatchViewSync({ uri: target.path }))
+      .then(() => {
+        setViewSetting(undefined);
+      })
+      .catch((error) => {
+        console.error("Failed to delete view setting:", error);
+      });
+  }, [target.path, dispatch]);
 
   return (
     <>
@@ -215,6 +236,30 @@ const BasicInfo = ({ target }: BasicInfoProps) => {
         title={t("application:fileManager.modifiedAt")}
         content={<TimeBadge variant={"body2"} datetime={target.updated_at} />}
       />
+      {target.type == FileType.folder && viewSyncEnabled && target.owned && !restoreParent && !isSymbolicLink && (
+        <InfoRow
+          title={t("application:fileManager.viewSetting")}
+          content={
+            !!viewSetting ? (
+              <>
+                {t("application:fileManager.saved")}{" "}
+                <Link
+                  href={"#"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteViewSetting();
+                  }}
+                  underline={"hover"}
+                >
+                  {t("application:fileManager.deleteViewSetting")}
+                </Link>
+              </>
+            ) : (
+              t("application:fileManager.notSet")
+            )
+          }
+        />
+      )}
     </>
   );
 };

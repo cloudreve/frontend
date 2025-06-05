@@ -20,11 +20,7 @@ export interface ResizeProps {
   startX: number;
 }
 
-const ListHeader = ({
-  setColumns,
-  commitColumnSetting,
-  columns,
-}: ListHeaderProps) => {
+const ListHeader = ({ setColumns, commitColumnSetting, columns }: ListHeaderProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [showDivider, setShowDivider] = useState(false);
@@ -44,14 +40,9 @@ const ListHeader = ({
       const column = columns[resizeProps.current.index];
       const currentWidth = column.width ?? column.defaults.width;
       const minWidth = column.defaults.minWidth ?? 100;
-      const newWidth = Math.max(
-        minWidth,
-        currentWidth + (e.clientX - resizeProps.current.startX),
-      );
+      const newWidth = Math.max(minWidth, currentWidth + (e.clientX - resizeProps.current.startX));
       setColumns((prev) =>
-        prev.map((c, index) =>
-          index === resizeProps.current?.index ? { ...c, width: newWidth } : c,
-        ),
+        prev.map((c, index) => (index === resizeProps.current?.index ? { ...c, width: newWidth } : c)),
       );
     },
     [columns, setColumns],
@@ -65,16 +56,12 @@ const ListHeader = ({
   }, [onMouseMove, commitColumnSetting]);
 
   const fmIndex = useContext(FmIndexContext);
-  const orderMethodOptions = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.props.order_by_options,
-  );
+  const orderMethodOptions = useAppSelector((state) => state.fileManager[fmIndex].list?.props.order_by_options);
   const orderDirectionOption = useAppSelector(
     (state) => state.fileManager[fmIndex].list?.props.order_direction_options,
   );
   const sortBy = useAppSelector((state) => state.fileManager[fmIndex].sortBy);
-  const sortDirection = useAppSelector(
-    (state) => state.fileManager[fmIndex].sortDirection,
-  );
+  const sortDirection = useAppSelector((state) => state.fileManager[fmIndex].sortDirection);
 
   const allAvailableSortOptions = useMemo((): {
     [key: string]: boolean;
@@ -83,10 +70,7 @@ const ListHeader = ({
     const res: { [key: string]: boolean } = {};
     orderMethodOptions.forEach((method) => {
       // make sure orderDirectionOption contains both asc and desc
-      if (
-        orderDirectionOption.includes("asc") &&
-        orderDirectionOption.includes("desc")
-      ) {
+      if (orderDirectionOption.includes("asc") && orderDirectionOption.includes("desc")) {
         res[method] = true;
       }
     });
@@ -96,8 +80,6 @@ const ListHeader = ({
   const setSortBy = useCallback(
     (order_by: string, order_direction: string) => {
       dispatch(changeSortOption(fmIndex, order_by, order_direction));
-      SessionManager.set(UserSettings.SortBy, order_by);
-      SessionManager.set(UserSettings.SortDirection, order_direction);
     },
     [dispatch, fmIndex],
   );
@@ -119,15 +101,8 @@ const ListHeader = ({
           key={index}
           column={column}
           setSortBy={setSortBy}
-          sortable={
-            !!column.defaults.order_by &&
-            allAvailableSortOptions[column.defaults.order_by]
-          }
-          sortDirection={
-            sortBy && sortBy === column.defaults.order_by
-              ? sortDirection
-              : undefined
-          }
+          sortable={!!column.defaults.order_by && allAvailableSortOptions[column.defaults.order_by]}
+          sortDirection={sortBy && sortBy === column.defaults.order_by ? sortDirection : undefined}
         />
       ))}
       <Fade in={showDivider}>
@@ -139,11 +114,7 @@ const ListHeader = ({
           }}
         >
           <Tooltip title={t("fileManager.addColumn")}>
-            <IconButton
-              onClick={() => dispatch(setListViewColumnSettingDialog(true))}
-              sx={{ ml: 1 }}
-              size={"small"}
-            >
+            <IconButton onClick={() => dispatch(setListViewColumnSettingDialog(true))} sx={{ ml: 1 }} size={"small"}>
               <Add
                 sx={{
                   width: "18px",

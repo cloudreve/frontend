@@ -498,7 +498,13 @@
     "skipSoftDelete": "徹底刪除檔案",
     "skipSoftDeleteDes": "跳過回收站，直接刪除檔案",
     "unlinkOnly": "保留物理檔案",
-    "unlinkOnlyDes": "僅刪除檔案記錄，物理檔案不會被刪除"
+    "unlinkOnlyDes": "僅刪除檔案記錄，物理檔案不會被刪除",
+    "shareView": "分享視圖設定",
+    "shareViewDes": "勾選後，其他使用者存取此共享資料夾時可以看到你保存在服務器的視圖設定（佈局、排序等）。",
+    "viewSetting": "視圖設定",
+    "saved": "已保存",
+    "notSet": "未設定",
+    "deleteViewSetting": "刪除視圖設定"
   },
   "uploader": {
     "fileCopyName": "副本_",
@@ -666,6 +672,10 @@
     "createdAt": "建立日期："
   },
   "setting": {
+    "syncView": "視圖設置",
+    "syncViewDes": "是否記住各個目錄的視圖設置，並同步到服務器。",
+    "syncViewOn": "同步到服務器",
+    "syncViewOff": "不同步",
     "noAuthenticator": "新增通行金鑰以使用人臉、指紋或 USB 金鑰登入賬號",
     "neverUsed": "從未使用過",
     "usedAt": "上次使用於 <0></0>",

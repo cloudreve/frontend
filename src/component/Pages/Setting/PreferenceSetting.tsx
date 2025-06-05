@@ -9,6 +9,8 @@ import {
   ListItemText,
   Stack,
   styled,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   useMediaQuery,
   useTheme,
@@ -21,6 +23,7 @@ import { UserSettings as UserSettingsType } from "../../../api/user.ts";
 import { languages } from "../../../i18n.ts";
 import { setPreferredTheme } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { clearLocalCustomView } from "../../../redux/thunks/filemanager.ts";
 import { selectLanguage } from "../../../redux/thunks/settings.ts";
 import SessionManager, { UserSettings } from "../../../session";
 import { refreshTimeZone, timeZone } from "../../../util/datetime.ts";
@@ -33,6 +36,8 @@ import {
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import { ColorCircle, SelectorBox } from "../../FileManager/FileInfo/ColorCircle/CircleColorSelector.tsx";
 import { SwitchPopover } from "../../Frame/NavBar/DarkThemeSwitcher.tsx";
+import RectangleLandscapeSync from "../../Icons/RectangleLandscapeSync.tsx";
+import RectangleLandscapeSyncOff from "../../Icons/RectangleLandscapeSyncOff.tsx";
 import SettingForm from "./SettingForm.tsx";
 
 export interface PreferenceSettingProps {
@@ -135,6 +140,30 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
           version_retention_max: versionRetentionMax,
           version_retention_ext: versionRetentionExts,
         });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const onDisableViewSyncChange = (e: React.MouseEvent<HTMLElement>, enabled: boolean) => {
+    setSetting({ ...setting, disable_view_sync: !enabled });
+    setLoading(true);
+    dispatch(
+      sendUpdateUserSetting({
+        disable_view_sync: !enabled,
+      }),
+    )
+      .then(() => {
+        const user = SessionManager.currentLoginOrNull();
+        if (user?.user) {
+          SessionManager.updateUserIfExist({
+            ...user?.user,
+            disable_view_sync: !enabled,
+          });
+        }
+        clearLocalCustomView();
+        setLoading(false);
       })
       .finally(() => {
         setLoading(false);
@@ -275,6 +304,27 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
             </Collapse>
           </Stack>
         </OutlinedSettingBox>
+      </SettingForm>
+      <SettingForm title={t("setting.syncView")} lgWidth={12}>
+        <ToggleButtonGroup
+          color="primary"
+          value={!setting.disable_view_sync}
+          exclusive
+          disabled={loading}
+          onChange={onDisableViewSyncChange}
+          size={"small"}
+          aria-label="Platform"
+        >
+          <ToggleButton value={true}>
+            <RectangleLandscapeSync fontSize="small" sx={{ mr: 1 }} />
+            {t("setting.syncViewOn")}
+          </ToggleButton>
+          <ToggleButton value={false}>
+            <RectangleLandscapeSyncOff fontSize="small" sx={{ mr: 1 }} />
+            {t("setting.syncViewOff")}
+          </ToggleButton>
+        </ToggleButtonGroup>
+        <FormHelperText>{t("setting.syncViewDes")}</FormHelperText>
       </SettingForm>
     </Stack>
   );

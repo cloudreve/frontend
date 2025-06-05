@@ -1,24 +1,13 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { useTranslation } from "react-i18next";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import {
-  getColumnTypeDefaults,
-  ListViewColumn,
-  ListViewColumnSetting,
-} from "./Column.tsx";
-import ListHeader from "./ListHeader.tsx";
-import ListBody from "./ListBody.tsx";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import { applyListColumns } from "../../../../redux/thunks/filemanager.ts";
 import { FmIndexContext } from "../../FmIndexContext.tsx";
-import { setListViewColumns } from "../../../../redux/fileManagerSlice.ts";
-import SessionManager, { UserSettings } from "../../../../session";
 import { SearchLimitReached } from "../EmptyFileList.tsx";
+import { getColumnTypeDefaults, ListViewColumn, ListViewColumnSetting } from "./Column.tsx";
+import ListBody from "./ListBody.tsx";
+import ListHeader from "./ListHeader.tsx";
 
 const ListView = React.forwardRef(
   (
@@ -34,12 +23,8 @@ const ListView = React.forwardRef(
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const dispatch = useAppDispatch();
     const fmIndex = useContext(FmIndexContext);
-    const recursion_limit_reached = useAppSelector(
-      (state) => state.fileManager[fmIndex].list?.recursion_limit_reached,
-    );
-    const columnSetting = useAppSelector(
-      (state) => state.fileManager[fmIndex].listViewColumns,
-    );
+    const recursion_limit_reached = useAppSelector((state) => state.fileManager[fmIndex].list?.recursion_limit_reached);
+    const columnSetting = useAppSelector((state) => state.fileManager[fmIndex].listViewColumns);
 
     const [columns, setColumns] = useState<ListViewColumn[]>(
       columnSetting.map(
@@ -64,10 +49,7 @@ const ListView = React.forwardRef(
     }, [columnSetting]);
 
     const totalWidth = useMemo(() => {
-      return columns.reduce(
-        (acc, column) => acc + (column.width ?? column.defaults.width),
-        0,
-      );
+      return columns.reduce((acc, column) => acc + (column.width ?? column.defaults.width), 0);
     }, [columns]);
 
     const commitColumnSetting = useCallback(() => {
@@ -82,8 +64,7 @@ const ListView = React.forwardRef(
         return prev;
       });
       if (settings.length > 0) {
-        dispatch(setListViewColumns(settings));
-        SessionManager.set(UserSettings.ListViewColumns, settings);
+        dispatch(applyListColumns(fmIndex, settings));
       }
     }, [dispatch, setColumns]);
 
@@ -98,11 +79,7 @@ const ListView = React.forwardRef(
           flexDirection: "column",
         }}
       >
-        <ListHeader
-          commitColumnSetting={commitColumnSetting}
-          setColumns={setColumns}
-          columns={columns}
-        />
+        <ListHeader commitColumnSetting={commitColumnSetting} setColumns={setColumns} columns={columns} />
         <ListBody columns={columns} />
         {recursion_limit_reached && (
           <Box sx={{ px: 1, py: 1 }}>

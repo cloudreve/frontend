@@ -9,30 +9,29 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import React, { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Layouts } from "../../../redux/fileManagerSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import AppsListOutlined from "../../Icons/AppsListOutlined.tsx";
-import GridOutlined from "../../Icons/GridOutlined.tsx";
-import Grid from "../../Icons/Grid.tsx";
-import AppsList from "../../Icons/AppsList.tsx";
-import NavIconTransition from "../../Frame/NavBar/NavIconTransition.tsx";
-import React, { useContext } from "react";
-import SessionManager, { UserSettings } from "../../../session";
 import {
-  Layouts,
-  setGalleryWidth,
-  setLayout,
-  setShowThumb,
-} from "../../../redux/fileManagerSlice.ts";
-import ImageOutlined from "../../Icons/ImageOutlined.tsx";
-import ImageOffOutlined from "../../Icons/ImageOffOutlined.tsx";
-import { changePageSize } from "../../../redux/thunks/filemanager.ts";
+  applyGalleryWidth,
+  changePageSize,
+  setLayoutSetting,
+  setThumbToggle,
+} from "../../../redux/thunks/filemanager.ts";
+import NavIconTransition from "../../Frame/NavBar/NavIconTransition.tsx";
+import AppsList from "../../Icons/AppsList.tsx";
+import AppsListOutlined from "../../Icons/AppsListOutlined.tsx";
+import Grid from "../../Icons/Grid.tsx";
+import GridOutlined from "../../Icons/GridOutlined.tsx";
 import ImageCopy from "../../Icons/ImageCopy.tsx";
 import ImageCopyOutlined from "../../Icons/ImageCopyOutlined.tsx";
+import ImageOffOutlined from "../../Icons/ImageOffOutlined.tsx";
+import ImageOutlined from "../../Icons/ImageOutlined.tsx";
 
-import { FmIndexContext } from "../FmIndexContext.tsx";
-import Setting from "../../Icons/Setting.tsx";
 import { setListViewColumnSettingDialog } from "../../../redux/globalStateSlice.ts";
+import Setting from "../../Icons/Setting.tsx";
+import { FmIndexContext } from "../FmIndexContext.tsx";
 
 const layoutOptions: {
   label: string;
@@ -80,71 +79,44 @@ const ViewOptionPopover = ({ ...rest }: PopoverProps) => {
   const dispatch = useAppDispatch();
   const fmIndex = useContext(FmIndexContext);
   const layout = useAppSelector((state) => state.fileManager[fmIndex].layout);
-  const showThumb = useAppSelector(
-    (state) => state.fileManager[fmIndex].showThumb,
-  );
-  const pageSize = useAppSelector(
-    (state) => state.fileManager[fmIndex].pageSize,
-  );
-  const pageSizeMax = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.props.max_page_size,
-  );
-  const galleryWidth = useAppSelector(
-    (state) => state.fileManager[fmIndex].galleryWidth,
-  );
+  const showThumb = useAppSelector((state) => state.fileManager[fmIndex].showThumb);
+  const pageSize = useAppSelector((state) => state.fileManager[fmIndex].pageSize);
+  const pageSizeMax = useAppSelector((state) => state.fileManager[fmIndex].list?.props.max_page_size);
+  const galleryWidth = useAppSelector((state) => state.fileManager[fmIndex].galleryWidth);
   const [desiredPageSize, setDesiredPageSize] = React.useState(pageSize);
   const pageSizeMaxSafe = pageSizeMax ?? desiredPageSize;
   const step = pageSizeMaxSafe - MinPageSize <= 100 ? 1 : 10;
-  const [desiredImageWidth, setDesiredImageWidth] =
-    React.useState(galleryWidth);
+  const [desiredImageWidth, setDesiredImageWidth] = React.useState(galleryWidth);
 
-  const handleLayoutChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newMode: string,
-  ) => {
+  useEffect(() => {
+    setDesiredPageSize(pageSize);
+  }, [pageSize]);
+
+  const handleLayoutChange = (_event: React.MouseEvent<HTMLElement>, newMode: string) => {
     if (newMode) {
-      dispatch(setLayout({ index: fmIndex, value: newMode }));
-      SessionManager.set(UserSettings.Layout, newMode);
+      dispatch(setLayoutSetting(fmIndex, newMode));
     }
   };
 
-  const handleThumbChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newMode: boolean,
-  ) => {
-    dispatch(setShowThumb({ index: fmIndex, value: newMode }));
-    SessionManager.set(UserSettings.ShowThumb, newMode);
+  const handleThumbChange = (_event: React.MouseEvent<HTMLElement>, newMode: boolean) => {
+    dispatch(setThumbToggle(fmIndex, newMode));
   };
 
-  const handlePageSlideChange = (
-    _event: Event,
-    newValue: number | number[],
-  ) => {
+  const handlePageSlideChange = (_event: Event, newValue: number | number[]) => {
     setDesiredPageSize(newValue as number);
   };
 
-  const commitPageSize = (
-    _event: React.SyntheticEvent | Event,
-    newValue: number | number[],
-  ) => {
+  const commitPageSize = (_event: React.SyntheticEvent | Event, newValue: number | number[]) => {
     const pageSize = Math.max(MinPageSize, newValue as number);
-    SessionManager.set(UserSettings.PageSize, pageSize);
     dispatch(changePageSize(fmIndex, pageSize));
   };
 
-  const handleImageSizeChange = (
-    _event: Event,
-    newValue: number | number[],
-  ) => {
+  const handleImageSizeChange = (_event: Event, newValue: number | number[]) => {
     setDesiredImageWidth(newValue as number);
   };
 
-  const commitImageSize = (
-    _event: React.SyntheticEvent | Event,
-    newValue: number | number[],
-  ) => {
-    SessionManager.set(UserSettings.GalleryWidth, newValue as number);
-    dispatch(setGalleryWidth({ index: fmIndex, value: newValue as number }));
+  const commitImageSize = (_event: React.SyntheticEvent | Event, newValue: number | number[]) => {
+    dispatch(applyGalleryWidth(fmIndex, newValue as number));
   };
 
   return (
@@ -161,11 +133,7 @@ const ViewOptionPopover = ({ ...rest }: PopoverProps) => {
     >
       <Box sx={{ p: 2, minWidth: "300px" }}>
         <Box>
-          <Typography
-            variant="subtitle2"
-            sx={{ mb: 0.5, ml: 0.5 }}
-            color={"text.secondary"}
-          >
+          <Typography variant="subtitle2" sx={{ mb: 0.5, ml: 0.5 }} color={"text.secondary"}>
             {t("application:fileManager.layout")}
           </Typography>
           <ToggleButtonGroup
@@ -190,11 +158,7 @@ const ViewOptionPopover = ({ ...rest }: PopoverProps) => {
           </ToggleButtonGroup>
         </Box>
         <Collapse in={layout == Layouts.grid}>
-          <Typography
-            variant="subtitle2"
-            sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }}
-            color={"text.secondary"}
-          >
+          <Typography variant="subtitle2" sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }} color={"text.secondary"}>
             {t("application:fileManager.thumbnails")}
           </Typography>
           <ToggleButtonGroup
@@ -207,45 +171,25 @@ const ViewOptionPopover = ({ ...rest }: PopoverProps) => {
           >
             {thumbOptions.map((option) => (
               <ToggleButton key={option.label} value={option.value}>
-                <option.icon
-                  sx={{ mr: 1, height: "20px" }}
-                  fontSize={"small"}
-                />
+                <option.icon sx={{ mr: 1, height: "20px" }} fontSize={"small"} />
                 {t(option.label)}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
         </Collapse>
         <Collapse in={layout == Layouts.list}>
-          <Typography
-            variant="subtitle2"
-            sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }}
-            color={"text.secondary"}
-          >
+          <Typography variant="subtitle2" sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }} color={"text.secondary"}>
             {t("application:fileManager.listColumnSetting")}
           </Typography>
-          <ToggleButtonGroup
-            value={0}
-            fullWidth
-            size="small"
-            color="primary"
-            exclusive
-          >
-            <ToggleButton
-              value={1}
-              onClick={() => dispatch(setListViewColumnSettingDialog(true))}
-            >
+          <ToggleButtonGroup value={0} fullWidth size="small" color="primary" exclusive>
+            <ToggleButton value={1} onClick={() => dispatch(setListViewColumnSettingDialog(true))}>
               <Setting sx={{ mr: 1, height: "20px" }} fontSize={"small"} />
               {t("application:fileManager.listColumnSetting")}
             </ToggleButton>
           </ToggleButtonGroup>
         </Collapse>
         <Collapse in={layout == Layouts.gallery}>
-          <Typography
-            variant="subtitle2"
-            sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }}
-            color={"text.secondary"}
-          >
+          <Typography variant="subtitle2" sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }} color={"text.secondary"}>
             {t("application:fileManager.imageSize")}
           </Typography>
           <Box sx={{ px: 1 }}>
@@ -269,11 +213,7 @@ const ViewOptionPopover = ({ ...rest }: PopoverProps) => {
             </Box>
           </Box>
         </Collapse>
-        <Typography
-          variant="subtitle2"
-          sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }}
-          color={"text.secondary"}
-        >
+        <Typography variant="subtitle2" sx={{ mt: 1.5, mb: 0.5, ml: 0.5 }} color={"text.secondary"}>
           {t("application:fileManager.paginationSize")}
         </Typography>
         <Box sx={{ px: 1 }}>

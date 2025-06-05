@@ -20,6 +20,7 @@ export function createOrUpdateShareLink(
     const req: ShareCreateService = {
       uri: file.path,
       is_private: setting.is_private,
+      share_view: setting.share_view,
       downloads: setting.downloads && setting.downloads_val.value > 0 ? setting.downloads_val.value : undefined,
       expire: setting.expires && setting.expires_val.value > 0 ? setting.expires_val.value : undefined,
     };

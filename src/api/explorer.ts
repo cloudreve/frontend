@@ -1,3 +1,4 @@
+import { ListViewColumnSetting } from "../component/FileManager/Explorer/ListView/Column.tsx";
 import { User } from "./user.ts";
 
 export interface PaginationArgs {
@@ -49,6 +50,7 @@ export interface ExtendedInfo {
   storage_used: number;
   shares?: Share[];
   entities?: Entity[];
+  view?: ExplorerView;
 }
 
 export interface Entity {
@@ -65,6 +67,7 @@ export interface Share {
   name?: string;
   expires?: string;
   is_private?: boolean;
+  share_view?: boolean;
   remain_downloads?: number;
   created_at?: string;
   url: string;
@@ -114,6 +117,16 @@ export interface NavigatorProps {
   order_direction_options: string[];
 }
 
+export interface ExplorerView {
+  page_size: number;
+  order?: string;
+  order_direction?: string;
+  view?: string;
+  thumbnail?: boolean;
+  columns?: ListViewColumnSetting[];
+  gallery_width?: number;
+}
+
 export interface ListResponse {
   files: FileResponse[];
   pagination: PaginationResults;
@@ -124,6 +137,7 @@ export interface ListResponse {
   single_file_view?: boolean;
   parent?: FileResponse;
   storage_policy?: StoragePolicy;
+  view?: ExplorerView;
 }
 
 export const Metadata = {
@@ -262,6 +276,7 @@ export interface ShareCreateService {
   downloads?: number;
   is_private?: boolean;
   expire?: number;
+  share_view?: boolean;
 }
 
 export interface CreateFileService {
@@ -368,6 +383,7 @@ export const AuditLogType = {
   remove_passkey: 53,
   redeem_gift_code: 54,
   file_imported: 55,
+  update_view: 56,
 };
 
 export interface MultipleUriService {
@@ -476,4 +492,9 @@ export interface DeleteUploadSessionService {
 export interface DirectLink {
   file_url: string;
   link: string;
+}
+
+export interface PatchViewSyncService {
+  uri: string;
+  view?: ExplorerView;
 }

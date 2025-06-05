@@ -1,20 +1,21 @@
-import { useTranslation } from "react-i18next";
 import { Box, DialogContent, IconButton, Tooltip, useTheme } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import dayjs from "dayjs";
+import { TFunction } from "i18next";
 import React, { useCallback, useEffect, useState } from "react";
-import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
-import { closeShareLinkDialog } from "../../../../redux/globalStateSlice.ts";
-import AutoHeight from "../../../Common/AutoHeight.tsx";
-import ShareSettingContent, { downloadOptions, expireOptions, ShareSetting } from "./ShareSetting.tsx";
+import { useTranslation } from "react-i18next";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { Share as ShareModel } from "../../../../api/explorer.ts";
+import { closeShareLinkDialog } from "../../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
 import { createOrUpdateShareLink } from "../../../../redux/thunks/share.ts";
-import { FilledTextField } from "../../../Common/StyledComponents.tsx";
 import { copyToClipboard, sendLink } from "../../../../util";
+import AutoHeight from "../../../Common/AutoHeight.tsx";
+import { FilledTextField } from "../../../Common/StyledComponents.tsx";
+import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import Share from "../../../Icons/Share.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
-import { TFunction } from "i18next";
-import { Share as ShareModel } from "../../../../api/explorer.ts";
-import dayjs from "dayjs";
+import ShareSettingContent, { downloadOptions, expireOptions, ShareSetting } from "./ShareSetting.tsx";
+
 
 const initialSetting: ShareSetting = {
   expires_val: expireOptions[2],
@@ -24,6 +25,7 @@ const initialSetting: ShareSetting = {
 const shareToSetting = (share: ShareModel, t: TFunction): ShareSetting => {
   const res: ShareSetting = {
     is_private: share.is_private,
+    share_view: share.share_view,
     downloads: share.remain_downloads != undefined && share.remain_downloads > 0,
 
     expires_val: expireOptions[2],

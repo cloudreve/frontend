@@ -22,6 +22,7 @@ export interface User {
   group?: Group;
   pined?: PinedFile[];
   language?: string;
+  disable_view_sync?: boolean;
 }
 export interface Group {
   id: string;
@@ -99,6 +100,7 @@ export interface UserSettings {
   passwordless: boolean;
   two_fa_enabled: boolean;
   passkeys?: Passkey[];
+  disable_view_sync: boolean;
 }
 
 export interface PatchUserSetting {
@@ -112,6 +114,7 @@ export interface PatchUserSetting {
   new_password?: string;
   two_fa_enabled?: boolean;
   two_fa_code?: string;
+  disable_view_sync?: boolean;
 }
 
 export interface PasskeyCredentialOption {

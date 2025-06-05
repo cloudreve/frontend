@@ -26,7 +26,7 @@
     "forgetPassword": "Forgot password?",
     "2FA": "2FA Verification",
     "input2FACode": "Please enter the six-digit 2FA verification code",
-    "passwordNotMatch": "Those passwords didn’t match.",
+    "passwordNotMatch": "Those passwords didn't match.",
     "findMyPassword": "Find my password",
     "passwordReset": "Password has been reset.",
     "newPassword": "New password",
@@ -363,7 +363,11 @@
     "layout": "Layout",
     "thumbnails": "Thumbnails",
     "on": "On",
-    "off": "Off"
+    "off": "Off",
+    "viewSetting": "View setting",
+    "saved": "Saved",
+    "notSet": "Not set",
+    "deleteViewSetting": "Delete view setting"
   },
   "modals": {
     "showFileName": "Show file name",
@@ -465,6 +469,8 @@
     "createShareLink": "Create share link",
     "privateShare": "Hide from public",
     "privateShareDes": "If selected, other people cannot see this share link on your homepage.",
+    "shareView": "Share view setting",
+    "shareViewDes": "If selected, other users can see your view setting (layout, sorting, etc.) saved on the server server when accessing this shared folder.",
     "expireAfterDownload": "Expire after being downloaded",
     "sharePassword": "Share password",
     "randomlyGenerate": "Random",
@@ -666,6 +672,10 @@
     "createdAt": "Created at: "
   },
   "setting": {
+    "syncView": "View settings",
+    "syncViewDes": "Remember the view settings of each directory and synchronize to the server.",
+    "syncViewOn": "Sync to server",
+    "syncViewOff": "Do not sync",
     "noAuthenticator": "Add a passkey to sign in using fingerprint, face or USB key.",
     "neverUsed": "Never used",
     "usedAt": "Last used at <0></0>",

@@ -617,7 +617,8 @@
       "disable_2fa": "禁用 2FA",
       "add_passkey": "添加通行密钥",
       "remove_passkey": "移除通行密钥",
-      "redeem_gift_code": "兑换礼品码"
+      "redeem_gift_code": "兑换礼品码",
+      "update_view": "更改视图设置"
     },
     "server": "服务器设置",
     "tempPath": "临时路径",

@@ -621,7 +621,8 @@
       "disable_2fa": "Disable 2FA",
       "add_passkey": "Add passkey",
       "remove_passkey": "Remove passkey",
-      "redeem_gift_code": "Redeem gift code"
+      "redeem_gift_code": "Redeem gift code",
+      "update_view": "Changed view setting"
     },
     "server": "Server",
     "tempPath": "Temporary path",

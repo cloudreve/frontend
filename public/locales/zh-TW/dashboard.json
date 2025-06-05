@@ -612,9 +612,10 @@
       "change_password": "更改密碼",
       "enable_2fa": "啟用 2FA",
       "disable_2fa": "禁用 2FA",
-      "add_passkey": "新增通行金鑰",
-      "remove_passkey": "移除通行金鑰",
-      "redeem_gift_code": "兌換禮品碼"
+      "add_passkey": "新增通行密鑰",
+      "remove_passkey": "移除通行密鑰",
+      "redeem_gift_code": "兌換禮品碼",
+      "update_view": "更改檢視設定"
     },
     "server": "伺服器設定",
     "tempPath": "臨時路徑",

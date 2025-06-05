@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import {
   Autocomplete,
   Checkbox,
@@ -13,14 +12,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FileResponse, FileType } from "../../../../api/explorer.ts";
 import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import { useState } from "react";
-import Eye from "../../../Icons/Eye.tsx";
-import Timer from "../../../Icons/Timer.tsx";
+import { useTranslation } from "react-i18next";
+import { FileResponse, FileType } from "../../../../api/explorer.ts";
 import ClockArrowDownload from "../../../Icons/ClockArrowDownload.tsx";
+import Eye from "../../../Icons/Eye.tsx";
+import TableSettingsOutlined from "../../../Icons/TableSettings.tsx";
+import Timer from "../../../Icons/Timer.tsx";
 
 const Accordion = styled(MuiAccordion)(() => ({
   border: "0px solid rgba(0, 0, 0, .125)",
@@ -69,6 +70,7 @@ const StyledListItemButton = styled(ListItemButton)(() => ({}));
 
 export interface ShareSetting {
   is_private?: boolean;
+  share_view?: boolean;
   downloads?: boolean;
   expires?: boolean;
 
@@ -122,7 +124,7 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
     setExpanded(isExpanded ? panel : undefined);
   };
 
-  const handleCheck = (prop: "is_private" | "expires" | "downloads") => () => {
+  const handleCheck = (prop: "is_private" |  "share_view" | "expires" | "downloads") => () => {
     if (!setting[prop]) {
       handleExpand(prop)(null, true);
     }
@@ -150,6 +152,22 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
         </AccordionSummary>
         <AccordionDetails>{t("application:modals.privateShareDes")}</AccordionDetails>
       </Accordion>
+      {file?.type == FileType.folder && (
+        <Accordion expanded={expanded === "share_view"} onChange={handleExpand("share_view")}>
+          <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+            <StyledListItemButton>
+              <ListItemIcon>
+                <TableSettingsOutlined />
+              </ListItemIcon>
+              <ListItemText primary={t("application:modals.shareView")} />
+              <ListItemSecondaryAction>
+                <Checkbox checked={setting.share_view} onChange={handleCheck("share_view")} />
+              </ListItemSecondaryAction>
+            </StyledListItemButton>
+          </AccordionSummary>
+          <AccordionDetails>{t("application:modals.shareViewDes")}</AccordionDetails>
+        </Accordion>
+      )}
       <Accordion expanded={expanded === "expires"} onChange={handleExpand("expires")}>
         <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
           <StyledListItemButton>

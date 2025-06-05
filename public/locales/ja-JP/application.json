@@ -183,6 +183,7 @@
     "save": "保存",
     "noMoreImages": "現在のページには閲覧可能な画像がありません",
     "imageViewer": "画像ビューア",
+    "logUpdateView": "ビュー設定を更新",
     "logFileDeleteShare": "共有リンクを削除",
     "logFileEditShare": "共有リンクを編集",
     "deleteShareWarning": "この共有リンクを削除しますか？",
@@ -363,7 +364,11 @@
     "layout": "レイアウト",
     "thumbnails": "サムネイル",
     "on": "オン",
-    "off": "オフ"
+    "off": "オフ",
+    "viewSetting": "ビュー設定",
+    "saved": "保存",
+    "notSet": "未設定",
+    "deleteViewSetting": "ビュー設定を削除"
   },
   "modals": {
     "showFileName": "ファイル名を表示",
@@ -498,7 +503,9 @@
     "skipSoftDelete": "ファイルを完全に削除",
     "skipSoftDeleteDes": "ゴミ箱をスキップしてファイルを完全に削除します",
     "unlinkOnly": "物理ファイルを保持",
-    "unlinkOnlyDes": "ファイル記録のみ削除、物理ファイルは削除されません"
+    "unlinkOnlyDes": "ファイル記録のみ削除、物理ファイルは削除されません",
+    "shareView": "共有ビュー設定",
+    "shareViewDes": "チェックを入れると、他のユーザーがこの共有フォルダにアクセスした際にあなたのビュー設定（レイアウト、ソートなど）を見ることができます。"
   },
   "uploader": {
     "fileCopyName": "コピー_",
@@ -666,6 +673,10 @@
     "createdAt": "作成日："
   },
   "setting": {
+    "syncView": "ビュー設定",
+    "syncViewDes": "各ディレクトリのビュー設定を記憶し、サーバーに同期します。",
+    "syncViewOn": "サーバーに同期",
+    "syncViewOff": "同期しない",
     "noAuthenticator": "顔認証、指紋認証、またはUSBキーによるログインのために通行キーを追加",
     "neverUsed": "未使用",
     "usedAt": "最終使用日 <0></0>",

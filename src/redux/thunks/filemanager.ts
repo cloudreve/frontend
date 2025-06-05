@@ -1,14 +1,15 @@
 import dayjs from "dayjs";
-import { getFileInfo, getFileList, getUserCapacity } from "../../api/api.ts";
-import { FileResponse, ListResponse, Metadata } from "../../api/explorer.ts";
+import { getFileInfo, getFileList, getUserCapacity, sendPatchViewSync } from "../../api/api.ts";
+import { ExplorerView, FileResponse, ListResponse, Metadata } from "../../api/explorer.ts";
 import { getActionOpt } from "../../component/FileManager/ContextMenu/useActionDisplayOpt.ts";
+import { ListViewColumnSetting } from "../../component/FileManager/Explorer/ListView/Column.tsx";
 import { FileManagerIndex } from "../../component/FileManager/FileManager.tsx";
 import { Condition, ConditionType } from "../../component/FileManager/Search/AdvanceSearch/ConditionBox.tsx";
 import { MinPageSize } from "../../component/FileManager/TopBar/ViewOptionPopover.tsx";
 import { SelectType } from "../../component/Uploader/core";
 import { defaultPath } from "../../hooks/useNavigation.tsx";
 import { router } from "../../router";
-import SessionManager from "../../session";
+import SessionManager, { UserSettings } from "../../session";
 import { getFileLinkedUri, sleep } from "../../util";
 import CrUri, { Filesystem, SearchParam, UriQuery } from "../../util/uri.ts";
 import {
@@ -19,16 +20,21 @@ import {
   clearSelected,
   closeContextMenu,
   ContextMenuTypes,
+  Layouts,
   resetFileManager,
   setCapacity,
   setContextMenu,
   setFmError,
   setFmLoading,
+  setGalleryWidth,
+  setLayout,
+  setListViewColumns,
   setMultiSelectHovered,
   setPage,
   setPageSize,
   setPathProps,
   setSelected,
+  setShowThumb,
   setSortOption,
   SingleManager,
 } from "../fileManagerSlice.ts";
@@ -82,6 +88,7 @@ export function setTargetPath(index: number, path: string): AppThunk {
 let generation = 0;
 export interface NavigateReconcileOptions {
   next_page?: boolean;
+  sync_view?: boolean;
 }
 
 const pageSize = (fm: SingleManager) => {
@@ -110,7 +117,7 @@ export function navigateReconcile(index: number, opt?: NavigateReconcileOptions)
       fileManager,
       globalState: { sidebarOpen, imageViewer },
     } = getState();
-    const { path, list } = fileManager[index];
+    const { path, list, pure_path } = fileManager[index];
     if (!path) {
       return;
     }
@@ -121,16 +128,30 @@ export function navigateReconcile(index: number, opt?: NavigateReconcileOptions)
     }
     dispatch(setFmError({ index, value: undefined }));
 
+    if (opt?.sync_view) {
+      try {
+        await dispatch(syncViewSettings(index));
+      } catch (e) {}
+    }
+
+    const currentLogin = SessionManager.currentLoginOrNull();
+    const currentView = localCustomView[pure_path ?? ""];
+    let useCustomView = currentLogin?.user.disable_view_sync || currentView;
+
     let listRes: ListResponse | null = null;
     try {
       listRes = await dispatch(
         getFileList({
           next_page_token: opt && opt.next_page ? list?.pagination.next_token : undefined,
-          page_size: pageSize(fileManager[index]),
           uri: path,
-          order_by: fileManager[index].sortBy,
-          order_direction: fileManager[index].sortDirection,
           page: list?.pagination.page ?? undefined,
+          ...(useCustomView
+            ? {
+                page_size: currentView?.page_size ?? pageSize(fileManager[index]),
+                order_by: currentView?.order ?? fileManager[index].sortBy,
+                order_direction: currentView?.order_direction ?? fileManager[index].sortDirection,
+              }
+            : {}),
         }),
       );
     } catch (e) {
@@ -162,6 +183,42 @@ export function navigateReconcile(index: number, opt?: NavigateReconcileOptions)
           value: [listRes.files, fsUri.is_search() ? undefined : path],
         }),
       );
+
+      if (listRes.view) {
+        // Apply view setting from cloud
+        dispatch(setPageSize({ index, value: listRes.view.page_size }));
+        dispatch(
+          setSortOption({ index, value: [listRes.view.order ?? "created_at", listRes.view.order_direction ?? "asc"] }),
+        );
+        if (!currentView) {
+          dispatch(setShowThumb({ index, value: !!listRes.view.thumbnail }));
+          dispatch(setLayout({ index, value: listRes.view.view ?? Layouts.grid }));
+          dispatch(
+            setListViewColumns(listRes.view.columns ?? SessionManager.getWithFallback(UserSettings.ListViewColumns)),
+          );
+          dispatch(
+            setGalleryWidth({
+              index,
+              value: listRes.view.gallery_width ?? SessionManager.getWithFallback(UserSettings.GalleryWidth),
+            }),
+          );
+        }
+      }
+
+      if (currentView) {
+        // Apply view setting from local cache
+        dispatch(setShowThumb({ index, value: !!currentView.thumbnail }));
+        dispatch(setLayout({ index, value: currentView.view ?? Layouts.grid }));
+        dispatch(
+          setListViewColumns(currentView.columns ?? SessionManager.getWithFallback(UserSettings.ListViewColumns)),
+        );
+        dispatch(
+          setGalleryWidth({
+            index,
+            value: currentView.gallery_width ?? SessionManager.getWithFallback(UserSettings.GalleryWidth),
+          }),
+        );
+      }
 
       if (opt && opt.next_page) {
         dispatch(appendListResponse({ index, value: listRes }));
@@ -226,8 +283,9 @@ export function loadChild(index: number, path: string, beforeLoad?: () => void):
 
 export function changePageSize(index: number, pageSize: number): AppThunk {
   return async (dispatch, _getState) => {
+    SessionManager.set(UserSettings.PageSize, pageSize);
     dispatch(setPageSize({ index, value: pageSize }));
-    dispatch(navigateReconcile(index));
+    dispatch(navigateReconcile(index, { sync_view: true }));
   };
 }
 
@@ -241,7 +299,9 @@ export function changePage(index: number, page: number): AppThunk {
 export function changeSortOption(index: number, sortBy: string, sortDirection: string): AppThunk {
   return async (dispatch, _getState) => {
     dispatch(setSortOption({ index, value: [sortBy, sortDirection] }));
-    dispatch(navigateReconcile(index));
+    SessionManager.set(UserSettings.SortBy, sortBy);
+    SessionManager.set(UserSettings.SortDirection, sortDirection);
+    dispatch(navigateReconcile(index, { sync_view: true }));
   };
 }
 
@@ -560,5 +620,91 @@ export function openContextUrlFromUri(index: number, uri: string, e: React.Mouse
     }
 
     dispatch(openFileContextMenu(index, file, true, e, ContextMenuTypes.file, false));
+  };
+}
+
+export function setThumbToggle(index: number, value: boolean): AppThunk {
+  return async (dispatch, _getState) => {
+    dispatch(setFmLoading({ index, value: true }));
+    await dispatch(syncViewSettings(index, undefined, undefined, value));
+    dispatch(setShowThumb({ index: index, value: value }));
+    SessionManager.set(UserSettings.ShowThumb, value);
+    dispatch(setFmLoading({ index, value: false }));
+  };
+}
+
+export function setLayoutSetting(index: number, value: string): AppThunk {
+  return async (dispatch, _getState) => {
+    dispatch(setFmLoading({ index, value: true }));
+    dispatch(setLayout({ index: index, value: value }));
+    SessionManager.set(UserSettings.Layout, value);
+    await dispatch(syncViewSettings(index));
+    dispatch(setFmLoading({ index, value: false }));
+  };
+}
+
+let localCustomView: Record<string, ExplorerView> = {};
+
+export const clearLocalCustomView = () => {
+  localCustomView = {};
+};
+
+export function syncViewSettings(
+  index: number,
+  columns?: ListViewColumnSetting[],
+  galleryWidth?: number,
+  thumbOff?: boolean,
+): AppThunk {
+  return async (dispatch, getState) => {
+    const fm = getState().fileManager[index];
+    const currentLogin = SessionManager.currentLoginOrNull();
+    if (!fm.list || !fm.pure_path) {
+      return;
+    }
+    const parent = fm.list.parent;
+    const crUri = new CrUri(fm.pure_path);
+    const shouldUpdatedView =
+      currentLogin &&
+      !currentLogin.user.disable_view_sync &&
+      (parent?.owned || crUri.fs() == Filesystem.trash || crUri.fs() == Filesystem.shared_with_me);
+
+    const currentView: ExplorerView = {
+      page_size: pageSize(fm),
+      order: fm.sortBy ?? "created_at",
+      order_direction: fm.sortDirection ?? "asc",
+      view: fm.layout ?? Layouts.grid,
+      thumbnail: thumbOff ?? fm.showThumb,
+      columns: columns ?? fm.listViewColumns,
+      gallery_width: galleryWidth ?? fm.galleryWidth ?? 110,
+    };
+
+    if (shouldUpdatedView) {
+      await dispatch(
+        sendPatchViewSync({
+          uri: fm.pure_path,
+          view: currentView,
+        }),
+      );
+    } else {
+      localCustomView[fm.pure_path] = currentView;
+    }
+  };
+}
+
+export function applyListColumns(index: number, columns: ListViewColumnSetting[]): AppThunk {
+  return async (dispatch, _getState) => {
+    dispatch(setListViewColumns(columns));
+    SessionManager.set(UserSettings.ListViewColumns, columns);
+    dispatch(syncViewSettings(index, columns));
+  };
+}
+
+export function applyGalleryWidth(index: number, width: number): AppThunk {
+  return async (dispatch, _getState) => {
+    dispatch(setFmLoading({ index, value: true }));
+    await dispatch(syncViewSettings(index, undefined, width));
+    dispatch(setGalleryWidth({ index, value: width }));
+    SessionManager.set(UserSettings.GalleryWidth, width);
+    dispatch(setFmLoading({ index, value: false }));
   };
 }

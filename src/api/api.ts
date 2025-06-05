@@ -55,6 +55,7 @@ import {
   MoveFileService,
   MultipleUriService,
   PatchMetadataService,
+  PatchViewSyncService,
   PinFileService,
   RenameFileService,
   Share,
@@ -1980,6 +1981,21 @@ export function sendImport(req: ImportWorkflowService): ThunkResponse<TaskRespon
           data: req,
           method: "POST",
         },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+
+export function sendPatchViewSync(args: PatchViewSyncService): ThunkResponse<void> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/file/view`,
+        { method: "PATCH", data: args },
         {
           ...defaultOpts,
         },

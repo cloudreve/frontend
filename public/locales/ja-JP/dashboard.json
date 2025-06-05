@@ -617,7 +617,8 @@
       "disable_2fa": "2FA無効化",
       "add_passkey": "パスキー追加",
       "remove_passkey": "パスキー削除",
-      "redeem_gift_code": "ギフトコード交換"
+      "redeem_gift_code": "ギフトコード交換",
+      "update_view": "ビュー設定変更"
     },
     "server": "サーバー設定",
     "tempPath": "一時パス",

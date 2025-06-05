@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import {
   Box,
   DialogContent,
@@ -10,21 +9,21 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
-import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
+import { useTranslation } from "react-i18next";
 import { setListViewColumnSettingDialog } from "../../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import { applyListColumns } from "../../../../redux/thunks/filemanager.ts";
 import AutoHeight from "../../../Common/AutoHeight.tsx";
-import { FileManagerIndex } from "../../FileManager.tsx";
-import { getColumnTypeDefaults, ListViewColumnSetting } from "./Column.tsx";
+import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
 import { StyledTableContainerPaper } from "../../../Common/StyledComponents.tsx";
+import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import ArrowDown from "../../../Icons/ArrowDown.tsx";
 import Dismiss from "../../../Icons/Dismiss.tsx";
-import { setListViewColumns } from "../../../../redux/fileManagerSlice.ts";
-import SessionManager, { UserSettings } from "../../../../session";
+import { FileManagerIndex } from "../../FileManager.tsx";
 import AddColumn from "./AddColumn.tsx";
-import { useSnackbar } from "notistack";
-import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
+import { getColumnTypeDefaults, ListViewColumnSetting } from "./Column.tsx";
 
 const ColumnSetting = () => {
   const { t } = useTranslation();
@@ -32,12 +31,8 @@ const ColumnSetting = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [columns, setColumns] = useState<ListViewColumnSetting[]>([]);
 
-  const open = useAppSelector(
-    (state) => state.globalState.listViewColumnSettingDialogOpen,
-  );
-  const listViewColumns = useAppSelector(
-    (state) => state.fileManager[FileManagerIndex.main].listViewColumns,
-  );
+  const open = useAppSelector((state) => state.globalState.listViewColumnSettingDialogOpen);
+  const listViewColumns = useAppSelector((state) => state.fileManager[FileManagerIndex.main].listViewColumns);
 
   useEffect(() => {
     if (open) {
@@ -51,8 +46,7 @@ const ColumnSetting = () => {
 
   const onSubmitted = useCallback(() => {
     if (columns.length > 0) {
-      dispatch(setListViewColumns(columns));
-      SessionManager.set(UserSettings.ListViewColumns, columns);
+      dispatch(applyListColumns(FileManagerIndex.main, columns));
     }
     dispatch(setListViewColumnSettingDialog(false));
   }, [dispatch, columns]);
@@ -60,10 +54,7 @@ const ColumnSetting = () => {
   const onColumnAdded = useCallback(
     (column: ListViewColumnSetting) => {
       const existed = columns.find((c) => c.type === column.type);
-      if (
-        !existed ||
-        existed.props?.metadata_key != column.props?.metadata_key
-      ) {
+      if (!existed || existed.props?.metadata_key != column.props?.metadata_key) {
         setColumns((prev) => [...prev, column]);
       } else {
         enqueueSnackbar(t("application:fileManager.columnExisted"), {
@@ -101,11 +92,7 @@ const ColumnSetting = () => {
               </TableHead>
               <TableBody>
                 {columns.map((column, index) => (
-                  <TableRow
-                    hover
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                  <TableRow hover key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       {t(getColumnTypeDefaults(column).title)}
                     </TableCell>

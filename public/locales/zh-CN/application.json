@@ -363,7 +363,11 @@
     "layout": "布局",
     "thumbnails": "缩略图",
     "on": "开启",
-    "off": "关闭"
+    "off": "关闭",
+    "viewSetting": "视图设置",
+    "saved": "已保存",
+    "notSet": "未设置",
+    "deleteViewSetting": "删除视图设置"
   },
   "modals": {
     "showFileName": "显示文件名",
@@ -498,7 +502,13 @@
     "skipSoftDelete": "彻底删除文件",
     "skipSoftDeleteDes": "跳过回收站，直接删除文件",
     "unlinkOnly": "保留物理文件",
-    "unlinkOnlyDes": "仅删除文件记录，物理文件不会被删除"
+    "unlinkOnlyDes": "仅删除文件记录，物理文件不会被删除",
+    "shareView": "分享视图设置",
+    "shareViewDes": "勾选后，其他用户访问此共享文件夹时可以看到你保存在服务器的视图设置（布局、排序等）。",
+    "viewSetting": "视图设置",
+    "saved": "已保存",
+    "notSet": "未设置",
+    "deleteViewSetting": "删除视图设置"
   },
   "uploader": {
     "fileCopyName": "副本_",
@@ -666,6 +676,10 @@
     "createdAt": "创建日期："
   },
   "setting": {
+    "syncView": "视图设置",
+    "syncViewDes": "是否记住各个目录的视图设置，并同步到服务器。",
+    "syncViewOn": "同步到服务器",
+    "syncViewOff": "不同步",
     "noAuthenticator": "添加通行密钥以使用人脸、指纹或 USB 密钥登录账号",
     "neverUsed": "从未使用过",
     "usedAt": "上次使用于 <0></0>",
