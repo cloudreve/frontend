@@ -3,6 +3,7 @@ import {
   Collapse,
   FormControl,
   FormControlLabel,
+  IconButton,
   Link,
   ListItemText,
   SelectChangeEvent,
@@ -21,6 +22,7 @@ import Boolset from "../../../../util/boolset";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar";
 import { DenseFilledTextField, DenseSelect, SecondaryButton } from "../../../Common/StyledComponents";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu";
+import QuestionCircle from "../../../Icons/QuestionCircle";
 import SettingForm from "../../../Pages/Setting/SettingForm";
 import { Code } from "../../Common/Code";
 import { EndpointInput } from "../../Common/EndpointInput";
@@ -348,8 +350,23 @@ const CapabilitiesSection = () => {
 
       <Collapse in={hasRemoteDownload} unmountOnExit>
         <SettingSection>
-          <Typography variant="h6" gutterBottom>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+            }}
+          >
             {t("node.remoteDownload")}
+            <IconButton
+              onClick={() => {
+                window.open("https://docs.cloudreve.org/usage/remote-download", "_blank");
+              }}
+            >
+              <QuestionCircle />
+            </IconButton>
           </Typography>
           <SettingSectionContent>
             <SettingForm title={t("node.downloader")} lgWidth={5}>

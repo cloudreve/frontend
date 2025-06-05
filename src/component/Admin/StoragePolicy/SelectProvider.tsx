@@ -1,7 +1,19 @@
-import { Card, CardActionArea, CardContent, CardMedia, DialogContent, Grid2, styled, Typography } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  DialogActions,
+  DialogContent,
+  Grid2,
+  styled,
+  Typography,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { PolicyType } from "../../../api/explorer";
+import { SecondaryButton } from "../../Common/StyledComponents";
 import DraggableDialog from "../../Dialogs/DraggableDialog";
+import Open from "../../Icons/Open";
 import { PolicyPropsMap } from "./StoragePolicySetting";
 
 export interface SelectProviderProps {
@@ -46,6 +58,15 @@ const SelectProvider = ({ open, onClose, onSelect }: SelectProviderProps) => {
           ))}
         </Grid2>
       </DialogContent>
+      <DialogActions sx={{ justifyContent: "flex-start", p: 2, px: 3 }}>
+        <SecondaryButton
+          startIcon={<Open />}
+          variant="contained"
+          onClick={() => window.open("https://docs.cloudreve.org/usage/storage/", "_blank")}
+        >
+          {t("policy.compare")}
+        </SecondaryButton>
+      </DialogActions>
     </DraggableDialog>
   );
 };

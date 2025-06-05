@@ -1,12 +1,13 @@
-import { useTranslation } from "react-i18next";
-import { ViewerGroup } from "../../../../../api/explorer.ts";
-import DraggableDialog from "../../../../Dialogs/DraggableDialog.tsx";
+import { DialogContent, Link } from "@mui/material";
 import { useCallback, useState } from "react";
-import { useAppDispatch } from "../../../../../redux/hooks.ts";
+import { Trans, useTranslation } from "react-i18next";
 import { getWopiDiscovery } from "../../../../../api/api.ts";
-import SettingForm from "../../../../Pages/Setting/SettingForm.tsx";
-import { DialogContent } from "@mui/material";
+import { ViewerGroup } from "../../../../../api/explorer.ts";
+import { useAppDispatch } from "../../../../../redux/hooks.ts";
 import { DenseFilledTextField } from "../../../../Common/StyledComponents.tsx";
+import DraggableDialog from "../../../../Dialogs/DraggableDialog.tsx";
+import SettingForm from "../../../../Pages/Setting/SettingForm.tsx";
+import { Code } from "../../../Common/Code.tsx";
 import { NoMarginHelperText } from "../../Settings.tsx";
 
 export interface ImportWopiDialogProps {
@@ -15,11 +16,7 @@ export interface ImportWopiDialogProps {
   onImported: (v: ViewerGroup) => void;
 }
 
-const ImportWopiDialog = ({
-  open,
-  onClose,
-  onImported,
-}: ImportWopiDialogProps) => {
+const ImportWopiDialog = ({ open, onClose, onImported }: ImportWopiDialogProps) => {
   const { t } = useTranslation("dashboard");
   const dispatch = useAppDispatch();
   const [endpoint, setEndpoint] = useState("");
@@ -58,12 +55,14 @@ const ImportWopiDialog = ({
     >
       <DialogContent>
         <SettingForm lgWidth={12} title={t("settings.wopiEndpoint")}>
-          <DenseFilledTextField
-            value={endpoint}
-            fullWidth
-            onChange={(e) => setEndpoint(e.target.value)}
-          />
-          <NoMarginHelperText>{t("settings.wopiDes")}</NoMarginHelperText>
+          <DenseFilledTextField value={endpoint} fullWidth onChange={(e) => setEndpoint(e.target.value)} />
+          <NoMarginHelperText>
+            <Trans
+              ns="dashboard"
+              i18nKey="settings.wopiDes"
+              components={[<Code />, <Link href="https://docs.cloudreve.org/usage/wopi" target="_blank" />]}
+            />
+          </NoMarginHelperText>
         </SettingForm>
       </DialogContent>
     </DraggableDialog>

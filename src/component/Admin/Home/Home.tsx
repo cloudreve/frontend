@@ -40,10 +40,12 @@ import OpenFilled from "../../Icons/OpenFilled.tsx";
 import PeopleFilled from "../../Icons/PeopleFilled.tsx";
 import ShareFilled from "../../Icons/ShareFilled.tsx";
 import SparkleFilled from "../../Icons/SparkleFilled.tsx";
+import Telegram from "../../Icons/Telegram.tsx";
 import PageContainer from "../../Pages/PageContainer.tsx";
 import PageHeader from "../../Pages/PageHeader.tsx";
 import ProDialog from "../Common/ProDialog.tsx";
 import SiteUrlWarning from "./SiteUrlWarning.tsx";
+import CommentMultiple from "../../Icons/CommentMultiple.tsx";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -347,6 +349,24 @@ const Home = () => {
                     <Discord />
                   </ListItemIcon>
                   <ListItemText primary={t("summary.discordCommunity")} />
+                  <StyledListItemIcon>
+                    <OpenFilled />
+                  </StyledListItemIcon>
+                </ListItemButton>
+                <ListItemButton onClick={() => window.open("https://t.me/cloudreve_official")}>
+                  <ListItemIcon>
+                    <Telegram />
+                  </ListItemIcon>
+                  <ListItemText primary={t("summary.telegram")} />
+                  <StyledListItemIcon>
+                    <OpenFilled />
+                  </StyledListItemIcon>
+                </ListItemButton>
+                <ListItemButton onClick={() => window.open("https://github.com/cloudreve/Cloudreve/discussions")}>
+                  <ListItemIcon>
+                    <CommentMultiple />
+                  </ListItemIcon>
+                  <ListItemText primary={t("summary.forum")} />
                   <StyledListItemIcon>
                     <OpenFilled />
                   </StyledListItemIcon>

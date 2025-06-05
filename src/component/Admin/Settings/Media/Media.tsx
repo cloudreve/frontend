@@ -1,32 +1,15 @@
-import { useTranslation } from "react-i18next";
-import * as React from "react";
-import { useContext } from "react";
-import { SettingContext } from "../SettingWrapper.tsx";
-import {
-  Alert,
-  Box,
-  Collapse,
-  FormControlLabel,
-  ListItemText,
-  Stack,
-  Switch,
-  Typography,
-} from "@mui/material";
-import {
-  NoMarginHelperText,
-  SettingSection,
-  SettingSectionContent,
-} from "../Settings.tsx";
-import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
-import {
-  DenseFilledTextField,
-  DenseSelect,
-} from "../../../Common/StyledComponents.tsx";
+import { Alert, Box, Collapse, FormControlLabel, Link, ListItemText, Stack, Switch, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
+import { useContext } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { isTrueVal } from "../../../../session/utils.ts";
+import { DenseFilledTextField, DenseSelect } from "../../../Common/StyledComponents.tsx";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
-import Generators from "./Generators.tsx";
+import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings.tsx";
+import { SettingContext } from "../SettingWrapper.tsx";
 import Extractors from "./Extractors.tsx";
+import Generators from "./Generators.tsx";
 
 const Media = () => {
   const { t } = useTranslation("dashboard");
@@ -106,7 +89,7 @@ const Media = () => {
                     <SquareMenuItem value={f} key={f}>
                       <ListItemText
                         slotProps={{
-                          primary: { variant: "body2" }
+                          primary: { variant: "body2" },
                         }}
                       >
                         {f}
@@ -114,9 +97,7 @@ const Media = () => {
                     </SquareMenuItem>
                   ))}
                 </DenseSelect>
-                <NoMarginHelperText>
-                  {t("settings.notAppliedToNativeGenerator", { prefix: "" })}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.notAppliedToNativeGenerator", { prefix: "" })}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
             <Collapse in={values.thumb_encode_method == "jpg"} unmountOnExit>
@@ -156,9 +137,7 @@ const Media = () => {
                   }
                   label={t("settings.thumbGC")}
                 />
-                <NoMarginHelperText>
-                  {t("settings.notAppliedToNativeGenerator", { prefix: "" })}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.notAppliedToNativeGenerator", { prefix: "" })}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
           </SettingSectionContent>
@@ -168,7 +147,11 @@ const Media = () => {
           <SettingSectionContent>
             <SettingForm lgWidth={6}>
               <Alert severity="info" sx={{ mb: 1 }}>
-                {t("settings.generatorProxyWarning")}
+                <Trans
+                  ns="dashboard"
+                  i18nKey="settings.generatorProxyWarning"
+                  components={[<Link href="https://docs.cloudreve.org/usage/thumbnails" target="_blank" />]}
+                />
               </Alert>
               <Generators values={values} setSetting={setSettings} />
             </SettingForm>
@@ -181,7 +164,11 @@ const Media = () => {
           <SettingSectionContent>
             <SettingForm lgWidth={6}>
               <Alert severity="info" sx={{ mb: 1 }}>
-                {t("settings.extractMediaMetaDes")}
+                <Trans
+                  ns="dashboard"
+                  i18nKey="settings.extractMediaMetaDes"
+                  components={[<Link href="https://docs.cloudreve.org/usage/media-meta" target="_blank" />]}
+                />
               </Alert>
               <Extractors values={values} setSetting={setSettings} />
             </SettingForm>
