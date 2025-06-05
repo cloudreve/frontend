@@ -1302,6 +1302,8 @@
     "deleteXPayments": "{{num}}件の注文を削除"
   },
   "vas": {
+    "disableSubAddressEmail": "サブアドレスメールの無効化",
+    "disableSubAddressEmailDes": "有効化後、<0>+</0>を含むメールアドレスは登録不可になります。",
     "confirmDelete": "これらの注文を削除しますか？",
     "vas": "付加価値サービス",
     "reports": "報告",

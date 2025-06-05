@@ -1315,6 +1315,8 @@
     "deleteXPayments": "Delete {{num}} payments"
   },
   "vas": {
+    "disableSubAddressEmail": "Disable sub-address email",
+    "disableSubAddressEmailDes": "After enabled, email addresses containing <0>+</0> cannot be used for sign-up.",
     "confirmDelete": "Are you sure you want to delete these orders?",
     "vas": "VAS",
     "reports": "Reports",

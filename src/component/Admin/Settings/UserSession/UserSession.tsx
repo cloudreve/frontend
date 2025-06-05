@@ -7,6 +7,7 @@ import SizeInput from "../../../Common/SizeInput.tsx";
 import { DenseFilledTextField, DenseSelect } from "../../../Common/StyledComponents.tsx";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
 import SettingForm, { ProChip } from "../../../Pages/Setting/SettingForm.tsx";
+import { Code } from "../../Common/Code.tsx";
 import GroupSelectionInput from "../../Common/GroupSelectionInput.tsx";
 import SharesInput from "../../Common/SharesInput.tsx";
 import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings.tsx";
@@ -110,7 +111,7 @@ const UserSession = () => {
             </SettingForm>
             <SettingForm title={t("settings.defaultSymbolics")} lgWidth={5} pro>
               <FormControl>
-                <SharesInput/>
+                <SharesInput />
                 <NoMarginHelperText>
                   <Trans
                     i18nKey="settings.defaultSymbolicsDes"
@@ -138,6 +139,22 @@ const UserSession = () => {
                   )}
                 </DenseSelect>
                 <NoMarginHelperText>{t("vas.filterEmailProviderDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+            <SettingForm lgWidth={5} pro>
+              <FormControl fullWidth>
+                <FormControlLabel
+                  control={<Switch checked={false} />}
+                  label={
+                    <>
+                    {t("vas.disableSubAddressEmail")}
+                      <ProChip label="Pro" color="primary" size="small" />
+                    </>
+                  }
+                />
+                <NoMarginHelperText>
+                  <Trans i18nKey="vas.disableSubAddressEmailDes" ns={"dashboard"} components={[<Code />]} />
+                </NoMarginHelperText>
               </FormControl>
             </SettingForm>
           </SettingSectionContent>

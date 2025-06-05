@@ -1302,6 +1302,8 @@
     "deleteXPayments": "删除 {{num}} 个订单"
   },
   "vas": {
+    "disableSubAddressEmail": "禁用子地址邮箱",
+    "disableSubAddressEmailDes": "开启后，包含加号 <0>+</0> 的邮箱地址无法注册账户。",
     "confirmDelete": "确认要删除这些订单?",
     "vas": "增值服务",
     "reports": "举报",

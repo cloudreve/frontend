@@ -1299,6 +1299,8 @@
     "deleteXPayments": "刪除 {{num}} 個訂單"
   },
   "vas": {
+    "disableSubAddressEmail": "禁用子地址郵箱",
+    "disableSubAddressEmailDes": "開啟後，包含加號 <0>+</0> 的郵箱地址無法註冊賬戶。",
     "confirmDelete": "確認要刪除這些訂單?",
     "vas": "增值服務",
     "reports": "舉報",
