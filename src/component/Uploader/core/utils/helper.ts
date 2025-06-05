@@ -1,13 +1,11 @@
-import { Task } from "../types";
-import Logger from "../logger";
+import CrUri from "../../../../util/uri";
 import { UploaderError, UploaderErrorName } from "../errors";
+import Logger from "../logger";
+import { Task } from "../types";
 import { ChunkProgress } from "../uploader/chunk";
 
 // 文件分块
-export function getChunks(
-  file: File,
-  chunkByteSize: number | undefined,
-): Blob[] {
+export function getChunks(file: File, chunkByteSize: number | undefined): Blob[] {
   // 如果 chunkByteSize 比文件大或为0，则直接取文件的大小
   if (!chunkByteSize || chunkByteSize > file.size || chunkByteSize == 0) {
     chunkByteSize = file.size;
@@ -16,10 +14,7 @@ export function getChunks(
   const chunks: Blob[] = [];
   const count = Math.ceil(file.size / chunkByteSize);
   for (let i = 0; i < count; i++) {
-    const chunk = file.slice(
-      chunkByteSize * i,
-      i === count - 1 ? file.size : chunkByteSize * (i + 1),
-    );
+    const chunk = file.slice(chunkByteSize * i, i === count - 1 ? file.size : chunkByteSize * (i + 1));
     chunks.push(chunk);
   }
 
@@ -52,12 +47,7 @@ export function setResumeCtx(task: Task, logger: Logger) {
   try {
     localStorage.setItem(ctxKey, JSON.stringify(task));
   } catch (err) {
-    logger.warn(
-      new UploaderError(
-        UploaderErrorName.WriteCtxFailed,
-        `setResumeCtx failed: ${ctxKey}`,
-      ),
-    );
+    logger.warn(new UploaderError(UploaderErrorName.WriteCtxFailed, `setResumeCtx failed: ${ctxKey}`));
   }
 }
 
@@ -66,12 +56,7 @@ export function removeResumeCtx(task: Task | string, logger: Logger) {
   try {
     localStorage.removeItem(ctxKey);
   } catch (err) {
-    logger.warn(
-      new UploaderError(
-        UploaderErrorName.RemoveCtxFailed,
-        `removeResumeCtx failed. key: ${ctxKey}`,
-      ),
-    );
+    logger.warn(new UploaderError(UploaderErrorName.RemoveCtxFailed, `removeResumeCtx failed. key: ${ctxKey}`));
   }
 }
 
@@ -82,12 +67,7 @@ export function cleanupResumeCtx(logger: Logger) {
       try {
         localStorage.removeItem(key);
       } catch (err) {
-        logger.warn(
-          new UploaderError(
-            UploaderErrorName.RemoveCtxFailed,
-            `removeResumeCtx failed. key: ${key}`,
-          ),
-        );
+        logger.warn(new UploaderError(UploaderErrorName.RemoveCtxFailed, `removeResumeCtx failed. key: ${key}`));
       }
     }
   }
@@ -99,12 +79,7 @@ export function getResumeCtx(task: Task | string, logger: Logger): Task | null {
   try {
     localInfoString = localStorage.getItem(ctxKey);
   } catch {
-    logger.warn(
-      new UploaderError(
-        UploaderErrorName.ReadCtxFailed,
-        `getResumeCtx failed. key: ${ctxKey}`,
-      ),
-    );
+    logger.warn(new UploaderError(UploaderErrorName.ReadCtxFailed, `getResumeCtx failed. key: ${ctxKey}`));
   }
 
   if (localInfoString == null) {
@@ -117,19 +92,10 @@ export function getResumeCtx(task: Task | string, logger: Logger): Task | null {
   } catch {
     // 本地信息已被破坏，直接删除
     removeResumeCtx(task, logger);
-    logger.warn(
-      new UploaderError(
-        UploaderErrorName.InvalidCtxData,
-        `getResumeCtx failed to parse. key: ${ctxKey}`,
-      ),
-    );
+    logger.warn(new UploaderError(UploaderErrorName.InvalidCtxData, `getResumeCtx failed to parse. key: ${ctxKey}`));
   }
 
-  if (
-    localInfo &&
-    localInfo.session &&
-    localInfo.session.expires < Math.floor(Date.now() / 1000)
-  ) {
+  if (localInfo && localInfo.session && localInfo.session.expires < Math.floor(Date.now() / 1000)) {
     removeResumeCtx(task, logger);
     logger.warn(
       new UploaderError(
@@ -232,9 +198,12 @@ export function getDirectoryUploadDst(dst: string, file: any): string {
     }
   }
 
+  const dstCrUrl = new CrUri(dst);
   relPath = trimPrefix(relPath, "/");
-
-  return basename(pathJoin([dst, relPath]));
+  return dstCrUrl
+    .join(...relPath.split("/"))
+    .parent()
+    .toString();
 }
 
 // Wrap readEntries in a promise to make working with readEntries easier
@@ -273,9 +242,7 @@ async function readAllDirectoryEntries(directoryReader: any): Promise<any> {
 }
 
 // Drop handler function to get all files
-export async function getAllFileEntries(
-  dataTransferItemList: DataTransferItemList,
-): Promise<File[]> {
+export async function getAllFileEntries(dataTransferItemList: DataTransferItemList): Promise<File[]> {
   const fileEntries: any[] = [];
   // Use BFS to traverse entire directory/file structure
   const queue: any[] = [];
