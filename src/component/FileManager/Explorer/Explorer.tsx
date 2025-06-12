@@ -121,6 +121,7 @@ const Explorer = () => {
     >
       <SwitchTransition>
         <CSSTransition
+          timeout={500}
           addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
           classNames="fade"
           key={index}
