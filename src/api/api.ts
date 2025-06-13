@@ -481,22 +481,6 @@ export function getSearchUser(keyword: string): ThunkResponse<User[]> {
   };
 }
 
-export function getAllGroups(): ThunkResponse<Group[]> {
-  return async (dispatch, _getState) => {
-    return await dispatch(
-      send(
-        "/group/list",
-        {
-          method: "GET",
-        },
-        {
-          ...defaultOpts,
-        },
-      ),
-    );
-  };
-}
-
 export function sendCreateShare(req: ShareCreateService): ThunkResponse<string> {
   return async (dispatch, _getState) => {
     return await dispatch(
