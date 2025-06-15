@@ -275,6 +275,7 @@ export interface ShareCreateService {
   uri: string;
   downloads?: number;
   is_private?: boolean;
+  password?: string;
   expire?: number;
   share_view?: boolean;
 }
