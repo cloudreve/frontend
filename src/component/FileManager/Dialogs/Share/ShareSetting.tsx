@@ -180,7 +180,7 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
                               if (!/^[a-zA-Z0-9]*$/.test(value) || value.length > 32) return;
                               onSettingChange({ ...setting, password: value });
                             }}
-                            placeholder={t("application:modals.passwordAutoGenerate")}
+                            required
                             fullWidth
                         />
                       </FormControl>

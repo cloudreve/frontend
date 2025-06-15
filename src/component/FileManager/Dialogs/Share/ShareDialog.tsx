@@ -196,13 +196,13 @@ const ShareDialog = () => {
                             inputProps={{ readonly: true }}
                             label={t("modals.sharePassword")}
                             fullWidth
-                            value={setting.password}
+                            value={shareLink.substring(shareLink.lastIndexOf("/") + 1)}
                             onFocus={(e) => e.target.select()}
                             slotProps={{
                                 input: {
                                     endAdornment: (
                                         <IconButton
-                                            onClick={() => copyToClipboard(setting.password ?? "")}
+                                            onClick={() => copyToClipboard(shareLink.substring(shareLink.lastIndexOf("/") + 1) ?? "")}
                                             size="small"
                                             sx={{ marginRight: -1 }}
                                         >

@@ -471,7 +471,6 @@
     "privateShare": "隐藏分享",
     "privateShareDes": "勾选后，其他人无法在你的个人主页看到此分享链接。",
     "useCustomPassword": "自定义分享密码",
-    "passwordAutoGenerate": "自动生成",
     "expireAfterDownload": "下载后自动过期",
     "sharePassword": "分享密码",
     "randomlyGenerate": "随机生成",
