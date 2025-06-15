@@ -71,6 +71,7 @@ const StyledListItemButton = styled(ListItemButton)(() => ({}));
 
 export interface ShareSetting {
   is_private?: boolean;
+  use_custom_password?: boolean;
   password?: string;
   share_view?: boolean;
   downloads?: boolean;
@@ -154,25 +155,37 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
         </AccordionSummary>
         <AccordionDetails sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Typography>{t("application:modals.privateShareDes")}</Typography>
-            {setting.is_private && (
+            {setting.is_private &&
                 <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-                  <Typography>{t("application:modals.passwordPrefix")}</Typography>
-                  <FormControl
-                      variant="standard"
-                      sx={{ mx: 1, flex: 1 }}
-                  >
-                    <TextField
-                        variant="standard"
-                        value={setting.password ?? ""}
-                        onChange={(e) => {
-                          onSettingChange({ ...setting, password: e.target.value });
-                        }}
-                        placeholder={t("application:modals.passwordAutoGenerate")}
-                        fullWidth
-                    />
-                  </FormControl>
-                </Box>
-            )}
+                  {!editing && (
+                      <Checkbox checked={setting.use_custom_password} onChange={() => {
+                        onSettingChange({ ...setting, use_custom_password: !setting.use_custom_password });
+                      }} />
+                  )}
+                  {!setting.use_custom_password && (
+                      <Typography sx={{ flex: 1 }}>{t("application:modals.useCustomPassword")}</Typography>
+                  )}
+                  {setting.use_custom_password && (
+                      <FormControl
+                          variant="standard"
+                          sx={{ mx: 1, flex: 1 }}
+                      >
+                        <TextField
+                            label={t("application:modals.sharePassword")}
+                            variant="standard"
+                            disabled={editing}
+                            value={setting.password ?? ""}
+                            onChange={(e) => {
+                              const value = e.target.value.trim();
+                              if (!/^[a-zA-Z0-9]*$/.test(value) || value.length > 32) return;
+                              onSettingChange({ ...setting, password: value });
+                            }}
+                            placeholder={t("application:modals.passwordAutoGenerate")}
+                            fullWidth
+                        />
+                      </FormControl>
+                  )}
+                </Box>  }
         </AccordionDetails>
       </Accordion>
       {file?.type == FileType.folder && (

@@ -1,4 +1,4 @@
-import { Box, DialogContent, IconButton, Tooltip, useTheme } from "@mui/material";
+import {Box, DialogContent, IconButton, List, Tooltip, useTheme} from "@mui/material";
 import dayjs from "dayjs";
 import { TFunction } from "i18next";
 import React, { useCallback, useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import Share from "../../../Icons/Share.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
 import ShareSettingContent, { downloadOptions, expireOptions, ShareSetting } from "./ShareSetting.tsx";
+import {CopyAll} from "@mui/icons-material";
 
 
 const initialSetting: ShareSetting = {
@@ -25,6 +26,8 @@ const initialSetting: ShareSetting = {
 const shareToSetting = (share: ShareModel, t: TFunction): ShareSetting => {
   const res: ShareSetting = {
     is_private: share.is_private,
+    password: share.password,
+    use_custom_password: true,
     share_view: share.share_view,
     downloads: share.remain_downloads != undefined && share.remain_downloads > 0,
 
@@ -129,7 +132,7 @@ const ShareDialog = () => {
           maxWidth: "xs",
         }}
         cancelText={shareLink ? "common:close" : undefined}
-        okText={shareLink ? "fileManager.copy" : undefined}
+        okText={shareLink ? "fileManager.copyLinkAlongWithPassword" : undefined}
         secondaryAction={
           shareLink
             ? // @ts-ignore
@@ -161,15 +164,55 @@ const ShareDialog = () => {
                     />
                   )}
                   {shareLink && (
-                    <FilledTextField
-                      variant={"filled"}
-                      autoFocus
-                      inputProps={{ readonly: true }}
-                      label={t("modals.shareLink")}
-                      fullWidth
-                      value={shareLink}
-                      onFocus={(e) => e.target.select()}
-                    />
+                    <List sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: theme.spacing(1),
+                            padding: theme.spacing(1),
+                        }}>
+                        <FilledTextField
+                            variant={"filled"}
+                            inputProps={{ readonly: true }}
+                            label={t("modals.shareLink")}
+                            fullWidth
+                            value={shareLink.substring(0, shareLink.lastIndexOf("/"))}
+                            onFocus={(e) => e.target.select()}
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <IconButton
+                                            onClick={() => copyToClipboard(shareLink.substring(0, shareLink.lastIndexOf("/")))}
+                                            size="small"
+                                            sx={{ marginRight: -1 }}
+                                        >
+                                            <CopyAll />
+                                        </IconButton>
+                                    )
+                                }
+                            }}
+                        />
+                        <FilledTextField
+                            variant={"filled"}
+                            inputProps={{ readonly: true }}
+                            label={t("modals.sharePassword")}
+                            fullWidth
+                            value={setting.password}
+                            onFocus={(e) => e.target.select()}
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <IconButton
+                                            onClick={() => copyToClipboard(setting.password ?? "")}
+                                            size="small"
+                                            sx={{ marginRight: -1 }}
+                                        >
+                                            <CopyAll />
+                                        </IconButton>
+                                    )
+                                }
+                            }}
+                        />
+                    </List>
                   )}
                 </Box>
               </CSSTransition>
