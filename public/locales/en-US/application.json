@@ -469,6 +469,8 @@
     "createShareLink": "Create share link",
     "privateShare": "Hide from public",
     "privateShareDes": "If selected, other people cannot see this share link on your homepage.",
+    "passwordPrefix": "Share link password: ",
+    "passwordAutoGenerate": "Auto generate",
     "shareView": "Share view setting",
     "shareViewDes": "If selected, other users can see your view setting (layout, sorting, etc.) saved on the server server when accessing this shared folder.",
     "expireAfterDownload": "Expire after being downloaded",

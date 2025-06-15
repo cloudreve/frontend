@@ -465,6 +465,8 @@
     "createShareLink": "建立分享連結",
     "privateShare": "隱藏分享",
     "privateShareDes": "勾選後，其他人無法在你的個人主頁看到此分享連結。",
+    "passwordPrefix": "分享密碼：",
+    "passwordAutoGenerate": "自動生成",
     "expireAfterDownload": "下載後自動過期",
     "sharePassword": "分享密碼",
     "randomlyGenerate": "隨機生成",

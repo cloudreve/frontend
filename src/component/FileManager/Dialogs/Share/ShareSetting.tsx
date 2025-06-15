@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Box,
   Checkbox,
   createFilterOptions,
   FormControl,
@@ -70,6 +71,7 @@ const StyledListItemButton = styled(ListItemButton)(() => ({}));
 
 export interface ShareSetting {
   is_private?: boolean;
+  password?: string;
   share_view?: boolean;
   downloads?: boolean;
   expires?: boolean;
@@ -150,7 +152,28 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
             </ListItemSecondaryAction>
           </StyledListItemButton>
         </AccordionSummary>
-        <AccordionDetails>{t("application:modals.privateShareDes")}</AccordionDetails>
+        <AccordionDetails sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Typography>{t("application:modals.privateShareDes")}</Typography>
+            {setting.is_private && (
+                <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+                  <Typography>{t("application:modals.passwordPrefix")}</Typography>
+                  <FormControl
+                      variant="standard"
+                      sx={{ mx: 1, flex: 1 }}
+                  >
+                    <TextField
+                        variant="standard"
+                        value={setting.password ?? ""}
+                        onChange={(e) => {
+                          onSettingChange({ ...setting, password: e.target.value });
+                        }}
+                        placeholder={t("application:modals.passwordAutoGenerate")}
+                        fullWidth
+                    />
+                  </FormControl>
+                </Box>
+            )}
+        </AccordionDetails>
       </Accordion>
       {file?.type == FileType.folder && (
         <Accordion expanded={expanded === "share_view"} onChange={handleExpand("share_view")}>
