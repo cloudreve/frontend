@@ -1,4 +1,4 @@
-import {Box, DialogContent, IconButton, List, Tooltip, useTheme} from "@mui/material";
+import { Box, DialogContent, IconButton, List, Tooltip, useTheme } from "@mui/material";
 import dayjs from "dayjs";
 import { TFunction } from "i18next";
 import React, { useCallback, useEffect, useState } from "react";
@@ -15,8 +15,7 @@ import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import Share from "../../../Icons/Share.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
 import ShareSettingContent, { downloadOptions, expireOptions, ShareSetting } from "./ShareSetting.tsx";
-import {CopyAll} from "@mui/icons-material";
-
+import CopyOutlined from "../../../Icons/CopyOutlined.tsx";
 
 const initialSetting: ShareSetting = {
   expires_val: expireOptions[2],
@@ -164,54 +163,58 @@ const ShareDialog = () => {
                     />
                   )}
                   {shareLink && (
-                    <List sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: theme.spacing(1),
-                            padding: theme.spacing(1),
-                        }}>
-                        <FilledTextField
-                            variant={"filled"}
-                            inputProps={{ readonly: true }}
-                            label={t("modals.shareLink")}
-                            fullWidth
-                            value={shareLink.substring(0, shareLink.lastIndexOf("/"))}
-                            onFocus={(e) => e.target.select()}
-                            slotProps={{
-                                input: {
-                                    endAdornment: (
-                                        <IconButton
-                                            onClick={() => copyToClipboard(shareLink.substring(0, shareLink.lastIndexOf("/")))}
-                                            size="small"
-                                            sx={{ marginRight: -1 }}
-                                        >
-                                            <CopyAll />
-                                        </IconButton>
-                                    )
+                    <List
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: theme.spacing(1),
+                        padding: theme.spacing(1),
+                      }}
+                    >
+                      <FilledTextField
+                        variant={"filled"}
+                        inputProps={{ readonly: true }}
+                        label={t("modals.shareLink")}
+                        fullWidth
+                        value={shareLink.substring(0, shareLink.lastIndexOf("/"))}
+                        onFocus={(e) => e.target.select()}
+                        slotProps={{
+                          input: {
+                            endAdornment: (
+                              <IconButton
+                                onClick={() => copyToClipboard(shareLink.substring(0, shareLink.lastIndexOf("/")))}
+                                size="small"
+                                sx={{ marginRight: -1 }}
+                              >
+                                <CopyOutlined />
+                              </IconButton>
+                            ),
+                          },
+                        }}
+                      />
+                      <FilledTextField
+                        variant={"filled"}
+                        inputProps={{ readonly: true }}
+                        label={t("modals.sharePassword")}
+                        fullWidth
+                        value={shareLink.substring(shareLink.lastIndexOf("/") + 1)}
+                        onFocus={(e) => e.target.select()}
+                        slotProps={{
+                          input: {
+                            endAdornment: (
+                              <IconButton
+                                onClick={() =>
+                                  copyToClipboard(shareLink.substring(shareLink.lastIndexOf("/") + 1) ?? "")
                                 }
-                            }}
-                        />
-                        <FilledTextField
-                            variant={"filled"}
-                            inputProps={{ readonly: true }}
-                            label={t("modals.sharePassword")}
-                            fullWidth
-                            value={shareLink.substring(shareLink.lastIndexOf("/") + 1)}
-                            onFocus={(e) => e.target.select()}
-                            slotProps={{
-                                input: {
-                                    endAdornment: (
-                                        <IconButton
-                                            onClick={() => copyToClipboard(shareLink.substring(shareLink.lastIndexOf("/") + 1) ?? "")}
-                                            size="small"
-                                            sx={{ marginRight: -1 }}
-                                        >
-                                            <CopyAll />
-                                        </IconButton>
-                                    )
-                                }
-                            }}
-                        />
+                                size="small"
+                                sx={{ marginRight: -1 }}
+                              >
+                                <CopyOutlined />
+                              </IconButton>
+                            ),
+                          },
+                        }}
+                      />
                     </List>
                   )}
                 </Box>

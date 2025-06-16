@@ -127,7 +127,7 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
     setExpanded(isExpanded ? panel : undefined);
   };
 
-  const handleCheck = (prop: "is_private" |  "share_view" | "expires" | "downloads") => () => {
+  const handleCheck = (prop: "is_private" | "share_view" | "expires" | "downloads") => () => {
     if (!setting[prop]) {
       handleExpand(prop)(null, true);
     }
@@ -155,37 +155,38 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
         </AccordionSummary>
         <AccordionDetails sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Typography>{t("application:modals.privateShareDes")}</Typography>
-            {setting.is_private &&
-                <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-                  {!editing && (
-                      <Checkbox checked={setting.use_custom_password} onChange={() => {
-                        onSettingChange({ ...setting, use_custom_password: !setting.use_custom_password });
-                      }} />
-                  )}
-                  {!setting.use_custom_password && (
-                      <Typography sx={{ flex: 1 }}>{t("application:modals.useCustomPassword")}</Typography>
-                  )}
-                  {setting.use_custom_password && (
-                      <FormControl
-                          variant="standard"
-                          sx={{ mx: 1, flex: 1 }}
-                      >
-                        <TextField
-                            label={t("application:modals.sharePassword")}
-                            variant="standard"
-                            disabled={editing}
-                            value={setting.password ?? ""}
-                            onChange={(e) => {
-                              const value = e.target.value.trim();
-                              if (!/^[a-zA-Z0-9]*$/.test(value) || value.length > 32) return;
-                              onSettingChange({ ...setting, password: value });
-                            }}
-                            required
-                            fullWidth
-                        />
-                      </FormControl>
-                  )}
-                </Box>  }
+          {setting.is_private && (
+            <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+              {!editing && (
+                <Checkbox
+                  checked={setting.use_custom_password}
+                  onChange={() => {
+                    onSettingChange({ ...setting, use_custom_password: !setting.use_custom_password });
+                  }}
+                />
+              )}
+              {!setting.use_custom_password && (
+                <Typography sx={{ flex: 1 }}>{t("application:modals.useCustomPassword")}</Typography>
+              )}
+              {setting.use_custom_password && (
+                <FormControl variant="standard" sx={{ mx: 1, flex: 1 }}>
+                  <TextField
+                    label={t("application:modals.sharePassword")}
+                    variant="standard"
+                    disabled={editing}
+                    value={setting.password ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value.trim();
+                      if (!/^[a-zA-Z0-9]*$/.test(value) || value.length > 32) return;
+                      onSettingChange({ ...setting, password: value });
+                    }}
+                    required
+                    fullWidth
+                  />
+                </FormControl>
+              )}
+            </Box>
+          )}
         </AccordionDetails>
       </Accordion>
       {file?.type == FileType.folder && (
