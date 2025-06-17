@@ -1,7 +1,7 @@
-import { Box, DialogContent, IconButton, Tooltip, useTheme } from "@mui/material";
+import { Box, DialogContent, IconButton, List, Tooltip, useTheme } from "@mui/material";
 import dayjs from "dayjs";
 import { TFunction } from "i18next";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { Share as ShareModel } from "../../../../api/explorer.ts";
@@ -15,16 +15,23 @@ import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import Share from "../../../Icons/Share.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
 import ShareSettingContent, { downloadOptions, expireOptions, ShareSetting } from "./ShareSetting.tsx";
-
+import CopyOutlined from "../../../Icons/CopyOutlined.tsx";
 
 const initialSetting: ShareSetting = {
   expires_val: expireOptions[2],
   downloads_val: downloadOptions[0],
 };
 
+interface ShareLinkPassword {
+  shareLink: string;
+  password?: string;
+}
+
 const shareToSetting = (share: ShareModel, t: TFunction): ShareSetting => {
   const res: ShareSetting = {
     is_private: share.is_private,
+    password: share.password,
+    use_custom_password: true,
     share_view: share.share_view,
     downloads: share.remain_downloads != undefined && share.remain_downloads > 0,
 
@@ -65,6 +72,15 @@ const ShareDialog = () => {
   const [loading, setLoading] = useState(false);
   const [setting, setSetting] = useState<ShareSetting>(initialSetting);
   const [shareLink, setShareLink] = useState<string>("");
+  const shareLinkPassword = useMemo(() => {
+    const start = shareLink.lastIndexOf("/s/");
+    const shareLinkParts = shareLink.substring(start + 3).split("/");
+    const password = shareLinkParts.length == 2 ? shareLinkParts[1] : undefined;
+    return {
+      shareLink: password ? shareLink.substring(0, shareLink.lastIndexOf("/")) : shareLink,
+      password: password,
+    } as ShareLinkPassword;
+  }, [shareLink]);
 
   const open = useAppSelector((state) => state.globalState.shareLinkDialogOpen);
   const target = useAppSelector((state) => state.globalState.shareLinkDialogFile);
@@ -129,7 +145,13 @@ const ShareDialog = () => {
           maxWidth: "xs",
         }}
         cancelText={shareLink ? "common:close" : undefined}
-        okText={shareLink ? "fileManager.copy" : undefined}
+        okText={
+          shareLink
+            ? shareLinkPassword.password
+              ? "fileManager.copyLinkAlongWithPassword"
+              : "fileManager.copy"
+            : undefined
+        }
         secondaryAction={
           shareLink
             ? // @ts-ignore
@@ -161,15 +183,61 @@ const ShareDialog = () => {
                     />
                   )}
                   {shareLink && (
-                    <FilledTextField
-                      variant={"filled"}
-                      autoFocus
-                      inputProps={{ readonly: true }}
-                      label={t("modals.shareLink")}
-                      fullWidth
-                      value={shareLink}
-                      onFocus={(e) => e.target.select()}
-                    />
+                    <List
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: theme.spacing(1),
+                        padding: theme.spacing(1),
+                      }}
+                    >
+                      <FilledTextField
+                        variant={"filled"}
+                        inputProps={{ readonly: true }}
+                        label={t("modals.shareLink")}
+                        fullWidth
+                        value={shareLinkPassword.shareLink}
+                        onFocus={(e) => e.target.select()}
+                        slotProps={{
+                          input: {
+                            endAdornment: (
+                              <IconButton
+                                onClick={() => copyToClipboard(shareLink.substring(0, shareLink.lastIndexOf("/")))}
+                                size="small"
+                                sx={{ marginRight: -1 }}
+                              >
+                                <CopyOutlined />
+                              </IconButton>
+                            ),
+                          },
+                        }}
+                      />
+                      {shareLinkPassword.password && (
+                        <FilledTextField
+                          variant={"filled"}
+                          inputProps={{ readonly: true }}
+                          label={t("modals.sharePassword")}
+                          fullWidth
+                          value={shareLinkPassword.password}
+                          onFocus={(e) => e.target.select()}
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <IconButton
+                                  onClick={() =>
+                                    copyToClipboard(shareLink.substring(shareLink.lastIndexOf("/") + 1) ?? "")
+                                  }
+                                  size="small"
+                                  sx={{ marginRight: -1 }}
+                                >
+                                  <CopyOutlined />
+                                </IconButton>
+                              ),
+                            },
+                          }}
+                        />
+                      )}
+                    </List>
                   )}
                 </Box>
               </CSSTransition>
