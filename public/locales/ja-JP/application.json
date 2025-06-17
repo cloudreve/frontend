@@ -308,7 +308,6 @@
     "createShareLink": "共有リンクの作成",
     "viewDetails": "詳細情報",
     "copy": "コピー",
-    "copyLinkAlongWithPassword": "パスワード付きリンクをコピー",
     "bytes": " ({{bytes}} バイト)",
     "storagePolicy": "ストレージポリシー",
     "childFolders": "ディレクトリの内容",
@@ -372,6 +371,8 @@
     "deleteViewSetting": "ビュー設定を削除"
   },
   "modals": {
+    "includePasswordInShareLink": "共有リンクにパスワードを含める",
+    "includePasswordInShareLinkDes": "チェックを入れると、共有リンクにパスワードが含まれます。このリンクにアクセスする際には、パスワードを入力する必要はありません。",
     "showFileName": "ファイル名を表示",
     "archiveFile": "圧縮ファイル",
     "cancelDownload": "ダウンロードキャンセル",
@@ -469,8 +470,8 @@
     "shareLinkShareContent": "{{name}} を共有しました。リンク：{{link}}",
     "shareLinkPasswordInfo": "パスワード：{{password}}",
     "createShareLink": "共有リンク作成",
-    "privateShare": "共有を非表示",
-    "privateShareDes": "チェックを入れると他の人はあなたのプロフィールページでこの共有リンクを見ることができません。",
+    "privateShare": "パスワードで保護",
+    "privateShareDes": "チェックを入れると、パスワードが必要です。他の人はあなたのプロフィールページでこの共有リンクを見ることができません。",
     "useCustomPassword": "カスタムパスワードを使用",
     "expireAfterDownload": "ダウンロード後に自動的に期限切れ",
     "sharePassword": "共有パスワード",

@@ -1,7 +1,7 @@
 import {
   Autocomplete,
-  Box,
   Checkbox,
+  Collapse,
   createFilterOptions,
   FormControl,
   List,
@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
+  Stack,
   styled,
   TextField,
   Typography,
@@ -19,6 +20,7 @@ import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FileResponse, FileType } from "../../../../api/explorer.ts";
+import { FilledTextField, SmallFormControlLabel } from "../../../Common/StyledComponents.tsx";
 import ClockArrowDownload from "../../../Icons/ClockArrowDownload.tsx";
 import Eye from "../../../Icons/Eye.tsx";
 import TableSettingsOutlined from "../../../Icons/TableSettings.tsx";
@@ -149,31 +151,38 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
             </ListItemIcon>
             <ListItemText primary={t("application:modals.privateShare")} />
             <ListItemSecondaryAction>
-              <Checkbox disabled={editing} checked={setting.is_private} onChange={handleCheck("is_private")} />
+              <Checkbox disabled={editing} checked={!!setting.is_private} onChange={handleCheck("is_private")} />
             </ListItemSecondaryAction>
           </StyledListItemButton>
         </AccordionSummary>
         <AccordionDetails sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography>{t("application:modals.privateShareDes")}</Typography>
+          <Typography variant="body2">{t("application:modals.privateShareDes")}</Typography>
           {setting.is_private && (
-            <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+            <Stack sx={{ mt: 1, width: "100%" }}>
               {!editing && (
-                <Checkbox
-                  checked={setting.use_custom_password}
-                  onChange={() => {
-                    onSettingChange({ ...setting, use_custom_password: !setting.use_custom_password });
-                  }}
+                <SmallFormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={setting.use_custom_password}
+                      onChange={() => {
+                        onSettingChange({ ...setting, use_custom_password: !setting.use_custom_password });
+                      }}
+                    />
+                  }
+                  label={t("application:modals.useCustomPassword")}
                 />
               )}
-              {!setting.use_custom_password && (
-                <Typography sx={{ flex: 1 }}>{t("application:modals.useCustomPassword")}</Typography>
-              )}
-              {setting.use_custom_password && (
-                <FormControl variant="standard" sx={{ mx: 1, flex: 1 }}>
-                  <TextField
+              <Collapse in={setting.use_custom_password}>
+                <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+                  <FilledTextField
                     label={t("application:modals.sharePassword")}
-                    variant="standard"
                     disabled={editing}
+                    slotProps={{
+                      htmlInput: {
+                        maxLength: 32,
+                      },
+                    }}
                     value={setting.password ?? ""}
                     onChange={(e) => {
                       const value = e.target.value.trim();
@@ -181,11 +190,10 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
                       onSettingChange({ ...setting, password: value });
                     }}
                     required
-                    fullWidth
                   />
                 </FormControl>
-              )}
-            </Box>
+              </Collapse>
+            </Stack>
           )}
         </AccordionDetails>
       </Accordion>

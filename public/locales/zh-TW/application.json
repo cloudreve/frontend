@@ -307,7 +307,6 @@
     "createShareLink": "建立分享連結",
     "viewDetails": "詳細資訊",
     "copy": "復制",
-    "copyLinkAlongWithPassword": "復制連結和密碼",
     "bytes": " ({{bytes}} 位元組)",
     "storagePolicy": "儲存策略",
     "childFolders": "包含目錄",
@@ -367,6 +366,8 @@
     "off": "關閉"
   },
   "modals": {
+    "includePasswordInShareLink": "在連結中包含密碼",
+    "includePasswordInShareLinkDes": "勾選後，分享連結中會包含密碼，通過此連結訪問時不需要再輸入密碼。",
     "showFileName": "顯示檔名",
     "archiveFile": "壓縮檔案",
     "cancelDownload": "取消下載",
@@ -464,8 +465,8 @@
     "shareLinkShareContent": "我向你分享了：{{name}} 連結：{{link}}",
     "shareLinkPasswordInfo": " 密碼： {{password}}",
     "createShareLink": "建立分享連結",
-    "privateShare": "隱藏分享",
-    "privateShareDes": "勾選後，其他人無法在你的個人主頁看到此分享連結。",
+    "privateShare": "使用密碼保護連結",
+    "privateShareDes": "勾選後，需要使用密碼訪問分享連結，其他人無法在你的個人主頁看到此分享連結。",
     "useCustomPassword": "使用自定義密碼",
     "expireAfterDownload": "下載後自動過期",
     "sharePassword": "分享密碼",

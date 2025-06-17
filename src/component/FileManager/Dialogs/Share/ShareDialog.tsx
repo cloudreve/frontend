@@ -1,4 +1,4 @@
-import { Box, DialogContent, IconButton, List, Tooltip, useTheme } from "@mui/material";
+import { Box, Checkbox, Collapse, DialogContent, IconButton, Stack, Tooltip, useTheme } from "@mui/material";
 import dayjs from "dayjs";
 import { TFunction } from "i18next";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -10,12 +10,12 @@ import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
 import { createOrUpdateShareLink } from "../../../../redux/thunks/share.ts";
 import { copyToClipboard, sendLink } from "../../../../util";
 import AutoHeight from "../../../Common/AutoHeight.tsx";
-import { FilledTextField } from "../../../Common/StyledComponents.tsx";
+import { FilledTextField, SmallFormControlLabel } from "../../../Common/StyledComponents.tsx";
 import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
+import CopyOutlined from "../../../Icons/CopyOutlined.tsx";
 import Share from "../../../Icons/Share.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
 import ShareSettingContent, { downloadOptions, expireOptions, ShareSetting } from "./ShareSetting.tsx";
-import CopyOutlined from "../../../Icons/CopyOutlined.tsx";
 
 const initialSetting: ShareSetting = {
   expires_val: expireOptions[2],
@@ -72,6 +72,7 @@ const ShareDialog = () => {
   const [loading, setLoading] = useState(false);
   const [setting, setSetting] = useState<ShareSetting>(initialSetting);
   const [shareLink, setShareLink] = useState<string>("");
+  const [includePassword, setIncludePassword] = useState(true);
   const shareLinkPassword = useMemo(() => {
     const start = shareLink.lastIndexOf("/s/");
     const shareLinkParts = shareLink.substring(start + 3).split("/");
@@ -130,6 +131,20 @@ const ShareDialog = () => {
     [dispatch, target, shareLink, editTarget, setLoading, setting, setShareLink],
   );
 
+  const finalShareLink = useMemo(() => {
+    if (includePassword) {
+      return shareLink;
+    }
+    return shareLink.substring(0, shareLink.lastIndexOf("/"));
+  }, [includePassword, shareLink]);
+
+  const finalShareLinkPassword = useMemo(() => {
+    if (!includePassword) {
+      return shareLink.substring(shareLink.lastIndexOf("/") + 1);
+    }
+    return undefined;
+  }, [includePassword, shareLink]);
+
   return (
     <>
       <DraggableDialog
@@ -137,6 +152,7 @@ const ShareDialog = () => {
         showActions
         loading={loading}
         showCancel
+        hideOk={!!shareLink}
         onAccept={onAccept}
         dialogProps={{
           open: open ?? false,
@@ -145,19 +161,12 @@ const ShareDialog = () => {
           maxWidth: "xs",
         }}
         cancelText={shareLink ? "common:close" : undefined}
-        okText={
-          shareLink
-            ? shareLinkPassword.password
-              ? "fileManager.copyLinkAlongWithPassword"
-              : "fileManager.copy"
-            : undefined
-        }
         secondaryAction={
           shareLink
             ? // @ts-ignore
               navigator.share && (
                 <Tooltip title={t("application:modals.sendLink")}>
-                  <IconButton onClick={() => sendLink(target?.name ?? "", shareLink)}>
+                  <IconButton onClick={() => sendLink(target?.name ?? "", finalShareLink)}>
                     <Share />
                   </IconButton>
                 </Tooltip>
@@ -183,26 +192,19 @@ const ShareDialog = () => {
                     />
                   )}
                   {shareLink && (
-                    <List
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: theme.spacing(1),
-                        padding: theme.spacing(1),
-                      }}
-                    >
+                    <Stack spacing={1}>
                       <FilledTextField
                         variant={"filled"}
                         inputProps={{ readonly: true }}
                         label={t("modals.shareLink")}
                         fullWidth
-                        value={shareLinkPassword.shareLink}
+                        value={finalShareLink ?? ""}
                         onFocus={(e) => e.target.select()}
                         slotProps={{
                           input: {
                             endAdornment: (
                               <IconButton
-                                onClick={() => copyToClipboard(shareLink.substring(0, shareLink.lastIndexOf("/")))}
+                                onClick={() => copyToClipboard(finalShareLink)}
                                 size="small"
                                 sx={{ marginRight: -1 }}
                               >
@@ -213,31 +215,54 @@ const ShareDialog = () => {
                         }}
                       />
                       {shareLinkPassword.password && (
-                        <FilledTextField
-                          variant={"filled"}
-                          inputProps={{ readonly: true }}
-                          label={t("modals.sharePassword")}
-                          fullWidth
-                          value={shareLinkPassword.password}
-                          onFocus={(e) => e.target.select()}
-                          slotProps={{
-                            input: {
-                              endAdornment: (
-                                <IconButton
-                                  onClick={() =>
-                                    copyToClipboard(shareLink.substring(shareLink.lastIndexOf("/") + 1) ?? "")
-                                  }
+                        <>
+                          <Collapse in={!includePassword}>
+                            <FilledTextField
+                              variant={"filled"}
+                              inputProps={{ readonly: true }}
+                              label={t("modals.sharePassword")}
+                              fullWidth
+                              value={finalShareLinkPassword ?? ""}
+                              onFocus={(e) => e.target.select()}
+                              slotProps={{
+                                input: {
+                                  endAdornment: (
+                                    <IconButton
+                                      onClick={() => copyToClipboard(finalShareLinkPassword ?? "")}
+                                      size="small"
+                                      sx={{ marginRight: -1 }}
+                                    >
+                                      <CopyOutlined />
+                                    </IconButton>
+                                  ),
+                                },
+                              }}
+                            />
+                          </Collapse>
+                          <Tooltip enterDelay={100} title={t("application:modals.includePasswordInShareLinkDes")}>
+                            <SmallFormControlLabel
+                              sx={{
+                                mt: "0!important",
+                              }}
+                              control={
+                                <Checkbox
+                                  disableRipple
+                                  sx={{
+                                    pl: 0,
+                                  }}
                                   size="small"
-                                  sx={{ marginRight: -1 }}
-                                >
-                                  <CopyOutlined />
-                                </IconButton>
-                              ),
-                            },
-                          }}
-                        />
+                                  checked={includePassword}
+                                  onChange={() => {
+                                    setIncludePassword(!includePassword);
+                                  }}
+                                />
+                              }
+                              label={t("application:modals.includePasswordInShareLink")}
+                            />
+                          </Tooltip>
+                        </>
                       )}
-                    </List>
+                    </Stack>
                   )}
                 </Box>
               </CSSTransition>
