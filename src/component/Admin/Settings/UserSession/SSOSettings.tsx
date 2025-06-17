@@ -52,6 +52,12 @@ const SSOSettings = () => {
           </AccordionSummary>
           <AccordionDetails sx={{ display: "block" }}></AccordionDetails>
         </StyledAccordion>
+        <StyledAccordion expanded={false} disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreRounded />}>
+            <FormControlLabel control={<StyledCheckbox size={"small"} checked={false} />} label={t("settings.oidc")} />
+          </AccordionSummary>
+          <AccordionDetails sx={{ display: "block" }}></AccordionDetails>
+        </StyledAccordion>
       </div>
     </>
   );
