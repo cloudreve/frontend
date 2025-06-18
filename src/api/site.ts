@@ -7,6 +7,7 @@ export enum CaptchaType {
   // Deprecated
   TCAPTCHA = "tcaptcha",
   TURNSTILE = "turnstile",
+  CAP = "cap",
 }
 
 export interface SiteConfig {
@@ -22,6 +23,8 @@ export interface SiteConfig {
   captcha_ReCaptchaKey?: string;
   captcha_type?: CaptchaType;
   turnstile_site_id?: string;
+  cap_instance_url?: string;
+  cap_key_id?: string;
   register_enabled?: boolean;
   logo?: string;
   logo_light?: string;

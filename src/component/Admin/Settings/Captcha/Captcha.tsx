@@ -25,6 +25,7 @@ import { CaptchaType } from "../../../../api/site.ts";
 import GraphicCaptcha from "./GraphicCaptcha.tsx";
 import ReCaptcha from "./ReCaptcha.tsx";
 import TurnstileCaptcha from "./TurnstileCaptcha.tsx";
+import CapCaptcha from "./CapCaptcha.tsx";
 
 const Captcha = () => {
   const { t } = useTranslation("dashboard");
@@ -136,6 +137,20 @@ const Captcha = () => {
                       {t("settings.turnstile")}
                     </ListItemText>
                   </SquareMenuItem>
+                  <SquareMenuItem value={CaptchaType.CAP}>
+                    <ListItemText slotProps={{
+                      primary: { variant: "body2" }
+                    }}>
+                      {t("settings.cap")}
+                    </ListItemText>
+                  </SquareMenuItem>
+                  <SquareMenuItem value={CaptchaType.CAP}>
+                    <ListItemText slotProps={{
+                      primary: { variant: "body2" }
+                    }}>
+                      {t("settings.cap")}
+                    </ListItemText>
+                  </SquareMenuItem>
                 </DenseSelect>
                 <NoMarginHelperText>
                   {t("settings.captchaTypeDes")}
@@ -159,6 +174,12 @@ const Captcha = () => {
               unmountOnExit
             >
               <TurnstileCaptcha setSettings={setSettings} values={values} />
+            </Collapse>
+            <Collapse
+              in={values.captcha_type === CaptchaType.CAP}
+              unmountOnExit
+            >
+              <CapCaptcha setSettings={setSettings} values={values} />
             </Collapse>
           </SettingSectionContent>
         </SettingSection>

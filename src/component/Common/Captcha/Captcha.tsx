@@ -3,6 +3,7 @@ import { CaptchaType } from "../../../api/site.ts";
 import DefaultCaptcha from "./DefaultCaptcha.tsx";
 import ReCaptchaV2 from "./ReCaptchaV2.tsx";
 import TurnstileCaptcha from "./TurnstileCaptcha.tsx";
+import CapCaptcha from "./CapCaptcha.tsx";
 
 export interface CaptchaProps {
   onStateChange: (state: CaptchaParams) => void;
@@ -27,6 +28,8 @@ export const Captcha = (props: CaptchaProps) => {
       return <ReCaptchaV2 {...props} />;
     case CaptchaType.TURNSTILE:
       return <TurnstileCaptcha {...props} />;
+    case CaptchaType.CAP:
+      return <CapCaptcha {...props} />;
     // case "tcaptcha":
     //   return { ...tcaptcha, captchaRefreshRef, captchaLoading };
     default:
