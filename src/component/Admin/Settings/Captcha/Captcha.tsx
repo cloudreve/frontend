@@ -144,13 +144,6 @@ const Captcha = () => {
                       {t("settings.cap")}
                     </ListItemText>
                   </SquareMenuItem>
-                  <SquareMenuItem value={CaptchaType.CAP}>
-                    <ListItemText slotProps={{
-                      primary: { variant: "body2" }
-                    }}>
-                      {t("settings.cap")}
-                    </ListItemText>
-                  </SquareMenuItem>
                 </DenseSelect>
                 <NoMarginHelperText>
                   {t("settings.captchaTypeDes")}

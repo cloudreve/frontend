@@ -23,8 +23,9 @@ export interface SiteConfig {
   captcha_ReCaptchaKey?: string;
   captcha_type?: CaptchaType;
   turnstile_site_id?: string;
-  cap_instance_url?: string;
-  cap_key_id?: string;
+  captcha_cap_instance_url?: string;
+  captcha_cap_key_id?: string;
+  captcha_cap_key_secret?: string;
   register_enabled?: boolean;
   logo?: string;
   logo_light?: string;
