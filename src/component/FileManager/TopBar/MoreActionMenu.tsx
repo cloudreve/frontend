@@ -111,7 +111,7 @@ const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
         </ListItemIcon>
         <ListItemText>{t("application:fileManager.selectAll")}</ListItemText>
         <Typography variant="body2" color="text.secondary">
-          <KeyIndicator>{isMacbook ? "⌘" : "Crtl"}</KeyIndicator>+<KeyIndicator>A</KeyIndicator>
+          <KeyIndicator>{isMacbook ? "⌘" : "Ctrl"}</KeyIndicator>+<KeyIndicator>A</KeyIndicator>
         </Typography>
       </SquareMenuItem>
       <SquareMenuItem onClick={onSelectNoneClicked}>
