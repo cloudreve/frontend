@@ -12,7 +12,9 @@ import Base, { Status } from "./core/uploader/base.ts";
 import { DropFileBackground } from "./DropFile.tsx";
 import PasteUploadDialog from "./PasteUploadDialog.tsx";
 import TaskList from "./Popup/TaskList.tsx";
-import { defaultTrashPath } from "../../hooks/useNavigation.tsx";
+import useActionDisplayOpt from "../FileManager/ContextMenu/useActionDisplayOpt.ts";
+import { ContextMenuTypes } from "../../redux/fileManagerSlice.ts";
+import { FileManagerIndex } from "../FileManager/FileManager.tsx";
 
 let totalProgressCollector: NodeJS.Timeout | null = null;
 let lastProgressStart = -1;
@@ -27,18 +29,30 @@ const Uploader = () => {
   const [uploaders, setUploaders] = useState<Base[]>([]);
   const [dropBgOpen, setDropBgOpen] = useState(false);
   
-  const pathRef = useRef<string>();
+  const uploadEnabled = useRef<boolean>(false);
 
   const totalProgress = useAppSelector((state) => state.globalState.uploadProgress);
   const taskListOpen = useAppSelector((state) => state.globalState.uploadTaskListOpen);
-  const parent = useAppSelector((state) => state.fileManager[0].list?.parent);
-  const path = useAppSelector((state) => state.fileManager[0].pure_path);
-  const policy = useAppSelector((state) => state.fileManager[0].list?.storage_policy);
+  const parent = useAppSelector((state) => state.fileManager[FileManagerIndex.main].list?.parent);
+  const path = useAppSelector((state) => state.fileManager[FileManagerIndex.main].pure_path);
+  const policy = useAppSelector((state) => state.fileManager[FileManagerIndex.main].list?.storage_policy);
   const selectFileSignal = useAppSelector((state) => state.globalState.uploadFileSignal);
   const selectFolderSignal = useAppSelector((state) => state.globalState.uploadFolderSignal);
 
-  // Update path
-  pathRef.current = path;
+  const displayOpt = useActionDisplayOpt(
+    [],
+    ContextMenuTypes.empty,
+    parent,
+    FileManagerIndex.main,
+  );
+
+  useEffect(() => {
+    if (!parent) {
+      uploadEnabled.current = false;
+      return;
+    }
+    uploadEnabled.current = displayOpt.showUpload ?? false;
+  }, [parent, displayOpt.showUpload]);
 
   const taskAdded = useCallback(
     (original?: Base) => (tasks: Base[]) => {
@@ -75,14 +89,14 @@ const Uploader = () => {
         enqueueSnackbar(msg, { variant: type });
       },
       onDropOver: (_e) => {
-        if (pathRef.current === defaultTrashPath) {
+        if (!uploadEnabled.current) {
           return;
         }
         dragCounter++;
         setDropBgOpen((value) => !value);
       },
       onDropLeave: (_e) => {
-        if (pathRef.current === defaultTrashPath) {
+        if (!uploadEnabled.current) {
           return;
         }
         dragCounter--;
