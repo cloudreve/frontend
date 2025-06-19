@@ -107,7 +107,7 @@ const NewGroupDialog = ({ open, onClose }: NewGroupDialogProps) => {
                 value={group.name}
                 onChange={(e) => setGroup({ ...group, name: e.target.value })}
               />
-              <NoMarginHelperText>{t("policy.policyName")}</NoMarginHelperText>
+              <NoMarginHelperText>{t("group.nameOfGroupDes")}</NoMarginHelperText>
             </SettingForm>
             <SettingForm title={t("group.copyFromExisting")} lgWidth={12}>
               <FormControl fullWidth>
