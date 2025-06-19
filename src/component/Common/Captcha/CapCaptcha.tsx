@@ -12,7 +12,7 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
   const captchaRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<any>(null);
   const onStateChangeRef = useRef(onStateChange);
-  const isInitializedRef = useRef(false);
+  const scriptLoadedRef = useRef(false);
   
   const capInstanceURL = useAppSelector(
     (state) => state.siteConfig.basic.config.captcha_cap_instance_url,
@@ -20,34 +20,46 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
   const capKeyID = useAppSelector(
     (state) => state.siteConfig.basic.config.captcha_cap_key_id,
   );
-
+  
   // Keep callback reference up to date
   useEffect(() => {
     onStateChangeRef.current = onStateChange;
   }, [onStateChange]);
 
-  const refreshCaptcha = async () => {
-    if (widgetRef.current && captchaRef.current) {
-      widgetRef.current.remove?.();
-      captchaRef.current.innerHTML = "";
-      
-      if (typeof window !== "undefined" && (window as any).Cap && capInstanceURL && capKeyID) {
-        const widget = document.createElement("cap-widget");
-        widget.setAttribute("data-cap-api-endpoint", `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/api/`);
-        widget.id = "cap-widget";
-        
-        captchaRef.current.appendChild(widget);
-        
-        widget.addEventListener("solve", (e: any) => {
-          const token = e.detail.token;
-          if (token) {
-            onStateChangeRef.current({ ticket: token });
-          }
-        });
-        
-        widgetRef.current = widget;
-      }
+  const createWidget = () => {
+    if (!captchaRef.current || !capInstanceURL || !capKeyID) {
+      return;
     }
+
+    // Clean up existing widget
+    if (widgetRef.current) {
+      widgetRef.current.remove?.();
+      widgetRef.current = null;
+    }
+    
+    // Clear container
+    captchaRef.current.innerHTML = "";
+    
+    if (typeof window !== "undefined" && (window as any).Cap) {
+      const widget = document.createElement("cap-widget");
+      widget.setAttribute("data-cap-api-endpoint", `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/api/`);
+      widget.id = "cap-widget";
+      
+      captchaRef.current.appendChild(widget);
+      
+      widget.addEventListener("solve", (e: any) => {
+        const token = e.detail.token;
+        if (token) {
+          onStateChangeRef.current({ ticket: token });
+        }
+      });
+      
+      widgetRef.current = widget;
+    }
+  };
+
+  const refreshCaptcha = () => {
+    createWidget();
   };
 
   useEffect(() => {
@@ -57,54 +69,45 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
   }, [generation]);
 
   useEffect(() => {
-    if (!capInstanceURL || !capKeyID || !captchaRef.current) {
-      return;
-    }
-
-    if (isInitializedRef.current) {
+    if (!capInstanceURL || !capKeyID) {
       return;
     }
 
     const scriptId = "cap-widget-script";
     let script = document.getElementById(scriptId) as HTMLScriptElement;
     
+    const initWidget = () => {
+      scriptLoadedRef.current = true;
+      // Add a small delay to ensure DOM is ready
+      setTimeout(() => {
+        createWidget();
+      }, 100);
+    };
+
     if (!script) {
       script = document.createElement("script");
       script.id = scriptId;
       script.src = `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`;
       script.async = true;
+      script.onload = initWidget;
+      script.onerror = () => {
+        console.error("Failed to load Cap widget script");
+      };
       document.head.appendChild(script);
-    }
-
-    const initWidget = () => {
-      if (typeof window !== "undefined" && (window as any).Cap && captchaRef.current) {
-        const widget = document.createElement("cap-widget");
-        widget.setAttribute("data-cap-api-endpoint", `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/api/`);
-        widget.id = "cap-widget";
-        
-        captchaRef.current.innerHTML = "";
-        captchaRef.current.appendChild(widget);
-
-        widget.addEventListener("solve", (e: any) => {
-          const token = e.detail.token;
-          if (token) {
-            onStateChangeRef.current({ ticket: token });
-          }
-        });
-
-        widgetRef.current = widget;
-        isInitializedRef.current = true;
-      }
-    };
-
-    if ((script as any).readyState === "complete" || (script as any).readyState === "loaded") {
+    } else if (scriptLoadedRef.current || (window as any).Cap) {
+      // Script already loaded
       initWidget();
     } else {
+      // Script exists but not loaded yet
       script.onload = initWidget;
     }
 
     return () => {
-      isInitializedRef.current = false;
+      // Clean up widget but keep script for reuse
+      if (widgetRef.current) {
+        widgetRef.current.remove?.();
+        widgetRef.current = null;
+      }
       if (captchaRef.current) {
         captchaRef.current.innerHTML = "";
       }
