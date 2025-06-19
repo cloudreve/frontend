@@ -1,18 +1,22 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useAppSelector } from "../../../redux/hooks.ts";
 import { CaptchaParams } from "./Captcha.tsx";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 export interface CapProps {
   onStateChange: (state: CaptchaParams) => void;
   generation: number;
 }
 
-const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
+// Standard input height
+const STANDARD_INPUT_HEIGHT = "56px";
+
+const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps & { fullWidth?: boolean }) => {
   const captchaRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<any>(null);
   const onStateChangeRef = useRef(onStateChange);
   const scriptLoadedRef = useRef(false);
+  const theme = useTheme();
   
   const capInstanceURL = useAppSelector(
     (state) => state.siteConfig.basic.config.captcha_cap_instance_url,
@@ -25,6 +29,49 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
   useEffect(() => {
     onStateChangeRef.current = onStateChange;
   }, [onStateChange]);
+
+  // Apply responsive styles for fullWidth mode
+  const applyFullWidthStyles = (widget: HTMLElement) => {
+    const applyStyles = () => {
+      // Style widget container
+      widget.style.width = '100%';
+      widget.style.display = 'block';
+      widget.style.boxSizing = 'border-box';
+      
+      // Style internal captcha element
+      const captchaElement = widget.shadowRoot?.querySelector('.captcha') || widget.querySelector('.captcha');
+      if (captchaElement) {
+        const captchaEl = captchaElement as HTMLElement;
+        captchaEl.style.width = '100%';
+        captchaEl.style.maxWidth = 'none';
+        captchaEl.style.minWidth = '0';
+        captchaEl.style.boxSizing = 'border-box';
+        return true;
+      }
+      return false;
+    };
+
+    // Apply immediately or wait for DOM changes
+    if (!applyStyles()) {
+      const observer = new MutationObserver(() => {
+        if (applyStyles()) {
+          observer.disconnect();
+        }
+      });
+      
+      observer.observe(widget, {
+        childList: true,
+        subtree: true,
+        attributes: true
+      });
+      
+      // Fallback timeout
+      setTimeout(() => {
+        applyStyles();
+        observer.disconnect();
+      }, 500);
+    }
+  };
 
   const createWidget = () => {
     if (!captchaRef.current || !capInstanceURL || !capKeyID) {
@@ -54,17 +101,18 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
         }
       });
       
+      // Apply fullWidth styles if needed
+      if (fullWidth) {
+        applyFullWidthStyles(widget);
+      }
+      
       widgetRef.current = widget;
     }
   };
 
-  const refreshCaptcha = () => {
-    createWidget();
-  };
-
   useEffect(() => {
     if (generation > 0) {
-      refreshCaptcha();
+      createWidget();
     }
   }, [generation]);
 
@@ -103,7 +151,7 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
     }
 
     return () => {
-      // Clean up widget but keep script for reuse
+      // Cleanup widget (keep script for reuse)
       if (widgetRef.current) {
         widgetRef.current.remove?.();
         widgetRef.current = null;
@@ -119,10 +167,35 @@ const CapCaptcha = ({ onStateChange, generation, ...rest }: CapProps) => {
   }
 
   return (
-    <Box sx={{ textAlign: "center" }}>
+    <Box 
+      sx={{ 
+        // Container full width when needed
+        ...(fullWidth && { width: "100%" }),
+        
+        // CSS variables for Cloudreve theme adaptation
+        "& cap-widget": {
+          "--cap-border-radius": `${theme.shape.borderRadius}px`,
+          "--cap-background": theme.palette.background.paper,
+          "--cap-border-color": theme.palette.divider,
+          "--cap-color": theme.palette.text.primary,
+          "--cap-widget-height": fullWidth ? STANDARD_INPUT_HEIGHT : "auto",
+          "--cap-widget-padding": "16px",
+          "--cap-gap": "12px",
+          "--cap-checkbox-size": "20px",
+          "--cap-checkbox-border-radius": "4px",
+          "--cap-checkbox-background": theme.palette.action.hover,
+          "--cap-checkbox-border": `1px solid ${theme.palette.divider}`,
+          "--cap-font": String(theme.typography.fontFamily || "Roboto, sans-serif"),
+          "--cap-spinner-color": theme.palette.primary.main,
+          "--cap-spinner-background-color": theme.palette.action.hover,
+          "--cap-credits-font-size": String(theme.typography.caption.fontSize || "12px"),
+          "--cap-opacity-hover": "0.7",
+        } as React.CSSProperties,
+      }}
+    >
       <div ref={captchaRef} {...rest} />
     </Box>
   );
 };
 
-export default CapCaptcha; 
+export default CapCaptcha;
