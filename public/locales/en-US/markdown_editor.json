@@ -58,7 +58,7 @@
       "selectBlockTypeTooltip": "Select block type",
       "placeholder": "Block type"
     },
-    "toggleGroup":"toggle group",
+    "toggleGroup": "toggle group",
     "removeBold": "Remove bold",
     "bold": "Bold",
     "removeItalic": "Remove italic",
@@ -84,7 +84,13 @@
     "checkList": "Check list",
     "deleteSandpack": "Delete this code block",
     "undo": "Undo {{shortcut}}",
-    "redo": "Redo {{shortcut}}"
+    "redo": "Redo {{shortcut}}",
+    "superscript": "Superscript",
+    "subscript": "Subscript",
+    "strikethrough": "Strikethrough",
+    "removeSubscript": "Remove subscript",
+    "removeSuperscript": "Remove superscript",
+    "removeStrikethrough": "Remove strikethrough"
   },
   "admonitions": {
     "note": "Note",
@@ -99,7 +105,7 @@
     "language": "Code block language",
     "selectLanguage": "Select code block language"
   },
-  "contentArea":{
+  "contentArea": {
     "editableMarkdown": "editable markdown"
   }
 }

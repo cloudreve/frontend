@@ -84,7 +84,13 @@
     "checkList": "タスクリスト",
     "deleteSandpack": "Sandpack削除",
     "undo": "元に戻す {{shortcut}}",
-    "redo": "やり直し {{shortcut}}"
+    "redo": "やり直し {{shortcut}}",
+    "superscript": "上付き",
+    "subscript": "下付き",
+    "strikethrough": "取り消し線",
+    "removeSubscript": "下付きの解除",
+    "removeSuperscript": "上付きの解除",
+    "removeStrikethrough": "取り消し線の解除"
   },
   "admonitions": {
     "note": "注意",

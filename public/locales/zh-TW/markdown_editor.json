@@ -86,7 +86,13 @@
     "checkList": "核取清單",
     "deleteSandpack": "刪除 Sandpack",
     "undo": "復原 {{shortcut}}",
-    "redo": "重做 {{shortcut}}"
+    "redo": "重做 {{shortcut}}",
+    "superscript": "上標",
+    "subscript": "下標",
+    "strikethrough": "刪除線",
+    "removeSubscript": "移除下標",
+    "removeSuperscript": "移除上標",
+    "removeStrikethrough": "移除刪除線"
   },
   "admonitions": {
     "note": "注意",
