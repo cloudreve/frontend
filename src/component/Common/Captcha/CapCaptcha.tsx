@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../../../redux/hooks.ts";
 import { CaptchaParams } from "./Captcha.tsx";
 import { Box, useTheme } from "@mui/material";
@@ -17,6 +18,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   const onStateChangeRef = useRef(onStateChange);
   const scriptLoadedRef = useRef(false);
   const theme = useTheme();
+  const { t } = useTranslation("common");
   
   const capInstanceURL = useAppSelector(
     (state) => state.siteConfig.basic.config.captcha_cap_instance_url,
@@ -92,6 +94,11 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
       widget.setAttribute("data-cap-api-endpoint", `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/api/`);
       widget.id = "cap-widget";
       
+      // Set internationalization attributes (Cap official i18n format)
+      widget.setAttribute("data-cap-i18n-initial-state", t("captcha.cap.human"));
+      widget.setAttribute("data-cap-i18n-verifying-label", t("captcha.cap.verifying"));
+      widget.setAttribute("data-cap-i18n-solved-label", t("captcha.cap.verified"));
+      
       captchaRef.current.appendChild(widget);
       
       widget.addEventListener("solve", (e: any) => {
@@ -114,7 +121,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
     if (generation > 0) {
       createWidget();
     }
-  }, [generation]);
+  }, [generation, t]);
 
   useEffect(() => {
     if (!capInstanceURL || !capKeyID) {
@@ -160,7 +167,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
         captchaRef.current.innerHTML = "";
       }
     };
-  }, [capInstanceURL, capKeyID]);
+  }, [capInstanceURL, capKeyID, t]);
 
   if (!capInstanceURL || !capKeyID) {
     return null;

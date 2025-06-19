@@ -28,6 +28,13 @@
   "rowsPerPage": "每页行数",
   "custom": "自定义",
   "enter": "输入",
+  "captcha": {
+    "cap": {
+      "human": "我是人类",
+      "verifying": "验证中…",
+      "verified": "您通过了验证"
+    }
+  },
   "errors": {
     "401": "请先登录",
     "403": "你没有权限执行此操作",
