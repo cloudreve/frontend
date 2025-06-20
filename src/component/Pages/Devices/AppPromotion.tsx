@@ -1,47 +1,10 @@
-import { useAppSelector } from "../../../redux/hooks.ts";
 import { alpha, Box, Grid, Typography, useTheme } from "@mui/material";
-import { Trans, useTranslation } from "react-i18next";
-import { useMemo, useState } from "react";
-import SessionManager from "../../../session";
 import { QRCodeSVG } from "qrcode.react";
+import { useMemo, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
+import { useAppSelector } from "../../../redux/hooks.ts";
+import SessionManager from "../../../session";
 import { SecondaryButton } from "../../Common/StyledComponents.tsx";
-
-const PhoneSkeleton = () => {
-  const theme = useTheme();
-
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      x={0}
-      y={0}
-      enableBackground="new 0 0 444 908"
-      viewBox="0 0 444 908"
-    >
-      <path
-        fill={theme.palette.background.paper}
-        stroke={theme.palette.divider}
-        strokeMiterlimit="10"
-        d="M378.8.5H65.6C29.6.5.5 29.6.5 65.6V843c0 35.9 29.1 65.1 65.1 65.1h313.2c35.9 0 65.1-29.1 65.1-65.1V65.6c0-36-29.2-65.1-65.1-65.1zm46.5 838.8c0 28-21.8 50.7-48.8 50.7H67.9c-26.9 0-48.8-22.7-48.8-50.7V74.1c0-28 21.8-50.7 48.8-50.7h35.3c4 0 7.2 3.4 7.2 7.5 0 14.9 11.6 27 26 27h171.5c14.4.1 26-12 26-27 0-4.1 3.2-7.5 7.2-7.5h35.4c26.9 0 48.8 22.7 48.8 50.7v765.2z"
-      ></path>
-      <path
-        fill="none"
-        stroke={theme.palette.divider}
-        strokeMiterlimit="10"
-        strokeWidth="4"
-        d="M243.3 37.3h-46.4c-2 0-3.6-1.6-3.6-3.6h0c0-2 1.6-3.6 3.6-3.6h46.4c2 0 3.6 1.6 3.6 3.6h0c0 2-1.6 3.6-3.6 3.6z"
-      ></path>
-      <circle
-        cx="270"
-        cy="33.7"
-        r="5.5"
-        fill="none"
-        stroke={theme.palette.divider}
-        strokeMiterlimit="10"
-        strokeWidth="4"
-      ></circle>
-    </svg>
-  );
-};
 
 const AppPromotion = () => {
   const title = useAppSelector((state) => state.siteConfig.basic.config.title);
@@ -86,10 +49,7 @@ const AppPromotion = () => {
                     variant={"inherit"}
                     sx={{
                       background: (theme) =>
-                        `linear-gradient(180deg, transparent 82%, ${alpha(
-                          theme.palette.secondary.main,
-                          0.3,
-                        )} 0%)`,
+                        `linear-gradient(180deg, transparent 82%, ${alpha(theme.palette.secondary.main, 0.3)} 0%)`,
                     }}
                   />,
                 ]}
@@ -116,13 +76,7 @@ const AppPromotion = () => {
                   {t("setting.downloadOurApp")}
                 </Typography>
                 <Box marginTop={1}>
-                  <Box
-                    component={"a"}
-                    href={
-                      "https://apps.apple.com/us/app/cloudreve/id1619480823"
-                    }
-                    target={"_blank"}
-                  >
+                  <Box component={"a"} href={"https://apps.apple.com/us/app/cloudreve/id1619480823"} target={"_blank"}>
                     <Box component={"img"} src={"/static/img/appstore.svg"} />
                   </Box>
                 </Box>
@@ -179,60 +133,25 @@ const AppPromotion = () => {
       <Grid item xs={12} md={5}>
         <Box
           sx={{
-            maxWidth: 450,
-            position: "relative",
-            marginX: "auto",
-            perspective: 1500,
-            transformStyle: "preserve-3d",
-            perspectiveOrigin: 0,
+            transform: "scale(1.5) translateY(15%)",
           }}
         >
           <Box
             sx={{
-              position: "relative",
-              borderRadius: "2.75rem",
-              boxShadow: 1,
-              width: "75% !important",
               marginX: "auto",
-              transform: "rotateY(-35deg) rotateX(15deg) translateZ(0)",
             }}
           >
             <Box>
-              <Box
-                position={"relative"}
-                zIndex={2}
-                maxWidth={1}
-                height={"auto"}
-                sx={{ verticalAlign: "middle" }}
-              >
-                <PhoneSkeleton />
-              </Box>
-              <Box
-                position={"absolute"}
-                top={"2.4%"}
-                left={"4%"}
-                width={"92.4%"}
-                height={"96%"}
-              >
+              <Box>
                 <Box
                   component={"img"}
-                  src={
-                    "https://cloudreve.org/imgs/ios/" +
-                    (theme.palette.mode === "light"
-                      ? "main.png"
-                      : "main_dark.jpg")
-                  }
+                  src={"https://cloudreve.org/imgs/ios/766shots_so.png"}
                   alt="Image Description"
                   effect="blur"
                   width={1}
                   height={1}
                   sx={{
                     objectFit: "cover",
-                    borderRadius: "2.5rem",
-                    filter: (theme) =>
-                      theme.palette.mode === "dark"
-                        ? "brightness(0.7)"
-                        : "none",
                   }}
                 />
               </Box>
