@@ -28,6 +28,13 @@
   "rowsPerPage": "每頁行數",
   "custom": "自定義",
   "enter": "輸入",
+  "captcha": {
+    "cap": {
+      "human": "我是人類",
+      "verifying": "驗證中…",
+      "verified": "您已通過驗證"
+    }
+  },
   "errors": {
     "401": "請先登入",
     "403": "你沒有許可權執行此操作",
