@@ -28,6 +28,13 @@
   "rowsPerPage": "Rows per page",
   "custom": "Custom",
   "enter": "Enter",
+  "captcha": {
+    "cap": {
+      "human": "I'm a human",
+      "verifying": "Verifying...",
+      "verified": "You're a human"
+    }
+  },
   "errors": {
     "401": "Please login.",
     "403": "You are not allowed to perform this action.",
