@@ -215,6 +215,7 @@ export interface GlobalStateSlice {
   customViewer?: CustomViewerState;
   epubViewer?: GeneralViewerState;
   musicPlayer?: MusicPlayerState;
+  excalidrawViewer?: GeneralViewerState;
 
   // Viewer selector
   viewerSelector?: ViewerSelectorState;
@@ -328,6 +329,7 @@ export const globalStateSlice = createSlice({
       state.pdfViewer = undefined;
       state.customViewer = undefined;
       state.epubViewer = undefined;
+      state.excalidrawViewer = undefined;
     },
     setExtractArchiveDialog: (state, action: PayloadAction<{ open: boolean; file?: FileResponse }>) => {
       state.extractArchiveDialogOpen = action.payload.open;
@@ -465,6 +467,12 @@ export const globalStateSlice = createSlice({
     },
     closeMarkdownViewer: (state) => {
       state.markdownViewer && (state.markdownViewer.open = false);
+    },
+    setExcalidrawViewer: (state, action: PayloadAction<GeneralViewerState>) => {
+      state.excalidrawViewer = action.payload;
+    },
+    closeExcalidrawViewer: (state) => {
+      state.excalidrawViewer && (state.excalidrawViewer.open = false);
     },
     addShareInfo: (state, action: PayloadAction<{ info: Share; id: string }>) => {
       state.shareInfo[action.payload.id] = action.payload.info;
@@ -785,4 +793,6 @@ export const {
   resetDialogs,
   setPolicyOptionCache,
   setSearchPopup,
+  setExcalidrawViewer,
+  closeExcalidrawViewer,
 } = globalStateSlice.actions;

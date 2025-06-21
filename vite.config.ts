@@ -70,6 +70,17 @@ export default defineConfig({
           if (id.includes("@codemirror")) {
             return "codemirror";
           }
+          if (
+            id.toLocaleLowerCase().includes("excalidraw") ||
+            id.includes("browser-fs-access") ||
+            id.includes("image-blob-reduce") ||
+            id.includes("pica")
+          ) {
+            return "excalidraw";
+          }
+          if (id.includes("mermaid") || id.includes("katex")) {
+            return "mermaid";
+          }
         },
       },
     },

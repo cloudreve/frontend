@@ -20,6 +20,7 @@ import VideoViewer from "../../Viewers/Video/VideoViewer.tsx";
 import PdfViewer from "../../Viewers/PdfViewer.tsx";
 import CustomViewer from "../../Viewers/CustomViewer.tsx";
 import EpubViewer from "../../Viewers/EpubViewer/EpubViewer.tsx";
+import ExcalidrawViewer from "../../Viewers/Excalidraw/ExcalidrawViewer.tsx";
 import CreateNew from "./CreateNew.tsx";
 import { useAppSelector } from "../../../redux/hooks.ts";
 import CreateArchive from "./CreateArchive.tsx";
@@ -37,6 +38,7 @@ const Dialogs = () => {
   const showAdvancedSearch = useAppSelector((state) => state.globalState.advanceSearchOpen);
   const showListViewColumnSetting = useAppSelector((state) => state.globalState.listViewColumnSettingDialogOpen);
   const directLink = useAppSelector((state) => state.globalState.directLinkDialogOpen);
+  const excalidrawViewer = useAppSelector((state) => state.globalState.excalidrawViewer);
 
   return (
     <>
@@ -69,6 +71,7 @@ const Dialogs = () => {
       {showAdvancedSearch != undefined && <AdvanceSearch />}
       {showListViewColumnSetting != undefined && <ColumnSetting />}
       {directLink != undefined && <DirectLinks />}
+      {excalidrawViewer != undefined && <ExcalidrawViewer />}
     </>
   );
 };

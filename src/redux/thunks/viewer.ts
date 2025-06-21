@@ -17,6 +17,7 @@ import {
   setCustomViewer,
   setDrawIOViewer,
   setEpubViewer,
+  setExcalidrawViewer,
   setImageEditor,
   setImageViewer,
   setMarkdownViewer,
@@ -48,6 +49,7 @@ export const builtInViewers = {
   pdf: "pdf",
   epub: "epub",
   music: "music",
+  excalidraw: "excalidraw",
 };
 
 export function openViewers(
@@ -174,6 +176,15 @@ export function openViewer(file: FileResponse, viewer: Viewer, size: number, pre
         case builtInViewers.markdown:
           dispatch(
             setMarkdownViewer({
+              open: true,
+              file,
+              version: preferredVersion ?? primaryEntity,
+            }),
+          );
+          break;
+        case builtInViewers.excalidraw:
+          dispatch(
+            setExcalidrawViewer({
               open: true,
               file,
               version: preferredVersion ?? primaryEntity,
@@ -577,6 +588,36 @@ export function saveDrawIO(
     }
 
     return savedFile;
+  };
+}
+
+export function saveExcalidraw(
+  data: string,
+  file: FileResponse,
+  version?: string,
+  saveAsNew?: boolean,
+): AppThunk<Promise<void>> {
+  return async (dispatch, getState) => {
+    const isLinkedFile = file.metadata?.[Metadata.share_redirect] ?? false;
+    if (!version && !isLinkedFile) {
+      version = file.primary_entity;
+    }
+    const savedFile = await dispatch(saveFile(getFileLinkedUri(file), data, version, saveAsNew));
+
+    if (savedFile) {
+      const {
+        globalState: { excalidrawViewer },
+      } = getState();
+      if (excalidrawViewer) {
+        dispatch(
+          setExcalidrawViewer({
+            ...excalidrawViewer,
+            file: savedFile,
+            version: savedFile.primary_entity,
+          }),
+        );
+      }
+    }
   };
 }
 
