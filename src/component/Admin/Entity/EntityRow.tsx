@@ -51,7 +51,12 @@ const EntityRow = ({
     setOpenLoading(true);
     dispatch(getEntityUrl(entity?.id ?? 0))
       .then((url) => {
-        entityLink ? (entityLink.location.href = url) : window.open(url, "_blank");
+        if (entityLink) {
+          entityLink.close();
+          window.open(url, "_blank");
+        } else {
+          window.open(url, "_blank");
+        }
       })
       .finally(() => {
         setOpenLoading(false);

@@ -72,7 +72,12 @@ const FileRow = ({
     fileLink?.document.write("Loading file URL...");
     dispatch(getFileUrl(file?.id ?? 0))
       .then((url) => {
-        fileLink ? (fileLink.location.href = url) : window.open(url, "_blank");
+        if (fileLink) {
+          fileLink.close();
+          window.open(url, "_blank");
+        } else {
+          window.open(url, "_blank");
+        }
       })
       .finally(() => {
         setOpenLoading(false);
