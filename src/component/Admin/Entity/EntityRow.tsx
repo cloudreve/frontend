@@ -50,7 +50,8 @@ const EntityRow = ({
     
     dispatch(getEntityUrl(entity?.id ?? 0))
       .then((url) => {
-        window.location.assign(url);
+        // window.location.assign(url);
+        window.open(url, "_blank");
       })
       .finally(() => {
         setOpenLoading(false);
