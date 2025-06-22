@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { TransitionGroup } from "react-transition-group";
 import { defaultPath, defaultSharedWithMePath, defaultTrashPath } from "../../../hooks/useNavigation.tsx";
 import { useAppSelector } from "../../../redux/hooks.ts";
-import SessionManager from "../../../session";
+import SessionManager, { UserSettings } from "../../../session";
 import CrUri, { Filesystem } from "../../../util/uri.ts";
 import { FileManagerIndex } from "../FileManager.tsx";
 import { FmIndexContext } from "../FmIndexContext.tsx";
@@ -46,7 +46,9 @@ const TreeNavigation = React.memo(
           res.push(b.toString());
         });
       }
-      setExpanded((e) => [...new Set([...e, ...res])]);
+      if (SessionManager.getWithFallback(UserSettings.TreeViewAutoExpand)) {
+        setExpanded((e) => [...new Set([...e, ...res])]);
+      }
     }, [path, base, elements]);
 
     const pinned = usePinned();

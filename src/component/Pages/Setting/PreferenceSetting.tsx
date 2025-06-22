@@ -77,6 +77,9 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
   const [versionRetentionMax, setVersionRetentionMax] = useState(setting.version_retention_max);
   const [versionRetentionExts, setVersionRetentionExts] = useState<string[] | undefined>(setting.version_retention_ext);
   const [showSaveButton, setShowSaveButton] = useState(false);
+  const [autoExpandTreeView, setAutoExpandTreeView] = useState(
+    SessionManager.getWithFallback(UserSettings.TreeViewAutoExpand),
+  );
 
   const onRetentionCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVersionRetentionEnabled(e.target.checked);
@@ -168,6 +171,11 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const onAutoExpandTreeViewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAutoExpandTreeView(e.target.checked);
+    SessionManager.set(UserSettings.TreeViewAutoExpand, e.target.checked);
   };
 
   return (
@@ -325,6 +333,13 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
           </ToggleButton>
         </ToggleButtonGroup>
         <FormHelperText>{t("setting.syncViewDes")}</FormHelperText>
+      </SettingForm>
+      <SettingForm title={t("setting.treeView")} lgWidth={12}>
+        <SmallFormControlLabel
+          control={<Checkbox size="small" checked={autoExpandTreeView} onChange={onAutoExpandTreeViewChange} />}
+          label={t("application:setting.autoExpandTreeView")}
+        />
+        <FormHelperText>{t("setting.autoExpandTreeViewDes")}</FormHelperText>
       </SettingForm>
     </Stack>
   );

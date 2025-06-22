@@ -32,6 +32,7 @@ export enum UserSettings {
   GalleryWidth = "gallery_width",
   UploadOverwrite = "upload_overwrite",
   TimeZone = "time_zone",
+  TreeViewAutoExpand = "tree_view_auto_expand",
 }
 
 export const UserSettingsDefault: { [key: string]: any } = {
@@ -61,6 +62,7 @@ export const UserSettingsDefault: { [key: string]: any } = {
   [UserSettings.GalleryWidth]: 220,
   [UserSettings.UploadOverwrite]: false,
   [UserSettings.TimeZone]: "Asia/Shanghai",
+  [UserSettings.TreeViewAutoExpand]: true,
 };
 
 export interface Session extends LoginResponse {

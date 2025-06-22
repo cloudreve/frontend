@@ -676,6 +676,9 @@
     "createdAt": "作成日："
   },
   "setting": {
+    "treeView": "ツリービュー",
+    "autoExpandTreeView": "ツリービューの自動展開",
+    "autoExpandTreeViewDes": "有効にすると、サイドバーのファイルツリーが現在のディレクトリに従って自動的に展開されます。",
     "syncView": "ビュー設定",
     "syncViewDes": "各ディレクトリのビュー設定を記憶し、サーバーに同期します。",
     "syncViewOn": "サーバーに同期",

@@ -679,6 +679,9 @@
     "createdAt": "创建日期："
   },
   "setting": {
+    "treeView": "树视图",
+    "autoExpandTreeView": "自动展开树视图",
+    "autoExpandTreeViewDes": "开启后，侧边栏的文件树会跟随当前目录并自动展开。",
     "syncView": "视图设置",
     "syncViewDes": "是否记住各个目录的视图设置，并同步到服务器。",
     "syncViewOn": "同步到服务器",

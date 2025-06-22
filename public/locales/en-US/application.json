@@ -675,6 +675,9 @@
     "createdAt": "Created at: "
   },
   "setting": {
+    "treeView": "Tree view",
+    "autoExpandTreeView": "Auto expand tree view",
+    "autoExpandTreeViewDes": "When enabled, the file tree in the sidebar will follow the current directory and expand automatically.",
     "syncView": "View settings",
     "syncViewDes": "Remember the view settings of each directory and synchronize to the server.",
     "syncViewOn": "Sync to server",
