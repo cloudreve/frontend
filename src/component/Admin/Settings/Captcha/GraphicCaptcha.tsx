@@ -1,11 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  FormControl,
-  FormControlLabel,
-  ListItemText,
-  Stack,
-  Switch,
-} from "@mui/material";
+import { FormControl, FormControlLabel, ListItemText, Stack, Switch } from "@mui/material";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
 import { DenseSelect } from "../../../Common/StyledComponents.tsx";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
@@ -33,16 +27,13 @@ const GraphicCaptcha = ({ values, setSettings }: GraphicCaptchaProps) => {
             }
             value={values.captcha_mode}
           >
-            {[
-              "captchaModeNumber",
-              "captchaModeLetter",
-              "captchaModeMath",
-              "captchaModeNumberLetter",
-            ].map((k, i) => (
+            {["captchaModeNumber", "captchaModeLetter", "captchaModeMath", "captchaModeNumberLetter"].map((k, i) => (
               <SquareMenuItem key={k} value={i.toString()}>
-                <ListItemText slotProps={{
-                  primary: { variant: "body2" }
-                }}>
+                <ListItemText
+                  slotProps={{
+                    primary: { variant: "body2" },
+                  }}
+                >
                   {t(`settings.${k}`)}
                 </ListItemText>
               </SquareMenuItem>

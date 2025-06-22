@@ -10,13 +10,7 @@ export interface StepProgressBarProps {
   indeterminate?: boolean;
 }
 
-const StepProgressBar = ({
-  title,
-  secondary,
-  progress,
-  loading,
-  indeterminate,
-}: StepProgressBarProps) => {
+const StepProgressBar = ({ title, secondary, progress, loading, indeterminate }: StepProgressBarProps) => {
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -24,12 +18,7 @@ const StepProgressBar = ({
           {loading ? <Skeleton variant={"text"} width={100} /> : title}
         </Typography>
         {secondary && (
-          <Typography
-            noWrap
-            sx={{ ml: 1 }}
-            variant={"caption"}
-            color={"text.secondary"}
-          >
+          <Typography noWrap sx={{ ml: 1 }} variant={"caption"} color={"text.secondary"}>
             {secondary}
           </Typography>
         )}
@@ -37,10 +26,7 @@ const StepProgressBar = ({
       {loading ? (
         <Skeleton variant={"rectangular"} width={200} height={8} />
       ) : (
-        <BorderLinearProgress
-          variant={indeterminate ? "indeterminate" : "determinate"}
-          value={progress}
-        />
+        <BorderLinearProgress variant={indeterminate ? "indeterminate" : "determinate"} value={progress} />
       )}
     </Box>
   );

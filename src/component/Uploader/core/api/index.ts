@@ -1,10 +1,4 @@
-import {
-  OneDriveChunkResponse,
-  QiniuChunkResponse,
-  QiniuFinishUploadRequest,
-  QiniuPartsInfo,
-  S3Part,
-} from "../types";
+import { OneDriveChunkResponse, QiniuChunkResponse, QiniuFinishUploadRequest, QiniuPartsInfo, S3Part } from "../types";
 import { OBJtoXML, request } from "../utils";
 import {
   CreateUploadSessionError,
@@ -25,10 +19,7 @@ import {
 import { ChunkInfo, ChunkProgress } from "../uploader/chunk";
 import { Progress } from "../uploader/base";
 import { CancelToken } from "axios";
-import {
-  UploadCredential,
-  UploadSessionRequest,
-} from "../../../../api/explorer.ts";
+import { UploadCredential, UploadSessionRequest } from "../../../../api/explorer.ts";
 import { store } from "../../../../redux/store.ts";
 import {
   sendCreateUploadSession,
@@ -39,10 +30,7 @@ import {
 } from "../../../../api/api.ts";
 import { AppError } from "../../../../api/request.ts";
 
-export async function createUploadSession(
-  req: UploadSessionRequest,
-  _cancel: CancelToken,
-): Promise<UploadCredential> {
+export async function createUploadSession(req: UploadSessionRequest, _cancel: CancelToken): Promise<UploadCredential> {
   try {
     return await store.dispatch(sendCreateUploadSession(req));
   } catch (e) {
@@ -54,10 +42,7 @@ export async function createUploadSession(
   }
 }
 
-export async function deleteUploadSession(
-  id: string,
-  uri: string,
-): Promise<any> {
+export async function deleteUploadSession(id: string, uri: string): Promise<any> {
   try {
     return await store.dispatch(sendDeleteUploadSession({ id, uri }));
   } catch (e) {
@@ -77,18 +62,12 @@ export async function localUploadChunk(
 ): Promise<any> {
   try {
     return await store.dispatch(
-      sendUploadChunk(
-        sessionID,
-        chunk.chunk,
-        chunk.index,
-        cancel,
-        (progressEvent) => {
-          onProgress({
-            loaded: progressEvent.loaded,
-            total: progressEvent.total,
-          });
-        },
-      ),
+      sendUploadChunk(sessionID, chunk.chunk, chunk.index, cancel, (progressEvent) => {
+        onProgress({
+          loaded: progressEvent.loaded,
+          total: progressEvent.total,
+        });
+      }),
     );
   } catch (e) {
     if (e instanceof AppError) {
@@ -161,14 +140,9 @@ export async function oneDriveUploadChunk(
   return res.data;
 }
 
-export async function finishOneDriveUpload(
-  sessionID: string,
-  sessionKey: string,
-): Promise<any> {
+export async function finishOneDriveUpload(sessionID: string, sessionKey: string): Promise<any> {
   try {
-    return await store.dispatch(
-      sendOneDriveCompleteUpload(sessionID, sessionKey),
-    );
+    return await store.dispatch(sendOneDriveCompleteUpload(sessionID, sessionKey));
   } catch (e) {
     if (e instanceof AppError) {
       throw new OneDriveFinishUploadError(e.response);
@@ -210,11 +184,7 @@ export async function s3LikeUploadChunk(
   return res.headers["etag"];
 }
 
-export async function obsFinishUpload(
-  url: string,
-  chunks: ChunkProgress[],
-  cancel: CancelToken,
-): Promise<any> {
+export async function obsFinishUpload(url: string, chunks: ChunkProgress[], cancel: CancelToken): Promise<any> {
   let body = encodePartsXML(chunks);
   const res = await request<any>(url, {
     method: "post",
@@ -391,15 +361,9 @@ export async function upyunFormUploadChunk(
   return res.data;
 }
 
-export async function s3LikeUploadCallback(
-  sessionID: string,
-  sessionKey: string,
-  policyType: string,
-): Promise<any> {
+export async function s3LikeUploadCallback(sessionID: string, sessionKey: string, policyType: string): Promise<any> {
   try {
-    return await store.dispatch(
-      sendS3LikeCompleteUpload(policyType, sessionID, sessionKey),
-    );
+    return await store.dispatch(sendS3LikeCompleteUpload(policyType, sessionID, sessionKey));
   } catch (e) {
     if (e instanceof AppError) {
       throw new S3LikeUploadCallbackError(e.response);

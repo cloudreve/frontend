@@ -1,15 +1,6 @@
-import {
-  Autocomplete,
-  Box,
-  Chip,
-  FormControlLabel,
-  styled,
-} from "@mui/material";
+import { Autocomplete, Box, Chip, FormControlLabel, styled } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import {
-  FilledTextField,
-  StyledCheckbox,
-} from "../../../Common/StyledComponents.tsx";
+import { FilledTextField, StyledCheckbox } from "../../../Common/StyledComponents.tsx";
 import { Condition } from "./ConditionBox.tsx";
 
 export const StyledBox = styled(Box)(({ theme }) => ({
@@ -41,9 +32,7 @@ export const FileNameCondition = ({
         renderTags={(value: readonly string[], getTagProps) =>
           value.map((option: string, index: number) => {
             const { key, ...tagProps } = getTagProps({ index });
-            return (
-              <Chip variant="outlined" label={option} key={key} {...tagProps} />
-            );
+            return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
           })
         }
         renderInput={(params) => (

@@ -19,14 +19,10 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   const scriptLoadedRef = useRef(false);
   const theme = useTheme();
   const { t } = useTranslation("common");
-  
-  const capInstanceURL = useAppSelector(
-    (state) => state.siteConfig.basic.config.captcha_cap_instance_url,
-  );
-  const capKeyID = useAppSelector(
-    (state) => state.siteConfig.basic.config.captcha_cap_key_id,
-  );
-  
+
+  const capInstanceURL = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_instance_url);
+  const capKeyID = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_key_id);
+
   // Keep callback reference up to date
   useEffect(() => {
     onStateChangeRef.current = onStateChange;
@@ -36,18 +32,18 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   const applyFullWidthStyles = (widget: HTMLElement) => {
     const applyStyles = () => {
       // Style widget container
-      widget.style.width = '100%';
-      widget.style.display = 'block';
-      widget.style.boxSizing = 'border-box';
-      
+      widget.style.width = "100%";
+      widget.style.display = "block";
+      widget.style.boxSizing = "border-box";
+
       // Style internal captcha element
-      const captchaElement = widget.shadowRoot?.querySelector('.captcha') || widget.querySelector('.captcha');
+      const captchaElement = widget.shadowRoot?.querySelector(".captcha") || widget.querySelector(".captcha");
       if (captchaElement) {
         const captchaEl = captchaElement as HTMLElement;
-        captchaEl.style.width = '100%';
-        captchaEl.style.maxWidth = 'none';
-        captchaEl.style.minWidth = '0';
-        captchaEl.style.boxSizing = 'border-box';
+        captchaEl.style.width = "100%";
+        captchaEl.style.maxWidth = "none";
+        captchaEl.style.minWidth = "0";
+        captchaEl.style.boxSizing = "border-box";
         return true;
       }
       return false;
@@ -60,13 +56,13 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
           observer.disconnect();
         }
       });
-      
+
       observer.observe(widget, {
         childList: true,
         subtree: true,
-        attributes: true
+        attributes: true,
       });
-      
+
       // Fallback timeout
       setTimeout(() => {
         applyStyles();
@@ -85,34 +81,34 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
       widgetRef.current.remove?.();
       widgetRef.current = null;
     }
-    
+
     // Clear container
     captchaRef.current.innerHTML = "";
-    
+
     if (typeof window !== "undefined" && (window as any).Cap) {
       const widget = document.createElement("cap-widget");
       widget.setAttribute("data-cap-api-endpoint", `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/api/`);
       widget.id = "cap-widget";
-      
+
       // Set internationalization attributes (Cap official i18n format)
       widget.setAttribute("data-cap-i18n-initial-state", t("captcha.cap.human"));
       widget.setAttribute("data-cap-i18n-verifying-label", t("captcha.cap.verifying"));
       widget.setAttribute("data-cap-i18n-solved-label", t("captcha.cap.verified"));
-      
+
       captchaRef.current.appendChild(widget);
-      
+
       widget.addEventListener("solve", (e: any) => {
         const token = e.detail.token;
         if (token) {
           onStateChangeRef.current({ ticket: token });
         }
       });
-      
+
       // Apply fullWidth styles if needed
       if (fullWidth) {
         applyFullWidthStyles(widget);
       }
-      
+
       widgetRef.current = widget;
     }
   };
@@ -130,7 +126,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
     const scriptId = "cap-widget-script";
     let script = document.getElementById(scriptId) as HTMLScriptElement;
-    
+
     const initWidget = () => {
       scriptLoadedRef.current = true;
       // Add a small delay to ensure DOM is ready
@@ -174,11 +170,11 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   }
 
   return (
-    <Box 
-      sx={{ 
+    <Box
+      sx={{
         // Container full width when needed
         ...(fullWidth && { width: "100%" }),
-        
+
         // CSS variables for Cloudreve theme adaptation
         "& cap-widget": {
           "--cap-border-radius": `${theme.shape.borderRadius}px`,

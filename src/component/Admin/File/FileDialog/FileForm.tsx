@@ -134,10 +134,7 @@ const FileForm = () => {
             {!fileParentLoading && (
               <>
                 {fileParent && (
-                  <StyledFileBadge
-                    variant={"outlined"}
-                    simplifiedFile={{ path: fileParent, type: FileType.folder }}
-                  />
+                  <StyledFileBadge variant={"outlined"} simplifiedFile={{ path: fileParent, type: FileType.folder }} />
                 )}
                 {!fileParent && "-"}
               </>

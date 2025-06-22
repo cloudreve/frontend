@@ -1,14 +1,6 @@
 import * as React from "react";
 import { useCallback, useState } from "react";
-import {
-  Box,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Box, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { getDavAccounts } from "../../../api/api.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
@@ -26,19 +18,14 @@ export interface DavAccountListProps {
   setCreateAccountDialog: (value: boolean) => void;
 }
 
-const DavAccountList = ({
-  creatAccountDialog,
-  setCreateAccountDialog,
-}: DavAccountListProps) => {
+const DavAccountList = ({ creatAccountDialog, setCreateAccountDialog }: DavAccountListProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [nextPageToken, setNextPageToken] = useState<string | undefined>("");
   const [accounts, setAccounts] = useState<DavAccount[]>([]);
   const [loading, setLoading] = useState(false);
-  const [accountInfoTarget, setAccountInfoTarget] = useState<
-    DavAccount | undefined
-  >();
+  const [accountInfoTarget, setAccountInfoTarget] = useState<DavAccount | undefined>();
   const [editTarget, setEditTarget] = useState<DavAccount | undefined>();
   const [editOpen, setEditOpen] = useState(false);
 
@@ -75,9 +62,7 @@ const DavAccountList = ({
 
   const onAccountDeleted = useCallback(
     (id: string) => {
-      setAccounts((accounts) =>
-        accounts.filter((account) => account.id !== id),
-      );
+      setAccounts((accounts) => accounts.filter((account) => account.id !== id));
     },
     [setAccounts],
   );
@@ -103,9 +88,7 @@ const DavAccountList = ({
         open={editOpen}
         editTarget={editTarget}
         onClose={() => setEditOpen(false)}
-        onAccountUpdated={(account) =>
-          setAccounts(accounts.map((a) => (a.id == account.id ? account : a)))
-        }
+        onAccountUpdated={(account) => setAccounts(accounts.map((a) => (a.id == account.id ? account : a)))}
       />
       <ConnectionInfoDialog
         open={accountInfoTarget != undefined}
@@ -116,26 +99,14 @@ const DavAccountList = ({
         <Table sx={{ width: "100%", tableLayout: "fixed" }} size="small">
           <TableHead>
             <TableRow>
+              <NoWrapTableCell width={200}>{t("setting.annotation")}</NoWrapTableCell>
               <NoWrapTableCell width={200}>
-                {t("setting.annotation")}
+                <CellHeaderWithPadding>{t("setting.rootFolder")}</CellHeaderWithPadding>
               </NoWrapTableCell>
-              <NoWrapTableCell width={200}>
-                <CellHeaderWithPadding>
-                  {t("setting.rootFolder")}
-                </CellHeaderWithPadding>
-              </NoWrapTableCell>
-              <NoWrapTableCell width={150}>
-                {t("fileManager.permissions")}
-              </NoWrapTableCell>
-              <NoWrapTableCell width={150}>
-                {t("setting.proxy")}
-              </NoWrapTableCell>
-              <NoWrapTableCell width={200}>
-                {t("fileManager.createdAt")}
-              </NoWrapTableCell>
-              <NoWrapTableCell width={100}>
-                {t("fileManager.actions")}
-              </NoWrapTableCell>
+              <NoWrapTableCell width={150}>{t("fileManager.permissions")}</NoWrapTableCell>
+              <NoWrapTableCell width={150}>{t("setting.proxy")}</NoWrapTableCell>
+              <NoWrapTableCell width={200}>{t("fileManager.createdAt")}</NoWrapTableCell>
+              <NoWrapTableCell width={100}>{t("fileManager.actions")}</NoWrapTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -152,9 +123,7 @@ const DavAccountList = ({
               <>
                 {[...Array(4)].map((_, i) => (
                   <DavAccountRow
-                    onLoad={
-                      i == 0 ? loadNextPage(accounts, nextPageToken) : undefined
-                    }
+                    onLoad={i == 0 ? loadNextPage(accounts, nextPageToken) : undefined}
                     loading={true}
                     key={i}
                     onAccountDeleted={onAccountDeleted}

@@ -55,8 +55,7 @@ const DragPreview = ({ pointerOffset, files, ...rest }: DragPreviewProps) => {
             zIndex: 1610 - i - 1,
             top: (i + 1) * 4,
             left: (i + 1) * 4,
-            transition: (theme) =>
-              theme.transitions.create(["width", "height"]),
+            transition: (theme) => theme.transitions.create(["width", "height"]),
           }}
           elevation={3}
         />
@@ -68,14 +67,12 @@ const DragPreview = ({ pointerOffset, files, ...rest }: DragPreviewProps) => {
 const DragLayer = () => {
   DisableDropDelay();
 
-  const { itemType, isDragging, item, pointerOffset } = useDragLayer(
-    (monitor) => ({
-      item: monitor.getItem(),
-      itemType: monitor.getItemType(),
-      pointerOffset: monitor.getClientOffset(),
-      isDragging: monitor.isDragging(),
-    }),
-  );
+  const { itemType, isDragging, item, pointerOffset } = useDragLayer((monitor) => ({
+    item: monitor.getItem(),
+    itemType: monitor.getItemType(),
+    pointerOffset: monitor.getClientOffset(),
+    isDragging: monitor.isDragging(),
+  }));
 
   const selected = useAppSelector((state) => state.fileManager[0].selected);
   const draggingFiles = useMemo(() => {

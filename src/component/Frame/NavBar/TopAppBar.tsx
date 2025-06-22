@@ -1,21 +1,8 @@
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import {
-  AppBar,
-  Box,
-  Collapse,
-  IconButton,
-  Stack,
-  Toolbar,
-  Tooltip,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { AppBar, Box, Collapse, IconButton, Stack, Toolbar, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import {
-  setDrawerOpen,
-  setMobileDrawerOpen,
-} from "../../../redux/globalStateSlice.ts";
+import { setDrawerOpen, setMobileDrawerOpen } from "../../../redux/globalStateSlice.ts";
 import NewButton from "../../FileManager/NewButton.tsx";
 import UserAction from "./UserAction.tsx";
 import Setting from "../../Icons/Setting.tsx";
@@ -43,19 +30,12 @@ const TopAppBar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const open = useAppSelector((state) => state.globalState.drawerOpen);
-  const mobileDrawerOpen = useAppSelector(
-    (state) => state.globalState.mobileDrawerOpen,
-  );
+  const mobileDrawerOpen = useAppSelector((state) => state.globalState.mobileDrawerOpen);
   const drawerWidth = useAppSelector((state) => state.globalState.drawerWidth);
   const musicPlayer = useAppSelector((state) => state.globalState.musicPlayer);
-  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(
-    null,
-  );
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
 
-  const appBarBg =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[900];
+  const appBarBg = theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900];
   const isLogin = !!SessionManager.currentLoginOrNull();
 
   const onMobileMenuClicked = (e: React.MouseEvent<HTMLElement>) => {
@@ -94,10 +74,7 @@ const TopAppBar = () => {
       <Toolbar
         sx={{
           "&.MuiToolbar-root.MuiToolbar-gutters": {
-            paddingLeft:
-              open && !isMobile
-                ? theme.spacing(0)
-                : theme.spacing(isMobile ? 2 : 3),
+            paddingLeft: open && !isMobile ? theme.spacing(0) : theme.spacing(isMobile ? 2 : 3),
             transition: theme.transitions.create("padding", {
               easing: theme.transitions.easing.easeInOut,
               duration: theme.transitions.duration.standard,
@@ -110,11 +87,7 @@ const TopAppBar = () => {
             color="inherit"
             aria-label="open drawer"
             // @ts-ignore
-            onClick={
-              isMobile
-                ? onMobileMenuClicked
-                : () => dispatch(setDrawerOpen(true))
-            }
+            onClick={isMobile ? onMobileMenuClicked : () => dispatch(setDrawerOpen(true))}
             edge="start"
             sx={{
               mr: isMobile ? 1 : 2,
@@ -126,11 +99,7 @@ const TopAppBar = () => {
         </Collapse>
         {isMobile && (
           <>
-            <DrawerPopover
-              open={!!mobileDrawerOpen}
-              anchorEl={mobileMenuAnchor}
-              onClose={onCloseMobileMenu}
-            />
+            <DrawerPopover open={!!mobileDrawerOpen} anchorEl={mobileMenuAnchor} onClose={onCloseMobileMenu} />
           </>
         )}
         {!isMobile && isMainPage && (
@@ -154,10 +123,7 @@ const TopAppBar = () => {
               <DarkThemeSwitcher />
               {isLogin && (
                 <Tooltip title={t("navbar.setting")}>
-                  <IconButton
-                    size="large"
-                    onClick={() => navigate("/settings")}
-                  >
+                  <IconButton size="large" onClick={() => navigate("/settings")}>
                     <Setting />
                   </IconButton>
                 </Tooltip>

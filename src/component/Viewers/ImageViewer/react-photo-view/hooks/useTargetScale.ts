@@ -1,7 +1,7 @@
-import { useRef } from 'react';
-import useSetState from './useSetState';
-import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect';
-import useDebounceCallback from './useDebounceCallback';
+import { useRef } from "react";
+import useSetState from "./useSetState";
+import useIsomorphicLayoutEffect from "./useIsomorphicLayoutEffect";
+import useDebounceCallback from "./useDebounceCallback";
 
 /**
  * 目标缩放延迟处理

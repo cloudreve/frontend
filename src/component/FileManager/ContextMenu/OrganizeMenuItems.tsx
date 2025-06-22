@@ -5,16 +5,10 @@ import { CascadingContext, CascadingMenuItem } from "./CascadingMenu.tsx";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import { closeContextMenu } from "../../../redux/fileManagerSlice.ts";
-import {
-  applyIconColor,
-  dialogBasedMoveCopy,
-} from "../../../redux/thunks/file.ts";
+import { applyIconColor, dialogBasedMoveCopy } from "../../../redux/thunks/file.ts";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import FolderArrowRightOutlined from "../../Icons/FolderArrowRightOutlined.tsx";
-import {
-  setChangeIconDialog,
-  setPinFileDialog,
-} from "../../../redux/globalStateSlice.ts";
+import { setChangeIconDialog, setPinFileDialog } from "../../../redux/globalStateSlice.ts";
 import { getFileLinkedUri } from "../../../util";
 import PinOutlined from "../../Icons/PinOutlined.tsx";
 import EmojiEdit from "../../Icons/EmojiEdit.tsx";
@@ -45,16 +39,11 @@ const OrganizeMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
     [dispatch, targets],
   );
   const showDivider =
-    (displayOpt.showMove || displayOpt.showPin || displayOpt.showChangeIcon) &&
-    displayOpt.showChangeFolderColor;
+    (displayOpt.showMove || displayOpt.showPin || displayOpt.showChangeIcon) && displayOpt.showChangeFolderColor;
   return (
     <>
       {displayOpt.showMove && (
-        <CascadingMenuItem
-          onClick={onClick(() =>
-            dispatch(dialogBasedMoveCopy(0, targets, false)),
-          )}
-        >
+        <CascadingMenuItem onClick={onClick(() => dispatch(dialogBasedMoveCopy(0, targets, false)))}>
           <ListItemIcon>
             <FolderArrowRightOutlined fontSize="small" />
           </ListItemIcon>
@@ -92,18 +81,14 @@ const OrganizeMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
           <ListItemIcon>
             <EmojiEdit fontSize="small" />
           </ListItemIcon>
-          <ListItemText>
-            {t("application:fileManager.customizeIcon")}
-          </ListItemText>
+          <ListItemText>{t("application:fileManager.customizeIcon")}</ListItemText>
         </CascadingMenuItem>
       )}
       {showDivider && <DenseDivider />}
       {displayOpt.showChangeFolderColor && (
         <FolderColorQuickAction
           file={targets[0]}
-          onColorChange={(color) =>
-            onClick(() => dispatch(applyIconColor(0, targets, color, true)))()
-          }
+          onColorChange={(color) => onClick(() => dispatch(applyIconColor(0, targets, color, true)))()}
           sx={{
             maxWidth: "204px",
             margin: (theme) => `0 ${theme.spacing(0.5)}`,

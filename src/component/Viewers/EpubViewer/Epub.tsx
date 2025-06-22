@@ -1,9 +1,4 @@
-import {
-  IReactReaderProps,
-  IReactReaderStyle,
-  ReactReader,
-  ReactReaderStyle,
-} from "react-reader";
+import { IReactReaderProps, IReactReaderStyle, ReactReader, ReactReaderStyle } from "react-reader";
 
 import { type Rendition } from "epubjs";
 import { useEffect, useRef } from "react";
@@ -82,9 +77,7 @@ const Epub = (props: IReactReaderProps) => {
   return (
     <ReactReader
       {...props}
-      readerStyles={
-        theme.palette.mode === "dark" ? darkReaderTheme : lightReaderTheme
-      }
+      readerStyles={theme.palette.mode === "dark" ? darkReaderTheme : lightReaderTheme}
       getRendition={(_rendition) => {
         updateTheme(_rendition, theme.palette.mode);
         rendition.current = _rendition;

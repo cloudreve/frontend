@@ -1,6 +1,6 @@
-import React from 'react';
-import { createPortal } from 'react-dom';
-import './SlidePortal.less';
+import React from "react";
+import { createPortal } from "react-dom";
+import "./SlidePortal.less";
 
 export interface ISliderPortalProps extends React.HTMLAttributes<HTMLDivElement> {
   container?: HTMLElement;

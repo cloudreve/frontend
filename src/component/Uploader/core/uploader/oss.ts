@@ -17,15 +17,9 @@ export default class OSS extends Chunk {
   protected async afterUpload(): Promise<any> {
     this.logger.info(`Finishing multipart upload...`);
     this.transit(Status.finishing);
-    return s3LikeFinishUpload(
-      this.task.session!.completeURL,
-      true,
-      this.task.chunkProgress,
-      this.cancelToken.token,
-      {
-        "x-oss-forbid-overwrite": "true",
-        "x-oss-complete-all": "yes",
-      },
-    );
+    return s3LikeFinishUpload(this.task.session!.completeURL, true, this.task.chunkProgress, this.cancelToken.token, {
+      "x-oss-forbid-overwrite": "true",
+      "x-oss-complete-all": "yes",
+    });
   }
 }

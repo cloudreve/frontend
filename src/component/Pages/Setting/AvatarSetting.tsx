@@ -7,11 +7,7 @@ import { SecondaryButton } from "../../Common/StyledComponents.tsx";
 import { ListItemIcon, ListItemText, Menu } from "@mui/material";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import React, { useState } from "react";
-import {
-  bindMenu,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
+import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import Upload from "../../Icons/Upload.tsx";
 import Fingerprint from "../../Icons/Fingerprint.tsx";
 import AvatarCropperDialog from "./AvatarCropperDialog.tsx";
@@ -79,12 +75,7 @@ const AvatarSetting = ({ user }: AvatarSettingProps) => {
         sx={{ width: 200, height: 200 }}
         overwriteTextSize
       />
-      <SecondaryButton
-        sx={{ mt: 1 }}
-        variant={"contained"}
-        startIcon={<Edit />}
-        {...bindTrigger(popupState)}
-      >
+      <SecondaryButton sx={{ mt: 1 }} variant={"contained"} startIcon={<Edit />} {...bindTrigger(popupState)}>
         {t("fileManager.edit")}
       </SecondaryButton>
       <AvatarCropperDialog
@@ -93,13 +84,7 @@ const AvatarSetting = ({ user }: AvatarSettingProps) => {
         onClose={() => setImageCropperOpen(false)}
         open={imageCropperOpen}
       />
-      <input
-        onChange={onImageChange}
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        ref={fileInput}
-      />
+      <input onChange={onImageChange} type="file" accept="image/*" style={{ display: "none" }} ref={fileInput} />
       <Menu
         slotProps={{
           paper: {

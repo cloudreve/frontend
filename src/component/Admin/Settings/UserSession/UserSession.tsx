@@ -147,7 +147,7 @@ const UserSession = () => {
                   control={<Switch checked={false} />}
                   label={
                     <>
-                    {t("vas.disableSubAddressEmail")}
+                      {t("vas.disableSubAddressEmail")}
                       <ProChip label="Pro" color="primary" size="small" />
                     </>
                   }

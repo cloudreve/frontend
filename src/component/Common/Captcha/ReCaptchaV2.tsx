@@ -22,17 +22,11 @@ window.recaptchaOptions = {
   useRecaptchaNet: true,
 };
 
-const ReCaptchaV2 = ({
-  onStateChange,
-  generation,
-  ...rest
-}: ReCaptchaV2Props) => {
+const ReCaptchaV2 = ({ onStateChange, generation, ...rest }: ReCaptchaV2Props) => {
   const theme = useTheme();
 
   const captchaRef = useRef();
-  const reCaptchaKey = useAppSelector(
-    (state) => state.siteConfig.basic.config.captcha_ReCaptchaKey,
-  );
+  const reCaptchaKey = useAppSelector((state) => state.siteConfig.basic.config.captcha_ReCaptchaKey);
 
   const refreshCaptcha = async () => {
     captchaRef.current?.reset();

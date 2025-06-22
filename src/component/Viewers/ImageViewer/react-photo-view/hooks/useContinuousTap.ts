@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import useDebounceCallback from './useDebounceCallback';
+import { useRef } from "react";
+import useDebounceCallback from "./useDebounceCallback";
 
 export type TapFuncType<T> = (...args: T[]) => void;
 

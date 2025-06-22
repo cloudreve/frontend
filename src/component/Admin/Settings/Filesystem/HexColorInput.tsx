@@ -11,11 +11,7 @@ export interface HexColorInputProps {
   required?: boolean;
 }
 
-const HexColorInput = ({
-  currentColor,
-  onColorChange,
-  ...rest
-}: HexColorInputProps) => {
+const HexColorInput = ({ currentColor, onColorChange, ...rest }: HexColorInputProps) => {
   return (
     <DenseFilledTextField
       value={currentColor}

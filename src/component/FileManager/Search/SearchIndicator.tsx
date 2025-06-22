@@ -2,21 +2,10 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { useContext, useMemo } from "react";
 import { FmIndexContext } from "../FmIndexContext.tsx";
-import {
-  alpha,
-  Button,
-  ButtonGroup,
-  Grow,
-  styled,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { alpha, Button, ButtonGroup, Grow, styled, useMediaQuery, useTheme } from "@mui/material";
 import Search from "../../Icons/Search.tsx";
 import Dismiss from "../../Icons/Dismiss.tsx";
-import {
-  clearSearch,
-  openAdvancedSearch,
-} from "../../../redux/thunks/filemanager.ts";
+import { clearSearch, openAdvancedSearch } from "../../../redux/thunks/filemanager.ts";
 import { FileManagerIndex } from "../FileManager.tsx";
 
 export const StyledButtonGroup = styled(ButtonGroup)(({ theme }) => ({
@@ -44,9 +33,7 @@ export const SearchIndicator = () => {
   const dispatch = useAppDispatch();
   const fmIndex = useContext(FmIndexContext);
 
-  const search_params = useAppSelector(
-    (state) => state.fileManager[fmIndex].search_params,
-  );
+  const search_params = useAppSelector((state) => state.fileManager[fmIndex].search_params);
 
   const searchConditionsCount = useMemo(() => {
     if (!search_params) {
@@ -90,10 +77,7 @@ export const SearchIndicator = () => {
                 num: searchConditionsCount,
               })}
         </StyledButton>
-        <StyledButton
-          size={"small"}
-          onClick={() => dispatch(clearSearch(fmIndex))}
-        >
+        <StyledButton size={"small"} onClick={() => dispatch(clearSearch(fmIndex))}>
           <Dismiss fontSize={"small"} sx={{ width: 16, height: 16 }} />
         </StyledButton>
       </StyledButtonGroup>

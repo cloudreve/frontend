@@ -37,14 +37,8 @@ export interface MediaMetaCardProps {
 }
 
 const StyledButtonBase = styled(Box)(({ theme }) => {
-  let bgColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[900];
-  let bgColorHover =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[300]
-      : theme.palette.grey[700];
+  let bgColor = theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900];
+  let bgColorHover = theme.palette.mode === "light" ? theme.palette.grey[300] : theme.palette.grey[700];
   return {
     borderRadius: theme.shape.borderRadius,
     backgroundColor: bgColor,
@@ -69,21 +63,12 @@ export interface MediaMetaElementsProps extends LinkProps {
   element: MediaMetaElements;
 }
 
-export const MediaMetaElements = ({
-  element,
-  ...rest
-}: MediaMetaElementsProps) => {
+export const MediaMetaElements = ({ element, ...rest }: MediaMetaElementsProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const handleSearch = () => {
-    dispatch(
-      searchMetadata(
-        FileManagerIndex.main,
-        element.searchKey,
-        element.searchValue,
-      ),
-    );
+    dispatch(searchMetadata(FileManagerIndex.main, element.searchKey, element.searchValue));
     handleClose();
   };
 
@@ -113,18 +98,10 @@ export const MediaMetaElements = ({
           <ListItemIcon>
             <Clipboard fontSize="small" />
           </ListItemIcon>
-          <ListItemText>
-            {t("application:fileManager.copyToClipboard")}
-          </ListItemText>
+          <ListItemText>{t("application:fileManager.copyToClipboard")}</ListItemText>
         </SquareMenuItem>
       </Menu>
-      <Link
-        color="inherit"
-        href={"#"}
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-        underline="hover"
-        {...rest}
-      >
+      <Link color="inherit" href={"#"} onClick={(e) => setAnchorEl(e.currentTarget)} underline="hover" {...rest}>
         {element.display}
       </Link>
     </>
@@ -147,26 +124,14 @@ const MediaMetaCard = ({ contents, icon }: MediaMetaCardProps) => {
         >
           {contents.map(({ title, content }) => (
             <Box>
-              <Typography
-                variant={"body2"}
-                color="textPrimary"
-                fontWeight={500}
-              >
+              <Typography variant={"body2"} color="textPrimary" fontWeight={500}>
                 {title.map((element) =>
-                  typeof element === "string" ? (
-                    element
-                  ) : (
-                    <MediaMetaElements element={element} />
-                  ),
+                  typeof element === "string" ? element : <MediaMetaElements element={element} />,
                 )}
               </Typography>
               <Typography variant={"body2"} color={"text.secondary"}>
                 {content.map((element) =>
-                  typeof element === "string" ? (
-                    element
-                  ) : (
-                    <MediaMetaElements element={element} />
-                  ),
+                  typeof element === "string" ? element : <MediaMetaElements element={element} />,
                 )}
               </Typography>
             </Box>

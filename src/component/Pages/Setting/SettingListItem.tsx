@@ -12,11 +12,7 @@ import * as React from "react";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
-  border: `1px solid ${
-    theme.palette.mode === "light"
-      ? "rgba(0, 0, 0, 0.23)"
-      : "rgba(255, 255, 255, 0.23)"
-  }`,
+  border: `1px solid ${theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.23)" : "rgba(255, 255, 255, 0.23)"}`,
   marginTop: theme.spacing(1),
   paddingBottom: theme.spacing(0.5),
   paddingTop: theme.spacing(0.5),
@@ -58,9 +54,7 @@ const SettingListItem = ({
         }}
         secondary={settingDescription}
       />
-      {settingAction && (
-        <ListItemSecondaryAction>{settingAction}</ListItemSecondaryAction>
-      )}
+      {settingAction && <ListItemSecondaryAction>{settingAction}</ListItemSecondaryAction>}
     </StyledListItem>
   );
 };

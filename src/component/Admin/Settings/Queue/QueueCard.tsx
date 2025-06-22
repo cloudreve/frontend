@@ -34,11 +34,7 @@ export const QueueCard = ({ queue, settings, metrics, setSettings, loading }: Qu
           <Skeleton variant="text" width="80%" height={20} sx={{ mt: 1 }} />
           <Divider sx={{ my: 2 }} />
           <Skeleton variant="rectangular" height={8} width="100%" sx={{ borderRadius: 1 }} />
-          <Stack
-            spacing={isMobile ? 1 : 2}
-            direction={isMobile ? "column" : "row"}
-            sx={{ mt: 1 }}
-          >
+          <Stack spacing={isMobile ? 1 : 2} direction={isMobile ? "column" : "row"} sx={{ mt: 1 }}>
             {Array.from(Array(5)).map((_, index) => (
               <Skeleton key={index} variant="text" width={isMobile ? "100%" : 80} height={20} />
             ))}
@@ -48,115 +44,116 @@ export const QueueCard = ({ queue, settings, metrics, setSettings, loading }: Qu
     );
   }
 
-  return <Grid item xs={12} md={6} lg={4}>
-    <BorderedCard>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="subtitle1" fontWeight={600}>{t(`queue.queueName_${queue}`)}</Typography>
-        <IconButton size="small" onClick={() => setSettingDialogOpen(true)}>
-          <Setting fontSize="small" />
-        </IconButton>
-      </Box>
-      <Typography variant="body2" color="text.secondary">{t(`queue.queueName_${queue}Des`)}</Typography>
-      <Divider sx={{ my: 2 }} />
-      {metrics && <>
-        <StorageBar>
-          <StoragePart
-            sx={{
-              backgroundColor: (theme) => theme.palette.success.light,
-              width: `${(metrics.success_tasks / metrics.submitted_tasks) * 100}%`,
-            }}
-          />
-          <StoragePart
-            sx={{
-              backgroundColor: (theme) => theme.palette.error.light,
-              width: `${(metrics.failure_tasks / metrics.submitted_tasks) * 100}%`,
-            }}
-          />
-          <StoragePart
-            sx={{
-              backgroundColor: (theme) => theme.palette.action.active,
-              width: `${(metrics.suspending_tasks / metrics.submitted_tasks) * 100}%`,
-            }}
-          />
-          <StoragePart
-            sx={{
-              backgroundColor: (theme) => theme.palette.info.light,
-              width: `${(metrics.busy_workers / metrics.submitted_tasks) * 100}%`,
-            }}
-          />
-        </StorageBar>
-        <Stack
-          spacing={isMobile ? 1 : 2}
-          direction={isMobile ? "column" : "row"}
-          sx={{ mt: 1 }}
-        >
-          <Typography variant={"caption"}>
-            <StorageBlock
-              sx={{
-                backgroundColor: (theme) => theme.palette.success.light,
-              }}
-            />
-            {t("queue.success", {
-              count: metrics.success_tasks,
-            })}
+  return (
+    <Grid item xs={12} md={6} lg={4}>
+      <BorderedCard>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="subtitle1" fontWeight={600}>
+            {t(`queue.queueName_${queue}`)}
           </Typography>
-          <Typography variant={"caption"}>
-            <StorageBlock
-              sx={{
-                backgroundColor: (theme) => theme.palette.error.light,
-              }}
-            />
-            {t("queue.failed", {
-              count: metrics.failure_tasks,
-            })}
-          </Typography>
-          <Typography variant={"caption"}>
-            <StorageBlock
-              sx={{
-                backgroundColor: (theme) => theme.palette.info.light,
-              }}
-            />
-            {t("queue.busyWorker", {
-              count: metrics.busy_workers,
-            })}
-          </Typography>
-          <Typography variant={"caption"}>
-            <StorageBlock
-              sx={{
-                backgroundColor: (theme) => theme.palette.action.active,
-              }}
-            />
-            {t("queue.suspending", {
-              count: metrics.suspending_tasks,
-            })}
-          </Typography>
-          <Typography variant={"caption"}>
-            <StorageBlock
-              sx={{
-                backgroundColor: (theme) =>
-                  theme.palette.grey[
-                  theme.palette.mode === "light" ? 200 : 800
-                  ],
-              }}
-            />
-            {t("queue.submited", {
-              count: metrics.submitted_tasks,
-            })}
-          </Typography>
-        </Stack>
-      </>}
+          <IconButton size="small" onClick={() => setSettingDialogOpen(true)}>
+            <Setting fontSize="small" />
+          </IconButton>
+        </Box>
+        <Typography variant="body2" color="text.secondary">
+          {t(`queue.queueName_${queue}Des`)}
+        </Typography>
+        <Divider sx={{ my: 2 }} />
+        {metrics && (
+          <>
+            <StorageBar>
+              <StoragePart
+                sx={{
+                  backgroundColor: (theme) => theme.palette.success.light,
+                  width: `${(metrics.success_tasks / metrics.submitted_tasks) * 100}%`,
+                }}
+              />
+              <StoragePart
+                sx={{
+                  backgroundColor: (theme) => theme.palette.error.light,
+                  width: `${(metrics.failure_tasks / metrics.submitted_tasks) * 100}%`,
+                }}
+              />
+              <StoragePart
+                sx={{
+                  backgroundColor: (theme) => theme.palette.action.active,
+                  width: `${(metrics.suspending_tasks / metrics.submitted_tasks) * 100}%`,
+                }}
+              />
+              <StoragePart
+                sx={{
+                  backgroundColor: (theme) => theme.palette.info.light,
+                  width: `${(metrics.busy_workers / metrics.submitted_tasks) * 100}%`,
+                }}
+              />
+            </StorageBar>
+            <Stack spacing={isMobile ? 1 : 2} direction={isMobile ? "column" : "row"} sx={{ mt: 1 }}>
+              <Typography variant={"caption"}>
+                <StorageBlock
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.success.light,
+                  }}
+                />
+                {t("queue.success", {
+                  count: metrics.success_tasks,
+                })}
+              </Typography>
+              <Typography variant={"caption"}>
+                <StorageBlock
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.error.light,
+                  }}
+                />
+                {t("queue.failed", {
+                  count: metrics.failure_tasks,
+                })}
+              </Typography>
+              <Typography variant={"caption"}>
+                <StorageBlock
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.info.light,
+                  }}
+                />
+                {t("queue.busyWorker", {
+                  count: metrics.busy_workers,
+                })}
+              </Typography>
+              <Typography variant={"caption"}>
+                <StorageBlock
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.action.active,
+                  }}
+                />
+                {t("queue.suspending", {
+                  count: metrics.suspending_tasks,
+                })}
+              </Typography>
+              <Typography variant={"caption"}>
+                <StorageBlock
+                  sx={{
+                    backgroundColor: (theme) => theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+                  }}
+                />
+                {t("queue.submited", {
+                  count: metrics.submitted_tasks,
+                })}
+              </Typography>
+            </Stack>
+          </>
+        )}
 
-      {queue && (
-        <QueueSettingDialog
-          open={settingDialogOpen}
-          onClose={() => setSettingDialogOpen(false)}
-          queue={queue}
-          settings={settings}
-          setSettings={setSettings}
-        />
-      )}
-    </BorderedCard>
-  </Grid>;
+        {queue && (
+          <QueueSettingDialog
+            open={settingDialogOpen}
+            onClose={() => setSettingDialogOpen(false)}
+            queue={queue}
+            settings={settings}
+            setSettings={setSettings}
+          />
+        )}
+      </BorderedCard>
+    </Grid>
+  );
 };
 
 export default QueueCard;

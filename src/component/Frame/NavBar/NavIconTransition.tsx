@@ -10,12 +10,7 @@ export interface NavIconTransitionProps {
   iconProps?: SvgIconProps;
 }
 
-const NavIconTransition = ({
-  fileIcon,
-  active,
-  iconProps,
-  ...rest
-}: NavIconTransitionProps) => {
+const NavIconTransition = ({ fileIcon, active, iconProps, ...rest }: NavIconTransitionProps) => {
   const [Active, InActive] = fileIcon;
   return (
     <Box {...rest}>
@@ -30,11 +25,7 @@ const NavIconTransition = ({
         {!active && (
           <Fade key={"inactive"}>
             <span>
-              <InActive
-                sx={{ position: "absolute" }}
-                key={"inactive"}
-                {...iconProps}
-              />
+              <InActive sx={{ position: "absolute" }} key={"inactive"} {...iconProps} />
             </span>
           </Fade>
         )}

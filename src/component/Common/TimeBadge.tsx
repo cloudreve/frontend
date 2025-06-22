@@ -13,12 +13,7 @@ export interface TimeBadgeProps extends TypographyProps {
   timeAgoThreshold?: number;
 }
 
-const TimeBadge = ({
-  timeAgoThreshold = defaultTimeAgoThreshold,
-  datetime,
-  sx,
-  ...rest
-}: TimeBadgeProps) => {
+const TimeBadge = ({ timeAgoThreshold = defaultTimeAgoThreshold, datetime, sx, ...rest }: TimeBadgeProps) => {
   const { t } = useTranslation();
   const timeStr = useMemo(() => {
     if (typeof datetime === "string") {

@@ -12,10 +12,7 @@ export function loadSiteConfig(section: string): AppThunk {
         config: siteConfig,
       }),
     );
-    localStorage.setItem(
-      `siteConfigCache_${section}`,
-      JSON.stringify(siteConfig),
-    );
+    localStorage.setItem(`siteConfigCache_${section}`, JSON.stringify(siteConfig));
   };
 }
 

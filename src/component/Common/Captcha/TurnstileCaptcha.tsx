@@ -10,17 +10,11 @@ export interface TurnstileProps {
   generation: number;
 }
 
-const TurnstileCaptcha = ({
-  onStateChange,
-  generation,
-  ...rest
-}: TurnstileProps) => {
+const TurnstileCaptcha = ({ onStateChange, generation, ...rest }: TurnstileProps) => {
   const theme = useTheme();
 
   const captchaRef = useRef();
-  const turnstileKey = useAppSelector(
-    (state) => state.siteConfig.basic.config.turnstile_site_id,
-  );
+  const turnstileKey = useAppSelector((state) => state.siteConfig.basic.config.turnstile_site_id);
 
   const refreshCaptcha = async () => {
     captchaRef.current?.reset();

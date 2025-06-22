@@ -16,21 +16,9 @@ export default function useAnimationPosition(
   updateEasing: (pause: boolean) => void,
 ) {
   // 延迟更新 width/height
-  const [autoWidth, autoHeight, autoScale] = useTargetScale(
-    width,
-    height,
-    scale,
-    speed,
-    updateEasing,
-  );
+  const [autoWidth, autoHeight, autoScale] = useTargetScale(width, height, scale, speed, updateEasing);
   // 动画源处理
-  const [easingMode, originRect] = useAnimationOrigin(
-    visible,
-    originRef,
-    loaded,
-    speed,
-    updateEasing,
-  );
+  const [easingMode, originRect] = useAnimationOrigin(visible, originRef, loaded, speed, updateEasing);
 
   // 计算动画位置
   const { T, L, W, H, FIT } = originRect;
@@ -51,18 +39,8 @@ export default function useAnimationPosition(
   // 适应 objectFit 保持缩略图宽高比
   const currentHeight = miniMode && FIT ? autoWidth * (H / W) : autoHeight;
   // 初始加载情况无缩放
-  const currentScale =
-    easingMode === 0 ? autoScale : miniMode ? minScale : autoScale;
+  const currentScale = easingMode === 0 ? autoScale : miniMode ? minScale : autoScale;
   const opacity = miniMode ? (FIT ? 1 : 0) : 1;
 
-  return [
-    translateX,
-    translateY,
-    autoWidth,
-    currentHeight,
-    currentScale,
-    opacity,
-    easingMode,
-    FIT,
-  ] as const;
+  return [translateX, translateY, autoWidth, currentHeight, currentScale, opacity, easingMode, FIT] as const;
 }

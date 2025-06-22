@@ -32,13 +32,7 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
             <Trans
               i18nKey="settings.capInstanceURLDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://capjs.js.org/guide/standalone.html"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone.html"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
@@ -58,13 +52,7 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
             <Trans
               i18nKey="settings.capKeyIDDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://capjs.js.org/guide/standalone.html"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone.html"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
@@ -85,13 +73,7 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
             <Trans
               i18nKey="settings.capKeySecretDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://capjs.js.org/guide/standalone.html"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone.html"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
@@ -100,4 +82,4 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
   );
 };
 
-export default CapCaptcha; 
+export default CapCaptcha;

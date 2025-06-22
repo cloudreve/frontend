@@ -7,9 +7,7 @@ import { Outlet } from "react-router-dom";
 
 const SessionIntro = () => {
   const dispatch = useAppDispatch();
-  const loginConfigLoading = useAppSelector(
-    (state) => state.siteConfig.login.loaded,
-  );
+  const loginConfigLoading = useAppSelector((state) => state.siteConfig.login.loaded);
   useEffect(() => {
     dispatch(loadSiteConfig("login"));
   }, []);

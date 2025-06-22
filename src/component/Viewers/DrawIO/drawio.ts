@@ -62,9 +62,7 @@ export const handleRemoteInvoke = async (
       break;
     case "saveFile":
       try {
-        const res = await dispatch(
-          saveDrawIO(msg.functionArgs[2], viewerState.file, false),
-        );
+        const res = await dispatch(saveDrawIO(msg.functionArgs[2], viewerState.file, false));
         if (res) {
           sendResponse(w, msg, [
             {

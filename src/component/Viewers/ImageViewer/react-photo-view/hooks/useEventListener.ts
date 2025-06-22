@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export default function useEventListener<K extends keyof WindowEventMap>(
   type: K | undefined,

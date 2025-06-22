@@ -18,16 +18,10 @@ import { useAppDispatch } from "../../../../redux/hooks.ts";
 import { isTrueVal } from "../../../../session/utils.ts";
 import SizeInput from "../../../Common/SizeInput.tsx";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
-import {
-  DenseFilledTextField,
-  StyledCheckbox,
-} from "../../../Common/StyledComponents.tsx";
+import { DenseFilledTextField, StyledCheckbox } from "../../../Common/StyledComponents.tsx";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
 import { NoMarginHelperText, SettingSectionContent } from "../Settings.tsx";
-import {
-  AccordionSummary,
-  StyledAccordion,
-} from "../UserSession/SSOSettings.tsx";
+import { AccordionSummary, StyledAccordion } from "../UserSession/SSOSettings.tsx";
 
 export interface ExtractorsProps {
   values: {
@@ -90,12 +84,11 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
   const [testing, setTesting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleEnableChange =
-    (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSetting({
-        [name]: e.target.checked ? "1" : "0",
-      });
-    };
+  const handleEnableChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSetting({
+      [name]: e.target.checked ? "1" : "0",
+    });
+  };
 
   const doTest = (name: string, executable: string) => {
     setTesting(true);
@@ -150,12 +143,7 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
                         endAdornment: (
                           <InputAdornment position="end">
                             <LoadingButton
-                              onClick={() =>
-                                doTest(
-                                  e.name,
-                                  values[e.executableSetting ?? ""],
-                                )
-                              }
+                              onClick={() => doTest(e.name, values[e.executableSetting ?? ""])}
                               loading={testing}
                               color="primary"
                             >
@@ -170,9 +158,7 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
                         })
                       }
                     />
-                    <NoMarginHelperText>
-                      {t("settings.executableDes")}
-                    </NoMarginHelperText>
+                    <NoMarginHelperText>{t("settings.executableDes")}</NoMarginHelperText>
                   </FormControl>
                 </SettingForm>
               )}
@@ -189,9 +175,7 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
                         })
                       }
                     />
-                    <NoMarginHelperText>
-                      {t("settings.maxSizeLocalDes")}
-                    </NoMarginHelperText>
+                    <NoMarginHelperText>{t("settings.maxSizeLocalDes")}</NoMarginHelperText>
                   </FormControl>
                 </SettingForm>
               )}
@@ -208,17 +192,12 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
                         })
                       }
                     />
-                    <NoMarginHelperText>
-                      {t("settings.maxSizeRemoteDes")}
-                    </NoMarginHelperText>
+                    <NoMarginHelperText>{t("settings.maxSizeRemoteDes")}</NoMarginHelperText>
                   </FormControl>
                 </SettingForm>
               )}
               {e.additionalSettings?.map((setting) => (
-                <SettingForm
-                  key={setting.name}
-                  lgWidth={12}
-                >
+                <SettingForm key={setting.name} lgWidth={12}>
                   <FormControl fullWidth>
                     {setting.type === "switch" ? (
                       <FormControlLabel
@@ -245,9 +224,7 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
                         }
                       />
                     )}
-                    <NoMarginHelperText>
-                      {t(`settings.${setting.des}`)}
-                    </NoMarginHelperText>
+                    <NoMarginHelperText>{t(`settings.${setting.des}`)}</NoMarginHelperText>
                   </FormControl>
                 </SettingForm>
               ))}
@@ -259,4 +236,4 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
   );
 };
 
-export default Extractors; 
+export default Extractors;

@@ -1,11 +1,5 @@
 import { FileResponse, FileType, Metadata } from "../../../api/explorer.ts";
-import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { sizeToString } from "../../../util";
 import FileIcon from "../Explorer/FileIcon.tsx";
@@ -49,15 +43,7 @@ const FuzzySearchResult = ({ files, keyword }: FuzzySearchResultProps) => {
           <ListItemButton
             sx={{ py: 0 }}
             onClick={(e) =>
-              dispatch(
-                openFileContextMenu(
-                  FileManagerIndex.main,
-                  file,
-                  true,
-                  e,
-                  ContextMenuTypes.searchResult,
-                ),
-              )
+              dispatch(openFileContextMenu(FileManagerIndex.main, file, true, e, ContextMenuTypes.searchResult))
             }
           >
             <ListItemAvatar sx={{ minWidth: 48 }}>
@@ -91,8 +77,9 @@ const FuzzySearchResult = ({ files, keyword }: FuzzySearchResultProps) => {
 
                 secondary: {
                   variant: "body2",
-                }
-              }} />
+                },
+              }}
+            />
             <FileBadge
               clickable
               variant={"outlined"}

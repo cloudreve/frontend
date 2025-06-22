@@ -101,9 +101,7 @@ export interface PhotoProviderBase {
   /**
    * 自定义加载失败渲染
    */
-  brokenElement?:
-    | JSX.Element
-    | ((photoProps: BrokenElementParams) => JSX.Element);
+  brokenElement?: JSX.Element | ((photoProps: BrokenElementParams) => JSX.Element);
   /**
    * @defaultValue document.body
    */
@@ -184,12 +182,7 @@ export interface ExposedProperties {
   onRotate?: (rotate: number) => void;
 }
 
-export type ReachMoveFunction = (
-  reachPosition: ReachType,
-  clientX: number,
-  clientY: number,
-  scale?: number,
-) => void;
+export type ReachMoveFunction = (reachPosition: ReachType, clientX: number, clientY: number, scale?: number) => void;
 
 export type ReachFunction = (clientX: number, clientY: number) => void;
 

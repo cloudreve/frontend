@@ -1,13 +1,6 @@
 import * as React from "react";
 import { useCallback, useState } from "react";
-import {
-  Box,
-  Container,
-  FormControl,
-  Grid,
-  ListItemText,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Box, Container, FormControl, Grid, ListItemText, SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PageHeader from "../PageHeader.tsx";
 import { getShares } from "../../../api/api.ts";
@@ -83,22 +76,22 @@ const ShareList = () => {
         <PageHeader
           secondaryAction={
             <FormControl variant="outlined">
-              <DenseSelect
-                variant="outlined"
-                value={orderDirection}
-                onChange={onSelectChange}
-              >
+              <DenseSelect variant="outlined" value={orderDirection} onChange={onSelectChange}>
                 <SquareMenuItem value={"desc"}>
-                  <ListItemText slotProps={{
-                    primary: { variant: "body2" }
-                  }}>
+                  <ListItemText
+                    slotProps={{
+                      primary: { variant: "body2" },
+                    }}
+                  >
                     {t("application:share.createdAtDesc")}
                   </ListItemText>
                 </SquareMenuItem>
                 <SquareMenuItem value={"asc"}>
-                  <ListItemText slotProps={{
-                    primary: { variant: "body2" }
-                  }}>
+                  <ListItemText
+                    slotProps={{
+                      primary: { variant: "body2" },
+                    }}
+                  >
                     {t("application:share.createdAtAsc")}
                   </ListItemText>
                 </SquareMenuItem>
@@ -112,20 +105,14 @@ const ShareList = () => {
 
         <Grid container spacing={1}>
           {shares.map((share) => (
-            <ShareCard
-              share={share}
-              key={share.id}
-              onShareDeleted={onShareDeleted}
-            />
+            <ShareCard share={share} key={share.id} onShareDeleted={onShareDeleted} />
           ))}
           {nextPageToken != undefined && (
             <>
               {[...Array(4)].map((_, i) => (
                 <ShareCard
                   onShareDeleted={onShareDeleted}
-                  onLoad={
-                    i == 0 ? loadNextPage(shares, nextPageToken) : undefined
-                  }
+                  onLoad={i == 0 ? loadNextPage(shares, nextPageToken) : undefined}
                   loading={true}
                   key={i == 0 ? nextPageToken : i}
                 />

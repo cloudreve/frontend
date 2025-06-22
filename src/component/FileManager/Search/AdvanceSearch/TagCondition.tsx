@@ -23,9 +23,7 @@ export const TagCondition = ({
         renderTags={(value: readonly string[], getTagProps) =>
           value.map((option: string, index: number) => {
             const { key, ...tagProps } = getTagProps({ index });
-            return (
-              <Chip variant="outlined" label={option} key={key} {...tagProps} />
-            );
+            return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
           })
         }
         renderInput={(params) => (

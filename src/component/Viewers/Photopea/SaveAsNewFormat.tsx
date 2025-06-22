@@ -92,19 +92,13 @@ const formats: Format[] = [
   },
 ];
 
-const SaveAsNewFormat = ({
-  onSaveSubmit,
-  onClose,
-  ...rest
-}: SaveAsNewFormatProps) => {
+const SaveAsNewFormat = ({ onSaveSubmit, onClose, ...rest }: SaveAsNewFormatProps) => {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<Format>(formats[0]);
   const [quality, setQuality] = useState(0.9);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelected(
-      formats.find((f) => f.ext === event.target.value) ?? formats[0],
-    );
+    setSelected(formats.find((f) => f.ext === event.target.value) ?? formats[0]);
   };
 
   const handleSliderChange = (_event: Event, newValue: number | number[]) => {

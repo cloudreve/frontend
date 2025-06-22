@@ -1,12 +1,4 @@
-import {
-  alpha,
-  Button,
-  IconButton,
-  styled,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { alpha, Button, IconButton, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Trans, useTranslation } from "react-i18next";
 import { setSearchPopup } from "../../../redux/globalStateSlice.ts";
@@ -14,10 +6,7 @@ import { useAppDispatch } from "../../../redux/hooks.ts";
 import Search from "../../Icons/Search.tsx";
 
 export const KeyIndicator = styled("code")(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[900],
+  backgroundColor: theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
   border: `1px solid ${theme.palette.divider}`,
   boxShadow:
     theme.palette.mode === "light"
@@ -36,7 +25,7 @@ const SearchButton = styled(Button)(({ theme }) => ({
   " :hover": {
     border: `1px solid ${theme.palette.primary.main}`,
     backgroundColor: alpha(theme.palette.primary.main, 0.04),
-  }
+  },
 }));
 
 const SearchBar = () => {

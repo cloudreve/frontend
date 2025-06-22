@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function ArrowRight(props: React.HTMLAttributes<SVGElement>) {
   return (

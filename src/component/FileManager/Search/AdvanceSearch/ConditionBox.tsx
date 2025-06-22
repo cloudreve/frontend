@@ -137,49 +137,25 @@ const ConditionBox = forwardRef((props: ConditionProps, ref) => {
         <Icon sx={{ width: "20px", height: "20px" }} />
         <Box sx={{ flexGrow: 1 }}>{title}</Box>
         <Grow in={hovered && !!onRemove}>
-          <IconButton
-            onClick={onRemove ? () => onRemove(condition) : undefined}
-          >
+          <IconButton onClick={onRemove ? () => onRemove(condition) : undefined}>
             <Dismiss fontSize={"small"} />
           </IconButton>
         </Grow>
       </Typography>
       <Box>
         {condition.type == ConditionType.name && (
-          <FileNameCondition
-            condition={condition}
-            onChange={onChange}
-            onNameConditionAdded={onNameConditionAdded}
-          />
+          <FileNameCondition condition={condition} onChange={onChange} onNameConditionAdded={onNameConditionAdded} />
         )}
-        {condition.type == ConditionType.type && (
-          <FileTypeCondition condition={condition} onChange={onChange} />
-        )}
-        {condition.type == ConditionType.base && (
-          <SearchBaseCondition condition={condition} onChange={onChange} />
-        )}
-        {condition.type == ConditionType.tag && (
-          <TagCondition onChange={onChange} condition={condition} />
-        )}
-        {condition.type == ConditionType.metadata && (
-          <MetadataCondition onChange={onChange} condition={condition} />
-        )}
-        {condition.type == ConditionType.size && (
-          <SizeCondition condition={condition} onChange={onChange} />
-        )}
+        {condition.type == ConditionType.type && <FileTypeCondition condition={condition} onChange={onChange} />}
+        {condition.type == ConditionType.base && <SearchBaseCondition condition={condition} onChange={onChange} />}
+        {condition.type == ConditionType.tag && <TagCondition onChange={onChange} condition={condition} />}
+        {condition.type == ConditionType.metadata && <MetadataCondition onChange={onChange} condition={condition} />}
+        {condition.type == ConditionType.size && <SizeCondition condition={condition} onChange={onChange} />}
         {condition.type == ConditionType.created && (
-          <DateTimeCondition
-            condition={condition}
-            onChange={onChange}
-            field={"created"}
-          />
+          <DateTimeCondition condition={condition} onChange={onChange} field={"created"} />
         )}
         {condition.type == ConditionType.modified && (
-          <DateTimeCondition
-            condition={condition}
-            onChange={onChange}
-            field={"updated"}
-          />
+          <DateTimeCondition condition={condition} onChange={onChange} field={"updated"} />
         )}
       </Box>
     </StyledBox>

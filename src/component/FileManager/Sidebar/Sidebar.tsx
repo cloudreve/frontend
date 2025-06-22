@@ -13,13 +13,9 @@ export interface SideBarProps {
 const Sidebar = ({ inPhotoViewer }: SideBarProps) => {
   const dispatch = useAppDispatch();
   const sidebarOpen = useAppSelector((state) => state.globalState.sidebarOpen);
-  const sidebarTarget = useAppSelector(
-    (state) => state.globalState.sidebarTarget,
-  );
+  const sidebarTarget = useAppSelector((state) => state.globalState.sidebarTarget);
   // null: not valid, undefined: not loaded, FileResponse: loaded
-  const [target, setTarget] = useState<FileResponse | undefined | null>(
-    undefined,
-  );
+  const [target, setTarget] = useState<FileResponse | undefined | null>(undefined);
 
   const loadExtendedInfo = useCallback(
     (path: string) => {
@@ -72,8 +68,7 @@ const Sidebar = ({ inPhotoViewer }: SideBarProps) => {
             width: "300px",
             height: "100%",
             ml: 1,
-            borderRadius: (theme) =>
-              inPhotoViewer ? 0 : theme.shape.borderRadius / 8,
+            borderRadius: (theme) => (inPhotoViewer ? 0 : theme.shape.borderRadius / 8),
           }}
           withBorder={!inPhotoViewer}
         >

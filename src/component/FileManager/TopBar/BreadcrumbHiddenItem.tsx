@@ -1,14 +1,5 @@
-import {
-  BreadcrumbButtonProps,
-  useBreadcrumbButtons,
-} from "./BreadcrumbButton.tsx";
-import {
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Skeleton,
-  styled,
-} from "@mui/material";
+import { BreadcrumbButtonProps, useBreadcrumbButtons } from "./BreadcrumbButton.tsx";
+import { ListItemIcon, ListItemText, MenuItem, Skeleton, styled } from "@mui/material";
 import { useContext, useMemo } from "react";
 import { useAppSelector } from "../../../redux/hooks.ts";
 import FileIcon from "../Explorer/FileIcon.tsx";
@@ -20,24 +11,13 @@ export interface BreadcrumbHiddenItem extends BreadcrumbButtonProps {
   onClose: () => void;
 }
 
-export const StyledMenuItem = styled(MenuItem)<{ isDropOver?: boolean }>(
-  ({ theme, isDropOver }) => ({
-    transition: "all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
-    transitionProperty: "background-color,opacity,box-shadow",
-    boxShadow: isDropOver
-      ? `inset 0 0 0 2px ${theme.palette.primary.light}`
-      : "none",
-  }),
-);
+export const StyledMenuItem = styled(MenuItem)<{ isDropOver?: boolean }>(({ theme, isDropOver }) => ({
+  transition: "all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
+  transitionProperty: "background-color,opacity,box-shadow",
+  boxShadow: isDropOver ? `inset 0 0 0 2px ${theme.palette.primary.light}` : "none",
+}));
 
-const BreadcrumbHiddenItem = ({
-  name,
-  is_root,
-  is_latest,
-  path,
-  onClose,
-  ...rest
-}: BreadcrumbHiddenItem) => {
+const BreadcrumbHiddenItem = ({ name, is_root, is_latest, path, onClose, ...rest }: BreadcrumbHiddenItem) => {
   const [loading, displayName, startIcon, onClick] = useBreadcrumbButtons({
     name,
     is_latest,
@@ -70,12 +50,7 @@ const BreadcrumbHiddenItem = ({
   });
 
   return (
-    <StyledMenuItem
-      isDropOver={isOver}
-      ref={drop}
-      {...rest}
-      onClick={onItemClick}
-    >
+    <StyledMenuItem isDropOver={isOver} ref={drop} {...rest} onClick={onItemClick}>
       <ListItemIcon>
         {StartIcon ? (
           StartIcon
@@ -91,9 +66,7 @@ const BreadcrumbHiddenItem = ({
           />
         )}
       </ListItemIcon>
-      <ListItemText>
-        {loading ? <Skeleton variant={"text"} width={75} /> : displayName}
-      </ListItemText>
+      <ListItemText>{loading ? <Skeleton variant={"text"} width={75} /> : displayName}</ListItemText>
     </StyledMenuItem>
   );
 };

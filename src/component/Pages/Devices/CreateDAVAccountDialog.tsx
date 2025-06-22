@@ -1,13 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  Checkbox,
-  DialogContent,
-  DialogProps,
-  FormGroup,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Checkbox, DialogContent, DialogProps, FormGroup, Stack, Typography, useTheme } from "@mui/material";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import { useSnackbar } from "notistack";
@@ -22,10 +14,7 @@ import Boolset from "../../../util/boolset.ts";
 import { GroupPermission } from "../../../api/user.ts";
 import SessionManager from "../../../session";
 import { SmallFormControlLabel } from "../../Common/StyledComponents.tsx";
-import {
-  sendCreateDavAccounts,
-  sendUpdateDavAccounts,
-} from "../../../api/api.ts";
+import { sendCreateDavAccounts, sendUpdateDavAccounts } from "../../../api/api.ts";
 import { DavAccount, DavAccountOption } from "../../../api/setting.ts";
 
 export interface CreateDAVAccountDialogProps extends DialogProps {
@@ -55,9 +44,7 @@ const CreateDAVAccountDialog = ({
   const theme = useTheme();
 
   const groupProxyEnabled = useMemo(() => {
-    const perm = new Boolset(
-      SessionManager.currentLoginOrNull()?.user.group?.permission,
-    );
+    const perm = new Boolset(SessionManager.currentLoginOrNull()?.user.group?.permission);
     return perm.enabled(GroupPermission.webdav_proxy);
   }, []);
 
@@ -83,11 +70,7 @@ const CreateDAVAccountDialog = ({
       proxy,
       readonly,
     };
-    dispatch(
-      editTarget
-        ? sendUpdateDavAccounts(editTarget.id, req)
-        : sendCreateDavAccounts(req),
-    )
+    dispatch(editTarget ? sendUpdateDavAccounts(editTarget.id, req) : sendCreateDavAccounts(req))
       .then((account) => {
         onClose && onClose({}, "escapeKeyDown");
         !editTarget && onAccountAdded && onAccountAdded(account);
@@ -146,39 +129,19 @@ const CreateDAVAccountDialog = ({
           >
             <FormGroup>
               <SmallFormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    onChange={(e) => setReadonly(e.target.checked)}
-                    checked={readonly}
-                  />
-                }
+                control={<Checkbox size="small" onChange={(e) => setReadonly(e.target.checked)} checked={readonly} />}
                 label={t("application:setting.readonlyOn")}
               />
-              <Typography
-                sx={{ pl: "27px" }}
-                variant={"caption"}
-                color={"text.secondary"}
-              >
+              <Typography sx={{ pl: "27px" }} variant={"caption"} color={"text.secondary"}>
                 {t("application:setting.readonlyTooltip")}
               </Typography>
               {groupProxyEnabled && (
                 <>
                   <SmallFormControlLabel
-                    control={
-                      <Checkbox
-                        size="small"
-                        onChange={(e) => setProxy(e.target.checked)}
-                        checked={proxy}
-                      />
-                    }
+                    control={<Checkbox size="small" onChange={(e) => setProxy(e.target.checked)} checked={proxy} />}
                     label={t("application:setting.proxy")}
                   />
-                  <Typography
-                    sx={{ pl: "27px" }}
-                    variant={"caption"}
-                    color={"text.secondary"}
-                  >
+                  <Typography sx={{ pl: "27px" }} variant={"caption"} color={"text.secondary"}>
                     {t("application:setting.proxyTooltip")}
                   </Typography>
                 </>

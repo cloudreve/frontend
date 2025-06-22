@@ -4,10 +4,7 @@ import { Tag } from "../component/FileManager/Dialogs/Tags.tsx";
 import Boolset from "../util/boolset.ts";
 import { User } from "../api/user.ts";
 
-export const addRecentUsedColor = (
-  color: string | undefined,
-  setting: string,
-) => {
+export const addRecentUsedColor = (color: string | undefined, setting: string) => {
   if (!color || defaultColors.includes(color)) return;
   let colors = SessionManager.get(setting) as string[];
   if (!colors) colors = [];
@@ -37,10 +34,7 @@ export const addUsedTags = (tags: Tag[]) => {
   });
 
   if (Object.keys(existing).length > maxRecentTags) {
-    const removedKeys = Object.keys(existing).slice(
-      0,
-      Object.keys(existing).length - maxRecentTags,
-    );
+    const removedKeys = Object.keys(existing).slice(0, Object.keys(existing).length - maxRecentTags);
     removedKeys.forEach((key) => {
       delete existing[key];
     });

@@ -27,13 +27,7 @@ const NoMarginHelperText = (props: any) => (
   />
 );
 
-const QueueSettingDialog = ({
-  open,
-  onClose,
-  queue,
-  settings,
-  setSettings,
-}: QueueSettingDialogProps) => {
+const QueueSettingDialog = ({ open, onClose, queue, settings, setSettings }: QueueSettingDialogProps) => {
   const { t } = useTranslation("dashboard");
   const formRef = useRef<HTMLFormElement>(null);
   const [localSettings, setLocalSettings] = useState<{ [key: string]: string }>({});
@@ -48,10 +42,10 @@ const QueueSettingDialog = ({
         "backoff_factor",
         "backoff_max_duration",
         "max_retry",
-        "retry_delay"
+        "retry_delay",
       ];
 
-      settingKeys.forEach(key => {
+      settingKeys.forEach((key) => {
         const fullKey = `queue_${queue}_${key}`;
         queueSettings[key] = settings[fullKey] || "";
       });
@@ -76,7 +70,7 @@ const QueueSettingDialog = ({
   const updateLocalSetting = (key: string, value: string) => {
     setLocalSettings((prev: { [key: string]: string }) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
@@ -95,25 +89,25 @@ const QueueSettingDialog = ({
         maxWidth: "sm",
       }}
     >
-      <Box component={"form"} ref={formRef} sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, px: 3, pb: 2 }}>
+      <Box
+        component={"form"}
+        ref={formRef}
+        sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, px: 3, pb: 2 }}
+      >
         <SettingForm title={t("queue.workerNum")} lgWidth={12}>
           <FormControl fullWidth>
             <DenseFilledTextField
               value={localSettings.worker_num || ""}
               onChange={(e) => updateLocalSetting("worker_num", e.target.value)}
               type="number"
-              slotProps={
-                {
-                  htmlInput: {
-                    min: 1,
-                  }
-                }
-              }
+              slotProps={{
+                htmlInput: {
+                  min: 1,
+                },
+              }}
               required
             />
-            <NoMarginHelperText>
-              {t("queue.workerNumDes")}
-            </NoMarginHelperText>
+            <NoMarginHelperText>{t("queue.workerNumDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
 
@@ -128,9 +122,7 @@ const QueueSettingDialog = ({
               }}
               required
             />
-            <NoMarginHelperText>
-              {t("queue.maxExecutionDes")}
-            </NoMarginHelperText>
+            <NoMarginHelperText>{t("queue.maxExecutionDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
 
@@ -140,19 +132,15 @@ const QueueSettingDialog = ({
               value={localSettings.backoff_factor || ""}
               onChange={(e) => updateLocalSetting("backoff_factor", e.target.value)}
               type="number"
-              slotProps={
-                {
-                  htmlInput: {
-                    min: 1,
-                    step: 0.1,
-                  }
-                }
-              }
+              slotProps={{
+                htmlInput: {
+                  min: 1,
+                  step: 0.1,
+                },
+              }}
               required
             />
-            <NoMarginHelperText>
-              {t("queue.backoffFactorDes")}
-            </NoMarginHelperText>
+            <NoMarginHelperText>{t("queue.backoffFactorDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
 
@@ -162,18 +150,14 @@ const QueueSettingDialog = ({
               value={localSettings.backoff_max_duration || ""}
               onChange={(e) => updateLocalSetting("backoff_max_duration", e.target.value)}
               type="number"
-              slotProps={
-                {
-                  htmlInput: {
-                    min: 1,
-                  }
-                }
-              }
+              slotProps={{
+                htmlInput: {
+                  min: 1,
+                },
+              }}
               required
             />
-            <NoMarginHelperText>
-              {t("queue.backoffMaxDurationDes")}
-            </NoMarginHelperText>
+            <NoMarginHelperText>{t("queue.backoffMaxDurationDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
 
@@ -183,18 +167,14 @@ const QueueSettingDialog = ({
               value={localSettings.max_retry || ""}
               onChange={(e) => updateLocalSetting("max_retry", e.target.value)}
               type="number"
-              slotProps={
-                {
-                  htmlInput: {
-                    min: 0,
-                  }
-                }
-              }
+              slotProps={{
+                htmlInput: {
+                  min: 0,
+                },
+              }}
               required
             />
-            <NoMarginHelperText>
-              {t("queue.maxRetryDes")}
-            </NoMarginHelperText>
+            <NoMarginHelperText>{t("queue.maxRetryDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
 
@@ -204,18 +184,14 @@ const QueueSettingDialog = ({
               value={localSettings.retry_delay || ""}
               onChange={(e) => updateLocalSetting("retry_delay", e.target.value)}
               type="number"
-              slotProps={
-                {
-                  htmlInput: {
-                    min: 0,
-                  }
-                }
-              }
+              slotProps={{
+                htmlInput: {
+                  min: 0,
+                },
+              }}
               required
             />
-            <NoMarginHelperText>
-              {t("queue.retryDelayDes")}
-            </NoMarginHelperText>
+            <NoMarginHelperText>{t("queue.retryDelayDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
       </Box>
@@ -223,4 +199,4 @@ const QueueSettingDialog = ({
   );
 };
 
-export default QueueSettingDialog; 
+export default QueueSettingDialog;

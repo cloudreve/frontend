@@ -26,9 +26,7 @@ const Devices = () => {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [creatAccountDialog, setCreateAccountDialog] = useState(false);
-  const appPromotion = useAppSelector(
-    (state) => state.siteConfig.app.config?.app_promotion,
-  );
+  const appPromotion = useAppSelector((state) => state.siteConfig.app.config?.app_promotion);
 
   const webDavEnabled = useMemo(() => {
     const user = SessionManager.currentLoginOrNull();
@@ -59,8 +57,7 @@ const Devices = () => {
   }, [webDavEnabled, appPromotion]);
 
   const [tab, setTab] = useState(
-    searchParams.get(PageTabQuery) ??
-      (webDavEnabled ? DevicePageTab.Dav : DevicePageTab.App),
+    searchParams.get(PageTabQuery) ?? (webDavEnabled ? DevicePageTab.Dav : DevicePageTab.App),
   );
 
   useEffect(() => {
@@ -73,33 +70,20 @@ const Devices = () => {
         <PageHeader
           secondaryAction={
             <Grow in={tab == DevicePageTab.Dav}>
-              <Button
-                variant={"contained"}
-                startIcon={<Add />}
-                onClick={() => setCreateAccountDialog(true)}
-              >
+              <Button variant={"contained"} startIcon={<Add />} onClick={() => setCreateAccountDialog(true)}>
                 {t("setting.createNewAccount")}
               </Button>
             </Grow>
           }
           title={t("application:navbar.connect")}
         />
-        <ResponsiveTabs
-          value={tab}
-          onChange={(_e, newValue) => setTab(newValue)}
-          tabs={tabs}
-        />
+        <ResponsiveTabs value={tab} onChange={(_e, newValue) => setTab(newValue)} tabs={tabs} />
         {tab == DevicePageTab.Dav && webDavEnabled && (
-          <DavAccountList
-            creatAccountDialog={creatAccountDialog}
-            setCreateAccountDialog={setCreateAccountDialog}
-          />
+          <DavAccountList creatAccountDialog={creatAccountDialog} setCreateAccountDialog={setCreateAccountDialog} />
         )}
         {tab == DevicePageTab.App && appPromotion && <AppPromotion />}
 
-        {!webDavEnabled && !appPromotion && (
-          <Nothing primary={t("setting.deviceNothing")} />
-        )}
+        {!webDavEnabled && !appPromotion && <Nothing primary={t("setting.deviceNothing")} />}
       </Container>
     </PageContainer>
   );

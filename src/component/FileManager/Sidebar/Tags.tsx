@@ -37,12 +37,7 @@ const Tags = ({ target }: TagsProps) => {
 
   return (
     <>
-      <Typography
-        sx={{ pt: 1 }}
-        color="textPrimary"
-        fontWeight={500}
-        variant={"subtitle1"}
-      >
+      <Typography sx={{ pt: 1 }} color="textPrimary" fontWeight={500} variant={"subtitle1"}>
         {t("application:fileManager.tags")}
       </Typography>
       <Box>

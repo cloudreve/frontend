@@ -30,24 +30,14 @@ export function useUpload(uploader: Base) {
 
   // 获取上传速度
   const [speed, speedAvg] = React.useMemo(() => {
-    if (
-      progress == undefined ||
-      progress.total == null ||
-      progress.total.loaded == null
-    )
-      return [0, 0];
+    if (progress == undefined || progress.total == null || progress.total.loaded == null) return [0, 0];
     const duration = (Date.now() - (uploader.lastTime || 0)) / 1000;
     const durationTotal = (Date.now() - (uploader.startTime || 0)) / 1000;
     const res =
       progress.total.loaded > startLoadedRef.current
-        ? Math.floor(
-            (progress.total.loaded - startLoadedRef.current) / duration,
-          )
+        ? Math.floor((progress.total.loaded - startLoadedRef.current) / duration)
         : 0;
-    const resAvg =
-      progress.total.loaded > 0
-        ? Math.floor(progress.total.loaded / durationTotal)
-        : 0;
+    const resAvg = progress.total.loaded > 0 ? Math.floor(progress.total.loaded / durationTotal) : 0;
 
     startLoadedRef.current = progress.total.loaded;
     uploader.lastTime = Date.now();

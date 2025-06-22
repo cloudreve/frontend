@@ -12,15 +12,9 @@ const BatchDownloadLog = () => {
   const dispatch = useAppDispatch();
   const logRef = useRef<HTMLInputElement>(null);
 
-  const open = useAppSelector(
-    (state) => state.globalState.batchDownloadLogDialogOpen,
-  );
-  const downloadId = useAppSelector(
-    (state) => state.globalState.batchDownloadLogDialogId,
-  );
-  const logs = useAppSelector(
-    (state) => state.globalState.batchDownloadLogDialogLogs?.[downloadId ?? ""],
-  );
+  const open = useAppSelector((state) => state.globalState.batchDownloadLogDialogOpen);
+  const downloadId = useAppSelector((state) => state.globalState.batchDownloadLogDialogId);
+  const logs = useAppSelector((state) => state.globalState.batchDownloadLogDialogLogs?.[downloadId ?? ""]);
 
   const onClose = useCallback(() => {
     dispatch(closeBatchDownloadLogDialog());

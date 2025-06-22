@@ -10,11 +10,7 @@ export default function getSuitableImageSize(
   rotate: number,
   dynamicInnerWidth: number,
 ) {
-  const [currentWidth, currentHeight, isVertical] = getRotateSize(
-    rotate,
-    dynamicInnerWidth,
-    innerHeight,
-  );
+  const [currentWidth, currentHeight, isVertical] = getRotateSize(rotate, dynamicInnerWidth, innerHeight);
 
   let y = 0;
   let width = currentWidth;

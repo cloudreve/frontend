@@ -21,9 +21,7 @@ const Loading = () => {
 };
 
 const HeadlessFrame = () => {
-  const loading = useAppSelector(
-    (state) => state.globalState.loading.headlessFrame,
-  );
+  const loading = useAppSelector((state) => state.globalState.loading.headlessFrame);
   const dispatch = useAppDispatch();
   let navigation = useNavigation();
 
@@ -31,9 +29,7 @@ const HeadlessFrame = () => {
     <Box
       sx={{
         backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? theme.palette.grey[100]
-            : theme.palette.grey[900],
+          theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
         flexGrow: 1,
         height: "100vh",
         overflow: "auto",
@@ -51,8 +47,7 @@ const HeadlessFrame = () => {
           <Box sx={{ width: "100%", py: 2 }}>
             <Paper
               sx={{
-                padding: (theme) =>
-                  `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,
+                padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,
               }}
             >
               <Logo
@@ -66,10 +61,7 @@ const HeadlessFrame = () => {
                 <div>
                   <Box
                     sx={{
-                      display:
-                        loading || navigation.state !== "idle"
-                          ? "none"
-                          : "block",
+                      display: loading || navigation.state !== "idle" ? "none" : "block",
                     }}
                   >
                     <Outlet />

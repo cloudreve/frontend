@@ -12,23 +12,11 @@ export interface MapLoaderProps extends BoxProps {
 }
 
 const MapLoader = (props: MapLoaderProps) => {
-  const mapProvider = useAppSelector(
-    (state) => state.siteConfig.explorer.config.map_provider,
-  );
-  const googleTileType = useAppSelector(
-    (state) => state.siteConfig.explorer.config.google_map_tile_type,
-  );
+  const mapProvider = useAppSelector((state) => state.siteConfig.explorer.config.map_provider);
+  const googleTileType = useAppSelector((state) => state.siteConfig.explorer.config.google_map_tile_type);
   return (
-    <Suspense
-      fallback={
-        <Skeleton variant="rounded" width={"100%"} height={props.height} />
-      }
-    >
-      <MapBox
-        mapProvider={mapProvider}
-        googleTileType={googleTileType}
-        {...props}
-      />
+    <Suspense fallback={<Skeleton variant="rounded" width={"100%"} height={props.height} />}>
+      <MapBox mapProvider={mapProvider} googleTileType={googleTileType} {...props} />
     </Suspense>
   );
 };

@@ -1973,7 +1973,6 @@ export function sendImport(req: ImportWorkflowService): ThunkResponse<TaskRespon
   };
 }
 
-
 export function sendPatchViewSync(args: PatchViewSyncService): ThunkResponse<void> {
   return async (dispatch, _getState) => {
     return await dispatch(

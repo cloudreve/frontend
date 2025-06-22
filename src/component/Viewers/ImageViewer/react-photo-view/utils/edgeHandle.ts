@@ -1,4 +1,4 @@
-import type { CloseEdgeType, ReachType, TouchStartType } from '../types';
+import type { CloseEdgeType, ReachType, TouchStartType } from "../types";
 
 /**
  * 获取接触边缘类型
@@ -9,11 +9,11 @@ export const getReachType = (
   verticalCloseEdge: CloseEdgeType,
   reachPosition: ReachType,
 ): ReachType => {
-  if ((horizontalCloseEdge && initialTouchState === 1) || reachPosition === 'x') {
-    return 'x';
+  if ((horizontalCloseEdge && initialTouchState === 1) || reachPosition === "x") {
+    return "x";
   }
-  if ((verticalCloseEdge && initialTouchState > 1) || reachPosition === 'y') {
-    return 'y';
+  if ((verticalCloseEdge && initialTouchState > 1) || reachPosition === "y") {
+    return "y";
   }
   return undefined;
 };

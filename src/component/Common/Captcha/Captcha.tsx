@@ -16,9 +16,7 @@ export interface CaptchaParams {
 }
 
 export const Captcha = (props: CaptchaProps) => {
-  const captchaType = useAppSelector(
-    (state) => state.siteConfig.basic.config.captcha_type,
-  );
+  const captchaType = useAppSelector((state) => state.siteConfig.basic.config.captcha_type);
 
   // const recaptcha = useRecaptcha(setCaptchaLoading);
   // const tcaptcha = useTCaptcha(setCaptchaLoading);

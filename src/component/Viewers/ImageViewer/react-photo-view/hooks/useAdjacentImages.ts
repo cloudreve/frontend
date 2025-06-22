@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import type { DataType } from '../types';
+import { useMemo } from "react";
+import type { DataType } from "../types";
 
 /**
  * 截取相邻三张图片

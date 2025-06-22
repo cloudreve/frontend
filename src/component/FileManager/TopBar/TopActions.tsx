@@ -1,16 +1,6 @@
-import {
-  Button,
-  ButtonGroup,
-  styled,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Button, ButtonGroup, styled, useMediaQuery, useTheme } from "@mui/material";
 import { bindPopover } from "material-ui-popup-state";
-import {
-  bindMenu,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
+import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../../../redux/hooks.ts";
@@ -42,12 +32,8 @@ const TopActions = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const fmIndex = useContext(FmIndexContext);
-  const sortOptions = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.props.order_by_options,
-  );
-  const isSingleFileView = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.single_file_view,
-  );
+  const sortOptions = useAppSelector((state) => state.fileManager[fmIndex].list?.props.order_by_options);
+  const isSingleFileView = useAppSelector((state) => state.fileManager[fmIndex].list?.single_file_view);
   const viewPopupState = usePopupState({
     variant: "popover",
     popupId: "viewOption",
@@ -68,11 +54,7 @@ const TopActions = () => {
           {...bindTrigger(viewPopupState)}
           startIcon={!isMobile && <TableSettingsOutlined />}
         >
-          {isMobile ? (
-            <TableSettingsOutlined fontSize={"small"} />
-          ) : (
-            t("application:fileManager.view")
-          )}
+          {isMobile ? <TableSettingsOutlined fontSize={"small"} /> : t("application:fileManager.view")}
         </ActionButton>
         {(!(!sortOptions || isSingleFileView) || !isMobile) && (
           <ActionButton
@@ -80,11 +62,7 @@ const TopActions = () => {
             startIcon={!isMobile && <ArrowSort />}
             {...bindTrigger(sortPopupState)}
           >
-            {isMobile ? (
-              <ArrowSort fontSize={"small"} />
-            ) : (
-              t("application:fileManager.sortMethod")
-            )}
+            {isMobile ? <ArrowSort fontSize={"small"} /> : t("application:fileManager.sortMethod")}
           </ActionButton>
         )}
         {isMobile && (

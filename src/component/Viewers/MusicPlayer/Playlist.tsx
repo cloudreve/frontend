@@ -1,9 +1,6 @@
 import { ListItemIcon, ListItemText, MenuProps } from "@mui/material";
 import { FileResponse } from "../../../api/explorer.ts";
-import {
-  SquareMenu,
-  SquareMenuItem,
-} from "../../FileManager/ContextMenu/ContextMenu.tsx";
+import { SquareMenu, SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import FileIcon from "../../FileManager/Explorer/FileIcon.tsx";
 
 export interface PlaylistProps extends MenuProps {
@@ -12,13 +9,7 @@ export interface PlaylistProps extends MenuProps {
   playIndex: (index: number, volume?: number) => void;
 }
 
-const Playlist = ({
-  file,
-  playlist,
-  playIndex,
-  onClose,
-  ...rest
-}: PlaylistProps) => {
+const Playlist = ({ file, playlist, playIndex, onClose, ...rest }: PlaylistProps) => {
   return (
     <SquareMenu
       MenuListProps={{
@@ -36,11 +27,7 @@ const Playlist = ({
       {...rest}
     >
       {playlist.map((item, index) => (
-        <SquareMenuItem
-          key={item.id}
-          onClick={() => playIndex(index)}
-          selected={item.path == file.path}
-        >
+        <SquareMenuItem key={item.id} onClick={() => playIndex(index)} selected={item.path == file.path}>
           <ListItemIcon>
             <FileIcon
               sx={{ px: 0, py: 0, height: "20px" }}

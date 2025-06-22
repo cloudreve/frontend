@@ -1,10 +1,10 @@
-import type React from 'react';
-import { useImperativeHandle, Children, cloneElement, useContext, useEffect, useMemo, useRef } from 'react';
-import useInitial from './hooks/useInitial';
-import useMethods from './hooks/useMethods';
-import type { PhotoContextType } from './photo-context';
-import PhotoContext from './photo-context';
-import type { PhotoRenderParams } from './types';
+import type React from "react";
+import { useImperativeHandle, Children, cloneElement, useContext, useEffect, useMemo, useRef } from "react";
+import useInitial from "./hooks/useInitial";
+import useMethods from "./hooks/useMethods";
+import type { PhotoContextType } from "./photo-context";
+import PhotoContext from "./photo-context";
+import type { PhotoRenderParams } from "./types";
 
 export interface PhotoViewProps {
   /**
@@ -34,7 +34,7 @@ export interface PhotoViewProps {
   /**
    * 触发的事件
    */
-  triggers?: ('onClick' | 'onDoubleClick')[];
+  triggers?: ("onClick" | "onDoubleClick")[];
 }
 
 const PhotoView: React.FC<PhotoViewProps> = ({
@@ -43,7 +43,7 @@ const PhotoView: React.FC<PhotoViewProps> = ({
   overlay,
   width,
   height,
-  triggers = ['onClick'],
+  triggers = ["onClick"],
   children,
 }) => {
   const photoContext = useContext<PhotoContextType>(PhotoContext);

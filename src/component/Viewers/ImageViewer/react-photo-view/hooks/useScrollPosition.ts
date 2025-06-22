@@ -5,11 +5,7 @@ import { defaultSpeed, maxTouchTime } from "../variables";
 import useMethods from "./useMethods";
 
 // 触边运动反馈
-const rebound = (
-  start: number,
-  bound: number,
-  callback: (spatial: number) => boolean,
-) =>
+const rebound = (start: number, bound: number, callback: (spatial: number) => boolean) =>
   easeOutMove(
     start,
     bound,
@@ -22,9 +18,12 @@ const rebound = (
 /**
  * 物理滚动到具体位置
  */
-export default function useScrollPosition<
-  C extends (spatial: number) => boolean,
->(callbackX: C, callbackY: C, callbackS: C, dynamicInnerWidth: number) {
+export default function useScrollPosition<C extends (spatial: number) => boolean>(
+  callbackX: C,
+  callbackY: C,
+  callbackS: C,
+  dynamicInnerWidth: number,
+) {
   const callback = useMethods({
     X: (spatial: number) => callbackX(spatial),
     Y: (spatial: number) => callbackY(spatial),
@@ -46,35 +45,14 @@ export default function useScrollPosition<
   ) => {
     const [currentWidth, currentHeight] = getRotateSize(rotate, width, height);
     // 开始状态下边缘触发状态
-    const [beginEdgeX, beginX] = computePositionEdge(
-      x,
-      safeScale,
-      currentWidth,
-      dynamicInnerWidth,
-    );
-    const [beginEdgeY, beginY] = computePositionEdge(
-      y,
-      safeScale,
-      currentHeight,
-      innerHeight,
-    );
+    const [beginEdgeX, beginX] = computePositionEdge(x, safeScale, currentWidth, dynamicInnerWidth);
+    const [beginEdgeY, beginY] = computePositionEdge(y, safeScale, currentHeight, innerHeight);
     const moveTime = Date.now() - touchedTime;
 
     // 时间过长、超出安全范围的情况下不执行滚动逻辑，恢复安全范围
-    if (
-      moveTime >= maxTouchTime ||
-      safeScale !== scale ||
-      Math.abs(lastScale - scale) > 1
-    ) {
+    if (moveTime >= maxTouchTime || safeScale !== scale || Math.abs(lastScale - scale) > 1) {
       // 计算中心缩放点
-      const { x: nextX, y: nextY } = getPositionOnMoveOrScale(
-        x,
-        y,
-        width,
-        height,
-        scale,
-        safeScale,
-      );
+      const { x: nextX, y: nextY } = getPositionOnMoveOrScale(x, y, width, height, scale, safeScale);
       const targetX = beginEdgeX ? beginX : nextX !== x ? nextX : null;
       const targetY = beginEdgeY ? beginY : nextY !== y ? nextY : null;
 
@@ -102,18 +80,8 @@ export default function useScrollPosition<
       const nextX = x + spatial * (speedX / speedT);
       const nextY = y + spatial * (speedY / speedT);
 
-      const [isEdgeX, currentX] = computePositionEdge(
-        nextX,
-        scale,
-        currentWidth,
-        innerWidth,
-      );
-      const [isEdgeY, currentY] = computePositionEdge(
-        nextY,
-        scale,
-        currentHeight,
-        innerHeight,
-      );
+      const [isEdgeX, currentX] = computePositionEdge(nextX, scale, currentWidth, innerWidth);
+      const [isEdgeY, currentY] = computePositionEdge(nextY, scale, currentHeight, innerHeight);
 
       if (isEdgeX && !edgeX) {
         edgeX = true;
@@ -152,10 +120,7 @@ const resistance = 0.0002;
 /**
  * 通过速度滚动到停止
  */
-function scrollMove(
-  initialSpeed: number,
-  callback: (spatial: number) => boolean,
-) {
+function scrollMove(initialSpeed: number, callback: (spatial: number) => boolean) {
   let v = initialSpeed;
   let s = 0;
   let lastTime: number | undefined;

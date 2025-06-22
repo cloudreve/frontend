@@ -1,23 +1,10 @@
 import * as React from "react";
 import { useLayoutEffect, useRef, useState } from "react";
-import {
-  Box,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, ListItemIcon, ListItemText, Menu, MenuItem, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { StyledTab, StyledTabs } from "./StyledComponents.tsx";
 import CaretDown from "../Icons/CaretDown.tsx";
 import { useTranslation } from "react-i18next";
-import {
-  bindMenu,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
+import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 
 export interface Tab<T> {
   label: React.ReactNode;
@@ -31,11 +18,7 @@ export interface ResponsiveTabsProps<T> {
   onChange: (event: React.SyntheticEvent, value: T) => void;
 }
 
-const ResponsiveTabs = <T,>({
-  tabs,
-  value,
-  onChange,
-}: ResponsiveTabsProps<T>) => {
+const ResponsiveTabs = <T,>({ tabs, value, onChange }: ResponsiveTabsProps<T>) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [hideTabs, setHideTabs] = useState(false);

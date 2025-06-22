@@ -79,11 +79,7 @@ function createWriter(underlyingSource) {
         );
 
       let name = fileLike.name.trim();
-      const date = new Date(
-        typeof fileLike.lastModified === "undefined"
-          ? Date.now()
-          : fileLike.lastModified,
-      );
+      const date = new Date(typeof fileLike.lastModified === "undefined" ? Date.now() : fileLike.lastModified);
 
       if (fileLike.directory && !name.endsWith("/")) name += "/";
       if (files[name]) throw new Error("File already exists.");
@@ -109,17 +105,10 @@ function createWriter(underlyingSource) {
             header.view.setUint16(4, 0x0800);
           }
           header.view.setUint32(0, 0x14000808);
-          header.view.setUint16(
-            6,
-            (((date.getHours() << 6) | date.getMinutes()) << 5) |
-              (date.getSeconds() / 2),
-            true,
-          );
+          header.view.setUint16(6, (((date.getHours() << 6) | date.getMinutes()) << 5) | (date.getSeconds() / 2), true);
           header.view.setUint16(
             8,
-            ((((date.getFullYear() - 1980) << 4) | (date.getMonth() + 1)) <<
-              5) |
-              date.getDate(),
+            ((((date.getFullYear() - 1980) << 4) | (date.getMonth() + 1)) << 5) | date.getDate(),
             true,
           );
           header.view.setUint16(22, nameBuf.length, true);
@@ -135,16 +124,8 @@ function createWriter(underlyingSource) {
 
           if (zipObject.crc) {
             zipObject.header.view.setUint32(10, zipObject.crc.get(), true);
-            zipObject.header.view.setUint32(
-              14,
-              zipObject.compressedLength,
-              true,
-            );
-            zipObject.header.view.setUint32(
-              18,
-              zipObject.uncompressedLength,
-              true,
-            );
+            zipObject.header.view.setUint32(14, zipObject.compressedLength, true);
+            zipObject.header.view.setUint32(18, zipObject.uncompressedLength, true);
             footer.view.setUint32(4, zipObject.crc.get(), true);
             footer.view.setUint32(8, zipObject.compressedLength, true);
             footer.view.setUint32(12, zipObject.uncompressedLength, true);
@@ -163,10 +144,7 @@ function createWriter(underlyingSource) {
       }
     },
     close() {
-      if (closed)
-        throw new TypeError(
-          "Cannot close a readable stream that has already been requested to be closed",
-        );
+      if (closed) throw new TypeError("Cannot close a readable stream that has already been requested to be closed");
       if (!activeZipObject) closeZip();
       closed = true;
     },
@@ -206,8 +184,7 @@ function createWriter(underlyingSource) {
 
   function processNextChunk() {
     if (!activeZipObject) return;
-    if (activeZipObject.directory)
-      return activeZipObject.writeFooter(activeZipObject.writeHeader());
+    if (activeZipObject.directory) return activeZipObject.writeFooter(activeZipObject.writeHeader());
     if (activeZipObject.reader) return pump(activeZipObject);
     if (activeZipObject.fileLike.stream) {
       activeZipObject.crc = new Crc32();
@@ -218,15 +195,10 @@ function createWriter(underlyingSource) {
   return new ReadableStream({
     start: (c) => {
       ctrl = c;
-      underlyingSource.start &&
-        Promise.resolve(underlyingSource.start(zipWriter));
+      underlyingSource.start && Promise.resolve(underlyingSource.start(zipWriter));
     },
     pull() {
-      return (
-        processNextChunk() ||
-        (underlyingSource.pull &&
-          Promise.resolve(underlyingSource.pull(zipWriter)))
-      );
+      return processNextChunk() || (underlyingSource.pull && Promise.resolve(underlyingSource.pull(zipWriter)));
     },
   });
 }

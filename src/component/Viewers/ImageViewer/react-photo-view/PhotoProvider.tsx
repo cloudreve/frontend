@@ -1,9 +1,9 @@
-import React, { useMemo, useRef } from 'react';
-import type { DataType, PhotoProviderBase } from './types';
-import useMethods from './hooks/useMethods';
-import useSetState from './hooks/useSetState';
-import PhotoContext from './photo-context';
-import PhotoSlider from './PhotoSlider';
+import React, { useMemo, useRef } from "react";
+import type { DataType, PhotoProviderBase } from "./types";
+import useMethods from "./hooks/useMethods";
+import useSetState from "./hooks/useSetState";
+import PhotoContext from "./photo-context";
+import PhotoSlider from "./PhotoSlider";
 
 export interface PhotoProviderProps extends PhotoProviderBase {
   children: React.ReactNode;

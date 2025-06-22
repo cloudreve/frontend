@@ -13,9 +13,7 @@ const DirectLinks = () => {
 
   const [showFileName, setShowFileName] = useState(false);
 
-  const open = useAppSelector(
-    (state) => state.globalState.directLinkDialogOpen,
-  );
+  const open = useAppSelector((state) => state.globalState.directLinkDialogOpen);
   const targets = useAppSelector((state) => state.globalState.directLinkRes);
 
   const contents = useMemo(() => {
@@ -86,7 +84,7 @@ const DirectLinks = () => {
           variant="outlined"
           fullWidth
           slotProps={{
-            htmlInput: { readonly: true }
+            htmlInput: { readonly: true },
           }}
         />
       </DialogContent>

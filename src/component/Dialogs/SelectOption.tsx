@@ -1,10 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  DialogContent,
-  List,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { DialogContent, List, ListItemButton, ListItemText } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
 import React, { useCallback } from "react";
 import DraggableDialog from "./DraggableDialog.tsx";
@@ -15,16 +10,10 @@ const SelectOption = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const open = useAppSelector(
-    (state) => state.globalState.selectOptionDialogOpen,
-  );
+  const open = useAppSelector((state) => state.globalState.selectOptionDialogOpen);
   const title = useAppSelector((state) => state.globalState.selectOptionTitle);
-  const promiseId = useAppSelector(
-    (state) => state.globalState.selectOptionPromiseId,
-  );
-  const options = useAppSelector(
-    (state) => state.globalState.selectOptionDialogOptions,
-  );
+  const promiseId = useAppSelector((state) => state.globalState.selectOptionPromiseId);
+  const options = useAppSelector((state) => state.globalState.selectOptionDialogOptions);
 
   const onClose = useCallback(() => {
     dispatch(closeSelectOptionDialog());
@@ -65,8 +54,9 @@ const SelectOption = () => {
                     fontWeight: "bold",
                   },
 
-                  secondary: { variant: "body2" }
-                }} />
+                  secondary: { variant: "body2" },
+                }}
+              />
             </ListItemButton>
           ))}
         </List>

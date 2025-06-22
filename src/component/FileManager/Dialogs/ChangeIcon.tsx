@@ -1,14 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  Button,
-  DialogContent,
-  Skeleton,
-  styled,
-  Tab,
-  Tabs,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, DialogContent, Skeleton, styled, Tab, Tabs, useTheme } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
@@ -73,18 +64,10 @@ const ChangeIcon = () => {
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const open = useAppSelector(
-    (state) => state.globalState.changeIconDialogOpen,
-  );
-  const targets = useAppSelector(
-    (state) => state.globalState.changeIconDialogFile,
-  );
-  const emojiStr = useAppSelector(
-    (state) => state.siteConfig.emojis.config.emoji_preset,
-  );
-  const emojiStrLoaded = useAppSelector(
-    (state) => state.siteConfig.emojis.loaded,
-  );
+  const open = useAppSelector((state) => state.globalState.changeIconDialogOpen);
+  const targets = useAppSelector((state) => state.globalState.changeIconDialogFile);
+  const emojiStr = useAppSelector((state) => state.siteConfig.emojis.config.emoji_preset);
+  const emojiStrLoaded = useAppSelector((state) => state.siteConfig.emojis.loaded);
 
   const emojiSetting = useMemo((): EmojiSetting => {
     if (!emojiStr) return {};
@@ -163,9 +146,7 @@ const ChangeIcon = () => {
                 onChange={handleTabChange}
               >
                 {emojiStrLoaded ? (
-                  Object.keys(emojiSetting).map((key) => (
-                    <StyledTab label={key} key={key} />
-                  ))
+                  Object.keys(emojiSetting).map((key) => <StyledTab label={key} key={key} />)
                 ) : (
                   <StyledTab label={<Skeleton sx={{ minWidth: "20px" }} />} />
                 )}
@@ -177,9 +158,7 @@ const ChangeIcon = () => {
                   <CustomTabPanel value={tabValue} index={index}>
                     <SelectorBox>
                       {emojiSetting[key].map((emoji) => (
-                        <EmojiButton onClick={onAccept(emoji)}>
-                          {emoji}
-                        </EmojiButton>
+                        <EmojiButton onClick={onAccept(emoji)}>{emoji}</EmojiButton>
                       ))}
                     </SelectorBox>
                   </CustomTabPanel>

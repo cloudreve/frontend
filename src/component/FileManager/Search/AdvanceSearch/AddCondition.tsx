@@ -2,11 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import { SecondaryButton } from "../../../Common/StyledComponents.tsx";
 import Add from "../../../Icons/Add.tsx";
-import {
-  bindMenu,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
+import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import { ListItemIcon, ListItemText, Menu } from "@mui/material";
 import { Condition, ConditionType } from "./ConditionBox.tsx";
 import React from "react";
@@ -154,20 +150,13 @@ const AddCondition = (props: AddConditionProps) => {
   const onConditionAdd = (condition: Condition) => {
     props.onConditionAdd({
       ...condition,
-      id:
-        condition.type == ConditionType.metadata && !condition.id
-          ? Math.random().toString()
-          : condition.id,
+      id: condition.type == ConditionType.metadata && !condition.id ? Math.random().toString() : condition.id,
     });
     onClose();
   };
   return (
     <>
-      <SecondaryButton
-        {...bindTrigger(conditionPopupState)}
-        startIcon={<Add />}
-        sx={{ px: "15px" }}
-      >
+      <SecondaryButton {...bindTrigger(conditionPopupState)} startIcon={<Add />} sx={{ px: "15px" }}>
         {t("navbar.addCondition")}
       </SecondaryButton>
       <Menu
@@ -183,11 +172,7 @@ const AddCondition = (props: AddConditionProps) => {
         {...menuProps}
       >
         {options.map((option, index) => (
-          <SquareMenuItem
-            dense
-            key={index}
-            onClick={() => onConditionAdd(option.condition)}
-          >
+          <SquareMenuItem dense key={index} onClick={() => onConditionAdd(option.condition)}>
             <ListItemIcon>{option.icon}</ListItemIcon>
             {t(option.name)}
           </SquareMenuItem>
@@ -198,14 +183,12 @@ const AddCondition = (props: AddConditionProps) => {
           title={t("application:fileManager.mediaInfo")}
         >
           {mediaMetaOptions.map((option, index) => (
-            <SquareMenuItem
-              key={index}
-              dense
-              onClick={() => onConditionAdd(option.condition)}
-            >
-              <ListItemText slotProps={{
-                primary: { variant: "body2" }
-              }}>
+            <SquareMenuItem key={index} dense onClick={() => onConditionAdd(option.condition)}>
+              <ListItemText
+                slotProps={{
+                  primary: { variant: "body2" },
+                }}
+              >
                 {t(option.name)}
               </ListItemText>
             </SquareMenuItem>

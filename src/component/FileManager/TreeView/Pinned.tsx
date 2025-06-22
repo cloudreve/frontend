@@ -14,12 +14,8 @@ interface PinnedItem {
 
 export const usePinned = () => {
   const fmIndex = useContext(FmIndexContext);
-  const generation = useAppSelector(
-    (state) => state.globalState.pinedGeneration,
-  );
-  const path_root = useAppSelector(
-    (state) => state.fileManager[fmIndex].path_root,
-  );
+  const generation = useAppSelector((state) => state.globalState.pinedGeneration);
+  const path_root = useAppSelector((state) => state.fileManager[fmIndex].path_root);
   const pined = useMemo(() => {
     try {
       return SessionManager.currentLogin().user.pined?.map((p): PinnedItem => {
@@ -38,9 +34,7 @@ export const usePinned = () => {
 
 const Pinned = memo(() => {
   const fmIndex = useContext(FmIndexContext);
-  const elements = useAppSelector(
-    (state) => state.fileManager[fmIndex].path_elements,
-  );
+  const elements = useAppSelector((state) => state.fileManager[fmIndex].path_elements);
   const pined = usePinned();
 
   return (
@@ -50,14 +44,9 @@ const Pinned = memo(() => {
           sx={{ mt: index == 0 ? 2 : 0 }}
           flatten={
             p.crUri.fs() != Filesystem.share ||
-            (p.crUri.fs() == Filesystem.share &&
-              (!p.crUri.is_root() || p.crUri.is_search()))
+            (p.crUri.fs() == Filesystem.share && (!p.crUri.is_root() || p.crUri.is_search()))
           }
-          canDrop={
-            (p.crUri.fs() == Filesystem.share ||
-              p.crUri.fs() == Filesystem.my) &&
-            !p.crUri.is_search()
-          }
+          canDrop={(p.crUri.fs() == Filesystem.share || p.crUri.fs() == Filesystem.my) && !p.crUri.is_search()}
           level={0}
           labelOverwrite={p.name}
           path={p.uri}

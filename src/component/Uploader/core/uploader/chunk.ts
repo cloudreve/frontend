@@ -22,10 +22,7 @@ export default abstract class Chunk extends Base {
     this.logger.info("Starting uploading file chunks:", this.chunks);
     this.updateLocalCache();
     for (let i = 0; i < this.chunks.length; i++) {
-      if (
-        this.task.chunkProgress[i].loaded < this.chunks[i].size ||
-        this.chunks[i].size == 0
-      ) {
+      if (this.task.chunkProgress[i].loaded < this.chunks[i].size || this.chunks[i].size == 0) {
         await this.uploadChunk({ chunk: this.chunks[i], index: i });
         this.logger.info(`Chunk [${i}] uploaded.`);
         this.updateLocalCache();
@@ -34,10 +31,7 @@ export default abstract class Chunk extends Base {
   };
 
   private initBeforeUploadChunks() {
-    this.chunks = utils.getChunks(
-      this.task.file,
-      this.task.session?.chunk_size,
-    );
+    this.chunks = utils.getChunks(this.task.file, this.task.session?.chunk_size);
     const cachedInfo = utils.getResumeCtx(this.task, this.logger);
     if (cachedInfo == null) {
       this.task.chunkProgress = this.chunks.map(
@@ -60,16 +54,9 @@ export default abstract class Chunk extends Base {
 
   private notifyResumeProgress() {
     this.progress = {
-      total: this.getProgressInfoItem(
-        utils.sumChunk(this.task.chunkProgress),
-        this.task.file.size + 1,
-      ),
+      total: this.getProgressInfoItem(utils.sumChunk(this.task.chunkProgress), this.task.file.size + 1),
       chunks: this.chunks.map((chunk, index) => {
-        return this.getProgressInfoItem(
-          this.task.chunkProgress[index].loaded,
-          chunk.size,
-          false,
-        );
+        return this.getProgressInfoItem(this.task.chunkProgress[index].loaded, chunk.size, false);
       }),
     };
     this.subscriber.onProgress(this.progress);

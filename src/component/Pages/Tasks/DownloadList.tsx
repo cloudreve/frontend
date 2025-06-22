@@ -1,14 +1,7 @@
 import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ListTaskCategory, TaskResponse } from "../../../api/workflow.ts";
-import {
-  Box,
-  Container,
-  FormControlLabel,
-  FormGroup,
-  Switch,
-  Typography,
-} from "@mui/material";
+import { Box, Container, FormControlLabel, FormGroup, Switch, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PageHeader from "../PageHeader.tsx";
 import { getTasks } from "../../../api/api.ts";
@@ -26,9 +19,7 @@ const DownloadList = () => {
 
   const [nextPageToken, setNextPageToken] = useState<string | undefined>("");
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
-  const [downloadingTasks, setDownloadingTasks] = useState<
-    TaskResponse[] | undefined
-  >(undefined);
+  const [downloadingTasks, setDownloadingTasks] = useState<TaskResponse[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const interval = React.useRef<NodeJS.Timeout>();
@@ -94,14 +85,9 @@ const DownloadList = () => {
       .then((res) => {
         setDownloadingTasks(res.tasks);
         // New hash = id of first downloading task + id of last downloading task + length of downloading tasks
-        const newHash = `${res.tasks[0]?.id ?? ""}-${
-          res.tasks[res.tasks.length - 1]?.id ?? ""
-        }-${res.tasks.length}`;
+        const newHash = `${res.tasks[0]?.id ?? ""}-${res.tasks[res.tasks.length - 1]?.id ?? ""}-${res.tasks.length}`;
 
-        if (
-          downloadingListHash.current != "" &&
-          downloadingListHash.current != newHash
-        ) {
+        if (downloadingListHash.current != "" && downloadingListHash.current != newHash) {
           loadNextPage([], "")();
         }
         downloadingListHash.current = newHash;
@@ -131,13 +117,7 @@ const DownloadList = () => {
             <FormGroup>
               <FormControlLabel
                 sx={{ mr: 0 }}
-                control={
-                  <Switch
-                    size={"small"}
-                    onChange={toggleAutoRefresh}
-                    checked={autoRefresh}
-                  />
-                }
+                control={<Switch size={"small"} onChange={toggleAutoRefresh} checked={autoRefresh} />}
                 label={
                   <Typography variant={"body2"} color={"text.secondary"}>
                     {t("setting.autoRefresh")}
@@ -150,12 +130,7 @@ const DownloadList = () => {
           loading={loading}
           title={t("application:navbar.remoteDownload")}
         />
-        <Typography
-          variant={"h5"}
-          sx={{ mb: 2 }}
-          color={"text.secondary"}
-          fontWeight={500}
-        >
+        <Typography variant={"h5"} sx={{ mb: 2 }} color={"text.secondary"} fontWeight={500}>
           {t("download.active")}
         </Typography>
         {downloadingTasks != undefined && downloadingTasks.length == 0 && (
@@ -163,31 +138,17 @@ const DownloadList = () => {
             <Nothing size={0.8} top={63} primary={t("setting.listEmpty")} />
           </Box>
         )}
-        {downloadingTasks == undefined && (
-          <TaskCard onLoad={loadDownloading} loading={true} />
-        )}
+        {downloadingTasks == undefined && <TaskCard onLoad={loadDownloading} loading={true} />}
 
-        {downloadingTasks &&
-          downloadingTasks.map((task) => (
-            <TaskCard showProgress key={task.id} task={task} />
-          ))}
-        <Typography
-          variant={"h5"}
-          sx={{ mb: 2, mt: 3 }}
-          color={"text.secondary"}
-          fontWeight={500}
-        >
+        {downloadingTasks && downloadingTasks.map((task) => <TaskCard showProgress key={task.id} task={task} />)}
+        <Typography variant={"h5"} sx={{ mb: 2, mt: 3 }} color={"text.secondary"} fontWeight={500}>
           {t("download.finished")}
         </Typography>
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
         {nextPageToken != undefined && (
-          <TaskCard
-            onLoad={loadNextPage(tasks, nextPageToken)}
-            loading={true}
-            key={nextPageToken}
-          />
+          <TaskCard onLoad={loadNextPage(tasks, nextPageToken)} loading={true} key={nextPageToken} />
         )}
 
         {nextPageToken == undefined && tasks.length == 0 && (

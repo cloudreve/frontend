@@ -22,9 +22,7 @@ export const MetadataCondition = ({
         variant="filled"
         label={t("application:fileManager.metadataKey")}
         value={condition.metadata_key ?? ""}
-        onChange={(e) =>
-          onChange({ ...condition, metadata_key: e.target.value })
-        }
+        onChange={(e) => onChange({ ...condition, metadata_key: e.target.value })}
         disabled={condition.metadata_key_readonly}
         type="text"
         fullWidth
@@ -33,9 +31,7 @@ export const MetadataCondition = ({
         variant="filled"
         label={t("application:fileManager.metadataValue")}
         value={condition.metadata_value ?? ""}
-        onChange={(e) =>
-          onChange({ ...condition, metadata_value: e.target.value })
-        }
+        onChange={(e) => onChange({ ...condition, metadata_value: e.target.value })}
         type="text"
         fullWidth
       />

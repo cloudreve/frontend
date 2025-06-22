@@ -12,9 +12,7 @@ import { sendEmailActivate } from "../../../api/api.ts";
 
 const Activate = () => {
   const { t } = useTranslation();
-  const { reg_captcha } = useAppSelector(
-    (state) => state.siteConfig.login.config,
-  );
+  const { reg_captcha } = useAppSelector((state) => state.siteConfig.login.config);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useAppDispatch();
@@ -72,11 +70,7 @@ const Activate = () => {
               </Typography>
             </Box>
             <Button
-              onClick={() =>
-                navigate(
-                  "/session?phase=email&email=" + encodeURIComponent(email),
-                )
-              }
+              onClick={() => navigate("/session?phase=email&email=" + encodeURIComponent(email))}
               sx={{ mt: 2 }}
               variant="contained"
               color="primary"

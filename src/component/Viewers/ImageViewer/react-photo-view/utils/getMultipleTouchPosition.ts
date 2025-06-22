@@ -1,4 +1,4 @@
-import type React from 'react';
+import type React from "react";
 
 /**
  * 从 Touch 事件中获取两个触控中心位置

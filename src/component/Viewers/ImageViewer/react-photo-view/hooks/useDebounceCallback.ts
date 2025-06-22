@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
 interface DebounceCallback<CallbackArguments extends any[]> {
   (...args: CallbackArguments): void;

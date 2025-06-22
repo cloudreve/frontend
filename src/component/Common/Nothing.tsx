@@ -9,12 +9,7 @@ export interface NothingProps {
   size?: number;
 }
 
-export default function Nothing({
-  primary,
-  secondary,
-  top = 20,
-  size = 1,
-}: NothingProps) {
+export default function Nothing({ primary, secondary, top = 20, size = 1 }: NothingProps) {
   return (
     <Box
       sx={{
@@ -41,10 +36,7 @@ export default function Nothing({
         {primary}
       </Typography>
       {secondary && (
-        <Typography
-          variant={"body2"}
-          sx={{ color: (theme) => theme.palette.action.disabled }}
-        >
+        <Typography variant={"body2"} sx={{ color: (theme) => theme.palette.action.disabled }}>
           {secondary}
         </Typography>
       )}

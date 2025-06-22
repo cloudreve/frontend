@@ -5,7 +5,7 @@ import artplayerPluginChapter from "artplayer-plugin-chapter";
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
 import { CrMaskedPrefix } from "./VideoViewer";
 import Hls, { HlsConfig } from "hls.js";
-import mpegts from 'mpegts.js';
+import mpegts from "mpegts.js";
 import i18next from "i18next";
 import { useEffect, useRef } from "react";
 import "./artplayer.css";
@@ -90,25 +90,27 @@ const playM3u8 =
     }
   };
 
-const playFlv =
-  (video: HTMLVideoElement, url: string, art: Artplayer) => {
-    if (mpegts.isSupported()) {
-      if (art.flv) art.flv.destroy();
-      const flv = mpegts.createPlayer({
+const playFlv = (video: HTMLVideoElement, url: string, art: Artplayer) => {
+  if (mpegts.isSupported()) {
+    if (art.flv) art.flv.destroy();
+    const flv = mpegts.createPlayer(
+      {
         type: "flv",
         url: url,
-      }, {
+      },
+      {
         lazyLoadMaxDuration: 5 * 60,
         accurateSeek: true,
-      });
-      flv.attachMediaElement(video);
-      flv.load();
-      art.flv = flv;
-      art.on("destroy", () => flv.destroy());
-    } else {
-      art.notice.show = "Unsupported playback format: flv";
-    }
-  };
+      },
+    );
+    flv.attachMediaElement(video);
+    flv.load();
+    art.flv = flv;
+    art.on("destroy", () => flv.destroy());
+  } else {
+    art.notice.show = "Unsupported playback format: flv";
+  }
+};
 
 export default function Player({
   option,

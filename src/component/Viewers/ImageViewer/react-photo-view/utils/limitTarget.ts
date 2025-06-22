@@ -1,4 +1,4 @@
-import { maxScale, minScale } from '../variables';
+import { maxScale, minScale } from "../variables";
 
 export const limitNumber = (value: number, min: number, max: number) => {
   return Math.max(Math.min(value, max), min);

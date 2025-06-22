@@ -1,12 +1,4 @@
-import {
-  Box,
-  Drawer,
-  Popover,
-  PopoverProps,
-  Stack,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Drawer, Popover, PopoverProps, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import DrawerHeader from "./DrawerHeader.tsx";
 import TreeNavigation from "../../FileManager/TreeView/TreeNavigation.tsx";
@@ -68,10 +60,7 @@ const AppDrawer = () => {
   const theme = useTheme();
   const open = useAppSelector((state) => state.globalState.drawerOpen);
   const drawerWidth = useAppSelector((state) => state.globalState.drawerWidth);
-  const appBarBg =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[900];
+  const appBarBg = theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900];
 
   return (
     <Drawer

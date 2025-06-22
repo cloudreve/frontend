@@ -1,21 +1,9 @@
 import { Trans, useTranslation } from "react-i18next";
 import { DialogContent, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import {
-  ChangeEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  closeRenameFileModal,
-  setRenameFileModalError,
-} from "../../../redux/fileManagerSlice.ts";
-import DraggableDialog, {
-  StyledDialogContentText,
-} from "../../Dialogs/DraggableDialog.tsx";
+import { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { closeRenameFileModal, setRenameFileModalError } from "../../../redux/fileManagerSlice.ts";
+import DraggableDialog, { StyledDialogContentText } from "../../Dialogs/DraggableDialog.tsx";
 import { renameDialogPromisePool } from "../../../redux/thunks/dialog.ts";
 import { validateFileName } from "../../../redux/thunks/file.ts";
 import { FileType } from "../../../api/explorer.ts";
@@ -33,21 +21,11 @@ const Rename = () => {
 
   const fmIndex = useContext(FmIndexContext);
 
-  const open = useAppSelector(
-    (state) => state.fileManager[0].renameFileModalOpen,
-  );
-  const targets = useAppSelector(
-    (state) => state.fileManager[0].renameFileModalSelected,
-  );
-  const promiseId = useAppSelector(
-    (state) => state.fileManager[0].renameFileModalPromiseId,
-  );
-  const loading = useAppSelector(
-    (state) => state.fileManager[0].renameFileModalLoading,
-  );
-  const error = useAppSelector(
-    (state) => state.fileManager[0].renameFileModalError,
-  );
+  const open = useAppSelector((state) => state.fileManager[0].renameFileModalOpen);
+  const targets = useAppSelector((state) => state.fileManager[0].renameFileModalSelected);
+  const promiseId = useAppSelector((state) => state.fileManager[0].renameFileModalPromiseId);
+  const loading = useAppSelector((state) => state.fileManager[0].renameFileModalLoading);
+  const error = useAppSelector((state) => state.fileManager[0].renameFileModalError);
 
   const onClose = useCallback(() => {
     dispatch(
@@ -67,13 +45,7 @@ const Rename = () => {
         e.preventDefault();
       }
       if (promiseId) {
-        dispatch(
-          validateFileName(
-            0,
-            renameDialogPromisePool[promiseId]?.resolve,
-            name,
-          ),
-        );
+        dispatch(validateFileName(0, renameDialogPromisePool[promiseId]?.resolve, name));
       }
     },
     [promiseId, name],
@@ -95,12 +67,8 @@ const Rename = () => {
 
   useEffect(() => {
     if (targets && open && inputRef.current) {
-      const lastDot =
-        targets.type == FileType.folder ? 0 : targets.name.lastIndexOf(".");
-      inputRef.current.setSelectionRange(
-        0,
-        lastDot > 0 ? lastDot : targets.name.length,
-      );
+      const lastDot = targets.type == FileType.folder ? 0 : targets.name.lastIndexOf(".");
+      inputRef.current.setSelectionRange(0, lastDot > 0 ? lastDot : targets.name.length);
     }
   }, [inputRef.current, open]);
 

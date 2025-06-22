@@ -11,15 +11,9 @@ export interface ConcurrentOptionDialogProps {
   onSave: (count: string) => void;
 }
 
-export default function ConcurrentOptionDialog({
-  open,
-  onClose,
-  onSave,
-}: ConcurrentOptionDialogProps) {
+export default function ConcurrentOptionDialog({ open, onClose, onSave }: ConcurrentOptionDialogProps) {
   const { t } = useTranslation();
-  const [count, setCount] = useState(
-    SessionManager.getWithFallback(UserSettings.ConcurrentLimit),
-  );
+  const [count, setCount] = useState(SessionManager.getWithFallback(UserSettings.ConcurrentLimit));
 
   const onAccept = useCallback(() => {
     onSave(count);
@@ -40,9 +34,7 @@ export default function ConcurrentOptionDialog({
     >
       <DialogContent>
         <FormControl variant="filled" fullWidth>
-          <InputLabel htmlFor="component-helper">
-            {t("uploader.concurrentTaskNumber")}
-          </InputLabel>
+          <InputLabel htmlFor="component-helper">{t("uploader.concurrentTaskNumber")}</InputLabel>
           <FilledInput
             type={"number"}
             inputProps={{

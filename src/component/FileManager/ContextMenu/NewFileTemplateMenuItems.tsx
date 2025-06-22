@@ -6,11 +6,7 @@ import { ViewersByID } from "../../../redux/siteConfigSlice.ts";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import { ViewerIcon } from "../Dialogs/OpenWith.tsx";
 import { SquareMenuItem } from "./ContextMenu.tsx";
-import {
-  CascadingContext,
-  CascadingMenuItem,
-  CascadingSubmenu,
-} from "./CascadingMenu.tsx";
+import { CascadingContext, CascadingMenuItem, CascadingSubmenu } from "./CascadingMenu.tsx";
 import { NewFileTemplate, Viewer } from "../../../api/explorer.ts";
 import { createNew } from "../../../redux/thunks/file.ts";
 import { CreateNewDialogType } from "../../../redux/globalStateSlice.ts";
@@ -72,10 +68,7 @@ const NewFileTemplateMenuItems = (props: SubMenuItemsProps) => {
 
           if (viewer.templates.length == 1) {
             return (
-              <SquareMenuItem
-                key={viewer.id}
-                onClick={onClick(viewer, viewer.templates[0])}
-              >
+              <SquareMenuItem key={viewer.id} onClick={onClick(viewer, viewer.templates[0])}>
                 <ListItemIcon>
                   <ViewerIcon size={20} viewer={viewer} py={0} />
                 </ListItemIcon>

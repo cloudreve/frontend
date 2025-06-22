@@ -10,9 +10,7 @@ export const getFileSystemDirectoryPaths = async (
     if (fileSystemHandle instanceof window.FileSystemFileHandle) {
       paths.set(`${parent}${path}`, "1");
     } else {
-      (
-        await getFileSystemDirectoryPaths(fileSystemHandle, `${parent}${path}/`)
-      ).forEach((value, key) => {
+      (await getFileSystemDirectoryPaths(fileSystemHandle, `${parent}${path}/`)).forEach((value, key) => {
         paths.set(key, value);
       });
     }
@@ -24,10 +22,7 @@ export const getFileSystemDirectoryPaths = async (
 // create the dst directory if it doesn't exist
 // return the dst directory handle
 // paths: "/dir1/dir2" => ["dir1","dir2"]
-export const createFileSystemDirectory = async (
-  handle: FileSystemDirectoryHandle,
-  paths: string[],
-) => {
+export const createFileSystemDirectory = async (handle: FileSystemDirectoryHandle, paths: string[]) => {
   let cur = handle;
   while (paths.length > 0) {
     const path = paths.shift();
@@ -60,9 +55,7 @@ export const saveFileToFileSystemDirectory = async (
 };
 
 // verify or request the permission of the readwrite permission
-export async function verifyFileSystemRWPermission(
-  fileHandle: FileSystemDirectoryHandle,
-) {
+export async function verifyFileSystemRWPermission(fileHandle: FileSystemDirectoryHandle) {
   const opts = { mode: "readwrite" as FileSystemPermissionMode };
 
   // Check if we already have permission, if so, return true.

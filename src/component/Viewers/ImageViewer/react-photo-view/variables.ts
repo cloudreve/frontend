@@ -11,7 +11,7 @@ export const defaultSpeed = 400;
 /**
  * 默认动画函数
  */
-export const defaultEasing = 'cubic-bezier(0.25, 0.8, 0.25, 1)';
+export const defaultEasing = "cubic-bezier(0.25, 0.8, 0.25, 1)";
 
 /**
  * 最大滑动切换图片距离

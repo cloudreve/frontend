@@ -1,12 +1,6 @@
 import * as React from "react";
 import { useEffect, useMemo } from "react";
-import {
-  IconButton,
-  ListItemText,
-  Menu,
-  Skeleton,
-  TableRow,
-} from "@mui/material";
+import { IconButton, ListItemText, Menu, Skeleton, TableRow } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import { NoWrapCell, SquareChip } from "../../Common/StyledComponents.tsx";
@@ -20,11 +14,7 @@ import { useInView } from "react-intersection-observer";
 import Eye from "../../Icons/Eye.tsx";
 import { Edit } from "@mui/icons-material";
 import CloudFilled from "../../Icons/CloudFilled.tsx";
-import {
-  bindMenu,
-  bindTrigger,
-  usePopupState,
-} from "material-ui-popup-state/hooks";
+import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import MoreVertical from "../../Icons/MoreVertical.tsx";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import { sendDeleteDavAccount } from "../../../api/api.ts";
@@ -38,14 +28,7 @@ export interface DavAccountRowProps {
   onEditClicked?: (account: DavAccount) => void;
 }
 
-const DavAccountRow = ({
-  account,
-  onAccountDeleted,
-  onLoad,
-  loading,
-  onClick,
-  onEditClicked,
-}: DavAccountRowProps) => {
+const DavAccountRow = ({ account, onAccountDeleted, onLoad, loading, onClick, onEditClicked }: DavAccountRowProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -73,10 +56,7 @@ const DavAccountRow = ({
   const [readOnly, proxy] = useMemo(() => {
     if (!account?.options) return [false, false] as const;
     const bs = new Boolset(account.options);
-    return [
-      bs.enabled(DavAccountOption.readonly),
-      bs.enabled(DavAccountOption.proxy),
-    ] as const;
+    return [bs.enabled(DavAccountOption.readonly), bs.enabled(DavAccountOption.proxy)] as const;
   }, [account?.options]);
 
   const { onClose, ...rest } = bindMenu(actionMenuState);
@@ -101,11 +81,7 @@ const DavAccountRow = ({
   return (
     <TableRow ref={ref} hover sx={{ cursor: "pointer" }} onClick={onClick}>
       <NoWrapCell component="th" scope="row">
-        {loading ? (
-          <Skeleton variant={"text"} width={200} sx={{ my: "6px" }} />
-        ) : (
-          account?.name
-        )}
+        {loading ? <Skeleton variant={"text"} width={200} sx={{ my: "6px" }} /> : account?.name}
       </NoWrapCell>
       <NoWrapCell>
         {loading ? (
@@ -126,17 +102,9 @@ const DavAccountRow = ({
         {loading ? (
           <Skeleton variant={"text"} width={100} />
         ) : readOnly ? (
-          <SquareChip
-            icon={<Eye />}
-            size={"small"}
-            label={t("setting.readonlyOn")}
-          />
+          <SquareChip icon={<Eye />} size={"small"} label={t("setting.readonlyOn")} />
         ) : (
-          <SquareChip
-            icon={<Edit />}
-            size={"small"}
-            label={t("setting.readonlyOff")}
-          />
+          <SquareChip icon={<Edit />} size={"small"} label={t("setting.readonlyOff")} />
         )}
       </NoWrapCell>
       <NoWrapCell>

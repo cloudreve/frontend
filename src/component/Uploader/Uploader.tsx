@@ -28,7 +28,7 @@ const Uploader = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [uploaders, setUploaders] = useState<Base[]>([]);
   const [dropBgOpen, setDropBgOpen] = useState(false);
-  
+
   const uploadEnabled = useRef<boolean>(false);
 
   const totalProgress = useAppSelector((state) => state.globalState.uploadProgress);
@@ -39,12 +39,7 @@ const Uploader = () => {
   const selectFileSignal = useAppSelector((state) => state.globalState.uploadFileSignal);
   const selectFolderSignal = useAppSelector((state) => state.globalState.uploadFolderSignal);
 
-  const displayOpt = useActionDisplayOpt(
-    [],
-    ContextMenuTypes.empty,
-    parent,
-    FileManagerIndex.main,
-  );
+  const displayOpt = useActionDisplayOpt([], ContextMenuTypes.empty, parent, FileManagerIndex.main);
 
   useEffect(() => {
     if (!parent) {

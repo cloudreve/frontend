@@ -28,13 +28,10 @@ export default function getPositionOnMoveOrScale(
   const lastPositionY = centerClientY + y;
 
   // 偏移位置
-  const originX =
-    clientX - (clientX - lastPositionX) * (toScale / scale) - centerClientX;
-  const originY =
-    clientY - (clientY - lastPositionY) * (toScale / scale) - centerClientY;
+  const originX = clientX - (clientX - lastPositionX) * (toScale / scale) - centerClientX;
+  const originY = clientY - (clientY - lastPositionY) * (toScale / scale) - centerClientY;
   // 长图模式无左右反馈
-  const longModeEdge =
-    height / width >= longModeRatio && width * toScale === innerWidth;
+  const longModeEdge = height / width >= longModeRatio && width * toScale === innerWidth;
   // 超出边缘距离减半
   return {
     x: originX + (longModeEdge ? 0 : closedEdgeX ? offsetX / 2 : offsetX),

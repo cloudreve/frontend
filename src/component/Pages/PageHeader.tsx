@@ -13,13 +13,7 @@ export interface PageHeaderProps {
   secondaryAction?: React.ReactNode;
 }
 
-const PageHeader = ({
-  title,
-  secondaryAction,
-  onRefresh,
-  loading,
-  skipChangingDocumentTitle,
-}: PageHeaderProps) => {
+const PageHeader = ({ title, secondaryAction, onRefresh, loading, skipChangingDocumentTitle }: PageHeaderProps) => {
   const { t } = useTranslation();
   return (
     <Box sx={{ mb: 4 }}>

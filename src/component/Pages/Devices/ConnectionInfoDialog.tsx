@@ -1,13 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  DialogContent,
-  DialogProps,
-  FilledInput,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  Stack,
-} from "@mui/material";
+import { DialogContent, DialogProps, FilledInput, IconButton, InputAdornment, InputLabel, Stack } from "@mui/material";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import { DavAccount } from "../../../api/setting.ts";
@@ -47,11 +39,7 @@ const InfoTextField = ({ label, value }: { label: string; value: string }) => {
   );
 };
 
-const ConnectionInfoDialog = ({
-  onClose,
-  account,
-  ...rest
-}: ConnectionInfoDialogProps) => {
+const ConnectionInfoDialog = ({ onClose, account, ...rest }: ConnectionInfoDialogProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -70,18 +58,12 @@ const ConnectionInfoDialog = ({
     >
       <DialogContent sx={{ pt: 1 }}>
         <Stack spacing={2} direction={"column"}>
-          <InfoTextField
-            label={t("application:setting.webdavServer")}
-            value={window.location.origin + "/dav"}
-          />
+          <InfoTextField label={t("application:setting.webdavServer")} value={window.location.origin + "/dav"} />
           <InfoTextField
             label={t("application:setting.userName")}
             value={SessionManager.currentLoginOrNull()?.user.email ?? ""}
           />
-          <InfoTextField
-            label={t("application:login.password")}
-            value={account?.password ?? ""}
-          />
+          <InfoTextField label={t("application:login.password")} value={account?.password ?? ""} />
         </Stack>
       </DialogContent>
     </DraggableDialog>

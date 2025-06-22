@@ -39,9 +39,7 @@ export default function MoreActions({
 }: MoreActionsProps) {
   const { t } = useTranslation("application", { keyPrefix: "uploader" });
   const [concurrentDialog, setConcurrentDialog] = useState(false);
-  const [overwrite, setOverwrite] = useState(
-    SessionManager.getWithFallback(UserSettings.UploadOverwrite),
-  );
+  const [overwrite, setOverwrite] = useState(SessionManager.getWithFallback(UserSettings.UploadOverwrite));
   const actionClicked = (next: () => void) => () => {
     onClose();
     next();
@@ -122,16 +120,7 @@ export default function MoreActions({
         divider: false,
       },
     ],
-    [
-      useAvgSpeed,
-      setUseAvgSpeed,
-      sorter,
-      setSorter,
-      filter,
-      setFilter,
-      cleanFinished,
-      overwrite,
-    ],
+    [useAvgSpeed, setUseAvgSpeed, sorter, setSorter, filter, setFilter, cleanFinished, overwrite],
   );
 
   const onConcurrentLimitSave = (val: string) => {

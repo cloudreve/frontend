@@ -1,13 +1,6 @@
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
-import {
-  Box,
-  Container,
-  FormControl,
-  Grid,
-  ListItemText,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Box, Container, FormControl, Grid, ListItemText, SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PageHeader from "../PageHeader.tsx";
 import { getUserShares } from "../../../api/api.ts";
@@ -106,9 +99,7 @@ const Profile = () => {
         <Box
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode == "light"
-                ? "rgba(0, 0, 0, 0.06)"
-                : "rgba(255, 255, 255, 0.09)",
+              theme.palette.mode == "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
             borderRadius: (theme) => `${theme.shape.borderRadius}px`,
             mb: 4,
             p: 2,
@@ -120,22 +111,22 @@ const Profile = () => {
         <PageHeader
           secondaryAction={
             <FormControl variant="outlined">
-              <DenseSelect
-                variant="outlined"
-                value={orderDirection}
-                onChange={onSelectChange}
-              >
+              <DenseSelect variant="outlined" value={orderDirection} onChange={onSelectChange}>
                 <SquareMenuItem value={"desc"}>
-                  <ListItemText slotProps={{
-                    primary: { variant: "body2" }
-                  }}>
+                  <ListItemText
+                    slotProps={{
+                      primary: { variant: "body2" },
+                    }}
+                  >
                     {t("application:share.createdAtDesc")}
                   </ListItemText>
                 </SquareMenuItem>
                 <SquareMenuItem value={"asc"}>
-                  <ListItemText slotProps={{
-                    primary: { variant: "body2" }
-                  }}>
+                  <ListItemText
+                    slotProps={{
+                      primary: { variant: "body2" },
+                    }}
+                  >
                     {t("application:share.createdAtAsc")}
                   </ListItemText>
                 </SquareMenuItem>
@@ -159,9 +150,7 @@ const Profile = () => {
               {[...Array(4)].map((_, i) => (
                 <ShareCard
                   onShareDeleted={onShareDeleted}
-                  onLoad={
-                    i == 0 ? loadNextPage(shares, nextPageToken) : undefined
-                  }
+                  onLoad={i == 0 ? loadNextPage(shares, nextPageToken) : undefined}
                   loading={true}
                   key={i == 0 ? nextPageToken : i}
                 />

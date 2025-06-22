@@ -28,10 +28,7 @@ const SplitHandle = (_props: SplitHandleProps) => {
     function onMouseMove(e: MouseEvent) {
       e.preventDefault();
       const newWidth = e.clientX - document.body.offsetLeft;
-      const cappedWidth = Math.max(
-        Math.min(newWidth, window.innerWidth / 2),
-        minDrawerWidth,
-      );
+      const cappedWidth = Math.max(Math.min(newWidth, window.innerWidth / 2), minDrawerWidth);
       setCursor(cappedWidth);
       finalWidth.current = cappedWidth;
     }

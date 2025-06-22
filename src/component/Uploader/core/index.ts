@@ -93,8 +93,7 @@ export default class UploadManager {
       return;
     }
     var confirmationMessage =
-      "It looks like you have been editing something. " +
-      "If you leave before saving, your changes will be lost.";
+      "It looks like you have been editing something. " + "If you leave before saving, your changes will be lost.";
 
     (e || window.event).returnValue = confirmationMessage; //Gecko + IE
     return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
@@ -169,35 +168,24 @@ export default class UploadManager {
     return new Promise<Base[]>((resolve) => {
       if (this.policy == undefined) {
         this.logger.warn(`Calling file selector while no policy is set`);
-        throw new UploaderError(
-          UploaderErrorName.NoPolicySelected,
-          "No policy selected.",
-        );
+        throw new UploaderError(UploaderErrorName.NoPolicySelected, "No policy selected.");
       }
 
       this.fileInput.onchange = (ev: Event) => this.addFiles(ev, dst, resolve);
-      this.directoryInput.onchange = (ev: Event) =>
-        this.addFiles(ev, dst, resolve);
+      this.directoryInput.onchange = (ev: Event) => this.addFiles(ev, dst, resolve);
       this.fileInput.value = "";
       this.directoryInput.value = "";
-      type == SelectType.File
-        ? this.fileInput.click()
-        : this.directoryInput.click();
+      type == SelectType.File ? this.fileInput.click() : this.directoryInput.click();
     });
   };
 
   public resumeTasks = (): Base[] => {
     const tasks = listResumeCtx(this.logger);
     if (tasks.length > 0) {
-      this.logger.info(
-        `Resumed ${tasks.length} unfinished task(s) from local storage:`,
-        tasks,
-      );
+      this.logger.info(`Resumed ${tasks.length} unfinished task(s) from local storage:`, tasks);
     }
     return tasks
-      .filter(
-        (t) => t.chunkProgress.length > 0 && t.chunkProgress[0].loaded > 0,
-      )
+      .filter((t) => t.chunkProgress.length > 0 && t.chunkProgress[0].loaded > 0)
       .map((t) => this.dispatchUploader({ ...t, type: TaskType.resumeHint }));
   };
 
@@ -205,10 +193,7 @@ export default class UploadManager {
     cleanupResumeCtx(this.logger);
   };
 
-  public addRawFiles = async (
-    files: File[],
-    getName?: (file: File) => string,
-  ) => {
+  public addRawFiles = async (files: File[], getName?: (file: File) => string) => {
     if (!this.currentPath) {
       return;
     }
@@ -259,14 +244,11 @@ export default class UploadManager {
     if (!this.currentPath) {
       return;
     }
-    const containFile =
-      e.dataTransfer && e.dataTransfer.types.includes("Files");
+    const containFile = e.dataTransfer && e.dataTransfer.types.includes("Files");
     if (containFile) {
       this.o.onDropLeave && this.o.onDropLeave(e);
       const items = await getAllFileEntries(e.dataTransfer!.items);
-      const uploaders = await new Promise<Base[]>((resolve) =>
-        this.addFiles(items, this.currentPath, resolve),
-      );
+      const uploaders = await new Promise<Base[]>((resolve) => this.addFiles(items, this.currentPath, resolve));
       this.o.onProactiveFileAdded && this.o.onProactiveFileAdded(uploaders);
     }
   };

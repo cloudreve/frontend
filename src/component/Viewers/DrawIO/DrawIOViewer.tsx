@@ -4,9 +4,7 @@ import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { closeDrawIOViewer } from "../../../redux/globalStateSlice.ts";
 import { Box, ListItemText, Menu, useTheme } from "@mui/material";
-import useActionDisplayOpt, {
-  canUpdate,
-} from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
+import useActionDisplayOpt, { canUpdate } from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import { generateIframeSrc, handleRemoteInvoke } from "./drawio.ts";
 import { getEntityContent } from "../../../redux/thunks/file.ts";
@@ -19,13 +17,9 @@ const DrawIOViewer = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const viewerState = useAppSelector((state) => state.globalState.drawIOViewer);
-  const instanceID = useAppSelector(
-    (state) => state.siteConfig.basic.config.instance_id,
-  );
+  const instanceID = useAppSelector((state) => state.siteConfig.basic.config.instance_id);
 
-  const displayOpt = useActionDisplayOpt(
-    viewerState?.file ? [viewerState?.file] : [],
-  );
+  const displayOpt = useActionDisplayOpt(viewerState?.file ? [viewerState?.file] : []);
   const supportUpdate = useRef(false);
   const [loading, setLoading] = useState(false);
   const [src, setSrc] = useState("");
@@ -85,14 +79,7 @@ const DrawIOViewer = () => {
         break;
       case "remoteInvoke":
         pp.current?.contentWindow &&
-          handleRemoteInvoke(
-            pp.current?.contentWindow,
-            msg,
-            dispatch,
-            viewerState,
-            supportUpdate.current,
-            instanceID,
-          );
+          handleRemoteInvoke(pp.current?.contentWindow, msg, dispatch, viewerState, supportUpdate.current, instanceID);
         break;
       case "save":
         try {
@@ -112,9 +99,7 @@ const DrawIOViewer = () => {
 
       case "init":
         try {
-          const content = await dispatch(
-            getEntityContent(viewerState.file, viewerState.version),
-          );
+          const content = await dispatch(getEntityContent(viewerState.file, viewerState.version));
           const contentStr = new TextDecoder().decode(content);
           pp.current?.contentWindow?.postMessage(
             JSON.stringify({
@@ -138,10 +123,7 @@ const DrawIOViewer = () => {
             "*",
           );
           if (supportUpdate.current) {
-            pp.current?.contentWindow?.postMessage(
-              JSON.stringify({ action: "remoteInvokeReady" }),
-              "*",
-            );
+            pp.current?.contentWindow?.postMessage(JSON.stringify({ action: "remoteInvokeReady" }), "*");
           }
         } catch (e) {
           onClose();
@@ -161,13 +143,10 @@ const DrawIOViewer = () => {
     [dispatch],
   );
 
-  const handleIframeOnload = useCallback(
-    (e: React.SyntheticEvent<HTMLIFrameElement>) => {
-      setLoaded(true);
-      pp.current = e.currentTarget;
-    },
-    [],
-  );
+  const handleIframeOnload = useCallback((e: React.SyntheticEvent<HTMLIFrameElement>) => {
+    setLoaded(true);
+    pp.current = e.currentTarget;
+  }, []);
 
   return (
     <ViewerDialog

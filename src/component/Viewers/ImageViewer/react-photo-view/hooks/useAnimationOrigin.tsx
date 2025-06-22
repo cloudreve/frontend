@@ -1,8 +1,8 @@
-import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { useState, useEffect, useRef } from 'react';
-import type { EasingMode, OriginRectType } from '../types';
-import useMethods from './useMethods';
-import { maxWaitAnimationTime } from '../variables';
+import type { Dispatch, MutableRefObject, SetStateAction } from "react";
+import { useState, useEffect, useRef } from "react";
+import type { EasingMode, OriginRectType } from "../types";
+import useMethods from "./useMethods";
+import { maxWaitAnimationTime } from "../variables";
 
 const initialRect: OriginRectType = {
   T: 0,
@@ -83,13 +83,13 @@ function handleUpdateOrigin(
   if (element && element.nodeType === 1) {
     // 获取触发时节点位置
     const { top, left, width, height } = element.getBoundingClientRect();
-    const isImage = element.tagName === 'IMG';
+    const isImage = element.tagName === "IMG";
     updateOriginRect({
       T: top,
       L: left,
       W: width,
       H: height,
-      FIT: isImage ? (getComputedStyle(element).objectFit as 'contain' | 'cover' | 'fill' | undefined) : undefined,
+      FIT: isImage ? (getComputedStyle(element).objectFit as "contain" | "cover" | "fill" | undefined) : undefined,
     });
   }
 }

@@ -31,13 +31,7 @@ const Turnstile = ({ values, setSettings }: TurnstileCaptchaProps) => {
             <Trans
               i18nKey="settings.siteKeyDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://dash.cloudflare.com/"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://dash.cloudflare.com/"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
@@ -57,13 +51,7 @@ const Turnstile = ({ values, setSettings }: TurnstileCaptchaProps) => {
             <Trans
               i18nKey="settings.siteSecretDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://dash.cloudflare.com/"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://dash.cloudflare.com/"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>

@@ -10,21 +10,11 @@ interface SignupNeededProps {
 
 const SignupNeeded = ({ email, control }: SignupNeededProps) => {
   const { t } = useTranslation();
-  const regEnabled = useAppSelector(
-    (state) => state.siteConfig.login.config.register_enabled,
-  );
+  const regEnabled = useAppSelector((state) => state.siteConfig.login.config.register_enabled);
   return (
     <>
-      {regEnabled && (
-        <Typography color={"text.secondary"}>
-          {t("login.signupHint", { email: email })}
-        </Typography>
-      )}
-      {!regEnabled && (
-        <Alert severity={"warning"}>
-          {t("login.accountNotFoundHint", { email: email })}
-        </Alert>
-      )}
+      {regEnabled && <Typography color={"text.secondary"}>{t("login.signupHint", { email: email })}</Typography>}
+      {!regEnabled && <Alert severity={"warning"}>{t("login.accountNotFoundHint", { email: email })}</Alert>}
       <Stack spacing={1} sx={{ mt: 1 }}>
         {regEnabled && control?.submit}
       </Stack>

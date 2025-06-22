@@ -14,78 +14,71 @@ export const DefaultCloseAction = (snackbarId: SnackbarKey | undefined) => {
   const { t } = useTranslation();
   return (
     <>
-      <Button
-        onClick={() => closeSnackbar(snackbarId)}
-        color="inherit"
-        size="small"
-      >
+      <Button onClick={() => closeSnackbar(snackbarId)} color="inherit" size="small">
         {t("dismiss", { ns: "common" })}
       </Button>
     </>
   );
 };
 
-export const ErrorListDetailAction =
-  (error: Response<any>) => (snackbarId: SnackbarKey | undefined) => {
-    const { t } = useTranslation();
-    const dispatch = useAppDispatch();
+export const ErrorListDetailAction = (error: Response<any>) => (snackbarId: SnackbarKey | undefined) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
-    const Close = DefaultCloseAction(snackbarId);
+  const Close = DefaultCloseAction(snackbarId);
 
-    const showDetails = useCallback(() => {
-      dispatch(showAggregatedErrorDialog(error));
-      closeSnackbar(snackbarId);
-    }, [dispatch, error, snackbarId]);
+  const showDetails = useCallback(() => {
+    dispatch(showAggregatedErrorDialog(error));
+    closeSnackbar(snackbarId);
+  }, [dispatch, error, snackbarId]);
 
-    return (
-      <>
-        <Button onClick={showDetails} color="inherit" size="small">
-          {t("common:errorDetails")}
-        </Button>
-        {Close}
-      </>
-    );
-  };
+  return (
+    <>
+      <Button onClick={showDetails} color="inherit" size="small">
+        {t("common:errorDetails")}
+      </Button>
+      {Close}
+    </>
+  );
+};
 
-export const ViewDstAction =
-  (dst: string) => (snackbarId: SnackbarKey | undefined) => {
-    const { t } = useTranslation();
-    const dispatch = useAppDispatch();
+export const ViewDstAction = (dst: string) => (snackbarId: SnackbarKey | undefined) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
-    const Close = DefaultCloseAction(snackbarId);
+  const Close = DefaultCloseAction(snackbarId);
 
-    const viewDst = useCallback(() => {
-      dispatch(navigateToPath(FileManagerIndex.main, dst));
-      closeSnackbar(snackbarId);
-    }, [dispatch, snackbarId]);
+  const viewDst = useCallback(() => {
+    dispatch(navigateToPath(FileManagerIndex.main, dst));
+    closeSnackbar(snackbarId);
+  }, [dispatch, snackbarId]);
 
-    return (
-      <>
-        <Button onClick={viewDst} color="inherit" size="small">
-          {t("application:modals.view")}
-        </Button>
-        {Close}
-      </>
-    );
-  };
+  return (
+    <>
+      <Button onClick={viewDst} color="inherit" size="small">
+        {t("application:modals.view")}
+      </Button>
+      {Close}
+    </>
+  );
+};
 
-export const ViewDownloadLogAction =
-  (downloadId: string) => (_snackbarId: SnackbarKey | undefined) => {
-    const { t } = useTranslation();
-    const dispatch = useAppDispatch();
+export const ViewDownloadLogAction = (downloadId: string) => (_snackbarId: SnackbarKey | undefined) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
-    const viewLogs = useCallback(() => {
-      dispatch(setBatchDownloadLogDialog({ open: true, id: downloadId }));
-    }, [dispatch, downloadId]);
+  const viewLogs = useCallback(() => {
+    dispatch(setBatchDownloadLogDialog({ open: true, id: downloadId }));
+  }, [dispatch, downloadId]);
 
-    return (
-      <>
-        <Button onClick={viewLogs} color="inherit" size="small">
-          {t("application:fileManager.details")}
-        </Button>
-      </>
-    );
-  };
+  return (
+    <>
+      <Button onClick={viewLogs} color="inherit" size="small">
+        {t("application:fileManager.details")}
+      </Button>
+    </>
+  );
+};
 
 export const ViewTaskAction =
   (path: string = "/tasks") =>

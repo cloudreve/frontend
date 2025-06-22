@@ -10,11 +10,7 @@ export interface DefaultCaptchaProps {
   generation: number;
 }
 
-const DefaultCaptcha = ({
-  onStateChange,
-  generation,
-  ...rest
-}: DefaultCaptchaProps) => {
+const DefaultCaptcha = ({ onStateChange, generation, ...rest }: DefaultCaptchaProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -92,8 +88,9 @@ const DefaultCaptcha = ({
         htmlInput: {
           name: "captcha",
           id: "captcha",
-        }
-      }} />
+        },
+      }}
+    />
   );
 };
 

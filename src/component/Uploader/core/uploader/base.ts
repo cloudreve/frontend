@@ -30,14 +30,7 @@ export interface UploadHandlers {
   onProgress: (data: UploadProgress) => void;
   onMsg: (msg: string, color: MessageColor) => void;
 }
-export type MessageColor =
-  | "error"
-  | "default"
-  | "success"
-  | "warning"
-  | "info"
-  | "loading"
-  | undefined;
+export type MessageColor = "error" | "default" | "success" | "warning" | "info" | "loading" | undefined;
 
 export interface UploadProgress {
   total: ProgressCompose;
@@ -204,10 +197,7 @@ export default abstract class Base {
       return;
     }
 
-    if (
-      !(e instanceof UploaderError && e.Retryable()) ||
-      !resumePolicy.includes(this.task.policy.type)
-    ) {
+    if (!(e instanceof UploaderError && e.Retryable()) || !resumePolicy.includes(this.task.policy.type)) {
       this.logger.warn("Non-resume error occurs, clean resume ctx cache");
       this.cancelUploadSession();
     }
@@ -222,10 +212,7 @@ export default abstract class Base {
       utils.removeResumeCtx(this.task, this.logger);
       if (this.task.session) {
         setTimeout(() => {
-          deleteUploadSession(
-            this.task.session!?.session_id,
-            this.task.session!?.uri,
-          )
+          deleteUploadSession(this.task.session!?.session_id, this.task.session!?.uri)
             .catch((e) => {
               this.logger.warn("Failed to cancel upload session: ", e);
             })
@@ -244,11 +231,7 @@ export default abstract class Base {
     this.subscriber.onTransition(status);
   }
 
-  public getProgressInfoItem(
-    loaded: number,
-    size: number,
-    fromCache?: boolean,
-  ): ProgressCompose {
+  public getProgressInfoItem(loaded: number, size: number, fromCache?: boolean): ProgressCompose {
     return {
       size,
       loaded,

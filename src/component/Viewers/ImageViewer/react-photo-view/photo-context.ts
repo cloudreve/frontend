@@ -1,5 +1,5 @@
-import { createContext } from 'react';
-import type { DataType } from './types';
+import { createContext } from "react";
+import type { DataType } from "./types";
 
 export type UpdateItemType = (dataType: DataType) => void;
 

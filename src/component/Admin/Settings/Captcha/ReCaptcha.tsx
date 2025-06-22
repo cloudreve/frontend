@@ -31,13 +31,7 @@ const ReCaptcha = ({ values, setSettings }: ReCaptchaProps) => {
             <Trans
               i18nKey="settings.siteKeyDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://www.google.com/recaptcha/admin/create"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://www.google.com/recaptcha/admin/create"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
@@ -57,13 +51,7 @@ const ReCaptcha = ({ values, setSettings }: ReCaptchaProps) => {
             <Trans
               i18nKey="settings.siteSecretDes"
               ns={"dashboard"}
-              components={[
-                <Link
-                  key={0}
-                  href={"https://www.google.com/recaptcha/admin/create"}
-                  target={"_blank"}
-                />,
-              ]}
+              components={[<Link key={0} href={"https://www.google.com/recaptcha/admin/create"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>

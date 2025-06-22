@@ -1,20 +1,11 @@
-import {
-  Chip,
-  ChipProps,
-  darken,
-  styled,
-  Tooltip,
-  useTheme,
-} from "@mui/material";
+import { Chip, ChipProps, darken, styled, Tooltip, useTheme } from "@mui/material";
 import { useCallback, useContext } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { Metadata } from "../../../api/explorer.ts";
 import { searchMetadata } from "../../../redux/thunks/filemanager.ts";
 import { FmIndexContext } from "../FmIndexContext.tsx";
 
-export const TagChip = styled(Chip)<{ defaultStyle?: boolean }>(({
-  defaultStyle,
-}) => {
+export const TagChip = styled(Chip)<{ defaultStyle?: boolean }>(({ defaultStyle }) => {
   const base = {
     "& .MuiChip-deleteIcon": {},
   };
@@ -30,16 +21,7 @@ export interface FileTagProps extends ChipProps {
   disableClick?: boolean;
 }
 
-const FileTag = ({
-  disableClick,
-  tagColor,
-  sx,
-  label,
-  defaultStyle,
-  spacing,
-  openInNewTab,
-  ...rest
-}: FileTagProps) => {
+const FileTag = ({ disableClick, tagColor, sx, label, defaultStyle, spacing, openInNewTab, ...rest }: FileTagProps) => {
   const theme = useTheme();
   const fmIndex = useContext(FmIndexContext);
   const dispatch = useAppDispatch();
@@ -56,23 +38,13 @@ const FileTag = ({
         return;
       }
       e.stopPropagation();
-      dispatch(
-        searchMetadata(
-          fmIndex,
-          Metadata.tag_prefix + label,
-          tagColor,
-          openInNewTab,
-        ),
-      );
+      dispatch(searchMetadata(fmIndex, Metadata.tag_prefix + label, tagColor, openInNewTab));
     },
     [root, dispatch, fmIndex, disableClick],
   );
 
   const hackColor =
-    !!tagColor &&
-    theme.palette.getContrastText(tagColor) != theme.palette.text.primary
-      ? "error"
-      : undefined;
+    !!tagColor && theme.palette.getContrastText(tagColor) != theme.palette.text.primary ? "error" : undefined;
   return (
     <Tooltip title={label}>
       <TagChip

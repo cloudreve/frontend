@@ -33,10 +33,7 @@ import Add from "../../Icons/Add.tsx";
 import { ExpandMoreRounded } from "@mui/icons-material";
 import { UploadProgressTotal } from "../../../redux/globalStateSlice.ts";
 
-const Transition = React.forwardRef(function Transition(
-  props: SlideProps,
-  ref,
-) {
+const Transition = React.forwardRef(function Transition(props: SlideProps, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -67,15 +64,13 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   paddingTop: "0!important",
 }));
 
-const CaretDownIcon = styled(ExpandMoreRounded)<{ expanded: boolean }>(
-  ({ theme, expanded }) => ({
-    transform: `rotate(${expanded ? 0 : 180}deg)`,
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-      easing: theme.transitions.easing.easeInOut,
-    }),
+const CaretDownIcon = styled(ExpandMoreRounded)<{ expanded: boolean }>(({ theme, expanded }) => ({
+  transform: `rotate(${expanded ? 0 : 180}deg)`,
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+    easing: theme.transitions.easing.easeInOut,
   }),
-);
+}));
 
 const sorters: {
   [key: string]: (a: Base, b: Base) => number;
@@ -117,16 +112,10 @@ export default function TaskList({
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const path = useAppSelector((state) => state.fileManager[0].pure_path);
   const [expanded, setExpanded] = useState(true);
-  const [useAvgSpeed, setUseAvgSpeed] = useState<boolean>(
-    SessionManager.getWithFallback(UserSettings.UseAvgSpeed),
-  );
+  const [useAvgSpeed, setUseAvgSpeed] = useState<boolean>(SessionManager.getWithFallback(UserSettings.UseAvgSpeed));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [filter, setFilter] = useState(
-    SessionManager.getWithFallback(UserSettings.TaskFilter),
-  );
-  const [sorter, setSorter] = useState(
-    SessionManager.getWithFallback(UserSettings.TaskSorter),
-  );
+  const [filter, setFilter] = useState(SessionManager.getWithFallback(UserSettings.TaskFilter));
+  const [sorter, setSorter] = useState(SessionManager.getWithFallback(UserSettings.TaskSorter));
   const [refreshList, setRefreshList] = useState(false);
 
   const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -154,12 +143,10 @@ export default function TaskList({
     }
   }, [taskList]);
 
-  const stopPop =
-    (func: (e: React.MouseEvent<HTMLElement>) => void) =>
-    (e: React.MouseEvent<HTMLElement>) => {
-      e.stopPropagation();
-      func(e);
-    };
+  const stopPop = (func: (e: React.MouseEvent<HTMLElement>) => void) => (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    func(e);
+  };
 
   const progressBar = useMemo(
     () =>
@@ -172,8 +159,7 @@ export default function TaskList({
                   theme.palette.mode === "light"
                     ? lighten(theme.palette.primary.main, 0.8)
                     : alpha(theme.palette.primary.main, 0.18),
-                width:
-                  (progress.processedSize / progress.totalSize) * 100 + "%",
+                width: (progress.processedSize / progress.totalSize) * 100 + "%",
                 transition: "width .4s linear",
                 zIndex: -1,
                 height: "100%",
@@ -288,11 +274,7 @@ export default function TaskList({
             {progressBar}
             <Toolbar disableGutters sx={{ px: 1, minHeight: "52px!important" }}>
               <Tooltip title={t("hideTaskList")}>
-                <IconButton
-                  color="inherit"
-                  onClick={stopPop(() => close(null, ""))}
-                  aria-label="Close"
-                >
+                <IconButton color="inherit" onClick={stopPop(() => close(null, ""))} aria-label="Close">
                   <Dismiss fontSize={"small"} />
                 </IconButton>
               </Tooltip>
@@ -309,30 +291,20 @@ export default function TaskList({
               </Typography>
               <Box sx={{ display: "flex", gap: 1 }}>
                 <Tooltip title={t("moreActions")}>
-                  <IconButton
-                    color="inherit"
-                    onClick={stopPop(handleActionClick)}
-                  >
+                  <IconButton color="inherit" onClick={stopPop(handleActionClick)}>
                     <MoreHorizontal fontSize={"small"} />
                   </IconButton>
                 </Tooltip>
                 {path && (
                   <Tooltip title={t("addNewFiles")}>
-                    <IconButton
-                      color="inherit"
-                      onClick={stopPop(() => selectFile(path ?? defaultPath))}
-                    >
+                    <IconButton color="inherit" onClick={stopPop(() => selectFile(path ?? defaultPath))}>
                       <Add fontSize={"small"} />
                     </IconButton>
                   </Tooltip>
                 )}
                 {!fullScreen && (
                   <Tooltip title={t("toggleTaskList")}>
-                    <IconButton
-                      sx={{ p: "6px" }}
-                      color="inherit"
-                      onClick={stopPop(() => setExpanded(!expanded))}
-                    >
+                    <IconButton sx={{ p: "6px" }} color="inherit" onClick={stopPop(() => setExpanded(!expanded))}>
                       <CaretDownIcon expanded={expanded} />
                     </IconButton>
                   </Tooltip>

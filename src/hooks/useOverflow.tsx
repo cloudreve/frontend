@@ -1,9 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 
-export const useIsOverflow = (
-  ref: React.RefObject<HTMLElement>,
-  callback?: (o: boolean) => void,
-) => {
+export const useIsOverflow = (ref: React.RefObject<HTMLElement>, callback?: (o: boolean) => void) => {
   const [isOverflow, setIsOverflow] = useState(false);
 
   useLayoutEffect(() => {

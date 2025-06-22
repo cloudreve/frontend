@@ -31,9 +31,11 @@ export const FileTypeCondition = ({
           <ListItemIcon>
             <Document fontSize="small" />
           </ListItemIcon>
-          <ListItemText slotProps={{
-            primary: { variant: "body2" }
-          }}>
+          <ListItemText
+            slotProps={{
+              primary: { variant: "body2" },
+            }}
+          >
             {t("application:fileManager.file")}
           </ListItemText>
         </SquareMenuItem>
@@ -41,9 +43,11 @@ export const FileTypeCondition = ({
           <ListItemIcon>
             <Folder fontSize="small" />
           </ListItemIcon>
-          <ListItemText slotProps={{
-            primary: { variant: "body2" }
-          }}>
+          <ListItemText
+            slotProps={{
+              primary: { variant: "body2" },
+            }}
+          >
             {t("application:fileManager.folder")}
           </ListItemText>
         </SquareMenuItem>

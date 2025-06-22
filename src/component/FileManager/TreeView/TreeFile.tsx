@@ -5,20 +5,11 @@ import { SideNavItemBase } from "../../Frame/NavBar/SideNavItem.tsx";
 import clsx from "clsx";
 import FileIcon from "../Explorer/FileIcon.tsx";
 import { FileResponse } from "../../../api/explorer.ts";
-import {
-  TreeItem,
-  treeItemClasses,
-  TreeItemContentProps,
-  TreeItemProps,
-  useTreeItem,
-} from "@mui/x-tree-view";
+import { TreeItem, treeItemClasses, TreeItemContentProps, TreeItemProps, useTreeItem } from "@mui/x-tree-view";
 import NavIconTransition from "../../Frame/NavBar/NavIconTransition.tsx";
 import { mergeRefs } from "../../../util";
 import { useAppDispatch } from "../../../redux/hooks.ts";
-import {
-  loadChild,
-  navigateToPath,
-} from "../../../redux/thunks/filemanager.ts";
+import { loadChild, navigateToPath } from "../../../redux/thunks/filemanager.ts";
 import FacebookCircularProgress from "../../Common/CircularProgress.tsx";
 import CaretDown from "../../Icons/CaretDown.tsx";
 import { StartIcon } from "../TopBar/BreadcrumbButton.tsx";
@@ -41,9 +32,7 @@ const CustomContentRoot = styled(SideNavItemBase)<{
   opacity: isDragging ? 0.5 : 1,
   transition: "all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
   transitionProperty: "opacity,box-shadow,background-color",
-  boxShadow: isDropOver
-    ? `inset 0 0 0 2px ${theme.palette.primary.light}`
-    : "none",
+  boxShadow: isDropOver ? `inset 0 0 0 2px ${theme.palette.primary.light}` : "none",
   height: "32px",
 }));
 
@@ -56,16 +45,14 @@ const StyledTreeItemRoot = styled(TreeItem)(() => ({
   },
 })) as unknown as typeof TreeItem;
 
-export const CaretDownIcon = styled(CaretDown)<{ expanded: boolean }>(
-  ({ theme, expanded }) => ({
-    fontSize: "12px!important",
-    transform: `rotate(${expanded ? 0 : -90}deg)`,
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-      easing: theme.transitions.easing.easeInOut,
-    }),
+export const CaretDownIcon = styled(CaretDown)<{ expanded: boolean }>(({ theme, expanded }) => ({
+  fontSize: "12px!important",
+  transform: `rotate(${expanded ? 0 : -90}deg)`,
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+    easing: theme.transitions.easing.easeInOut,
   }),
-);
+}));
 
 export interface CustomContentProps extends TreeItemContentProps {
   parent?: string;
@@ -117,12 +104,7 @@ const UnpinButton = (props: UnpinButton) => {
   return (
     <Fade in={props.show} unmountOnExit>
       <Tooltip title={t("application:fileManager.unpin")}>
-        <SmallIconButton
-          disabled={loading}
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={onClick}
-          size="small"
-        >
+        <SmallIconButton disabled={loading} onMouseDown={(e) => e.stopPropagation()} onClick={onClick} size="small">
           <Dismiss fontSize={"inherit"} />
         </SmallIconButton>
       </Tooltip>
@@ -136,27 +118,10 @@ const CustomContent = React.memo(
     const fmIndex = useContext(FmIndexContext);
     const [loading, setLoading] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
-    const {
-      classes,
-      className,
-      label,
-      nodeId,
-      icon: iconProp,
-      expansionIcon,
-      displayIcon,
-      file,
-      fileIcon,
-    } = props;
+    const { classes, className, label, nodeId, icon: iconProp, expansionIcon, displayIcon, file, fileIcon } = props;
 
-    const {
-      disabled,
-      expanded,
-      selected,
-      focused,
-      handleExpansion,
-      handleSelection,
-      preventSelection,
-    } = useTreeItem(nodeId);
+    const { disabled, expanded, selected, focused, handleExpansion, handleSelection, preventSelection } =
+      useTreeItem(nodeId);
 
     const uri = useMemo(() => {
       // Trim 'pinedPrefix' if exist in prefix
@@ -169,9 +134,7 @@ const CustomContent = React.memo(
 
     const icon = iconProp || expansionIcon || displayIcon;
 
-    const handleMouseDown = (
-      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    ) => {
+    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       preventSelection(event);
     };
 
@@ -182,13 +145,7 @@ const CustomContent = React.memo(
         handleExpansion(event);
         if (!expanded) {
           try {
-            await dispatch(
-              loadChild(
-                fmIndex,
-                uri,
-                () => (timeOutID = setTimeout(() => setLoading(true), 300)),
-              ),
-            );
+            await dispatch(loadChild(fmIndex, uri, () => (timeOutID = setTimeout(() => setLoading(true), 300))));
           } finally {
             if (timeOutID) {
               clearTimeout(timeOutID);
@@ -211,14 +168,7 @@ const CustomContent = React.memo(
 
     const FileItemIcon = useMemo(() => {
       if (props.loading) {
-        return (
-          <Skeleton
-            sx={{ mr: "14px" }}
-            variant={"rounded"}
-            width={20}
-            height={20}
-          />
-        );
+        return <Skeleton sx={{ mr: "14px" }} variant={"rounded"} width={20} height={20} />;
       }
       if (fileIcon && fileIcon.Icons) {
         return (
@@ -320,9 +270,7 @@ const CustomContent = React.memo(
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
         <div onClick={handleExpansionClick} className={classes.iconContainer}>
           {icon && !loading && <CaretDownIcon expanded={expanded} />}
-          {icon && loading && (
-            <FacebookCircularProgress size={15} sx={{ pt: 0.5 }} />
-          )}
+          {icon && loading && <FacebookCircularProgress size={15} sx={{ pt: 0.5 }} />}
         </div>
         {FileItemIcon}
         {fileName}
@@ -333,23 +281,11 @@ const CustomContent = React.memo(
 );
 
 const TreeFile = React.memo(
-  React.forwardRef(function CustomTreeItem(
-    props: TreeFileProps,
-    ref: React.Ref<HTMLLIElement>,
-  ) {
+  React.forwardRef(function CustomTreeItem(props: TreeFileProps, ref: React.Ref<HTMLLIElement>) {
     const contentProps = useMemo(() => {
-      const { level, file, notLoaded, fileIcon, loading, pinned, canDrop } =
-        props;
+      const { level, file, notLoaded, fileIcon, loading, pinned, canDrop } = props;
       return { level, file, notLoaded, fileIcon, loading, pinned, canDrop };
-    }, [
-      props.level,
-      props.file,
-      props.notLoaded,
-      props.fileIcon,
-      props.loading,
-      props.canDrop,
-      props.pinned,
-    ]);
+    }, [props.level, props.file, props.notLoaded, props.fileIcon, props.loading, props.canDrop, props.pinned]);
     return (
       <StyledTreeItemRoot
         ContentComponent={CustomContent}

@@ -3,23 +3,11 @@ import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  DialogContent,
-  FormControl,
-  Stack,
-  styled,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, DialogContent, FormControl, Stack, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import AutoHeight from "../../../Common/AutoHeight.tsx";
 import FacebookCircularProgress from "../../../Common/CircularProgress.tsx";
-import {
-  get2FAInitSecret,
-  sendUpdateUserSetting,
-} from "../../../../api/api.ts";
+import { get2FAInitSecret, sendUpdateUserSetting } from "../../../../api/api.ts";
 import { QRCodeSVG } from "qrcode.react";
 import SessionManager from "../../../../session";
 import { MuiOtpInput } from "mui-one-time-password-input";
@@ -37,19 +25,13 @@ const MuiOtpInputStyled = styled(MuiOtpInput)`
   margin-inline: auto;
 `;
 
-const Enable2FADialog = ({
-  open,
-  onClose,
-  on2FAEnabled,
-}: Enable2FADialogProps) => {
+const Enable2FADialog = ({ open, onClose, on2FAEnabled }: Enable2FADialogProps) => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const siteTitle = useAppSelector(
-    (state) => state.siteConfig.basic.config.title,
-  );
+  const siteTitle = useAppSelector((state) => state.siteConfig.basic.config.title);
   const user = SessionManager.currentLoginOrNull();
 
   const [loading, setLoading] = useState(false);
@@ -110,9 +92,7 @@ const Enable2FADialog = ({
         <AutoHeight>
           <SwitchTransition>
             <CSSTransition
-              addEndListener={(node, done) =>
-                node.addEventListener("transitionend", done, false)
-              }
+              addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
               classNames="fade"
               key={`${loading}`}
             >

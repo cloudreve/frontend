@@ -14,7 +14,12 @@ import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar";
-import { NoWrapTableCell, SecondaryButton, StyledCheckbox, StyledTableContainerPaper } from "../../../Common/StyledComponents";
+import {
+  NoWrapTableCell,
+  SecondaryButton,
+  StyledCheckbox,
+  StyledTableContainerPaper,
+} from "../../../Common/StyledComponents";
 import Add from "../../../Icons/Add";
 import Delete from "../../../Icons/Delete";
 import Edit from "../../../Icons/Edit";
@@ -79,30 +84,39 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
     }
   }, [value]);
 
-  const handleSave = useCallback((newOptions: Record<string, ThemeOption["config"]>) => {
-    onChange(JSON.stringify(newOptions));
-  }, [onChange]);
+  const handleSave = useCallback(
+    (newOptions: Record<string, ThemeOption["config"]>) => {
+      onChange(JSON.stringify(newOptions));
+    },
+    [onChange],
+  );
 
-  const handleDelete = useCallback((id: string) => {
-    // Prevent deleting the default theme
-    if (id === defaultTheme) {
-      enqueueSnackbar({
-        message: t("settings.cannotDeleteDefaultTheme"),
-        variant: "warning",
-        action: DefaultCloseAction,
-      });
-      return;
-    }
+  const handleDelete = useCallback(
+    (id: string) => {
+      // Prevent deleting the default theme
+      if (id === defaultTheme) {
+        enqueueSnackbar({
+          message: t("settings.cannotDeleteDefaultTheme"),
+          variant: "warning",
+          action: DefaultCloseAction,
+        });
+        return;
+      }
 
-    const newOptions = { ...options };
-    delete newOptions[id];
-    handleSave(newOptions);
-  }, [options, handleSave, defaultTheme, enqueueSnackbar, t]);
+      const newOptions = { ...options };
+      delete newOptions[id];
+      handleSave(newOptions);
+    },
+    [options, handleSave, defaultTheme, enqueueSnackbar, t],
+  );
 
-  const handleEdit = useCallback((id: string) => {
-    setEditingOption({ id, config: options[id] });
-    setIsDialogOpen(true);
-  }, [options]);
+  const handleEdit = useCallback(
+    (id: string) => {
+      setEditingOption({ id, config: options[id] });
+      setIsDialogOpen(true);
+    },
+    [options],
+  );
 
   const handleAdd = useCallback(() => {
     // Generate a new default theme option with a random color
@@ -113,16 +127,16 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
         light: {
           palette: {
             primary: { main: randomColor },
-            secondary: { main: "#f50057" }
-          }
+            secondary: { main: "#f50057" },
+          },
         },
         dark: {
           palette: {
             primary: { main: randomColor },
-            secondary: { main: "#f50057" }
-          }
-        }
-      }
+            secondary: { main: "#f50057" },
+          },
+        },
+      },
     });
     setIsDialogOpen(true);
   }, []);
@@ -132,15 +146,58 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
     setEditingOption(null);
   }, []);
 
-  const handleDialogSave = useCallback((id: string, newId: string, config: string) => {
-    try {
-      const parsedConfig = JSON.parse(config);
+  const handleDialogSave = useCallback(
+    (id: string, newId: string, config: string) => {
+      try {
+        const parsedConfig = JSON.parse(config);
+        const newOptions = { ...options };
+
+        // If ID has changed (primary color changed), delete the old entry and create a new one
+        if (id !== newId) {
+          // Check if the new ID already exists
+          if (newOptions[newId]) {
+            enqueueSnackbar({
+              message: t("settings.duplicateThemeColor"),
+              variant: "warning",
+              action: DefaultCloseAction,
+            });
+            return;
+          }
+
+          // If we're changing the ID of the default theme, update the default theme reference
+          if (id === defaultTheme) {
+            onDefaultThemeChange(newId);
+          }
+
+          delete newOptions[id];
+        }
+
+        newOptions[newId] = parsedConfig;
+        handleSave(newOptions);
+        setIsDialogOpen(false);
+        setEditingOption(null);
+      } catch (e) {
+        // Handle error
+        enqueueSnackbar({
+          message: t("settings.invalidThemeConfig"),
+          variant: "warning",
+          action: DefaultCloseAction,
+        });
+      }
+    },
+    [options, handleSave, enqueueSnackbar, defaultTheme, onDefaultThemeChange, t],
+  );
+
+  const handleColorChange = useCallback(
+    (id: string, type: "primary" | "secondary", mode: "light" | "dark", color: string) => {
       const newOptions = { ...options };
 
-      // If ID has changed (primary color changed), delete the old entry and create a new one
-      if (id !== newId) {
+      if (type === "primary" && mode === "light") {
+        // If changing the primary color (which is the ID), we need to create a new entry
+        const newId = color;
+
         // Check if the new ID already exists
-        if (newOptions[newId]) {
+        if (newOptions[newId] && newId !== id) {
           enqueueSnackbar({
             message: t("settings.duplicateThemeColor"),
             variant: "warning",
@@ -149,67 +206,33 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
           return;
         }
 
+        const config = { ...newOptions[id] };
+        config[mode].palette[type].main = color;
+
+        // Delete old entry and create new one with the updated ID
+        delete newOptions[id];
+        newOptions[newId] = config;
+
         // If we're changing the ID of the default theme, update the default theme reference
         if (id === defaultTheme) {
           onDefaultThemeChange(newId);
         }
-
-        delete newOptions[id];
+      } else {
+        // For other colors, just update the value
+        newOptions[id][mode].palette[type].main = color;
       }
 
-      newOptions[newId] = parsedConfig;
       handleSave(newOptions);
-      setIsDialogOpen(false);
-      setEditingOption(null);
-    } catch (e) {
-      // Handle error
-      enqueueSnackbar({
-        message: t("settings.invalidThemeConfig"),
-        variant: "warning",
-        action: DefaultCloseAction,
-      });
-    }
-  }, [options, handleSave, enqueueSnackbar, defaultTheme, onDefaultThemeChange, t]);
+    },
+    [options, handleSave, enqueueSnackbar, t, defaultTheme, onDefaultThemeChange],
+  );
 
-  const handleColorChange = useCallback((id: string, type: 'primary' | 'secondary', mode: 'light' | 'dark', color: string) => {
-    const newOptions = { ...options };
-
-    if (type === 'primary' && mode === 'light') {
-      // If changing the primary color (which is the ID), we need to create a new entry
-      const newId = color;
-
-      // Check if the new ID already exists
-      if (newOptions[newId] && newId !== id) {
-        enqueueSnackbar({
-          message: t("settings.duplicateThemeColor"),
-          variant: "warning",
-          action: DefaultCloseAction,
-        });
-        return;
-      }
-
-      const config = { ...newOptions[id] };
-      config[mode].palette[type].main = color;
-
-      // Delete old entry and create new one with the updated ID
-      delete newOptions[id];
-      newOptions[newId] = config;
-
-      // If we're changing the ID of the default theme, update the default theme reference
-      if (id === defaultTheme) {
-        onDefaultThemeChange(newId);
-      }
-    } else {
-      // For other colors, just update the value
-      newOptions[id][mode].palette[type].main = color;
-    }
-
-    handleSave(newOptions);
-  }, [options, handleSave, enqueueSnackbar, t, defaultTheme, onDefaultThemeChange]);
-
-  const handleDefaultThemeChange = useCallback((id: string) => {
-    onDefaultThemeChange(id);
-  }, [onDefaultThemeChange]);
+  const handleDefaultThemeChange = useCallback(
+    (id: string) => {
+      onDefaultThemeChange(id);
+    },
+    [onDefaultThemeChange],
+  );
 
   const optionsArray = useMemo(() => {
     return Object.entries(options).map(([id, config]) => ({
@@ -229,8 +252,7 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
 
       {optionsArray.length > 0 && (
         <TableContainer component={StyledTableContainerPaper} sx={{ mt: 2 }}>
-          <Table size="small" stickyHeader
-            sx={{ width: "100%", tableLayout: "fixed" }}>
+          <Table size="small" stickyHeader sx={{ width: "100%", tableLayout: "fixed" }}>
             <TableHead>
               <TableRow>
                 <NoWrapTableCell width={50}>{t("settings.defaultTheme")}</NoWrapTableCell>
@@ -255,25 +277,25 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
                     <HexColorInput
                       required
                       currentColor={option.config.light.palette.primary.main}
-                      onColorChange={(color) => handleColorChange(option.id, 'primary', 'light', color)}
+                      onColorChange={(color) => handleColorChange(option.id, "primary", "light", color)}
                     />
                   </TableCell>
                   <TableCell>
                     <HexColorInput
                       currentColor={option.config.light.palette.secondary.main}
-                      onColorChange={(color) => handleColorChange(option.id, 'secondary', 'light', color)}
+                      onColorChange={(color) => handleColorChange(option.id, "secondary", "light", color)}
                     />
                   </TableCell>
                   <TableCell>
                     <HexColorInput
                       currentColor={option.config.dark.palette.primary.main}
-                      onColorChange={(color) => handleColorChange(option.id, 'primary', 'dark', color)}
+                      onColorChange={(color) => handleColorChange(option.id, "primary", "dark", color)}
                     />
                   </TableCell>
                   <TableCell>
                     <HexColorInput
                       currentColor={option.config.dark.palette.secondary.main}
-                      onColorChange={(color) => handleColorChange(option.id, 'secondary', 'dark', color)}
+                      onColorChange={(color) => handleColorChange(option.id, "secondary", "dark", color)}
                     />
                   </TableCell>
                   <TableCell align="right">
@@ -295,12 +317,7 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
         </TableContainer>
       )}
 
-      <SecondaryButton
-        variant="contained"
-        startIcon={<Add />}
-        onClick={handleAdd}
-        sx={{ mt: 2 }}
-      >
+      <SecondaryButton variant="contained" startIcon={<Add />} onClick={handleAdd} sx={{ mt: 2 }}>
         {t("settings.addThemeOption")}
       </SecondaryButton>
 
@@ -317,4 +334,4 @@ const ThemeOptions = ({ value, onChange, defaultTheme, onDefaultThemeChange }: T
   );
 };
 
-export default ThemeOptions; 
+export default ThemeOptions;

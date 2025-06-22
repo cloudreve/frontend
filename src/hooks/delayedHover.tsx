@@ -3,8 +3,7 @@ import { useCallback, useRef } from "react";
 import { PopupState } from "material-ui-popup-state/hooks";
 
 export function bindDelayedHover(popupState: PopupState, delayMs = 200) {
-  const { onTouchStart, onMouseOver, onMouseLeave, ...hoverAriaProps } =
-    bindHover(popupState);
+  const { onTouchStart, onMouseOver, onMouseLeave, ...hoverAriaProps } = bindHover(popupState);
 
   const timeout = useRef<NodeJS.Timeout | null>(null);
 

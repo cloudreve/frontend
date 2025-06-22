@@ -6,10 +6,7 @@ import { setRenameFileModalError } from "../../../redux/fileManagerSlice.ts";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import { createNewDialogPromisePool } from "../../../redux/thunks/dialog.ts";
 import { FilledTextField } from "../../Common/StyledComponents.tsx";
-import {
-  closeCreateNewDialog,
-  CreateNewDialogType,
-} from "../../../redux/globalStateSlice.ts";
+import { closeCreateNewDialog, CreateNewDialogType } from "../../../redux/globalStateSlice.ts";
 import { submitCreateNew } from "../../../redux/thunks/file.ts";
 import { FileType } from "../../../api/explorer.ts";
 
@@ -24,15 +21,10 @@ const CreateNew = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const open = useAppSelector((state) => state.globalState.createNewDialogOpen);
-  const promiseId = useAppSelector(
-    (state) => state.globalState.createNewPromiseId,
-  );
+  const promiseId = useAppSelector((state) => state.globalState.createNewPromiseId);
   const type = useAppSelector((state) => state.globalState.createNewDialogType);
-  const defaultName = useAppSelector(
-    (state) => state.globalState.createNewDialogDefault,
-  );
-  const fmIndex =
-    useAppSelector((state) => state.globalState.createNewDialogFmIndex) ?? 0;
+  const defaultName = useAppSelector((state) => state.globalState.createNewDialogDefault);
+  const fmIndex = useAppSelector((state) => state.globalState.createNewDialogFmIndex) ?? 0;
 
   useEffect(() => {
     if (open) {
@@ -54,13 +46,7 @@ const CreateNew = () => {
       }
 
       setLoading(true);
-      dispatch(
-        submitCreateNew(
-          fmIndex,
-          name,
-          type == CreateNewDialogType.folder ? FileType.folder : FileType.file,
-        ),
-      )
+      dispatch(submitCreateNew(fmIndex, name, type == CreateNewDialogType.folder ? FileType.folder : FileType.file))
         .then((f) => {
           if (promiseId) {
             createNewDialogPromisePool[promiseId]?.resolve(f);
@@ -86,12 +72,7 @@ const CreateNew = () => {
     if (open) {
       const lastDot = name.lastIndexOf(".");
       setTimeout(
-        () =>
-          inputRef.current &&
-          inputRef.current.setSelectionRange(
-            0,
-            lastDot > 0 ? lastDot : name.length,
-          ),
+        () => inputRef.current && inputRef.current.setSelectionRange(0, lastDot > 0 ? lastDot : name.length),
         200,
       );
     }
@@ -110,9 +91,7 @@ const CreateNew = () => {
   return (
     <DraggableDialog
       title={t(
-        type == CreateNewDialogType.folder
-          ? "application:fileManager.newFolder"
-          : "application:fileManager.newFile",
+        type == CreateNewDialogType.folder ? "application:fileManager.newFolder" : "application:fileManager.newFile",
       )}
       showActions
       loading={loading}
@@ -137,9 +116,7 @@ const CreateNew = () => {
               helperText={error}
               margin="dense"
               label={t(
-                type == CreateNewDialogType.folder
-                  ? "application:modals.folderName"
-                  : "application:modals.fileName",
+                type == CreateNewDialogType.folder ? "application:modals.folderName" : "application:modals.fileName",
               )}
               type="text"
               value={name}

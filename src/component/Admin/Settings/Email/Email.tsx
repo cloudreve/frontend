@@ -1,12 +1,4 @@
-import {
-  Box,
-  DialogContent,
-  FormControl,
-  FormControlLabel,
-  Stack,
-  Switch,
-  Typography
-} from "@mui/material";
+import { Box, DialogContent, FormControl, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,11 +10,7 @@ import { DenseFilledTextField, SecondaryButton } from "../../../Common/StyledCom
 import DraggableDialog, { StyledDialogContentText } from "../../../Dialogs/DraggableDialog.tsx";
 import MailOutlined from "../../../Icons/MailOutlined.tsx";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
-import {
-  NoMarginHelperText,
-  SettingSection,
-  SettingSectionContent,
-} from "../Settings.tsx";
+import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings.tsx";
 import { SettingContext } from "../SettingWrapper.tsx";
 import EmailTemplates from "./EmailTemplates.tsx";
 
@@ -38,10 +26,12 @@ const Email = () => {
   const handleTestEmail = async () => {
     setSending(true);
     try {
-      await dispatch(sendTestSMTP({
-        to: testEmailAddress,
-        settings: values,
-      }));
+      await dispatch(
+        sendTestSMTP({
+          to: testEmailAddress,
+          settings: values,
+        }),
+      );
       enqueueSnackbar({
         message: t("settings.testMailSent"),
         variant: "success",
@@ -69,9 +59,7 @@ const Email = () => {
           title={t("settings.testSMTPSettings")}
         >
           <DialogContent>
-            <StyledDialogContentText sx={{ mb: 2 }}>
-              {t("settings.testSMTPTooltip")}
-            </StyledDialogContentText>
+            <StyledDialogContentText sx={{ mb: 2 }}>{t("settings.testSMTPTooltip")}</StyledDialogContentText>
             <SettingForm title={t("settings.recipient")} lgWidth={12}>
               <DenseFilledTextField
                 required
@@ -86,7 +74,9 @@ const Email = () => {
         </DraggableDialog>
 
         <SettingSection>
-          <Typography variant="h6" gutterBottom>{t("settings.smtp")}</Typography>
+          <Typography variant="h6" gutterBottom>
+            {t("settings.smtp")}
+          </Typography>
           <SettingSectionContent>
             <SettingForm title={t("settings.senderName")} lgWidth={5}>
               <FormControl fullWidth>
@@ -95,9 +85,7 @@ const Email = () => {
                   value={values.fromName ?? ""}
                   onChange={(e) => setSettings({ fromName: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.senderNameDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.senderNameDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -109,9 +97,7 @@ const Email = () => {
                   value={values.fromAdress ?? ""}
                   onChange={(e) => setSettings({ fromAdress: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.senderAddressDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.senderAddressDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -122,9 +108,7 @@ const Email = () => {
                   value={values.smtpHost ?? ""}
                   onChange={(e) => setSettings({ smtpHost: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.smtpServerDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.smtpServerDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -137,9 +121,7 @@ const Email = () => {
                   value={values.smtpPort ?? ""}
                   onChange={(e) => setSettings({ smtpPort: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.smtpPortDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.smtpPortDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -150,9 +132,7 @@ const Email = () => {
                   value={values.smtpUser ?? ""}
                   onChange={(e) => setSettings({ smtpUser: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.smtpUsernameDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.smtpUsernameDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -164,9 +144,7 @@ const Email = () => {
                   value={values.smtpPass ?? ""}
                   onChange={(e) => setSettings({ smtpPass: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.smtpPasswordDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.smtpPasswordDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -177,9 +155,7 @@ const Email = () => {
                   value={values.replyTo ?? ""}
                   onChange={(e) => setSettings({ replyTo: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.replyToAddressDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.replyToAddressDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -189,16 +165,12 @@ const Email = () => {
                   control={
                     <Switch
                       checked={isTrueVal(values.smtpEncryption)}
-                      onChange={(e) =>
-                        setSettings({ smtpEncryption: e.target.checked ? "1" : "0" })
-                      }
+                      onChange={(e) => setSettings({ smtpEncryption: e.target.checked ? "1" : "0" })}
                     />
                   }
                   label={t("settings.enforceSSL")}
                 />
-                <NoMarginHelperText>
-                  {t("settings.enforceSSLDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.enforceSSLDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
@@ -211,18 +183,12 @@ const Email = () => {
                   value={values.mail_keepalive ?? "30"}
                   onChange={(e) => setSettings({ mail_keepalive: e.target.value })}
                 />
-                <NoMarginHelperText>
-                  {t("settings.smtpTTLDes")}
-                </NoMarginHelperText>
+                <NoMarginHelperText>{t("settings.smtpTTLDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
 
             <Box display="flex" gap={2} mt={2}>
-              <SecondaryButton
-                variant="contained"
-                startIcon={<MailOutlined />}
-                onClick={() => setTestEmailOpen(true)}
-              >
+              <SecondaryButton variant="contained" startIcon={<MailOutlined />} onClick={() => setTestEmailOpen(true)}>
                 {t("settings.sendTestEmail")}
               </SecondaryButton>
             </Box>
@@ -236,4 +202,4 @@ const Email = () => {
   );
 };
 
-export default Email; 
+export default Email;

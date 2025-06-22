@@ -8,11 +8,7 @@ import { closeContextMenu } from "../../../redux/fileManagerSlice.ts";
 import { setTagsDialog } from "../../../redux/globalStateSlice.ts";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import Tags from "../../Icons/Tags.tsx";
-import {
-  DenseDivider,
-  SquareMenuItem,
-  SubMenuItemsProps,
-} from "./ContextMenu.tsx";
+import { DenseDivider, SquareMenuItem, SubMenuItemsProps } from "./ContextMenu.tsx";
 import SessionManager, { UserSettings } from "../../../session";
 import { UsedTags } from "../../../session/utils.ts";
 import Checkmark from "../../Icons/Checkmark.tsx";
@@ -111,33 +107,20 @@ const TagMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
       </CascadingMenuItem>
       {tags.length > 0 && <DenseDivider />}
       {tags.map((tag) => (
-        <SquareMenuItem
-          key={tag.key}
-          onClick={() => onTagChange(tag, !tag.selected)}
-        >
+        <SquareMenuItem key={tag.key} onClick={() => onTagChange(tag, !tag.selected)}>
           {tag.selected && (
             <>
               <ListItemIcon>
                 <Checkmark />
               </ListItemIcon>
               <ListItemText>
-                <FileTag
-                  disableClick
-                  spacing={1}
-                  label={tag.key}
-                  tagColor={tag.color}
-                />
+                <FileTag disableClick spacing={1} label={tag.key} tagColor={tag.color} />
               </ListItemText>
             </>
           )}
           {!tag.selected && (
             <ListItemText inset>
-              <FileTag
-                disableClick
-                spacing={1}
-                label={tag.key}
-                tagColor={tag.color}
-              />
+              <FileTag disableClick spacing={1} label={tag.key} tagColor={tag.color} />
             </ListItemText>
           )}
         </SquareMenuItem>

@@ -11,22 +11,14 @@ const checkers: Array<Validator> = [
     if (policy.allowed_suffix != undefined && policy.allowed_suffix.length > 0) {
       const ext = file?.name.split(".").pop();
       if (ext === null || !ext || !policy.allowed_suffix.includes(ext))
-        throw new FileValidateError(
-          "File suffix not allowed in policy.",
-          "suffix",
-          policy,
-        );
+        throw new FileValidateError("File suffix not allowed in policy.", "suffix", policy);
     }
   },
 
   function checkSize(file: File, policy: StoragePolicy) {
     if (policy.max_size > 0) {
       if (file.size > policy.max_size) {
-        throw new FileValidateError(
-          "File size exceeds maximum limit.",
-          "size",
-          policy,
-        );
+        throw new FileValidateError("File size exceeds maximum limit.", "size", policy);
       }
     }
   },

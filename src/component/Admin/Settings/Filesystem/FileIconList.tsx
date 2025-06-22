@@ -1,18 +1,7 @@
-import {
-  Box,
-  IconButton,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Box, IconButton, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import * as React from "react";
 import { memo, useMemo, useState } from "react";
-import {
-  builtInIcons,
-  FileTypeIconSetting,
-} from "../../../FileManager/Explorer/FileTypeIcon.tsx";
+import { builtInIcons, FileTypeIconSetting } from "../../../FileManager/Explorer/FileTypeIcon.tsx";
 import {
   DenseFilledTextField,
   NoWrapCell,
@@ -71,52 +60,28 @@ const IconPreview = ({ icon }: { icon: FileTypeIconSetting }) => {
 
 const FileIconList = memo(({ config, onChange }: FileIconListProps) => {
   const { t } = useTranslation("dashboard");
-  const configParsed = useMemo(
-    (): FileTypeIconSetting[] => JSON.parse(config),
-    [config],
-  );
+  const configParsed = useMemo((): FileTypeIconSetting[] => JSON.parse(config), [config]);
   const [inputCache, setInputCache] = useState<{
     [key: number]: string | undefined;
   }>({});
   return (
     <Box>
       {configParsed?.length > 0 && (
-        <TableContainer
-          sx={{ mt: 1, maxHeight: 440 }}
-          component={StyledTableContainerPaper}
-        >
-          <Table
-            stickyHeader
-            sx={{ width: "100%", tableLayout: "fixed" }}
-            size="small"
-          >
+        <TableContainer sx={{ mt: 1, maxHeight: 440 }} component={StyledTableContainerPaper}>
+          <Table stickyHeader sx={{ width: "100%", tableLayout: "fixed" }} size="small">
             <TableHead>
               <TableRow>
-                <NoWrapTableCell width={64}>
-                  {t("settings.icon")}
-                </NoWrapTableCell>
-                <NoWrapTableCell width={200}>
-                  {t("settings.iconUrl")}
-                </NoWrapTableCell>
-                <NoWrapTableCell width={150}>
-                  {t("settings.iconColor")}
-                </NoWrapTableCell>
-                <NoWrapTableCell width={150}>
-                  {t("settings.iconColorDark")}
-                </NoWrapTableCell>
-                <NoWrapTableCell width={250}>
-                  {t("settings.exts")}
-                </NoWrapTableCell>
+                <NoWrapTableCell width={64}>{t("settings.icon")}</NoWrapTableCell>
+                <NoWrapTableCell width={200}>{t("settings.iconUrl")}</NoWrapTableCell>
+                <NoWrapTableCell width={150}>{t("settings.iconColor")}</NoWrapTableCell>
+                <NoWrapTableCell width={150}>{t("settings.iconColorDark")}</NoWrapTableCell>
+                <NoWrapTableCell width={250}>{t("settings.exts")}</NoWrapTableCell>
                 <NoWrapTableCell width={64}></NoWrapTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {configParsed.map((r, i) => (
-                <TableRow
-                  key={i}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  hover
-                >
+                <TableRow key={i} sx={{ "&:last-child td, &:last-child th": { border: 0 } }} hover>
                   <NoWrapCell>
                     <IconPreview icon={r} />
                   </NoWrapCell>
@@ -215,13 +180,7 @@ const FileIconList = memo(({ config, onChange }: FileIconListProps) => {
                   <NoWrapCell>
                     {!r.icon && (
                       <IconButton
-                        onClick={() =>
-                          onChange(
-                            JSON.stringify(
-                              configParsed.filter((_, index) => index !== i),
-                            ),
-                          )
-                        }
+                        onClick={() => onChange(JSON.stringify(configParsed.filter((_, index) => index !== i)))}
                         size={"small"}
                       >
                         <Dismiss fontSize={"small"} />

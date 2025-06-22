@@ -16,10 +16,7 @@ export interface PasteTargetProps extends PasteUploadDialogProps {
 
 const PasteTargetContainer = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
-  backgroundColor:
-    theme.palette.mode == "light"
-      ? "rgba(0, 0, 0, 0.06)"
-      : "rgba(255, 255, 255, 0.09)",
+  backgroundColor: theme.palette.mode == "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -48,13 +45,10 @@ const PasteTarget = ({ onFilePasted, onClose }: PasteTargetProps) => {
     };
   }, []);
 
-  const disableDefault = useCallback(
-    (e: React.MouseEvent | React.KeyboardEvent | React.ClipboardEvent) => {
-      e.preventDefault();
-      return false;
-    },
-    [],
-  );
+  const disableDefault = useCallback((e: React.MouseEvent | React.KeyboardEvent | React.ClipboardEvent) => {
+    e.preventDefault();
+    return false;
+  }, []);
   return (
     <PasteTargetContainer sx={{ py: 5, mt: 0.5 }}>
       <Clipboard sx={{ fontSize: 60 }} />
@@ -63,14 +57,10 @@ const PasteTarget = ({ onFilePasted, onClose }: PasteTargetProps) => {
   );
 };
 
-export default function PasteUploadDialog({
-  onFilePasted,
-}: PasteUploadDialogProps) {
+export default function PasteUploadDialog({ onFilePasted }: PasteUploadDialogProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const open = useAppSelector(
-    (state) => state.globalState.uploadFromClipboardDialogOpen,
-  );
+  const open = useAppSelector((state) => state.globalState.uploadFromClipboardDialogOpen);
 
   const onClose = useCallback(() => {
     dispatch(setUploadFromClipboardDialog(false));

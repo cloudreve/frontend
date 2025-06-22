@@ -1,17 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import {
-  Box,
-  Collapse,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Stack,
-} from "@mui/material";
-import {
-  DenseFilledTextField,
-  SecondaryButton,
-} from "../../../Common/StyledComponents.tsx";
+import { Box, Collapse, Divider, IconButton, InputAdornment, Stack } from "@mui/material";
+import { DenseFilledTextField, SecondaryButton } from "../../../Common/StyledComponents.tsx";
 import FormControl from "@mui/material/FormControl";
 import Dismiss from "../../../Icons/Dismiss.tsx";
 import Add from "../../../Icons/Add.tsx";
@@ -29,12 +19,11 @@ const SiteURLInput = ({ urls, onChange }: SiteURLInputProps) => {
     return urls.split(",").map((url) => url);
   }, [urls]);
 
-  const onUrlChange =
-    (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newUrls = [...urlSplit];
-      newUrls[index] = e.target.value;
-      onChange(newUrls.join(","));
-    };
+  const onUrlChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newUrls = [...urlSplit];
+    newUrls[index] = e.target.value;
+    onChange(newUrls.join(","));
+  };
 
   const removeUrl = (index: number) => () => {
     const newUrls = [...urlSplit];
@@ -58,9 +47,7 @@ const SiteURLInput = ({ urls, onChange }: SiteURLInputProps) => {
           }}
           required
         />
-        <NoMarginHelperText>
-          {t("settings.primarySiteURLDes")}
-        </NoMarginHelperText>
+        <NoMarginHelperText>{t("settings.primarySiteURLDes")}</NoMarginHelperText>
       </FormControl>
       <Divider />
       <NoMarginHelperText>{t("settings.secondaryDes")}</NoMarginHelperText>
@@ -93,11 +80,7 @@ const SiteURLInput = ({ urls, onChange }: SiteURLInputProps) => {
         ))}
       </TransitionGroup>
       <Box sx={{ mt: "0!important" }}>
-        <SecondaryButton
-          variant={"contained"}
-          startIcon={<Add />}
-          onClick={() => onChange(`${urls},`)}
-        >
+        <SecondaryButton variant={"contained"} startIcon={<Add />} onClick={() => onChange(`${urls},`)}>
           {t("settings.addSecondary")}
         </SecondaryButton>
       </Box>

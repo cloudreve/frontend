@@ -31,13 +31,7 @@ const UserBadge = ({ textProps, user, uid, ...rest }: UserBadgeProps) => {
           maxWidth: "150px",
         }}
       >
-        <UserAvatar
-          overwriteTextSize
-          user={user}
-          onUserLoaded={(u) => setUserLoaded(u)}
-          uid={uid}
-          {...rest}
-        />
+        <UserAvatar overwriteTextSize user={user} onUserLoaded={(u) => setUserLoaded(u)} uid={uid} {...rest} />
         <BadgeText {...textProps}>
           {userLoaded ? (
             userLoaded.id ? (
@@ -50,9 +44,7 @@ const UserBadge = ({ textProps, user, uid, ...rest }: UserBadgeProps) => {
           )}
         </BadgeText>
       </DefaultButton>
-      {userLoaded && (
-        <UserPopover user={userLoaded} {...bindPopover(popupState)} />
-      )}
+      {userLoaded && <UserPopover user={userLoaded} {...bindPopover(popupState)} />}
     </>
   );
 };

@@ -71,11 +71,7 @@ export class FileValidateError extends UploaderError {
   // 对应的存储策略
   public policy: StoragePolicy;
 
-  constructor(
-    message: string,
-    field: "size" | "suffix",
-    policy: StoragePolicy,
-  ) {
+  constructor(message: string, field: "size" | "suffix", policy: StoragePolicy) {
     super(UploaderErrorName.InvalidFile, message);
     this.field = field;
     this.policy = policy;
@@ -89,9 +85,7 @@ export class FileValidateError extends UploaderError {
     }
 
     return i18next.t(`uploader.suffixNotAllowedError`, {
-      supported: this.policy.allowed_suffix
-        ? this.policy.allowed_suffix.join(",")
-        : "*",
+      supported: this.policy.allowed_suffix ? this.policy.allowed_suffix.join(",") : "*",
     });
   }
 }
@@ -212,10 +206,7 @@ export class SlaveChunkUploadError extends APIError {
 // 上传任务冲突
 export class ProcessingTaskDuplicatedError extends UploaderError {
   constructor() {
-    super(
-      UploaderErrorName.ProcessingTaskDuplicated,
-      "Processing task duplicated",
-    );
+    super(UploaderErrorName.ProcessingTaskDuplicated, "Processing task duplicated");
   }
 
   public Message(): string {
@@ -246,9 +237,7 @@ export class OneDriveChunkError extends UploaderError {
   }
 
   public Retryable(): boolean {
-    return (
-      super.Retryable() || this.response.error.retryAfterSeconds != undefined
-    );
+    return super.Retryable() || this.response.error.retryAfterSeconds != undefined;
   }
 }
 
@@ -278,10 +267,7 @@ export class OneDriveFinishUploadError extends APIError {
 // S3 类策略分块上传失败
 export class S3LikeChunkError extends UploaderError {
   constructor(public response: Document) {
-    super(
-      UploaderErrorName.S3LikeChunkUploadFailed,
-      response.getElementsByTagName("Message")[0].innerHTML,
-    );
+    super(UploaderErrorName.S3LikeChunkUploadFailed, response.getElementsByTagName("Message")[0].innerHTML);
   }
 
   public Message(): string {
@@ -294,10 +280,7 @@ export class S3LikeChunkError extends UploaderError {
 // OSS 完成传失败
 export class S3LikeFinishUploadError extends UploaderError {
   constructor(public response: Document) {
-    super(
-      UploaderErrorName.S3LikeChunkUploadFailed,
-      response.getElementsByTagName("Message")[0].innerHTML,
-    );
+    super(UploaderErrorName.S3LikeChunkUploadFailed, response.getElementsByTagName("Message")[0].innerHTML);
   }
 
   public Message(): string {
@@ -355,10 +338,7 @@ export class QiniuFinishUploadError extends UploaderError {
 // COS 上传失败
 export class COSUploadError extends UploaderError {
   constructor(public response: Document) {
-    super(
-      UploaderErrorName.COSPostUploadFailed,
-      response.getElementsByTagName("Message")[0].innerHTML,
-    );
+    super(UploaderErrorName.COSPostUploadFailed, response.getElementsByTagName("Message")[0].innerHTML);
   }
 
   public Message(): string {

@@ -3,14 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
 import { useAppDispatch } from "../../../../redux/hooks.ts";
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  DialogContent,
-  FormControl,
-  Stack,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Box, DialogContent, FormControl, Stack, styled, Typography } from "@mui/material";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import AutoHeight from "../../../Common/AutoHeight.tsx";
 import FacebookCircularProgress from "../../../Common/CircularProgress.tsx";
@@ -30,11 +23,7 @@ const MuiOtpInputStyled = styled(MuiOtpInput)`
   margin-inline: auto;
 `;
 
-const Disable2FADialog = ({
-  open,
-  onClose,
-  on2FADisabled,
-}: Disable2FADialogProps) => {
+const Disable2FADialog = ({ open, onClose, on2FADisabled }: Disable2FADialogProps) => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useAppDispatch();
@@ -90,9 +79,7 @@ const Disable2FADialog = ({
         <AutoHeight>
           <SwitchTransition>
             <CSSTransition
-              addEndListener={(node, done) =>
-                node.addEventListener("transitionend", done, false)
-              }
+              addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
               classNames="fade"
               key={`${loading}`}
             >
@@ -112,9 +99,7 @@ const Disable2FADialog = ({
                 )}
                 {!loading && (
                   <Stack spacing={1}>
-                    <Typography variant={"body2"}>
-                      {t("setting.inputCurrent2FACode")}
-                    </Typography>
+                    <Typography variant={"body2"}>{t("setting.inputCurrent2FACode")}</Typography>
                     <FormControl variant="standard" margin="normal" required>
                       <MuiOtpInputStyled
                         TextFieldsProps={{ disabled: loading }}

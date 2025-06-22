@@ -4,9 +4,7 @@ import { useAppSelector } from "../redux/hooks.ts";
 
 const PageTitle = ({ title }: { title?: string }) => {
   const location = useLocation();
-  const siteTitle = useAppSelector(
-    (state) => state.siteConfig.basic.config.title,
-  );
+  const siteTitle = useAppSelector((state) => state.siteConfig.basic.config.title);
 
   useEffect(() => {
     const titles: string[] = [];

@@ -1,6 +1,6 @@
-import { useReducer, useRef } from 'react';
-import type { ActiveAnimationType } from '../types';
-import useForkedVariable from './useForkedVariable';
+import { useReducer, useRef } from "react";
+import type { ActiveAnimationType } from "../types";
+import useForkedVariable from "./useForkedVariable";
 
 /**
  * 动画关闭处理真实关闭状态

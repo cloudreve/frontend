@@ -1,11 +1,4 @@
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { Box, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { Trans, useTranslation } from "react-i18next";
 import React, { useCallback } from "react";
 // @ts-ignore
@@ -27,8 +20,7 @@ const FullSearchOption = ({ options, keyword }: FullSearchOptionProps) => {
   const dispatch = useAppDispatch();
 
   const onClick = useCallback(
-    (base: string) => () =>
-      dispatch(quickSearch(FileManagerIndex.main, base, keyword)),
+    (base: string) => () => dispatch(quickSearch(FileManagerIndex.main, base, keyword)),
     [keyword, dispatch],
   );
 
@@ -56,15 +48,13 @@ const FullSearchOption = ({ options, keyword }: FullSearchOptionProps) => {
                   values={{
                     keywords: keyword,
                   }}
-                  components={[
-                    <Box component={"span"} sx={{ fontWeight: 600 }} />,
-                  ]}
+                  components={[<Box component={"span"} sx={{ fontWeight: 600 }} />]}
                 />
               }
               slotProps={{
                 primary: {
                   variant: "body2",
-                }
+                },
               }}
             />
             <FileBadge

@@ -1,8 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
 import { useTranslation } from "react-i18next";
-import DraggableDialog, {
-  StyledDialogContentText,
-} from "./DraggableDialog.tsx";
+import DraggableDialog, { StyledDialogContentText } from "./DraggableDialog.tsx";
 import { useCallback, useMemo } from "react";
 import { closeAggregatedErrorDialog } from "../../redux/globalStateSlice.ts";
 import {
@@ -44,18 +42,9 @@ const ErrorTable = (props: ErrorTableProps) => {
         </TableHead>
         <TableBody>
           {Object.keys(props.errors).map((id) => (
-            <TableRow
-              hover
-              key={id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
+            <TableRow hover key={id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell component="th" scope="row">
-                {props.files[id] && (
-                  <FileBadge
-                    sx={{ maxWidth: "250px" }}
-                    file={props.files[id]}
-                  />
-                )}
+                {props.files[id] && <FileBadge sx={{ maxWidth: "250px" }} file={props.files[id]} />}
                 {!props.files[id] && !id.startsWith(CrUriPrefix) && id}
                 {!props.files[id] && id.startsWith(CrUriPrefix) && (
                   <FileBadge
@@ -80,12 +69,8 @@ const AggregatedErrorDetail = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const open = useAppSelector(
-    (state) => state.globalState.aggregatedErrorDialogOpen,
-  );
-  const files = useAppSelector(
-    (state) => state.globalState.aggregatedErrorFile,
-  );
+  const open = useAppSelector((state) => state.globalState.aggregatedErrorDialogOpen);
+  const files = useAppSelector((state) => state.globalState.aggregatedErrorFile);
   const error = useAppSelector((state) => state.globalState.aggregatedError);
   const onClose = useCallback(() => {
     dispatch(closeAggregatedErrorDialog());
@@ -119,9 +104,7 @@ const AggregatedErrorDetail = () => {
     >
       <DialogContent>
         <Stack spacing={2}>
-          <StyledDialogContentText>
-            {rootError && rootError.message}
-          </StyledDialogContentText>
+          <StyledDialogContentText>{rootError && rootError.message}</StyledDialogContentText>
           {files && errors && <ErrorTable errors={errors} files={files} />}
           {rootError && rootError.cid && (
             <DialogContentText variant={"caption"}>

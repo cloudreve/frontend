@@ -14,13 +14,7 @@ export interface DetailsProps {
   target: FileResponse;
 }
 
-const InfoBlock = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => {
+const InfoBlock = ({ title, children }: { title: string; children: React.ReactNode }) => {
   return (
     <Box>
       <Typography variant={"body2"}>{title}</Typography>
@@ -35,11 +29,7 @@ const Details = ({ target, inPhotoViewer }: DetailsProps) => {
   const dispatch = useAppDispatch();
   const [thumbSrc, setThumbSrc] = useState<string | null>(null);
   useEffect(() => {
-    if (
-      target.type == FileType.file &&
-      (!target.metadata ||
-        target.metadata[Metadata.thumbDisabled] === undefined)
-    ) {
+    if (target.type == FileType.file && (!target.metadata || target.metadata[Metadata.thumbDisabled] === undefined)) {
       dispatch(loadFileThumb(FileManagerIndex.main, target)).then((src) => {
         setThumbSrc(src);
       });

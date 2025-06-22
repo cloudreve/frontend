@@ -2,24 +2,14 @@ import { DialogContent } from "@mui/material";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import { useTranslation } from "react-i18next";
 import { DependencyList, useEffect, useRef, useState } from "react";
-import {
-  centerCrop,
-  Crop,
-  makeAspectCrop,
-  PixelCrop,
-  ReactCrop,
-} from "react-image-crop";
+import { centerCrop, Crop, makeAspectCrop, PixelCrop, ReactCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { useSnackbar } from "notistack";
 import { DefaultCloseAction } from "../../Common/Snackbar/snackbar.tsx";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import { sendUploadAvatar } from "../../../api/api.ts";
 
-export function useDebounceEffect(
-  fn: () => void,
-  waitTime: number,
-  deps?: DependencyList,
-) {
+export function useDebounceEffect(fn: () => void, waitTime: number, deps?: DependencyList) {
   useEffect(() => {
     const t = setTimeout(() => {
       // @ts-ignore
@@ -81,17 +71,7 @@ export async function canvasPreview(
   ctx.scale(scale, scale);
   // 1) Move the center of the image to the origin (0,0)
   ctx.translate(-centerX, -centerY);
-  ctx.drawImage(
-    image,
-    0,
-    0,
-    image.naturalWidth,
-    image.naturalHeight,
-    0,
-    0,
-    image.naturalWidth,
-    image.naturalHeight,
-  );
+  ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, image.naturalWidth, image.naturalHeight);
 
   ctx.restore();
 }
@@ -103,11 +83,7 @@ export interface AvatarCropperDialogProps {
   onAvatarUpdated: () => void;
 }
 
-function centerAspectCrop(
-  mediaWidth: number,
-  mediaHeight: number,
-  aspect: number,
-) {
+function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: number) {
   return centerCrop(
     makeAspectCrop(
       {
@@ -123,12 +99,7 @@ function centerAspectCrop(
   );
 }
 
-const AvatarCropperDialog = ({
-  open,
-  onClose,
-  onAvatarUpdated,
-  file,
-}: AvatarCropperDialogProps) => {
+const AvatarCropperDialog = ({ open, onClose, onAvatarUpdated, file }: AvatarCropperDialogProps) => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useAppDispatch();
@@ -170,10 +141,7 @@ const AvatarCropperDialog = ({
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    const offscreen = new OffscreenCanvas(
-      completedCrop.width * scaleX,
-      completedCrop.height * scaleY,
-    );
+    const offscreen = new OffscreenCanvas(completedCrop.width * scaleX, completedCrop.height * scaleY);
     const ctx = offscreen.getContext("2d");
     if (!ctx) {
       throw new Error("No 2d context");
@@ -230,21 +198,10 @@ const AvatarCropperDialog = ({
 
   useDebounceEffect(
     async () => {
-      if (
-        completedCrop?.width &&
-        completedCrop?.height &&
-        imageRef.current &&
-        previewCanvasRef.current
-      ) {
+      if (completedCrop?.width && completedCrop?.height && imageRef.current && previewCanvasRef.current) {
         console.log(completedCrop);
         // We use canvasPreview as it's much faster than imgPreview.
-        canvasPreview(
-          imageRef.current,
-          previewCanvasRef.current,
-          completedCrop,
-          1,
-          0,
-        );
+        canvasPreview(imageRef.current, previewCanvasRef.current, completedCrop, 1, 0);
       }
     },
     100,

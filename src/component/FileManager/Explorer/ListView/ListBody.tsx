@@ -13,18 +13,10 @@ export interface ListBodyProps {
 
 const ListBody = ({ columns }: ListBodyProps) => {
   const fmIndex = useContext(FmIndexContext);
-  const files = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.files,
-  );
-  const mixedType = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.mixed_type,
-  );
-  const pagination = useAppSelector(
-    (state) => state.fileManager[fmIndex].list?.pagination,
-  );
-  const search_params = useAppSelector(
-    (state) => state.fileManager[fmIndex]?.search_params,
-  );
+  const files = useAppSelector((state) => state.fileManager[fmIndex].list?.files);
+  const mixedType = useAppSelector((state) => state.fileManager[fmIndex].list?.mixed_type);
+  const pagination = useAppSelector((state) => state.fileManager[fmIndex].list?.pagination);
+  const search_params = useAppSelector((state) => state.fileManager[fmIndex]?.search_params);
 
   const list = useMemo(() => {
     const list: FmFile[] = [];

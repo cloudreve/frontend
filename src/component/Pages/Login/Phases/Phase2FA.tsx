@@ -20,14 +20,10 @@ const MuiOtpInputStyled = styled(MuiOtpInput)`
 
 const Phase2FA = ({ control, otp, onOtpChange, loading }: Phase2FAProps) => {
   const { t } = useTranslation();
-  const regEnabled = useAppSelector(
-    (state) => state.siteConfig.login.config.register_enabled,
-  );
+  const regEnabled = useAppSelector((state) => state.siteConfig.login.config.register_enabled);
   return (
     <>
-      <Typography color={"text.secondary"}>
-        {t("login.input2FACode")}
-      </Typography>
+      <Typography color={"text.secondary"}>{t("login.input2FACode")}</Typography>
       <FormControl variant="standard" margin="normal" required fullWidth>
         <MuiOtpInputStyled
           TextFieldsProps={{ disabled: loading }}

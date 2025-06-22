@@ -55,11 +55,7 @@ export default function TaskDetail({ uploader, error }: TaskDetailProps) {
                 components={[
                   <TimeAgo
                     key={0}
-                    datetime={
-                      uploader.task.session
-                        ? uploader.task.session.expires * 1000
-                        : 0
-                    }
+                    datetime={uploader.task.session ? uploader.task.session.expires * 1000 : 0}
                     locale={t("timeAgoLocaleCode", {
                       ns: "common",
                     })}
@@ -78,10 +74,7 @@ export default function TaskDetail({ uploader, error }: TaskDetailProps) {
       : null,
   ];
   return (
-    <Grid
-      container
-      sx={{ fontSize: (theme) => theme.typography.body2.fontSize }}
-    >
+    <Grid container sx={{ fontSize: (theme) => theme.typography.body2.fontSize }}>
       {items.map((i) => (
         <>
           {i && (

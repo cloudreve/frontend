@@ -13,9 +13,7 @@ const NewButton = () => {
 
   if (isMobile) {
     return (
-      <IconButton
-        onClick={(e) => dispatch(openNewContextMenu(FileManagerIndex.main, e))}
-      >
+      <IconButton onClick={(e) => dispatch(openNewContextMenu(FileManagerIndex.main, e))}>
         <Add />
       </IconButton>
     );

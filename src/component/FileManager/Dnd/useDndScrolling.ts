@@ -5,9 +5,7 @@ const threshold = 0.1;
 
 const useDragScrolling = (containers: string[]) => {
   const isScrolling = useRef(false);
-  const targets = containers.map(
-    (id) => document.querySelector(id) as HTMLElement,
-  );
+  const targets = containers.map((id) => document.querySelector(id) as HTMLElement);
   const rects = useRef<DOMRect[]>([]);
 
   const goDown = (target: HTMLElement) => {
@@ -41,16 +39,10 @@ const useDragScrolling = (containers: string[]) => {
       }
 
       const height = rect.bottom - rect.top;
-      if (
-        event.clientY > rect.top &&
-        event.clientY < rect.top + threshold * height
-      ) {
+      if (event.clientY > rect.top && event.clientY < rect.top + threshold * height) {
         isScrolling.current = true;
         window.requestAnimationFrame(goUp(targets[index]));
-      } else if (
-        event.clientY < rect.bottom &&
-        event.clientY > rect.bottom - threshold * height
-      ) {
+      } else if (event.clientY < rect.bottom && event.clientY > rect.bottom - threshold * height) {
         isScrolling.current = true;
         window.requestAnimationFrame(goDown(targets[index]));
       } else {

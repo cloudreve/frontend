@@ -1,12 +1,4 @@
-import {
-  Box,
-  DialogContent,
-  DialogProps,
-  Slider,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, DialogContent, DialogProps, Slider, Stack, Typography, useTheme } from "@mui/material";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import { useTranslation } from "react-i18next";
 import { CSSProperties, useEffect, useState } from "react";
@@ -18,12 +10,7 @@ export interface SubtitleStyleProps extends DialogProps {
   onSaveSubmit: (setting: SubtitleStyle) => void;
 }
 
-const SubtitleStyleDialog = ({
-  onSaveSubmit,
-  onClose,
-  open,
-  ...rest
-}: SubtitleStyleProps) => {
+const SubtitleStyleDialog = ({ onSaveSubmit, onClose, open, ...rest }: SubtitleStyleProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [style, setStyle] = useState<SubtitleStyle>({});

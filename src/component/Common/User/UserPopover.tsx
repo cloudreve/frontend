@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  PopoverProps,
-  styled,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, PopoverProps, styled, Tooltip, Typography } from "@mui/material";
 import HoverPopover from "material-ui-popup-state/HoverPopover";
 import { useCallback, useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -26,15 +19,7 @@ const ActionButton = styled(Button)({
   minWidth: "initial",
 });
 
-export const UserProfile = ({
-  user,
-  open,
-  displayOnly,
-}: {
-  user: User;
-  open: boolean;
-  displayOnly?: boolean;
-}) => {
+export const UserProfile = ({ user, open, displayOnly }: { user: User; open: boolean; displayOnly?: boolean }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -55,22 +40,14 @@ export const UserProfile = ({
         display: "flex",
       }}
     >
-      <UserAvatar
-        overwriteTextSize
-        user={user}
-        sx={{ width: 80, height: 80 }}
-      />
+      <UserAvatar overwriteTextSize user={user} sx={{ width: 80, height: 80 }} />
       <Box sx={{ ml: 2 }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant={"h6"} fontWeight={600}>
             {user.id ? user.nickname : t("application:modals.anonymous")}
           </Typography>
           {displayOnly && (
-            <Typography
-              variant={"body2"}
-              sx={{ ml: 1 }}
-              color={"text.secondary"}
-            >
+            <Typography variant={"body2"} sx={{ ml: 1 }} color={"text.secondary"}>
               {loadedUser?.group ? loadedUser.group.name : ""}
             </Typography>
           )}
@@ -85,12 +62,7 @@ export const UserProfile = ({
             <Trans
               i18nKey={"setting.accountCreatedAt"}
               ns={"application"}
-              components={[
-                <TimeBadge
-                  variant={"inherit"}
-                  datetime={loadedUser.created_at}
-                />,
-              ]}
+              components={[<TimeBadge variant={"inherit"} datetime={loadedUser.created_at} />]}
             />
           </Typography>
         )}

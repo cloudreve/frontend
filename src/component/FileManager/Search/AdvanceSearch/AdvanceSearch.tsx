@@ -15,10 +15,7 @@ import { defaultPath } from "../../../../hooks/useNavigation.tsx";
 import { advancedSearch } from "../../../../redux/thunks/filemanager.ts";
 import { Metadata } from "../../../../api/explorer.ts";
 
-const searchParamToConditions = (
-  search_params: SearchParam,
-  base: string,
-): Condition[] => {
+const searchParamToConditions = (search_params: SearchParam, base: string): Condition[] => {
   const applied: Condition[] = [
     {
       type: ConditionType.base,
@@ -41,10 +38,7 @@ const searchParamToConditions = (
     });
   }
 
-  if (
-    search_params.size_gte != undefined ||
-    search_params.size_lte != undefined
-  ) {
+  if (search_params.size_gte != undefined || search_params.size_lte != undefined) {
     applied.push({
       type: ConditionType.size,
       size_gte: search_params.size_gte,
@@ -52,10 +46,7 @@ const searchParamToConditions = (
     });
   }
 
-  if (
-    search_params.created_at_gte != undefined ||
-    search_params.created_at_lte != undefined
-  ) {
+  if (search_params.created_at_gte != undefined || search_params.created_at_lte != undefined) {
     applied.push({
       type: ConditionType.created,
       created_gte: search_params.created_at_gte,
@@ -63,10 +54,7 @@ const searchParamToConditions = (
     });
   }
 
-  if (
-    search_params.updated_at_gte != undefined ||
-    search_params.updated_at_lte != undefined
-  ) {
+  if (search_params.updated_at_gte != undefined || search_params.updated_at_lte != undefined) {
     applied.push({
       type: ConditionType.modified,
       updated_gte: search_params.updated_at_gte,
@@ -106,18 +94,10 @@ const AdvanceSearch = () => {
 
   const [conditions, setConditions] = useState<Condition[]>([]);
   const open = useAppSelector((state) => state.globalState.advanceSearchOpen);
-  const base = useAppSelector(
-    (state) => state.globalState.advanceSearchBasePath,
-  );
-  const initialNames = useAppSelector(
-    (state) => state.globalState.advanceSearchInitialNameCondition,
-  );
-  const search_params = useAppSelector(
-    (state) => state.fileManager[FileManagerIndex.main].search_params,
-  );
-  const current_base = useAppSelector(
-    (state) => state.fileManager[FileManagerIndex.main].pure_path,
-  );
+  const base = useAppSelector((state) => state.globalState.advanceSearchBasePath);
+  const initialNames = useAppSelector((state) => state.globalState.advanceSearchInitialNameCondition);
+  const search_params = useAppSelector((state) => state.fileManager[FileManagerIndex.main].search_params);
+  const current_base = useAppSelector((state) => state.fileManager[FileManagerIndex.main].pure_path);
 
   const onClose = useCallback(() => {
     dispatch(closeAdvanceSearch());
@@ -141,10 +121,7 @@ const AdvanceSearch = () => {
       }
 
       if (search_params) {
-        const existedConditions = searchParamToConditions(
-          search_params,
-          current_base ?? defaultPath,
-        );
+        const existedConditions = searchParamToConditions(search_params, current_base ?? defaultPath);
         if (existedConditions.length > 0) {
           setConditions(existedConditions);
         }
@@ -157,9 +134,7 @@ const AdvanceSearch = () => {
   };
 
   const onConditionAdd = (condition: Condition) => {
-    if (
-      conditions.find((c) => c.type === condition.type && c.id === condition.id)
-    ) {
+    if (conditions.find((c) => c.type === condition.type && c.id === condition.id)) {
       enqueueSnackbar(t("application:navbar.conditionDuplicate"), {
         variant: "warning",
         action: DefaultCloseAction,
@@ -194,11 +169,7 @@ const AdvanceSearch = () => {
             <Collapse key={`${condition.type} ${condition.id}`}>
               <ConditionBox
                 index={index}
-                onRemove={
-                  conditions.length > 2 && condition.type != ConditionType.base
-                    ? onConditionRemove
-                    : undefined
-                }
+                onRemove={conditions.length > 2 && condition.type != ConditionType.base ? onConditionRemove : undefined}
                 condition={condition}
                 onChange={(condition) => {
                   const new_conditions = [...conditions];

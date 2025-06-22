@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Popover,
-  styled,
-  Tooltip,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Divider, Popover, styled, Tooltip, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { CSSProperties, useCallback, useState } from "react";
 import { bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
@@ -72,11 +64,7 @@ const ColorCircleBox = styled("div")(({
   };
 });
 
-const ColorCircleBoxChild = styled("div")(({
-  selected,
-}: {
-  selected: boolean;
-}) => {
+const ColorCircleBoxChild = styled("div")(({ selected }: { selected: boolean }) => {
   const theme = useTheme();
   return {
     "--circle-point-background-color": theme.palette.background.default,
@@ -90,14 +78,7 @@ const ColorCircleBoxChild = styled("div")(({
   };
 });
 
-export const ColorCircle = ({
-  color,
-  selected,
-  isCustomization,
-  onClick,
-  size,
-  noMb,
-}: ColorCircleProps) => {
+export const ColorCircle = ({ color, selected, isCustomization, onClick, size, noMb }: ColorCircleProps) => {
   const { t } = useTranslation();
   const displayColor = isCustomization
     ? "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)"
@@ -105,16 +86,8 @@ export const ColorCircle = ({
       ? "linear-gradient(45deg, rgba(217,217,217,1) 46%, rgba(217,217,217,1) 47%, rgba(128,128,128,1) 47%)"
       : color;
   return (
-    <Tooltip
-      title={isCustomization ? t("application:fileManager.customizeColor") : ""}
-    >
-      <ColorCircleBox
-        size={size}
-        onClick={onClick}
-        color={displayColor}
-        selected={selected}
-        noMb={noMb}
-      >
+    <Tooltip title={isCustomization ? t("application:fileManager.customizeColor") : ""}>
+      <ColorCircleBox size={size} onClick={onClick} color={displayColor} selected={selected} noMb={noMb}>
         <ColorCircleBoxChild selected={selected} />
       </ColorCircleBox>
     </Tooltip>
@@ -124,9 +97,7 @@ export const ColorCircle = ({
 const CircleColorSelector = (props: CircleColorSelectorProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const [customizeColor, setCustomizeColor] = useState<string>(
-    props.selectedColor,
-  );
+  const [customizeColor, setCustomizeColor] = useState<string>(props.selectedColor);
   const popupState = usePopupState({
     variant: "popover",
     popupId: "color-picker",
@@ -152,13 +123,8 @@ const CircleColorSelector = (props: CircleColorSelectorProps) => {
       {props.colors.map((color) => (
         <ColorCircle
           noMb={props.showColorValueInCustomization}
-          isCustomization={
-            color === customizeMagicColor &&
-            !props.showColorValueInCustomization
-          }
-          color={
-            !props.showColorValueInCustomization ? color : props.selectedColor
-          }
+          isCustomization={color === customizeMagicColor && !props.showColorValueInCustomization}
+          color={!props.showColorValueInCustomization ? color : props.selectedColor}
           onClick={onClick(color)}
           selected={color === props.selectedColor}
           {...(color === customizeMagicColor && bindTrigger(popupState))}
@@ -195,12 +161,7 @@ const CircleColorSelector = (props: CircleColorSelectorProps) => {
         />
         <Divider />
         <Box sx={{ p: 1 }}>
-          <Button
-            size={"small"}
-            onClick={onApply}
-            fullWidth
-            variant={"contained"}
-          >
+          <Button size={"small"} onClick={onApply} fullWidth variant={"contained"}>
             {t("application:fileManager.apply")}
           </Button>
         </Box>

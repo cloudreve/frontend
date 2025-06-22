@@ -2,13 +2,8 @@ import { Trans, useTranslation } from "react-i18next";
 import { Button, DialogContent, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { useCallback } from "react";
-import DraggableDialog, {
-  StyledDialogContentText,
-} from "../../Dialogs/DraggableDialog.tsx";
-import {
-  askSaveAs,
-  staleVersionDialogPromisePool,
-} from "../../../redux/thunks/dialog.ts";
+import DraggableDialog, { StyledDialogContentText } from "../../Dialogs/DraggableDialog.tsx";
+import { askSaveAs, staleVersionDialogPromisePool } from "../../../redux/thunks/dialog.ts";
 import { closeStaleVersionDialog } from "../../../redux/globalStateSlice.ts";
 import CrUri from "../../../util/uri.ts";
 
@@ -16,13 +11,9 @@ const StaleVersionConfirm = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const open = useAppSelector(
-    (state) => state.globalState.staleVersionDialogOpen,
-  );
+  const open = useAppSelector((state) => state.globalState.staleVersionDialogOpen);
   const uri = useAppSelector((state) => state.globalState.staleVersionUri);
-  const promiseId = useAppSelector(
-    (state) => state.globalState.staleVersionPromiseId,
-  );
+  const promiseId = useAppSelector((state) => state.globalState.staleVersionPromiseId);
 
   const onClose = useCallback(() => {
     dispatch(closeStaleVersionDialog());
@@ -88,11 +79,7 @@ const StaleVersionConfirm = () => {
           <StyledDialogContentText>
             {t("modals.conflictDes1")}
             <ul>
-              <Trans
-                i18nKey="modals.conflictDes2"
-                ns={"application"}
-                components={[<li key={0} />, <li key={1} />]}
-              />
+              <Trans i18nKey="modals.conflictDes2" ns={"application"} components={[<li key={0} />, <li key={1} />]} />
             </ul>
           </StyledDialogContentText>
         </Stack>

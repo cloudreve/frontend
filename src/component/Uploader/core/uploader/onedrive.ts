@@ -9,14 +9,8 @@ export default class OneDrive extends Chunk {
       throw new OneDriveEmptyFileSelected();
     }
 
-    const rangeEnd =
-      (this.progress?.total.loaded ?? 0) + chunkInfo.chunk.size - 1;
-    return this.sendRange(
-      chunkInfo,
-      this.progress?.total.loaded ?? 0,
-      rangeEnd,
-      0,
-    ).catch((e) => {
+    const rangeEnd = (this.progress?.total.loaded ?? 0) + chunkInfo.chunk.size - 1;
+    return this.sendRange(chunkInfo, this.progress?.total.loaded ?? 0, rangeEnd, 0).catch((e) => {
       if (
         e instanceof OneDriveChunkError &&
         e.response.error.innererror &&
@@ -29,12 +23,7 @@ export default class OneDrive extends Chunk {
     });
   }
 
-  private async sendRange(
-    chunkInfo: ChunkInfo,
-    start: number,
-    end: number,
-    chunkOffset: number,
-  ) {
+  private async sendRange(chunkInfo: ChunkInfo, start: number, end: number, chunkOffset: number) {
     const range = `bytes ${start}-${end}/${this.task.file.size}`;
     return oneDriveUploadChunk(
       `${this.task.session?.upload_urls[0]!}`,
@@ -48,9 +37,7 @@ export default class OneDrive extends Chunk {
   }
 
   private async alignChunkOffset(chunkInfo: ChunkInfo) {
-    this.logger.info(
-      `Chunk [${chunkInfo.index}] overlapped, checking next expected range...`,
-    );
+    this.logger.info(`Chunk [${chunkInfo.index}] overlapped, checking next expected range...`);
     const rangeStatus = await oneDriveUploadChunk(
       `${this.task.session?.upload_urls[0]!}`,
       "",
@@ -60,12 +47,8 @@ export default class OneDrive extends Chunk {
       },
       this.cancelToken.token,
     );
-    const expectedStart = parseInt(
-      rangeStatus.nextExpectedRanges[0].split("-")[0],
-    );
-    this.logger.info(
-      `Next expected range start from OneDrive is ${expectedStart}.`,
-    );
+    const expectedStart = parseInt(rangeStatus.nextExpectedRanges[0].split("-")[0]);
+    this.logger.info(`Next expected range start from OneDrive is ${expectedStart}.`);
 
     const loaded = this.progress?.total.loaded ?? 0;
 
@@ -86,9 +69,6 @@ export default class OneDrive extends Chunk {
   protected async afterUpload(): Promise<any> {
     this.logger.info(`Finishing upload...`);
     this.transit(Status.finishing);
-    return finishOneDriveUpload(
-      this.task.session!.session_id,
-      this.task.session!.callback_secret,
-    );
+    return finishOneDriveUpload(this.task.session!.session_id, this.task.session!.callback_secret);
   }
 }

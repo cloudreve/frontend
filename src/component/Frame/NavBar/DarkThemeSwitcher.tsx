@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  Popover,
-  ToggleButton,
-  ToggleButtonGroup,
-  Tooltip,
-} from "@mui/material";
+import { IconButton, Popover, ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
 import DarkTheme from "../../Icons/DarkTheme.tsx";
 import { useTranslation } from "react-i18next";
 import { useMemo, useState } from "react";
@@ -21,11 +15,7 @@ interface SwitchPopoverProps {
   onClose?: () => void;
 }
 
-export const SwitchPopover = ({
-  open,
-  anchorEl,
-  onClose,
-}: SwitchPopoverProps) => {
+export const SwitchPopover = ({ open, anchorEl, onClose }: SwitchPopoverProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -36,10 +26,7 @@ export const SwitchPopover = ({
     }
     return darkMode ? "dark" : "light";
   }, [darkMode]);
-  const handleChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newMode: string,
-  ) => {
+  const handleChange = (_event: React.MouseEvent<HTMLElement>, newMode: string) => {
     let newSetting: boolean | undefined;
     if (newMode === "light") {
       newSetting = false;
@@ -107,11 +94,7 @@ const DarkThemeSwitcher = () => {
           <DarkTheme />
         </IconButton>
       </Tooltip>
-      <SwitchPopover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-      />
+      <SwitchPopover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={() => setAnchorEl(null)} />
     </>
   );
 };

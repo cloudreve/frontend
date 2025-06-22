@@ -1,9 +1,5 @@
 import Chunk, { ChunkInfo } from "./chunk";
-import {
-  s3LikeFinishUpload,
-  s3LikeUploadCallback,
-  s3LikeUploadChunk,
-} from "../api";
+import { s3LikeFinishUpload, s3LikeUploadCallback, s3LikeUploadChunk } from "../api";
 import { Status } from "./base";
 import { PolicyType } from "../../../../api/explorer.ts";
 
@@ -24,18 +20,9 @@ export default class OSS extends Chunk {
   protected async afterUpload(): Promise<any> {
     this.logger.info(`Finishing multipart upload...`);
     this.transit(Status.finishing);
-    await s3LikeFinishUpload(
-      this.task.session!.completeURL,
-      false,
-      this.task.chunkProgress,
-      this.cancelToken.token,
-    );
+    await s3LikeFinishUpload(this.task.session!.completeURL, false, this.task.chunkProgress, this.cancelToken.token);
 
     this.logger.info(`Sending S3-like upload callback...`);
-    return s3LikeUploadCallback(
-      this.task.session!.session_id,
-      this.task.session!.callback_secret,
-      PolicyType.s3,
-    );
+    return s3LikeUploadCallback(this.task.session!.session_id, this.task.session!.callback_secret, PolicyType.s3);
   }
 }

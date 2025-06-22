@@ -23,13 +23,7 @@ export interface FileBadgeProps extends ButtonProps {
   clickable?: boolean;
 }
 
-const FileBadge = ({
-  file,
-  clickable,
-  simplifiedFile,
-  unknown,
-  ...rest
-}: FileBadgeProps) => {
+const FileBadge = ({ file, clickable, simplifiedFile, unknown, ...rest }: FileBadgeProps) => {
   const { t } = useTranslation();
   const popupState = usePopupState({
     variant: "popover",
@@ -131,9 +125,7 @@ const FileBadge = ({
               />
             )}
 
-            <BadgeText variant={"body2"}>
-              {name == "" ? displayName : name}
-            </BadgeText>
+            <BadgeText variant={"body2"}>{name == "" ? displayName : name}</BadgeText>
           </DefaultButton>
         </span>
       </Tooltip>
