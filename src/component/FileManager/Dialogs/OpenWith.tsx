@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import {
   Avatar,
   Box,
@@ -12,25 +11,24 @@ import {
   ListItemText,
   Stack,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import DraggableDialog, {
-  StyledDialogContentText,
-} from "../../Dialogs/DraggableDialog.tsx";
-import { closeViewerSelector } from "../../../redux/globalStateSlice.ts";
-import { fileExtension } from "../../../util";
+import { useTranslation } from "react-i18next";
 import { Viewer, ViewerType } from "../../../api/explorer.ts";
-import { builtInViewers, openViewer } from "../../../redux/thunks/viewer.ts";
-import Image from "../../Icons/Image.tsx";
-import AutoHeight from "../../Common/AutoHeight.tsx";
-import Markdown from "../../Icons/Markdown.tsx";
-import DocumentPDF from "../../Icons/DocumentPDF.tsx";
-import Book from "../../Icons/Book.tsx";
-import MusicNote1 from "../../Icons/MusicNote1.tsx";
-import MoreHorizontal from "../../Icons/MoreHorizontal.tsx";
+import { closeViewerSelector } from "../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { ViewersByID } from "../../../redux/siteConfigSlice.ts";
+import { builtInViewers, openViewer } from "../../../redux/thunks/viewer.ts";
 import SessionManager, { UserSettings } from "../../../session";
+import { fileExtension } from "../../../util";
+import AutoHeight from "../../Common/AutoHeight.tsx";
 import { SecondaryButton } from "../../Common/StyledComponents.tsx";
+import DraggableDialog, { StyledDialogContentText } from "../../Dialogs/DraggableDialog.tsx";
+import Book from "../../Icons/Book.tsx";
+import DocumentPDF from "../../Icons/DocumentPDF.tsx";
+import Image from "../../Icons/Image.tsx";
+import Markdown from "../../Icons/Markdown.tsx";
+import MoreHorizontal from "../../Icons/MoreHorizontal.tsx";
+import MusicNote1 from "../../Icons/MusicNote1.tsx";
 
 export interface ViewerIconProps {
   viewer: Viewer;
@@ -48,11 +46,7 @@ export const ViewerIDWithDefaultIcons = [
   builtInViewers.markdown,
 ];
 
-export const ViewerIcon = ({
-  viewer,
-  size = 32,
-  py = 0.5,
-}: ViewerIconProps) => {
+export const ViewerIcon = ({ viewer, size = 32, py = 0.5 }: ViewerIconProps) => {
   const BuiltinIcons = useMemo(() => {
     if (viewer.icon) {
       return undefined;
@@ -63,23 +57,18 @@ export const ViewerIcon = ({
         case builtInViewers.image:
           return <Image sx={{ width: size, height: size, color: "#d32f2f" }} />;
         case builtInViewers.pdf:
-          return (
-            <DocumentPDF sx={{ width: size, height: size, color: "#f44336" }} />
-          );
+          return <DocumentPDF sx={{ width: size, height: size, color: "#f44336" }} />;
         case builtInViewers.epub:
           return <Book sx={{ width: size, height: size, color: "#81b315" }} />;
         case builtInViewers.music:
-          return (
-            <MusicNote1 sx={{ width: size, height: size, color: "#651fff" }} />
-          );
+          return <MusicNote1 sx={{ width: size, height: size, color: "#651fff" }} />;
         case builtInViewers.markdown:
           return (
             <Markdown
               sx={{
                 width: size,
                 height: size,
-                color: (theme) =>
-                  theme.palette.mode == "dark" ? "#cbcbcb" : "#383838",
+                color: (theme) => (theme.palette.mode == "dark" ? "#cbcbcb" : "#383838"),
               }}
             />
           );
@@ -106,18 +95,14 @@ export const ViewerIcon = ({
 const OpenWith = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [selectedViewer, setSelectedViewer] = React.useState<Viewer | null>(
-    null,
-  );
+  const [selectedViewer, setSelectedViewer] = React.useState<Viewer | null>(null);
   const [expanded, setExpanded] = useState(false);
 
-  const selectorState = useAppSelector(
-    (state) => state.globalState.viewerSelector,
-  );
+  const selectorState = useAppSelector((state) => state.globalState.viewerSelector);
 
   useEffect(() => {
     if (selectorState?.open) {
-      setExpanded(false);
+      setExpanded(!selectorState.viewers);
       setSelectedViewer(null);
     }
   }, [selectorState]);
@@ -140,10 +125,7 @@ const OpenWith = () => {
     }
 
     if (always) {
-      SessionManager.set(
-        UserSettings.OpenWithPrefix + ext,
-        viewer?.id ?? selectedViewer?.id,
-      );
+      SessionManager.set(UserSettings.OpenWithPrefix + ext, viewer?.id ?? selectedViewer?.id);
     }
 
     dispatch(
@@ -155,6 +137,15 @@ const OpenWith = () => {
       ),
     );
     dispatch(closeViewerSelector());
+  };
+
+  const onViewerClick = (viewer: Viewer) => {
+    if (selectorState?.viewers) {
+      setSelectedViewer(viewer);
+    } else {
+      // For files without matching viewers, open the selected viewer without asking for preference
+      openWith(false, viewer);
+    }
   };
 
   return (
@@ -183,16 +174,12 @@ const OpenWith = () => {
               overflow: "auto",
             }}
           >
-            {(
-              (expanded
-                ? Object.values(ViewersByID)
-                : selectorState?.viewers) ?? emptyViewer
-            ).map((viewer) => (
+            {((expanded ? Object.values(ViewersByID) : selectorState?.viewers) ?? emptyViewer).map((viewer) => (
               <ListItem
                 disablePadding
                 key={viewer.id}
                 onDoubleClick={() => openWith(false, viewer)}
-                onClick={() => setSelectedViewer(viewer)}
+                onClick={() => onViewerClick(viewer)}
               >
                 <ListItemButton selected={viewer.id == selectedViewer?.id}>
                   <ListItemAvatar sx={{ minWidth: "48px" }}>
@@ -221,20 +208,12 @@ const OpenWith = () => {
             <Divider />
             <Grid container spacing={2} sx={{ p: 2 }}>
               <Grid md={6} xs={12} item>
-                <SecondaryButton
-                  fullWidth
-                  variant={"contained"}
-                  onClick={() => openWith(true)}
-                >
+                <SecondaryButton fullWidth variant={"contained"} onClick={() => openWith(true)}>
                   {t("modals.always")}
                 </SecondaryButton>
               </Grid>
               <Grid md={6} xs={12} item>
-                <SecondaryButton
-                  fullWidth
-                  variant={"contained"}
-                  onClick={() => openWith(false)}
-                >
+                <SecondaryButton fullWidth variant={"contained"} onClick={() => openWith(false)}>
                   {t("modals.justOnce")}
                 </SecondaryButton>
               </Grid>

@@ -48,6 +48,7 @@ export interface DisplayOption {
 
   showEnter?: boolean;
   showOpen?: boolean;
+  showOpenWithCascading?: () => boolean;
   showOpenWith?: () => boolean;
   showDownload?: boolean;
   showGoToSharedLink?: boolean;
@@ -228,7 +229,13 @@ export const getActionOpt = (
     display.orCapability &&
     (currentUserAnonymous?.group?.direct_link_batch_size ?? 0) >= targets.length &&
     display.orCapability.enabled(NavigatorCapability.download_file);
-  display.showOpen = targets.length == 1 && display.hasFile && display.showDownload && !!viewerSetting;
+  display.showOpen =
+    targets.length == 1 &&
+    display.hasFile &&
+    display.showDownload &&
+    !!viewerSetting &&
+    !!firstFileSuffix &&
+    !!viewerSetting?.[firstFileSuffix];
   display.showEnter =
     targets.length == 1 &&
     display.hasFolder &&
@@ -249,11 +256,13 @@ export const getActionOpt = (
     groupBs.enabled(GroupPermission.remote_download) &&
     firstFileSuffix == "torrent";
 
-  display.showOpenWith = () => false;
+  display.showOpenWithCascading = () => false;
+  display.showOpenWith = () => targets.length == 1 && !!display.hasFile && !!display.showDownload;
   if (display.showOpen) {
-    display.showOpen = !!firstFileSuffix && !!viewerSetting?.[firstFileSuffix];
+    display.showOpenWithCascading = () =>
+      !!(display.showOpen && viewerSetting && viewerSetting[firstFileSuffix ?? ""]?.length >= 1);
     display.showOpenWith = () =>
-      !!(display.showOpen && viewerSetting && viewerSetting[firstFileSuffix ?? ""]?.length > 1);
+      !!(display.showOpen && viewerSetting && viewerSetting[firstFileSuffix ?? ""]?.length < 1);
   }
   display.showOrganize = display.showPin || display.showMove || display.showChangeFolderColor || display.showChangeIcon;
   display.showGoToSharedLink =

@@ -78,25 +78,16 @@ export function openViewers(
     }
 
     const viewerOptions = Viewers[ext];
-    if (!viewerOptions) {
-      return;
-    }
-
-    if (viewerOptions.length > 1) {
-      // open viewer selection dialog
-      dispatch(
-        setViewerSelector({
-          open: true,
-          file,
-          entitySize,
-          viewers: viewerOptions,
-          version: preferredVersion,
-        }),
-      );
-      return;
-    }
-
-    dispatch(openViewer(file, viewerOptions[0], entitySize, preferredVersion));
+    // open viewer selection dialog
+    dispatch(
+      setViewerSelector({
+        open: true,
+        file,
+        entitySize,
+        viewers: viewerOptions,
+        version: preferredVersion,
+      }),
+    );
   };
 }
 
