@@ -6,8 +6,9 @@ import { batchDeleteFiles, getFileUrl } from "../../../api/api";
 import { File } from "../../../api/dashboard";
 import { FileType, Metadata } from "../../../api/explorer";
 import { useAppDispatch } from "../../../redux/hooks";
+import { Viewers } from "../../../redux/siteConfigSlice";
 import { confirmOperation } from "../../../redux/thunks/dialog";
-import { sizeToString } from "../../../util";
+import { fileExtension, sizeToString } from "../../../util";
 import { NoWrapTableCell, NoWrapTypography } from "../../Common/StyledComponents";
 import TimeBadge from "../../Common/TimeBadge";
 import UserAvatar from "../../Common/User/UserAvatar";
@@ -68,22 +69,44 @@ const FileRow = ({
   const onOpenClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setOpenLoading(true);
-    var fileLink = window.open("", "_blank");
-    fileLink?.document.write("Loading file URL...");
+    
     dispatch(getFileUrl(file?.id ?? 0))
       .then((url) => {
-        if (fileLink) {
-          fileLink.close();
+        const ext = fileExtension(file?.name ?? "");
+
+        let hasViewer = false;
+        try {
+          // check Viewers object is loaded and valid
+          if (ext && Viewers && typeof Viewers === 'object' && Viewers[ext]) {
+            hasViewer = Array.isArray(Viewers[ext]) && Viewers[ext].length > 0;
+          }
+        } catch (error) {
+          console.warn('Failed to check viewer availability:', error);
+          hasViewer = false;
+        }
+        
+        if (hasViewer) {
+          // 可预览文件：新窗口打开预览，窗口保持显示预览内容
           window.open(url, "_blank");
         } else {
+
+          // PlanA:
+          // 当前窗口下载（不跳转页面，直接下载链接）
+          // window.location.assign(url);
+
+          // PlanB:
+          // 在新窗口打开下载链接
+          // - 下载成功：浏览器自动关闭下载窗口
+          // - 下载失败：窗口保持打开显示错误信息
           window.open(url, "_blank");
+
         }
       })
       .finally(() => {
         setOpenLoading(false);
       })
-      .catch(() => {
-        fileLink && fileLink.close();
+      .catch((error) => {
+        console.error('Failed to get file URL:', error);
       });
   };
 

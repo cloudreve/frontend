@@ -46,23 +46,17 @@ const EntityRow = ({
 
   const onOpenClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    var entityLink = window.open("", "_blank");
-    entityLink?.document.write("Loading entity URL...");
     setOpenLoading(true);
+    
     dispatch(getEntityUrl(entity?.id ?? 0))
       .then((url) => {
-        if (entityLink) {
-          entityLink.close();
-          window.open(url, "_blank");
-        } else {
-          window.open(url, "_blank");
-        }
+        window.location.assign(url);
       })
       .finally(() => {
         setOpenLoading(false);
       })
-      .catch(() => {
-        entityLink && entityLink.close();
+      .catch((error) => {
+        console.error('Failed to get entity URL:', error);
       });
   };
 
