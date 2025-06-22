@@ -89,8 +89,15 @@ const FileRow = ({
           // 可预览文件：新窗口打开预览，窗口保持显示预览内容
           window.open(url, "_blank");
         } else {
-          // 下载文件：当前窗口下载（不跳转页面，直接下载链接）
-          window.location.assign(url);
+          // 下载文件：使用a标签的download属性强制下载
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = file?.name || `file-${file?.id}`;
+          link.style.display = 'none';
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         }
       })
       .finally(() => {

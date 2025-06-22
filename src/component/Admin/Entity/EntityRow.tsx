@@ -50,8 +50,15 @@ const EntityRow = ({
     
     dispatch(getEntityUrl(entity?.id ?? 0))
       .then((url) => {
-        // 直接下载文件
-        window.location.assign(url);
+        // 直接下载文件：使用a标签的download属性强制下载
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `entity-${entity?.id}`;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       })
       .finally(() => {
         setOpenLoading(false);
