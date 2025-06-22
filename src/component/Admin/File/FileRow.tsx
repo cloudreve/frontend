@@ -89,17 +89,8 @@ const FileRow = ({
           // 可预览文件：新窗口打开预览，窗口保持显示预览内容
           window.open(url, "_blank");
         } else {
-
-          // PlanA:
-          // 当前窗口下载（不跳转页面，直接下载链接）
-          // window.location.assign(url);
-
-          // PlanB:
-          // 在新窗口打开下载链接
-          // - 下载成功：浏览器自动关闭下载窗口
-          // - 下载失败：窗口保持打开显示错误信息
-          window.open(url, "_blank");
-
+          // 下载文件：当前窗口下载（不跳转页面，直接下载链接）
+          window.location.assign(url);
         }
       })
       .finally(() => {

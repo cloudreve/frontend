@@ -50,8 +50,8 @@ const EntityRow = ({
     
     dispatch(getEntityUrl(entity?.id ?? 0))
       .then((url) => {
-        // window.location.assign(url);
-        window.open(url, "_blank");
+        // 直接下载文件
+        window.location.assign(url);
       })
       .finally(() => {
         setOpenLoading(false);
