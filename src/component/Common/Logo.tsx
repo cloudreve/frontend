@@ -28,6 +28,7 @@ const Logo = (props: any) => {
           component={"img"}
           onLoad={() => setLoaded(true)}
           src={mode === "light" ? logo : logo_light}
+          alt="Logo"
           {...props}
           sx={{
             display: loaded ? "block" : "none",
