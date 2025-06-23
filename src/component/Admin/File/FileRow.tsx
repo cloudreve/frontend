@@ -6,8 +6,9 @@ import { batchDeleteFiles, getFileUrl } from "../../../api/api";
 import { File } from "../../../api/dashboard";
 import { FileType, Metadata } from "../../../api/explorer";
 import { useAppDispatch } from "../../../redux/hooks";
+import { Viewers } from "../../../redux/siteConfigSlice";
 import { confirmOperation } from "../../../redux/thunks/dialog";
-import { sizeToString } from "../../../util";
+import { fileExtension, sizeToString } from "../../../util";
 import { NoWrapTableCell, NoWrapTypography } from "../../Common/StyledComponents";
 import TimeBadge from "../../Common/TimeBadge";
 import UserAvatar from "../../Common/User/UserAvatar";
@@ -68,17 +69,42 @@ const FileRow = ({
   const onOpenClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setOpenLoading(true);
-    var fileLink = window.open("", "_blank");
-    fileLink?.document.write("Loading file URL...");
+    
     dispatch(getFileUrl(file?.id ?? 0))
       .then((url) => {
-        fileLink ? (fileLink.location.href = url) : window.open(url, "_blank");
+        const ext = fileExtension(file?.name ?? "");
+
+        let hasViewer = false;
+        try {
+          // check Viewers object is loaded and valid
+          if (ext && Viewers && typeof Viewers === 'object' && Viewers[ext]) {
+            hasViewer = Array.isArray(Viewers[ext]) && Viewers[ext].length > 0;
+          }
+        } catch (error) {
+          console.warn('Failed to check viewer availability:', error);
+          hasViewer = false;
+        }
+        
+        if (hasViewer) {
+          // 可预览文件：新窗口打开预览，窗口保持显示预览内容
+          window.open(url, "_blank");
+        } else {
+          // 下载文件：使用a标签的download属性强制下载
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = file?.name || `file-${file?.id}`;
+          link.style.display = 'none';
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       })
       .finally(() => {
         setOpenLoading(false);
       })
-      .catch(() => {
-        fileLink && fileLink.close();
+      .catch((error) => {
+        console.error('Failed to get file URL:', error);
       });
   };
 
