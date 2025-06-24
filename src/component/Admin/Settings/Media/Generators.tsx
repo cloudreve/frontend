@@ -1,19 +1,19 @@
-import { useTranslation } from "react-i18next";
-import { AccordionDetails, Box, FormControl, FormControlLabel, InputAdornment, Typography } from "@mui/material";
-import { isTrueVal } from "../../../../session/utils.ts";
-import { AccordionSummary, StyledAccordion } from "../UserSession/SSOSettings.tsx";
 import { ExpandMoreRounded } from "@mui/icons-material";
-import { DenseFilledTextField, StyledCheckbox } from "../../../Common/StyledComponents.tsx";
+import { LoadingButton } from "@mui/lab";
+import { AccordionDetails, Box, FormControl, FormControlLabel, InputAdornment, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
-import { NoMarginHelperText, SettingSectionContent } from "../Settings.tsx";
-import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
 import * as React from "react";
 import { useState } from "react";
-import { LoadingButton } from "@mui/lab";
-import { useAppDispatch } from "../../../../redux/hooks.ts";
+import { useTranslation } from "react-i18next";
 import { sendTestThumbGeneratorExecutable } from "../../../../api/api.ts";
+import { useAppDispatch } from "../../../../redux/hooks.ts";
+import { isTrueVal } from "../../../../session/utils.ts";
 import SizeInput from "../../../Common/SizeInput.tsx";
+import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
+import { DenseFilledTextField, StyledCheckbox } from "../../../Common/StyledComponents.tsx";
+import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import { NoMarginHelperText, SettingSectionContent } from "../Settings.tsx";
+import { AccordionSummary, StyledAccordion } from "../UserSession/SSOSettings.tsx";
 
 export interface GeneratorsProps {
   values: {
@@ -65,6 +65,20 @@ const generators: GeneratorRenderProps[] = [
     inputs: [
       {
         name: "thumb_libreoffice_exts",
+        label: "generatorExts",
+        des: "generatorExtsDes",
+      },
+    ],
+  },
+  {
+    name: "libraw",
+    des: "librawDes",
+    enableFlag: "thumb_libraw_enabled",
+    maxSizeSetting: "thumb_libraw_max_size",
+    executableSetting: "thumb_libraw_path",
+    inputs: [
+      {
+        name: "thumb_libraw_exts",
         label: "generatorExts",
         des: "generatorExtsDes",
       },

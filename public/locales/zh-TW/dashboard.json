@@ -389,6 +389,8 @@
     "cloudreveBuiltinDes": "使用 Cloudreve 內建的影象處理能力，僅支援 PNG、JPEG、GIF 格式的圖片。",
     "libreOffice": "LibreOffice",
     "libreOfficeDes": "使用 LibreOffice 生成 Office 檔案的縮圖。這一生成器依賴於任一其他影象生成器（Cloudreve 內建 或 VIPS）。",
+    "libraw": "LibRaw / DCRaw",
+    "librawDes": "使用 LibRaw 附帶的 DCRaw 模擬例程，或者原始 DCRaw 程式生成 RAW 影象的縮圖。",
     "vips": "VIPS",
     "vipsDes": "使用 libvips 處理縮圖影象，支援更多影象格式，資源消耗更低。",
     "thumbDependencyWarning": "LibreOffice 或歌曲封面生成器依賴於 Cloudreve 內建 或 VIPS 生成器，請開啟其中任一生成器。",

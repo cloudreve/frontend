@@ -394,6 +394,8 @@
     "cloudreveBuiltinDes": "Only images in PNG, JPEG, GIF formats are supported using Cloudreve's built-in image processing capabilities.",
     "libreOffice": "LibreOffice",
     "libreOfficeDes": "Use LibreOffice to generate thumbnails for Office documents. This generator depends on any other image thumbnail generator (Cloudreve built-in or VIPS).",
+    "libraw": "LibRaw / DCRaw",
+    "librawDes": "Use LibRaw's DCRaw sample program, or the original DCRaw executable to generate thumbnails for RAW images.",
     "vips": "VIPS",
     "vipsDes": "Use libvips to process thumbnail images, support more image formats, and consume less resources.",
     "thumbDependencyWarning": "LibreOffice or music cover generator depend on Cloudreve built-in or VIPS generators, please enable either one.",

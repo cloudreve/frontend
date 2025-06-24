@@ -392,6 +392,8 @@
     "cloudreveBuiltinDes": "Cloudreve内蔵の画像処理機能を使用します。PNG、JPEG、GIF形式の画像のみサポートします。",
     "libreOffice": "LibreOffice",
     "libreOfficeDes": "LibreOfficeを使用してOffice文書のサムネイルを生成します。このジェネレーターは、他のいずれかの画像ジェネレーター（Cloudreve内蔵またはVIPS）に依存します。",
+    "libraw": "LibRaw / DCRaw",
+    "librawDes": "LibRaw 付属の DCRaw サンプルプログラム、または元の DCRaw プログラムを使用して RAW 画像のサムネイルを生成します。",
     "vips": "VIPS",
     "vipsDes": "libvipsを使用してサムネイル画像を処理します。より多くの画像形式をサポートし、リソース消費が少ないです。",
     "thumbDependencyWarning": "LibreOfficeまたは楽曲カバー画像ジェネレーターは、Cloudreve内蔵またはVIPSジェネレーターに依存します。いずれかのジェネレーターを有効にしてください。",
