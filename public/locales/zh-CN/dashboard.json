@@ -435,8 +435,6 @@
     "capKeyIDDes": "从 Cap 服务器控制面板获取的密钥 ID。",
     "capKeySecret": "密钥密码",
     "capKeySecretDes": "从 Cap 服务器控制面板获取的密钥密码。",
-    "capVersion": "Cap 版本",
-    "capVersionDes": "选择你的 Cap 服务器版本（1.x 用于兼容旧版本，2.x 为最新版本）。",
     "captchaProvider": "验证码类型",
     "captchaWidth": "宽度",
     "captchaHeight": "高度",

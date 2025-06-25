@@ -26,7 +26,6 @@ export interface SiteConfig {
   captcha_cap_instance_url?: string;
   captcha_cap_key_id?: string;
   captcha_cap_key_secret?: string;
-  captcha_cap_version?: string;
   register_enabled?: boolean;
   logo?: string;
   logo_light?: string;

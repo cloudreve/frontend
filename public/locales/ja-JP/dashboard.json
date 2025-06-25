@@ -435,8 +435,6 @@
     "capKeyIDDes": "Cap サーバーダッシュボードから取得したキー ID。",
     "capKeySecret": "キーシークレット",
     "capKeySecretDes": "Cap サーバーダッシュボードから取得したキーシークレット。",
-    "capVersion": "Cap バージョン",
-    "capVersionDes": "Cap サーバーのバージョンを選択してください（1.x は旧バージョン互換、2.x は最新機能）。",
     "captchaProvider": "認証コードタイプ",
     "captchaWidth": "幅",
     "captchaHeight": "高さ",

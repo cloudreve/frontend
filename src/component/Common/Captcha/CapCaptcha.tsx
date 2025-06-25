@@ -22,7 +22,6 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
   const capInstanceURL = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_instance_url);
   const capKeyID = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_key_id);
-  const capVersion = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_version);
 
   // Keep callback reference up to date
   useEffect(() => {
@@ -89,16 +88,8 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
     if (typeof window !== "undefined" && (window as any).Cap) {
       const widget = document.createElement("cap-widget");
 
-      // Build API endpoint based on Cap version
-      let apiEndpoint;
-      if (capVersion === "1.x") {
-        // Version 1.x: {instanceURL}/api/{keyID}/
-        apiEndpoint = `${capInstanceURL.replace(/\/$/, "")}/api/${capKeyID}/`;
-      } else {
-        // Version 2.x (default): {instanceURL}/{siteKey}/
-        apiEndpoint = `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/`;
-      }
-
+      // Cap 2.0 API format: {instanceURL}/{siteKey}/
+      const apiEndpoint = `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/`;
       widget.setAttribute("data-cap-api-endpoint", apiEndpoint);
       widget.id = "cap-widget";
 
@@ -129,7 +120,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
     if (generation > 0) {
       createWidget();
     }
-  }, [generation, capVersion, t]);
+  }, [generation, t]);
 
   useEffect(() => {
     if (!capInstanceURL || !capKeyID) {
@@ -175,7 +166,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
         captchaRef.current.innerHTML = "";
       }
     };
-  }, [capInstanceURL, capKeyID, capVersion, t]);
+  }, [capInstanceURL, capKeyID, t]);
 
   if (!capInstanceURL || !capKeyID) {
     return null;

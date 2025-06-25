@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from "react-i18next";
-import { FormControl, Link, Stack, MenuItem, Select, InputLabel } from "@mui/material";
+import { FormControl, Link, Stack } from "@mui/material";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
 import { DenseFilledTextField } from "../../../Common/StyledComponents.tsx";
 import * as React from "react";
@@ -16,24 +16,6 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
   const { t } = useTranslation("dashboard");
   return (
     <Stack spacing={3}>
-      <SettingForm title={t("settings.capVersion")} lgWidth={5}>
-        <FormControl fullWidth>
-          <InputLabel>{t("settings.capVersion")}</InputLabel>
-          <Select
-            value={values.captcha_cap_version || "1.x"}
-            onChange={(e) =>
-              setSettings({
-                captcha_cap_version: e.target.value,
-              })
-            }
-            label={t("settings.capVersion")}
-          >
-            <MenuItem value="1.x">1.x (Legacy)</MenuItem>
-            <MenuItem value="2.x">2.x (Latest)</MenuItem>
-          </Select>
-          <NoMarginHelperText>{t("settings.capVersionDes")}</NoMarginHelperText>
-        </FormControl>
-      </SettingForm>
       <SettingForm title={t("settings.capInstanceURL")} lgWidth={5}>
         <FormControl fullWidth>
           <DenseFilledTextField
