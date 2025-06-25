@@ -42,6 +42,7 @@ export default function Photo({
   const mountedRef = useMountedRef();
   const dispatch = useAppDispatch();
   const [imageSrc, setImageSrc] = React.useState<string | undefined>(undefined);
+  const playerRef = React.useRef<LivePhotosKit.Player | null>(null);
 
   // Helper function to check if file is HEIC/HEIF based on extension
   const isHeicFile = (fileName: string): boolean => {
@@ -154,6 +155,7 @@ export default function Photo({
       const imgElement = document.getElementById(file.id);
       if (imgElement) {
         const player = LivePhotosKit.Player(imgElement as HTMLElement);
+        playerRef.current = player;
         player.photoSrc = imgUrl;
         player.videoSrc = livePhotoEntityUrl.urls[0].url;
         player.proactivelyLoadsVideo = true;
@@ -192,23 +194,43 @@ export default function Photo({
     };
   }, [imageSrc]);
 
+  const {
+    onMouseDown,
+    onTouchStart,
+    style: { width, height, ...restStyle },
+    ...rest
+  } = restProps;
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.updateSize(width, height);
+    }
+  }, [width, height]);
+
   if (file && !broken) {
     return (
       <>
         {imageSrc && (
-          <img
-            id={file?.id ?? "photobox-img"}
-            className={`PhotoView__Photo${className ? ` ${className}` : ""}`}
-            src={imageSrc}
-            draggable={false}
-            onLoad={handleImageLoaded}
-            onError={handleImageBroken}
-            alt=""
-            {...restProps}
-          />
+          <div onMouseDown={onMouseDown} onTouchStart={onTouchStart} style={{ width, height }}>
+            <img
+              id={file?.id ?? "photobox-img"}
+              className={`PhotoView__Photo${className ? ` ${className}` : ""}`}
+              src={imageSrc}
+              draggable={false}
+              onLoad={handleImageLoaded}
+              onError={handleImageBroken}
+              alt=""
+              style={{ width, height, ...restStyle }}
+              {...rest}
+            />
+          </div>
         )}
         {!loaded && (
-          <FacebookCircularProgress sx={{ position: "absolute", top: 0 }} fgColor={"#fff"} bgColor={grey[800]} />
+          <FacebookCircularProgress
+            sx={{ position: "relative", top: "-20px", left: "-20px" }}
+            fgColor={"#fff"}
+            bgColor={grey[800]}
+          />
         )}
       </>
     );
