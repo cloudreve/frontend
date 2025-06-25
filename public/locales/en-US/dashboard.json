@@ -437,6 +437,8 @@
     "capKeyIDDes": "The key ID from your Cap server dashboard.",
     "capKeySecret": "Key Secret",
     "capKeySecretDes": "The key secret from your Cap server dashboard.",
+    "capVersion": "Cap Version",
+    "capVersionDes": "Select the version of your Cap server (1.x for legacy compatibility, 2.x for latest features).",
     "captchaProvider": "Captcha provider",
     "captchaWidth": "Width",
     "captchaHeight": "Height",
