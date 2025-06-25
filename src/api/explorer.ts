@@ -146,6 +146,7 @@ export const Metadata = {
   upload_session_id: "sys:upload_session_id",
   icon_color: "customize:icon_color",
   emoji: "customize:emoji",
+  live_photo: "customize:live_photo",
   tag_prefix: "tag:",
   thumbDisabled: "thumb:disabled",
   restore_uri: "sys:restore_uri",

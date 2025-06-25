@@ -6427,6 +6427,11 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
+heic-to@^1.1.14:
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/heic-to/-/heic-to-1.1.14.tgz#bd639c461db6284ad66874321072476b4dbf12b2"
+  integrity sha512-CxJE27BF6JcQvrL1giK478iSZr7EJNTnAN2Th1rAJiN1BSMYZxDLm4PL/p/ha3aSqVHvCo+YNk++5tIj0JVxLQ==
+
 highlight-words-core@^1.2.0:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/highlight-words-core/-/highlight-words-core-1.2.3.tgz#781f37b2a220bf998114e4ef8c8cb6c7a4802ea8"

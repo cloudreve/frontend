@@ -37,6 +37,7 @@
     "axios": "^1.6.2",
     "dayjs": "^1.11.10",
     "fuse.js": "^7.0.0",
+    "heic-to": "^1.1.14",
     "hls.js": "^1.6.2",
     "i18next": "^23.7.11",
     "i18next-browser-languagedetector": "^7.2.0",
