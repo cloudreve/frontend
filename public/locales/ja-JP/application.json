@@ -113,6 +113,7 @@
     "dashboard": "管理パネル"
   },
   "fileManager": {
+    "permissions": "権限",
     "quality": "解像度",
     "audioTrack": "音声トラック",
     "auto": "自動",

@@ -113,6 +113,7 @@
     "dashboard": "管理面板"
   },
   "fileManager": {
+    "permissions": "权限",
     "quality": "清晰度",
     "audioTrack": "音轨",
     "auto": "自动",

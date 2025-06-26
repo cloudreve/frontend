@@ -112,6 +112,7 @@
     "dashboard": "Dashboard"
   },
   "fileManager": {
+    "permissions": "Permissions",
     "quality": "Quality",
     "audioTrack": "Audio",
     "auto": "Auto",
