@@ -7169,6 +7169,11 @@ lit@^3.2.1:
     lit-element "^4.1.0"
     lit-html "^3.2.0"
 
+livephotoskit@^1.5.6:
+  version "1.5.6"
+  resolved "https://registry.yarnpkg.com/livephotoskit/-/livephotoskit-1.5.6.tgz#33228c6a99a83a0ffc147dd2b70df3166a1b4d2a"
+  integrity sha512-dsD6EzQnExuYfYvBSxf3t1bdl2Juw7NnlpWZrsGxdYq2x4pnxyOYrkOG6LGHmklytdFdxaru86GvviLpUhaIBQ==
+
 localforage@*, localforage@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.10.0.tgz#5c465dc5f62b2807c3a84c0c6a1b1b3212781dd4"
