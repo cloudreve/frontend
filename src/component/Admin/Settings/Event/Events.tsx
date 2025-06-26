@@ -63,6 +63,7 @@ export const eventCategories = {
       AuditLogType.move_to_trash,
       AuditLogType.update_metadata,
       AuditLogType.get_direct_link,
+      AuditLogType.delete_direct_link,
       AuditLogType.update_view,
     ],
   },

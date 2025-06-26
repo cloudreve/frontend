@@ -190,6 +190,11 @@ export interface GlobalStateSlice {
   directLinkDialogOpen?: boolean;
   directLinkRes?: DirectLink[];
 
+  // Direct Link management dialog
+  directLinkManagementDialogOpen?: boolean;
+  directLinkManagementDialogFile?: FileResponse;
+  directLinkHighlight?: string;
+
   // DnD
   dndState: DndState;
 
@@ -262,6 +267,19 @@ export const globalStateSlice = createSlice({
   name: "globalState",
   initialState,
   reducers: {
+    setDirectLinkManagementDialog: (
+      state,
+      action: PayloadAction<{ open: boolean; file?: FileResponse; highlight?: string }>,
+    ) => {
+      state.directLinkManagementDialogOpen = action.payload.open;
+      state.directLinkManagementDialogFile = action.payload.file;
+      state.directLinkHighlight = action.payload.highlight;
+    },
+    closeDirectLinkManagementDialog: (state) => {
+      state.directLinkManagementDialogOpen = false;
+      state.directLinkManagementDialogFile = undefined;
+      state.directLinkHighlight = undefined;
+    },
     setMobileDrawerOpen: (state, action: PayloadAction<boolean>) => {
       state.mobileDrawerOpen = action.payload;
     },
@@ -795,4 +813,6 @@ export const {
   setSearchPopup,
   setExcalidrawViewer,
   closeExcalidrawViewer,
+  setDirectLinkManagementDialog,
+  closeDirectLinkManagementDialog,
 } = globalStateSlice.actions;

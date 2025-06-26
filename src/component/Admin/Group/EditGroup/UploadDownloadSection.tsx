@@ -68,6 +68,16 @@ const UploadDownloadSection = () => {
     [setGroup],
   );
 
+  const onReuseDirectLinkChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setGroup((p: GroupEnt) => ({
+        ...p,
+        permissions: new Boolset(p.permissions).set(GroupPermission.unique_direct_link, !e.target.checked).toString(),
+      }));
+    },
+    [setGroup],
+  );
+
   return (
     <SettingSection>
       <Typography variant="h6" gutterBottom>
@@ -131,6 +141,22 @@ const UploadDownloadSection = () => {
               </FormControl>
             </SettingForm>
           </Stack>
+          <Collapse in={values?.settings?.redirected_source} unmountOnExit>
+            <SettingForm lgWidth={5}>
+              <FormControl fullWidth sx={{ mt: 3 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={!permission.enabled(GroupPermission.unique_direct_link)}
+                      onChange={onReuseDirectLinkChange}
+                    />
+                  }
+                  label={t("group.reuseDirectLink")}
+                />
+                <NoMarginHelperText>{t("group.reuseDirectLinkDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+          </Collapse>
         </Collapse>
         <SettingForm lgWidth={5} title={t("group.downloadSpeedLimit")}>
           <FormControl fullWidth>

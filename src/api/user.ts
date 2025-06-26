@@ -91,6 +91,7 @@ export const GroupPermission = {
   remote_download: 9,
   redirected_source: 11,
   advance_delete: 12,
+  unique_direct_link: 17,
 };
 
 export interface UserSettings {

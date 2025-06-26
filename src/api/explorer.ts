@@ -51,6 +51,14 @@ export interface ExtendedInfo {
   shares?: Share[];
   entities?: Entity[];
   view?: ExplorerView;
+  direct_links?: DirectLink[];
+}
+
+export interface DirectLink {
+  id: string;
+  created_at: string;
+  url: string;
+  downloaded: number;
 }
 
 export interface Entity {
@@ -386,6 +394,7 @@ export const AuditLogType = {
   redeem_gift_code: 54,
   file_imported: 55,
   update_view: 56,
+  delete_direct_link: 57,
 };
 
 export interface MultipleUriService {

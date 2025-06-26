@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
 import {
+  Alert,
   Box,
   DialogContent,
   IconButton,
@@ -14,25 +14,26 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
+import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { confirmOperation } from "../../../redux/thunks/dialog.ts";
+import { downloadSingleFile } from "../../../redux/thunks/download.ts";
+import { setFileVersion } from "../../../redux/thunks/file.ts";
+import { openViewers } from "../../../redux/thunks/viewer.ts";
+import { sizeToString } from "../../../util";
+import AutoHeight from "../../Common/AutoHeight.tsx";
 import { closeVersionControlDialog } from "../../../redux/globalStateSlice.ts";
 import { Entity, EntityType, FileResponse } from "../../../api/explorer.ts";
 import { deleteVersion, getFileInfo } from "../../../api/api.ts";
 import { NoWrapTableCell, StyledTableContainerPaper } from "../../Common/StyledComponents.tsx";
 import TimeBadge from "../../Common/TimeBadge.tsx";
-import { sizeToString } from "../../../util";
+import { AnonymousUser } from "../../Common/User/UserAvatar.tsx";
 import UserBadge from "../../Common/User/UserBadge.tsx";
+import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import MoreVertical from "../../Icons/MoreVertical.tsx";
 import { SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
-import { downloadSingleFile } from "../../../redux/thunks/download.ts";
-import AutoHeight from "../../Common/AutoHeight.tsx";
-import { confirmOperation } from "../../../redux/thunks/dialog.ts";
-import { openViewers } from "../../../redux/thunks/viewer.ts";
 import { FileManagerIndex } from "../FileManager.tsx";
-import { setFileVersion } from "../../../redux/thunks/file.ts";
-import { AnonymousUser } from "../../Common/User/UserAvatar.tsx";
 
 const VersionControl = () => {
   const { t } = useTranslation();
@@ -72,6 +73,10 @@ const VersionControl = () => {
   const versionEntities = useMemo(() => {
     return fileExtended?.extended_info?.entities?.filter((e) => e.type == EntityType.version);
   }, [fileExtended?.extended_info?.entities]);
+
+  const hilightButNotFound = useMemo(() => {
+    return highlight && fileExtended?.extended_info && !versionEntities?.some((e) => e.id == highlight);
+  }, [highlight, fileExtended?.extended_info?.entities]);
 
   const handleActionClose = () => {
     setAnchorEl(null);
@@ -201,6 +206,11 @@ const VersionControl = () => {
       >
         <DialogContent>
           <AutoHeight>
+            {hilightButNotFound && (
+              <Alert severity="warning" sx={{ mb: 2 }}>
+                {t("application:fileManager.versionNotFound")}
+              </Alert>
+            )}
             <TableContainer component={StyledTableContainerPaper}>
               <Table sx={{ width: "100%" }} size="small">
                 <TableHead>

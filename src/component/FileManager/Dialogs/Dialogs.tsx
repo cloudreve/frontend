@@ -30,6 +30,7 @@ import AdvanceSearch from "../Search/AdvanceSearch/AdvanceSearch.tsx";
 import React from "react";
 import ColumnSetting from "../Explorer/ListView/ColumnSetting.tsx";
 import DirectLinks from "./DirectLinks.tsx";
+import DirectLinksControl from "./DirectLinksControl.tsx";
 
 const Dialogs = () => {
   const showCreateArchive = useAppSelector((state) => state.globalState.createArchiveDialogOpen);
@@ -39,6 +40,7 @@ const Dialogs = () => {
   const showListViewColumnSetting = useAppSelector((state) => state.globalState.listViewColumnSettingDialogOpen);
   const directLink = useAppSelector((state) => state.globalState.directLinkDialogOpen);
   const excalidrawViewer = useAppSelector((state) => state.globalState.excalidrawViewer);
+  const directLinkManagement = useAppSelector((state) => state.globalState.directLinkManagementDialogOpen);
 
   return (
     <>
@@ -72,6 +74,7 @@ const Dialogs = () => {
       {showListViewColumnSetting != undefined && <ColumnSetting />}
       {directLink != undefined && <DirectLinks />}
       {excalidrawViewer != undefined && <ExcalidrawViewer />}
+      {directLinkManagement != undefined && <DirectLinksControl />}
     </>
   );
 };

@@ -73,6 +73,7 @@ export interface DisplayOption {
 
   showMore?: boolean;
   showVersionControl?: boolean;
+  showDirectLinkManagement?: boolean;
   showManageShares?: boolean;
   showCreateArchive?: boolean;
 
@@ -229,6 +230,7 @@ export const getActionOpt = (
     display.orCapability &&
     (currentUserAnonymous?.group?.direct_link_batch_size ?? 0) >= targets.length &&
     display.orCapability.enabled(NavigatorCapability.download_file);
+  display.showDirectLinkManagement = display.showDirectLink && targets.length == 1 && display.hasFile;
   display.showOpen =
     targets.length == 1 &&
     display.hasFile &&
@@ -287,7 +289,11 @@ export const getActionOpt = (
     display.orCapability &&
     display.orCapability.enabled(NavigatorCapability.download_file);
 
-  display.showMore = display.showVersionControl || display.showManageShares || display.showCreateArchive;
+  display.showMore =
+    display.showVersionControl ||
+    display.showManageShares ||
+    display.showCreateArchive ||
+    display.showDirectLinkManagement;
   return display;
 };
 

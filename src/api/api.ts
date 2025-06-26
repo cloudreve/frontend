@@ -1013,6 +1013,12 @@ export function getFileDirectLinks(req: MultipleUriService): ThunkResponse<Direc
   };
 }
 
+export function sendDeleteDirectLink(id: string): ThunkResponse {
+  return async (dispatch, _getState) => {
+    return await dispatch(send(`/file/source/${id}`, { method: "DELETE" }, { ...defaultOpts }));
+  };
+}
+
 export function getUserShares(req: ListShareService, uid: string): ThunkResponse<ListShareResponse> {
   return async (dispatch, _getState) => {
     return await dispatch(

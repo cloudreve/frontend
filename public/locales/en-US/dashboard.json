@@ -645,7 +645,8 @@
       "add_passkey": "Add passkey",
       "remove_passkey": "Remove passkey",
       "redeem_gift_code": "Redeem gift code",
-      "update_view": "Changed view setting"
+      "update_view": "Changed view setting",
+      "delete_direct_link": "Delete direct link"
     },
     "server": "Server",
     "tempPath": "Temporary path",
@@ -1104,6 +1105,8 @@
     "bathSourceLinkLimitDes": "The maximum number of files allowed for users to obtain direct links in a single batch, fill in 0 means no batch generation of direct links is allowed.",
     "redirectedSource": "Use redirected direct link",
     "redirectedSourceDes": "Recommended to enable. When enabled, the direct link to the file obtained by the user will be redirected by Cloudreve with a shorter link. When disabled, the direct link to the file obtained by the user becomes the original URL to the file, and is bound to the file version. Some policies produce non-redirected direct links that do not remain persistent; see Cloudreve documents for details.",
+    "reuseDirectLink": "Reuse existing direct link",
+    "reuseDirectLinkDes": "When enabled, multiple requests for the same file's direct link will reuse the existing redirect link.",
     "downloadSpeedLimit": "Max download speed",
     "downloadSpeedLimitDes": "Fill in 0 to indicate no limit. When the restriction is turned on, the maximum download speed will be limited when users download all files under the storage policy that supports the speed limit.",
     "anonymousHint": "This user group corresponds to the anonymous visitor who is not signed in.",

@@ -641,7 +641,8 @@
       "add_passkey": "添加通行密钥",
       "remove_passkey": "移除通行密钥",
       "redeem_gift_code": "兑换礼品码",
-      "update_view": "更改视图设置"
+      "update_view": "更改视图设置",
+      "delete_direct_link": "删除直链"
     },
     "server": "服务器设置",
     "tempPath": "临时路径",
@@ -1090,6 +1091,8 @@
     "bathSourceLinkLimitDes": "允许用户单次批量获取直链的最大文件数量，填写为 0 表示不允许获取直链。",
     "redirectedSource": "使用重定向的直链",
     "redirectedSourceDes": "推荐开启。开启后，用户获取的文件直链将由 Cloudreve 中转，链接较短。关闭后，用户获取的文件直链会变成文件的原始链接，且与文件版本绑定。部分存储策略在某些设置下获取的非中转直链无法保持永久有效，请参阅 Cloudreve 文档。",
+    "reuseDirectLink": "重用已有直链",
+    "reuseDirectLinkDes": "开启后，多次请求同一个文件的直链时，会重用已创建的中转直链。",
     "downloadSpeedLimit": "下载限速",
     "downloadSpeedLimitDes": "填写为 0 表示不限制。开启限制后，用户下载所有支持限速的存储策略下的文件时，下载最大速度会被限制。",
     "anonymousHint": "此用户组对应着未登录的匿名访客。",
