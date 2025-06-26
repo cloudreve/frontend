@@ -222,8 +222,8 @@ const Settings = () => {
                     "captcha_turnstile_site_key",
                     "captcha_turnstile_site_secret",
                     "captcha_cap_instance_url",
-                    "captcha_cap_key_id",
-                    "captcha_cap_key_secret",
+                    "captcha_cap_site_key",
+                    "captcha_cap_secret_key",
                   ]}
                 >
                   <Captcha />

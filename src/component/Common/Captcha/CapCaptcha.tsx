@@ -21,7 +21,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   const { t } = useTranslation("common");
 
   const capInstanceURL = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_instance_url);
-  const capKeyID = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_key_id);
+  const capSiteKey = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_site_key);
 
   // Keep callback reference up to date
   useEffect(() => {
@@ -72,7 +72,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   };
 
   const createWidget = () => {
-    if (!captchaRef.current || !capInstanceURL || !capKeyID) {
+    if (!captchaRef.current || !capInstanceURL || !capSiteKey) {
       return;
     }
 
@@ -87,7 +87,10 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
     if (typeof window !== "undefined" && (window as any).Cap) {
       const widget = document.createElement("cap-widget");
-      widget.setAttribute("data-cap-api-endpoint", `${capInstanceURL.replace(/\/$/, "")}/${capKeyID}/api/`);
+
+      // Cap 2.0 API format: {instanceURL}/{siteKey}/
+      const apiEndpoint = `${capInstanceURL.replace(/\/$/, "")}/${capSiteKey}/`;
+      widget.setAttribute("data-cap-api-endpoint", apiEndpoint);
       widget.id = "cap-widget";
 
       // Set internationalization attributes (Cap official i18n format)
@@ -120,7 +123,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
   }, [generation, t]);
 
   useEffect(() => {
-    if (!capInstanceURL || !capKeyID) {
+    if (!capInstanceURL || !capSiteKey) {
       return;
     }
 
@@ -163,9 +166,9 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
         captchaRef.current.innerHTML = "";
       }
     };
-  }, [capInstanceURL, capKeyID, t]);
+  }, [capInstanceURL, capSiteKey, t]);
 
-  if (!capInstanceURL || !capKeyID) {
+  if (!capInstanceURL || !capSiteKey) {
     return null;
   }
 

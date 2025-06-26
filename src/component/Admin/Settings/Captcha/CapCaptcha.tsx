@@ -32,38 +32,38 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
             <Trans
               i18nKey="settings.capInstanceURLDes"
               ns={"dashboard"}
-              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone.html"} target={"_blank"} />]}
+              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone/"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
       </SettingForm>
-      <SettingForm title={t("settings.capKeyID")} lgWidth={5}>
+      <SettingForm title={t("settings.capSiteKey")} lgWidth={5}>
         <FormControl fullWidth>
           <DenseFilledTextField
-            value={values.captcha_cap_key_id}
+            value={values.captcha_cap_site_key}
             onChange={(e) =>
               setSettings({
-                captcha_cap_key_id: e.target.value,
+                captcha_cap_site_key: e.target.value,
               })
             }
             required
           />
           <NoMarginHelperText>
             <Trans
-              i18nKey="settings.capKeyIDDes"
+              i18nKey="settings.capSiteKeyDes"
               ns={"dashboard"}
-              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone.html"} target={"_blank"} />]}
+              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone/"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
       </SettingForm>
-      <SettingForm title={t("settings.capKeySecret")} lgWidth={5}>
+      <SettingForm title={t("settings.capSecretKey")} lgWidth={5}>
         <FormControl fullWidth>
           <DenseFilledTextField
-            value={values.captcha_cap_key_secret}
+            value={values.captcha_cap_secret_key}
             onChange={(e) =>
               setSettings({
-                captcha_cap_key_secret: e.target.value,
+                captcha_cap_secret_key: e.target.value,
               })
             }
             type="password"
@@ -71,9 +71,9 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
           />
           <NoMarginHelperText>
             <Trans
-              i18nKey="settings.capKeySecretDes"
+              i18nKey="settings.capSecretKeyDes"
               ns={"dashboard"}
-              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone.html"} target={"_blank"} />]}
+              components={[<Link key={0} href={"https://capjs.js.org/guide/standalone/"} target={"_blank"} />]}
             />
           </NoMarginHelperText>
         </FormControl>
