@@ -22,6 +22,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
   const capInstanceURL = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_instance_url);
   const capSiteKey = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_site_key);
+  const capAssetServer = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_asset_server);
 
   // Keep callback reference up to date
   useEffect(() => {
@@ -132,6 +133,14 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
     const initWidget = () => {
       scriptLoadedRef.current = true;
+
+      // 根据配置设置WASM URL，保持资源加载的一致性
+      if (capAssetServer === "instance") {
+        (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm_bg.wasm`;
+      } else {
+        (window as any).CAP_CUSTOM_WASM_URL = "https://cdn.jsdelivr.net/npm/@captcha/widget/dist/cap_wasm_bg.wasm";
+      }
+
       // Add a small delay to ensure DOM is ready
       setTimeout(() => {
         createWidget();
@@ -141,11 +150,22 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
     if (!script) {
       script = document.createElement("script");
       script.id = scriptId;
-      script.src = `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`;
+
+      // 根据配置选择静态资源源
+      const assetSource =
+        capAssetServer === "instance"
+          ? `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`
+          : "https://cdn.jsdelivr.net/npm/@captcha/widget/dist/widget.js";
+
+      script.src = assetSource;
       script.async = true;
       script.onload = initWidget;
       script.onerror = () => {
-        console.error("Failed to load Cap widget script");
+        if (capAssetServer === "instance") {
+          console.error("Failed to load Cap widget script from instance server");
+        } else {
+          console.error("Failed to load Cap widget script from jsDelivr CDN");
+        }
       };
       document.head.appendChild(script);
     } else if (scriptLoadedRef.current || (window as any).Cap) {
@@ -166,7 +186,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
         captchaRef.current.innerHTML = "";
       }
     };
-  }, [capInstanceURL, capSiteKey, t]);
+  }, [capInstanceURL, capSiteKey, capAssetServer, t]);
 
   if (!capInstanceURL || !capSiteKey) {
     return null;
