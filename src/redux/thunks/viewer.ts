@@ -78,6 +78,12 @@ export function openViewers(
     }
 
     const viewerOptions = Viewers[ext];
+
+    if (!ignorePreference && viewerOptions.length == 1) {
+      dispatch(openViewer(file, viewerOptions[0], entitySize, preferredVersion));
+      return;
+    }
+
     // open viewer selection dialog
     dispatch(
       setViewerSelector({
