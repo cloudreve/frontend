@@ -436,7 +436,7 @@
     "capSecretKey": "私密密钥",
     "capSecretKeyDes": "从 Cap 服务器控制面板获取的私密密钥。",
     "capAssetServer": "静态资源服务源",
-    "capAssetServerDes": "选择 Cap 验证码静态资源的加载源。使用自部署服务器需要在服务器端设置环境变量 ENABLE_ASSETS_SERVER=true <0>开启静态资源服务</0>。",
+    "capAssetServerDes": "选择 Cap 验证码静态资源的加载源。使用自部署服务器需要在服务器端设置环境变量，请参考 <0>开启静态资源服务</0>。",
     "capAssetServerJsdelivr": "jsDelivr CDN",
     "capAssetServerUnpkg": "unpkg CDN",
     "capAssetServerInstance": "自部署服务器",

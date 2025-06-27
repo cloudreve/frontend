@@ -433,7 +433,7 @@
     "capSecretKey": "私密金鑰",
     "capSecretKeyDes": "從 Cap 伺服器控制面板獲取的私密金鑰。",
     "capAssetServer": "靜態資源服務源",
-    "capAssetServerDes": "選擇 Cap 驗證碼靜態資源的載入源。使用自部署伺服器需要在伺服器端設定環境變數 ENABLE_ASSETS_SERVER=true <0>開啟靜態資源服務</0>。",
+    "capAssetServerDes": "選擇 Cap 驗證碼靜態資源的載入源。使用自部署伺服器需要在伺服器端設定環境變數，請參考 <0>開啟靜態資源服務</0>。",
     "capAssetServerJsdelivr": "jsDelivr CDN",
     "capAssetServerUnpkg": "unpkg CDN",
     "capAssetServerInstance": "自部署伺服器",

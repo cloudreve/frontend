@@ -436,7 +436,7 @@
     "capSecretKey": "シークレットキー",
     "capSecretKeyDes": "Cap サーバーダッシュボードから取得したシークレットキー。",
     "capAssetServer": "静的リソースソース",
-    "capAssetServerDes": "Cap認証コードの静的リソースの読み込みソースを選択します。自己デプロイサーバーを使用するにはサーバー側で環境変数 ENABLE_ASSETS_SERVER=true を設定して<0>静的リソースサービスを有効にする</0>必要があります。",
+    "capAssetServerDes": "Cap認証コードの静的リソースの読み込みソースを選択します。自己デプロイサーバーを使用するにはサーバー側で環境変数を設定する必要があります、<0>静的リソースサービスを有効にする</0>を参照してください。",
     "capAssetServerJsdelivr": "jsDelivr CDN",
     "capAssetServerUnpkg": "unpkg CDN",
     "capAssetServerInstance": "自己デプロイサーバー",
