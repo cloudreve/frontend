@@ -82,20 +82,29 @@ const CapCaptcha = ({ values, setSettings }: CapCaptchaProps) => {
       <SettingForm title={t("settings.capAssetServer")} lgWidth={5}>
         <FormControl>
           <DenseSelect
-            value={values.captcha_cap_asset_server || "cdn"}
+            value={values.captcha_cap_asset_server || "jsdelivr"}
             onChange={(e) =>
               setSettings({
                 captcha_cap_asset_server: e.target.value,
               })
             }
           >
-            <SquareMenuItem value="cdn">
+            <SquareMenuItem value="jsdelivr">
               <ListItemText
                 slotProps={{
                   primary: { variant: "body2" },
                 }}
               >
-                {t("settings.capAssetServerCdn")}
+                {t("settings.capAssetServerJsdelivr")}
+              </ListItemText>
+            </SquareMenuItem>
+            <SquareMenuItem value="unpkg">
+              <ListItemText
+                slotProps={{
+                  primary: { variant: "body2" },
+                }}
+              >
+                {t("settings.capAssetServerUnpkg")}
               </ListItemText>
             </SquareMenuItem>
             <SquareMenuItem value="instance">

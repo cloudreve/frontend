@@ -136,9 +136,12 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
       // 根据配置设置WASM URL，保持资源加载的一致性
       if (capAssetServer === "instance") {
-        (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm_bg.wasm`;
+        (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm.min.js`;
+      } else if (capAssetServer === "unpkg") {
+        (window as any).CAP_CUSTOM_WASM_URL = "https://unpkg.com/@cap.js/wasm@0.0.4/browser/cap_wasm.js";
       } else {
-        (window as any).CAP_CUSTOM_WASM_URL = "https://cdn.jsdelivr.net/npm/@captcha/widget/dist/cap_wasm_bg.wasm";
+        // jsdelivr - 默认CDN
+        (window as any).CAP_CUSTOM_WASM_URL = "https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.4/browser/cap_wasm.min.js";
       }
 
       // Add a small delay to ensure DOM is ready
@@ -152,10 +155,15 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
       script.id = scriptId;
 
       // 根据配置选择静态资源源
-      const assetSource =
-        capAssetServer === "instance"
-          ? `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`
-          : "https://cdn.jsdelivr.net/npm/@captcha/widget/dist/widget.js";
+      let assetSource;
+      if (capAssetServer === "instance") {
+        assetSource = `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`;
+      } else if (capAssetServer === "unpkg") {
+        assetSource = "https://unpkg.com/@cap.js/widget";
+      } else {
+        // jsdelivr - 默认CDN
+        assetSource = "https://cdn.jsdelivr.net/npm/@cap.js/widget";
+      }
 
       script.src = assetSource;
       script.async = true;
@@ -163,6 +171,8 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
       script.onerror = () => {
         if (capAssetServer === "instance") {
           console.error("Failed to load Cap widget script from instance server");
+        } else if (capAssetServer === "unpkg") {
+          console.error("Failed to load Cap widget script from unpkg CDN");
         } else {
           console.error("Failed to load Cap widget script from jsDelivr CDN");
         }
