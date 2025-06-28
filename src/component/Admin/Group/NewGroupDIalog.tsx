@@ -38,7 +38,7 @@ const defaultGroup: GroupEnt = {
     redirected_source: true,
   },
   edges: {
-    storage_policies: [],
+    storage_policies: undefined,
   },
   id: 0,
 };
