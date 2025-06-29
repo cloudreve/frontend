@@ -55,17 +55,13 @@ const DirectLinksControl = () => {
 
   useEffect(() => {
     if (target && open) {
-      if (target.extended_info) {
-        setFileExtended(target);
-      } else {
-        setFileExtended(undefined);
-        dispatch(
-          getFileInfo({
-            uri: target.path,
-            extended: true,
-          }),
-        ).then((res) => setFileExtended(res));
-      }
+      setFileExtended(undefined);
+      dispatch(
+        getFileInfo({
+          uri: target.path,
+          extended: true,
+        }),
+      ).then((res) => setFileExtended(res));
     }
   }, [target, open]);
 
