@@ -4,6 +4,12 @@ import { useAppSelector } from "../../../redux/hooks.ts";
 import { CaptchaParams } from "./Captcha.tsx";
 import { Box, useTheme } from "@mui/material";
 
+// Cap Widget URLs
+const CAP_WASM_UNPKG_URL = "https://unpkg.com/@cap.js/wasm@0.0.4/browser/cap_wasm.js";
+const CAP_WASM_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.4/browser/cap_wasm.min.js";
+const CAP_WIDGET_UNPKG_URL = "https://unpkg.com/@cap.js/widget";
+const CAP_WIDGET_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/widget";
+
 export interface CapProps {
   onStateChange: (state: CaptchaParams) => void;
   generation: number;
@@ -22,6 +28,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
   const capInstanceURL = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_instance_url);
   const capSiteKey = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_site_key);
+  const capAssetServer = useAppSelector((state) => state.siteConfig.basic.config.captcha_cap_asset_server);
 
   // Keep callback reference up to date
   useEffect(() => {
@@ -132,6 +139,17 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
     const initWidget = () => {
       scriptLoadedRef.current = true;
+
+      // 根据配置设置WASM URL，保持资源加载的一致性
+      if (capAssetServer === "instance") {
+        (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm.min.js`;
+      } else if (capAssetServer === "unpkg") {
+        (window as any).CAP_CUSTOM_WASM_URL = CAP_WASM_UNPKG_URL;
+      } else {
+        // jsdelivr - 默认CDN
+        (window as any).CAP_CUSTOM_WASM_URL = CAP_WASM_JSDELIVR_URL;
+      }
+
       // Add a small delay to ensure DOM is ready
       setTimeout(() => {
         createWidget();
@@ -141,11 +159,29 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
     if (!script) {
       script = document.createElement("script");
       script.id = scriptId;
-      script.src = `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`;
+
+      // 根据配置选择静态资源源
+      let assetSource;
+      if (capAssetServer === "instance") {
+        assetSource = `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`;
+      } else if (capAssetServer === "unpkg") {
+        assetSource = CAP_WIDGET_UNPKG_URL;
+      } else {
+        // jsdelivr - 默认CDN
+        assetSource = CAP_WIDGET_JSDELIVR_URL;
+      }
+
+      script.src = assetSource;
       script.async = true;
       script.onload = initWidget;
       script.onerror = () => {
-        console.error("Failed to load Cap widget script");
+        if (capAssetServer === "instance") {
+          console.error("Failed to load Cap widget script from instance server");
+        } else if (capAssetServer === "unpkg") {
+          console.error("Failed to load Cap widget script from unpkg CDN");
+        } else {
+          console.error("Failed to load Cap widget script from jsDelivr CDN");
+        }
       };
       document.head.appendChild(script);
     } else if (scriptLoadedRef.current || (window as any).Cap) {
@@ -166,7 +202,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
         captchaRef.current.innerHTML = "";
       }
     };
-  }, [capInstanceURL, capSiteKey, t]);
+  }, [capInstanceURL, capSiteKey, capAssetServer, t]);
 
   if (!capInstanceURL || !capSiteKey) {
     return null;
