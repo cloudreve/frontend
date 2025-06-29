@@ -4,6 +4,12 @@ import { useAppSelector } from "../../../redux/hooks.ts";
 import { CaptchaParams } from "./Captcha.tsx";
 import { Box, useTheme } from "@mui/material";
 
+// Cap Widget URLs
+const CAP_WASM_UNPKG_URL = "https://unpkg.com/@cap.js/wasm@0.0.4/browser/cap_wasm.js";
+const CAP_WASM_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.4/browser/cap_wasm.min.js";
+const CAP_WIDGET_UNPKG_URL = "https://unpkg.com/@cap.js/widget";
+const CAP_WIDGET_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/widget";
+
 export interface CapProps {
   onStateChange: (state: CaptchaParams) => void;
   generation: number;
@@ -138,10 +144,10 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
       if (capAssetServer === "instance") {
         (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm.min.js`;
       } else if (capAssetServer === "unpkg") {
-        (window as any).CAP_CUSTOM_WASM_URL = "https://unpkg.com/@cap.js/wasm@0.0.4/browser/cap_wasm.js";
+        (window as any).CAP_CUSTOM_WASM_URL = CAP_WASM_UNPKG_URL;
       } else {
         // jsdelivr - 默认CDN
-        (window as any).CAP_CUSTOM_WASM_URL = "https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.4/browser/cap_wasm.min.js";
+        (window as any).CAP_CUSTOM_WASM_URL = CAP_WASM_JSDELIVR_URL;
       }
 
       // Add a small delay to ensure DOM is ready
@@ -159,10 +165,10 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
       if (capAssetServer === "instance") {
         assetSource = `${capInstanceURL.replace(/\/$/, "")}/assets/widget.js`;
       } else if (capAssetServer === "unpkg") {
-        assetSource = "https://unpkg.com/@cap.js/widget";
+        assetSource = CAP_WIDGET_UNPKG_URL;
       } else {
         // jsdelivr - 默认CDN
-        assetSource = "https://cdn.jsdelivr.net/npm/@cap.js/widget";
+        assetSource = CAP_WIDGET_JSDELIVR_URL;
       }
 
       script.src = assetSource;
