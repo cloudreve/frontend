@@ -224,6 +224,7 @@ const Settings = () => {
                     "captcha_cap_instance_url",
                     "captcha_cap_site_key",
                     "captcha_cap_secret_key",
+                    "captcha_cap_asset_server",
                   ]}
                 >
                   <Captcha />
