@@ -60,6 +60,11 @@ const magicVars: MagicVar[] = [
     example: "https://cloudreve.org/api/v4/file/content/zOie/0/text.txt?sign=xxx",
   },
   {
+    name: "{$src_raw_base64}",
+    value: "settings.srcBase64Var",
+    example: "aHR0cHM6Ly9jbG91ZHJldmUub3JnL2FwaS92NC9maWxlL2NvbnRlbnQvek9pZS8wL3RleHQudHh0P3NpZ249eHh4",
+  },
+  {
     name: "{$name}",
     value: "settings.nameEncodedVar",
     example: "sampleFile%5B1%5D.txt",

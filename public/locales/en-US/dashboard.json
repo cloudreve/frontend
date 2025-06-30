@@ -192,6 +192,7 @@
     "maxSizeDes": "The maximum file size supported by this application. 0 means no limit. If the file exceeds this size, it will still be opened, but users will be warned.",
     "srcEncodedVar": "URL-encoded file Blob temporary access URL",
     "srcVar": "File blob temporary access URL",
+    "srcBase64Var": "Base64-encoded File blob temporary access URL",
     "nameEncodedVar": "URL-encoded file name",
     "versionEntityVar": "The Blob ID of the opened file version, empty means the latest version.",
     "fileIdVar": "File ID",
