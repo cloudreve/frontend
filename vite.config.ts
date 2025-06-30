@@ -71,7 +71,7 @@ export default defineConfig({
             return "codemirror";
           }
           if (
-            id.toLocaleLowerCase().includes("excalidraw") ||
+            id.includes("excalidraw") ||
             id.includes("browser-fs-access") ||
             id.includes("image-blob-reduce") ||
             id.includes("pica")

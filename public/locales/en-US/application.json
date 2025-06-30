@@ -856,6 +856,7 @@
     "points": "Points",
     "quota": "Quota",
     "used": "Used - {{size}}",
-    "total": "Total - {{size}}"
+    "total": "Total - {{size}}",
+    "validDurationDays": "{{num}} days"
   }
 }
