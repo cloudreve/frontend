@@ -38,6 +38,11 @@ import Dismiss from "../../../../Icons/Dismiss.tsx";
 import SettingForm from "../../../../Pages/Setting/SettingForm.tsx";
 import MagicVarDialog, { MagicVar } from "../../../Common/MagicVarDialog.tsx";
 import { NoMarginHelperText } from "../../Settings.tsx";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { SelectChangeEvent } from "@mui/material";
 
 const MonacoEditor = lazy(() => import("../../../../Viewers/CodeViewer/MonacoEditor.tsx"));
 
@@ -85,6 +90,96 @@ const magicVars: MagicVar[] = [
     example: "Aaron%20Liu",
   },
 ];
+
+const DND_TYPE = "template-row";
+
+interface DraggableTemplateRowProps {
+  t: any;
+  i: number;
+  moveRow: (from: number, to: number) => void;
+  onExtChange: (e: SelectChangeEvent<unknown>, child: React.ReactNode) => void;
+  onNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onDelete: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+  extList: string[];
+  template: any;
+}
+
+function DraggableTemplateRow({ i, moveRow, onExtChange, onNameChange, onDelete, isFirst, isLast, extList, template }: DraggableTemplateRowProps) {
+  const ref = React.useRef<HTMLTableRowElement>(null);
+  const [, drop] = useDrop({
+    accept: DND_TYPE,
+    hover(item: any, monitor) {
+      if (!ref.current) return;
+  
+      const dragIndex = item.index;
+      const hoverIndex = i;
+      if (dragIndex === hoverIndex) return;
+  
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) return;
+  
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+  
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+  
+      moveRow(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+  const [{ isDragging }, drag] = useDrag({
+    type: DND_TYPE,
+    item: { index: i },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  drag(drop(ref));
+  return (
+    <TableRow
+      ref={ref}
+      sx={{ "&:last-child td, &:last-child th": { border: 0 }, opacity: isDragging ? 0.5 : 1, cursor: "move" }}
+      hover
+    >
+      <NoWrapTableCell>
+        <DenseSelect
+          value={template.ext}
+          required
+          onChange={onExtChange}
+        >
+          {extList.map((ext) => (
+            <SquareMenuItem value={ext} key={ext}>
+              <ListItemText slotProps={{ primary: { variant: "body2" } }}>{ext}</ListItemText>
+            </SquareMenuItem>
+          ))}
+        </DenseSelect>
+      </NoWrapTableCell>
+      <NoWrapTableCell>
+        <DenseFilledTextField
+          fullWidth
+          required
+          value={template.display_name}
+          onChange={onNameChange}
+        />
+      </NoWrapTableCell>
+      <NoWrapTableCell>
+        <IconButton size={"small"} onClick={onDelete}>
+          <Dismiss fontSize={"small"} />
+        </IconButton>
+        <IconButton size="small" onClick={() => moveRow(i, i - 1)} disabled={isFirst}>
+          <KeyboardArrowUpIcon fontSize="small" />
+        </IconButton>
+        <IconButton size="small" onClick={() => moveRow(i, i + 1)} disabled={isLast}>
+          <KeyboardArrowDownIcon fontSize="small" />
+        </IconButton>
+      </NoWrapTableCell>
+    </TableRow>
+  );
+}
 
 const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEditDialogProps) => {
   const { t } = useTranslation("dashboard");
@@ -300,99 +395,72 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
             )}
             <SettingForm noContainer title={t("settings.newFileAction")} lgWidth={12}>
               {viewerShadowed?.templates && viewerShadowed.templates.length > 0 && (
-                <TableContainer sx={{ mt: 1, maxHeight: 440 }} component={StyledTableContainerPaper}>
-                  <Table
-                    stickyHeader
-                    sx={{
-                      width: "100%",
-                      maxHeight: 300,
-                      tableLayout: "fixed",
-                    }}
-                    size="small"
-                  >
-                    <TableHead>
-                      <TableRow>
-                        <NoWrapTableCell width={100}>{t("settings.ext")}</NoWrapTableCell>
-                        <NoWrapTableCell width={200}>{t("settings.displayName")}</NoWrapTableCell>
-                        <NoWrapTableCell width={64}></NoWrapTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {viewerShadowed.templates?.map((t, i) => (
-                        <TableRow
-                          key={i}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                          hover
-                        >
-                          <NoWrapTableCell>
-                            <DenseSelect
-                              value={t.ext}
-                              required
-                              onChange={(e) => {
-                                const newExt = e.target.value as string;
-                                setViewerShadowed((v) => ({
-                                  ...(v as Viewer),
-                                  templates: (v?.templates ?? []).map((template, index) =>
-                                    index == i ? { ...template, ext: newExt } : template,
-                                  ),
-                                }));
-                              }}
-                            >
-                              {viewerShadowed.exts.map((ext) => (
-                                <SquareMenuItem value={ext}>
-                                  <ListItemText
-                                    slotProps={{
-                                      primary: {
-                                        variant: "body2",
-                                      },
-                                    }}
-                                  >
-                                    {ext}
-                                  </ListItemText>
-                                </SquareMenuItem>
-                              ))}
-                            </DenseSelect>
-                          </NoWrapTableCell>
-                          <NoWrapTableCell>
-                            <DenseFilledTextField
-                              fullWidth
-                              required
-                              value={t.display_name}
-                              onChange={(e) => {
-                                setViewerShadowed((v) => ({
-                                  ...(v as Viewer),
-                                  templates: (v?.templates ?? []).map((template, index) =>
-                                    index == i
-                                      ? {
-                                          ...template,
-                                          display_name: e.target.value,
-                                        }
-                                      : template,
-                                  ),
-                                }));
-                              }}
-                            />
-                          </NoWrapTableCell>
-                          <NoWrapTableCell>
-                            <IconButton
-                              size={"small"}
-                              onClick={() =>
-                                setViewerShadowed((v) => ({
-                                  ...(v as Viewer),
-                                  templates: (v?.templates ?? []).filter((_, index) => index != i),
-                                }))
-                              }
-                            >
-                              <Dismiss fontSize={"small"} />
-                            </IconButton>
-                          </NoWrapTableCell>
+                <DndProvider backend={HTML5Backend}>
+                  <TableContainer sx={{ mt: 1, maxHeight: 440 }} component={StyledTableContainerPaper}>
+                    <Table
+                      stickyHeader
+                      sx={{
+                        width: "100%",
+                        maxHeight: 300,
+                        tableLayout: "fixed",
+                      }}
+                      size="small"
+                    >
+                      <TableHead>
+                        <TableRow>
+                          <NoWrapTableCell width={100}>{t("settings.ext")}</NoWrapTableCell>
+                          <NoWrapTableCell width={200}>{t("settings.displayName")}</NoWrapTableCell>
+                          <NoWrapTableCell width={100}>{t("settings.actions")}</NoWrapTableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                      </TableHead>
+                      <TableBody>
+                        {viewerShadowed.templates?.map((template, i) => (
+                          <DraggableTemplateRow
+                            key={i}
+                            t={template}
+                            i={i}
+                            moveRow={(from, to) => {
+                              if (from === to || to < 0 || to >= (viewerShadowed.templates?.length ?? 0)) return;
+                              setViewerShadowed((v) => {
+                                const arr = [...(v?.templates ?? [])];
+                                const [moved] = arr.splice(from, 1);
+                                arr.splice(to, 0, moved);
+                                return { ...(v as Viewer), templates: arr };
+                              });
+                            }}
+                            onExtChange={(e) => {
+                              const newExt = e.target.value as string;
+                              setViewerShadowed((v) => ({
+                                ...(v as Viewer),
+                                templates: (v?.templates ?? []).map((template, index) =>
+                                  index == i ? { ...template, ext: newExt } : template,
+                                ),
+                              }));
+                            }}
+                            onNameChange={(e) => {
+                              setViewerShadowed((v) => ({
+                                ...(v as Viewer),
+                                templates: (v?.templates ?? []).map((template, index) =>
+                                  index == i ? { ...template, display_name: e.target.value } : template,
+                                ),
+                              }));
+                            }}
+                            onDelete={() => {
+                              setViewerShadowed((v) => ({
+                                ...(v as Viewer),
+                                templates: (v?.templates ?? []).filter((_, index) => index != i),
+                              }));
+                            }}
+                            isFirst={i === 0}
+                            isLast={i === (viewerShadowed.templates?.length ?? 0) - 1}
+                            extList={viewerShadowed.exts}
+                            template={template}
+                          />
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </DndProvider>
               )}
               <SecondaryButton
                 sx={{ mt: 1 }}

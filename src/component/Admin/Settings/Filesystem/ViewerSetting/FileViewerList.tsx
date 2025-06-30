@@ -27,6 +27,8 @@ import { AccordionSummary, StyledAccordion } from "../../UserSession/SSOSettings
 import FileViewerEditDialog from "./FileViewerEditDialog.tsx";
 import FileViewerRow from "./FileViewerRow.tsx";
 import ImportWopiDialog from "./ImportWopiDialog.tsx";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface ViewerGroupProps {
   group: ViewerGroup;
@@ -34,6 +36,66 @@ interface ViewerGroupProps {
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onGroupChange: (g: ViewerGroup) => void;
 }
+
+const DND_TYPE = "viewer-row";
+
+const DraggableViewerRow = memo(function DraggableViewerRow({
+  viewer,
+  index,
+  moveRow,
+  onChange,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+  isLast,
+  isFirst,
+}: any) {
+  const ref = React.useRef<HTMLTableRowElement>(null);
+  const [, drop] = useDrop({
+    accept: DND_TYPE,
+    hover(item: any, monitor) {
+      if (!ref.current) return;
+
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) return;
+
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) return;
+
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+
+      moveRow(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+  const [{ isDragging }, drag] = useDrag({
+    type: DND_TYPE,
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  drag(drop(ref));
+  return (
+    <FileViewerRow
+      ref={ref}
+      viewer={viewer}
+      onChange={onChange}
+      onDelete={onDelete}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+      isLast={isLast}
+      isFirst={isFirst}
+      style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}
+    />
+  );
+});
 
 const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange }: ViewerGroupProps) => {
   const { t } = useTranslation("dashboard");
@@ -55,6 +117,27 @@ const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange }: ViewerGr
       e.stopPropagation();
     });
   }, [group.viewers]);
+
+  const [viewers, setViewers] = useState(group.viewers);
+  React.useEffect(() => {
+    setViewers(group.viewers);
+  }, [group.viewers]);
+  const moveRow = useCallback((from: number, to: number) => {
+    if (from === to) return;
+    const updated = [...viewers];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    setViewers(updated);
+    onGroupChange({ viewers: updated });
+  }, [viewers, onGroupChange]);
+  const handleMoveUp = (idx: number) => {
+    if (idx <= 0) return;
+    moveRow(idx, idx - 1);
+  };
+  const handleMoveDown = (idx: number) => {
+    if (idx >= viewers.length - 1) return;
+    moveRow(idx, idx + 1);
+  };
 
   return (
     <StyledAccordion
@@ -84,31 +167,40 @@ const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange }: ViewerGr
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={{ display: "block" }}>
-        <TableContainer sx={{ mt: 1, maxHeight: 440 }}>
-          <Table stickyHeader sx={{ width: "100%", tableLayout: "fixed" }} size="small">
-            <TableHead>
-              <TableRow>
-                <NoWrapTableCell width={64}>{t("settings.icon")}</NoWrapTableCell>
-                <NoWrapTableCell width={100}>{t("settings.viewerType")}</NoWrapTableCell>
-                <NoWrapTableCell width={200}>{t("settings.displayName")}</NoWrapTableCell>
-                <NoWrapTableCell width={250}>{t("settings.exts")}</NoWrapTableCell>
-                <NoWrapTableCell width={100}>{t("settings.newFileAction")}</NoWrapTableCell>
-                <NoWrapTableCell width={64}>{t("settings.viewerEnabled")}</NoWrapTableCell>
-                <NoWrapTableCell width={100}></NoWrapTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {group.viewers.map((viewer, index) => (
-                <FileViewerRow
-                  onChange={onViewerChange[index]}
-                  onDelete={onViewerDeleted[index]}
-                  viewer={viewer}
-                  key={viewer.id}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DndProvider backend={HTML5Backend}>
+          <TableContainer sx={{ mt: 1, maxHeight: 440 }}>
+            <Table stickyHeader sx={{ width: "100%", tableLayout: "fixed" }} size="small">
+              <TableHead>
+                <TableRow>
+                  <NoWrapTableCell width={64}>{t("settings.icon")}</NoWrapTableCell>
+                  <NoWrapTableCell width={100}>{t("settings.viewerType")}</NoWrapTableCell>
+                  <NoWrapTableCell width={200}>{t("settings.displayName")}</NoWrapTableCell>
+                  <NoWrapTableCell width={250}>{t("settings.exts")}</NoWrapTableCell>
+                  <NoWrapTableCell width={100}>{t("settings.newFileAction")}</NoWrapTableCell>
+                  <NoWrapTableCell width={64}>{t("settings.viewerEnabled")}</NoWrapTableCell>
+                  <NoWrapTableCell width={64}>{t("settings.actions")}</NoWrapTableCell>
+                  <NoWrapTableCell width={64}></NoWrapTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {viewers.map((viewer, idx) => (
+                  <DraggableViewerRow
+                    key={viewer.id}
+                    viewer={viewer}
+                    index={idx}
+                    moveRow={moveRow}
+                    onChange={onViewerChange[idx]}
+                    onDelete={onViewerDeleted[idx]}
+                    onMoveUp={() => handleMoveUp(idx)}
+                    onMoveDown={() => handleMoveDown(idx)}
+                    isFirst={idx === 0}
+                    isLast={idx === viewers.length - 1}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DndProvider>
       </AccordionDetails>
     </StyledAccordion>
   );
