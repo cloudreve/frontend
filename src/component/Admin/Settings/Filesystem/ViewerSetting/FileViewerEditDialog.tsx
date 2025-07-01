@@ -38,8 +38,7 @@ import Dismiss from "../../../../Icons/Dismiss.tsx";
 import SettingForm from "../../../../Pages/Setting/SettingForm.tsx";
 import MagicVarDialog, { MagicVar } from "../../../Common/MagicVarDialog.tsx";
 import { NoMarginHelperText } from "../../Settings.tsx";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ArrowDown from "../../../../Icons/ArrowDown.tsx";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectChangeEvent } from "@mui/material";
@@ -112,21 +111,21 @@ function DraggableTemplateRow({ i, moveRow, onExtChange, onNameChange, onDelete,
     accept: DND_TYPE,
     hover(item: any, monitor) {
       if (!ref.current) return;
-  
+
       const dragIndex = item.index;
       const hoverIndex = i;
       if (dragIndex === hoverIndex) return;
-  
+
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       if (!clientOffset) return;
-  
+
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-  
+
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-  
+
       moveRow(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
@@ -171,10 +170,21 @@ function DraggableTemplateRow({ i, moveRow, onExtChange, onNameChange, onDelete,
           <Dismiss fontSize={"small"} />
         </IconButton>
         <IconButton size="small" onClick={() => moveRow(i, i - 1)} disabled={isFirst}>
-          <KeyboardArrowUpIcon fontSize="small" />
+          <ArrowDown
+            sx={{
+              width: "18px",
+              height: "18px",
+              transform: "rotate(180deg)",
+            }}
+          />
         </IconButton>
         <IconButton size="small" onClick={() => moveRow(i, i + 1)} disabled={isLast}>
-          <KeyboardArrowDownIcon fontSize="small" />
+          <ArrowDown
+            sx={{
+              width: "18px",
+              height: "18px",
+            }}
+          />
         </IconButton>
       </NoWrapTableCell>
     </TableRow>

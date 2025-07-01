@@ -11,8 +11,7 @@ import {
 } from "../../../Common/StyledComponents.tsx";
 import Add from "../../../Icons/Add.tsx";
 import Dismiss from "../../../Icons/Dismiss.tsx";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ArrowDown from "../../../Icons/ArrowDown.tsx";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -140,10 +139,21 @@ function DraggableEmojiRow({
           <Dismiss fontSize={"small"} />
         </IconButton>
         <IconButton size="small" onClick={() => moveRow(i, i - 1)} disabled={isFirst}>
-          <KeyboardArrowUpIcon fontSize="small" />
+          <ArrowDown
+            sx={{
+              width: "18px",
+              height: "18px",
+              transform: "rotate(180deg)",
+            }}
+          />
         </IconButton>
         <IconButton size="small" onClick={() => moveRow(i, i + 1)} disabled={isLast}>
-          <KeyboardArrowDownIcon fontSize="small" />
+          <ArrowDown
+            sx={{
+              width: "18px",
+              height: "18px",
+            }}
+          />
         </IconButton>
       </NoWrapCell>
     </TableRow>

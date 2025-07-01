@@ -23,8 +23,7 @@ import Dismiss from "../../../Icons/Dismiss.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
 import AddColumn from "./AddColumn.tsx";
 import { getColumnTypeDefaults, ListViewColumnSetting } from "./Column.tsx";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ArrowDown from "../../../Icons/ArrowDown.tsx";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import React from "react";
@@ -50,21 +49,21 @@ const DraggableColumnRow: React.FC<DraggableColumnRowProps> = ({ column, index, 
     accept: DND_TYPE,
     hover(item: any, monitor) {
       if (!ref.current) return;
-  
+
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) return;
-  
+
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       if (!clientOffset) return;
-  
+
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-  
+
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-  
+
       moveRow(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
@@ -90,10 +89,21 @@ const DraggableColumnRow: React.FC<DraggableColumnRowProps> = ({ column, index, 
       <TableCell>
         <Box sx={{ display: "flex" }}>
           <IconButton size="small" onClick={() => moveRow(index, index - 1)} disabled={isFirst}>
-            <KeyboardArrowUpIcon fontSize="small" />
+            <ArrowDown
+              sx={{
+                width: "18px",
+                height: "18px",
+                transform: "rotate(180deg)",
+              }}
+            />
           </IconButton>
           <IconButton size="small" onClick={() => moveRow(index, index + 1)} disabled={isLast}>
-            <KeyboardArrowDownIcon fontSize="small" />
+            <ArrowDown
+              sx={{
+                width: "18px",
+                height: "18px",
+              }}
+            />
           </IconButton>
           <IconButton size="small" onClick={() => onDelete(index)} disabled={columns.length <= 1}>
             <Dismiss sx={{ width: "18px", height: "18px" }} />

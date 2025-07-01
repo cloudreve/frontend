@@ -8,8 +8,7 @@ import { ViewerIcon } from "../../../../FileManager/Dialogs/OpenWith.tsx";
 import Dismiss from "../../../../Icons/Dismiss.tsx";
 import Edit from "../../../../Icons/Edit.tsx";
 import FileViewerEditDialog from "./FileViewerEditDialog.tsx";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ArrowDown from "../../../../Icons/ArrowDown.tsx";
 
 export interface FileViewerRowProps {
   viewer: Viewer;
@@ -103,10 +102,21 @@ const FileViewerRow = React.memo(
           </NoWrapCell>
           <NoWrapCell>
             <IconButton size="small" onClick={onMoveUp} disabled={isFirst}>
-              <KeyboardArrowUpIcon fontSize="small" />
+              <ArrowDown
+                sx={{
+                  width: "18px",
+                  height: "18px",
+                  transform: "rotate(180deg)",
+                }}
+              />
             </IconButton>
             <IconButton size="small" onClick={onMoveDown} disabled={isLast}>
-              <KeyboardArrowDownIcon fontSize="small" />
+              <ArrowDown
+                sx={{
+                  width: "18px",
+                  height: "18px",
+                }}
+              />
             </IconButton>
           </NoWrapCell>
         </TableRow>

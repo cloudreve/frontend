@@ -35,6 +35,7 @@ interface ViewerGroupProps {
   index: number;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onGroupChange: (g: ViewerGroup) => void;
+  dndType: string;
 }
 
 const DND_TYPE = "viewer-row";
@@ -49,10 +50,11 @@ const DraggableViewerRow = memo(function DraggableViewerRow({
   onMoveDown,
   isLast,
   isFirst,
+  dndType,
 }: any) {
   const ref = React.useRef<HTMLTableRowElement>(null);
   const [, drop] = useDrop({
-    accept: DND_TYPE,
+    accept: dndType,
     hover(item: any, monitor) {
       if (!ref.current) return;
 
@@ -75,7 +77,7 @@ const DraggableViewerRow = memo(function DraggableViewerRow({
     },
   });
   const [{ isDragging }, drag] = useDrag({
-    type: DND_TYPE,
+    type: dndType,
     item: { index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -97,7 +99,7 @@ const DraggableViewerRow = memo(function DraggableViewerRow({
   );
 });
 
-const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange }: ViewerGroupProps) => {
+const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange, dndType }: ViewerGroupProps) => {
   const { t } = useTranslation("dashboard");
 
   const onViewerChange = useMemo(() => {
@@ -195,6 +197,7 @@ const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange }: ViewerGr
                     onMoveDown={() => handleMoveDown(idx)}
                     isFirst={idx === 0}
                     isLast={idx === viewers.length - 1}
+                    dndType={dndType}
                   />
                 ))}
               </TableBody>
@@ -289,6 +292,7 @@ const FileViewerList = memo(({ config, onChange }: FileViewerListProps) => {
             key={index}
             onDelete={onGroupDelete[index]}
             onGroupChange={onGroupChange[index]}
+            dndType={`viewer-row-${index}`}
           />
         ))}
       <SecondaryButton variant={"contained"} {...bindTrigger(addNewPopupState)} startIcon={<Add />} sx={{ mt: 1 }}>
