@@ -10,6 +10,8 @@ import {
   ListItemButton,
   ListItemText,
   Stack,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -98,6 +100,9 @@ const OpenWith = () => {
   const [selectedViewer, setSelectedViewer] = React.useState<Viewer | null>(null);
   const [expanded, setExpanded] = useState(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const selectorState = useAppSelector((state) => state.globalState.viewerSelector);
 
   useEffect(() => {
@@ -174,21 +179,26 @@ const OpenWith = () => {
               overflow: "auto",
             }}
           >
-            {((expanded ? Object.values(ViewersByID) : selectorState?.viewers) ?? emptyViewer).map((viewer) => (
-              <ListItem
-                disablePadding
-                key={viewer.id}
-                onDoubleClick={() => openWith(false, viewer)}
-                onClick={() => onViewerClick(viewer)}
-              >
-                <ListItemButton selected={viewer.id == selectedViewer?.id}>
-                  <ListItemAvatar sx={{ minWidth: "48px" }}>
-                    <ViewerIcon viewer={viewer} />
-                  </ListItemAvatar>
-                  <ListItemText primary={t(viewer.display_name)} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {((expanded ? Object.values(ViewersByID) : selectorState?.viewers) ?? emptyViewer)
+              .filter((viewer) => {
+                const platform = viewer.platform || "all";
+                return platform === "all" || platform === (isMobile ? "mobile" : "pc");
+              })
+              .map((viewer) => (
+                <ListItem
+                  disablePadding
+                  key={viewer.id}
+                  onDoubleClick={() => openWith(false, viewer)}
+                  onClick={() => onViewerClick(viewer)}
+                >
+                  <ListItemButton selected={viewer.id == selectedViewer?.id}>
+                    <ListItemAvatar sx={{ minWidth: "48px" }}>
+                      <ViewerIcon viewer={viewer} />
+                    </ListItemAvatar>
+                    <ListItemText primary={t(viewer.display_name)} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             {!expanded && (
               <ListItem onClick={() => setExpanded(true)} disablePadding>
                 <ListItemButton>

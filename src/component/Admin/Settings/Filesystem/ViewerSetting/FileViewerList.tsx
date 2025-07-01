@@ -124,14 +124,17 @@ const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange, dndType }:
   React.useEffect(() => {
     setViewers(group.viewers);
   }, [group.viewers]);
-  const moveRow = useCallback((from: number, to: number) => {
-    if (from === to) return;
-    const updated = [...viewers];
-    const [moved] = updated.splice(from, 1);
-    updated.splice(to, 0, moved);
-    setViewers(updated);
-    onGroupChange({ viewers: updated });
-  }, [viewers, onGroupChange]);
+  const moveRow = useCallback(
+    (from: number, to: number) => {
+      if (from === to) return;
+      const updated = [...viewers];
+      const [moved] = updated.splice(from, 1);
+      updated.splice(to, 0, moved);
+      setViewers(updated);
+      onGroupChange({ viewers: updated });
+    },
+    [viewers, onGroupChange],
+  );
   const handleMoveUp = (idx: number) => {
     if (idx <= 0) return;
     moveRow(idx, idx - 1);
@@ -178,10 +181,11 @@ const ViewerGroupRow = memo(({ group, index, onDelete, onGroupChange, dndType }:
                   <NoWrapTableCell width={100}>{t("settings.viewerType")}</NoWrapTableCell>
                   <NoWrapTableCell width={200}>{t("settings.displayName")}</NoWrapTableCell>
                   <NoWrapTableCell width={250}>{t("settings.exts")}</NoWrapTableCell>
+                  <NoWrapTableCell width={150}>{t("settings.viewerPlatform")}</NoWrapTableCell>
                   <NoWrapTableCell width={100}>{t("settings.newFileAction")}</NoWrapTableCell>
                   <NoWrapTableCell width={64}>{t("settings.viewerEnabled")}</NoWrapTableCell>
-                  <NoWrapTableCell width={64}>{t("settings.actions")}</NoWrapTableCell>
-                  <NoWrapTableCell width={64}></NoWrapTableCell>
+                  <NoWrapTableCell width={100}>{t("settings.actions")}</NoWrapTableCell>
+                  <NoWrapTableCell width={100}></NoWrapTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
