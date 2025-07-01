@@ -192,6 +192,7 @@
     "maxSizeDes": "此应用支持的最大文件大小，填写 0 表示不限制，超出大小时仍会尝试打开文件，但会警告用户。",
     "srcEncodedVar": "经过 URL 编码后的文件 Blob 临时访问地址",
     "srcVar": "文件 Blob 临时访问地址",
+    "srcBase64Var": "经过 Base64 编码后的文件 Blob 临时访问地址",
     "nameEncodedVar": "经过 URL 编码后的文件名",
     "versionEntityVar": "打开的文件版本 Blob ID，为空时表示打开的是最新版本。",
     "fileIdVar": "文件 ID",
