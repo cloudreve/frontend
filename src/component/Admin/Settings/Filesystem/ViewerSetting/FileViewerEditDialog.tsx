@@ -357,7 +357,7 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
             <SettingForm noContainer lgWidth={6} title={t("settings.viewerPlatform")}>
               <FormControl fullWidth>
                 <DenseSelect
-                  value={viewerShadowed.platform || "all"}
+                  value={viewerShadowed.platform || ViewerPlatform.all}
                   onChange={(e) =>
                     setViewerShadowed((v) => ({
                       ...(v as Viewer),

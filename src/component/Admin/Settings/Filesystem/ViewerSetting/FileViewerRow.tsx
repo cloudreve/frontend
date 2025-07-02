@@ -61,7 +61,7 @@ const FileViewerRow = React.memo(
           </NoWrapCell>
           <NoWrapCell>
             <DenseSelect
-              value={viewer.platform || "all"}
+              value={viewer.platform || ViewerPlatform.all}
               onChange={(e) =>
                 onChange({
                   ...viewer,
