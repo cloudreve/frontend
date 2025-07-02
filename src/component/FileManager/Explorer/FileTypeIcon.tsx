@@ -147,6 +147,7 @@ const FileTypeIcon = ({ name, fileType, notLoaded, sx, hideUnknown, customizedCo
       //@ts-ignore
       <Box
         component={"img"}
+        draggable={false}
         sx={{
           width: "24px",
           height: "24px",
