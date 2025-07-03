@@ -1,9 +1,10 @@
 import * as React from "react";
 import { memo, useCallback, useState } from "react";
-import { Viewer, ViewerType } from "../../../../../api/explorer.ts";
+import { Viewer, ViewerPlatform, ViewerType } from "../../../../../api/explorer.ts";
 import { useTranslation } from "react-i18next";
-import { IconButton, TableRow } from "@mui/material";
-import { DenseFilledTextField, NoWrapCell, StyledCheckbox } from "../../../../Common/StyledComponents.tsx";
+import { IconButton, TableRow, ListItemText } from "@mui/material";
+import { DenseFilledTextField, NoWrapCell, StyledCheckbox, DenseSelect } from "../../../../Common/StyledComponents.tsx";
+import { SquareMenuItem } from "../../../../FileManager/ContextMenu/ContextMenu.tsx";
 import { ViewerIcon } from "../../../../FileManager/Dialogs/OpenWith.tsx";
 import Dismiss from "../../../../Icons/Dismiss.tsx";
 import Edit from "../../../../Icons/Edit.tsx";
@@ -23,19 +24,7 @@ export interface FileViewerRowProps {
 
 const FileViewerRow = React.memo(
   React.forwardRef<HTMLTableRowElement, FileViewerRowProps>(
-    (
-      {
-        viewer,
-        onChange,
-        onDelete,
-        onMoveUp,
-        onMoveDown,
-        isFirst,
-        isLast,
-        style,
-      },
-      ref
-    ) => {
+    ({ viewer, onChange, onDelete, onMoveUp, onMoveDown, isFirst, isLast, style }, ref) => {
       const { t } = useTranslation("dashboard");
       const [extCached, setExtCached] = useState("");
       const [editOpen, setEditOpen] = useState(false);
@@ -43,12 +32,7 @@ const FileViewerRow = React.memo(
         setEditOpen(false);
       }, [setEditOpen]);
       return (
-        <TableRow
-          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          hover
-          ref={ref}
-          style={style}
-        >
+        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }} hover ref={ref} style={style}>
           <FileViewerEditDialog viewer={viewer} onChange={onChange} open={editOpen} onClose={onClose} />
           <NoWrapCell>
             <ViewerIcon viewer={viewer} />
@@ -74,6 +58,45 @@ const FileViewerRow = React.memo(
               }}
               onChange={(e) => setExtCached(e.target.value)}
             />
+          </NoWrapCell>
+          <NoWrapCell>
+            <DenseSelect
+              value={viewer.platform || ViewerPlatform.all}
+              onChange={(e) =>
+                onChange({
+                  ...viewer,
+                  platform: e.target.value as ViewerPlatform,
+                })
+              }
+            >
+              <SquareMenuItem value="pc">
+                <ListItemText
+                  slotProps={{
+                    primary: { variant: "body2" },
+                  }}
+                >
+                  {t("settings.viewerPlatformPC")}
+                </ListItemText>
+              </SquareMenuItem>
+              <SquareMenuItem value="mobile">
+                <ListItemText
+                  slotProps={{
+                    primary: { variant: "body2" },
+                  }}
+                >
+                  {t("settings.viewerPlatformMobile")}
+                </ListItemText>
+              </SquareMenuItem>
+              <SquareMenuItem value="all">
+                <ListItemText
+                  slotProps={{
+                    primary: { variant: "body2" },
+                  }}
+                >
+                  {t("settings.viewerPlatformAll")}
+                </ListItemText>
+              </SquareMenuItem>
+            </DenseSelect>
           </NoWrapCell>
           <NoWrapCell>
             {viewer.templates?.length ? t("settings.nMapping", { num: viewer.templates?.length }) : t("share.none")}
@@ -121,8 +144,8 @@ const FileViewerRow = React.memo(
           </NoWrapCell>
         </TableRow>
       );
-    }
-  )
+    },
+  ),
 );
 
 export default FileViewerRow;

@@ -412,6 +412,12 @@ export const ViewerType = {
   custom: "custom",
 };
 
+export enum ViewerPlatform {
+  pc = "pc",
+  mobile = "mobile",
+  all = "all",
+}
+
 export interface Viewer {
   id: string;
   type: string;
@@ -430,6 +436,7 @@ export interface Viewer {
     };
   };
   templates?: NewFileTemplate[];
+  platform?: ViewerPlatform;
 }
 
 export interface NewFileTemplate {

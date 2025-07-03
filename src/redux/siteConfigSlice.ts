@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SiteConfig } from "../api/site.ts";
 import { ExpandedIconSettings, FileTypeIconSetting } from "../component/FileManager/Explorer/FileTypeIcon.tsx";
 import { ExpandedViewerSetting } from "./thunks/viewer.ts";
-import { Viewer } from "../api/explorer.ts";
+import { Viewer, ViewerPlatform } from "../api/explorer.ts";
 
 declare global {
   interface Window {
@@ -68,9 +68,15 @@ const preProcessors: {
 
     Viewers = {};
     ViewersByID = {};
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     config.file_viewers?.forEach((group) => {
       group.viewers.forEach((viewer) => {
         if (viewer.disabled) {
+          return;
+        }
+
+        const platform = viewer.platform || ViewerPlatform.all;
+        if (platform !== ViewerPlatform.all && platform !== (isMobile ? ViewerPlatform.mobile : ViewerPlatform.pc)) {
           return;
         }
 

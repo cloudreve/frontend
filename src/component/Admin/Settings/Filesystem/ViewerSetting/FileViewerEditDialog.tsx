@@ -17,7 +17,7 @@ import Grid from "@mui/material/Grid2";
 import { useSnackbar } from "notistack";
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Viewer, ViewerType } from "../../../../../api/explorer.ts";
+import { Viewer, ViewerPlatform, ViewerType } from "../../../../../api/explorer.ts";
 import { builtInViewers } from "../../../../../redux/thunks/viewer.ts";
 import { isTrueVal } from "../../../../../session/utils.ts";
 import CircularProgress from "../../../../Common/CircularProgress.tsx";
@@ -110,7 +110,17 @@ interface DraggableTemplateRowProps {
   template: any;
 }
 
-function DraggableTemplateRow({ i, moveRow, onExtChange, onNameChange, onDelete, isFirst, isLast, extList, template }: DraggableTemplateRowProps) {
+function DraggableTemplateRow({
+  i,
+  moveRow,
+  onExtChange,
+  onNameChange,
+  onDelete,
+  isFirst,
+  isLast,
+  extList,
+  template,
+}: DraggableTemplateRowProps) {
   const ref = React.useRef<HTMLTableRowElement>(null);
   const [, drop] = useDrop({
     accept: DND_TYPE,
@@ -150,11 +160,7 @@ function DraggableTemplateRow({ i, moveRow, onExtChange, onNameChange, onDelete,
       hover
     >
       <NoWrapTableCell>
-        <DenseSelect
-          value={template.ext}
-          required
-          onChange={onExtChange}
-        >
+        <DenseSelect value={template.ext} required onChange={onExtChange}>
           {extList.map((ext) => (
             <SquareMenuItem value={ext} key={ext}>
               <ListItemText slotProps={{ primary: { variant: "body2" } }}>{ext}</ListItemText>
@@ -163,12 +169,7 @@ function DraggableTemplateRow({ i, moveRow, onExtChange, onNameChange, onDelete,
         </DenseSelect>
       </NoWrapTableCell>
       <NoWrapTableCell>
-        <DenseFilledTextField
-          fullWidth
-          required
-          value={template.display_name}
-          onChange={onNameChange}
-        />
+        <DenseFilledTextField fullWidth required value={template.display_name} onChange={onNameChange} />
       </NoWrapTableCell>
       <NoWrapTableCell>
         <IconButton size={"small"} onClick={onDelete}>
@@ -351,6 +352,48 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                   }
                 />
                 <NoMarginHelperText>{t("settings.maxSizeDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+            <SettingForm noContainer lgWidth={6} title={t("settings.viewerPlatform")}>
+              <FormControl fullWidth>
+                <DenseSelect
+                  value={viewerShadowed.platform || ViewerPlatform.all}
+                  onChange={(e) =>
+                    setViewerShadowed((v) => ({
+                      ...(v as Viewer),
+                      platform: e.target.value as ViewerPlatform,
+                    }))
+                  }
+                >
+                  <SquareMenuItem value="pc">
+                    <ListItemText
+                      slotProps={{
+                        primary: { variant: "body2" },
+                      }}
+                    >
+                      {t("settings.viewerPlatformPC")}
+                    </ListItemText>
+                  </SquareMenuItem>
+                  <SquareMenuItem value="mobile">
+                    <ListItemText
+                      slotProps={{
+                        primary: { variant: "body2" },
+                      }}
+                    >
+                      {t("settings.viewerPlatformMobile")}
+                    </ListItemText>
+                  </SquareMenuItem>
+                  <SquareMenuItem value="all">
+                    <ListItemText
+                      slotProps={{
+                        primary: { variant: "body2" },
+                      }}
+                    >
+                      {t("settings.viewerPlatformAll")}
+                    </ListItemText>
+                  </SquareMenuItem>
+                </DenseSelect>
+                <NoMarginHelperText>{t("settings.viewerPlatformDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
             {viewer.type == ViewerType.custom && (
