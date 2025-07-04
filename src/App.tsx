@@ -7,6 +7,7 @@ import { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 import { useRegisterSW } from "virtual:pwa-register/react";
+import FileIconSnackbar from "./component/Common/Snackbar/FileIconSnackbar.tsx";
 import LoadingSnackbar from "./component/Common/Snackbar/LoadingSnackbar.tsx";
 import GlobalDialogs from "./component/Dialogs/GlobalDialogs.tsx";
 import { GrowDialogTransition } from "./component/FileManager/Search/SearchPopup.tsx";
@@ -344,6 +345,7 @@ const AppContent = () => {
           warning: StyledMaterialDesignContent,
           loading: LoadingSnackbar,
           default: StyledMaterialDesignContent,
+          file: FileIconSnackbar,
         }}
       >
         <GlobalDialogs />

@@ -479,6 +479,8 @@
     "useCustomPassword": "Custom share link password",
     "shareView": "Share view setting",
     "shareViewDes": "If selected, other users can see your view setting (layout, sorting, etc.) saved on the server server when accessing this shared folder.",
+    "showReadme": "Show README file",
+    "showReadmeDes": "If selected, the <0>README.md</0> file (case-sensitive) in the directory will be automatically displayed for visitors.",
     "expireAfterDownload": "Expire after being downloaded",
     "sharePassword": "Share password",
     "randomlyGenerate": "Random",

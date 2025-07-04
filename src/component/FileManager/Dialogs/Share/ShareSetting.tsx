@@ -18,9 +18,11 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { FileResponse, FileType } from "../../../../api/explorer.ts";
+import { Code } from "../../../Admin/Common/Code.tsx";
 import { FilledTextField, SmallFormControlLabel } from "../../../Common/StyledComponents.tsx";
+import BookInformation from "../../../Icons/BookInformation.tsx";
 import ClockArrowDownload from "../../../Icons/ClockArrowDownload.tsx";
 import Eye from "../../../Icons/Eye.tsx";
 import TableSettingsOutlined from "../../../Icons/TableSettings.tsx";
@@ -76,6 +78,7 @@ export interface ShareSetting {
   use_custom_password?: boolean;
   password?: string;
   share_view?: boolean;
+  show_readme?: boolean;
   downloads?: boolean;
   expires?: boolean;
 
@@ -129,7 +132,7 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
     setExpanded(isExpanded ? panel : undefined);
   };
 
-  const handleCheck = (prop: "is_private" | "share_view" | "expires" | "downloads") => () => {
+  const handleCheck = (prop: "is_private" | "share_view" | "show_readme" | "expires" | "downloads") => () => {
     if (!setting[prop]) {
       handleExpand(prop)(null, true);
     }
@@ -198,20 +201,38 @@ const ShareSettingContent = ({ setting, file, editing, onSettingChange }: ShareS
         </AccordionDetails>
       </Accordion>
       {file?.type == FileType.folder && (
-        <Accordion expanded={expanded === "share_view"} onChange={handleExpand("share_view")}>
-          <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
-            <StyledListItemButton>
-              <ListItemIcon>
-                <TableSettingsOutlined />
-              </ListItemIcon>
-              <ListItemText primary={t("application:modals.shareView")} />
-              <ListItemSecondaryAction>
-                <Checkbox checked={setting.share_view} onChange={handleCheck("share_view")} />
-              </ListItemSecondaryAction>
-            </StyledListItemButton>
-          </AccordionSummary>
-          <AccordionDetails>{t("application:modals.shareViewDes")}</AccordionDetails>
-        </Accordion>
+        <>
+          <Accordion expanded={expanded === "share_view"} onChange={handleExpand("share_view")}>
+            <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+              <StyledListItemButton>
+                <ListItemIcon>
+                  <TableSettingsOutlined />
+                </ListItemIcon>
+                <ListItemText primary={t("application:modals.shareView")} />
+                <ListItemSecondaryAction>
+                  <Checkbox checked={setting.share_view} onChange={handleCheck("share_view")} />
+                </ListItemSecondaryAction>
+              </StyledListItemButton>
+            </AccordionSummary>
+            <AccordionDetails>{t("application:modals.shareViewDes")}</AccordionDetails>
+          </Accordion>
+          <Accordion expanded={expanded === "show_readme"} onChange={handleExpand("show_readme")}>
+            <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
+              <StyledListItemButton>
+                <ListItemIcon>
+                  <BookInformation />
+                </ListItemIcon>
+                <ListItemText primary={t("application:modals.showReadme")} />
+                <ListItemSecondaryAction>
+                  <Checkbox checked={setting.show_readme} onChange={handleCheck("show_readme")} />
+                </ListItemSecondaryAction>
+              </StyledListItemButton>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Trans i18nKey="application:modals.showReadmeDes" components={[<Code />]} />
+            </AccordionDetails>
+          </Accordion>
+        </>
       )}
       <Accordion expanded={expanded === "expires"} onChange={handleExpand("expires")}>
         <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">

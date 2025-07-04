@@ -1,14 +1,15 @@
-import { FileResponse } from "../../../api/explorer.ts";
 import { Box, IconButton, Skeleton, Typography } from "@mui/material";
-import FileIcon from "../Explorer/FileIcon.tsx";
-import Dismiss from "../../Icons/Dismiss.tsx";
+import { FileResponse } from "../../../api/explorer.ts";
+import { closeShareReadme, closeSidebar } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
-import { closeSidebar } from "../../../redux/globalStateSlice.ts";
+import Dismiss from "../../Icons/Dismiss.tsx";
+import FileIcon from "../Explorer/FileIcon.tsx";
 
 export interface HeaderProps {
   target: FileResponse | undefined | null;
+  variant?: "readme";
 }
-const Header = ({ target }: HeaderProps) => {
+const Header = ({ target, variant }: HeaderProps) => {
   const dispatch = useAppDispatch();
   return (
     <Box sx={{ display: "flex", p: 2 }}>
@@ -23,7 +24,7 @@ const Header = ({ target }: HeaderProps) => {
       )}
       <IconButton
         onClick={() => {
-          dispatch(closeSidebar());
+          dispatch(variant == "readme" ? closeShareReadme() : closeSidebar());
         }}
         sx={{
           ml: 1,

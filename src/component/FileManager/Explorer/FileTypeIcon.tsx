@@ -84,9 +84,19 @@ interface TypeIcon {
   color_dark?: string;
   img?: string;
   hideUnknown?: boolean;
+  reverseDarkMode?: boolean;
 }
 
-const FileTypeIcon = ({ name, fileType, notLoaded, sx, hideUnknown, customizedColor, ...rest }: FileTypeIconProps) => {
+const FileTypeIcon = ({
+  name,
+  fileType,
+  notLoaded,
+  sx,
+  hideUnknown,
+  customizedColor,
+  reverseDarkMode,
+  ...rest
+}: FileTypeIconProps) => {
   const theme = useTheme();
   const iconOptions = useAppSelector((state) => state.siteConfig.explorer.typed?.icons) as ExpandedIconSettings;
   const IconComponent = useMemo(() => {
@@ -122,7 +132,7 @@ const FileTypeIcon = ({ name, fileType, notLoaded, sx, hideUnknown, customizedCo
     if (customizedColor) {
       return customizedColor;
     }
-    if (theme.palette.mode == "dark") {
+    if (theme.palette.mode == (reverseDarkMode ? "light" : "dark")) {
       return IconComponent.color_dark ?? IconComponent.color ?? theme.palette.action.active;
     } else {
       return IconComponent.color ?? theme.palette.action.active;

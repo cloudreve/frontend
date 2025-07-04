@@ -509,6 +509,8 @@
     "unlinkOnlyDes": "僅刪除檔案記錄，物理檔案不會被刪除",
     "shareView": "分享視圖設定",
     "shareViewDes": "勾選後，其他使用者存取此共享資料夾時可以看到你保存在服務器的視圖設定（佈局、排序等）。",
+    "showReadme": "顯示 README 文件",
+    "showReadmeDes": "勾選後，會自動為訪問者展示目錄下的 <0>README.md</0> (區分大小寫) 文件。",
     "viewSetting": "視圖設定",
     "saved": "已保存",
     "notSet": "未設定",

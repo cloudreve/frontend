@@ -513,6 +513,8 @@
     "unlinkOnlyDes": "仅删除文件记录，物理文件不会被删除",
     "shareView": "分享视图设置",
     "shareViewDes": "勾选后，其他用户访问此共享文件夹时可以看到你保存在服务器的视图设置（布局、排序等）。",
+    "showReadme": "显示 README 文件",
+    "showReadmeDes": "勾选后，会自动为访问者展示目录下的 <0>README.md</0> (区分大小写) 文件。",
     "viewSetting": "视图设置",
     "saved": "已保存",
     "notSet": "未设置",

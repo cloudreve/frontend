@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { getFileInfo, getFileList, getUserCapacity, sendPatchViewSync } from "../../api/api.ts";
-import { ExplorerView, FileResponse, ListResponse, Metadata } from "../../api/explorer.ts";
+import { ExplorerView, FileResponse, FileType, ListResponse, Metadata } from "../../api/explorer.ts";
 import { getActionOpt } from "../../component/FileManager/ContextMenu/useActionDisplayOpt.ts";
 import { ListViewColumnSetting } from "../../component/FileManager/Explorer/ListView/Column.tsx";
 import { FileManagerIndex } from "../../component/FileManager/FileManager.tsx";
@@ -46,11 +46,13 @@ import {
   setAdvanceSearch,
   setPinFileDialog,
   setSearchPopup,
+  setShareReadmeDetect,
   setUploadFromClipboardDialog,
 } from "../globalStateSlice.ts";
 import { Viewers } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { deleteFile, openFileContextMenu } from "./file.ts";
+import { queueLoadShareInfo } from "./share.ts";
 
 export function setTargetPath(index: number, path: string): AppThunk {
   return async (dispatch, _getState) => {
@@ -110,7 +112,23 @@ export function beforePathChange(index: number): AppThunk {
   };
 }
 
-export function navigateReconcile(index: number, opt?: NavigateReconcileOptions): AppThunk {
+export function checkReadMeEnabled(index: number): AppThunk {
+  return async (dispatch, getState) => {
+    const { path, current_fs } = getState().fileManager[index];
+    if (path && current_fs == Filesystem.share) {
+      try {
+        const info = await dispatch(queueLoadShareInfo(new CrUri(path), false));
+        dispatch(setShareReadmeDetect(info?.show_readme && info.source_type == FileType.folder));
+      } catch (e) {
+        dispatch(setShareReadmeDetect(false));
+      }
+    } else {
+      dispatch(setShareReadmeDetect(false));
+    }
+  };
+}
+
+export function navigateReconcile(index: number, opt?: NavigateReconcileOptions): AppThunk<Promise<void>> {
   return async (dispatch, getState) => {
     const timeNow = dayjs().valueOf();
     const {

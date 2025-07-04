@@ -1,12 +1,19 @@
 import i18next from "i18next";
-import { enqueueSnackbar } from "notistack";
+import { closeSnackbar, enqueueSnackbar, SnackbarKey } from "notistack";
 import { getFileInfo, getFileList, getShareInfo, sendCreateShare, sendUpdateShare } from "../../api/api.ts";
 import { FileResponse, Share, ShareCreateService } from "../../api/explorer.ts";
-import { DefaultCloseAction } from "../../component/Common/Snackbar/snackbar.tsx";
+import { DefaultCloseAction, OpenReadMeAction } from "../../component/Common/Snackbar/snackbar.tsx";
 import { ShareSetting } from "../../component/FileManager/Dialogs/Share/ShareSetting.tsx";
+import { getPaginationState } from "../../component/FileManager/Pagination/PaginationFooter.tsx";
 import CrUri from "../../util/uri.ts";
 import { fileUpdated } from "../fileManagerSlice.ts";
-import { addShareInfo, setManageShareDialog, setShareLinkDialog } from "../globalStateSlice.ts";
+import {
+  addShareInfo,
+  closeShareReadme,
+  setManageShareDialog,
+  setShareLinkDialog,
+  setShareReadmeOpen,
+} from "../globalStateSlice.ts";
 import { AppThunk } from "../store.ts";
 import { longRunningTaskWithSnackbar } from "./file.ts";
 
@@ -22,6 +29,7 @@ export function createOrUpdateShareLink(
       is_private: setting.is_private,
       password: setting.password,
       share_view: setting.share_view,
+      show_readme: setting.show_readme,
       downloads: setting.downloads && setting.downloads_val.value > 0 ? setting.downloads_val.value : undefined,
       expire: setting.expires && setting.expires_val.value > 0 ? setting.expires_val.value : undefined,
     };
@@ -123,6 +131,63 @@ export function openShareEditByID(shareId: string, password?: string, singleFile
     } catch (e) {
       console.log(e);
       return;
+    }
+  };
+}
+
+// Priority from high to low
+const supportedReadMeFiles = ["README.md", "README.txt"];
+
+export function detectReadMe(index: number, isTablet: boolean): AppThunk<Promise<void>> {
+  return async (dispatch, getState) => {
+    const { files: list, pagination } = getState().fileManager[index]?.list ?? {};
+    if (list) {
+      // Find readme file from highest to lowest priority
+      for (const readmeFile of supportedReadMeFiles) {
+        const found = list.find((file) => file.name === readmeFile);
+        if (found) {
+          dispatch(tryOpenReadMe(found, isTablet));
+          return;
+        }
+      }
+    }
+
+    // Not found in current file list, try to get file directly
+    const path = getState().fileManager[index]?.pure_path;
+    const hasMorePages = getPaginationState(pagination).moreItems;
+    if (path && hasMorePages) {
+      const uri = new CrUri(path);
+      for (const readmeFile of supportedReadMeFiles) {
+        try {
+          const file = await dispatch(getFileInfo({ uri: uri.join(readmeFile).toString() }, true));
+          if (file) {
+            dispatch(tryOpenReadMe(file, isTablet));
+            return;
+          }
+        } catch (e) {}
+      }
+    }
+    dispatch(closeShareReadme());
+  };
+}
+
+let snackbarId: SnackbarKey | undefined = undefined;
+
+function tryOpenReadMe(file: FileResponse, askForConfirmation?: boolean): AppThunk<Promise<void>> {
+  return async (dispatch) => {
+    if (askForConfirmation) {
+      dispatch(setShareReadmeOpen({ open: false, target: file }));
+      if (snackbarId) {
+        closeSnackbar(snackbarId);
+      }
+      snackbarId = enqueueSnackbar({
+        message: "README.md",
+        variant: "file",
+        file,
+        action: OpenReadMeAction(file),
+      });
+    } else {
+      dispatch(setShareReadmeOpen({ open: true, target: file }));
     }
   };
 }

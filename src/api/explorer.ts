@@ -87,6 +87,7 @@ export interface Share {
   owner: User;
   source_uri?: string;
   password?: string;
+  show_readme?: boolean;
 }
 
 export enum PolicyType {
@@ -288,6 +289,7 @@ export interface ShareCreateService {
   password?: string;
   expire?: number;
   share_view?: boolean;
+  show_readme?: boolean;
 }
 
 export interface CreateFileService {

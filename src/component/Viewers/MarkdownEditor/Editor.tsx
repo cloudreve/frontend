@@ -52,6 +52,7 @@ export interface MarkdownEditorProps {
   initialValue: string;
   onChange: (value: string) => void;
   readOnly?: boolean;
+  displayOnly?: boolean;
   onSaveShortcut?: () => void;
 }
 
@@ -90,7 +91,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        minHeight: "calc(100vh - 200px)",
+        minHeight: props.displayOnly ? "100%" : "calc(100vh - 200px)",
       }}
       onKeyDown={(e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === "s") {
@@ -112,77 +113,81 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
               diffMarkdown: props.initialValue,
               viewMode: "rich-text",
             }),
-            toolbarPlugin({
-              toolbarContents: () => (
-                <ConditionalContents
-                  options={[
-                    {
-                      when: (editor) => editor?.editorType === "codeblock",
-                      contents: () => <ChangeCodeMirrorLanguage />,
-                    },
-                    {
-                      when: (editor) => editor?.editorType === "sandpack",
-                      contents: () => <ShowSandpackInfo />,
-                    },
-                    {
-                      fallback: () => (
-                        <DiffSourceToggleWrapper>
-                          <UndoRedo />
-                          <Separator />
-                          <BoldItalicUnderlineToggles />
-                          <CodeToggle />
-                          <Separator />
-                          <StrikeThroughSupSubToggles />
-                          <Separator />
-                          <ListsToggle />
-                          <Separator />
+            ...(props.displayOnly
+              ? []
+              : [
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <ConditionalContents
+                        options={[
+                          {
+                            when: (editor) => editor?.editorType === "codeblock",
+                            contents: () => <ChangeCodeMirrorLanguage />,
+                          },
+                          {
+                            when: (editor) => editor?.editorType === "sandpack",
+                            contents: () => <ShowSandpackInfo />,
+                          },
+                          {
+                            fallback: () => (
+                              <DiffSourceToggleWrapper>
+                                <UndoRedo />
+                                <Separator />
+                                <BoldItalicUnderlineToggles />
+                                <CodeToggle />
+                                <Separator />
+                                <StrikeThroughSupSubToggles />
+                                <Separator />
+                                <ListsToggle />
+                                <Separator />
 
-                          <ConditionalContents
-                            options={[
-                              {
-                                when: whenInAdmonition,
-                                contents: () => <ChangeAdmonitionType />,
-                              },
-                              { fallback: () => <BlockTypeSelect /> },
-                            ]}
-                          />
+                                <ConditionalContents
+                                  options={[
+                                    {
+                                      when: whenInAdmonition,
+                                      contents: () => <ChangeAdmonitionType />,
+                                    },
+                                    { fallback: () => <BlockTypeSelect /> },
+                                  ]}
+                                />
 
-                          <Separator />
+                                <Separator />
 
-                          <CreateLink />
-                          <InsertImage />
+                                <CreateLink />
+                                <InsertImage />
 
-                          <Separator />
+                                <Separator />
 
-                          <InsertTable />
-                          <InsertThematicBreak />
+                                <InsertTable />
+                                <InsertThematicBreak />
 
-                          <Separator />
-                          <InsertCodeBlock />
+                                <Separator />
+                                <InsertCodeBlock />
 
-                          <ConditionalContents
-                            options={[
-                              {
-                                when: (editorInFocus) => !whenInAdmonition(editorInFocus),
-                                contents: () => (
-                                  <>
-                                    <Separator />
-                                    <InsertAdmonition />
-                                  </>
-                                ),
-                              },
-                            ]}
-                          />
+                                <ConditionalContents
+                                  options={[
+                                    {
+                                      when: (editorInFocus) => !whenInAdmonition(editorInFocus),
+                                      contents: () => (
+                                        <>
+                                          <Separator />
+                                          <InsertAdmonition />
+                                        </>
+                                      ),
+                                    },
+                                  ]}
+                                />
 
-                          <Separator />
-                          <InsertFrontmatter />
-                        </DiffSourceToggleWrapper>
-                      ),
-                    },
-                  ]}
-                />
-              ),
-            }),
+                                <Separator />
+                                <InsertFrontmatter />
+                              </DiffSourceToggleWrapper>
+                            ),
+                          },
+                        ]}
+                      />
+                    ),
+                  }),
+                ]),
             listsPlugin(),
             quotePlugin(),
             headingsPlugin({ allowedHeadingLevels: [1, 2, 3] }),

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useQuery } from "../util";
-import { useAppDispatch, useAppSelector } from "../redux/hooks.ts";
-import { beforePathChange, navigateReconcile, setTargetPath } from "../redux/thunks/filemanager.ts";
-import { Filesystem } from "../util/uri.ts";
 import { FileManagerIndex } from "../component/FileManager/FileManager.tsx";
+import { useAppDispatch, useAppSelector } from "../redux/hooks.ts";
+import { beforePathChange, checkReadMeEnabled, navigateReconcile, setTargetPath } from "../redux/thunks/filemanager.ts";
+import { useQuery } from "../util";
+import { Filesystem } from "../util/uri.ts";
 
 const pathQueryKey = "path";
 export const defaultPath = "cloudreve://my";
@@ -30,7 +30,9 @@ const useNavigation = (index: number, initialPath?: string) => {
   // When path state changed, dispatch to load file list
   useEffect(() => {
     if (path) {
-      dispatch(navigateReconcile(index));
+      dispatch(navigateReconcile(index)).then(() => {
+        dispatch(checkReadMeEnabled(index));
+      });
       dispatch(beforePathChange(index));
     }
   }, [path]);

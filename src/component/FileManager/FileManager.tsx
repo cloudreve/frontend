@@ -10,6 +10,7 @@ import ImageViewer from "../Viewers/ImageViewer/ImageViewer.tsx";
 import Explorer from "./Explorer/Explorer.tsx";
 import { FmIndexContext } from "./FmIndexContext.tsx";
 import PaginationFooter from "./Pagination/PaginationFooter.tsx";
+import { ReadMe } from "./ReadMe/ReadMe.tsx";
 import Sidebar from "./Sidebar/Sidebar.tsx";
 import SidebarDialog from "./Sidebar/SidebarDialog.tsx";
 import NavHeader from "./TopBar/NavHeader.tsx";
@@ -97,6 +98,7 @@ export const FileManager = ({ index = 0, initialPath, skipRender }: FileManagerP
         <Box sx={{ display: "flex", flexGrow: 1, overflowY: "auto" }}>
           <Explorer />
           {index == FileManagerIndex.main && (isTablet ? <SidebarDialog /> : <Sidebar />)}
+          {index == FileManagerIndex.main && <ReadMe />}
         </Box>
         <PaginationFooter />
       </Stack>

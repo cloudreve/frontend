@@ -1,14 +1,15 @@
-import { closeSnackbar, SnackbarKey } from "notistack";
 import { Button } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { Response } from "../../../api/request.ts";
-import { useAppDispatch } from "../../../redux/hooks.ts";
+import { closeSnackbar, SnackbarKey } from "notistack";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { FileResponse } from "../../../api/explorer.ts";
+import { Response } from "../../../api/request.ts";
+import { setBatchDownloadLogDialog, setShareReadmeOpen } from "../../../redux/globalStateSlice.ts";
+import { useAppDispatch } from "../../../redux/hooks.ts";
 import { showAggregatedErrorDialog } from "../../../redux/thunks/dialog.ts";
 import { navigateToPath } from "../../../redux/thunks/filemanager.ts";
 import { FileManagerIndex } from "../../FileManager/FileManager.tsx";
-import { setBatchDownloadLogDialog } from "../../../redux/globalStateSlice.ts";
-import { useNavigate } from "react-router-dom";
 
 export const DefaultCloseAction = (snackbarId: SnackbarKey | undefined) => {
   const { t } = useTranslation();
@@ -36,6 +37,28 @@ export const ErrorListDetailAction = (error: Response<any>) => (snackbarId: Snac
     <>
       <Button onClick={showDetails} color="inherit" size="small">
         {t("common:errorDetails")}
+      </Button>
+      {Close}
+    </>
+  );
+};
+
+export const OpenReadMeAction = (file: FileResponse) => (snackbarId: SnackbarKey | undefined) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const Close = DefaultCloseAction(snackbarId);
+
+  const openReadMe = useCallback(() => {
+    dispatch(setShareReadmeOpen({ open: true, target: file }));
+    closeSnackbar(snackbarId);
+  }, [dispatch, file, snackbarId]);
+
+  return (
+    <>
+      <Button onClick={openReadMe} color="inherit" size="small">
+        {t("application:modals.view")}
       </Button>
       {Close}
     </>

@@ -242,6 +242,11 @@ export interface GlobalStateSlice {
   advanceSearchOpen?: boolean;
   advanceSearchBasePath?: string;
   advanceSearchInitialNameCondition?: string[];
+
+  // Share README
+  shareReadmeDetect?: number;
+  shareReadmeOpen?: boolean;
+  shareReadmeTarget?: FileResponse;
 }
 
 let preferred_theme: string | undefined = undefined;
@@ -267,6 +272,16 @@ export const globalStateSlice = createSlice({
   name: "globalState",
   initialState,
   reducers: {
+    setShareReadmeDetect: (state, action: PayloadAction<boolean>) => {
+      state.shareReadmeDetect = action.payload ? (state.shareReadmeDetect ?? 0) + 1 : 0;
+    },
+    setShareReadmeOpen: (state, action: PayloadAction<{ open: boolean; target?: FileResponse }>) => {
+      state.shareReadmeOpen = action.payload.open;
+      state.shareReadmeTarget = action.payload.target;
+    },
+    closeShareReadme: (state) => {
+      state.shareReadmeOpen = false;
+    },
     setDirectLinkManagementDialog: (
       state,
       action: PayloadAction<{ open: boolean; file?: FileResponse; highlight?: string }>,
@@ -815,4 +830,7 @@ export const {
   closeExcalidrawViewer,
   setDirectLinkManagementDialog,
   closeDirectLinkManagementDialog,
+  setShareReadmeDetect,
+  closeShareReadme,
+  setShareReadmeOpen,
 } = globalStateSlice.actions;
