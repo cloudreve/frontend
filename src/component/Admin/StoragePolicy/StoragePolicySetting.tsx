@@ -60,6 +60,7 @@ export interface PolicyProps {
   credentialDes?: React.ReactNode;
   corsExposedHeaders?: string[];
   endpointNotEnforcePrefix?: boolean;
+  pro?: boolean;
 }
 
 export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
@@ -69,6 +70,12 @@ export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
     wizardSize: "sm",
     wizard: LocalWizard,
     chunkSizeDes: "policy.chunkSizeDes",
+  },
+  [PolicyType.load_balance]: {
+    name: "policy.load_balance",
+    img: "/static/img/lb.svg",
+    wizardSize: "sm",
+    pro: true,
   },
   [PolicyType.remote]: {
     name: "policy.remote",

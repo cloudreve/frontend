@@ -1,8 +1,8 @@
-import { OneDriveError, QiniuError, UpyunError } from "../types";
-import i18next from "../../../../i18n";
-import { AppError, Response } from "../../../../api/request.ts";
 import { StoragePolicy } from "../../../../api/explorer.ts";
+import { AppError, Response } from "../../../../api/request.ts";
+import i18next from "../../../../i18n";
 import { sizeToString } from "../../../../util";
+import { OneDriveError, QiniuError, UpyunError } from "../types";
 
 export enum UploaderErrorName {
   InvalidFile = "InvalidFile",
@@ -31,6 +31,7 @@ export enum UploaderErrorName {
   FailedFinishOSSUpload = "FailedFinishOSSUpload",
   FailedFinishQiniuUpload = "FailedFinishQiniuUpload",
   FailedTransformResponse = "FailedTransformResponse",
+  LoadBalancePolicyNoAvailable = "LoadBalancePolicyNoAvailable",
 }
 
 const RETRY_ERROR_LIST = [

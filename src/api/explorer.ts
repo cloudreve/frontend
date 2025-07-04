@@ -99,6 +99,7 @@ export enum PolicyType {
   upyun = "upyun",
   s3 = "s3",
   obs = "obs",
+  load_balance = "load_balance",
 }
 
 export interface StoragePolicy {

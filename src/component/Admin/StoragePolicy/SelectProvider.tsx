@@ -15,6 +15,9 @@ import { SecondaryButton } from "../../Common/StyledComponents";
 import DraggableDialog from "../../Dialogs/DraggableDialog";
 import Open from "../../Icons/Open";
 import { PolicyPropsMap } from "./StoragePolicySetting";
+import { useState } from "react";
+import ProDialog from "../Common/ProDialog.tsx";
+import { ProChip } from "../../Pages/Setting/SettingForm.tsx";
 
 export interface SelectProviderProps {
   open: boolean;
@@ -30,6 +33,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 const SelectProvider = ({ open, onClose, onSelect }: SelectProviderProps) => {
   const { t } = useTranslation("dashboard");
+  const [proOpen, setProOpen] = useState(false);
   return (
     <DraggableDialog
       title={t("policy.selectAStorageProvider")}
@@ -40,16 +44,21 @@ const SelectProvider = ({ open, onClose, onSelect }: SelectProviderProps) => {
         maxWidth: "sm",
       }}
     >
+      <ProDialog open={proOpen} onClose={() => setProOpen(false)} />
       <DialogContent dividers>
         <Grid2 container spacing={2} sx={{ mt: 2 }}>
           {Object.values(PolicyType).map((type) => (
             <Grid2 key={type.toString()} size={{ sm: 12, md: 6 }}>
               <StyledCard sx={{ display: "flex" }}>
-                <CardActionArea sx={{ display: "flex", justifyContent: "flex-start" }} onClick={() => onSelect(type)}>
+                <CardActionArea
+                  sx={{ display: "flex", justifyContent: "flex-start" }}
+                  onClick={() => (PolicyPropsMap[type].pro ? setProOpen(true) : onSelect(type))}
+                >
                   <CardMedia component="img" image={PolicyPropsMap[type].img} sx={{ width: 100, height: 60 }} />
                   <CardContent>
                     <Typography variant="subtitle1" color="textSecondary">
                       {t(PolicyPropsMap[type].name)}
+                      {PolicyPropsMap[type].pro && <ProChip size="small" label="Pro" />}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

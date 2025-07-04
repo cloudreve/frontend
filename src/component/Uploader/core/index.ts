@@ -165,14 +165,14 @@ export default class UploadManager {
 
   // 选择文件
   public select = (dst: string, type = SelectType.File): Promise<Base[]> => {
-    return new Promise<Base[]>((resolve) => {
+    return new Promise<Base[]>((resolve, reject) => {
       if (this.policy == undefined) {
         this.logger.warn(`Calling file selector while no policy is set`);
         throw new UploaderError(UploaderErrorName.NoPolicySelected, "No policy selected.");
       }
 
-      this.fileInput.onchange = (ev: Event) => this.addFiles(ev, dst, resolve);
-      this.directoryInput.onchange = (ev: Event) => this.addFiles(ev, dst, resolve);
+      this.fileInput.onchange = (ev: Event) => this.addFiles(ev, dst, resolve, reject);
+      this.directoryInput.onchange = (ev: Event) => this.addFiles(ev, dst, resolve, reject);
       this.fileInput.value = "";
       this.directoryInput.value = "";
       type == SelectType.File ? this.fileInput.click() : this.directoryInput.click();
@@ -197,8 +197,8 @@ export default class UploadManager {
     if (!this.currentPath) {
       return;
     }
-    const uploaders = await new Promise<Base[]>((resolve) =>
-      this.addFiles(files, this.currentPath ?? defaultPath, resolve, getName),
+    const uploaders = await new Promise<Base[]>((resolve, reject) =>
+      this.addFiles(files, this.currentPath ?? defaultPath, resolve, reject, getName),
     );
     this.o.onProactiveFileAdded && this.o.onProactiveFileAdded(uploaders);
   };
@@ -207,6 +207,7 @@ export default class UploadManager {
     ev: Event | File[],
     dst: string,
     resolve: (value: Base[] | PromiseLike<Base[]>) => void,
+    reject: (reason?: any) => void,
     getName?: (file: File) => string,
   ) => {
     let files: File[] = [];
@@ -221,22 +222,25 @@ export default class UploadManager {
     }
 
     if (files.length > 0) {
-      resolve(
-        files.map(
-          (file): Base =>
-            this.dispatchUploader({
-              type: TaskType.file,
-              policy: this.policy as StoragePolicy,
-              dst: getDirectoryUploadDst(dst, file),
-              file: file,
-              size: file.size,
-              overwrite: this.overwrite,
-              name: getName ? getName(file) : file.name,
-              chunkProgress: [],
-              resumed: false,
-            }),
-        ),
-      );
+      let uploaders: Base[] = [];
+      try {
+        uploaders = files.map((file): Base => {
+          return this.dispatchUploader({
+            type: TaskType.file,
+            policy: this.policy as StoragePolicy,
+            dst: getDirectoryUploadDst(dst, file),
+            file: file,
+            size: file.size,
+            overwrite: this.overwrite,
+            name: getName ? getName(file) : file.name,
+            chunkProgress: [],
+            resumed: false,
+          });
+        });
+        resolve(uploaders);
+      } catch (e) {
+        reject(e);
+      }
     }
   };
 
@@ -248,7 +252,9 @@ export default class UploadManager {
     if (containFile) {
       this.o.onDropLeave && this.o.onDropLeave(e);
       const items = await getAllFileEntries(e.dataTransfer!.items);
-      const uploaders = await new Promise<Base[]>((resolve) => this.addFiles(items, this.currentPath, resolve));
+      const uploaders = await new Promise<Base[]>((resolve, reject) =>
+        this.addFiles(items, this.currentPath as string, resolve, reject),
+      );
       this.o.onProactiveFileAdded && this.o.onProactiveFileAdded(uploaders);
     }
   };
