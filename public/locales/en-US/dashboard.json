@@ -716,6 +716,8 @@
     "unknownProduct": "Unknown Product"
   },
   "policy": {
+    "acceleratedDomainUpload": "Use transfer acceleration domain for upload",
+    "acceleratedDomainUploadDes": "When enabled, the <0>transfer acceleration domain</0> of Qiniu will be used when uploading files.",
     "compare": "Compare",
     "deletePolicyConfirmation": "Are you sure you want to delete the storage policy {{name}}?",
     "streamSaver": "Download via browser",

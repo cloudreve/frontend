@@ -705,6 +705,8 @@
     "unknownProduct": "未知產品"
   },
   "policy": {
+    "acceleratedDomainUpload": "使用傳輸加速域名上傳",
+    "acceleratedDomainUploadDes": "開啟後，上傳檔案時會使用七牛的 <0>傳輸加速域名</0>。",
     "compare": "儲存策略對比",
     "deletePolicyConfirmation": "確定要刪除儲存策略 {{name}} 嗎？",
     "streamSaver": "由瀏覽器處理下載",

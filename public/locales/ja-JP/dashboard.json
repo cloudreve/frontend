@@ -709,6 +709,8 @@
     "unknownProduct": "不明な商品"
   },
   "policy": {
+    "acceleratedDomainUpload": "転送加速ドメインを使用してアップロード",
+    "acceleratedDomainUploadDes": "有効にすると、アップロード時に七牛の<0>転送加速ドメイン</0>を使用します。",
     "compare": "ストレージポリシーの比較",
     "deletePolicyConfirmation": "ストレージポリシー「{{name}}」を削除しますか？",
     "streamSaver": "ブラウザでダウンロード処理",

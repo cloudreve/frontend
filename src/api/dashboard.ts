@@ -230,6 +230,7 @@ export interface PolicySetting {
   stream_saver?: boolean;
   use_cname?: boolean;
   source_auth?: boolean;
+  qiniu_upload_cdn?: boolean;
 }
 
 export interface User extends CommonMixin {

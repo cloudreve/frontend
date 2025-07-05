@@ -709,6 +709,8 @@
     "unknownProduct": "未知产品"
   },
   "policy": {
+    "acceleratedDomainUpload": "使用传输加速域名上传",
+    "acceleratedDomainUploadDes": "开启后，上传文件时会使用七牛的 <0>传输加速域名</0>。",
     "compare": "对比存储策略",
     "deletePolicyConfirmation": "确定要删除存储策略 {{name}} 吗？",
     "streamSaver": "由浏览器处理下载",

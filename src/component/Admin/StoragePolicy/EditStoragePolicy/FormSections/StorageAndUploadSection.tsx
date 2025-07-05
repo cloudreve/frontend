@@ -107,6 +107,16 @@ const StorageAndUploadSection = () => {
     [setPolicy],
   );
 
+  const onAcceleratedDomainUploadChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPolicy((p: StoragePolicy) => ({
+        ...p,
+        settings: { ...p.settings, qiniu_upload_cdn: e.target.checked ? true : undefined },
+      }));
+    },
+    [setPolicy],
+  );
+
   return (
     <SettingSection>
       <Typography variant="h6" gutterBottom>
@@ -188,6 +198,30 @@ const StorageAndUploadSection = () => {
                 label={t("policy.preallocate")}
               />
               <NoMarginHelperText>{t("policy.preallocateDes")}</NoMarginHelperText>
+            </FormControl>
+          </SettingForm>
+        )}
+        {values.type === PolicyType.qiniu && (
+          <SettingForm lgWidth={5}>
+            <FormControl fullWidth>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={values.settings?.qiniu_upload_cdn ?? false}
+                    onChange={onAcceleratedDomainUploadChange}
+                  />
+                }
+                label={t("policy.acceleratedDomainUpload")}
+              />
+              <NoMarginHelperText>
+                <Trans
+                  i18nKey="policy.acceleratedDomainUploadDes"
+                  ns="dashboard"
+                  components={[
+                    <Link target="_blank" href="https://developer.qiniu.com/kodo/12656/transfer-acceleration" />,
+                  ]}
+                />
+              </NoMarginHelperText>
             </FormControl>
           </SettingForm>
         )}
