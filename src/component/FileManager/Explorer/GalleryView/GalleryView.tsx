@@ -64,7 +64,6 @@ const GalleryView = React.forwardRef(
 
     const resizeGallery = useCallback(
       (containerWidth: number, boxSize: number) => {
-        console.log(containerWidth / boxSize);
         const boxCount = Math.floor(containerWidth / boxSize);
         const newCols = Math.max(1, boxCount);
         const boxHeight = containerWidth / newCols;
@@ -95,17 +94,18 @@ const GalleryView = React.forwardRef(
             margin: 0,
           }}
         >
-          {list.map((file, index) => (
-            <DndWrappedFile
-              key={file.id}
-              boxHeight={boxHeight}
-              component={GalleryImage}
-              search={search_params}
-              index={index}
-              showThumb={true}
-              file={file}
-            />
-          ))}
+          {boxHeight > 0 &&
+            list.map((file, index) => (
+              <DndWrappedFile
+                key={file.id}
+                boxHeight={boxHeight}
+                component={GalleryImage}
+                search={search_params}
+                index={index}
+                showThumb={true}
+                file={file}
+              />
+            ))}
         </ImageList>
       </Box>
     );
