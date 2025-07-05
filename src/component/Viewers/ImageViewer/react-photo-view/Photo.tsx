@@ -6,6 +6,7 @@ import { getFileEntityUrl, getFileInfo } from "../../../../api/api.ts";
 import { EntityType, FileResponse, Metadata } from "../../../../api/explorer.ts";
 import { useAppDispatch } from "../../../../redux/hooks.ts";
 import { getFileLinkedUri } from "../../../../util";
+import { LRUCache } from "../../../../util/lru.ts";
 import FacebookCircularProgress from "../../../Common/CircularProgress.tsx";
 import useMountedRef from "./hooks/useMountedRef";
 import "./Photo.less";
@@ -27,6 +28,9 @@ export interface IPhotoProps extends React.HTMLAttributes<HTMLElement> {
   loadingElement?: JSX.Element;
   brokenElement?: JSX.Element | ((photoProps: BrokenElementParams) => JSX.Element);
 }
+
+// Global LRU cache for HEIC conversions (capacity: 50 images)
+const heicConversionCache = new LRUCache<string, string>(50);
 
 export default function Photo({
   file,
@@ -50,8 +54,14 @@ export default function Photo({
     return extension === "heic" || extension === "heif";
   };
 
-  // Helper function to convert HEIC to PNG
-  const convertHeicToPng = async (imageUrl: string): Promise<string> => {
+  // Helper function to convert HEIC to JPG with caching
+  const convertHeicToJpg = async (imageUrl: string, cacheKey: string): Promise<string> => {
+    // Check cache first
+    const cachedUrl = heicConversionCache.get(cacheKey);
+    if (cachedUrl) {
+      return cachedUrl;
+    }
+
     try {
       // Fetch the image as blob
       const response = await fetch(imageUrl);
@@ -64,21 +74,27 @@ export default function Photo({
       const isHeicBlob = await isHeic(file);
 
       if (isHeicBlob) {
-        // Convert HEIC to PNG
-        const pngBlob = await heicTo({
+        // Convert HEIC to JPG
+        const jpgBlob = await heicTo({
           blob: blob,
-          type: "image/png",
-          quality: 0.9,
+          type: "image/jpeg",
+          quality: 1,
         });
 
         // Create object URL for the converted image
-        return URL.createObjectURL(pngBlob);
+        const convertedUrl = URL.createObjectURL(jpgBlob);
+
+        // Cache the converted URL
+        heicConversionCache.set(cacheKey, convertedUrl);
+
+        return convertedUrl;
       } else {
-        // If not HEIC, return original URL
+        // If not HEIC, cache and return original URL
+        heicConversionCache.set(cacheKey, imageUrl);
         return imageUrl;
       }
     } catch (error) {
-      console.error("Error converting HEIC to PNG:", error);
+      console.error("Error converting HEIC to JPG:", error);
       throw error;
     }
   };
@@ -92,11 +108,12 @@ export default function Photo({
     )
       .then(async (res) => {
         const originalUrl = res.urls[0].url;
+        const cacheKey = `${file.id}-${version || "default"}`;
 
         // Check if the file is HEIC/HEIF and convert if needed
         if (isHeicFile(file.name)) {
           try {
-            const convertedUrl = await convertHeicToPng(originalUrl);
+            const convertedUrl = await convertHeicToJpg(originalUrl, cacheKey);
             setImageSrc(convertedUrl);
             if (file.metadata?.[Metadata.live_photo]) {
               loadLivePhoto(file, convertedUrl);
@@ -189,21 +206,23 @@ export default function Photo({
   useEffect(() => {
     return () => {
       if (imageSrc && imageSrc.startsWith("blob:")) {
-        URL.revokeObjectURL(imageSrc);
+        // Don't revoke cached URLs, let the cache handle cleanup
+        // URL.revokeObjectURL(imageSrc);
       }
     };
   }, [imageSrc]);
 
-  const {
-    onMouseDown,
-    onTouchStart,
-    style: { width, height, ...restStyle },
-    ...rest
-  } = restProps;
+  const { onMouseDown, onTouchStart, style, ...rest } = restProps;
+
+  // Extract width and height from style if available
+  const { width, height, ...restStyle } = style || {};
 
   useEffect(() => {
     if (playerRef.current) {
-      playerRef.current.updateSize(width, height);
+      // Convert width and height to numbers, defaulting to 0 if not valid
+      const numWidth = typeof width === "number" ? width : 0;
+      const numHeight = typeof height === "number" ? height : 0;
+      playerRef.current.updateSize(numWidth, numHeight);
     }
   }, [width, height]);
 
