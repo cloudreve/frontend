@@ -1253,6 +1253,12 @@
     "forceDeleteDes": "物理ファイルの削除成功可否に関わらず、Blobレコードは削除されます。"
   },
   "event": {
+    "cleanup": "イベント清理",
+    "cleanupAuditLog": "イベント清理",
+    "cleanupAuditLogDescription": "以下条件を満たすすべてのイベントを削除します：",
+    "cleanupNotAfter": "この日付以前",
+    "cleanupEventTypes": "イベント種類",
+    "cleanupEventTypesDes": "イベント種類を選択してください。空の場合はすべての種類を削除します。",
     "initiator": "発信者",
     "event": "イベント",
     "userID": "ユーザーID",
@@ -1305,6 +1311,13 @@
     "file": "ファイル"
   },
   "task": {
+    "cleanupTasks": "タスク清理",
+    "cleanupTasksDescription": "以下条件を満たすすべてのタスクを削除します：",
+    "cleanupNotAfter": "この日付以前",
+    "cleanupTaskTypes": "タスク種類",
+    "cleanupTaskTypesDes": "タスク種類を選択してください。空の場合はすべての種類を削除します。",
+    "cleanupTaskStatuses": "タスクステータス",
+    "cleanupTaskStatusesDes": "タスクステータスを選択してください。空の場合はすべての完了ステータスのタスクを削除します。",
     "import": "ファイルのインポート",
     "confirmDelete": "このタスクを削除しますか？",
     "confirmBatchDelete": "{{num}}個のタスクを削除しますか？",

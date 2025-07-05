@@ -27,6 +27,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { confirmOperation } from "../../../redux/thunks/dialog";
 import { NoWrapTableCell, SecondaryButton, StyledTableContainerPaper } from "../../Common/StyledComponents";
 import ArrowSync from "../../Icons/ArrowSync";
+import Broom from "../../Icons/Broom";
 import Filter from "../../Icons/Filter";
 import PageContainer from "../../Pages/PageContainer";
 import PageHeader from "../../Pages/PageHeader";
@@ -34,6 +35,7 @@ import TablePagination from "../Common/TablePagination";
 import EntityDialog from "../Entity/EntityDialog/EntityDialog";
 import { OrderByQuery, OrderDirectionQuery, PageQuery, PageSizeQuery } from "../StoragePolicy/StoragePolicySetting";
 import UserDialog from "../User/UserDialog/UserDialog";
+import TaskCleanupDialog from "./TaskCleanupDialog";
 import TaskDialog from "./TaskDialog/TaskDialog";
 import TaskFilterPopover from "./TaskFilterPopover";
 import TaskRow from "./TaskRow";
@@ -77,6 +79,7 @@ const TaskList = () => {
   const [openTask, setOpenTask] = useState<number | undefined>(undefined);
   const [openTaskDialogOpen, setOpenTaskDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [cleanupDialogOpen, setCleanupDialogOpen] = useState(false);
 
   const pageInt = parseInt(page) ?? 1;
   const pageSizeInt = parseInt(pageSize) ?? 10;
@@ -199,6 +202,11 @@ const TaskList = () => {
       <UserDialog open={userDialogOpen} onClose={() => setUserDialogOpen(false)} userID={userDialogID} />
       <EntityDialog open={openEntityDialogOpen} onClose={() => setOpenEntityDialogOpen(false)} entityID={openEntity} />
       <TaskDialog open={openTaskDialogOpen} onClose={() => setOpenTaskDialogOpen(false)} taskID={openTask} />
+      <TaskCleanupDialog
+        open={cleanupDialogOpen}
+        onClose={() => setCleanupDialogOpen(false)}
+        onCleanupComplete={fetchTasks}
+      />
       <Container maxWidth="xl">
         <PageHeader title={t("dashboard:nav.tasks")} />
         <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
@@ -224,6 +232,10 @@ const TaskList = () => {
               {t("user.filter")}
             </SecondaryButton>
           </Badge>
+
+          <SecondaryButton startIcon={<Broom />} variant="contained" onClick={() => setCleanupDialogOpen(true)}>
+            {t("event.cleanup")}
+          </SecondaryButton>
 
           {selected.length > 0 && !isMobile && (
             <>

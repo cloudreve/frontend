@@ -1267,6 +1267,12 @@
     "forceDeleteDes": "Whether to delete the Blob record regardless of whether the physical file is deleted."
   },
   "event": {
+    "cleanup": "Cleanup",
+    "cleanupAuditLog": "Event cleanup",
+    "cleanupAuditLogDescription": "Delete all events that meet the following conditions:",
+    "cleanupNotAfter": "Before this date",
+    "cleanupEventTypes": "Event types",
+    "cleanupEventTypesDes": "Select the event types to clean up. Leave blank to clean up all types.",
     "initiator": "Initiator",
     "event": "Event",
     "userID": "User ID",
@@ -1319,6 +1325,13 @@
     "file": "File"
   },
   "task": {
+    "cleanupTasks": "Cleanup tasks",
+    "cleanupTasksDescription": "Cleanup all tasks that meet the following conditions:",
+    "cleanupNotAfter": "Before this date",
+    "cleanupTaskTypes": "Task types",
+    "cleanupTaskTypesDes": "Select the task types to clean up. Leave blank to clean up all types.",
+    "cleanupTaskStatuses": "Task statuses",
+    "cleanupTaskStatusesDes": "Select the task statuses to clean up. Leave blank to clean up all completed status tasks.",
     "confirmDelete": "Are you sure you want to delete this task?",
     "confirmBatchDelete": "Are you sure you want to delete {{num}} tasks?",
     "deleteXTasks": "Delete {{num}} tasks",

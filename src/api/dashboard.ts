@@ -1,6 +1,6 @@
 import { EntityType, PaginationResults, PolicyType } from "./explorer.ts";
 import { Capacity } from "./user.ts";
-import { TaskStatus, TaskSummary } from "./workflow.ts";
+import { TaskStatus, TaskSummary, TaskType } from "./workflow.ts";
 
 export interface MetricsSummary {
   dates: string[];
@@ -540,4 +540,10 @@ export interface Share extends CommonMixin {
 export interface ListShareResponse {
   shares: Share[];
   pagination: PaginationResults;
+}
+
+export interface CleanupTaskService {
+  not_after: string;
+  types?: TaskType[];
+  status?: TaskStatus[];
 }

@@ -1249,6 +1249,12 @@
     "forceDeleteDes": "無論物理檔案是否刪除成功，都會刪除 Blob 記錄。"
   },
   "event": {
+    "cleanup": "清理",
+    "cleanupAuditLog": "事件清理",
+    "cleanupAuditLogDescription": "刪除滿足以下條件的所有事件：",
+    "cleanupNotAfter": "在此日期之前",
+    "cleanupEventTypes": "事件類型",
+    "cleanupEventTypesDes": "選擇要清理的事件類型，留空表示清理所有類型。",
     "initiator": "發起者",
     "event": "事件",
     "userID": "使用者 ID",
@@ -1301,6 +1307,13 @@
     "file": "檔案"
   },
   "task": {
+    "cleanupTasks": "清理任務",
+    "cleanupTasksDescription": "清理滿足以下條件的所有任務：",
+    "cleanupNotAfter": "在此日期之前",
+    "cleanupTaskTypes": "任務類型",
+    "cleanupTaskTypesDes": "選擇要清理的任務類型，留空表示清理所有類型。",
+    "cleanupTaskStatuses": "任務狀態",
+    "cleanupTaskStatusesDes": "選擇要清理的任務狀態，留空表示清理所有已完成狀態的任務。",
     "import": "導入檔案",
     "confirmDelete": "確認要刪除這個任務?",
     "confirmBatchDelete": "確認要刪除 {{num}} 個任務?",

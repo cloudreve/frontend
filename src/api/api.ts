@@ -4,6 +4,7 @@ import {
   AdminListGroupResponse,
   AdminListService,
   BatchIDService,
+  CleanupTaskService,
   CreateStoragePolicyCorsService,
   Entity,
   FetchWOPIDiscoveryService,
@@ -1985,6 +1986,20 @@ export function sendPatchViewSync(args: PatchViewSyncService): ThunkResponse<voi
       send(
         `/file/view`,
         { method: "PATCH", data: args },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function sendCleanupTask(args: CleanupTaskService): ThunkResponse<void> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/admin/queue/cleanup`,
+        { method: "POST", data: args },
         {
           ...defaultOpts,
         },
