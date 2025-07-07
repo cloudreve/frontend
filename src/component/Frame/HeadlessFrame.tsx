@@ -31,7 +31,7 @@ const HeadlessFrame = () => {
         backgroundColor: (theme) =>
           theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900],
         flexGrow: 1,
-        height: "100vh",
+        height: "95vh",
         overflow: "auto",
       }}
     >
@@ -42,7 +42,7 @@ const HeadlessFrame = () => {
           direction="column"
           alignItems="center"
           justifyContent="center"
-          sx={{ minHeight: "100vh" }}
+          sx={{ minHeight: "95vh" }}
         >
           <Box sx={{ width: "100%", py: 2 }}>
             <Paper
