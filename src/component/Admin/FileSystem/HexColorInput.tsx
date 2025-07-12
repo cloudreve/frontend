@@ -1,8 +1,8 @@
-import { DenseFilledTextField } from "../../../Common/StyledComponents.tsx";
+import { DenseFilledTextField } from "../../Common/StyledComponents.tsx";
 import { InputAdornment } from "@mui/material";
 import CircleColorSelector, {
   customizeMagicColor,
-} from "../../../FileManager/FileInfo/ColorCircle/CircleColorSelector.tsx";
+} from "../../FileManager/FileInfo/ColorCircle/CircleColorSelector.tsx";
 import * as React from "react";
 
 export interface HexColorInputProps {

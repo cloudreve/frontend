@@ -14,21 +14,18 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useCallback, useContext, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { sendClearBlobUrlCache } from "../../../../api/api.ts";
-import { useAppDispatch } from "../../../../redux/hooks.ts";
-import { isTrueVal } from "../../../../session/utils.ts";
-import SizeInput from "../../../Common/SizeInput.tsx";
-import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
-import { DenseFilledTextField, DenseSelect, SecondaryButton } from "../../../Common/StyledComponents.tsx";
-import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
-import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
-import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings.tsx";
-import { SettingContext } from "../SettingWrapper.tsx";
-import EmojiList from "./EmojiList.tsx";
-import FileIconList from "./FileIconList.tsx";
-import FileViewerList from "./ViewerSetting/FileViewerList.tsx";
+import { sendClearBlobUrlCache } from "../../../api/api.ts";
+import { useAppDispatch } from "../../../redux/hooks.ts";
+import { isTrueVal } from "../../../session/utils.ts";
+import SizeInput from "../../Common/SizeInput.tsx";
+import { DefaultCloseAction } from "../../Common/Snackbar/snackbar.tsx";
+import { DenseFilledTextField, DenseSelect, SecondaryButton } from "../../Common/StyledComponents.tsx";
+import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
+import SettingForm from "../../Pages/Setting/SettingForm.tsx";
+import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings/Settings.tsx";
+import { SettingContext } from "../Settings/SettingWrapper.tsx";
 
-const Filesystem = () => {
+const Parameters = () => {
   const { t } = useTranslation("dashboard");
   const { formRef, setSettings, values } = useContext(SettingContext);
   const [loading, setLoading] = useState(false);
@@ -47,35 +44,11 @@ const Filesystem = () => {
       });
   };
 
-  const iconOnChange = useCallback(
-    (s: string) =>
-      setSettings({
-        explorer_icons: s,
-      }),
-    [],
-  );
-
-  const viewerOnChange = useCallback(
-    (s: string) =>
-      setSettings({
-        file_viewers: s,
-      }),
-    [],
-  );
-
   const onMimeMappingChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSettings({
       mime_mapping: e.target.value,
     });
   }, []);
-
-  const onEmojiChange = useCallback(
-    (s: string) =>
-      setSettings({
-        emojis: s,
-      }),
-    [],
-  );
 
   return (
     <Box component={"form"} ref={formRef} onSubmit={(e) => e.preventDefault()}>
@@ -360,22 +333,6 @@ const Filesystem = () => {
         </SettingSection>
         <SettingSection>
           <Typography variant="h6" gutterBottom>
-            {t("settings.fileIcons")}
-          </Typography>
-          <SettingSectionContent>
-            <FileIconList config={values.explorer_icons} onChange={iconOnChange} />
-          </SettingSectionContent>
-        </SettingSection>
-        <SettingSection>
-          <Typography variant="h6" gutterBottom>
-            {t("settings.fileViewers")}
-          </Typography>
-          <SettingSectionContent>
-            <FileViewerList config={values.file_viewers} onChange={viewerOnChange} />
-          </SettingSectionContent>
-        </SettingSection>
-        <SettingSection>
-          <Typography variant="h6" gutterBottom>
             {t("settings.searchQuery")}
           </Typography>
           <SettingSectionContent>
@@ -427,14 +384,6 @@ const Filesystem = () => {
                 required
               />
             </SettingForm>
-          </SettingSectionContent>
-        </SettingSection>
-        <SettingSection>
-          <Typography variant="h6" gutterBottom>
-            {t("settings.emojiOptions")}
-          </Typography>
-          <SettingSectionContent>
-            <EmojiList config={values.emojis} onChange={onEmojiChange} />
           </SettingSectionContent>
         </SettingSection>
         <SettingSection>
@@ -630,4 +579,4 @@ const Filesystem = () => {
   );
 };
 
-export default Filesystem;
+export default Parameters;

@@ -8,7 +8,6 @@ import ResponsiveTabs, { Tab } from "../../Common/ResponsiveTabs.tsx";
 import Bot from "../../Icons/Bot.tsx";
 import Color from "../../Icons/Color.tsx";
 import CubeSync from "../../Icons/CubeSync.tsx";
-import CubeTree from "../../Icons/CubeTree.tsx";
 import Currency from "../../Icons/Currency.tsx";
 import FilmstripImage from "../../Icons/FilmstripImage.tsx";
 import Globe from "../../Icons/Globe.tsx";
@@ -22,7 +21,6 @@ import Appearance from "./Appearance/Appearance.tsx";
 import Captcha from "./Captcha/Captcha.tsx";
 import Email from "./Email/Email.tsx";
 import Events from "./Event/Events.tsx";
-import Filesystem from "./Filesystem/Filesystem.tsx";
 import Media from "./Media/Media.tsx";
 import Queue from "./Queue/Queue.tsx";
 import ServerSetting from "./Server/ServerSetting.tsx";
@@ -103,11 +101,6 @@ const Settings = () => {
           label: t("nav.captcha"),
           value: SettingsPageTab.Captcha,
           icon: <Bot />,
-        },
-        {
-          label: t("nav.fileSystem"),
-          value: SettingsPageTab.FileSystem,
-          icon: <CubeTree />,
         },
         {
           label: t("nav.mediaProcessing"),
@@ -228,43 +221,6 @@ const Settings = () => {
                   ]}
                 >
                   <Captcha />
-                </SettingsWrapper>
-              )}
-              {tab === SettingsPageTab.FileSystem && (
-                <SettingsWrapper
-                  settings={[
-                    "maxEditSize",
-                    "cron_trash_bin_collect",
-                    "cron_entity_collect",
-                    "public_resource_maxage",
-                    "use_cursor_pagination",
-                    "max_page_size",
-                    "max_recursive_searched_folder",
-                    "max_batched_file",
-                    "map_provider",
-                    "map_google_tile_type",
-                    "mime_mapping",
-                    "explorer_icons",
-                    "file_viewers",
-                    "explorer_category_image_query",
-                    "explorer_category_video_query",
-                    "explorer_category_audio_query",
-                    "explorer_category_document_query",
-                    "emojis",
-                    "archive_timeout",
-                    "upload_session_timeout",
-                    "slave_api_timeout",
-                    "folder_props_timeout",
-                    "chunk_retries",
-                    "use_temp_chunk_buffer",
-                    "max_parallel_transfer",
-                    "cron_oauth_cred_refresh",
-                    "viewer_session_timeout",
-                    "entity_url_default_ttl",
-                    "entity_url_cache_margin",
-                  ]}
-                >
-                  <Filesystem />
                 </SettingsWrapper>
               )}
               {tab === SettingsPageTab.MediaProcessing && (

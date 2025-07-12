@@ -22,7 +22,6 @@ import Add from "../../../Icons/Add";
 import { ProChip } from "../../../Pages/Setting/SettingForm";
 import ProDialog from "../../Common/ProDialog";
 import { SettingContext } from "../../Settings/SettingWrapper";
-import { SettingSection } from "../../Settings/Settings";
 import DraggableCustomPropsRow, { FieldTypes } from "./DraggableCustomPropsRow";
 import EditPropsDialog from "./EditPropsDialog";
 
@@ -117,94 +116,88 @@ const CustomPropsSetting = () => {
 
   return (
     <Box component={"form"} ref={formRef} onSubmit={(e) => e.preventDefault()}>
-      <Stack spacing={5}>
+      <Stack spacing={1}>
         <ProDialog open={proOpen} onClose={() => setProOpen(false)} />
-        <SettingSection>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-            <SecondaryButton variant="contained" startIcon={<Add />} {...bindTrigger(newPropsPopupState)}>
-              {t("customProps.add")}
-            </SecondaryButton>
-            <Menu
-              onClose={onClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              {...menuProps}
-            >
-              {(Object.keys(FieldTypes) as CustomPropsType[]).map((type, index) => {
-                const fieldType = FieldTypes[type];
-                const Icon = fieldType.icon;
-                return (
-                  <SquareMenuItem
-                    dense
-                    key={index}
-                    onClick={() => (fieldType.pro ? setProOpen(true) : onNewProp(type))}
-                  >
-                    <ListItemIcon>
-                      <Icon />
-                    </ListItemIcon>
-                    {t(fieldType.title)}
-                    {fieldType.pro && <ProChip label="Pro" color="primary" size="small" />}
-                  </SquareMenuItem>
-                );
-              })}
-            </Menu>
-          </Box>
-          <TableContainer component={StyledTableContainerPaper}>
-            <DndProvider backend={HTML5Backend}>
-              <Table sx={{ width: "100%" }} size="small">
-                <TableHead>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+          <SecondaryButton variant="contained" startIcon={<Add />} {...bindTrigger(newPropsPopupState)}>
+            {t("customProps.add")}
+          </SecondaryButton>
+          <Menu
+            onClose={onClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            {...menuProps}
+          >
+            {(Object.keys(FieldTypes) as CustomPropsType[]).map((type, index) => {
+              const fieldType = FieldTypes[type];
+              const Icon = fieldType.icon;
+              return (
+                <SquareMenuItem dense key={index} onClick={() => (fieldType.pro ? setProOpen(true) : onNewProp(type))}>
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                  {t(fieldType.title)}
+                  {fieldType.pro && <ProChip label="Pro" color="primary" size="small" />}
+                </SquareMenuItem>
+              );
+            })}
+          </Menu>
+        </Box>
+        <TableContainer component={StyledTableContainerPaper}>
+          <DndProvider backend={HTML5Backend}>
+            <Table sx={{ width: "100%" }} size="small">
+              <TableHead>
+                <TableRow>
+                  <NoWrapCell>{t("settings.displayName")}</NoWrapCell>
+                  <NoWrapCell>{t("customProps.type")}</NoWrapCell>
+                  <NoWrapCell>{t("customProps.default")}</NoWrapCell>
+                  <NoWrapCell>{t("settings.actions")}</NoWrapCell>
+                  <NoWrapCell></NoWrapCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {customProps.map((prop, idx) => {
+                  const rowRef = createRef<HTMLTableRowElement>();
+                  return (
+                    <DraggableCustomPropsRow
+                      key={prop.id}
+                      ref={rowRef}
+                      customProps={prop}
+                      index={idx}
+                      moveRow={moveRow}
+                      onEdit={(props) => {
+                        setEditProps(props);
+                        setIsNew(false);
+                        setOpen(true);
+                      }}
+                      onDelete={handleDeleteProduct}
+                      onMoveUp={() => handleMoveUp(idx)}
+                      onMoveDown={() => handleMoveDown(idx)}
+                      isFirst={idx === 0}
+                      isLast={idx === customProps.length - 1}
+                      t={t}
+                    />
+                  );
+                })}
+                {customProps.length === 0 && (
                   <TableRow>
-                    <NoWrapCell>{t("settings.displayName")}</NoWrapCell>
-                    <NoWrapCell>{t("customProps.type")}</NoWrapCell>
-                    <NoWrapCell>{t("customProps.default")}</NoWrapCell>
-                    <NoWrapCell>{t("settings.actions")}</NoWrapCell>
-                    <NoWrapCell></NoWrapCell>
+                    <NoWrapCell colSpan={6} align="center">
+                      <Typography variant="caption" color="text.secondary">
+                        {t("application:setting.listEmpty")}
+                      </Typography>
+                    </NoWrapCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {customProps.map((prop, idx) => {
-                    const rowRef = createRef<HTMLTableRowElement>();
-                    return (
-                      <DraggableCustomPropsRow
-                        key={prop.id}
-                        ref={rowRef}
-                        customProps={prop}
-                        index={idx}
-                        moveRow={moveRow}
-                        onEdit={(props) => {
-                          setEditProps(props);
-                          setIsNew(false);
-                          setOpen(true);
-                        }}
-                        onDelete={handleDeleteProduct}
-                        onMoveUp={() => handleMoveUp(idx)}
-                        onMoveDown={() => handleMoveDown(idx)}
-                        isFirst={idx === 0}
-                        isLast={idx === customProps.length - 1}
-                        t={t}
-                      />
-                    );
-                  })}
-                  {customProps.length === 0 && (
-                    <TableRow>
-                      <NoWrapCell colSpan={6} align="center">
-                        <Typography variant="caption" color="text.secondary">
-                          {t("application:setting.listEmpty")}
-                        </Typography>
-                      </NoWrapCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </DndProvider>
-          </TableContainer>
-        </SettingSection>
+                )}
+              </TableBody>
+            </Table>
+          </DndProvider>
+        </TableContainer>
       </Stack>
       <EditPropsDialog open={open} onClose={() => setOpen(false)} onSave={handleSave} isNew={isNew} props={editProps} />
     </Box>

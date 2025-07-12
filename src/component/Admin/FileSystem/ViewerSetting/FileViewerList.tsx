@@ -15,20 +15,20 @@ import {
 import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import * as React from "react";
 import { memo, useCallback, useMemo, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useTranslation } from "react-i18next";
-import { Viewer, ViewerGroup, ViewerType } from "../../../../../api/explorer.ts";
-import { uuidv4 } from "../../../../../util";
-import { NoWrapTableCell, SecondaryButton } from "../../../../Common/StyledComponents.tsx";
-import { SquareMenuItem } from "../../../../FileManager/ContextMenu/ContextMenu.tsx";
-import Add from "../../../../Icons/Add.tsx";
-import DesktopFlow from "../../../../Icons/DesktopFlow.tsx";
-import DocumentDataLink from "../../../../Icons/DocumentDataLink.tsx";
-import { AccordionSummary, StyledAccordion } from "../../UserSession/SSOSettings.tsx";
+import { Viewer, ViewerGroup, ViewerType } from "../../../../api/explorer.ts";
+import { uuidv4 } from "../../../../util";
+import { NoWrapTableCell, SecondaryButton } from "../../../Common/StyledComponents.tsx";
+import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
+import Add from "../../../Icons/Add.tsx";
+import DesktopFlow from "../../../Icons/DesktopFlow.tsx";
+import DocumentDataLink from "../../../Icons/DocumentDataLink.tsx";
+import { AccordionSummary, StyledAccordion } from "../../Settings/UserSession/SSOSettings.tsx";
 import FileViewerEditDialog from "./FileViewerEditDialog.tsx";
 import FileViewerRow from "./FileViewerRow.tsx";
 import ImportWopiDialog from "./ImportWopiDialog.tsx";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface ViewerGroupProps {
   group: ViewerGroup;
@@ -288,6 +288,9 @@ const FileViewerList = memo(({ config, onChange }: FileViewerListProps) => {
 
   return (
     <Box>
+      <SecondaryButton variant={"contained"} {...bindTrigger(addNewPopupState)} startIcon={<Add />} sx={{ mb: 1 }}>
+        {t("settings.addViewer")}
+      </SecondaryButton>
       {configParsed?.length > 0 &&
         configParsed.map((item: ViewerGroup, index) => (
           <ViewerGroupRow
@@ -299,9 +302,6 @@ const FileViewerList = memo(({ config, onChange }: FileViewerListProps) => {
             dndType={`viewer-row-${index}`}
           />
         ))}
-      <SecondaryButton variant={"contained"} {...bindTrigger(addNewPopupState)} startIcon={<Add />} sx={{ mt: 1 }}>
-        {t("settings.addViewer")}
-      </SecondaryButton>
       <Menu
         onClose={onClose}
         anchorOrigin={{

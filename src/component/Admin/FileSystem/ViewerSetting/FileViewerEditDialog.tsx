@@ -4,6 +4,7 @@ import {
   IconButton,
   Link,
   ListItemText,
+  SelectChangeEvent,
   Switch,
   Table,
   TableBody,
@@ -17,33 +18,32 @@ import Grid from "@mui/material/Grid2";
 import { useSnackbar } from "notistack";
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Viewer, ViewerPlatform, ViewerType } from "../../../../../api/explorer.ts";
-import { builtInViewers } from "../../../../../redux/thunks/viewer.ts";
-import { isTrueVal } from "../../../../../session/utils.ts";
-import CircularProgress from "../../../../Common/CircularProgress.tsx";
-import SizeInput from "../../../../Common/SizeInput.tsx";
-import { DefaultCloseAction } from "../../../../Common/Snackbar/snackbar.tsx";
+import { Viewer, ViewerPlatform, ViewerType } from "../../../../api/explorer.ts";
+import { builtInViewers } from "../../../../redux/thunks/viewer.ts";
+import { isTrueVal } from "../../../../session/utils.ts";
+import CircularProgress from "../../../Common/CircularProgress.tsx";
+import SizeInput from "../../../Common/SizeInput.tsx";
+import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
 import {
   DenseFilledTextField,
   DenseSelect,
   NoWrapTableCell,
   SecondaryButton,
   StyledTableContainerPaper,
-} from "../../../../Common/StyledComponents.tsx";
-import DraggableDialog from "../../../../Dialogs/DraggableDialog.tsx";
-import { SquareMenuItem } from "../../../../FileManager/ContextMenu/ContextMenu.tsx";
-import { ViewerIDWithDefaultIcons } from "../../../../FileManager/Dialogs/OpenWith.tsx";
-import Add from "../../../../Icons/Add.tsx";
-import Dismiss from "../../../../Icons/Dismiss.tsx";
-import SettingForm from "../../../../Pages/Setting/SettingForm.tsx";
-import MagicVarDialog, { MagicVar } from "../../../Common/MagicVarDialog.tsx";
-import { NoMarginHelperText } from "../../Settings.tsx";
-import ArrowDown from "../../../../Icons/ArrowDown.tsx";
+} from "../../../Common/StyledComponents.tsx";
+import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
+import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
+import { ViewerIDWithDefaultIcons } from "../../../FileManager/Dialogs/OpenWith.tsx";
+import Add from "../../../Icons/Add.tsx";
+import Dismiss from "../../../Icons/Dismiss.tsx";
+import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import MagicVarDialog, { MagicVar } from "../../Common/MagicVarDialog.tsx";
+import { NoMarginHelperText } from "../../Settings/Settings.tsx";
+import ArrowDown from "../../../Icons/ArrowDown.tsx";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { SelectChangeEvent } from "@mui/material";
 
-const MonacoEditor = lazy(() => import("../../../../Viewers/CodeViewer/MonacoEditor.tsx"));
+const MonacoEditor = lazy(() => import("../../../Viewers/CodeViewer/MonacoEditor.tsx"));
 
 export interface FileViewerEditDialogProps {
   viewer: Viewer;

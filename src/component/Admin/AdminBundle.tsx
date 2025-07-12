@@ -1,5 +1,6 @@
 import EntitySetting from "./Entity/EntitySetting";
 import FileSetting from "./File/FileSetting";
+import FileSystem from "./FileSystem/Filesystem";
 import EditGroup from "./Group/EditGroup/EditGroup";
 import GroupSetting from "./Group/GroupSetting";
 import Home from "./Home/Home";
@@ -12,15 +13,14 @@ import OauthCallback from "./StoragePolicy/OauthCallback";
 import StoragePolicySetting from "./StoragePolicy/StoragePolicySetting";
 import TaskList from "./Task/TaskList";
 import UserSetting from "./User/UserSetting";
-import FileSystem from "./FileSystem/FileSyste";
 
 export {
   EditGroup,
-  FileSystem,
   EditNode,
   EditStoragePolicy,
   EntitySetting,
   FileSetting,
+  FileSystem,
   GroupSetting,
   Home,
   NodeSetting,

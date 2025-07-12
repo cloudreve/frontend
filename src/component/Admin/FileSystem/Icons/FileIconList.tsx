@@ -1,7 +1,7 @@
 import { Box, IconButton, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
-import * as React from "react";
+import { useTheme } from "@mui/material/styles";
 import { memo, useMemo, useState } from "react";
-import { builtInIcons, FileTypeIconSetting } from "../../../FileManager/Explorer/FileTypeIcon.tsx";
+import { useTranslation } from "react-i18next";
 import {
   DenseFilledTextField,
   NoWrapCell,
@@ -9,11 +9,10 @@ import {
   SecondaryButton,
   StyledTableContainerPaper,
 } from "../../../Common/StyledComponents.tsx";
-import { useTranslation } from "react-i18next";
-import { useTheme } from "@mui/material/styles";
-import HexColorInput from "./HexColorInput.tsx";
-import Dismiss from "../../../Icons/Dismiss.tsx";
+import { builtInIcons, FileTypeIconSetting } from "../../../FileManager/Explorer/FileTypeIcon.tsx";
 import Add from "../../../Icons/Add.tsx";
+import Dismiss from "../../../Icons/Dismiss.tsx";
+import HexColorInput from "../HexColorInput.tsx";
 
 export interface FileIconListProps {
   config: string;

@@ -23,7 +23,7 @@ import {
 import Add from "../../../Icons/Add";
 import Delete from "../../../Icons/Delete";
 import Edit from "../../../Icons/Edit";
-import HexColorInput from "../../Settings/Filesystem/HexColorInput";
+import HexColorInput from "../../FileSystem/HexColorInput.tsx";
 import ThemeOptionEditDialog from "./ThemeOptionEditDialog";
 
 export interface ThemeOptionsProps {

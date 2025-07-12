@@ -1,6 +1,7 @@
-import React from "react";
 import { Box, IconButton, Stack, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
-import { memo, useMemo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useTranslation } from "react-i18next";
 import {
   DenseFilledTextField,
@@ -10,10 +11,8 @@ import {
   StyledTableContainerPaper,
 } from "../../../Common/StyledComponents.tsx";
 import Add from "../../../Icons/Add.tsx";
-import Dismiss from "../../../Icons/Dismiss.tsx";
 import ArrowDown from "../../../Icons/ArrowDown.tsx";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import Dismiss from "../../../Icons/Dismiss.tsx";
 
 export interface EmojiListProps {
   config: string;

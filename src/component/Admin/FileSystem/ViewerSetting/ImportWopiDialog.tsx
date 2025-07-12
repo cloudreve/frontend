@@ -1,14 +1,14 @@
 import { DialogContent, Link } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { getWopiDiscovery } from "../../../../../api/api.ts";
-import { ViewerGroup } from "../../../../../api/explorer.ts";
-import { useAppDispatch } from "../../../../../redux/hooks.ts";
-import { DenseFilledTextField } from "../../../../Common/StyledComponents.tsx";
-import DraggableDialog from "../../../../Dialogs/DraggableDialog.tsx";
-import SettingForm from "../../../../Pages/Setting/SettingForm.tsx";
-import { Code } from "../../../Common/Code.tsx";
-import { NoMarginHelperText } from "../../Settings.tsx";
+import { getWopiDiscovery } from "../../../../api/api.ts";
+import { ViewerGroup } from "../../../../api/explorer.ts";
+import { useAppDispatch } from "../../../../redux/hooks.ts";
+import { DenseFilledTextField } from "../../../Common/StyledComponents.tsx";
+import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
+import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import { Code } from "../../Common/Code.tsx";
+import { NoMarginHelperText } from "../../Settings/Settings.tsx";
 
 export interface ImportWopiDialogProps {
   open: boolean;

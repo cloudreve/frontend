@@ -1,15 +1,15 @@
 import * as React from "react";
-import { memo, useCallback, useState } from "react";
-import { Viewer, ViewerPlatform, ViewerType } from "../../../../../api/explorer.ts";
+import { useCallback, useState } from "react";
+import { Viewer, ViewerPlatform, ViewerType } from "../../../../api/explorer.ts";
 import { useTranslation } from "react-i18next";
-import { IconButton, TableRow, ListItemText } from "@mui/material";
-import { DenseFilledTextField, NoWrapCell, StyledCheckbox, DenseSelect } from "../../../../Common/StyledComponents.tsx";
-import { SquareMenuItem } from "../../../../FileManager/ContextMenu/ContextMenu.tsx";
-import { ViewerIcon } from "../../../../FileManager/Dialogs/OpenWith.tsx";
-import Dismiss from "../../../../Icons/Dismiss.tsx";
-import Edit from "../../../../Icons/Edit.tsx";
+import { IconButton, ListItemText, TableRow } from "@mui/material";
+import { DenseFilledTextField, DenseSelect, NoWrapCell, StyledCheckbox } from "../../../Common/StyledComponents.tsx";
+import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
+import { ViewerIcon } from "../../../FileManager/Dialogs/OpenWith.tsx";
+import Dismiss from "../../../Icons/Dismiss.tsx";
+import Edit from "../../../Icons/Edit.tsx";
 import FileViewerEditDialog from "./FileViewerEditDialog.tsx";
-import ArrowDown from "../../../../Icons/ArrowDown.tsx";
+import ArrowDown from "../../../Icons/ArrowDown.tsx";
 
 export interface FileViewerRowProps {
   viewer: Viewer;
