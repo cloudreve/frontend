@@ -70,6 +70,7 @@ export interface DisplayOption {
   showTags?: boolean;
   showChangeFolderColor?: boolean;
   showChangeIcon?: boolean;
+  showCustomProps?: boolean;
 
   showMore?: boolean;
   showVersionControl?: boolean;
@@ -223,6 +224,7 @@ export const getActionOpt = (
     display.orCapability.enabled(NavigatorCapability.update_metadata);
   display.showChangeIcon =
     display.hasUpdatable && display.orCapability && display.orCapability.enabled(NavigatorCapability.update_metadata);
+  display.showCustomProps = display.showChangeIcon;
   display.showDownload =
     display.hasReadable && display.orCapability && display.orCapability.enabled(NavigatorCapability.download_file);
   display.showDirectLink =

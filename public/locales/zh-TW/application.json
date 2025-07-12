@@ -113,6 +113,16 @@
     "dashboard": "管理面板"
   },
   "fileManager": {
+    "customProps": "自定義屬性",
+    "rating": "評級",
+    "description": "描述",
+    "add": "新增",
+    "clickToEdit": "點擊編輯...",
+    "clickToEditSelect": "點擊選擇...",
+    "enterUrl": "輸入 URL...",
+    "searchUser": "搜尋用戶...",
+    "typeToSearch": "輸入暱稱或郵箱...",
+    "searchProperty": "搜尋相同屬性的檔案",
     "permissions": "權限",
     "quality": "清晰度",
     "audioTrack": "音軌",

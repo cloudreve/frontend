@@ -10,7 +10,10 @@ import {
   TableRow,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useCallback, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useTranslation } from "react-i18next";
 import { setListViewColumnSettingDialog } from "../../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
@@ -19,15 +22,11 @@ import AutoHeight from "../../../Common/AutoHeight.tsx";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
 import { StyledTableContainerPaper } from "../../../Common/StyledComponents.tsx";
 import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
+import ArrowDown from "../../../Icons/ArrowDown.tsx";
 import Dismiss from "../../../Icons/Dismiss.tsx";
 import { FileManagerIndex } from "../../FileManager.tsx";
 import AddColumn from "./AddColumn.tsx";
 import { getColumnTypeDefaults, ListViewColumnSetting } from "./Column.tsx";
-import ArrowDown from "../../../Icons/ArrowDown.tsx";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import React from "react";
-import type { Dispatch, SetStateAction } from "react";
 
 const DND_TYPE = "column-row";
 
@@ -43,8 +42,18 @@ interface DraggableColumnRowProps {
   isLast: boolean;
 }
 
-const DraggableColumnRow: React.FC<DraggableColumnRowProps> = ({ column, index, moveRow, columns, t, onDelete, isFirst, isLast }) => {
+const DraggableColumnRow: React.FC<DraggableColumnRowProps> = ({
+  column,
+  index,
+  moveRow,
+  columns,
+  t,
+  onDelete,
+  isFirst,
+  isLast,
+}) => {
   const ref = React.useRef<HTMLTableRowElement>(null);
+  const customProps = useAppSelector((state) => state.siteConfig.explorer?.config?.custom_props);
   const [, drop] = useDrop({
     accept: DND_TYPE,
     hover(item: any, monitor) {
@@ -84,7 +93,7 @@ const DraggableColumnRow: React.FC<DraggableColumnRowProps> = ({ column, index, 
       sx={{ "&:last-child td, &:last-child th": { border: 0 }, opacity: isDragging ? 0.5 : 1, cursor: "move" }}
     >
       <TableCell component="th" scope="row">
-        {t(getColumnTypeDefaults(column).title)}
+        {t(getColumnTypeDefaults(column, false, customProps).title)}
       </TableCell>
       <TableCell>
         <Box sx={{ display: "flex" }}>
@@ -143,7 +152,11 @@ const ColumnSetting = () => {
   const onColumnAdded = useCallback(
     (column: ListViewColumnSetting) => {
       const existed = columns.find((c) => c.type === column.type);
-      if (!existed || existed.props?.metadata_key != column.props?.metadata_key) {
+      if (
+        !existed ||
+        existed.props?.metadata_key != column.props?.metadata_key ||
+        existed.props?.custom_props_id != column.props?.custom_props_id
+      ) {
         setColumns((prev) => [...prev, column]);
       } else {
         enqueueSnackbar(t("application:fileManager.columnExisted"), {

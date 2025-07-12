@@ -113,6 +113,16 @@
     "dashboard": "管理パネル"
   },
   "fileManager": {
+    "customProps": "カスタム属性",
+    "rating": "評価",
+    "description": "説明",
+    "add": "追加",
+    "clickToEdit": "編集...",
+    "clickToEditSelect": "選択...",
+    "enterUrl": "URLを入力...",
+    "searchUser": "ユーザーを検索...",
+    "typeToSearch": "名前またはメールアドレスを入力...",
+    "searchProperty": "同じ属性のファイルを検索",
     "permissions": "権限",
     "quality": "解像度",
     "audioTrack": "音声トラック",

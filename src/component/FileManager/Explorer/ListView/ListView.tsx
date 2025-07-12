@@ -25,13 +25,15 @@ const ListView = React.forwardRef(
     const fmIndex = useContext(FmIndexContext);
     const recursion_limit_reached = useAppSelector((state) => state.fileManager[fmIndex].list?.recursion_limit_reached);
     const columnSetting = useAppSelector((state) => state.fileManager[fmIndex].listViewColumns);
+    const customProps = useAppSelector((state) => state.siteConfig.explorer?.config?.custom_props);
 
     const [columns, setColumns] = useState<ListViewColumn[]>(
       columnSetting.map(
         (c): ListViewColumn => ({
           type: c.type,
           width: c.width,
-          defaults: getColumnTypeDefaults(c, isMobile),
+          props: c.props,
+          defaults: getColumnTypeDefaults(c, isMobile, customProps),
         }),
       ),
     );
@@ -42,11 +44,12 @@ const ListView = React.forwardRef(
           (c): ListViewColumn => ({
             type: c.type,
             width: c.width,
-            defaults: getColumnTypeDefaults(c, isMobile),
+            props: c.props,
+            defaults: getColumnTypeDefaults(c, isMobile, customProps),
           }),
         ),
       );
-    }, [columnSetting]);
+    }, [columnSetting, customProps]);
 
     const totalWidth = useMemo(() => {
       return columns.reduce((acc, column) => acc + (column.width ?? column.defaults.width), 0);
@@ -59,6 +62,7 @@ const ListView = React.forwardRef(
           ...prev.map((c) => ({
             type: c.type,
             width: c.width,
+            props: c.props,
           })),
         ];
         return prev;

@@ -80,7 +80,6 @@ const CoverImage = styled("div")({
   objectFit: "cover",
   overflow: "hidden",
   flexShrink: 0,
-  borderRadius: 8,
   backgroundColor: "rgba(0,0,0,0.08)",
   "& > img": {
     width: "100%",

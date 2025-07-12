@@ -453,7 +453,13 @@ export function retrySharePassword(index: number, password: string): AppThunk {
   };
 }
 
-export function searchMetadata(index: number, metaKey: string, metaValue?: string, newTab?: boolean): AppThunk {
+export function searchMetadata(
+  index: number,
+  metaKey: string,
+  metaValue?: string,
+  newTab?: boolean,
+  strongMatch?: boolean,
+): AppThunk {
   return async (dispatch, getState) => {
     const { fileManager } = getState();
     const fm = fileManager[index];
@@ -463,7 +469,10 @@ export function searchMetadata(index: number, metaKey: string, metaValue?: strin
     }
 
     const rootUri = new CrUri(root);
-    rootUri.addQuery(UriQuery.metadata_prefix + metaKey, metaValue ?? "");
+    rootUri.addQuery(
+      (strongMatch ? UriQuery.metadata_strong_match : UriQuery.metadata_prefix) + metaKey,
+      metaValue ?? "",
+    );
     dispatch(navigateToPath(index, rootUri.toString(), undefined, newTab));
   };
 }
@@ -536,11 +545,17 @@ export function advancedSearch(index: number, conditions: Condition[]): AppThunk
           }
           break;
         case ConditionType.metadata:
-          if (!params.metadata) {
-            params.metadata = {};
-          }
-          if (condition.metadata_key) {
+          if (condition.metadata_key && !condition.metadata_strong_match) {
+            if (!params.metadata) {
+              params.metadata = {};
+            }
             params.metadata[condition.metadata_key] = condition.metadata_value ?? "";
+          }
+          if (condition.metadata_key && condition.metadata_strong_match) {
+            if (!params.metadata_strong_match) {
+              params.metadata_strong_match = {};
+            }
+            params.metadata_strong_match[condition.metadata_key] = condition.metadata_value ?? "";
           }
           break;
         case ConditionType.size:

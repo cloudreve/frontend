@@ -73,6 +73,35 @@ export const DenseFilledTextField = styled(FilledTextField)(({ theme }) => ({
   },
 }));
 
+export const NoLabelFilledTextField = styled(FilledTextField)<{ backgroundColor?: string }>(
+  ({ theme, backgroundColor }) => ({
+    "& .MuiInputBase-root": {
+      ...(backgroundColor && {
+        backgroundColor: backgroundColor,
+      }),
+      paddingTop: 0,
+      paddingBottom: 0,
+      "&.Mui-disabled": {
+        borderBottomStyle: "none",
+        "&::before": {
+          borderBottomStyle: "none !important",
+        },
+      },
+    },
+    "& .MuiFilledInput-input": {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      fontSize: theme.typography.body2.fontSize,
+      "&.Mui-disabled": {
+        borderBottomStyle: "none",
+        "&::before": {
+          borderBottomStyle: "none !important",
+        },
+      },
+    },
+  }),
+);
+
 export const DenseAutocomplete = styled(Autocomplete)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     paddingTop: "6px",

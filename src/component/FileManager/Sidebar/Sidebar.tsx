@@ -1,10 +1,10 @@
-import { RadiusFrame } from "../../Frame/RadiusFrame.tsx";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { Box, Collapse } from "@mui/material";
-import SidebarContent from "./SidebarContent.tsx";
 import { useCallback, useEffect, useState } from "react";
-import { FileResponse } from "../../../api/explorer.ts";
 import { getFileInfo } from "../../../api/api.ts";
+import { FileResponse } from "../../../api/explorer.ts";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { RadiusFrame } from "../../Frame/RadiusFrame.tsx";
+import SidebarContent from "./SidebarContent.tsx";
 
 export interface SideBarProps {
   inPhotoViewer?: boolean;
@@ -25,7 +25,7 @@ const Sidebar = ({ inPhotoViewer }: SideBarProps) => {
           extended: true,
         }),
       ).then((res) => {
-        setTarget(res);
+        setTarget((r) => ({ ...res, capability: r?.capability }));
       });
     },
     [target, dispatch, setTarget],
@@ -72,7 +72,7 @@ const Sidebar = ({ inPhotoViewer }: SideBarProps) => {
           }}
           withBorder={!inPhotoViewer}
         >
-          <SidebarContent inPhotoViewer={inPhotoViewer} target={target} />
+          <SidebarContent inPhotoViewer={inPhotoViewer} target={target} setTarget={setTarget} />
         </RadiusFrame>
       </Collapse>
     </Box>

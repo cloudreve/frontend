@@ -12,9 +12,11 @@ import OauthCallback from "./StoragePolicy/OauthCallback";
 import StoragePolicySetting from "./StoragePolicy/StoragePolicySetting";
 import TaskList from "./Task/TaskList";
 import UserSetting from "./User/UserSetting";
+import FileSystem from "./FileSystem/FileSyste";
 
 export {
   EditGroup,
+  FileSystem,
   EditNode,
   EditStoragePolicy,
   EntitySetting,

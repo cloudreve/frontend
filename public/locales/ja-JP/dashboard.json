@@ -40,7 +40,8 @@
     "mediaProcessing": "メディア処理",
     "queue": "キュー",
     "events": "イベント",
-    "server": "サーバー"
+    "server": "サーバー",
+    "customProps": "カスタムプロパティ"
   },
   "summary": {
     "generatedAt": "生成日 <0></0>",
@@ -1362,6 +1363,34 @@
     "providerID": "決済方法",
     "status": "ステータス",
     "deleteXPayments": "{{num}}件の注文を削除"
+  },
+  "customProps": {
+    "add": "追加",
+    "type": "種類",
+    "default": "デフォルト値",
+    "actions": "操作",
+    "text": "テキスト",
+    "number": "数値",
+    "boolean": "チェックボックス",
+    "select": "単一選択",
+    "multiSelect": "複数選択",
+    "user": "ユーザー",
+    "link": "リンク",
+    "rating": "評価",
+    "addProp": "プロパティを追加",
+    "editProp": "プロパティを編集",
+    "icon": "アイコン",
+    "iconDes": "<0>Iconify</0> アイコン名を入力してください。空欄の場合はアイコンを表示しません。",
+    "id": "ID",
+    "idDes": "プロパティのIDです。他のプロパティと重複しないようにしてください。",
+    "idPatternDes": "半角英数字、アンダースコア、ハイフンのみ使用できます。",
+    "minLength": "最小文字数",
+    "maxLength": "最大文字数",
+    "emptyLimit": "制限なしの場合は空欄にしてください。",
+    "minValue": "最小値",
+    "maxValue": "最大値",
+    "options": "選択肢",
+    "optionsDes": "1行につき1つの選択肢を入力してください。"
   },
   "vas": {
     "disableSubAddressEmail": "サブアドレスメールの無効化",

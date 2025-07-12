@@ -1,12 +1,14 @@
 import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { FileResponse } from "../../../api/explorer.ts";
+import useActionDisplayOpt from "../ContextMenu/useActionDisplayOpt.ts";
 import Details from "./Details.tsx";
 import Header from "./Header.tsx";
 
 export interface SidebarContentProps {
   target: FileResponse | undefined | null;
   inPhotoViewer?: boolean;
+  setTarget: (target: FileResponse | undefined | null) => void;
 }
 
 interface TabPanelProps {
@@ -31,8 +33,9 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const SidebarContent = ({ target, inPhotoViewer }: SidebarContentProps) => {
+const SidebarContent = ({ target, inPhotoViewer, setTarget }: SidebarContentProps) => {
   const { t } = useTranslation();
+  const targetDisplayOptions = useActionDisplayOpt(target ? [target] : []);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Header target={target} />
@@ -48,7 +51,12 @@ const SidebarContent = ({ target, inPhotoViewer }: SidebarContentProps) => {
           ></Box>
           <Box sx={{ overflow: "auto" }}>
             <TabPanel value={0} index={0}>
-              <Details inPhotoViewer={inPhotoViewer} target={target} />
+              <Details
+                inPhotoViewer={inPhotoViewer}
+                target={target}
+                setTarget={setTarget}
+                targetDisplayOptions={targetDisplayOptions}
+              />
             </TabPanel>
           </Box>
         </>

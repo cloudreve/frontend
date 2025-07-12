@@ -40,7 +40,8 @@
     "mediaProcessing": "媒體處理",
     "queue": "佇列",
     "events": "事件",
-    "server": "伺服器"
+    "server": "伺服器",
+    "customProps": "自定義屬性"
   },
   "summary": {
     "generatedAt": "生成於 <0></0>",
@@ -1358,6 +1359,34 @@
     "providerID": "支付方式",
     "status": "狀態",
     "deleteXPayments": "刪除 {{num}} 個訂單"
+  },
+  "customProps": {
+    "add": "新增",
+    "type": "類型",
+    "default": "預設值",
+    "actions": "操作",
+    "text": "文本",
+    "number": "數字",
+    "boolean": "勾選",
+    "select": "單選",
+    "multiSelect": "多選",
+    "user": "使用者",
+    "link": "連結",
+    "rating": "評分",
+    "addProp": "新增屬性",
+    "editProp": "編輯屬性",
+    "icon": "圖標",
+    "iconDes": "<0>Iconify</0> 圖標名稱，留空表示不展示圖標。",
+    "id": "標識",
+    "idDes": "屬性標識，需要確保在所有屬性中唯一。",
+    "idPatternDes": "只能包含字母、數字、下劃線和中劃線。",
+    "minLength": "最小長度",
+    "maxLength": "最大長度",
+    "emptyLimit": "留空表示不限制。",
+    "minValue": "最小值",
+    "maxValue": "最大值",
+    "options": "選項",
+    "optionsDes": "每行一個選項。"
   },
   "vas": {
     "disableSubAddressEmail": "禁用子地址郵箱",

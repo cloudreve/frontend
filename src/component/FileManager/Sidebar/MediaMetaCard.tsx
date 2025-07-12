@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import {
   Box,
   Link,
@@ -11,14 +10,15 @@ import {
   Typography,
 } from "@mui/material";
 import SvgIcon from "@mui/material/SvgIcon/SvgIcon";
-import React, { useState } from "react";
-import { SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
-import Search from "../../Icons/Search.tsx";
-import Clipboard from "../../Icons/Clipboard.tsx";
-import { searchMetadata } from "../../../redux/thunks/filemanager.ts";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../../redux/hooks.ts";
-import { FileManagerIndex } from "../FileManager.tsx";
+import { searchMetadata } from "../../../redux/thunks/filemanager.ts";
 import { copyToClipboard } from "../../../util";
+import Clipboard from "../../Icons/Clipboard.tsx";
+import Search from "../../Icons/Search.tsx";
+import { SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
+import { FileManagerIndex } from "../FileManager.tsx";
 
 export interface MediaMetaElements {
   display: string;
@@ -36,7 +36,7 @@ export interface MediaMetaCardProps {
   icon?: typeof SvgIcon | ((props: SvgIconProps) => JSX.Element);
 }
 
-const StyledButtonBase = styled(Box)(({ theme }) => {
+export const StyledButtonBase = styled(Box)(({ theme }) => {
   let bgColor = theme.palette.mode === "light" ? theme.palette.grey[100] : theme.palette.grey[900];
   let bgColorHover = theme.palette.mode === "light" ? theme.palette.grey[300] : theme.palette.grey[700];
   return {

@@ -87,6 +87,7 @@ export function CascadingSubmenu({ title, popupId, menuItemProps, icon, ...props
   return (
     <>
       <SquareMenuItem
+        dense
         {...(isMobile ? bindTrigger(popupState) : bindHover(popupState))}
         {...(isMobile ? {} : bindFocus(popupState))}
         {...menuItemProps}

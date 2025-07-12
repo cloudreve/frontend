@@ -1,10 +1,11 @@
-import { useTranslation } from "react-i18next";
 import { Box, Fade, IconButton, styled } from "@mui/material";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { CustomProps } from "../../../../api/explorer.ts";
+import { NoWrapTypography } from "../../../Common/StyledComponents.tsx";
+import ArrowSortDownFilled from "../../../Icons/ArrowSortDownFilled.tsx";
 import Divider from "../../../Icons/Divider.tsx";
 import { ResizeProps } from "./ListHeader.tsx";
-import ArrowSortDownFilled from "../../../Icons/ArrowSortDownFilled.tsx";
-import { useCallback, useState } from "react";
-import { NoWrapTypography } from "../../../Common/StyledComponents.tsx";
 
 export interface ListViewColumn {
   type: ColumType;
@@ -21,6 +22,7 @@ export interface ListViewColumnSetting {
 
 export interface ColumTypeProps {
   metadata_key?: string;
+  custom_props_id?: string;
 }
 
 export enum ColumType {
@@ -52,6 +54,9 @@ export enum ColumType {
   artist = 23,
   album = 24,
   duration = 25,
+
+  // Custom props
+  custom_props = 26,
 }
 
 export interface ColumTypeDefaults {
@@ -176,7 +181,11 @@ export const ColumnTypeDefaults: { [key: number]: ColumTypeDefaults } = {
   },
 };
 
-export const getColumnTypeDefaults = (c: ListViewColumnSetting, isMobile?: boolean): ColumTypeDefaults => {
+export const getColumnTypeDefaults = (
+  c: ListViewColumnSetting,
+  isMobile?: boolean,
+  customProps?: CustomProps[],
+): ColumTypeDefaults => {
   if (ColumnTypeDefaults[c.type]) {
     return {
       ...ColumnTypeDefaults[c.type],
@@ -184,6 +193,14 @@ export const getColumnTypeDefaults = (c: ListViewColumnSetting, isMobile?: boole
         isMobile && ColumnTypeDefaults[c.type].widthMobile
           ? ColumnTypeDefaults[c.type].widthMobile
           : ColumnTypeDefaults[c.type].width,
+    };
+  }
+
+  if (c.type === ColumType.custom_props) {
+    const customProp = customProps?.find((p) => p.id === c.props?.custom_props_id);
+    return {
+      title: customProp?.name ?? "application:fileManager.customProps",
+      width: 100,
     };
   }
 

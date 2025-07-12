@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
 
-import { Menu } from "@mui/material";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { ListItemIcon, Menu } from "@mui/material";
 import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
+import { useAppSelector } from "../../../../redux/hooks.ts";
 import { SecondaryButton } from "../../../Common/StyledComponents.tsx";
 import Add from "../../../Icons/Add.tsx";
 import { CascadingSubmenu } from "../../ContextMenu/CascadingMenu.tsx";
@@ -48,6 +50,7 @@ const mediaInfoOptions: (ColumType | null)[] = [
 
 const AddColumn = (props: AddColumnProps) => {
   const { t } = useTranslation();
+  const customPropsOptions = useAppSelector((state) => state.siteConfig.explorer?.config?.custom_props);
   const conditionPopupState = usePopupState({
     variant: "popover",
     popupId: "columns",
@@ -97,6 +100,24 @@ const AddColumn = (props: AddColumnProps) => {
             ),
           )}
         </CascadingSubmenu>
+        {customPropsOptions && customPropsOptions.length > 0 && (
+          <CascadingSubmenu popupId={"customProps"} title={t("application:fileManager.customProps")}>
+            {customPropsOptions.map((option, index) => (
+              <SquareMenuItem
+                dense
+                key={index}
+                onClick={() => onConditionAdd(ColumType.custom_props, { custom_props_id: option.id })}
+              >
+                {option.icon && (
+                  <ListItemIcon>
+                    <Icon icon={option.icon} />
+                  </ListItemIcon>
+                )}
+                {t(option.name)}
+              </SquareMenuItem>
+            ))}
+          </CascadingSubmenu>
+        )}
       </Menu>
     </>
   );

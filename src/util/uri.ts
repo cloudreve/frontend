@@ -17,6 +17,7 @@ export const UriQuery = {
   name: "name",
   name_op_or: "name_op_or",
   metadata_prefix: "meta_",
+  metadata_strong_match: "exact_meta_",
   case_folding: "case_folding",
   type: "type",
   category: "category",
@@ -39,6 +40,9 @@ export interface SearchParam {
   name?: string[];
   name_op_or?: boolean;
   metadata?: {
+    [key: string]: string;
+  };
+  metadata_strong_match?: {
     [key: string]: string;
   };
   case_folding?: boolean;
@@ -115,6 +119,11 @@ export default class CrUri {
         this.addQuery(UriQuery.metadata_prefix + k, v);
       });
     }
+    if (param.metadata_strong_match) {
+      Object.entries(param.metadata_strong_match).forEach(([k, v]) => {
+        this.addQuery(UriQuery.metadata_strong_match + k, v);
+      });
+    }
     if (param.size_gte) {
       this.addQuery(UriQuery.size_gte, param.size_gte.toString());
     }
@@ -181,13 +190,17 @@ export default class CrUri {
         case UriQuery.updated_lte:
           res.updated_at_lte = parseInt(v);
           break;
-
         default:
           if (k.startsWith(UriQuery.metadata_prefix)) {
             if (!res.metadata) {
               res.metadata = {};
             }
             res.metadata[k.slice(UriQuery.metadata_prefix.length)] = v;
+          } else if (k.startsWith(UriQuery.metadata_strong_match)) {
+            if (!res.metadata_strong_match) {
+              res.metadata_strong_match = {};
+            }
+            res.metadata_strong_match[k.slice(UriQuery.metadata_strong_match.length)] = v;
           }
       }
     });

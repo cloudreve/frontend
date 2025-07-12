@@ -1,19 +1,19 @@
-import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
-import { useCallback, useEffect, useState } from "react";
-import { closeAdvanceSearch } from "../../../../redux/globalStateSlice.ts";
-import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import { Collapse, DialogContent } from "@mui/material";
-import ConditionBox, { Condition, ConditionType } from "./ConditionBox.tsx";
-import { SearchParam } from "../../../../util/uri.ts";
-import { TransitionGroup } from "react-transition-group";
-import AddCondition from "./AddCondition.tsx";
 import { useSnackbar } from "notistack";
-import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
-import { FileManagerIndex } from "../../FileManager.tsx";
-import { defaultPath } from "../../../../hooks/useNavigation.tsx";
-import { advancedSearch } from "../../../../redux/thunks/filemanager.ts";
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TransitionGroup } from "react-transition-group";
 import { Metadata } from "../../../../api/explorer.ts";
+import { defaultPath } from "../../../../hooks/useNavigation.tsx";
+import { closeAdvanceSearch } from "../../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import { advancedSearch } from "../../../../redux/thunks/filemanager.ts";
+import { SearchParam } from "../../../../util/uri.ts";
+import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
+import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
+import { FileManagerIndex } from "../../FileManager.tsx";
+import AddCondition from "./AddCondition.tsx";
+import ConditionBox, { Condition, ConditionType } from "./ConditionBox.tsx";
 
 const searchParamToConditions = (search_params: SearchParam, base: string): Condition[] => {
   const applied: Condition[] = [
@@ -72,8 +72,21 @@ const searchParamToConditions = (search_params: SearchParam, base: string): Cond
           type: ConditionType.metadata,
           metadata_key: key,
           metadata_value: value,
+          id: key,
         });
       }
+    });
+  }
+
+  if (search_params.metadata_strong_match) {
+    Object.entries(search_params.metadata_strong_match).forEach(([key, value]) => {
+      applied.push({
+        type: ConditionType.metadata,
+        metadata_key: key,
+        metadata_value: value,
+        id: key,
+        metadata_strong_match: true,
+      });
     });
   }
 
@@ -83,6 +96,8 @@ const searchParamToConditions = (search_params: SearchParam, base: string): Cond
       tags: tags,
     });
   }
+
+  console.log(search_params);
 
   return applied;
 };

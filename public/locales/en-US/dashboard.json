@@ -40,7 +40,8 @@
     "mediaProcessing": "Media processing",
     "queue": "Queue",
     "events": "Events",
-    "server": "Server"
+    "server": "Server",
+    "customProps": "Custom properties"
   },
   "summary": {
     "generatedAt": "Generated at <0></0>",
@@ -1375,6 +1376,34 @@
     "providerID": "Provider ID",
     "status": "Status",
     "deleteXPayments": "Delete {{num}} payments"
+  },
+  "customProps": {
+    "add": "Add",
+    "type": "Type",
+    "default": "Default value",
+    "actions": "Actions",
+    "text": "Text",
+    "number": "Number",
+    "boolean": "Checkbox",
+    "select": "Single select",
+    "multiSelect": "Multi select",
+    "user": "User",
+    "link": "Link",
+    "rating": "Rating",
+    "addProp": "Add property",
+    "editProp": "Edit property",
+    "icon": "Icon",
+    "iconDes": "<0>Iconify</0> Icon name, leave blank to hide the icon.",
+    "id": "ID",
+    "idDes": "Property ID, ensure it is unique across all properties.",
+    "idPatternDes": "Only letters, numbers, underscores, and hyphens are allowed.",
+    "minLength": "Minimum length",
+    "maxLength": "Maximum length",
+    "emptyLimit": "Leave blank to not limit.",
+    "minValue": "Minimum value",
+    "maxValue": "Maximum value",
+    "options": "Options",
+    "optionsDes": "One option per line."
   },
   "vas": {
     "disableSubAddressEmail": "Disable sub-address email",

@@ -40,7 +40,8 @@
     "mediaProcessing": "媒体处理",
     "queue": "队列",
     "events": "事件",
-    "server": "服务器"
+    "server": "服务器",
+    "customProps": "自定义属性"
   },
   "summary": {
     "generatedAt": "生成于 <0></0>",
@@ -1361,6 +1362,34 @@
     "providerID": "支付方式",
     "status": "状态",
     "deleteXPayments": "删除 {{num}} 个订单"
+  },
+  "customProps": {
+    "add": "添加",
+    "type": "类型",
+    "default": "默认值",
+    "actions": "操作",
+    "text": "文本",
+    "number": "数字",
+    "boolean": "勾选",
+    "select": "单选",
+    "multiSelect": "多选",
+    "user": "用户",
+    "link": "链接",
+    "rating": "评分",
+    "addProp": "添加属性",
+    "editProp": "编辑属性",
+    "icon": "图标",
+    "iconDes": "<0>Iconify</0> 图标名称，留空表示不展示图标。",
+    "id": "标识",
+    "idDes": "属性标识，需要确保在所有属性中唯一。",
+    "idPatternDes": "只能包含字母、数字、下划线和中划线。",
+    "minLength": "最小长度",
+    "maxLength": "最大长度",
+    "emptyLimit": "留空表示不限制。",
+    "minValue": "最小值",
+    "maxValue": "最大值",
+    "options": "选项",
+    "optionsDes": "每行一个选项。"
   },
   "vas": {
     "disableSubAddressEmail": "禁用子地址邮箱",

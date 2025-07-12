@@ -1,22 +1,25 @@
 import { useTranslation } from "react-i18next";
 
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { ListItemIcon, ListItemText, Menu } from "@mui/material";
+import dayjs from "dayjs";
+import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
+import { FileType, Metadata } from "../../../../api/explorer.ts";
+import { useAppSelector } from "../../../../redux/hooks.ts";
 import { SecondaryButton } from "../../../Common/StyledComponents.tsx";
 import Add from "../../../Icons/Add.tsx";
-import { bindMenu, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
-import { ListItemIcon, ListItemText, Menu } from "@mui/material";
-import { Condition, ConditionType } from "./ConditionBox.tsx";
-import React from "react";
-import TextCaseTitle from "../../../Icons/TextCaseTitle.tsx";
+import CalendarClock from "../../../Icons/CalendarClock.tsx";
 import FolderOutlined from "../../../Icons/FolderOutlined.tsx";
-import { SquareMenuItem } from "../../ContextMenu/ContextMenu.tsx";
-import { FileType, Metadata } from "../../../../api/explorer.ts";
+import HardDriveOutlined from "../../../Icons/HardDriveOutlined.tsx";
+import Info from "../../../Icons/Info.tsx";
 import Numbers from "../../../Icons/Numbers.tsx";
 import Tag from "../../../Icons/Tag.tsx";
+import TextBulletListSquareEdit from "../../../Icons/TextBulletListSquareEdit.tsx";
+import TextCaseTitle from "../../../Icons/TextCaseTitle.tsx";
 import { CascadingSubmenu } from "../../ContextMenu/CascadingMenu.tsx";
-import Info from "../../../Icons/Info.tsx";
-import HardDriveOutlined from "../../../Icons/HardDriveOutlined.tsx";
-import dayjs from "dayjs";
-import CalendarClock from "../../../Icons/CalendarClock.tsx";
+import { SquareMenuItem } from "../../ContextMenu/ContextMenu.tsx";
+import { customPropsMetadataPrefix } from "../../Sidebar/CustomProps/CustomProps.tsx";
+import { Condition, ConditionType } from "./ConditionBox.tsx";
 
 export interface AddConditionProps {
   onConditionAdd: (condition: Condition) => void;
@@ -142,6 +145,7 @@ const mediaMetaOptions: ConditionOption[] = [
 
 const AddCondition = (props: AddConditionProps) => {
   const { t } = useTranslation();
+  const customPropsOptions = useAppSelector((state) => state.siteConfig.explorer?.config?.custom_props);
   const conditionPopupState = usePopupState({
     variant: "popover",
     popupId: "conditions",
@@ -194,6 +198,34 @@ const AddCondition = (props: AddConditionProps) => {
             </SquareMenuItem>
           ))}
         </CascadingSubmenu>
+        {customPropsOptions && customPropsOptions.length > 0 && (
+          <CascadingSubmenu
+            icon={<TextBulletListSquareEdit fontSize="small" />}
+            popupId={"customProps"}
+            title={t("application:fileManager.customProps")}
+          >
+            {customPropsOptions.map((option, index) => (
+              <SquareMenuItem
+                dense
+                key={index}
+                onClick={() =>
+                  onConditionAdd({
+                    type: ConditionType.metadata,
+                    id: customPropsMetadataPrefix + option.id,
+                    metadata_key: customPropsMetadataPrefix + option.id,
+                  })
+                }
+              >
+                {option.icon && (
+                  <ListItemIcon>
+                    <Icon icon={option.icon} />
+                  </ListItemIcon>
+                )}
+                {t(option.name)}
+              </SquareMenuItem>
+            ))}
+          </CascadingSubmenu>
+        )}
       </Menu>
     </>
   );

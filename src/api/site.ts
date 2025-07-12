@@ -1,4 +1,4 @@
-import { ViewerGroup } from "./explorer.ts";
+import { CustomProps, ViewerGroup } from "./explorer.ts";
 import { User } from "./user.ts";
 
 export enum CaptchaType {
@@ -41,6 +41,7 @@ export interface SiteConfig {
   app_promotion?: boolean;
   thumbnail_width?: number;
   thumbnail_height?: number;
+  custom_props?: CustomProps[];
 }
 
 export interface CaptchaResponse {

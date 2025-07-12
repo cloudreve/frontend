@@ -519,3 +519,25 @@ export interface PatchViewSyncService {
   uri: string;
   view?: ExplorerView;
 }
+
+export interface CustomProps {
+  id: string;
+  name: string;
+  type: CustomPropsType;
+  max?: number;
+  min?: number;
+  default?: string;
+  options?: string[];
+  icon?: string;
+}
+
+export enum CustomPropsType {
+  text = "text",
+  number = "number",
+  boolean = "boolean",
+  select = "select",
+  multi_select = "multi_select",
+  user = "user",
+  link = "link",
+  rating = "rating",
+}

@@ -113,6 +113,16 @@
     "dashboard": "管理面板"
   },
   "fileManager": {
+    "customProps": "自定义属性",
+    "rating": "评级",
+    "description": "描述",
+    "add": "添加",
+    "clickToEdit": "点击编辑...",
+    "clickToEditSelect": "点击选择...",
+    "enterUrl": "输入 URL...",
+    "searchUser": "搜索用户...",
+    "typeToSearch": "输入昵称或邮箱...",
+    "searchProperty": "搜索相同属性的文件",
     "permissions": "权限",
     "quality": "清晰度",
     "audioTrack": "音轨",

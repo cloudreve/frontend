@@ -1,12 +1,12 @@
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import SidebarContent from "./SidebarContent.tsx";
-import { forwardRef, useCallback, useEffect, useState } from "react";
-import { FileResponse } from "../../../api/explorer.ts";
-import { getFileInfo } from "../../../api/api.ts";
-import { SideBarProps } from "./Sidebar.tsx";
 import { Dialog, Slide } from "@mui/material";
-import { closeSidebar } from "../../../redux/globalStateSlice.ts";
 import { TransitionProps } from "@mui/material/transitions";
+import { forwardRef, useCallback, useEffect, useState } from "react";
+import { getFileInfo } from "../../../api/api.ts";
+import { FileResponse } from "../../../api/explorer.ts";
+import { closeSidebar } from "../../../redux/globalStateSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { SideBarProps } from "./Sidebar.tsx";
+import SidebarContent from "./SidebarContent.tsx";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -32,7 +32,7 @@ const SidebarDialog = ({ inPhotoViewer }: SideBarProps) => {
           extended: true,
         }),
       ).then((res) => {
-        setTarget(res);
+        setTarget((r) => ({ ...res, capability: r?.capability }));
       });
     },
     [target, dispatch, setTarget],
@@ -59,7 +59,7 @@ const SidebarDialog = ({ inPhotoViewer }: SideBarProps) => {
         dispatch(closeSidebar());
       }}
     >
-      <SidebarContent inPhotoViewer={inPhotoViewer} target={target} />
+      <SidebarContent inPhotoViewer={inPhotoViewer} target={target} setTarget={setTarget} />
     </Dialog>
   );
 };

@@ -112,6 +112,16 @@
     "dashboard": "Dashboard"
   },
   "fileManager": {
+    "customProps": "Custom properties",
+    "rating": "Rating",
+    "description": "Description",
+    "add": "Add",
+    "clickToEdit": "Click to edit...",
+    "clickToEditSelect": "Click to select...",
+    "enterUrl": "Enter URL...",
+    "searchUser": "Search user...",
+    "typeToSearch": "Enter name or email...",
+    "searchProperty": "Search files with the same property",
     "permissions": "Permissions",
     "quality": "Quality",
     "audioTrack": "Audio",

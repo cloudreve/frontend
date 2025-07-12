@@ -77,6 +77,7 @@ export const router = createBrowserRouter([
                   return { Component: Settings };
                 },
               },
+
               {
                 path: "policy",
                 async lazy() {
@@ -159,6 +160,13 @@ export const router = createBrowserRouter([
                 async lazy() {
                   let { ShareList } = await import("../component/Admin/AdminBundle.tsx");
                   return { Component: ShareList };
+                },
+              },
+              {
+                path: "filesystem",
+                async lazy() {
+                  let { FileSystem } = await import("../component/Admin/AdminBundle.tsx");
+                  return { Component: FileSystem };
                 },
               },
             ],

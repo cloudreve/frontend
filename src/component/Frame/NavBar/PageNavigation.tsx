@@ -14,6 +14,8 @@ import CloudDownload from "../../Icons/CloudDownload.tsx";
 import CloudDownloadOutlined from "../../Icons/CloudDownloadOutlined.tsx";
 import CubeSync from "../../Icons/CubeSync.tsx";
 import CubeSyncFilled from "../../Icons/CubeSyncFilled.tsx";
+import CubeTree from "../../Icons/CubeTree.tsx";
+import CubeTreeFilled from "../../Icons/CubeTreeFilled.tsx";
 import DataHistogram from "../../Icons/DataHistogram.tsx";
 import DataHistogramFilled from "../../Icons/DataHistogramFilled.tsx";
 import Folder from "../../Icons/Folder.tsx";
@@ -133,6 +135,11 @@ AdminNavigationItems = [
     label: "dashboard:nav.settings",
     icon: [Setting, SettingsOutlined],
     path: "/admin/settings",
+  },
+  {
+    label: "dashboard:nav.fileSystem",
+    icon: [CubeTreeFilled, CubeTree],
+    path: "/admin/filesystem",
   },
   {
     label: "dashboard:nav.storagePolicy",

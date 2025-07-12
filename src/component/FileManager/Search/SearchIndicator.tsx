@@ -1,12 +1,12 @@
+import { alpha, Button, ButtonGroup, Grow, styled, useMediaQuery, useTheme } from "@mui/material";
+import { useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import { useContext, useMemo } from "react";
-import { FmIndexContext } from "../FmIndexContext.tsx";
-import { alpha, Button, ButtonGroup, Grow, styled, useMediaQuery, useTheme } from "@mui/material";
-import Search from "../../Icons/Search.tsx";
-import Dismiss from "../../Icons/Dismiss.tsx";
 import { clearSearch, openAdvancedSearch } from "../../../redux/thunks/filemanager.ts";
+import Dismiss from "../../Icons/Dismiss.tsx";
+import Search from "../../Icons/Search.tsx";
 import { FileManagerIndex } from "../FileManager.tsx";
+import { FmIndexContext } from "../FmIndexContext.tsx";
 
 export const StyledButtonGroup = styled(ButtonGroup)(({ theme }) => ({
   "& .MuiButtonGroup-firstButton, .MuiButtonGroup-lastButton": {
@@ -58,6 +58,9 @@ export const SearchIndicator = () => {
     }
     if (search_params.updated_at_gte || search_params.updated_at_lte) {
       count++;
+    }
+    if (search_params.metadata_strong_match) {
+      count += Object.keys(search_params.metadata_strong_match).length;
     }
     return count;
   }, [search_params]);
