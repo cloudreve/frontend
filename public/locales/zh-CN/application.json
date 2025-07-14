@@ -310,7 +310,7 @@
     "files": "文件",
     "listError": "请求时出现错误",
     "dropFileHere": "拖拽文件至此",
-    "orClickUploadButton": "或点击左上方“创建”按钮添加文件",
+    "orClickUploadButton": "或点击左上方“新建”按钮添加文件",
     "nothingFound": "什么都没有找到",
     "uploadFiles": "上传文件",
     "uploadFolder": "上传目录",
