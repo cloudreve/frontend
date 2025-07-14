@@ -310,7 +310,7 @@
     "files": "ファイル",
     "listError": "リクエストエラーが発生しました",
     "dropFileHere": "ファイルをここにドラッグ＆ドロップ",
-    "orClickUploadButton": "または左上の「作成」ボタンをクリックしてファイルを追加",
+    "orClickUploadButton": "または左上の「新規作成」ボタンをクリックしてファイルを追加",
     "nothingFound": "何も見つかりませんでした",
     "uploadFiles": "ファイルのアップロード",
     "uploadFolder": "ディレクトリのアップロード",
