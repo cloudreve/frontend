@@ -1,14 +1,15 @@
 import { Box, Drawer, Popover, PopoverProps, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { useContext, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import DrawerHeader from "./DrawerHeader.tsx";
+import SessionManager from "../../../session";
 import TreeNavigation from "../../FileManager/TreeView/TreeNavigation.tsx";
+import { PageVariant, PageVariantContext } from "../NavBarFrame.tsx";
+import DrawerHeader from "./DrawerHeader.tsx";
 import PageNavigation, { AdminPageNavigation } from "./PageNavigation.tsx";
 import StorageSummary from "./StorageSummary.tsx";
-import { useContext, useRef } from "react";
-import SessionManager from "../../../session";
-import { PageVariant, PageVariantContext } from "../NavBarFrame.tsx";
 
 const DrawerContent = () => {
+  const { sidebar_bottom } = useAppSelector((state) => state.siteConfig.basic?.config?.custom_html ?? {});
   const scrollRef = useRef<any>();
   const user = SessionManager.currentLoginOrNull();
   const theme = useTheme();
@@ -38,6 +39,11 @@ const DrawerContent = () => {
           </>
         )}
         {isDashboard && <AdminPageNavigation />}
+        {sidebar_bottom && (
+          <Box sx={{ width: "100%" }}>
+            <div dangerouslySetInnerHTML={{ __html: sidebar_bottom }} />
+          </Box>
+        )}
       </Stack>
     </>
   );

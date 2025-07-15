@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import { FileManagerIndex } from "../component/FileManager/FileManager.tsx";
 import { useAppDispatch, useAppSelector } from "../redux/hooks.ts";
-import { beforePathChange, checkReadMeEnabled, navigateReconcile, setTargetPath } from "../redux/thunks/filemanager.ts";
+import {
+  beforePathChange,
+  checkOpenViewerQuery,
+  checkReadMeEnabled,
+  navigateReconcile,
+  setTargetPath,
+} from "../redux/thunks/filemanager.ts";
 import { useQuery } from "../util";
 import { Filesystem } from "../util/uri.ts";
 
@@ -32,6 +38,7 @@ const useNavigation = (index: number, initialPath?: string) => {
     if (path) {
       dispatch(navigateReconcile(index)).then(() => {
         dispatch(checkReadMeEnabled(index));
+        dispatch(checkOpenViewerQuery(index));
       });
       dispatch(beforePathChange(index));
     }
