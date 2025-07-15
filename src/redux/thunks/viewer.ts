@@ -9,6 +9,7 @@ import { FileManagerIndex } from "../../component/FileManager/FileManager.tsx";
 import SessionManager, { UserSettings } from "../../session";
 import { isTrueVal } from "../../session/utils.ts";
 import { dataUrlToBytes, fileExtension, fileNameNoExt, getFileLinkedUri, sizeToString } from "../../util";
+import { base64Encode } from "../../util/base64.ts";
 import CrUri from "../../util/uri.ts";
 import { closeContextMenu, ContextMenuTypes, fileUpdated } from "../fileManagerSlice.ts";
 import {
@@ -34,7 +35,6 @@ import { Viewers, ViewersByID } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { askSaveAs, askStaleVersionAction } from "./dialog.ts";
 import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks } from "./file.ts";
-import { base64Encode } from "../../util/base64.ts";
 
 export interface ExpandedViewerSetting {
   [key: string]: Viewer[];
@@ -98,8 +98,24 @@ export function openViewers(
   };
 }
 
-export function openViewer(file: FileResponse, viewer: Viewer, size: number, preferredVersion?: string): AppThunk {
+export function openViewer(
+  file: FileResponse,
+  viewer: Viewer,
+  size: number,
+  preferredVersion?: string,
+  forceNotOpenInNew?: boolean,
+): AppThunk {
   return async (dispatch, getState) => {
+    if (!forceNotOpenInNew && viewer.type != ViewerType.custom && isTrueVal(viewer.props?.openInNew ?? "")) {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("viewer", viewer.id ?? "");
+      currentUrl.searchParams.set("version", preferredVersion ?? "");
+      currentUrl.searchParams.set("open", file.id ?? "");
+      currentUrl.searchParams.set("size", size.toString());
+      window.open(currentUrl.toString(), "_blank");
+      return;
+    }
+
     // Warning for large file
     if (viewer.max_size && size > viewer.max_size) {
       enqueueSnackbar({
