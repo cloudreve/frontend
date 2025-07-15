@@ -112,6 +112,11 @@
     "retryDelayDes": "Initial delay time (seconds) for task retries."
   },
   "settings": {
+    "addNavItem": "Add navigation item",
+    "customNavItems": "Custom sidebar items",
+    "customNavItemsDes": "You can add custom items to the sidebar, and users will be redirected to the corresponding link when clicked.",
+    "navItemUrl": "Link",
+    "iconifyNamePlaceholder": "Iconify icon identifier, e.g. fluent:home-24-regular",
     "imageUrl": "Image URL",
     "iconifyName": "Iconify icon name",
     "oidc": "OpenID Connect (OIDC)",

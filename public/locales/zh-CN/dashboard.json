@@ -112,7 +112,11 @@
     "retryDelayDes": "任务重试的初始延迟时间（秒）。"
   },
   "settings": {
-    "imageUrl": "图片 URL",
+    "addNavItem": "添加导航条目",
+    "customNavItems": "自定义侧边导航栏",
+    "customNavItemsDes": "你可以在左侧导航栏中添加自定义的条目，用户点击后会跳转到对应的链接。",
+    "navItemUrl": "链接",
+    "iconifyNamePlaceholder": "Iconify 图标标识，比如：fluent:home-24-regular",
     "iconifyName": "Iconify 图标名",
     "oidc": "OpenID Connect (OIDC)",
     "oidcDes": "OpenID Connect (OIDC) 是一种开放的认证协议，用于在不同的系统之间进行身份验证。在第三方身份平台中创建应用后，请将 <0>{{url}}</0> 添加到 “重定向 URI” 中。详情请参考 <1>官方文档</1>。",

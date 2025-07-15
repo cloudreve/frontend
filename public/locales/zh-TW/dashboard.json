@@ -112,6 +112,11 @@
     "retryDelayDes": "任務重試的初始延遲時間（秒）。"
   },
   "settings": {
+    "addNavItem": "新增導航條目",
+    "customNavItems": "自定義側邊導航欄",
+    "customNavItemsDes": "你可以在側邊導航欄中新增自定義的條目，用戶點擊後會跳轉到對應的鏈接。",
+    "navItemUrl": "鏈接",
+    "iconifyNamePlaceholder": "Iconify 圖標標識，比如：fluent:home-24-regular",
     "imageUrl": "圖片 URL",
     "iconifyName": "Iconify 圖標名",
     "oidc": "OpenID Connect (OIDC)",

@@ -300,7 +300,7 @@ const Settings = () => {
                 </SettingsWrapper>
               )}
               {tab === SettingsPageTab.Appearance && (
-                <SettingsWrapper settings={["theme_options", "defaultTheme"]}>
+                <SettingsWrapper settings={["theme_options", "defaultTheme", "custom_nav_items"]}>
                   <Appearance />
                 </SettingsWrapper>
               )}

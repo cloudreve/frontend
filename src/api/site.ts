@@ -42,9 +42,16 @@ export interface SiteConfig {
   thumbnail_width?: number;
   thumbnail_height?: number;
   custom_props?: CustomProps[];
+  custom_nav_items?: CustomNavItem[];
 }
 
 export interface CaptchaResponse {
   ticket: string;
   image: string;
+}
+
+export interface CustomNavItem {
+  name: string;
+  url: string;
+  icon: string;
 }

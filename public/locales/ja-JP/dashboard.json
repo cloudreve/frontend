@@ -112,6 +112,11 @@
     "retryDelayDes": "タスク再試行の初期遅延時間（秒）"
   },
   "settings": {
+    "addNavItem": "ナビゲーション項目を追加",
+    "customNavItems": "サイドナビゲーションバーのカスタマイズ",
+    "customNavItemsDes": "左側のナビゲーションバーにカスタム項目を追加できます。ユーザーがクリックすると、対応するリンクに移動します。",
+    "navItemUrl": "リンク",
+    "iconifyNamePlaceholder": "Iconify アイコン識別子（例：fluent:home-24-regular）",
     "imageUrl": "画像 URL",
     "iconifyName": "Iconify アイコン名",
     "oidc": "OpenID Connect (OIDC)",
