@@ -388,6 +388,7 @@
     "includePasswordInShareLink": "共有リンクにパスワードを含める",
     "includePasswordInShareLinkDes": "チェックを入れると、共有リンクにパスワードが含まれます。このリンクにアクセスする際には、パスワードを入力する必要はありません。",
     "showFileName": "ファイル名を表示",
+    "forceDownload": "強制ダウンロード",
     "archiveFile": "圧縮ファイル",
     "cancelDownload": "ダウンロードキャンセル",
     "always": "常に",

@@ -384,6 +384,7 @@
     "includePasswordInShareLink": "在連結中包含密碼",
     "includePasswordInShareLinkDes": "勾選後，分享連結中會包含密碼，通過此連結訪問時不需要再輸入密碼。",
     "showFileName": "顯示檔名",
+    "forceDownload": "強制下載",
     "archiveFile": "壓縮檔案",
     "cancelDownload": "取消下載",
     "always": "始終",

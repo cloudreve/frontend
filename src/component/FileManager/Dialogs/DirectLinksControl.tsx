@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   DialogContent,
+  FormControlLabel,
   IconButton,
   Link,
   Skeleton,
@@ -22,7 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { copyToClipboard } from "../../../util/index.ts";
 import AutoHeight from "../../Common/AutoHeight.tsx";
-import { NoWrapTableCell, StyledTableContainerPaper } from "../../Common/StyledComponents.tsx";
+import { NoWrapTableCell, StyledCheckbox, StyledTableContainerPaper } from "../../Common/StyledComponents.tsx";
 import TimeBadge from "../../Common/TimeBadge.tsx";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import CopyOutlined from "../../Icons/CopyOutlined.tsx";
@@ -34,6 +35,7 @@ const DirectLinksControl = () => {
 
   const [fileExtended, setFileExtended] = useState<FileResponse | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+  const [forceDownload, setForceDownload] = useState(false);
 
   const open = useAppSelector((state) => state.globalState.directLinkManagementDialogOpen);
   const target = useAppSelector((state) => state.globalState.directLinkManagementDialogFile);
@@ -66,8 +68,13 @@ const DirectLinksControl = () => {
   }, [target, open]);
 
   const directLinks = useMemo(() => {
-    return fileExtended?.extended_info?.direct_links;
-  }, [fileExtended?.extended_info?.direct_links]);
+    return fileExtended?.extended_info?.direct_links?.map((link) => {
+      return {
+        ...link,
+        url: forceDownload ? link.url.replace("/f/", "/f/d/") : link.url,
+      };
+    });
+  }, [fileExtended?.extended_info?.direct_links, forceDownload]);
 
   const handleRowClick = useCallback((directLink: DirectLink) => {
     window.open(directLink.url, "_blank");
@@ -215,6 +222,30 @@ const DirectLinksControl = () => {
             )}
           </TableContainer>
         </AutoHeight>
+        <FormControlLabel
+          sx={{
+            ml: 0,
+            mt: 2,
+          }}
+          slotProps={{
+            typography: {
+              variant: "body2",
+              pl: 1,
+              color: "text.secondary",
+            },
+          }}
+          control={
+            <StyledCheckbox
+              onChange={() => {
+                setForceDownload(!forceDownload);
+              }}
+              disableRipple
+              checked={forceDownload}
+              size="small"
+            />
+          }
+          label={t("application:modals.forceDownload")}
+        />
       </DialogContent>
     </DraggableDialog>
   );
