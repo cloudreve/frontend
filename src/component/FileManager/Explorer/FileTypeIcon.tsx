@@ -1,3 +1,4 @@
+import { Icon as IconifyIcon } from "@iconify/react/dist/iconify.js";
 import { Android } from "@mui/icons-material";
 import { Box, SvgIconProps, useTheme } from "@mui/material";
 import SvgIcon from "@mui/material/SvgIcon/SvgIcon";
@@ -41,6 +42,7 @@ export interface FileTypeIconProps extends SvgIconProps {
 export interface FileTypeIconSetting {
   exts: string[];
   icon?: string;
+  iconify?: string;
   img?: string;
   color?: string;
   color_dark?: string;
@@ -87,6 +89,15 @@ interface TypeIcon {
   reverseDarkMode?: boolean;
 }
 
+interface IconComponentProps {
+  icon?: typeof SvgIcon | ((props: SvgIconProps) => JSX.Element);
+  color?: string;
+  color_dark?: string;
+  isDefault?: boolean;
+  img?: string;
+  iconify?: string;
+}
+
 const FileTypeIcon = ({
   name,
   fileType,
@@ -99,7 +110,7 @@ const FileTypeIcon = ({
 }: FileTypeIconProps) => {
   const theme = useTheme();
   const iconOptions = useAppSelector((state) => state.siteConfig.explorer.typed?.icons) as ExpandedIconSettings;
-  const IconComponent = useMemo(() => {
+  const IconComponent: IconComponentProps = useMemo(() => {
     if (fileType === 1) {
       return notLoaded ? { icon: FolderOutlined } : { icon: Folder };
     }
@@ -109,7 +120,7 @@ const FileTypeIcon = ({
       if (fileSuffix && iconOptions) {
         const options = iconOptions[fileSuffix];
         if (options) {
-          const { icon, color, color_dark, img } = options;
+          const { icon, color, color_dark, img, iconify } = options;
           if (icon) {
             return {
               icon: builtInIcons[icon],
@@ -119,6 +130,12 @@ const FileTypeIcon = ({
           } else if (img) {
             return {
               img,
+            };
+          } else if (iconify) {
+            return {
+              iconify,
+              color,
+              color_dark,
             };
           }
         }
@@ -149,6 +166,21 @@ const FileTypeIcon = ({
           color: iconColor,
           ...sx,
         }}
+        {...rest}
+      />
+    );
+  } else if (IconComponent.iconify) {
+    return (
+      //@ts-ignore
+      <Box
+        component={IconifyIcon}
+        sx={{
+          color: iconColor,
+          ...sx,
+        }}
+        width={24}
+        height={24}
+        icon={IconComponent.iconify}
         {...rest}
       />
     );

@@ -388,6 +388,7 @@
     "includePasswordInShareLink": "Include password in share link",
     "includePasswordInShareLinkDes": "If selected, password will be included in the share link, and no password is required when accessing the share link.",
     "showFileName": "Show file name",
+    "forceDownload": "Force download",
     "archiveFile": "Archive file",
     "cancelDownload": "Cancel download",
     "always": "Always",

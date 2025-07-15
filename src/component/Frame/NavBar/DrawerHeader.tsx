@@ -1,8 +1,8 @@
+import { ChevronLeft } from "@mui/icons-material";
 import { Box, Fade, IconButton, styled, useMediaQuery, useTheme } from "@mui/material";
+import { useState } from "react";
 import { setDrawerOpen } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
-import { ChevronLeft } from "@mui/icons-material";
-import { useState } from "react";
 import Logo from "../../Common/Logo.tsx";
 
 export const DrawerHeaderContainer = styled("div")(({ theme }) => ({
@@ -14,7 +14,7 @@ export const DrawerHeaderContainer = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const DrawerHeader = () => {
+const DrawerHeader = ({ disabled }: { disabled?: boolean }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
@@ -22,7 +22,10 @@ const DrawerHeader = () => {
   const [showCollapse, setShowCollapse] = useState(false);
 
   return (
-    <DrawerHeaderContainer onMouseEnter={() => setShowCollapse(true)} onMouseLeave={() => setShowCollapse(false)}>
+    <DrawerHeaderContainer
+      onMouseEnter={() => setShowCollapse(disabled ? false : true)}
+      onMouseLeave={() => setShowCollapse(false)}
+    >
       <Box sx={{ width: "100%", pl: 2 }}>
         <Logo
           sx={{

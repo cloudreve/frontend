@@ -17,6 +17,8 @@ import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid2";
 import { useSnackbar } from "notistack";
 import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Trans, useTranslation } from "react-i18next";
 import { Viewer, ViewerPlatform, ViewerType } from "../../../../api/explorer.ts";
 import { builtInViewers } from "../../../../redux/thunks/viewer.ts";
@@ -35,13 +37,11 @@ import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
 import { ViewerIDWithDefaultIcons } from "../../../FileManager/Dialogs/OpenWith.tsx";
 import Add from "../../../Icons/Add.tsx";
+import ArrowDown from "../../../Icons/ArrowDown.tsx";
 import Dismiss from "../../../Icons/Dismiss.tsx";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
 import MagicVarDialog, { MagicVar } from "../../Common/MagicVarDialog.tsx";
 import { NoMarginHelperText } from "../../Settings/Settings.tsx";
-import ArrowDown from "../../../Icons/ArrowDown.tsx";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 const MonacoEditor = lazy(() => import("../../../Viewers/CodeViewer/MonacoEditor.tsx"));
 
@@ -396,28 +396,26 @@ const FileViewerEditDialog = ({ viewer, onChange, open, onClose }: FileViewerEdi
                 <NoMarginHelperText>{t("settings.viewerPlatformDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
-            {viewer.type == ViewerType.custom && (
-              <SettingForm noContainer lgWidth={6}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={isTrueVal(viewerShadowed.props?.openInNew ?? "")}
-                      onChange={(e) =>
-                        setViewerShadowed((v) => ({
-                          ...(v as Viewer),
-                          props: {
-                            ...(v?.props ?? {}),
-                            openInNew: e.target.checked.toString(),
-                          },
-                        }))
-                      }
-                    />
-                  }
-                  label={t("settings.openInNew")}
-                />
-                <NoMarginHelperText>{t("settings.openInNewDes")}</NoMarginHelperText>
-              </SettingForm>
-            )}
+            <SettingForm noContainer lgWidth={6}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isTrueVal(viewerShadowed.props?.openInNew ?? "")}
+                    onChange={(e) =>
+                      setViewerShadowed((v) => ({
+                        ...(v as Viewer),
+                        props: {
+                          ...(v?.props ?? {}),
+                          openInNew: e.target.checked.toString(),
+                        },
+                      }))
+                    }
+                  />
+                }
+                label={t("settings.openInNew")}
+              />
+              <NoMarginHelperText>{t("settings.openInNewDes")}</NoMarginHelperText>
+            </SettingForm>
             {viewer.id == builtInViewers.drawio && (
               <SettingForm noContainer title={t("settings.drawioHost")} lgWidth={6}>
                 <DenseFilledTextField

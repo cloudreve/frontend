@@ -49,10 +49,11 @@ import {
   setShareReadmeDetect,
   setUploadFromClipboardDialog,
 } from "../globalStateSlice.ts";
-import { Viewers } from "../siteConfigSlice.ts";
+import { Viewers, ViewersByID } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { deleteFile, openFileContextMenu } from "./file.ts";
 import { queueLoadShareInfo } from "./share.ts";
+import { openViewer } from "./viewer.ts";
 
 export function setTargetPath(index: number, path: string): AppThunk {
   return async (dispatch, _getState) => {
@@ -125,6 +126,39 @@ export function checkReadMeEnabled(index: number): AppThunk {
     } else {
       dispatch(setShareReadmeDetect(false));
     }
+  };
+}
+
+export function checkOpenViewerQuery(index: number): AppThunk {
+  return async (dispatch, getState) => {
+    const currentUrl = new URL(window.location.href);
+    const viewer = currentUrl.searchParams.get("viewer");
+    const fileId = currentUrl.searchParams.get("open");
+    const version = currentUrl.searchParams.get("version");
+    const size = currentUrl.searchParams.get("size");
+
+    // Clear viewer-related query parameters
+    currentUrl.searchParams.delete("viewer");
+    currentUrl.searchParams.delete("open");
+    currentUrl.searchParams.delete("version");
+    currentUrl.searchParams.delete("size");
+    window.history.replaceState({}, "", currentUrl.toString());
+
+    if (!fileId || !viewer || !ViewersByID[viewer]) {
+      return;
+    }
+
+    const { files: list, pagination } = getState().fileManager[index]?.list ?? {};
+    if (list) {
+      // Find readme file from highest to lowest priority
+      const found = list.find((file) => file.id === fileId);
+      if (found) {
+        dispatch(openViewer(found, ViewersByID[viewer], parseInt(size ?? "0"), version ?? undefined, true));
+        return;
+      }
+    }
+
+    alert("openViewer");
   };
 }
 

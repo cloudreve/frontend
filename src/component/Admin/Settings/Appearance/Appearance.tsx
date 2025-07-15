@@ -3,6 +3,8 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { SettingSection } from "../Settings";
 import { SettingContext } from "../SettingWrapper";
+import CustomHTML from "./CustomHTML";
+import CustomNavItems from "./CustomNavItems";
 import ThemeOptions from "./ThemeOptions";
 
 const Appearance = () => {
@@ -19,6 +21,15 @@ const Appearance = () => {
             defaultTheme={values.defaultTheme || ""}
             onDefaultThemeChange={(value: string) => setSettings({ defaultTheme: value })}
           />
+        </SettingSection>
+        <SettingSection>
+          <CustomNavItems
+            value={values.custom_nav_items || "[]"}
+            onChange={(value: string) => setSettings({ custom_nav_items: value })}
+          />
+        </SettingSection>
+        <SettingSection>
+          <CustomHTML />
         </SettingSection>
       </Stack>
     </Box>

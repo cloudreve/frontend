@@ -85,7 +85,7 @@ const Media = () => {
                   }}
                   required
                 >
-                  {["jpg", "png"].map((f) => (
+                  {["jpg", "png", "webp"].map((f) => (
                     <SquareMenuItem value={f} key={f}>
                       <ListItemText
                         slotProps={{
@@ -97,10 +97,12 @@ const Media = () => {
                     </SquareMenuItem>
                   ))}
                 </DenseSelect>
-                <NoMarginHelperText>{t("settings.notAppliedToNativeGenerator", { prefix: "" })}</NoMarginHelperText>
+                <NoMarginHelperText>
+                  {t("settings.notAppliedToNativeGenerator", { prefix: t("settings.thumbFormatDes") })}
+                </NoMarginHelperText>
               </FormControl>
             </SettingForm>
-            <Collapse in={values.thumb_encode_method == "jpg"} unmountOnExit>
+            <Collapse in={values.thumb_encode_method == "jpg" || values.thumb_encode_method == "webp"} unmountOnExit>
               <SettingForm title={t("settings.thumbQuality")} lgWidth={5}>
                 <FormControl>
                   <DenseFilledTextField
