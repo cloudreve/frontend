@@ -99,6 +99,7 @@ export enum PolicyType {
   cos = "cos",
   upyun = "upyun",
   s3 = "s3",
+  ks3 = "ks3",
   obs = "obs",
   load_balance = "load_balance",
 }

@@ -830,6 +830,7 @@
     "cos": "Tencent Cloud COS",
     "onedrive": "OneDrive",
     "s3": "S3 Compatible",
+    "ks3": "KS3 Compatible",
     "obs": "Huawei Cloud OBS",
     "load_balance": "Load Balance",
     "childPolicy": "Child Storage Policy",
@@ -994,7 +995,9 @@
     "driverRootDes": "Choose where to save files in your OneDrive account. Changing this option will make existing files in the storage policy inaccessible.",
     "saveToDefaultOneDrive": "Save files to default OneDrive driver",
     "saveToSharePoint": "Save files to SharePoint",
-    "sharePointUrlDes": "Enter the SharePoint site URL. After losing focus, the system will automatically convert it to the correct driver identifier."
+    "sharePointUrlDes": "Enter the SharePoint site URL. After losing focus, the system will automatically convert it to the correct driver identifier.",
+    "ks3selectRegionDes": "Enter the region code of the storage bucket, e.g. <0>BEIJING</0> .",
+    "ks3EndpointPathStyle": "Select the format of the KS3 Endpoint address."
   },
   "node": {
     "slave": "slave",
