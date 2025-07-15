@@ -42,7 +42,7 @@ export interface SizeInputProps {
   allowZero?: boolean;
 }
 
-const StyledSelect = styled(Select)(() => ({
+export const StyledSelect = styled(Select)(() => ({
   "& .MuiFilledInput-input": {
     paddingTop: "5px",
     "&:focus": {
