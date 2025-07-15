@@ -1,4 +1,6 @@
 import { Box, BoxProps, Typography, useTheme } from "@mui/material";
+import LogoIcon from "./assets/logo.svg";
+import LogoIconDark from "./assets/logo_light.svg";
 
 export interface PoweredByProps extends BoxProps {}
 
@@ -44,12 +46,7 @@ const PoweredBy = ({ ...rest }: PoweredByProps) => {
           sx={{
             height: 20,
           }}
-          src={
-            theme.palette.mode === "dark"
-              ? "https://docs.cloudreve.org/logo_light.svg"
-              : "https://docs.cloudreve.org/logo.svg"
-          }
-          alt="Cloudreve"
+          src={theme.palette.mode === "dark" ? LogoIconDark : LogoIcon}
         />
       </Box>
     </Box>

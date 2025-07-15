@@ -23,6 +23,9 @@ const Loading = () => {
 
 const HeadlessFrame = () => {
   const loading = useAppSelector((state) => state.globalState.loading.headlessFrame);
+  const { headless_footer, headless_bottom, sidebar_bottom } = useAppSelector(
+    (state) => state.siteConfig.basic?.config?.custom_html ?? {},
+  );
   const dispatch = useAppDispatch();
   let navigation = useNavigation();
 
@@ -66,6 +69,11 @@ const HeadlessFrame = () => {
                     }}
                   >
                     <Outlet />
+                    {headless_bottom && (
+                      <Box sx={{ width: "100%" }}>
+                        <div dangerouslySetInnerHTML={{ __html: headless_bottom }} />
+                      </Box>
+                    )}
                   </Box>
                   {(loading || navigation.state !== "idle") && <Loading />}
                 </div>
@@ -73,6 +81,11 @@ const HeadlessFrame = () => {
             </Paper>
           </Box>
           <PoweredBy />
+          {headless_footer && (
+            <Box sx={{ width: "100%", mb: 2 }}>
+              <div dangerouslySetInnerHTML={{ __html: headless_footer }} />
+            </Box>
+          )}
         </Grid>
       </Container>
     </Box>

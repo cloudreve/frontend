@@ -112,6 +112,14 @@
     "retryDelayDes": "Initial delay time (seconds) for task retries."
   },
   "settings": {
+    "headlessFooter": "Landing page footer",
+    "headlessFooterDes": "Custom HTML content displayed at the bottom of the login, sign up and callback result pages.",
+    "headlessBottom": "Landing page bottom",
+    "headlessBottomDes": "Custom HTML content displayed at the bottom of the login, sign up and callback result pages.",
+    "customHTML": "Custom HTML",
+    "customHTMLDes": "Insert custom HTML content at the preset position of the site.",
+    "sidebarBottom": "Sidebar bottom",
+    "sidebarBottomDes": "Custom HTML content displayed at the bottom of the sidebar.",
     "addNavItem": "Add navigation item",
     "customNavItems": "Custom sidebar items",
     "customNavItemsDes": "You can add custom items to the sidebar, and users will be redirected to the corresponding link when clicked.",

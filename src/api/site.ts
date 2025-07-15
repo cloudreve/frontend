@@ -43,6 +43,7 @@ export interface SiteConfig {
   thumbnail_height?: number;
   custom_props?: CustomProps[];
   custom_nav_items?: CustomNavItem[];
+  custom_html?: CustomHTML;
 }
 
 export interface CaptchaResponse {
@@ -54,4 +55,10 @@ export interface CustomNavItem {
   name: string;
   url: string;
   icon: string;
+}
+
+export interface CustomHTML {
+  headless_footer?: string;
+  headless_bottom?: string;
+  sidebar_bottom?: string;
 }

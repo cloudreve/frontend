@@ -112,6 +112,14 @@
     "retryDelayDes": "タスク再試行の初期遅延時間（秒）"
   },
   "settings": {
+    "headlessFooter": "ログインセッションページの下部",
+    "headlessFooterDes": "ユーザーがログイン、登録、コールバック結果などのページの下部に表示するカスタム HTML コンテンツ。",
+    "headlessBottom": "ログインセッションページの主体下部",
+    "headlessBottomDes": "ユーザーがログイン、登録、コールバック結果などのページの主体ボックスの下部に表示するカスタム HTML コンテンツ。",
+    "customHTML": "カスタム HTML",
+    "customHTMLDes": "サイトの既定の位置にカスタム HTML コンテンツを挿入します。",
+    "sidebarBottom": "サイドバーの下部",
+    "sidebarBottomDes": "サイドバーの下部に表示するカスタム HTML コンテンツ。",
     "addNavItem": "ナビゲーション項目を追加",
     "customNavItems": "サイドナビゲーションバーのカスタマイズ",
     "customNavItemsDes": "左側のナビゲーションバーにカスタム項目を追加できます。ユーザーがクリックすると、対応するリンクに移動します。",

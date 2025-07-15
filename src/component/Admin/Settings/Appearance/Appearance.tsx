@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { SettingSection } from "../Settings";
 import { SettingContext } from "../SettingWrapper";
+import CustomHTML from "./CustomHTML";
 import CustomNavItems from "./CustomNavItems";
 import ThemeOptions from "./ThemeOptions";
 
@@ -26,6 +27,9 @@ const Appearance = () => {
             value={values.custom_nav_items || "[]"}
             onChange={(value: string) => setSettings({ custom_nav_items: value })}
           />
+        </SettingSection>
+        <SettingSection>
+          <CustomHTML />
         </SettingSection>
       </Stack>
     </Box>

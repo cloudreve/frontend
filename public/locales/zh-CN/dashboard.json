@@ -112,6 +112,14 @@
     "retryDelayDes": "任务重试的初始延迟时间（秒）。"
   },
   "settings": {
+    "headlessFooter": "登录会话页面底部",
+    "headlessFooterDes": "用户登录、注册、回调结果等页面底部展示的自定义 HTML 内容。",
+    "headlessBottom": "登录会话页面主体底部",
+    "headlessBottomDes": "用户登录、注册、回调结果等页面主体框底部展示的自定义 HTML 内容。",
+    "customHTML": "自定义 HTML",
+    "customHTMLDes": "在站点的预设位置插入展示自定义的 HTML 内容。",
+    "sidebarBottom": "侧边栏底部",
+    "sidebarBottomDes": "在侧边栏底部展示的自定义 HTML 内容。",
     "addNavItem": "添加导航条目",
     "customNavItems": "自定义侧边导航栏",
     "customNavItemsDes": "你可以在左侧导航栏中添加自定义的条目，用户点击后会跳转到对应的链接。",

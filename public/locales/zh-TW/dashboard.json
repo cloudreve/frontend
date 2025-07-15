@@ -112,6 +112,14 @@
     "retryDelayDes": "任務重試的初始延遲時間（秒）。"
   },
   "settings": {
+    "headlessFooter": "登入會話頁面底部",
+    "headlessFooterDes": "使用者登入、註冊、回調結果等頁面底部展示的自訂 HTML 內容。",
+    "headlessBottom": "登入會話頁面主體底部",
+    "headlessBottomDes": "使用者登入、註冊、回調結果等頁面主體框底部展示的自訂 HTML 內容。",
+    "customHTML": "自訂 HTML",
+    "customHTMLDes": "在站點的預設位置插入展示自訂的 HTML 內容。",
+    "sidebarBottom": "側邊欄底部",
+    "sidebarBottomDes": "在側邊欄底部展示的自訂 HTML 內容。",
     "addNavItem": "新增導航條目",
     "customNavItems": "自定義側邊導航欄",
     "customNavItemsDes": "你可以在側邊導航欄中新增自定義的條目，用戶點擊後會跳轉到對應的鏈接。",
