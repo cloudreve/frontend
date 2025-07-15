@@ -831,6 +831,7 @@
     "cos": "Tencent COS",
     "onedrive": "OneDrive",
     "s3": "S3互換",
+    "ks3": "KS3互換",
     "obs": "Huawei Cloud OBS",
     "load_balance": "負荷分散",
     "childPolicy": "子ストレージポリシー",
@@ -983,7 +984,9 @@
     "driverRootDes": "OneDriveアカウント内でファイルを保存する場所を選択してください。このオプションを変更すると、ストレージポリシーに既に存在するファイルにアクセスできなくなる可能性があります。",
     "saveToDefaultOneDrive": "ファイルをデフォルトのOneDriveドライブに保存",
     "saveToSharePoint": "SharePointにファイルを保存",
-    "sharePointUrlDes": "SharePointサイトのURLを入力してください。フォーカスが外れると、システムが自動的に正しいドライブ識別子に変換します。"
+    "sharePointUrlDes": "SharePointサイトのURLを入力してください。フォーカスが外れると、システムが自動的に正しいドライブ識別子に変換します。",
+    "ks3selectRegionDes": "バケットが存在するリージョンコードを入力してください（例： <0>BEIJING</0>）。",
+    "ks3EndpointPathStyle": "パス形式エンドポイントの強制使用を選択してください。"
   },
   "node": {
     "slave": "スレーブ",

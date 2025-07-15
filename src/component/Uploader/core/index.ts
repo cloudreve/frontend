@@ -13,6 +13,7 @@ import ResumeHint from "./uploader/placeholder";
 import Qiniu from "./uploader/qiniu";
 import Remote from "./uploader/remote";
 import S3 from "./uploader/s3";
+import KS3 from "./uploader/ks3";
 import Upyun from "./uploader/upyun";
 import {
   cleanupResumeCtx,
@@ -130,6 +131,8 @@ export default class UploadManager {
         return new Upyun(task, this);
       case PolicyType.s3:
         return new S3(task, this);
+      case PolicyType.ks3:
+        return new KS3(task, this);
       case PolicyType.obs:
         return new OBS(task, this);
       default:

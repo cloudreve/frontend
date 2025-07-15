@@ -61,6 +61,7 @@ const resumePolicy = [
   PolicyType.oss,
   PolicyType.onedrive,
   PolicyType.s3,
+  PolicyType.ks3,
 ];
 const deleteUploadSessionDelay = 500;
 
