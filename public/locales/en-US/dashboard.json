@@ -431,6 +431,8 @@
     "generatorExtsDes": "List of available file extensions for this generator, please use comma , to separate multiple ones.",
     "ffmpegSeek": "Thumbnail capture location",
     "ffmpegSeekDes": "Define the thumbnail interception time, it is recommended to choose a smaller value to speed up the generation process. If the actual length of the video is exceeded, the thumbnail generation will fail.",
+    "ffmpegExtraArgs": "Extra input arguments",
+    "ffmpegExtraArgsDes": "Extra input arguments for calling FFmpeg.",
     "generatorProxy": "Generator proxy",
     "enableThumbProxy": "Use generator proxy",
     "proxyPolicyList": "Enabled storage policy",

@@ -425,6 +425,8 @@
     "generatorExtsDes": "此生成器可用的副檔名列表，多個請使用半形逗號 , 隔開。",
     "ffmpegSeek": "縮圖擷取位置",
     "ffmpegSeekDes": "定義縮圖擷取的時間，推薦選擇較小值以加速生成過程。如果超出視訊實際長度，會導致縮圖擷取失敗",
+    "ffmpegExtraArgs": "額外輸入參數",
+    "ffmpegExtraArgsDes": "呼叫 FFmpeg 時額外輸入的參數。",
     "generatorProxy": "生成器代理",
     "enableThumbProxy": "使用生成器代理",
     "proxyPolicyList": "啟動代理的儲存策略",

@@ -116,6 +116,11 @@ const generators: GeneratorRenderProps[] = [
         des: "ffmpegSeekDes",
         required: true,
       },
+      {
+        name: "thumb_ffmpeg_extra_args",
+        label: "ffmpegExtraArgs",
+        des: "ffmpegExtraArgsDes",
+      },
     ],
   },
   {

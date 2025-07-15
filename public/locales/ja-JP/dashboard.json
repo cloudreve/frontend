@@ -429,6 +429,8 @@
     "generatorExtsDes": "このジェネレーターで使用可能なファイル拡張子のリストです。複数指定する場合は半角カンマ(,)で区切ってください。",
     "ffmpegSeek": "サムネイルキャプチャ位置",
     "ffmpegSeekDes": "サムネイルのキャプチャ時間を定義します。生成処理を高速化するために、小さい値を選択することをお勧めします。ビデオの実際の長さを超えると、サムネイルのキャプチャに失敗する可能性があります。",
+    "ffmpegExtraArgs": "追加入力引数",
+    "ffmpegExtraArgsDes": "FFmpeg 呼び出し時に追加入力する引数。",
     "generatorProxy": "ジェネレーター代理",
     "enableThumbProxy": "ジェネレーター代理の使用",
     "proxyPolicyList": "代理のストレージポリシーの起動",
