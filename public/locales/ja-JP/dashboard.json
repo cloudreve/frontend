@@ -112,6 +112,8 @@
     "retryDelayDes": "タスク再試行の初期遅延時間（秒）"
   },
   "settings": {
+    "imageUrl": "画像 URL",
+    "iconifyName": "Iconify アイコン名",
     "oidc": "OpenID Connect (OIDC)",
     "oidcDes": "OpenID Connect (OIDC) は、異なるシステム間で認証を行うためのオープンな認証プロトコルです。サードパーティーのアイデンティティプラットフォームでアプリケーションを作成したら、<0>{{url}}</0> を「リダイレクト URI」に追加してください。詳細は<1>公式ドキュメント</1>を参照してください。",
     "clientID": "クライアント ID",
