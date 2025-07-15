@@ -1,9 +1,10 @@
 import { Box, Container, Grid, Paper } from "@mui/material";
+import { Outlet, useNavigation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
+import AutoHeight from "../Common/AutoHeight.tsx";
 import CircularProgress from "../Common/CircularProgress.tsx";
 import Logo from "../Common/Logo.tsx";
-import AutoHeight from "../Common/AutoHeight.tsx";
-import { Outlet, useNavigation } from "react-router-dom";
+import PoweredBy from "./PoweredBy.tsx";
 
 const Loading = () => {
   return (
@@ -71,6 +72,7 @@ const HeadlessFrame = () => {
               </AutoHeight>
             </Paper>
           </Box>
+          <PoweredBy />
         </Grid>
       </Container>
     </Box>
