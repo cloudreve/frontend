@@ -690,7 +690,8 @@
     "pending": "Finished, transfer pending in queue",
     "transferring": "Finished, transferring",
     "deleteRecord": "Delete record",
-    "createdAt": "Created at: "
+    "createdAt": "Created at: ",
+    "unknownSize": "Unknown file size"
   },
   "setting": {
     "treeView": "Tree view",

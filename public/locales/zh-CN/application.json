@@ -694,7 +694,8 @@
     "pending": "已完成，转存排队中",
     "transferring": "转存中",
     "deleteRecord": "删除记录",
-    "createdAt": "创建日期："
+    "createdAt": "创建日期：",
+    "unknownSize": "未知文件大小"
   },
   "setting": {
     "treeView": "树视图",

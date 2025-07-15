@@ -92,7 +92,7 @@ const TaskSummaryStatus = ({ type, status, summary, error, simplified }: TaskSum
               <TaskStatusContent
                 title={
                   downloadStatus.total <= 0
-                    ? "未知大小"
+                    ? t("download.unknownSize")
                     : `${((downloadStatus.downloaded * 100) / downloadStatus.total).toFixed(2)}%`
                 }
                 icon={<ArrowSyncCircleFilledSpin fontSize={"small"} />}
