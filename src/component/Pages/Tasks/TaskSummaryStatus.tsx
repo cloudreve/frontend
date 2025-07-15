@@ -90,7 +90,11 @@ const TaskSummaryStatus = ({ type, status, summary, error, simplified }: TaskSum
                   downloadStatus.downloaded,
                 )} / ${sizeToString(downloadStatus.total)}`}
               <TaskStatusContent
-                title={`${((downloadStatus.downloaded * 100) / Math.max(downloadStatus.total, 1)).toFixed(2)}%`}
+                title={
+                  downloadStatus.total <= 0
+                    ? "未知大小"
+                    : `${((downloadStatus.downloaded * 100) / downloadStatus.total).toFixed(2)}%`
+                }
                 icon={<ArrowSyncCircleFilledSpin fontSize={"small"} />}
                 color={theme.palette.primary.main}
               />
