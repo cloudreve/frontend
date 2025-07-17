@@ -690,7 +690,8 @@
     "pending": "已完成，轉存排隊中",
     "transferring": "轉存中",
     "deleteRecord": "刪除記錄",
-    "createdAt": "建立日期："
+    "createdAt": "建立日期：",
+    "unknownSize": "未知檔案大小"
   },
   "setting": {
     "treeView": "樹視圖",
