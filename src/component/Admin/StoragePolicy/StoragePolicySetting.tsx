@@ -28,6 +28,7 @@ import OssWizard from "./Wizards/OSS/OssWizard";
 import QiniuWizard from "./Wizards/Qiniu/QiniuWizard";
 import RemoteWizard from "./Wizards/Remote/RemoteWizard";
 import S3Wizard from "./Wizards/S3/S3Wizard";
+import KS3Wizard from "./Wizards/KS3/KS3Wizard";
 import UpyunWizard from "./Wizards/Upyun/UpyunWizard";
 
 export const PageQuery = "page";
@@ -98,6 +99,22 @@ export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
     endpointDes: <Trans i18nKey="policy.s3EndpointDes" ns="dashboard" components={[<Code />]} />,
     akName: "Access Key",
     skName: "Secret Key",
+    chunkSizeMin: 5 * 1024 * 1024, //5MB
+    chunkSizeMax: 5 * 1024 * 1024 * 1024, //5GB
+    chunkSizeDes: "policy.chunkSizeDesS3",
+  },
+  [PolicyType.ks3]: {
+    name: "policy.ks3",
+    img: "/static/img/ks3.png",
+    wizardSize: "sm",
+    wizard: KS3Wizard,
+    bucketName: "policy.bucketName",
+    bucketType: "policy.bucketType",
+    endpointName: "policy.policyEndpoint",
+    endpointDes: <Trans i18nKey="policy.s3EndpointDes" ns="dashboard" components={[<Code />]} />,
+    akName: "Access Key",
+    skName: "Secret Key",
+    corsExposedHeaders: ["ETag"],
     chunkSizeMin: 5 * 1024 * 1024, //5MB
     chunkSizeMax: 5 * 1024 * 1024 * 1024, //5GB
     chunkSizeDes: "policy.chunkSizeDesS3",
