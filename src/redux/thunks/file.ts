@@ -1212,6 +1212,17 @@ function startBatchGetDirectLinks(files: FileResponse[]): AppThunk<Promise<Direc
       }),
     );
 
+    // Check if there are any files to generate direct links for
+    if (allFiles.length === 0) {
+      enqueueSnackbar({
+        message: i18next.t("modals.noFileCanGenerateSourceLink"),
+        preventDuplicate: true,
+        variant: "warning",
+        action: DefaultCloseAction,
+      });
+      throw new Error("AbortError");
+    }
+
     return await dispatch(
       getFileDirectLinks({
         uris: allFiles.map((f) => getFileLinkedUri(f)),

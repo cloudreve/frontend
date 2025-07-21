@@ -694,7 +694,8 @@
     "pending": "完了、アーカイブ待ち",
     "transferring": "アーカイブ中",
     "deleteRecord": "レコード削除",
-    "createdAt": "作成日："
+    "createdAt": "作成日：",
+    "unknownSize": "未知のファイルサイズ"
   },
   "setting": {
     "treeView": "ツリービュー",
