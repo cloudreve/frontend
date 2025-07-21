@@ -20,7 +20,7 @@ const ThumbnailsSection = () => {
   }, [values.type]);
 
   const noNativeThumbnail = useMemo(() => {
-    return values.type === PolicyType.local || values.type === PolicyType.s3 || values.type === PolicyType.ks3;
+    return values.type === PolicyType.local || values.type === PolicyType.s3;
   }, [values.type]);
 
   const onNativeThumbnailChange = useCallback(

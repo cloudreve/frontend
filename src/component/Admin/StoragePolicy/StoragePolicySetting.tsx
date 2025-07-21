@@ -111,7 +111,7 @@ export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
     bucketName: "policy.bucketName",
     bucketType: "policy.bucketType",
     endpointName: "policy.policyEndpoint",
-    endpointDes: <Trans i18nKey="policy.s3EndpointDes" ns="dashboard" components={[<Code />]} />,
+    endpointDes: <Trans i18nKey="policy.ks3selectRegionDes" ns="dashboard" components={[<Code />]} />,
     akName: "Access Key",
     skName: "Secret Key",
     corsExposedHeaders: ["ETag"],
