@@ -844,6 +844,7 @@
     "cos": "騰訊雲 COS",
     "onedrive": "OneDrive",
     "s3": "S3 相容",
+    "ks3": "金山雲 KS3",
     "obs": "華為雲 OBS",
     "load_balance": "負載均衡",
     "childPolicy": "子儲存策略",
@@ -996,7 +997,9 @@
     "driverRootDes": "選擇在 OneDrive 賬戶中儲存檔案的位置。更改此選項會導致儲存策略中已有檔案無法訪問。",
     "saveToDefaultOneDrive": "儲存檔案到預設 OneDrive 驅動器",
     "saveToSharePoint": "儲存檔案到 SharePoint",
-    "sharePointUrlDes": "輸入 SharePoint 站點 URL。失去焦點後，系統將自動轉換為正確的驅動器標識。"
+    "sharePointUrlDes": "輸入 SharePoint 站點 URL。失去焦點後，系統將自動轉換為正確的驅動器標識。",
+    "ks3selectRegionDes": "輸入儲存桶所在的區域程式碼，如 <0>BEIJING</0>。",
+    "ks3EndpointPathStyle": "選擇是否強制使用路徑格式 Endpoint。"
   },
   "node": {
     "slave": "從機",
