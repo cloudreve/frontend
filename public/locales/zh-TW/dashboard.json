@@ -844,7 +844,7 @@
     "cos": "騰訊雲 COS",
     "onedrive": "OneDrive",
     "s3": "S3 相容",
-    "ks3": "KS3 相容",
+    "ks3": "金山雲 KS3",
     "obs": "華為雲 OBS",
     "load_balance": "負載均衡",
     "childPolicy": "子儲存策略",

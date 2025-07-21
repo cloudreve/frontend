@@ -3,7 +3,7 @@ import { s3LikeFinishUpload, s3LikeUploadCallback, s3LikeUploadChunk } from "../
 import { Status } from "./base";
 import { PolicyType } from "../../../../api/explorer.ts";
 
-export default class OSS extends Chunk {
+export default class KS3 extends Chunk {
   protected async uploadChunk(chunkInfo: ChunkInfo) {
     const etag = await s3LikeUploadChunk(
       this.task.session?.upload_urls[chunkInfo.index]!,

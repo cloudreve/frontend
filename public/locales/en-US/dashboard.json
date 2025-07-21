@@ -847,7 +847,7 @@
     "cos": "Tencent Cloud COS",
     "onedrive": "OneDrive",
     "s3": "S3 Compatible",
-    "ks3": "KS3 Compatible",
+    "ks3": "Kingsoft Cloud S3",
     "obs": "Huawei Cloud OBS",
     "load_balance": "Load Balance",
     "childPolicy": "Child Storage Policy",
