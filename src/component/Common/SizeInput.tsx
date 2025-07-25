@@ -54,7 +54,7 @@ export const StyledSelect = styled(Select)(() => ({
   backgroundColor: "initial",
 }));
 
-const StyleOutlinedSelect = styled(Select)(({ theme }) => ({
+export const StyleOutlinedSelect = styled(Select)(({ theme }) => ({
   "& .MuiFilledInput-input": {
     paddingTop: "5px",
     "&:focus": {

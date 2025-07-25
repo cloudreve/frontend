@@ -8,10 +8,25 @@ interface Validator {
 // validators
 const checkers: Array<Validator> = [
   function checkExt(file: File, policy: StoragePolicy) {
+    const ext = file?.name.split(".").pop();
     if (policy.allowed_suffix != undefined && policy.allowed_suffix.length > 0) {
-      const ext = file?.name.split(".").pop();
       if (ext === null || !ext || !policy.allowed_suffix.includes(ext))
         throw new FileValidateError("File suffix not allowed in policy.", "suffix", policy);
+    }
+    if (policy.denied_suffix != undefined && policy.denied_suffix.length > 0) {
+      if (ext && policy.denied_suffix.includes(ext))
+        throw new FileValidateError("File suffix not allowed in policy.", "suffix_denied", policy);
+    }
+  },
+
+  function checkRegexp(file: File, policy: StoragePolicy) {
+    if (policy.allowed_name_regexp != undefined && policy.allowed_name_regexp.length > 0) {
+      if (!new RegExp(policy.allowed_name_regexp).test(file.name))
+        throw new FileValidateError("File name must match the allowed regexp.", "regexp", policy);
+    }
+    if (policy.denied_name_regexp != undefined && policy.denied_name_regexp.length > 0) {
+      if (new RegExp(policy.denied_name_regexp).test(file.name))
+        throw new FileValidateError("File name must not match the regexp.", "regexp", policy);
     }
   },
 

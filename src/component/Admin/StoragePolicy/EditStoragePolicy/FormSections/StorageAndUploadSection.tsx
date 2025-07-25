@@ -1,9 +1,9 @@
-import { FormControl, FormControlLabel, Link, Switch, Typography } from "@mui/material";
+import { FormControl, FormControlLabel, InputAdornment, Link, MenuItem, Switch, Typography } from "@mui/material";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { StoragePolicy } from "../../../../../api/dashboard";
 import { PolicyType } from "../../../../../api/explorer";
-import SizeInput from "../../../../Common/SizeInput";
+import SizeInput, { StyleOutlinedSelect } from "../../../../Common/SizeInput";
 import { DenseFilledTextField } from "../../../../Common/StyledComponents";
 import SettingForm from "../../../../Pages/Setting/SettingForm";
 import MagicVarDialog from "../../../Common/MagicVarDialog";
@@ -71,6 +71,49 @@ const StorageAndUploadSection = () => {
         settings: {
           ...(p.settings ?? {}),
           file_type: e.target.value === "" ? undefined : e.target.value.split(",").map((ext) => ext.trim()),
+        },
+      }));
+    },
+    [setPolicy],
+  );
+
+  const onFileExtsModeChange = useCallback(
+    (mode: boolean | undefined) => {
+      setPolicy((p: StoragePolicy) => ({
+        ...p,
+        settings: {
+          ...(p.settings ?? {}),
+          is_file_type_deny_list: mode,
+        },
+      }));
+    },
+    [setPolicy],
+  );
+
+  const fileRegexp = useMemo(() => {
+    return values.settings?.file_regexp ?? "";
+  }, [values.settings?.file_regexp]);
+
+  const onFileRegexpChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPolicy((p: StoragePolicy) => ({
+        ...p,
+        settings: {
+          ...(p.settings ?? {}),
+          file_regexp: e.target.value === "" ? undefined : e.target.value,
+        },
+      }));
+    },
+    [setPolicy],
+  );
+
+  const onFileRegexpModeChange = useCallback(
+    (mode: boolean | undefined) => {
+      setPolicy((p: StoragePolicy) => ({
+        ...p,
+        settings: {
+          ...(p.settings ?? {}),
+          is_name_regexp_deny_list: mode,
         },
       }));
     },
@@ -167,8 +210,64 @@ const StorageAndUploadSection = () => {
         </SettingForm>
         <SettingForm title={t("policy.extList")} lgWidth={5}>
           <FormControl fullWidth>
-            <DenseFilledTextField multiline maxRows={4} value={fileExts} onChange={onFileExtsChange} />
+            <DenseFilledTextField
+              placeholder={t("policy.noLimit")}
+              multiline
+              maxRows={4}
+              value={fileExts}
+              onChange={onFileExtsChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <StyleOutlinedSelect
+                      size="small"
+                      variant="filled"
+                      value={values.settings?.is_file_type_deny_list === true ? "blacklist" : "whitelist"}
+                      onChange={(e) => onFileExtsModeChange(e.target.value === "blacklist" ? true : undefined)}
+                      sx={{ minWidth: 80, mr: 1 }}
+                    >
+                      <MenuItem dense value="whitelist">
+                        {t("policy.whitelist")}
+                      </MenuItem>
+                      <MenuItem dense value="blacklist">
+                        {t("policy.blacklist")}
+                      </MenuItem>
+                    </StyleOutlinedSelect>
+                  </InputAdornment>
+                ),
+              }}
+            />
             <NoMarginHelperText>{t("policy.enterFileExt")}</NoMarginHelperText>
+          </FormControl>
+        </SettingForm>
+        <SettingForm title={t("policy.fileNameRegex")} lgWidth={5}>
+          <FormControl fullWidth>
+            <DenseFilledTextField
+              placeholder={t("policy.noLimit")}
+              value={fileRegexp}
+              onChange={onFileRegexpChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <StyleOutlinedSelect
+                      size="small"
+                      variant="filled"
+                      value={values.settings?.is_name_regexp_deny_list === true ? "blacklist" : "whitelist"}
+                      onChange={(e) => onFileRegexpModeChange(e.target.value === "blacklist" ? true : undefined)}
+                      sx={{ minWidth: 80, mr: 1 }}
+                    >
+                      <MenuItem dense value="whitelist">
+                        {t("policy.whitelist")}
+                      </MenuItem>
+                      <MenuItem dense value="blacklist">
+                        {t("policy.blacklist")}
+                      </MenuItem>
+                    </StyleOutlinedSelect>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <NoMarginHelperText>{t("policy.fileNameRegexDes")}</NoMarginHelperText>
           </FormControl>
         </SettingForm>
         {values.type !== PolicyType.upyun && (

@@ -206,6 +206,9 @@ export enum NodeStatus {
 export interface PolicySetting {
   token?: string;
   file_type?: string[];
+  is_file_type_deny_list?: boolean;
+  file_regexp?: string;
+  is_name_regexp_deny_list?: boolean;
   od_redirect?: string;
   custom_proxy?: boolean;
   proxy_server?: string;

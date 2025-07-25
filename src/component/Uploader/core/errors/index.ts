@@ -67,12 +67,12 @@ export class UploaderError implements Error {
 // 文件未通过存储策略验证
 export class FileValidateError extends UploaderError {
   // 未通过验证的文件属性
-  public field: "size" | "suffix";
+  public field: "size" | "suffix" | "suffix_denied" | "regexp";
 
   // 对应的存储策略
   public policy: StoragePolicy;
 
-  constructor(message: string, field: "size" | "suffix", policy: StoragePolicy) {
+  constructor(message: string, field: "size" | "suffix" | "suffix_denied" | "regexp", policy: StoragePolicy) {
     super(UploaderErrorName.InvalidFile, message);
     this.field = field;
     this.policy = policy;
@@ -85,9 +85,25 @@ export class FileValidateError extends UploaderError {
       });
     }
 
-    return i18next.t(`uploader.suffixNotAllowedError`, {
-      supported: this.policy.allowed_suffix ? this.policy.allowed_suffix.join(",") : "*",
-    });
+    if (this.field == "suffix_denied") {
+      return (
+        i18next.t("uploader.suffixNotAllowedError") +
+        i18next.t(`uploader.suffixDenied`, {
+          denied: this.policy.denied_suffix ? this.policy.denied_suffix.join(",") : "*",
+        })
+      );
+    }
+
+    if (this.field == "regexp") {
+      return i18next.t("uploader.regexpNotAllowedError");
+    }
+
+    return (
+      i18next.t(`uploader.suffixNotAllowedError`) +
+      i18next.t(`uploader.suffixAllowed`, {
+        supported: this.policy.allowed_suffix ? this.policy.allowed_suffix.join(",") : "*",
+      })
+    );
   }
 }
 

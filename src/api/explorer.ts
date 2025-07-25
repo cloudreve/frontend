@@ -108,6 +108,9 @@ export interface StoragePolicy {
   id: string;
   name: string;
   allowed_suffix?: string[];
+  denied_suffix?: string[];
+  allowed_name_regexp?: string;
+  denied_name_regexp?: string;
   max_size: number;
   type: PolicyType;
   relay?: boolean;
