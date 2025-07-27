@@ -1285,6 +1285,7 @@
     "cleanupNotAfter": "この日付以前",
     "cleanupEventTypes": "イベント種類",
     "cleanupEventTypesDes": "イベント種類を選択してください。空の場合はすべての種類を削除します。",
+    "allEventTypes": "すべてのイベントタイプ",
     "initiator": "発信者",
     "event": "イベント",
     "userID": "ユーザーID",
