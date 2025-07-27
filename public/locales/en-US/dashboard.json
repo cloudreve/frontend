@@ -1299,6 +1299,7 @@
     "cleanupNotAfter": "Before this date",
     "cleanupEventTypes": "Event types",
     "cleanupEventTypesDes": "Select the event types to clean up. Leave blank to clean up all types.",
+    "allEventTypes": "All event types",
     "initiator": "Initiator",
     "event": "Event",
     "userID": "User ID",
