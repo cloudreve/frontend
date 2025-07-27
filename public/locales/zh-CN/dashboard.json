@@ -1284,7 +1284,7 @@
     "cleanupNotAfter": "在此日期之前",
     "cleanupEventTypes": "事件类型",
     "cleanupEventTypesDes": "选择要清理的事件类型，留空表示清理所有类型。",
-    "allEventTypes": "所有事件类型"
+    "allEventTypes": "所有事件类型",
     "initiator": "发起者",
     "event": "事件",
     "userID": "用户 ID",
