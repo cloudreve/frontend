@@ -64,22 +64,32 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          if (id.includes("monaco-editor")) {
-            return `monaco`;
-          }
-          if (id.includes("@codemirror")) {
-            return "codemirror";
-          }
-          if (
-            id.includes("excalidraw") ||
-            id.includes("browser-fs-access") ||
-            id.includes("image-blob-reduce") ||
-            id.includes("pica")
-          ) {
-            return "excalidraw";
-          }
-          if (id.includes("mermaid") || id.includes("katex")) {
-            return "mermaid";
+          const chunkMap = {
+            common: [
+              "vite/preload-helper",
+              "vite/modulepreload-polyfill",
+              "vite/dynamic-import-helper",
+              "commonjsHelpers",
+              "commonjs-dynamic-modules",
+              "__vite-browser-external",
+            ],
+            monaco: ["monaco-editor"],
+            codemirror: ["@codemirror"],
+            excalidraw: [
+              "node_modules/@excalidraw",
+              "node_modules/browser-fs-access",
+              "node_modules/image-blob-reduce",
+              "node_modules/pica/",
+            ],
+            mermaid: ["node_modules/mermaid", "node_modules/katex"],
+            react: ["node_modules/react", "node_modules/react-dom"],
+          };
+
+          // https://github.com/vitejs/vite/issues/5189#issuecomment-2175410148
+          for (const [chunkName, patterns] of Object.entries(chunkMap)) {
+            if (patterns.some((pattern) => id.includes(pattern))) {
+              return chunkName;
+            }
           }
         },
       },
