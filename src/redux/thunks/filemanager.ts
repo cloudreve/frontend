@@ -4,6 +4,7 @@ import { ExplorerView, FileResponse, FileType, ListResponse, Metadata } from "..
 import { getActionOpt } from "../../component/FileManager/ContextMenu/useActionDisplayOpt.ts";
 import { ListViewColumnSetting } from "../../component/FileManager/Explorer/ListView/Column.tsx";
 import { FileManagerIndex } from "../../component/FileManager/FileManager.tsx";
+import { getPaginationState } from "../../component/FileManager/Pagination/PaginationFooter.tsx";
 import { Condition, ConditionType } from "../../component/FileManager/Search/AdvanceSearch/ConditionBox.tsx";
 import { MinPageSize } from "../../component/FileManager/TopBar/ViewOptionPopover.tsx";
 import { SelectType } from "../../component/Uploader/core";
@@ -206,6 +207,14 @@ export function navigateReconcile(index: number, opt?: NavigateReconcileOptions)
             : {}),
         }),
       );
+
+      // DB sorting has limit on string comparison, so we need to
+      // sort by localCompare, if all files in current page is loaded, and sortBy is name.
+      const sortBy = listRes.view ? listRes.view.order : currentView?.order;
+      const orderDirection = listRes.view ? listRes.view.order_direction : currentView?.order_direction;
+      if (sortBy == "name" && !getPaginationState(list?.pagination).moreItems) {
+        listRes.files = sortByLocalCompare(listRes.files, listRes.mixed_type, orderDirection == "desc");
+      }
     } catch (e) {
       if (currentGeneration == generation) {
         dispatch(
@@ -774,4 +783,115 @@ export function applyGalleryWidth(index: number, width: number): AppThunk {
     SessionManager.set(UserSettings.GalleryWidth, width);
     dispatch(setFmLoading({ index, value: false }));
   };
+}
+
+function sortByLocalCompare(files: FileResponse[], mixed?: boolean, isDesc?: boolean): FileResponse[] {
+  if (files.length === 0) {
+    return files;
+  }
+
+  const descending = isDesc ?? false;
+
+  // If mixed is true, sort all files together
+  if (mixed) {
+    return files.slice().sort((a, b) => {
+      const result = a.name.localeCompare(b.name);
+      return descending ? -result : result;
+    });
+  }
+
+  // If mixed is false, separate folders and files, then sort each part
+  const sortedFiles = files.slice();
+
+  // Binary search to find the division between folders and files
+  let left = 0;
+  let right = sortedFiles.length - 1;
+  let divisionIndex = -1;
+
+  // First, we need to find if there's a division at all
+  let hasFolder = false;
+  let hasFile = false;
+  for (const file of sortedFiles) {
+    if (file.type === FileType.folder) hasFolder = true;
+    if (file.type === FileType.file) hasFile = true;
+  }
+
+  if (!hasFolder || !hasFile) {
+    // All items are the same type, just sort normally
+    return sortedFiles.sort((a, b) => {
+      const result = a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, {
+        numeric: true,
+        ignorePunctuation: true,
+      });
+      return descending ? -result : result;
+    });
+  }
+
+  // Find the division using binary search
+  // We're looking for the first file (type 0) after folders (type 1)
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+
+    if (sortedFiles[mid].type === FileType.folder) {
+      // Check if next item is a file
+      if (mid + 1 < sortedFiles.length && sortedFiles[mid + 1].type === FileType.file) {
+        divisionIndex = mid + 1;
+        break;
+      }
+      left = mid + 1;
+    } else {
+      // This is a file, look left for the division
+      if (mid === 0 || sortedFiles[mid - 1].type === FileType.folder) {
+        divisionIndex = mid;
+        break;
+      }
+      right = mid - 1;
+    }
+  }
+
+  // If no clear division found, fallback to linear search
+  if (divisionIndex === -1) {
+    for (let i = 0; i < sortedFiles.length; i++) {
+      if (sortedFiles[i].type === FileType.file) {
+        divisionIndex = i;
+        break;
+      }
+    }
+  }
+
+  let folders: FileResponse[] = [];
+  let filesOnly: FileResponse[] = [];
+
+  if (divisionIndex === -1) {
+    // All are folders
+    folders = sortedFiles;
+  } else if (divisionIndex === 0) {
+    // All are files
+    filesOnly = sortedFiles;
+  } else {
+    // Split into folders and files
+    folders = sortedFiles.slice(0, divisionIndex);
+    filesOnly = sortedFiles.slice(divisionIndex);
+  }
+
+  // Sort folders by name
+  folders.sort((a, b) => {
+    const result = a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, {
+      numeric: true,
+      ignorePunctuation: true,
+    });
+    return descending ? -result : result;
+  });
+
+  // Sort files by name
+  filesOnly.sort((a, b) => {
+    const result = a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, {
+      numeric: true,
+      ignorePunctuation: true,
+    });
+    return descending ? -result : result;
+  });
+
+  // Return folders first, then files
+  return [...folders, ...filesOnly];
 }
