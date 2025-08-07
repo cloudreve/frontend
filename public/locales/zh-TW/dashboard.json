@@ -813,7 +813,7 @@
     "nodeDes": "請選擇一個從機節點用於儲存檔案，你可以到 <0>儲存節點列表</0> 中建立或管理從機節點。",
     "noBindedGroupWarning": "當前儲存策略沒有被分配給任何使用者組，請前往 <0>使用者組列表</0> 為當前儲存策略繫結使用者組。",
     "nameRuleImmutable": "修改此設定不會影響儲存策略下已有檔案。Blob 路徑在建立後固定，即使其中魔法變數發生改變，路徑也不會更新。",
-    "uniqueVarRequired": "請至少包含一個唯一性變數：{{uuid}}、{{randomkey8}}、{{randomkey16}}。",
+    "uniqueVarRequired": "請至少包含一個唯一性變數：{uuid}、{randomkey8}、{randomkey16}。",
     "storageAndUpload": "儲存與上傳",
     "blobFolderNaming": "Blob 儲存目錄",
     "blobFolderNamingDes": "檔案 Blob 的存放目錄，可以使用 <0>魔法變數</0> 。",
