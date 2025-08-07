@@ -816,7 +816,7 @@
     "nodeDes": "请选择一个从机节点用于存储文件，你可以到 <0>存储节点列表</0> 中创建或管理从机节点。",
     "noBindedGroupWarning": "当前存储策略没有被分配给任何用户组，请前往 <0>用户组列表</0> 为当前存储策略绑定用户组。",
     "nameRuleImmutable": "修改此设置不会影响存储策略下已有文件。Blob 路径在创建后固定，即使其中魔法变量发生改变，路径也不会更新。",
-    "uniqueVarRequired": "请至少包含一个唯一性变量：{uuid}、{randomkey8}、{randomkey16}。",
+    "uniqueVarRequired": "请在目录路径或文件名中至少包含一个唯一性变量：{uuid}、{randomkey8}、{randomkey16}。",
     "storageAndUpload": "存储与上传",
     "blobFolderNaming": "Blob 存储目录",
     "blobFolderNamingDes": "文件 Blob 的存放目录，可以使用 <0>魔法变量</0> 。",

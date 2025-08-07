@@ -41,6 +41,11 @@ const StorageAndUploadSection = () => {
     [setPolicy],
   );
 
+  // Combined value for validation - ensures at least one random placeholder exists
+  const combinedRulesValue = useMemo(() => {
+    return `${values.dir_name_rule || ""}|${values.file_name_rule || ""}`;
+  }, [values.dir_name_rule, values.file_name_rule]);
+
   const handlePathMagicVarClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setDialogType("path");
@@ -181,17 +186,7 @@ const StorageAndUploadSection = () => {
         </SettingForm>
         <SettingForm title={t("policy.blobName")} lgWidth={5}>
           <FormControl fullWidth>
-            <DenseFilledTextField
-              required
-              value={values.file_name_rule}
-              slotProps={{
-                htmlInput: {
-                  pattern: `.*?(\\{randomkey8\\}|\\{randomkey16\\}|\\{uuid\\}).*?`,
-                  title: t("policy.uniqueVarRequired"),
-                },
-              }}
-              onChange={onFileNameChange}
-            />
+            <DenseFilledTextField required value={values.file_name_rule} onChange={onFileNameChange} />
             <NoMarginHelperText>
               <Trans
                 i18nKey="policy.blobNameDes"
@@ -201,6 +196,18 @@ const StorageAndUploadSection = () => {
               {t("policy.nameRuleImmutable")}
             </NoMarginHelperText>
           </FormControl>
+          {/* Hidden input for combined validation */}
+          <div style={{ height: 0, opacity: 0, pointerEvents: "none", overflow: "hidden" }}>
+            <input
+              type="text"
+              value={combinedRulesValue}
+              pattern=".*?(\{randomkey8\}|\{randomkey16\}|\{uuid\}).*?"
+              title={t("policy.uniqueVarRequired")}
+              required
+              tabIndex={-1}
+              aria-hidden="true"
+            />
+          </div>
         </SettingForm>
         <SettingForm title={t("policy.maxSizeOfSingleFile")} lgWidth={5}>
           <FormControl fullWidth>
