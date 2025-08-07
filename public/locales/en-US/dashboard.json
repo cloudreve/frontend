@@ -816,7 +816,7 @@
     "nodeDes": "Please select a slave node for file storage, you can create or manage slave storage nodes in <0>Node list</0>.",
     "noBindedGroupWarning": "The current storage policy is not bound to any user group, please go to <0>Group list</0> to bind the current storage policy to a user group.",
     "nameRuleImmutable": " Modifying settings will not affect existing files in the storage policy. The Blob path is fixed after creation, even if the magic variables in it change, the path will not be updated.",
-    "uniqueVarRequired": "Please include at least one unique variable: {{uuid}}, {{randomkey8}}, {{randomkey16}}.",
+    "uniqueVarRequired": "Please include at least one unique variable: {uuid}, {randomkey8}, {randomkey16}.",
     "storageAndUpload": "Storage and Upload",
     "blobFolderNaming": "Blob Storage Directory",
     "blobFolderNamingDes": "The directory where file Blobs are stored, you can use <0>magic variables</0>.",
