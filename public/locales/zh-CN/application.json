@@ -877,6 +877,11 @@
     "points": "积分",
     "quota": "容量配额",
     "used": "已使用 - {{size}}",
-    "total": "总容量 - {{size}}"
+    "total": "总容量 - {{size}}",
+    "reportTarget": "举报对象",
+    "reportReason": "原因",
+    "reportReasonOptions": ["侵权", "有害内容", "垃圾信息", "其他"],
+    "reportDescription": "补充说明",
+    "reportAbuseSuccess": "举报已提交"
   }
 }

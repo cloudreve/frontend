@@ -1,18 +1,17 @@
-import { useTranslation } from "react-i18next";
-import * as React from "react";
-import { useContext } from "react";
-import { SettingContext } from "../SettingWrapper.tsx";
 import { Box, Collapse, FormControl, FormControlLabel, ListItemText, Stack, Switch, Typography } from "@mui/material";
-import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings.tsx";
-import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import { useContext } from "react";
+import { useTranslation } from "react-i18next";
+import { CaptchaType } from "../../../../api/site.ts";
 import { isTrueVal } from "../../../../session/utils.ts";
 import { DenseSelect } from "../../../Common/StyledComponents.tsx";
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
-import { CaptchaType } from "../../../../api/site.ts";
+import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Settings.tsx";
+import { SettingContext } from "../SettingWrapper.tsx";
+import CapCaptcha from "./CapCaptcha.tsx";
 import GraphicCaptcha from "./GraphicCaptcha.tsx";
 import ReCaptcha from "./ReCaptcha.tsx";
 import TurnstileCaptcha from "./TurnstileCaptcha.tsx";
-import CapCaptcha from "./CapCaptcha.tsx";
 
 const Captcha = () => {
   const { t } = useTranslation("dashboard");

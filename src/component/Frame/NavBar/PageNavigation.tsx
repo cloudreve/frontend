@@ -40,6 +40,8 @@ import ShareAndroid from "../../Icons/ShareAndroid.tsx";
 import ShareOutlined from "../../Icons/ShareOutlined.tsx";
 import Storage from "../../Icons/Storage.tsx";
 import StorageOutlined from "../../Icons/StorageOutlined.tsx";
+import Warning from "../../Icons/Warning.tsx";
+import WarningOutlined from "../../Icons/WarningOutlined.tsx";
 import WrenchSettings from "../../Icons/WrenchSettings.tsx";
 import { ProChip } from "../../Pages/Setting/SettingForm.tsx";
 import NavIconTransition from "./NavIconTransition.tsx";
@@ -213,6 +215,12 @@ AdminNavigationItems = [
     label: "dashboard:nav.events",
     icon: [SendLoggingFilled, SendLogging],
     path: "/admin/event",
+    pro: true,
+  },
+  {
+    label: "dashboard:nav.abuseReport",
+    icon: [Warning, WarningOutlined],
+    path: "/admin/abuse",
     pro: true,
   },
 ];

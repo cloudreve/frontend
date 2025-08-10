@@ -41,7 +41,8 @@
     "queue": "佇列",
     "events": "事件",
     "server": "伺服器",
-    "customProps": "自定義屬性"
+    "customProps": "自定義屬性",
+    "abuseReport": "濫用舉報"
   },
   "summary": {
     "generatedAt": "生成於 <0></0>",
@@ -336,6 +337,8 @@
     "captchaForLoginDes": "是否啟用登入表單驗證碼。",
     "captchaForReset": "找回密碼驗證碼",
     "captchaForResetDes": "是否啟用找回密碼表單驗證碼。",
+    "captchaForAbuseReport": "濫用舉報驗證碼",
+    "captchaForAbuseReportDes": "是否啟用濫用舉報表單驗證碼。",
     "webauthnDes": "是否允許使用者使用繫結的硬體認證裝置登入，比如：人臉、指紋或 USB 金鑰；站點必須啟用 HTTPS 才能使用。",
     "webauthn": "使用通行金鑰登入",
     "defaultSymbolics": "預設分享快捷方式",
@@ -667,7 +670,8 @@
       "remove_passkey": "移除通行密鑰",
       "redeem_gift_code": "兌換禮品碼",
       "update_view": "更改檢視設定",
-      "delete_direct_link": "刪除直鏈"
+      "delete_direct_link": "刪除直鏈",
+      "report_abuse": "舉報濫用"
     },
     "server": "伺服器設定",
     "tempPath": "臨時路徑",
@@ -1567,5 +1571,19 @@
     "more": "......",
     "later": "稍後再說",
     "learnMore": "了解 Pro 版本詳情"
+  },
+  "abuseReport": {
+    "deleteXAbuseReports": "刪除 {{num}} 個舉報",
+    "folderPath": "目錄路徑",
+    "reporter": "舉報者",
+    "shareLink": "分享連結 <0>#{{id}}</0>",
+    "deletedShare": "已刪除的分享連結",
+    "deletedUser": "已刪除的使用者",
+    "confirmDelete": "確認要刪除這個舉報記錄?",
+    "confirmBatchDelete": "確認要刪除 {{num}} 個舉報記錄?",
+    "reporterID": "舉報者使用者 ID",
+    "reportedUserID": "舉報對象使用者 ID",
+    "shareID": "分享 ID",
+    "reason": "原因"
   }
 }

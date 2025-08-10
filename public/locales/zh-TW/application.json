@@ -873,6 +873,12 @@
     "points": "積分",
     "quota": "容量配額",
     "used": "已使用 - {{size}}",
-    "total": "總容量 - {{size}}"
+    "total": "總容量 - {{size}}",
+    "report": "舉報濫用",
+    "reportTarget": "舉報對象",
+    "reportReason": "原因",
+    "reportReasonOptions": ["侵權", "有害內容", "垃圾訊息", "其他"],
+    "reportDescription": "補充說明",
+    "reportAbuseSuccess": "舉報已提交"
   }
 }

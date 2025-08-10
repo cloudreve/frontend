@@ -41,7 +41,8 @@
     "queue": "队列",
     "events": "事件",
     "server": "服务器",
-    "customProps": "自定义属性"
+    "customProps": "自定义属性",
+    "abuseReport": "滥用举报"
   },
   "summary": {
     "generatedAt": "生成于 <0></0>",
@@ -339,6 +340,8 @@
     "captchaForLoginDes": "是否启用登录表单验证码。",
     "captchaForReset": "找回密码验证码",
     "captchaForResetDes": "是否启用找回密码表单验证码。",
+    "captchaForAbuseReport": "滥用举报验证码",
+    "captchaForAbuseReportDes": "是否启用滥用举报表单验证码。",
     "webauthnDes": "是否允许用户使用绑定的硬件认证设备登录，比如：人脸、指纹或 USB 密钥；站点必须启用 HTTPS 才能使用。",
     "webauthn": "使用通行密钥登录",
     "defaultSymbolics": "初始分享快捷方式",
@@ -670,7 +673,8 @@
       "remove_passkey": "移除通行密钥",
       "redeem_gift_code": "兑换礼品码",
       "update_view": "更改视图设置",
-      "delete_direct_link": "删除直链"
+      "delete_direct_link": "删除直链",
+      "report_abuse": "举报滥用"
     },
     "server": "服务器设置",
     "tempPath": "临时路径",
@@ -1570,5 +1574,19 @@
     "more": "......",
     "later": "稍后再说",
     "learnMore": "了解 Pro 版本详情"
+  },
+  "abuseReport": {
+    "deleteXAbuseReports": "删除 {{num}} 个举报",
+    "folderPath": "目录路径",
+    "reporter": "举报者",
+    "shareLink": "分享链接 <0>#{{id}}</0>",
+    "deletedShare": "已删除的分享链接",
+    "deletedUser": "已删除的用户",
+    "confirmDelete": "确认要删除这个举报记录?",
+    "confirmBatchDelete": "确认要删除 {{num}} 个举报记录?",
+    "reporterID": "举报者用户 ID",
+    "reportedUserID": "举报对象用户 ID",
+    "shareID": "分享 ID",
+    "reason": "原因"
   }
 }

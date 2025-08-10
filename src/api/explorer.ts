@@ -402,6 +402,7 @@ export const AuditLogType = {
   file_imported: 55,
   update_view: 56,
   delete_direct_link: 57,
+  report_abuse: 58,
 };
 
 export interface MultipleUriService {

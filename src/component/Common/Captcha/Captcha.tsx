@@ -1,13 +1,14 @@
-import { useAppSelector } from "../../../redux/hooks.ts";
 import { CaptchaType } from "../../../api/site.ts";
+import { useAppSelector } from "../../../redux/hooks.ts";
+import CapCaptcha from "./CapCaptcha.tsx";
 import DefaultCaptcha from "./DefaultCaptcha.tsx";
 import ReCaptchaV2 from "./ReCaptchaV2.tsx";
 import TurnstileCaptcha from "./TurnstileCaptcha.tsx";
-import CapCaptcha from "./CapCaptcha.tsx";
 
 export interface CaptchaProps {
   onStateChange: (state: CaptchaParams) => void;
   generation: number;
+  noLabel?: boolean;
   [x: string]: any;
 }
 

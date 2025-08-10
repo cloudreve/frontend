@@ -44,6 +44,7 @@ export const eventCategories = {
       AuditLogType.remove_passkey,
       AuditLogType.link_account,
       AuditLogType.unlink_account,
+      AuditLogType.report_abuse,
     ],
   },
   file: {

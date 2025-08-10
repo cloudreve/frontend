@@ -41,7 +41,8 @@
     "queue": "キュー",
     "events": "イベント",
     "server": "サーバー",
-    "customProps": "カスタムプロパティ"
+    "customProps": "カスタムプロパティ",
+    "abuseReport": "不正利用報告"
   },
   "summary": {
     "generatedAt": "生成日 <0></0>",
@@ -340,6 +341,8 @@
     "captchaForLoginDes": "ログインフォームでCAPTCHAを有効にするかどうか。",
     "captchaForReset": "パスワード再設定時のCAPTCHA",
     "captchaForResetDes": "パスワード再設定フォームでCAPTCHAを有効にするかどうか。",
+    "captchaForAbuseReport": "不正利用報告時のCAPTCHA",
+    "captchaForAbuseReportDes": "不正利用報告フォームでCAPTCHAを有効にするかどうか。",
     "webauthnDes": "ユーザーが登録済みのハードウェア認証デバイス（顔認証、指紋認証、USBキーなど）を使用してログインすることを許可するかどうか。サイトでHTTPSを有効にする必要があります。",
     "webauthn": "パスキーを使用してログイン",
     "defaultSymbolics": "デフォルトの共有リンク",
@@ -671,7 +674,8 @@
       "remove_passkey": "パスキー削除",
       "redeem_gift_code": "ギフトコード交換",
       "update_view": "ビュー設定変更",
-      "delete_direct_link": "直鏈削除"
+      "delete_direct_link": "直鏈削除",
+      "report_abuse": "不正利用報告"
     },
     "server": "サーバー設定",
     "tempPath": "一時パス",
@@ -1571,5 +1575,19 @@
     "more": "......",
     "later": "後で",
     "learnMore": "Pro版の詳細を見る"
+  },
+  "abuseReport": {
+    "deleteXAbuseReports": "{{num}} 個の舉報を削除",
+    "folderPath": "ディレクトリパス",
+    "reporter": "舉報者",
+    "shareLink": "共有リンク <0>#{{id}}</0>",
+    "deletedShare": "削除された共有リンク",
+    "deletedUser": "削除されたユーザー",
+    "confirmDelete": "この舉報記錄を削除しますか？",
+    "confirmBatchDelete": "{{num}} 個の舉報記錄を削除しますか？",
+    "reporterID": "舉報者ユーザー ID",
+    "reportedUserID": "舉報対象ユーザー ID",
+    "shareID": "共有 ID",
+    "reason": "原因"
   }
 }

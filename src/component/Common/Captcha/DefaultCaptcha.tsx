@@ -1,16 +1,17 @@
+import { Box, InputAdornment, Skeleton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getCaptcha } from "../../../api/api.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
-import { Box, InputAdornment, Skeleton, TextField } from "@mui/material";
 import { CaptchaParams } from "./Captcha.tsx";
 
 export interface DefaultCaptchaProps {
   onStateChange: (state: CaptchaParams) => void;
   generation: number;
+  noLabel?: boolean;
 }
 
-const DefaultCaptcha = ({ onStateChange, generation, ...rest }: DefaultCaptchaProps) => {
+const DefaultCaptcha = ({ onStateChange, generation, noLabel, ...rest }: DefaultCaptchaProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -41,7 +42,7 @@ const DefaultCaptcha = ({ onStateChange, generation, ...rest }: DefaultCaptchaPr
         },
       }}
       variant={"outlined"}
-      label={t("login.captcha")}
+      label={noLabel ? undefined : t("login.captcha")}
       onChange={(e) => setCaptcha(e.target.value)}
       value={captcha}
       autoComplete={"true"}
