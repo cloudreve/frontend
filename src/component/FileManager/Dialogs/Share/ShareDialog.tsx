@@ -96,6 +96,7 @@ const ShareDialog = () => {
         setSetting(initialSetting);
       }
       setShareLink("");
+      setIncludePassword(true);
     }
   }, [open]);
 
