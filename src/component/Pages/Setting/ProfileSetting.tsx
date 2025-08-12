@@ -1,20 +1,35 @@
 import { LoadingButton } from "@mui/lab";
-import { Collapse, Grid2, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Collapse, Grid2, Stack, Typography, useMediaQuery, useTheme, styled } from "@mui/material";
+import { bindPopover, bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { sendUpdateUserSetting } from "../../../api/api.ts";
-import { UserSettings } from "../../../api/user.ts";
+import { UserSettings, ShareLinksInProfileLevel } from "../../../api/user.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import SessionManager from "../../../session";
-import { DenseFilledTextField } from "../../Common/StyledComponents.tsx";
+import { DefaultButton, DenseFilledTextField } from "../../Common/StyledComponents.tsx";
 import TimeBadge from "../../Common/TimeBadge.tsx";
+import CaretDown from "../../Icons/CaretDown.tsx";
 import AvatarSetting from "./AvatarSetting.tsx";
+import ProfileSettingPopover, { useProfileSettingSummary } from "./ProfileSettingPopover.tsx";
 import SettingForm from "./SettingForm.tsx";
 
 export interface ProfileSettingProps {
   setting: UserSettings;
   setSetting: (setting: UserSettings) => void;
 }
+
+const ProfileDropButton = styled(DefaultButton)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  minWidth: 0,
+  minHeight: 0,
+  fontSize: theme.typography.body2.fontSize,
+  fontWeight: theme.typography.body2.fontWeight,
+  borderRadius: "4px",
+  padding: "0px 4px",
+  position: "relative",
+  left: "-4px",
+}));
 
 const ProfileSetting = ({ setting, setSetting }: ProfileSettingProps) => {
   const { t } = useTranslation();
@@ -26,6 +41,14 @@ const ProfileSetting = ({ setting, setSetting }: ProfileSettingProps) => {
   const user = SessionManager.currentLoginOrNull();
   const [nick, setNick] = useState(user?.user.nickname);
   const [nickLoading, setNickLoading] = useState(false);
+  const [profileSettingLoading, setProfileSettingLoading] = useState(false);
+
+  const profileSettingPopup = usePopupState({
+    variant: "popover",
+    popupId: "profileSetting",
+  });
+
+  const profileSettingSummary = useProfileSettingSummary(setting.share_links_in_profile);
 
   const onClick = () => {
     // Validate input length
@@ -47,6 +70,21 @@ const ProfileSetting = ({ setting, setSetting }: ProfileSettingProps) => {
       // Input is invalid, show validation errors
       nickRef.current?.reportValidity();
     }
+  };
+
+  const onProfileSettingChange = (value: ShareLinksInProfileLevel) => {
+    setProfileSettingLoading(true);
+    dispatch(sendUpdateUserSetting({ share_links_in_profile: value }))
+      .then(() => {
+        setSetting({
+          ...setting,
+          share_links_in_profile: value,
+        });
+        profileSettingPopup.close();
+      })
+      .finally(() => {
+        setProfileSettingLoading(false);
+      });
   };
 
   return (
@@ -94,11 +132,29 @@ const ProfileSetting = ({ setting, setSetting }: ProfileSettingProps) => {
               </SettingForm>
             </Grid2>
 
-            <SettingForm title={t("setting.group")} noContainer lgWidth={12}>
-              <Typography variant={"body2"} color={"textSecondary"}>
-                {user?.user.group?.name}
-              </Typography>
-            </SettingForm>
+            <Grid2 spacing={isMobile ? 3 : 4} container sx={{ width: "100%" }}>
+              <SettingForm title={t("setting.group")} noContainer lgWidth={6}>
+                <Typography variant={"body2"} color={"textSecondary"}>
+                  {user?.user.group?.name}
+                </Typography>
+              </SettingForm>
+
+              <SettingForm title={t("setting.profilePage")} noContainer lgWidth={6}>
+                <ProfileDropButton
+                  size={"small"}
+                  {...bindTrigger(profileSettingPopup)}
+                  endIcon={<CaretDown sx={{ fontSize: "12px!important" }} />}
+                  disabled={profileSettingLoading}
+                >
+                  {profileSettingSummary}
+                </ProfileDropButton>
+                <ProfileSettingPopover
+                  currentValue={setting.share_links_in_profile}
+                  onValueChange={onProfileSettingChange}
+                  {...bindPopover(profileSettingPopup)}
+                />
+              </SettingForm>
+            </Grid2>
           </Stack>
         </Grid2>
       </Grid2>

@@ -23,6 +23,7 @@ export interface User {
   pined?: PinedFile[];
   language?: string;
   disable_view_sync?: boolean;
+  share_links_in_profile?: ShareLinksInProfileLevel;
 }
 export interface Group {
   id: string;
@@ -102,6 +103,7 @@ export interface UserSettings {
   two_fa_enabled: boolean;
   passkeys?: Passkey[];
   disable_view_sync: boolean;
+  share_links_in_profile: ShareLinksInProfileLevel;
 }
 
 export interface PatchUserSetting {
@@ -116,6 +118,7 @@ export interface PatchUserSetting {
   two_fa_enabled?: boolean;
   two_fa_code?: string;
   disable_view_sync?: boolean;
+  share_links_in_profile?: ShareLinksInProfileLevel;
 }
 
 export interface PasskeyCredentialOption {
@@ -190,4 +193,10 @@ export interface SendResetEmailService extends CaptchaRequest {
 export interface ResetPasswordService {
   password: string;
   secret: string;
+}
+
+export enum ShareLinksInProfileLevel {
+  public_share_only = "",
+  all_share = "all_share",
+  hide_share = "hide_share",
 }

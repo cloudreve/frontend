@@ -32,6 +32,7 @@ import Clipboard from "../../Icons/Clipboard.tsx";
 import DeleteOutlined from "../../Icons/DeleteOutlined.tsx";
 import Eye from "../../Icons/Eye.tsx";
 import LinkEdit from "../../Icons/LinkEdit.tsx";
+import LockClosedOutlined from "../../Icons/LockClosedOutlined.tsx";
 import Open from "../../Icons/Open.tsx";
 import { SummaryButton } from "../Tasks/TaskCard.tsx";
 
@@ -209,7 +210,8 @@ const ShareCard = ({ share, onShareDeleted, onLoad, loading }: ShareCardProps) =
                   alignItems: "center",
                 }}
               >
-                <NoWrapBox>
+                <NoWrapBox sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                  {share && share?.password_protected && <LockClosedOutlined sx={{ fontSize: "16px" }} />}
                   <Tooltip title={share?.name ?? ""}>
                     <Typography variant={"body2"} fontWeight={500} noWrap>
                       {loading ? <Skeleton variant={"text"} width={200} /> : share?.name}

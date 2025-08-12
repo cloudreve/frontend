@@ -83,6 +83,7 @@ export interface Share {
   downloaded: number;
   expired?: boolean;
   unlocked: boolean;
+  password_protected: boolean;
   source_type?: number;
   owner: User;
   source_uri?: string;
