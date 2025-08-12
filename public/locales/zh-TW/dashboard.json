@@ -1570,7 +1570,9 @@
     "sso": "SSO 單點登入",
     "more": "......",
     "later": "稍後再說",
-    "learnMore": "了解 Pro 版本詳情"
+    "learnMore": "了解 Pro 版本詳情",
+    "promotionTitle": "社區版升級特別優惠",
+    "promotion": "購買時使用優惠碼 <0>{{code}}</0>，獲得 <1>-{{discount}}%</1> 折扣。"
   },
   "abuseReport": {
     "deleteXAbuseReports": "刪除 {{num}} 個舉報",

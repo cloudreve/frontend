@@ -1574,7 +1574,9 @@
     "sso": "SSOシングルサインオン",
     "more": "......",
     "later": "後で",
-    "learnMore": "Pro版の詳細を見る"
+    "learnMore": "Pro版の詳細を見る",
+    "promotionTitle": "コミュニティ版アップグレード特別割引",
+    "promotion": "購入時に<0>{{code}}</0>を使用すると、<1>-{{discount}}%</1>の割引が適用されます。"
   },
   "abuseReport": {
     "deleteXAbuseReports": "{{num}} 個の舉報を削除",

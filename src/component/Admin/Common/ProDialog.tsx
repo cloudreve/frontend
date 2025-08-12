@@ -1,8 +1,22 @@
-import { Button, DialogContent, List, ListItem, ListItemIcon, ListItemText, Typography, styled } from "@mui/material";
-import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  styled,
+} from "@mui/material";
+import dayjs from "dayjs";
+import { useCallback, useMemo } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import DraggableDialog, { StyledDialogActions } from "../../Dialogs/DraggableDialog";
 import CheckmarkCircleFilled from "../../Icons/CheckmarkCircleFilled";
+import Gift from "../../Icons/Gift";
+import { Code } from "./Code";
 
 export interface ProDialogProps {
   open: boolean;
@@ -28,11 +42,23 @@ const StyledButton = styled(Button)(({ theme }) => ({
   transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1) !important",
 }));
 
+// TODO: fetch from cloudreve.org
+const currentPromotion = {
+  code: "FI5Q9668YV",
+  discount: 15,
+  start: "2025-08-12T00:00:00Z",
+  end: "2025-10-12T23:59:59Z",
+};
+
 const ProDialog = ({ open, onClose }: ProDialogProps) => {
   const { t } = useTranslation("dashboard");
   const openMore = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     window.open("https://cloudreve.org/pro", "_blank");
+  }, []);
+  const showPromotion = useMemo(() => {
+    const now = dayjs();
+    return now >= dayjs(currentPromotion.start) && now <= dayjs(currentPromotion.end);
   }, []);
   return (
     <DraggableDialog
@@ -76,6 +102,25 @@ const ProDialog = ({ open, onClose }: ProDialogProps) => {
             </ListItem>
           ))}
         </List>
+        {showPromotion && (
+          <Alert
+            iconMapping={{
+              info: <Gift fontSize="inherit" />,
+            }}
+            severity="info"
+            sx={{ mt: 2 }}
+          >
+            <AlertTitle>{t("pro.promotionTitle")}</AlertTitle>
+            <Trans
+              i18nKey="dashboard:pro.promotion"
+              values={{
+                code: currentPromotion.code,
+                discount: currentPromotion.discount,
+              }}
+              components={[<Code />, <Typography component={"span"} fontWeight={600} />]}
+            />
+          </Alert>
+        )}
       </DialogContent>
       <StyledDialogActions
         sx={{
