@@ -168,24 +168,23 @@ const Uploader = () => {
     ]);
     if (!totalProgressCollector) {
       totalProgressCollector = setInterval(() => {
-        let progress = {
-          totalSize: 0,
-          processedSize: 0,
-          total: 0,
-          processed: 0,
-        };
+        let totalSize = 0;
+        let processedSize = 0;
+        let total = 0;
+        let processed = 0;
+
         setUploaders((uploaders) => {
           uploaders.forEach((u) => {
             if (u.id <= lastProgressStart) {
               return;
             }
 
-            progress.totalSize += u.task.size;
-            progress.total += 1;
+            totalSize += u.task.size;
+            total += 1;
 
             if (u.status === Status.finished || u.status === Status.canceled || u.status === Status.error) {
-              progress.processedSize += u.task.size;
-              progress.processed += 1;
+              processedSize += u.task.size;
+              processed += 1;
             }
 
             if (
@@ -196,11 +195,11 @@ const Uploader = () => {
               u.status === Status.processing ||
               u.status === Status.finishing
             ) {
-              progress.processedSize += u.progress ? u.progress.total.loaded : 0;
+              processedSize += u.progress ? u.progress.total.loaded : 0;
             }
           });
 
-          if (progress.total > 0 && progress.processed === progress.total) {
+          if (total > 0 && processed === total) {
             lastProgressStart = uploaders[uploaders.length - 1].id;
           }
           return uploaders;
@@ -208,8 +207,11 @@ const Uploader = () => {
 
         dispatch(
           setUploadProgress({
-            progress,
-            count: progress.total,
+            progress: {
+              totalSize,
+              processedSize,
+            },
+            count: total,
           }),
         );
       }, 2000);

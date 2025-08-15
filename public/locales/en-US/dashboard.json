@@ -1587,7 +1587,9 @@
     "sso": "SSO single sign-on",
     "more": "......",
     "later": "Maybe later",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "promotionTitle": "Community edition upgrade special discount",
+    "promotion": "Use the promotion code <0>{{code}}</0> when purchasing to apply a <1>-{{discount}}%</1> discount."
   },
   "abuseReport": {
     "deleteXAbuseReports": "Delete {{num}} abuse reports",

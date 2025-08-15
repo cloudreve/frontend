@@ -1573,7 +1573,9 @@
     "sso": "SSO 单点登录",
     "more": "......",
     "later": "稍后再说",
-    "learnMore": "了解 Pro 版本详情"
+    "learnMore": "了解 Pro 版本详情",
+    "promotionTitle": "社区版升级特别优惠",
+    "promotion": "购买时使用优惠码 <0>{{code}}</0>，获得 <1>-{{discount}}%</1> 折扣。"
   },
   "abuseReport": {
     "deleteXAbuseReports": "删除 {{num}} 个举报",
