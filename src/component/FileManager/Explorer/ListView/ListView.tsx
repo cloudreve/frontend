@@ -81,6 +81,7 @@ const ListView = React.forwardRef(
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          padding: 1,
         }}
       >
         <ListHeader commitColumnSetting={commitColumnSetting} setColumns={setColumns} columns={columns} />
