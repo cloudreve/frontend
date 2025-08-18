@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import React from "react";
@@ -12,7 +13,6 @@ const NoMatch = () => {
         flexDirection: "column",
         alignItems: "center",
         pt: 7,
-        pb: 9,
       }}
     >
       <DismissCircleFilled fontSize={"large"} color={"action"} />
@@ -25,6 +25,17 @@ const NoMatch = () => {
       >
         {t("common:pageNotFound")}
       </Typography>
+      <LoadingButton
+        sx={{
+          mt: 7,
+        }}
+        onClick={() => window.location.replace("/")}
+        fullWidth
+        variant="contained"
+        color="primary"
+      >
+        <span>{t("application:navbar.backToHomepage")}</span>
+      </LoadingButton>
     </Box>
   );
 };
