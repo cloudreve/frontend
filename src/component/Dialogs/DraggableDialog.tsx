@@ -93,7 +93,7 @@ const DraggableDialog = (props: DraggableDialogProps) => {
           <Stack direction={"row"} spacing={1}>
             {props.showCancel && (
               <Button disabled={props.loading} onClick={onClose}>
-                {t(props.cancelText ?? "common:cancel")}
+                {props.cancelText ?? t("common:cancel")}
               </Button>
             )}
             {!props.hideOk && (
@@ -104,7 +104,7 @@ const DraggableDialog = (props: DraggableDialogProps) => {
                 onClick={props.onAccept}
                 color="primary"
               >
-                <span>{t(props.okText ?? "common:ok")}</span>
+                <span>{props.okText ?? t("common:ok")}</span>
               </LoadingButton>
             )}
           </Stack>
