@@ -262,7 +262,7 @@
     "folderColor": "フォルダカラー",
     "restore": "復元",
     "unpin": "固定解除",
-    "youDontHaveReadPermissionToThisFile": "アクセス権限がありません",
+    "youDontHaveReadPermissionToThisFile": "アクセス権限がありません \n 未ログインの場合は、ログインまたは新規アカウントを登録した後、再度試してください。 \n 既にログインしているのに閲覧できない場合は、所有者がアクセス権限を設定して一時的に公開されていない可能性があります。",
     "sharedWithOthers": "他の人と共有",
     "new": "新規作成",
     "open": "開く",
