@@ -261,7 +261,8 @@
     "folderColor": "Folder color",
     "restore": "Restore",
     "unpin": "Unpin",
-    "youDontHaveReadPermissionToThisFile": "You don't have access permission.",
+    "youDontHaveReadPermissionToThisFile": "You don't have access permission. \n If you have not logged in, please log in or register and try again. \n If you are already logged in but still cannot view it, it may be because the owner has set access permissions and it is not open temporarily.​
+",
     "sharedWithOthers": "Shared with others",
     "new": "New",
     "open": "Open",
