@@ -144,7 +144,9 @@ const SiteInformation = () => {
               spacing={3}
               secondary={
                 <Grid item md={7} xs={12}>
-                  <GeneralImagePreview src={values.pwa_small_icon} />
+                  <Box sx={{ maxWidth: 160 }}>
+                    <GeneralImagePreview src={values.pwa_small_icon} debounce={250} />
+                  </Box>
                 </Grid>
               }
             >
@@ -164,7 +166,9 @@ const SiteInformation = () => {
               spacing={3}
               secondary={
                 <Grid item md={7} xs={12}>
-                  <GeneralImagePreview src={values.pwa_medium_icon} />
+                  <Box sx={{ maxWidth: 160 }}>
+                    <GeneralImagePreview src={values.pwa_medium_icon} debounce={250} />
+                  </Box>
                 </Grid>
               }
             >
@@ -184,7 +188,9 @@ const SiteInformation = () => {
               spacing={3}
               secondary={
                 <Grid item md={7} xs={12}>
-                  <GeneralImagePreview src={values.pwa_large_icon} />
+                  <Box sx={{ maxWidth: 160 }}>
+                    <GeneralImagePreview src={values.pwa_large_icon} debounce={250} />
+                  </Box>
                 </Grid>
               }
             >
