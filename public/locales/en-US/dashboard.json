@@ -317,7 +317,7 @@
     "supportHTML": "Enter HTML or plain text.",
     "branding": "Branding",
     "smallIcon": "Small icon",
-    "smallIconDes": "URL of the medium icon, ico or svg format. This icon will also be shown in browser tabs, bookmarks and desktop shortcuts.",
+    "smallIconDes": "URL of the small icon, ico or svg format. This icon will also be shown in browser tabs, bookmarks and desktop shortcuts.",
     "mediumIcon": "Medium icon",
     "mediumIconDes": "URL of the medium icon, prefer size at 192x192, png format.",
     "largeIcon": "Large icon",
