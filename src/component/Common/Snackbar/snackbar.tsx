@@ -125,3 +125,24 @@ export const ViewTaskAction =
       </>
     );
   };
+
+export const ServiceWorkerUpdateAction = (updateServiceWorker: () => void) => (snackbarId: SnackbarKey | undefined) => {
+  const { t } = useTranslation();
+
+  const Close = DefaultCloseAction(snackbarId);
+
+  const handleUpdate = useCallback(() => {
+    // Update service worker and reload
+    updateServiceWorker();
+    closeSnackbar(snackbarId);
+  }, [updateServiceWorker, snackbarId]);
+
+  return (
+    <>
+      <Button onClick={handleUpdate} color="inherit" size="small">
+        {t("common:update")}
+      </Button>
+      {Close}
+    </>
+  );
+};

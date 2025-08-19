@@ -2,13 +2,14 @@ import { createTheme, CssBaseline, GlobalStyles, styled, ThemeProvider, useMedia
 import { grey } from "@mui/material/colors";
 import { ThemeOptions } from "@mui/material/styles/createTheme";
 import i18next from "i18next";
-import { MaterialDesignContent, SnackbarProvider } from "notistack";
+import { enqueueSnackbar, MaterialDesignContent, SnackbarProvider } from "notistack";
 import { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import FileIconSnackbar from "./component/Common/Snackbar/FileIconSnackbar.tsx";
 import LoadingSnackbar from "./component/Common/Snackbar/LoadingSnackbar.tsx";
+import { ServiceWorkerUpdateAction } from "./component/Common/Snackbar/snackbar.tsx";
 import GlobalDialogs from "./component/Dialogs/GlobalDialogs.tsx";
 import { GrowDialogTransition } from "./component/FileManager/Search/SearchPopup.tsx";
 import Warning from "./component/Icons/Warning.tsx";
@@ -216,11 +217,17 @@ export const App = () => {
 
   useEffect(() => {
     if (needRefresh) {
-      alert(i18next.t("newVersionRefresh", { ns: "common" }));
-      removeI18nCache();
-      updateServiceWorker(true);
+      enqueueSnackbar({
+        message: i18next.t("common:newVersionRefresh"),
+        variant: "default",
+        persist: true,
+        action: ServiceWorkerUpdateAction(() => {
+          updateServiceWorker(true);
+          removeI18nCache();
+        }),
+      });
     }
-  }, [needRefresh]);
+  }, [needRefresh, updateServiceWorker]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
