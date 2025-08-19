@@ -262,7 +262,8 @@
     "folderColor": "資料夾顏色",
     "restore": "還原",
     "unpin": "取消固定",
-    "youDontHaveReadPermissionToThisFile": "你沒有許可權讀取此內容",
+    "youDontHaveReadPermissionToThisFile": "你沒有許可權讀取此內容 \n 若您尚未登入，請登入或註冊新帳戶後再次嘗試； \n 若已登入仍無法查看，則可能因所有者設定了存取權限暫不開放。
+",
     "sharedWithOthers": "與他人分享",
     "new": "新建",
     "open": "開啟",
