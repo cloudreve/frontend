@@ -617,7 +617,7 @@
     "statistics": "统计",
     "expireAt": "<0></0>过期",
     "expireAfterDownloads": "{{downloads}} 次下载后过期",
-    "somebodyShare": "{{name}} 的分享",
+    "somebodyShare": "来自 {{name}} 的分享"，
     "expiredLink": "已失效的分享",
     "sharedBy": "<0>{{nick}}</0> 向您分享了 {{num}} 个文件",
     "files": "1 file",
