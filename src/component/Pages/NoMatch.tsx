@@ -29,7 +29,7 @@ const NoMatch = () => {
         sx={{
           mt: 7,
         }}
-        onClick={() => window.location.replace("/")}
+        onClick={() => navigate("/")}
         fullWidth
         variant="contained"
         color="primary"
