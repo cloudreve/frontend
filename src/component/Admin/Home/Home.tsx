@@ -97,7 +97,7 @@ const Home = () => {
         existingUrls={summary?.site_urls ?? []}
       />
       <Container maxWidth="xl">
-        <PageHeader title={t("dashboard:nav.summary")} />
+        <PageHeader title={t("nav.summary")} />
         <Grid container spacing={3}>
           <Grid alignContent={"stretch"} item xs={12} md={8} lg={9}>
             <StyledPaper>
@@ -330,7 +330,7 @@ const Home = () => {
                   <ListItemIcon>
                     <GitHub />
                   </ListItemIcon>
-                  <ListItemText primary={t("GitHub")} />
+                  <ListItemText primary={t("summary.github")} />
                   <StyledListItemIcon>
                     <OpenFilled />
                   </StyledListItemIcon>
@@ -362,7 +362,7 @@ const Home = () => {
                     <OpenFilled />
                   </StyledListItemIcon>
                 </ListItemButton>
-                <ListItemButton onClick={() => window.open("https://github.com/cloudreve/Cloudreve/discussions")}>
+                <ListItemButton onClick={() => window.open("https://github.com/cloudreve/cloudreve/discussions")}>
                   <ListItemIcon>
                     <CommentMultiple />
                   </ListItemIcon>
@@ -391,7 +391,7 @@ const Home = () => {
               <Divider sx={{ mb: 2, mt: 1 }} />
               <Giscus
                 id="comments"
-                repo="cloudreve/Cloudreve"
+                repo="cloudreve/cloudreve"
                 repoId="MDEwOlJlcG9zaXRvcnkxMjAxNTYwNzY="
                 mapping={"number"}
                 term={i18next.language == "zh-CN" ? "2170" : "2169"}
