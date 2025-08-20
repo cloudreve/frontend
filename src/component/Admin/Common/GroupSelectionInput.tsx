@@ -1,7 +1,6 @@
 import { ListItemText } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { getGroupList } from "../../../api/api";
 import { GroupEnt } from "../../../api/dashboard";
 import { useAppDispatch } from "../../../redux/hooks";
@@ -29,7 +28,6 @@ const GroupSelectionInput = ({
   fullWidth,
   required,
 }: GroupSelectionInputProps) => {
-  const { t } = useTranslation("dashboard");
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState<GroupEnt[]>([]);
@@ -81,7 +79,7 @@ const GroupSelectionInput = ({
         {emptyValue !== undefined && emptyText && (
           <SquareMenuItem value={emptyValue}>
             <ListItemText
-              primary={<em>{t(emptyText)}</em>}
+              primary={<em>{emptyText}</em>}
               slotProps={{
                 primary: { variant: "body2" },
               }}
