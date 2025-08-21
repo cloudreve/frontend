@@ -715,6 +715,7 @@
     "giftCodeAmount": "數量",
     "giftCode": "禮品碼",
     "giftCodeStatus": "狀態",
+    "giftCodeUsedBy": "使用者",
     "giftCodeUsed": "已使用",
     "giftCodeUnused": "可用",
     "giftCodeDeleted": "禮品碼已成功刪除",

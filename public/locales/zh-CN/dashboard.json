@@ -718,6 +718,7 @@
     "giftCodeAmount": "数量",
     "giftCode": "礼品码",
     "giftCodeStatus": "状态",
+    "giftCodeUsedBy": "使用者",
     "giftCodeUsed": "已使用",
     "giftCodeUnused": "可用",
     "giftCodeDeleted": "礼品码已成功删除",

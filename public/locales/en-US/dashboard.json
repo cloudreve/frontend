@@ -726,6 +726,7 @@
     "giftCodeAmount": "Amount",
     "giftCode": "Gift Code",
     "giftCodeStatus": "Status",
+    "giftCodeUsedBy": "Used by",
     "giftCodeUsed": "Used",
     "giftCodeUnused": "Available",
     "giftCodeDeleted": "Gift code deleted successfully",

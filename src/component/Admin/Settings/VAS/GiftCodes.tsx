@@ -82,6 +82,7 @@ const GiftCodes = ({ storageProductsConfig, groupProductsConfig }: GiftCodesProp
                 <NoWrapCell>{t("giftCodes.giftCodeAmount")}</NoWrapCell>
                 <NoWrapCell>{t("giftCodes.giftCode")}</NoWrapCell>
                 <NoWrapCell>{t("giftCodes.giftCodeStatus")}</NoWrapCell>
+                <NoWrapCell>{t("giftCodes.giftCodeUsedBy")}</NoWrapCell>
                 <NoWrapCell align="right"></NoWrapCell>
               </TableRow>
             </TableHead>

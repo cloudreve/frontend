@@ -719,6 +719,7 @@
     "giftCodeAmount": "数量",
     "giftCode": "ギフトコード",
     "giftCodeStatus": "状態",
+    "giftCodeUsedBy": "利用者",
     "giftCodeUsed": "使用済み",
     "giftCodeUnused": "使用可能",
     "giftCodeDeleted": "ギフトコードが正常に削除されました",
