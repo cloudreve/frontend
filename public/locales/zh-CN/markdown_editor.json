@@ -12,8 +12,8 @@
   "uploadImage": {
     "dialogTitle": "上传图片",
     "uploadInstructions": "从您的设备中上传图片：",
-    "addViaUrlInstructions": "或从网址新增图片：",
-    "autoCompletePlaceholder": "选择或粘贴图片",
+    "addViaUrlInstructions": "或填写图片 URL / 相对路径 （相对于当前文件）：",
+    "autoCompletePlaceholder": "选择或粘贴图片 URL",
     "addViaUrlInstructionsNoUpload": "图片网址：",
     "alt": "替代文本：",
     "title": "标题："

@@ -10,7 +10,7 @@ import SessionManager, { UserSettings } from "../../session";
 import { isTrueVal } from "../../session/utils.ts";
 import { dataUrlToBytes, fileExtension, fileNameNoExt, getFileLinkedUri, sizeToString } from "../../util";
 import { base64Encode } from "../../util/base64.ts";
-import CrUri from "../../util/uri.ts";
+import CrUri, { CrUriPrefix } from "../../util/uri.ts";
 import { closeContextMenu, ContextMenuTypes, fileUpdated } from "../fileManagerSlice.ts";
 import {
   closeImageEditor,
@@ -689,5 +689,56 @@ export function findSubtitleOptions(): AppThunk<FileResponse[]> {
       });
 
     return options ?? [];
+  };
+}
+
+const BROKEN_IMG_URI =
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent(/* xml */ `
+    <svg id="imgLoadError" xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+      <rect x="0" y="0" width="100" height="100" fill="none" stroke="red" stroke-width="4" stroke-dasharray="4" />
+      <text x="50" y="55" text-anchor="middle" font-size="20" fill="red">⚠️</text>
+    </svg>
+`);
+
+export function markdownImagePreviewHandler(imageSource: string, mdFileUri: string): AppThunk<Promise<string>> {
+  return async (dispatch, getState) => {
+    // For URl, return the image source
+    if (imageSource.startsWith("http://") || imageSource.startsWith("https://")) {
+      return imageSource;
+    }
+
+    let uri = new CrUri(mdFileUri)?.parent();
+    if (imageSource.startsWith(CrUriPrefix)) {
+      uri = new CrUri(imageSource);
+    } else if (uri) {
+      uri = uri.join_raw(imageSource);
+    } else {
+      return imageSource;
+    }
+
+    try {
+      const file = await dispatch(getFileInfo({ uri: uri.toString() }));
+      const fileUrl = await dispatch(getFileEntityUrl({ uris: [getFileLinkedUri(file)], entity: file.primary_entity }));
+      return fileUrl.urls[0].url;
+    } catch (e) {
+      return BROKEN_IMG_URI;
+    }
+  };
+}
+
+export function markdownImageAutocompleteSuggestions(): AppThunk<string[] | null> {
+  return (_dispatch, getState) => {
+    const files = getState().fileManager[FileManagerIndex.main]?.list?.files;
+    if (!files) {
+      return null;
+    }
+
+    const suggestions = files.filter((f) => {
+      const ext = fileExtension(f.name);
+      return ViewersByID[builtInViewers.image]?.exts.indexOf(ext ?? "") !== -1;
+    });
+
+    return suggestions.map((f) => f.name);
   };
 }

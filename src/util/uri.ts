@@ -240,6 +240,17 @@ export default class CrUri {
     return this;
   }
 
+  public join_raw(rawPath: string): this {
+    if (rawPath.startsWith("/")) {
+      // Absolute path - replace the entire pathname
+      this.url.pathname = rawPath;
+    } else {
+      // Relative path - resolve it against the current path
+      this.url.pathname = path.resolve(this.url.pathname, rawPath);
+    }
+    return this;
+  }
+
   public elements(): string[] {
     const res = this.path_trimmed()
       .split("/")

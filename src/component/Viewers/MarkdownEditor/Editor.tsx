@@ -54,6 +54,8 @@ export interface MarkdownEditorProps {
   readOnly?: boolean;
   displayOnly?: boolean;
   onSaveShortcut?: () => void;
+  imageAutocompleteSuggestions?: string[] | null;
+  imagePreviewHandler?: (imageSource: string) => Promise<string>;
 }
 
 function whenInAdmonition(editorInFocus: EditorInFocus | null) {
@@ -193,7 +195,13 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
             headingsPlugin({ allowedHeadingLevels: [1, 2, 3] }),
             linkPlugin(),
             linkDialogPlugin(),
-            imagePlugin({}),
+            imagePlugin({
+              imageUploadHandler: () => {
+                return Promise.resolve("https://picsum.photos/200/300");
+              },
+              imagePreviewHandler: props.imagePreviewHandler,
+              imageAutocompleteSuggestions: props.imageAutocompleteSuggestions ?? undefined,
+            }),
             tablePlugin(),
             thematicBreakPlugin(),
             frontmatterPlugin(),

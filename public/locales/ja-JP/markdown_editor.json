@@ -12,8 +12,8 @@
   "uploadImage": {
     "dialogTitle": "画像アップロード",
     "uploadInstructions": "デバイスから画像をアップロード：",
-    "addViaUrlInstructions": "またはURLから画像を追加：",
-    "autoCompletePlaceholder": "画像を選択または貼り付け",
+    "addViaUrlInstructions": "または画像URL / 相対パス（現在のファイルに対して）：",
+    "autoCompletePlaceholder": "画像URLを選択または貼り付け",
     "addViaUrlInstructionsNoUpload": "画像URL：",
     "alt": "代替テキスト：",
     "title": "タイトル："
