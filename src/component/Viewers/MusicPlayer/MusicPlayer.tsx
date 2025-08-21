@@ -1,12 +1,12 @@
 import { IconButton, Tooltip } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import MusicNote2Play from "../../Icons/MusicNote2Play.tsx";
 import { getFileEntityUrl } from "../../../api/api.ts";
-import { getFileLinkedUri } from "../../../util";
-import PlayerPopup from "./PlayerPopup.tsx";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import SessionManager, { UserSettings } from "../../../session";
+import { getFileLinkedUri } from "../../../util";
 import MusicNote2 from "../../Icons/MusicNote2.tsx";
+import MusicNote2Play from "../../Icons/MusicNote2Play.tsx";
+import PlayerPopup from "./PlayerPopup.tsx";
 
 export const LoopMode = {
   list_repeat: 0,
@@ -27,6 +27,7 @@ const MusicPlayer = () => {
   const [duration, setDuration] = useState(0);
   const [current, setCurrent] = useState(0);
   const [loopMode, setLoopMode] = useState(LoopMode.list_repeat);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const playHistory = useRef<number[]>([]);
 
   useEffect(() => {
@@ -62,12 +63,13 @@ const MusicPlayer = () => {
           audio.current.currentTime = 0;
           audio.current.play();
           audio.current.volume = latestVolume ?? volume;
+          audio.current.playbackRate = playbackSpeed;
         } catch (e) {
           console.error(e);
         }
       }
     },
-    [playerState, volume],
+    [playerState, volume, playbackSpeed],
   );
 
   const loopProceed = useCallback(
@@ -153,6 +155,17 @@ const MusicPlayer = () => {
     setLoopMode((loopMode) => (loopMode + 1) % 3);
   }, []);
 
+  const setLoopModeHandler = useCallback((mode: number) => {
+    setLoopMode(mode);
+  }, []);
+
+  const setPlaybackSpeedHandler = useCallback((speed: number) => {
+    setPlaybackSpeed(speed);
+    if (audio.current) {
+      audio.current.playbackRate = speed;
+    }
+  }, []);
+
   return (
     <>
       <audio
@@ -182,6 +195,9 @@ const MusicPlayer = () => {
           playlist={playerState?.files}
           loopMode={loopMode}
           toggleLoopMode={toggleLoopMode}
+          setLoopMode={setLoopModeHandler}
+          playbackSpeed={playbackSpeed}
+          setPlaybackSpeed={setPlaybackSpeedHandler}
           anchorEl={icon.current}
           onClose={onPlayerPopoverClose}
         />
