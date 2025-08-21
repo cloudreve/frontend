@@ -19,6 +19,7 @@
     "title": "Заголовок:"
   },
   "imageEditor": {
+    "deleteImage": "Удалить изображение",
     "editImage": "Редактировать изображение"
   },
   "createLink": {

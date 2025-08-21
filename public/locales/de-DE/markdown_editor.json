@@ -19,6 +19,7 @@
     "title": "Titel:"
   },
   "imageEditor": {
+    "deleteImage": "Bild löschen",
     "editImage": "Bild bearbeiten"
   },
   "createLink": {
