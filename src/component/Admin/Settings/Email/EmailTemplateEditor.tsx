@@ -130,9 +130,10 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
           scrollButtons="auto"
           sx={{ flexGrow: 1 }}
         >
-          {templates.map((template, index) => (
-            <Tab key={index} label={template.language} />
-          ))}
+          {templates.map((template, index) => {
+            const lang = languages.find((l) => l.code === template.language);
+            return <DraggableTab key={index} index={index} label={lang ? lang.displayName : template.language} />;
+          })}
         </Tabs>
         <Button
           startIcon={<Add />}
