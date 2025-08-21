@@ -408,7 +408,7 @@
     "filePreview": "ファイルプレビュー",
     "thumbnails": "サムネイル",
     "thumbnailDoc": "サムネイル設定に関する詳細は、<0>公式ドキュメント</0>を参照してください。",
-    "thumbnailDocLink": "https://docs.cloudreve.org/en/usage/thumbnails",
+    "thumbnailDocLink": "https://docs.cloudreve.org/usage/thumbnails",
     "thumbnailBasic": "基本設定",
     "generators": "サムネイル生成器",
     "thumbMaxSize": "最大元ファイルサイズ",

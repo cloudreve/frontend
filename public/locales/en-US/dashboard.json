@@ -408,7 +408,7 @@
     "filePreview": "File Preview",
     "thumbnails": "Thumbnails",
     "thumbnailDoc": "For more information about thumbnail, see the <0>document</0>.",
-    "thumbnailDocLink": "https://docs.cloudreve.org/en/usage/thumbnails",
+    "thumbnailDocLink": "https://docs.cloudreve.org/usage/thumbnails",
     "thumbnailBasic": "Basic",
     "generators": "Thumbnail generators",
     "thumbMaxSize": "Maximum original file size",
