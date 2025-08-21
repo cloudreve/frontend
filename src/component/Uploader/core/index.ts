@@ -5,6 +5,7 @@ import Logger, { LogLevel } from "./logger";
 import { Task, TaskType } from "./types";
 import Base, { MessageColor } from "./uploader/base";
 import COS from "./uploader/cos";
+import KS3 from "./uploader/ks3";
 import Local from "./uploader/local";
 import OBS from "./uploader/obs.ts";
 import OneDrive from "./uploader/onedrive";
@@ -13,7 +14,6 @@ import ResumeHint from "./uploader/placeholder";
 import Qiniu from "./uploader/qiniu";
 import Remote from "./uploader/remote";
 import S3 from "./uploader/s3";
-import KS3 from "./uploader/ks3";
 import Upyun from "./uploader/upyun";
 import {
   cleanupResumeCtx,
@@ -196,13 +196,24 @@ export default class UploadManager {
     cleanupResumeCtx(this.logger);
   };
 
-  public addRawFiles = async (files: File[], getName?: (file: File) => string) => {
+  public addRawFiles = async (
+    files: File[],
+    getName?: (file: File) => string,
+    promiseIds?: string[],
+  ): Promise<Base[] | undefined> => {
     if (!this.currentPath) {
-      return;
+      return undefined;
     }
     const uploaders = await new Promise<Base[]>((resolve, reject) =>
       this.addFiles(files, this.currentPath ?? defaultPath, resolve, reject, getName),
     );
+    if (promiseIds) {
+      uploaders.forEach((u, i) => {
+        if (promiseIds[i]) {
+          u.promiseId = promiseIds[i];
+        }
+      });
+    }
     this.o.onProactiveFileAdded && this.o.onProactiveFileAdded(uploaders);
   };
 

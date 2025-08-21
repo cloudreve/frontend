@@ -56,6 +56,7 @@ export interface MarkdownEditorProps {
   onSaveShortcut?: () => void;
   imageAutocompleteSuggestions?: string[] | null;
   imagePreviewHandler?: (imageSource: string) => Promise<string>;
+  imageUploadHandler?: ((image: File) => Promise<string>) | null;
 }
 
 function whenInAdmonition(editorInFocus: EditorInFocus | null) {
@@ -196,9 +197,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
             linkPlugin(),
             linkDialogPlugin(),
             imagePlugin({
-              imageUploadHandler: () => {
-                return Promise.resolve("https://picsum.photos/200/300");
-              },
+              imageUploadHandler: props.imageUploadHandler,
               imagePreviewHandler: props.imagePreviewHandler,
               imageAutocompleteSuggestions: props.imageAutocompleteSuggestions ?? undefined,
             }),

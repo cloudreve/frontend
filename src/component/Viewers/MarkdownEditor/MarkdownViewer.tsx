@@ -9,6 +9,7 @@ import {
   markdownImageAutocompleteSuggestions,
   markdownImagePreviewHandler,
   saveMarkdown,
+  uploadMarkdownImage,
 } from "../../../redux/thunks/viewer.ts";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import useActionDisplayOpt, { canUpdate } from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
@@ -124,6 +125,13 @@ const MarkdownViewer = () => {
     [dispatch, viewerState?.file?.path],
   );
 
+  const onImageUpload = useCallback(
+    async (file: File): Promise<string> => {
+      return dispatch(uploadMarkdownImage(file));
+    },
+    [dispatch],
+  );
+
   return (
     <ViewerDialog
       file={viewerState?.file}
@@ -179,6 +187,7 @@ const MarkdownViewer = () => {
             onSaveShortcut={onSaveShortcut}
             imagePreviewHandler={imagePreviewHandler}
             imageAutocompleteSuggestions={imageAutocompleteSuggestions}
+            imageUploadHandler={onImageUpload}
           />
         </Suspense>
       )}

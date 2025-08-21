@@ -232,6 +232,8 @@ export interface GlobalStateSlice {
   uploadTaskCount?: number;
   uploadTaskListOpen?: boolean;
   uploadFromClipboardDialogOpen?: boolean;
+  uploadRawFiles?: File[];
+  uploadRawPromiseId?: string[];
 
   policyOptionCache?: StoragePolicy[];
 
@@ -272,6 +274,16 @@ export const globalStateSlice = createSlice({
   name: "globalState",
   initialState,
   reducers: {
+    setUploadRawFiles: (
+      state,
+      action: PayloadAction<{
+        files: File[];
+        promiseId: string[];
+      }>,
+    ) => {
+      state.uploadRawFiles = action.payload.files ?? [];
+      state.uploadRawPromiseId = action.payload.promiseId ?? [];
+    },
     setShareReadmeDetect: (state, action: PayloadAction<boolean>) => {
       state.shareReadmeDetect = action.payload ? (state.shareReadmeDetect ?? 0) + 1 : 0;
     },
@@ -737,6 +749,7 @@ export const globalStateSlice = createSlice({
 
 export default globalStateSlice.reducer;
 export const {
+  setUploadRawFiles,
   setMobileDrawerOpen,
   setDirectLinkDialog,
   closeDirectLinkDialog,

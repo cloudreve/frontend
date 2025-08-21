@@ -8,6 +8,8 @@ import { getPaginationState } from "../../component/FileManager/Pagination/Pagin
 import { Condition, ConditionType } from "../../component/FileManager/Search/AdvanceSearch/ConditionBox.tsx";
 import { MinPageSize } from "../../component/FileManager/TopBar/ViewOptionPopover.tsx";
 import { SelectType } from "../../component/Uploader/core";
+import { Task } from "../../component/Uploader/core/types.ts";
+import { uploadPromisePool } from "../../component/Uploader/core/uploader/base.ts";
 import { defaultPath } from "../../hooks/useNavigation.tsx";
 import { router } from "../../router";
 import SessionManager, { UserSettings } from "../../session";
@@ -49,9 +51,11 @@ import {
   setSearchPopup,
   setShareReadmeDetect,
   setUploadFromClipboardDialog,
+  setUploadRawFiles,
 } from "../globalStateSlice.ts";
 import { Viewers, ViewersByID } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
+import { promiseId } from "./dialog.ts";
 import { deleteFile, openFileContextMenu } from "./file.ts";
 import { queueLoadShareInfo } from "./share.ts";
 import { openViewer } from "./viewer.ts";
@@ -782,6 +786,21 @@ export function applyGalleryWidth(index: number, width: number): AppThunk {
     dispatch(setGalleryWidth({ index, value: width }));
     SessionManager.set(UserSettings.GalleryWidth, width);
     dispatch(setFmLoading({ index, value: false }));
+  };
+}
+
+export function uploadRawFile(files: File): AppThunk<Promise<Task>> {
+  return async (dispatch, _getState) => {
+    const id = promiseId();
+    return new Promise<Task>((resolve, reject) => {
+      uploadPromisePool[id] = { resolve, reject };
+      dispatch(
+        setUploadRawFiles({
+          files: [files],
+          promiseId: [id],
+        }),
+      );
+    });
   };
 }
 

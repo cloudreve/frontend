@@ -1,15 +1,15 @@
 // 所有 Uploader 的基类
-import { Task } from "../types";
-import UploadManager from "../index";
-import Logger from "../logger";
-import { validate } from "../utils/validator";
-import { CancelToken } from "../utils/request";
 import axios, { CanceledError, CancelTokenSource } from "axios";
-import { createUploadSession, deleteUploadSession } from "../api";
-import * as utils from "../utils";
-import { UploaderError } from "../errors";
 import { PolicyType } from "../../../../api/explorer.ts";
 import CrUri from "../../../../util/uri.ts";
+import { createUploadSession, deleteUploadSession } from "../api";
+import { UploaderError } from "../errors";
+import UploadManager from "../index";
+import Logger from "../logger";
+import { Task } from "../types";
+import * as utils from "../utils";
+import { CancelToken } from "../utils/request";
+import { validate } from "../utils/validator";
 
 export enum Status {
   added,
@@ -65,6 +65,13 @@ const resumePolicy = [
 ];
 const deleteUploadSessionDelay = 500;
 
+export const uploadPromisePool: {
+  [key: string]: {
+    resolve: (value: Task | PromiseLike<Task>) => void;
+    reject: (reason?: any) => void;
+  };
+} = {};
+
 export default abstract class Base {
   public child?: Base[];
   public status: Status = Status.added;
@@ -81,6 +88,7 @@ export default abstract class Base {
 
   public lastTime = Date.now();
   public startTime = Date.now();
+  public promiseId: string | undefined;
 
   constructor(
     public task: Task,
@@ -229,6 +237,21 @@ export default abstract class Base {
 
   protected transit(status: Status) {
     this.status = status;
+    if (this.promiseId && status === Status.finished) {
+      const promise = uploadPromisePool[this.promiseId];
+      delete uploadPromisePool[this.promiseId];
+      this.promiseId = undefined;
+      if (promise) {
+        switch (status) {
+          case Status.finished:
+            promise.resolve(this.task);
+            break;
+          default:
+            promise.reject(this.error);
+            break;
+        }
+      }
+    }
     this.subscriber.onTransition(status);
   }
 

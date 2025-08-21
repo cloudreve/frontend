@@ -3,7 +3,12 @@ import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ContextMenuTypes } from "../../redux/fileManagerSlice.ts";
-import { closeUploadTaskList, openUploadTaskList, setUploadProgress } from "../../redux/globalStateSlice.ts";
+import {
+  closeUploadTaskList,
+  openUploadTaskList,
+  setUploadProgress,
+  setUploadRawFiles,
+} from "../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
 import { refreshFileList, updateUserCapacity } from "../../redux/thunks/filemanager.ts";
 import SessionManager, { UserSettings } from "../../session";
@@ -38,6 +43,8 @@ const Uploader = () => {
   const policy = useAppSelector((state) => state.fileManager[FileManagerIndex.main].list?.storage_policy);
   const selectFileSignal = useAppSelector((state) => state.globalState.uploadFileSignal);
   const selectFolderSignal = useAppSelector((state) => state.globalState.uploadFolderSignal);
+  const uploadRawPromiseId = useAppSelector((state) => state.globalState.uploadRawPromiseId);
+  const uploadRawFiles = useAppSelector((state) => state.globalState.uploadRawFiles);
 
   const displayOpt = useActionDisplayOpt([], ContextMenuTypes.empty, parent, FileManagerIndex.main);
 
@@ -159,6 +166,15 @@ const Uploader = () => {
     },
     [uploadManager, taskAdded, handleUploaderError, dispatch, getClipboardFileName],
   );
+
+  useEffect(() => {
+    if (uploadRawFiles && uploadRawFiles.length > 0) {
+      uploadManager.addRawFiles(uploadRawFiles, getClipboardFileName, uploadRawPromiseId).catch((e) => {
+        handleUploaderError(e);
+      });
+      dispatch(setUploadRawFiles({ files: [], promiseId: [] }));
+    }
+  }, [uploadRawFiles, uploadRawPromiseId, handleUploaderError, uploadManager]);
 
   useEffect(() => {
     const unfinished = uploadManager.resumeTasks();

@@ -1,7 +1,8 @@
 import { Box, Skeleton, useTheme } from "@mui/material";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { getEntityContent } from "../../../redux/thunks/file.ts";
+import { markdownImagePreviewHandler } from "../../../redux/thunks/viewer.ts";
 import Header from "../Sidebar/Header.tsx";
 
 const MarkdownEditor = lazy(() => import("../../Viewers/MarkdownEditor/Editor.tsx"));
@@ -40,6 +41,13 @@ const ReadMeContent = () => {
     }
   }, [readMeTarget]);
 
+  const imagePreviewHandler = useCallback(
+    async (imageSource: string) => {
+      return dispatch(markdownImagePreviewHandler(imageSource, readMeTarget?.path ?? ""));
+    },
+    [dispatch, readMeTarget],
+  );
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Header target={readMeTarget} variant={"readme"} />
@@ -62,6 +70,7 @@ const ReadMeContent = () => {
               readOnly={true}
               onChange={() => {}}
               initialValue={value}
+              imagePreviewHandler={imagePreviewHandler}
             />
           </Suspense>
         )}

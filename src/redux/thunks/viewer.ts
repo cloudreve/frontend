@@ -35,6 +35,7 @@ import { Viewers, ViewersByID } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { askSaveAs, askStaleVersionAction } from "./dialog.ts";
 import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks } from "./file.ts";
+import { uploadRawFile } from "./filemanager.ts";
 
 export interface ExpandedViewerSetting {
   [key: string]: Viewer[];
@@ -718,8 +719,8 @@ export function markdownImagePreviewHandler(imageSource: string, mdFileUri: stri
     }
 
     try {
-      const file = await dispatch(getFileInfo({ uri: uri.toString() }));
-      const fileUrl = await dispatch(getFileEntityUrl({ uris: [getFileLinkedUri(file)], entity: file.primary_entity }));
+      const file = await dispatch(getFileInfo({ uri: uri.toString() }, true));
+      const fileUrl = await dispatch(getFileEntityUrl({ uris: [getFileLinkedUri(file)] }));
       return fileUrl.urls[0].url;
     } catch (e) {
       return BROKEN_IMG_URI;
@@ -740,5 +741,12 @@ export function markdownImageAutocompleteSuggestions(): AppThunk<string[] | null
     });
 
     return suggestions.map((f) => f.name);
+  };
+}
+
+export function uploadMarkdownImage(file: File): AppThunk<Promise<string>> {
+  return async (dispatch, getState) => {
+    const task = await dispatch(uploadRawFile(file));
+    return task.name;
   };
 }
