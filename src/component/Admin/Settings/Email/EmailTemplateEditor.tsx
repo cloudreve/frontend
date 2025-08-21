@@ -11,6 +11,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { languages } from "../../../../i18n.ts";
@@ -80,6 +82,55 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
     setCurrentTab(newValue);
   };
 
+  const lastHoverIndexRef = React.useRef<number | null>(null);
+  const DraggableTab = ({ index, label }: { index: number; label: string }) => {
+    const ref = React.useRef<HTMLDivElement>(null);
+    const [, drop] = useDrop({
+      accept: "template-tab",
+      hover: () => {
+        lastHoverIndexRef.current = index;
+      },
+    });
+    const [{ isDragging }, drag] = useDrag({
+      type: "template-tab",
+      item: { index },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      end: (item) => {
+        if (
+          typeof item.index === "number" &&
+          typeof lastHoverIndexRef.current === "number" &&
+          item.index !== lastHoverIndexRef.current
+        ) {
+          updateOrder(item.index, lastHoverIndexRef.current);
+        }
+        lastHoverIndexRef.current = null;
+      },
+    });
+
+    drag(drop(ref));
+    return (
+      <div
+        ref={ref}
+        style={{ opacity: isDragging ? 0.5 : 1, display: "inline-block" }}
+        onClick={() => setCurrentTab(index)}
+      >
+        <Tab label={label} />
+      </div>
+    );
+  };
+
+  const updateOrder = (from: number, to: number) => {
+    if (from === to) return;
+
+    isUpdatingFromProp.current = false; // Ensure this is a user interaction
+    const updatedTemplates = [...templates];
+    updatedTemplates.splice(to, 0, updatedTemplates.splice(from, 1)[0]);
+    setTemplates(updatedTemplates);
+    setCurrentTab(to);
+  };
+
   const updateTemplate = (index: number, field: keyof TemplateItem, newValue: string) => {
     isUpdatingFromProp.current = false; // Ensure this is a user interaction
     const updatedTemplates = [...templates];
@@ -122,118 +173,120 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
   }, []);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
-        <Tabs
-          value={currentTab}
-          onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{ flexGrow: 1 }}
-        >
-          {templates.map((template, index) => {
-            const lang = languages.find((l) => l.code === template.language);
-            return <DraggableTab key={index} index={index} label={lang ? lang.displayName : template.language} />;
-          })}
-        </Tabs>
-        <Button
-          startIcon={<Add />}
-          onClick={() => setAddLanguageOpen(true)}
-          sx={{ minWidth: "auto", mt: 0.5, mb: 0.5 }}
-        >
-          {t("settings.addLanguage")}
-        </Button>
-      </Box>
-      {templates.map((template, index) => (
-        <Box
-          key={index}
-          role="tabpanel"
-          hidden={currentTab !== index}
-          id={`template-tabpanel-${index}`}
-          aria-labelledby={`template-tab-${index}`}
-          sx={{ mt: 2 }}
-        >
-          {currentTab === index && (
-            <Box>
-              <FormControl fullWidth sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  {t("settings.emailSubject")}
-                </Typography>
-                <DenseFilledTextField
-                  fullWidth
-                  value={template.title}
-                  onChange={(e) => updateTemplate(index, "title", e.target.value)}
-                />
-                <NoMarginHelperText>{t("settings.emailSubjectDes")}</NoMarginHelperText>
-              </FormControl>
-
-              <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                {t("settings.emailBody")}
-              </Typography>
-              <Box sx={{ height: 400 }}>
-                <Suspense fallback={<CircularProgress />}>
-                  <MonacoEditor
-                    theme={theme.palette.mode === "dark" ? "vs-dark" : "vs"}
-                    language="html"
-                    value={template.body}
-                    onChange={(value) => updateTemplate(index, "body", value || "")}
-                    height="400px"
-                    minHeight="400px"
-                    options={{
-                      wordWrap: "on",
-                      minimap: { enabled: false },
-                      scrollBeyondLastLine: false,
-                    }}
-                  />
-                </Suspense>
-              </Box>
-              <NoMarginHelperText>
-                <Trans
-                  i18nKey={"settings.emailBodyDes"}
-                  ns={"dashboard"}
-                  components={[<Link onClick={openMagicVar} href={"#"} />]}
-                />
-              </NoMarginHelperText>
-            </Box>
-          )}
+    <DndProvider backend={HTML5Backend}>
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
+          <Tabs
+            value={currentTab}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{ flexGrow: 1 }}
+          >
+            {templates.map((template, index) => {
+              const lang = languages.find((l) => l.code === template.language);
+              return <DraggableTab key={index} index={index} label={lang ? lang.displayName : template.language} />;
+            })}
+          </Tabs>
+          <Button
+            startIcon={<Add />}
+            onClick={() => setAddLanguageOpen(true)}
+            sx={{ minWidth: "auto", mt: 0.5, mb: 0.5 }}
+          >
+            {t("settings.addLanguage")}
+          </Button>
         </Box>
-      ))}
-      {/* Add Language Dialog */}
-      <DraggableDialog
-        title={t("settings.addLanguage")}
-        showActions
-        showCancel
-        onAccept={addNewLanguage}
-        dialogProps={{
-          maxWidth: "xs",
-          fullWidth: true,
-          open: addLanguageOpen,
-          onClose: () => setAddLanguageOpen(false),
-        }}
-      >
-        <DialogContent>
-          <SettingForm title={t("application:setting.language")} lgWidth={12}>
-            <FormControl fullWidth>
-              <DenseSelect value={newLanguageCode} onChange={(e) => setNewLanguageCode(e.target.value as string)}>
-                {languages.map((l) => (
-                  <SquareMenuItem value={l.code}>
-                    <ListItemText
-                      slotProps={{
-                        primary: { variant: "body2" },
+        {templates.map((template, index) => (
+          <Box
+            key={index}
+            role="tabpanel"
+            hidden={currentTab !== index}
+            id={`template-tabpanel-${index}`}
+            aria-labelledby={`template-tab-${index}`}
+            sx={{ mt: 2 }}
+          >
+            {currentTab === index && (
+              <Box>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    {t("settings.emailSubject")}
+                  </Typography>
+                  <DenseFilledTextField
+                    fullWidth
+                    value={template.title}
+                    onChange={(e) => updateTemplate(index, "title", e.target.value)}
+                  />
+                  <NoMarginHelperText>{t("settings.emailSubjectDes")}</NoMarginHelperText>
+                </FormControl>
+
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  {t("settings.emailBody")}
+                </Typography>
+                <Box sx={{ height: 400 }}>
+                  <Suspense fallback={<CircularProgress />}>
+                    <MonacoEditor
+                      theme={theme.palette.mode === "dark" ? "vs-dark" : "vs"}
+                      language="html"
+                      value={template.body}
+                      onChange={(value) => updateTemplate(index, "body", value || "")}
+                      height="400px"
+                      minHeight="400px"
+                      options={{
+                        wordWrap: "on",
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
                       }}
-                    >
-                      {l.displayName}
-                    </ListItemText>
-                  </SquareMenuItem>
-                ))}
-              </DenseSelect>
-              <NoMarginHelperText>{t("settings.languageCodeDes")}</NoMarginHelperText>
-            </FormControl>
-          </SettingForm>
-        </DialogContent>
-      </DraggableDialog>
-      <MagicVarDialog open={magicVarOpen} vars={magicVars} onClose={() => setMagicVarOpen(false)} />
-    </Box>
+                    />
+                  </Suspense>
+                </Box>
+                <NoMarginHelperText>
+                  <Trans
+                    i18nKey={"settings.emailBodyDes"}
+                    ns={"dashboard"}
+                    components={[<Link onClick={openMagicVar} href={"#"} />]}
+                  />
+                </NoMarginHelperText>
+              </Box>
+            )}
+          </Box>
+        ))}
+        {/* Add Language Dialog */}
+        <DraggableDialog
+          title={t("settings.addLanguage")}
+          showActions
+          showCancel
+          onAccept={addNewLanguage}
+          dialogProps={{
+            maxWidth: "xs",
+            fullWidth: true,
+            open: addLanguageOpen,
+            onClose: () => setAddLanguageOpen(false),
+          }}
+        >
+          <DialogContent>
+            <SettingForm title={t("application:setting.language")} lgWidth={12}>
+              <FormControl fullWidth>
+                <DenseSelect value={newLanguageCode} onChange={(e) => setNewLanguageCode(e.target.value as string)}>
+                  {languages.map((l) => (
+                    <SquareMenuItem value={l.code}>
+                      <ListItemText
+                        slotProps={{
+                          primary: { variant: "body2" },
+                        }}
+                      >
+                        {l.displayName}
+                      </ListItemText>
+                    </SquareMenuItem>
+                  ))}
+                </DenseSelect>
+                <NoMarginHelperText>{t("settings.languageCodeDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+          </DialogContent>
+        </DraggableDialog>
+        <MagicVarDialog open={magicVarOpen} vars={magicVars} onClose={() => setMagicVarOpen(false)} />
+      </Box>
+    </DndProvider>
   );
 };
 
