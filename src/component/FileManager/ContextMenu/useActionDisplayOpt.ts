@@ -11,7 +11,7 @@ import Boolset from "../../../util/boolset.ts";
 import CrUri, { Filesystem } from "../../../util/uri.ts";
 import { FileManagerIndex } from "../FileManager.tsx";
 
-const supportedArchiveTypes = ["zip", "gz", "xz", "tar", "rar"];
+const supportedArchiveTypes = ["zip", "gz", "xz", "tar", "rar", "7z", "bz2"];
 
 export const canManageVersion = (file: FileResponse, bs: Boolset) => {
   return (

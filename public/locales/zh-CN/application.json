@@ -475,6 +475,8 @@
     "defaultEncoding": "缺省",
     "chineseMajorEncoding": "简体中文常见编码",
     "selectEncoding": "ZIP 文件编码",
+    "password": "压缩文件密码",
+    "passwordDescription": "如果加压缩文件未加密，此处请留空。",
     "noEncodingSelected": "未选择编码方式",
     "listingFiles": "列取文件中...",
     "listingFileError": "列取文件时出错：{{message}}",

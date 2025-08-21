@@ -471,6 +471,8 @@
     "defaultEncoding": "預設",
     "chineseMajorEncoding": "簡體中文常見編碼",
     "selectEncoding": "ZIP 檔案編碼",
+    "password": "壓縮檔案密碼",
+    "passwordDescription": "如果壓縮檔案未加密，此處請留空。",
     "noEncodingSelected": "未選擇編碼方式",
     "listingFiles": "列取檔案中...",
     "listingFileError": "列取檔案時出錯：{{message}}",

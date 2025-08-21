@@ -1,11 +1,12 @@
 import {
   DialogContent,
   FormControl,
+  Grid2,
   InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  Stack,
+  TextField,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -20,11 +21,11 @@ import { FileDisplayForm } from "../../Common/Form/FileDisplayForm.tsx";
 import { PathSelectorForm } from "../../Common/Form/PathSelectorForm.tsx";
 import { ViewTaskAction } from "../../Common/Snackbar/snackbar.tsx";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
+import Password from "../../Icons/Password.tsx";
 import Translate from "../../Icons/Translate.tsx";
 import { FileManagerIndex } from "../FileManager.tsx";
 
 const encodings = [
-  "gb18030",
   "ibm866",
   "iso8859_2",
   "iso8859_3",
@@ -54,6 +55,7 @@ const encodings = [
   "windows1258",
   "macintoshcyrillic",
   "gbk",
+  "gb18030",
   "big5",
   "eucjp",
   "iso2022jp",
@@ -75,13 +77,21 @@ const ExtractArchive = () => {
   const [loading, setLoading] = useState(false);
   const [path, setPath] = useState("");
   const [encoding, setEncoding] = useState(defaultEncodingValue);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const open = useAppSelector((state) => state.globalState.extractArchiveDialogOpen);
   const target = useAppSelector((state) => state.globalState.extractArchiveDialogFile);
   const current = useAppSelector((state) => state.fileManager[FileManagerIndex.main].pure_path);
 
   const showEncodingOption = useMemo(() => {
-    return fileExtension(target?.name ?? "") === "zip";
+    const ext = fileExtension(target?.name ?? "");
+    return ext === "zip";
+  }, [target?.name]);
+
+  const showPasswordOption = useMemo(() => {
+    const ext = fileExtension(target?.name ?? "");
+    return ext === "zip" || ext === "7z";
   }, [target?.name]);
 
   useEffect(() => {
@@ -105,6 +115,7 @@ const ExtractArchive = () => {
         src: [getFileLinkedUri(target)],
         dst: path,
         encoding: showEncodingOption && encoding != defaultEncodingValue ? encoding : undefined,
+        password: showPasswordOption && password ? password : undefined,
       }),
     )
       .then(() => {
@@ -118,7 +129,7 @@ const ExtractArchive = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [target, encoding, path, showEncodingOption]);
+  }, [target, encoding, path, showPasswordOption, showEncodingOption, password]);
 
   return (
     <DraggableDialog
@@ -136,10 +147,24 @@ const ExtractArchive = () => {
       }}
     >
       <DialogContent sx={{ pt: 1 }}>
-        <Stack spacing={3}>
-          <Stack spacing={3} direction={isMobile ? "column" : "row"}>
-            {target && <FileDisplayForm file={target} label={t("modals.archiveFile")} />}
-            {showEncodingOption && (
+        <Grid2 container spacing={3}>
+          {target && (
+            <Grid2
+              size={{
+                xs: 12,
+                md: showEncodingOption ? 6 : 12,
+              }}
+            >
+              <FileDisplayForm file={target} label={t("modals.archiveFile")} />
+            </Grid2>
+          )}
+          {showEncodingOption && (
+            <Grid2
+              size={{
+                xs: 12,
+                md: 6,
+              }}
+            >
               <FormControl variant="outlined" fullWidth>
                 <InputLabel>{t("modals.selectEncoding")}</InputLabel>
                 <Select
@@ -165,12 +190,40 @@ const ExtractArchive = () => {
                   ))}
                 </Select>
               </FormControl>
-            )}
-          </Stack>
-          <Stack spacing={3} direction={isMobile ? "column" : "row"}>
+            </Grid2>
+          )}
+          <Grid2
+            size={{
+              xs: 12,
+            }}
+          >
             <PathSelectorForm onChange={setPath} path={path} variant={"extractTo"} label={t("modals.decompressTo")} />
-          </Stack>
-        </Stack>
+          </Grid2>
+          {showPasswordOption && (
+            <Grid2
+              size={{
+                xs: 12,
+              }}
+            >
+              <TextField
+                slotProps={{
+                  input: {
+                    startAdornment: !isMobile && (
+                      <InputAdornment position="start">
+                        <Password />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                fullWidth
+                placeholder={t("application:modals.passwordDescription")}
+                label={t("modals.password")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Grid2>
+          )}
+        </Grid2>
       </DialogContent>
     </DraggableDialog>
   );

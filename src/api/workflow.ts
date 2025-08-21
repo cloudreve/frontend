@@ -4,6 +4,7 @@ export interface ArchiveWorkflowService {
   src: string[];
   dst: string;
   encoding?: string;
+  password?: string;
 }
 
 export interface TaskListResponse {

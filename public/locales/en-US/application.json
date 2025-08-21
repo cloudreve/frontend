@@ -475,6 +475,8 @@
     "defaultEncoding": "Default",
     "chineseMajorEncoding": "",
     "selectEncoding": "ZIP file encoding",
+    "password": "Password",
+    "passwordDescription": "If the archive file is not encrypted, please leave this field empty.",
     "noEncodingSelected": "No encoding method selected",
     "listingFiles": "Listing files...",
     "listingFileError": "Failed to list files: {{message}}",

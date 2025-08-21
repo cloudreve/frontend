@@ -475,6 +475,8 @@
     "defaultEncoding": "デフォルト",
     "chineseMajorEncoding": "",
     "selectEncoding": "ZIPファイルエンコード",
+    "password": "圧縮ファイルパスワード",
+    "passwordDescription": "圧縮ファイルが暗号化されていない場合、ここは空のままにしてください。",
     "noEncodingSelected": "エンコード方式を選択していません",
     "listingFiles": "ファイル一覧取得中...",
     "listingFileError": "ファイル一覧取得中にエラーが発生しました：{{message}}",
