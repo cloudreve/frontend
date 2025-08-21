@@ -72,6 +72,7 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
   useEffect(() => {
     if (templates.length > 0 && !isUpdatingFromProp.current) {
       onChange(JSON.stringify(templates));
+      isUpdatingFromProp.current = true; // Prevent infinite loop
     }
   }, [templates, onChange]);
 
