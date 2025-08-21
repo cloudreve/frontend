@@ -263,6 +263,7 @@
     "restore": "還原",
     "unpin": "取消固定",
     "youDontHaveReadPermissionToThisFile": "你沒有許可權讀取此內容",
+    "anonymousAccessDenied": "你沒有許可權讀取此內容，請嘗試登入帳號。",
     "sharedWithOthers": "與他人分享",
     "new": "新建",
     "open": "開啟",

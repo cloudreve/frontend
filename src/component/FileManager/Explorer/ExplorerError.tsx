@@ -1,11 +1,12 @@
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
 import React, { memo, useCallback, useContext, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { AppError, Code, Response } from "../../../api/request.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { navigateToPath, retrySharePassword } from "../../../redux/thunks/filemanager.ts";
 import { Filesystem } from "../../../util/uri.ts";
-import { FilledTextField } from "../../Common/StyledComponents.tsx";
+import { FilledTextField, SecondaryButton } from "../../Common/StyledComponents.tsx";
 import ArrowLeft from "../../Icons/ArrowLeft.tsx";
 import LinkDismiss from "../../Icons/LinkDismiss.tsx";
 import LockClosed from "../../Icons/LockClosed.tsx";
@@ -53,6 +54,7 @@ const RetryPassword = () => {
 const ExplorerError = memo(
   React.forwardRef(({ error, ...rest }: ExplorerErrorProps, ref) => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const fmIndex = useContext(FmIndexContext);
     const fs = useAppSelector((state) => state.fileManager[fmIndex].current_fs);
     const previousPath = useAppSelector((state) => state.fileManager[fmIndex].previous_path);
@@ -68,8 +70,22 @@ const ExplorerError = memo(
       previousPath && dispatch(navigateToPath(fmIndex, previousPath));
     }, [dispatch, fmIndex, previousPath]);
 
+    const signIn = useCallback(() => {
+      navigate("/session?redirect=" + encodeURIComponent(window.location.pathname + window.location.search));
+    }, [navigate]);
+
     const innerError = () => {
       switch (error?.code) {
+        case Code.AnonymouseAccessDenied:
+          return (
+            <Box sx={{ textAlign: "center" }}>
+              <LockClosed sx={{ fontSize: 60 }} color={"action"} />
+              <Typography color={"text.secondary"}>{t("application:fileManager.anonymousAccessDenied")}</Typography>
+              <SecondaryButton variant={"contained"} color={"inherit"} onClick={signIn} sx={{ mt: 4 }}>
+                {t("application:login.signIn")}
+              </SecondaryButton>
+            </Box>
+          );
         case Code.IncorrectPassword:
           return <RetryPassword />;
         // @ts-ignore

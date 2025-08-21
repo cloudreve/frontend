@@ -139,6 +139,7 @@ export const Code = {
   StaleVersion: 40076,
   BatchOperationNotFullyCompleted: 40081,
   DomainNotLicensed: 40087,
+  AnonymouseAccessDenied: 40088,
   CodeLoginRequired: 401,
   PermissionDenied: 403,
   NodeFound: 404,

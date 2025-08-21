@@ -262,6 +262,7 @@
     "restore": "Restore",
     "unpin": "Unpin",
     "youDontHaveReadPermissionToThisFile": "You don't have access permission.",
+    "anonymousAccessDenied": "You don't have access permission, please try to sign in.",
     "sharedWithOthers": "Shared with others",
     "new": "New",
     "open": "Open",
