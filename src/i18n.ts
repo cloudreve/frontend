@@ -55,6 +55,34 @@ export const languages = [
     code: "ja-JP",
     displayName: "日本語",
   },
+  {
+    code: "ru-RU",
+    displayName: "Русский",
+  },
+  {
+    code: "de-DE",
+    displayName: "Deutsch",
+  },
+  {
+    code: "fr-FR",
+    displayName: "Français",
+  },
+  {
+    code: "es-ES",
+    displayName: "Español",
+  },
+  {
+    code: "pt-BR",
+    displayName: "Português",
+  },
+  {
+    code: "it-IT",
+    displayName: "Italiano",
+  },
+  {
+    code: "ko-KR",
+    displayName: "한국어",
+  },
 ];
 
 export default i18n;
