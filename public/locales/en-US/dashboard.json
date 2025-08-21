@@ -1284,7 +1284,11 @@
       "After import, the physical file will be taken over by Cloudreve, please do not modify it externally afterwards.",
       "Do not import the same file multiple times.",
       "If the user's file conflicts, this file will be skipped."
-    ]
+    ],
+    "otherConditions": "Other conditions",
+    "shareLinkExisted": "Has share link",
+    "directLinkExisted": "Has direct link",
+    "isUploading": "Is uploading"
   },
   "entity": {
     "refenenceCount": "Reference count",

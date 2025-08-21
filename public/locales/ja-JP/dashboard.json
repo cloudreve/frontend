@@ -1270,7 +1270,11 @@
       "インポート後、物理ファイルはCloudreveに移行されます。外部での変更はお控えください。",
       "同じファイルを複数回インポートしないでください。",
       "ユーザーのファイルが衝突した場合、このファイルはスキップされます。"
-    ]
+    ],
+    "otherConditions": "その他の条件",
+    "shareLinkExisted": "共有リンクが存在",
+    "directLinkExisted": "直接リンクが存在",
+    "isUploading": "アップロード中"
   },
   "entity": {
     "refenenceCount": "参照回数",

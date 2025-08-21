@@ -1269,7 +1269,11 @@
       "导入后，物理文件将由 Cloudreve 接管，后续请不要在外部修改此文件；",
       "不要重复导入相同的文件；",
       "如果用户文件冲突，此文件会被跳过；"
-    ]
+    ],
+    "otherConditions": "其他条件",
+    "shareLinkExisted": "存在分享链接",
+    "directLinkExisted": "存在中转直链",
+    "isUploading": "上传中"
   },
   "entity": {
     "refenenceCount": "引用次数",

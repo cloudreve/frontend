@@ -23,6 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { batchDeleteFiles, getFlattenFileList } from "../../../api/api";
 import { File } from "../../../api/dashboard";
+import { Metadata } from "../../../api/explorer";
 import { useAppDispatch } from "../../../redux/hooks";
 import { confirmOperation } from "../../../redux/thunks/dialog";
 import { NoWrapTableCell, SecondaryButton, StyledTableContainerPaper } from "../../Common/StyledComponents";
@@ -42,6 +43,9 @@ import { ImportFileDialog } from "./ImportFileDialog";
 export const StoragePolicyQuery = "storage_policy";
 export const OwnerQuery = "owner";
 export const NameQuery = "name";
+export const HasDirectLinkQuery = "has_direct_link";
+export const SharedQuery = "shared";
+export const UploadingQuery = "uploading";
 
 const FileSetting = () => {
   const { t } = useTranslation("dashboard");
@@ -61,6 +65,9 @@ const FileSetting = () => {
   const [storagePolicy, setStoragePolicy] = useQueryState(StoragePolicyQuery, { defaultValue: "" });
   const [owner, setOwner] = useQueryState(OwnerQuery, { defaultValue: "" });
   const [name, setName] = useQueryState(NameQuery, { defaultValue: "" });
+  const [hasDirectLink, setHasDirectLink] = useQueryState(HasDirectLinkQuery, { defaultValue: "" });
+  const [shared, setShared] = useQueryState(SharedQuery, { defaultValue: "" });
+  const [uploading, setUploading] = useQueryState(UploadingQuery, { defaultValue: "" });
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [createNewOpen, setCreateNewOpen] = useState(false);
@@ -83,11 +90,14 @@ const FileSetting = () => {
     setStoragePolicy("");
     setOwner("");
     setName("");
-  }, [setStoragePolicy, setOwner, setName]);
+    setHasDirectLink("");
+    setShared("");
+    setUploading("");
+  }, [setStoragePolicy, setOwner, setName, setHasDirectLink, setShared, setUploading]);
 
   useEffect(() => {
     fetchFiles();
-  }, [page, pageSize, orderBy, orderDirection, storagePolicy, owner, name]);
+  }, [page, pageSize, orderBy, orderDirection, storagePolicy, owner, name, hasDirectLink, shared, uploading]);
 
   const fetchFiles = () => {
     setLoading(true);
@@ -102,6 +112,9 @@ const FileSetting = () => {
           file_policy: storagePolicy,
           file_user: owner,
           file_name: name,
+          file_direct_link: hasDirectLink === "true" ? "true" : "",
+          file_shared: shared === "true" ? "true" : "",
+          file_metadata: uploading === "true" ? Metadata.upload_session_id : "",
         },
       }),
     )
@@ -170,8 +183,8 @@ const FileSetting = () => {
   };
 
   const hasActiveFilters = useMemo(() => {
-    return !!(storagePolicy || owner || name);
-  }, [storagePolicy, owner, name]);
+    return !!(storagePolicy || owner || name || hasDirectLink || shared || uploading);
+  }, [storagePolicy, owner, name, hasDirectLink, shared, uploading]);
 
   const handleFileDialogOpen = (id: number) => {
     setFileDialogID(id);
@@ -220,6 +233,12 @@ const FileSetting = () => {
             name={name}
             setName={setName}
             clearFilters={clearFilters}
+            hasDirectLink={hasDirectLink === "true"}
+            setHasDirectLink={(value: boolean) => setHasDirectLink(value ? "true" : "")}
+            hasShareLink={shared === "true"}
+            setHasShareLink={(value: boolean) => setShared(value ? "true" : "")}
+            isUploading={uploading === "true"}
+            setIsUploading={(value: boolean) => setUploading(value ? "true" : "")}
           />
 
           <SecondaryButton onClick={fetchFiles} disabled={loading} variant={"contained"} startIcon={<ArrowSync />}>

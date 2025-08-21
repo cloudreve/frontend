@@ -1,7 +1,7 @@
-import { Box, Button, Popover, PopoverProps, Stack } from "@mui/material";
+import { Box, Button, Checkbox, Popover, PopoverProps, Stack, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { DenseFilledTextField } from "../../Common/StyledComponents";
+import { DenseFilledTextField, SmallFormControlLabel } from "../../Common/StyledComponents";
 import SettingForm from "../../Pages/Setting/SettingForm";
 import SinglePolicySelectionInput from "../Common/SinglePolicySelectionInput";
 
@@ -12,8 +12,20 @@ export interface FileFilterPopoverProps extends PopoverProps {
   setOwner: (owner: string) => void;
   name: string;
   setName: (name: string) => void;
+  hasShareLink: boolean;
+  setHasShareLink: (hasShareLink: boolean) => void;
+  hasDirectLink: boolean;
+  setHasDirectLink: (hasDirectLink: boolean) => void;
+  isUploading: boolean;
+  setIsUploading: (isUploading: boolean) => void;
   clearFilters: () => void;
 }
+
+const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
+  paddingTop: 0,
+  paddingBottom: 0,
+  paddingLeft: 0,
+}));
 
 const FileFilterPopover = ({
   storagePolicy,
@@ -22,6 +34,12 @@ const FileFilterPopover = ({
   setOwner,
   name,
   setName,
+  hasShareLink,
+  setHasShareLink,
+  hasDirectLink,
+  setHasDirectLink,
+  isUploading,
+  setIsUploading,
   clearFilters,
   onClose,
   open,
@@ -33,6 +51,9 @@ const FileFilterPopover = ({
   const [localStoragePolicy, setLocalStoragePolicy] = useState(storagePolicy);
   const [localOwner, setLocalOwner] = useState(owner);
   const [localName, setLocalName] = useState(name);
+  const [localHasShareLink, setLocalHasShareLink] = useState(hasShareLink);
+  const [localHasDirectLink, setLocalHasDirectLink] = useState(hasDirectLink);
+  const [localIsUploading, setLocalIsUploading] = useState(isUploading);
 
   // Initialize local state when popup opens
   useEffect(() => {
@@ -40,6 +61,9 @@ const FileFilterPopover = ({
       setLocalStoragePolicy(storagePolicy);
       setLocalOwner(owner);
       setLocalName(name);
+      setLocalHasShareLink(hasShareLink);
+      setLocalHasDirectLink(hasDirectLink);
+      setLocalIsUploading(isUploading);
     }
   }, [open]);
 
@@ -48,6 +72,9 @@ const FileFilterPopover = ({
     setStoragePolicy(localStoragePolicy);
     setOwner(localOwner);
     setName(localName);
+    setHasShareLink(localHasShareLink);
+    setHasDirectLink(localHasDirectLink);
+    setIsUploading(localIsUploading);
     onClose?.({}, "backdropClick");
   };
 
@@ -56,6 +83,9 @@ const FileFilterPopover = ({
     setLocalStoragePolicy("");
     setLocalOwner("");
     setLocalName("");
+    setLocalHasShareLink(false);
+    setLocalHasDirectLink(false);
+    setLocalIsUploading(false);
     clearFilters();
     onClose?.({}, "backdropClick");
   };
@@ -111,6 +141,44 @@ const FileFilterPopover = ({
             emptyValue={-1}
             emptyText={t("user.all")}
           />
+        </SettingForm>
+
+        <SettingForm title={t("file.otherConditions")} noContainer lgWidth={12}>
+          <Stack spacing={0.5}>
+            <SmallFormControlLabel
+              control={
+                <StyledCheckbox
+                  disableRipple
+                  size="small"
+                  checked={localHasShareLink}
+                  onChange={(e) => setLocalHasShareLink(e.target.checked)}
+                />
+              }
+              label={t("file.shareLinkExisted")}
+            />
+            <SmallFormControlLabel
+              control={
+                <StyledCheckbox
+                  disableRipple
+                  size="small"
+                  checked={localHasDirectLink}
+                  onChange={(e) => setLocalHasDirectLink(e.target.checked)}
+                />
+              }
+              label={t("file.directLinkExisted")}
+            />
+            <SmallFormControlLabel
+              control={
+                <StyledCheckbox
+                  disableRipple
+                  size="small"
+                  checked={localIsUploading}
+                  onChange={(e) => setLocalIsUploading(e.target.checked)}
+                />
+              }
+              label={t("file.isUploading")}
+            />
+          </Stack>
         </SettingForm>
 
         <Box display="flex" justifyContent="space-between">

@@ -1266,7 +1266,11 @@
       "匯入後，物理檔案將由 Cloudreve 接管，後續請不要在外部修改此檔案；",
       "不要重複匯入相同的檔案；",
       "如果使用者檔案衝突，此檔案會被跳過；"
-    ]
+    ],
+    "otherConditions": "其他條件",
+    "shareLinkExisted": "有分享連結",
+    "directLinkExisted": "有中轉直鏈",
+    "isUploading": "上傳中"
   },
   "entity": {
     "refenenceCount": "引用次數",
