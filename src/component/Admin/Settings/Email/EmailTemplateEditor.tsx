@@ -93,10 +93,12 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
     if (!newLanguageCode.trim()) return;
 
     // Check if language already exists
-    if (templates.some((t) => t.language === newLanguageCode)) {
-      // Could show an error message here
+    const langTemplateIndex = templates.findIndex(l => l.language === newLanguageCode);
+    if (langTemplateIndex !== -1) {
       setNewLanguageCode("");
       setAddLanguageOpen(false);
+
+      setCurrentTab(langTemplateIndex);
       return;
     }
 
@@ -128,9 +130,12 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
           scrollButtons="auto"
           sx={{ flexGrow: 1 }}
         >
-          {templates.map((template, index) => (
-            <Tab key={index} label={template.language} />
-          ))}
+          {templates.map((template, index) => {
+            const lang = languages.find(l => l.code === template.language);
+            return (
+              <Tab key={index} label={lang ? lang.displayName : template.language} />
+            );
+          })}
         </Tabs>
         <Button
           startIcon={<Add />}
