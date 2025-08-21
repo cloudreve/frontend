@@ -12,13 +12,14 @@
   "uploadImage": {
     "dialogTitle": "上传图片",
     "uploadInstructions": "从您的设备中上传图片：",
-    "addViaUrlInstructions": "或填写图片 URL / 相对路径 （相对于当前文件）：",
+    "addViaUrlInstructions": "或填写图片 URL / 相对路径（相对于当前文件）：",
     "autoCompletePlaceholder": "选择或粘贴图片 URL",
-    "addViaUrlInstructionsNoUpload": "图片网址：",
+    "addViaUrlInstructionsNoUpload": "图片 URL：",
     "alt": "替代文本：",
     "title": "标题："
   },
   "imageEditor": {
+    "deleteImage": "删除图片",
     "editImage": "编辑图片"
   },
   "createLink": {
@@ -30,7 +31,7 @@
   },
   "linkPreview": {
     "open": "在新窗口中打开 {{url}}",
-    "edit": "编辑链接网址",
+    "edit": "编辑链接",
     "copyToClipboard": "复制到剪贴板",
     "copied": "已复制！",
     "remove": "移除链接"
