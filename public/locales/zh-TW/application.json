@@ -275,6 +275,7 @@
     "organize": "整理",
     "pin": "固定到側邊欄",
     "pinAlias": "展示別名",
+    "alreadyPined": "此項目已固定。",
     "optional": "可選",
     "move": "移動",
     "delete": "刪除",
@@ -384,7 +385,11 @@
     "layout": "布局",
     "thumbnails": "縮圖",
     "on": "開啟",
-    "off": "關閉"
+    "off": "關閉",
+    "viewSetting": "檢視設定",
+    "saved": "已保存",
+    "notSet": "未設定",
+    "deleteViewSetting": "刪除檢視設定"
   },
   "modals": {
     "includePasswordInShareLink": "在連結中包含密碼",
@@ -736,6 +741,7 @@
     "rootFolderIn": "選擇 <0></0>",
     "createWebDavAccount": "建立 WebDAV 賬號",
     "editWebDavAccount": "編輯 {{name}}",
+    "saveChanges": "儲存更改",
     "seeding": "做種中",
     "awaitSeeding": "等待做種",
     "awaitSeedingDes": "等待下載任務做種完成。",
@@ -889,7 +895,8 @@
     "quota": "容量配額",
     "used": "已使用 - {{size}}",
     "total": "總容量 - {{size}}",
-    "report": "舉報濫用",
+    "report": "濫用舉報",
+    "validDurationDays": "{{num}} 天",
     "reportTarget": "舉報對象",
     "reportReason": "原因",
     "reportReasonOptions": ["侵權", "有害內容", "垃圾訊息", "其他"],

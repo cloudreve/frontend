@@ -19,6 +19,7 @@
     "title": "タイトル："
   },
   "imageEditor": {
+    "deleteImage": "画像削除",
     "editImage": "画像編集"
   },
   "createLink": {
@@ -30,7 +31,7 @@
   },
   "linkPreview": {
     "open": "{{url}}を新しいウィンドウで開く",
-    "edit": "リンクURLを編集",
+    "edit": "リンク編集",
     "copyToClipboard": "クリップボードにコピー",
     "copied": "コピーしました！",
     "remove": "リンク削除"
