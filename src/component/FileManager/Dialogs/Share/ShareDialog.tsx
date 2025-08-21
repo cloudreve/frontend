@@ -162,7 +162,7 @@ const ShareDialog = () => {
           fullWidth: true,
           maxWidth: "xs",
         }}
-        cancelText={shareLink ? "common:close" : undefined}
+        cancelText={shareLink ? t("common:close") : undefined}
         secondaryAction={
           shareLink
             ? // @ts-ignore
