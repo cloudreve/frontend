@@ -23,6 +23,7 @@ import { useAppDispatch } from "../../../redux/hooks.ts";
 import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { openShareEditByID } from "../../../redux/thunks/share.ts";
 import SessionManager from "../../../session";
+import { copyToClipboard } from "../../../util/index.ts";
 import { DefaultCloseAction } from "../../Common/Snackbar/snackbar.tsx";
 import { NoWrapBox, NoWrapTypography } from "../../Common/StyledComponents.tsx";
 import TimeBadge from "../../Common/TimeBadge.tsx";
@@ -79,14 +80,9 @@ const ActionMenu = ({ share, onShareDeleted, onClose, ...rest }: ActionMenuProps
   }, [share, onClose]);
 
   const copyLink = useCallback(() => {
-    navigator.clipboard.writeText(share.url);
-    enqueueSnackbar({
-      message: t("modals.linkCopied"),
-      variant: "success",
-      action: DefaultCloseAction,
-    });
+    copyToClipboard(share.url);
     onClose && onClose({}, "backdropClick");
-  }, [share, onClose, enqueueSnackbar, t]);
+  }, [share, onClose, t]);
 
   return (
     <Menu
