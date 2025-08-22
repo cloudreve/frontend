@@ -569,7 +569,7 @@
     "addLanguage": "言語を追加",
     "languageCodeDes": "追加する言語を選択してください。",
     "emailSubject": "メール件名",
-    "emailSubjectDes": "メールの件名。",
+    "emailSubjectDes": "メールの件名。<0>魔法変数</0> を使用して件名をカスタマイズできます。",
     "emailBody": "メール本文",
     "emailBodyDes": "メールの本文です。<0>魔法変数</0> を使用して本文をカスタマイズできます。",
     "orderTitle": "注文タイトル",

@@ -569,7 +569,7 @@
     "addLanguage": "언어 추가",
     "languageCodeDes": "추가할 언어를 선택해 주세요.",
     "emailSubject": "이메일 제목",
-    "emailSubjectDes": "이메일의 제목",
+    "emailSubjectDes": "이메일의 제목. <0>매직 변수</0>를 사용하여 사용자 정의할 수 있습니다.",
     "emailBody": "이메일 내용",
     "emailBodyDes": "이메일의 내용입니다. <0>매직 변수</0>를 사용하여 이메일 내용을 사용자 정의할 수 있습니다.",
     "orderTitle": "주문 제목",

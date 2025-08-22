@@ -163,7 +163,13 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
                   value={template.title}
                   onChange={(e) => updateTemplate(index, "title", e.target.value)}
                 />
-                <NoMarginHelperText>{t("settings.emailSubjectDes")}</NoMarginHelperText>
+                <NoMarginHelperText>
+                  <Trans
+                    i18nKey={"settings.emailSubjectDes"}
+                    ns={"dashboard"}
+                    components={[<Link onClick={openMagicVar} href={"#"} />]}
+                  />
+                </NoMarginHelperText>
               </FormControl>
 
               <Typography variant="subtitle2" sx={{ mb: 1 }}>

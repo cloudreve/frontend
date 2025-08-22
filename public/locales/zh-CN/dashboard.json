@@ -569,7 +569,7 @@
     "addLanguage": "添加语言",
     "languageCodeDes": "请选择要添加的语言。",
     "emailSubject": "邮件主题",
-    "emailSubjectDes": "邮件的主题。",
+    "emailSubjectDes": "邮件的主题。你可以使用 <0>魔法变量</0> 来定制邮件主题。",
     "emailBody": "邮件内容",
     "emailBodyDes": "邮件的内容。你可以使用 <0>魔法变量</0> 来定制邮件内容。",
     "orderTitle": "订单标题",

@@ -570,7 +570,7 @@
     "addLanguage": "Sprache hinzufügen",
     "languageCodeDes": "Bitte wählen Sie die Sprache aus, die Sie hinzufügen möchten.",
     "emailSubject": "E-Mail-Betreff",
-    "emailSubjectDes": "Die Betreffzeile der E-Mail.",
+    "emailSubjectDes": "Die Betreffzeile der E-Mail. Sie können <0>magische Variablen</0> verwenden, um den E-Mail-Betreff anzupassen.",
     "emailBody": "E-Mail-Inhalt",
     "emailBodyDes": "HTML-Inhalt der E-Mail. Sie können <0>magische Variablen</0> verwenden, um den E-Mail-Inhalt anzupassen.",
     "orderTitle": "Bestelltitel",

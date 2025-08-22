@@ -570,7 +570,7 @@
     "addLanguage": "Aggiungi lingua",
     "languageCodeDes": "Seleziona la lingua che vuoi aggiungere.",
     "emailSubject": "Oggetto email",
-    "emailSubjectDes": "L'oggetto dell'email.",
+    "emailSubjectDes": "L'oggetto dell'email. Puoi usare <0>variabili magiche</0> per personalizzare l'oggetto dell'email.",
     "emailBody": "Corpo email",
     "emailBodyDes": "Contenuto HTML dell'email. Puoi usare <0>variabili magiche</0> per personalizzare il contenuto dell'email.",
     "orderTitle": "Titolo ordine",

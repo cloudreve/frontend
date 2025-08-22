@@ -569,7 +569,7 @@
     "addLanguage": "Add language",
     "languageCodeDes": "Please select the language you want to add.",
     "emailSubject": "Email saveChanges",
-    "emailSubjectDes": "The subject line of the email.",
+    "emailSubjectDes": "The subject line of the email. You can use <0>magic variables</0> to customize the email subject.",
     "emailBody": "Email body",
     "emailBodyDes": "HTML content of the email. You can use <0>magic variables</0> to customize the email content.",
     "orderTitle": "Order title",
