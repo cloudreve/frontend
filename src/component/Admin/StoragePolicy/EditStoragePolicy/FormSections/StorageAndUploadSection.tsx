@@ -1,5 +1,5 @@
 import { FormControl, FormControlLabel, InputAdornment, Link, MenuItem, Switch, Typography } from "@mui/material";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { StoragePolicy } from "../../../../../api/dashboard";
 import { PolicyType } from "../../../../../api/explorer";
@@ -15,9 +15,11 @@ import { fileMagicVars, pathMagicVars } from "./magicVars";
 
 const StorageAndUploadSection = () => {
   const { t } = useTranslation("dashboard");
-  const { values, setPolicy } = useContext(StoragePolicySettingContext);
+  const { values, setPolicy, formRef } = useContext(StoragePolicySettingContext);
   const [magicVarDialogOpen, setMagicVarDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState<"path" | "file">("path");
+
+  const fileNameInputRef = useRef<HTMLInputElement>(null);
 
   const policyProps = useMemo(() => {
     return PolicyPropsMap[values.type];
@@ -41,10 +43,31 @@ const StorageAndUploadSection = () => {
     [setPolicy],
   );
 
-  // Combined value for validation - ensures at least one random placeholder exists
-  const combinedRulesValue = useMemo(() => {
-    return `${values.dir_name_rule || ""}|${values.file_name_rule || ""}`;
-  }, [values.dir_name_rule, values.file_name_rule]);
+  // Ensures at least one random placeholder exists
+  useEffect(() => {
+    if (!formRef?.current || !fileNameInputRef.current) return;
+
+    const form = formRef.current;
+    const originalCheckValidity = form.checkValidity.bind(form);
+
+    const hasUniqueVar = (value: string) => /(\{randomkey8\}|\{randomkey16\}|\{uuid\})/.test(value);
+
+    form.checkValidity = () => {
+      const dirHasUnique = hasUniqueVar(values.dir_name_rule || "");
+      const fileHasUnique = hasUniqueVar(values.file_name_rule || "");
+
+      fileNameInputRef.current!.setCustomValidity("");
+      if (!dirHasUnique && !fileHasUnique && (values.dir_name_rule || values.file_name_rule)) {
+        fileNameInputRef.current!.setCustomValidity(t("policy.uniqueVarRequired"));
+      }
+
+      return originalCheckValidity();
+    };
+
+    return () => {
+      form.checkValidity = originalCheckValidity;
+    };
+  }, [formRef, values.dir_name_rule, values.file_name_rule, t]);
 
   const handlePathMagicVarClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -186,7 +209,12 @@ const StorageAndUploadSection = () => {
         </SettingForm>
         <SettingForm title={t("policy.blobName")} lgWidth={5}>
           <FormControl fullWidth>
-            <DenseFilledTextField required value={values.file_name_rule} onChange={onFileNameChange} />
+            <DenseFilledTextField
+              required
+              value={values.file_name_rule}
+              onChange={onFileNameChange}
+              inputRef={fileNameInputRef}
+            />
             <NoMarginHelperText>
               <Trans
                 i18nKey="policy.blobNameDes"
@@ -196,18 +224,6 @@ const StorageAndUploadSection = () => {
               {t("policy.nameRuleImmutable")}
             </NoMarginHelperText>
           </FormControl>
-          {/* Hidden input for combined validation */}
-          <div style={{ height: 0, opacity: 0, pointerEvents: "none", overflow: "hidden" }}>
-            <input
-              type="text"
-              value={combinedRulesValue}
-              pattern=".*?(\{randomkey8\}|\{randomkey16\}|\{uuid\}).*?"
-              title={t("policy.uniqueVarRequired")}
-              required
-              tabIndex={-1}
-              aria-hidden="true"
-            />
-          </div>
         </SettingForm>
         <SettingForm title={t("policy.maxSizeOfSingleFile")} lgWidth={5}>
           <FormControl fullWidth>
