@@ -171,7 +171,7 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
                   <Box>
                     <SecondaryButton
                       variant="contained"
-                      onClick={() => (index === 0 ? undefined : setPreferredLanguage(index))}
+                      onClick={() => (setPreferredLanguage(index))}
                     >
                       {t("settings.setAsPreferredLanguage")}
                     </SecondaryButton>
