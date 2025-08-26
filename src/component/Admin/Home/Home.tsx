@@ -135,19 +135,31 @@ const Home = () => {
                           height={350}
                           data={summary?.metrics_summary.dates.map((i, d) => ({
                             name: dayjs(i).format("MM-DD"),
-                            file: summary?.metrics_summary?.files[d] ?? 0,
                             user: summary?.metrics_summary?.users[d] ?? 0,
+                            file: summary?.metrics_summary?.files[d] ?? 0,
                             share: summary?.metrics_summary?.shares[d] ?? 0,
                           }))}
                         >
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="name" />
-                          <YAxis allowDecimals={false} />
+                          <YAxis
+                            allowDecimals={false}
+                            width={(() => {
+                              const yAxisValue = [
+                                ...(summary?.metrics_summary?.users ?? []),
+                                ...(summary?.metrics_summary?.files ?? []),
+                                ...(summary?.metrics_summary?.shares ?? []),
+                              ];
+                              const yAxisUpperLimit = yAxisValue.length ? Math.max(...yAxisValue) : 0;
+                              const yAxisDigits = yAxisUpperLimit > 0 ? Math.floor(Math.log10(yAxisUpperLimit)) + 1 : 1;
+                              return 3 + yAxisDigits * 9;
+                            })()}
+                          />
                           <Tooltip />
                           <Legend />
-                          <Line name={t("nav.files")} type="monotone" dataKey="file" stroke="#3f51b5" />
-                          <Line name={t("nav.users")} type="monotone" dataKey="user" stroke="#82ca9d" />
-                          <Line name={t("nav.shares")} type="monotone" dataKey="share" stroke="#e91e63" />
+                          <Line name={t("nav.users")} type="monotone" dataKey="user" stroke={blue[600]} />
+                          <Line name={t("nav.files")} type="monotone" dataKey="file" stroke={yellow[800]} />
+                          <Line name={t("nav.shares")} type="monotone" dataKey="share" stroke={green[800]} />
                         </LineChart>
                       </ResponsiveContainer>
                     )}
@@ -225,7 +237,7 @@ const Home = () => {
                             </Avatar>
                           </ListItemAvatar>
                           <ListItemText
-                            secondary={t("summary.totalFiles")}
+                            secondary={t("summary.totalFilesAndFolders")}
                             primary={summary.metrics_summary.file_total.toLocaleString()}
                           />
                         </ListItem>
