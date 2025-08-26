@@ -167,14 +167,16 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
                   {t("settings.preferredLanguage")}
                 </Typography>
-                <Box>
-                  <SecondaryButton
-                    variant="contained"
-                    onClick={() => (index === 0 ? undefined : setPreferredLanguage(index))}
-                  >
-                    {t("settings.setAsPreferredLanguage")}
-                  </SecondaryButton>
-                </Box>
+                {index != 0 && (
+                  <Box>
+                    <SecondaryButton
+                      variant="contained"
+                      onClick={() => (index === 0 ? undefined : setPreferredLanguage(index))}
+                    >
+                      {t("settings.setAsPreferredLanguage")}
+                    </SecondaryButton>
+                  </Box>
+                )}
                 <NoMarginHelperText>
                   {t(index === 0 ? "settings.alreadyAsPreferredLanguageDes" : "settings.setAsPreferredLanguageDes")}
                 </NoMarginHelperText>
