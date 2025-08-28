@@ -1,3 +1,4 @@
+import { Delete } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -117,6 +118,16 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
     setCurrentTab(templates.length);
   };
 
+  const removeLanguage = (index: number) => {
+    isUpdatingFromProp.current = false; // Ensure this is a user interaction
+    const updatedTemplates = templates.filter((_, i) => i !== index);
+    setTemplates(updatedTemplates);
+
+    if (currentTab >= updatedTemplates.length) {
+      setCurrentTab(updatedTemplates.length - 1); // Move to the last tab if current is out of range
+    }
+  };
+
   const setPreferredLanguage = (index: number) => {
     isUpdatingFromProp.current = false; // Ensure this is a user interaction
     setTemplates([templates[index], ...templates.filter((_, i) => i !== index)]);
@@ -164,7 +175,7 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
           {currentTab === index && (
             <Box>
               <FormControl fullWidth sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                <Typography variant="subtitle2" sx={{ mb: index === 0 ? 0 : 1 }}>
                   {t("settings.preferredLanguage")}
                 </Typography>
                 {index != 0 && (
@@ -189,7 +200,7 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
                 <DenseFilledTextField
                   fullWidth
                   value={template.title}
-                  onChange={(e) => updateTemplate(index, "title", e.target.value)}
+                  onChange={(e) => updateTemplate(index, "title", e.target.value || "")}
                 />
                 <NoMarginHelperText>
                   <Trans
@@ -220,13 +231,36 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
                   />
                 </Suspense>
               </Box>
-              <NoMarginHelperText>
+              <NoMarginHelperText sx={{ mb: 2 }}>
                 <Trans
                   i18nKey={"settings.emailBodyDes"}
                   ns={"dashboard"}
                   components={[<Link onClick={openMagicVar} href={"#"} />]}
                 />
               </NoMarginHelperText>
+
+              <FormControl fullWidth>
+                <Typography variant="subtitle2" sx={{ mb: index === 0 ? 0 : 1 }}>
+                  {t("settings.removeLanguage")}
+                </Typography>
+                {index != 0 && (
+                  <Box>
+                    <Button
+                      startIcon={<Delete />}
+                      variant="contained"
+                      color="error"
+                      onClick={() => removeLanguage(index)}
+                    >
+                      {t("settings.removeLanguageBtn")}
+                    </Button>
+                  </Box>
+                )}
+                {index === 0 && (
+                  <NoMarginHelperText>
+                    {t("settings.cannotRemovePreferredLanguageDes")}
+                  </NoMarginHelperText>
+                )}
+              </FormControl>
             </Box>
           )}
         </Box>
