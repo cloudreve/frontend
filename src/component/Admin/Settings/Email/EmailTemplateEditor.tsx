@@ -255,9 +255,11 @@ const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ value, onChan
                     </Button>
                   </Box>
                 )}
-                <NoMarginHelperText>
-                  {t(index === 0 ? "settings.removePreferredLanguageDes" : "settings.removeLanguageDes")}
-                </NoMarginHelperText>
+                {index === 0 && (
+                  <NoMarginHelperText>
+                    {t("settings.cannotRemovePreferredLanguageDes")}
+                  </NoMarginHelperText>
+                )}
               </FormControl>
             </Box>
           )}
