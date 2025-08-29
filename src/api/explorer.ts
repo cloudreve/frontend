@@ -217,6 +217,11 @@ export interface FileThumbResponse {
   expires?: string;
 }
 
+// Request body for resetting thumbnails for given file URIs
+export interface ResetThumbRequest {
+  uris: string[];
+}
+
 export interface DeleteFileService {
   uris: string[];
   unlink?: boolean;

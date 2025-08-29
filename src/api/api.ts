@@ -67,6 +67,7 @@ import {
   VersionControlService,
   ViewerGroup,
   ViewerSessionResponse,
+  ResetThumbRequest,
 } from "./explorer.ts";
 import { AppError, Code, CrHeaders, defaultOpts, send, ThunkResponse } from "./request.ts";
 import { CreateDavAccountService, DavAccount, ListDavAccountsResponse, ListDavAccountsService } from "./setting.ts";
@@ -292,11 +293,6 @@ export function getFileThumb(path: string, contextHint?: string): ThunkResponse<
   };
 }
 
-// Reset thumbnails for given file URIs by clearing thumb:disabled metadata
-export interface ResetThumbRequest {
-  uris: string[];
-}
-
 export function sendResetFileThumbs(req: ResetThumbRequest): ThunkResponse<void> {
   return async (dispatch, _getState) => {
     return await dispatch(
@@ -314,113 +310,22 @@ export function sendResetFileThumbs(req: ResetThumbRequest): ThunkResponse<void>
   };
 }
 
-// Get supported thumbnail file extensions by reading enabled generators' settings
-export function getSupportedThumbExts(): ThunkResponse<string[]> {
+// Thin wrapper to query supported thumbnail extensions from backend
+export function getThumbExts(): ThunkResponse<{ thumb_exts?: string[] }> {
   return async (dispatch, _getState) => {
-    // Try backend endpoint first if available
-    try {
-      const remote = await dispatch(
-        send<{ exts?: string[] }>(
-          "/file/thumb/exts",
-          {
-            method: "GET",
-          },
-          {
-            ...defaultOpts,
-          },
-        ),
-      );
-      if (remote && Array.isArray(remote.exts)) {
-        return remote.exts;
-      }
-    } catch (_e) {
-      // Fallback to compute from settings below
-    }
-
-    const keys = {
-      keys: [
-        "thumb_builtin_enabled",
-        "thumb_vips_enabled",
-        "thumb_vips_exts",
-        "thumb_ffmpeg_enabled",
-        "thumb_ffmpeg_exts",
-        "thumb_libreoffice_enabled",
-        "thumb_libreoffice_exts",
-        "thumb_music_cover_enabled",
-        "thumb_music_cover_exts",
-        "thumb_libraw_enabled",
-        "thumb_libraw_exts",
-      ],
-    };
-
-    const settings = await dispatch(getSettings(keys));
-
-    const enabled = (k: string) => {
-      const v = (settings?.[k] ?? "").toString().toLowerCase();
-      return v === "1" || v === "true";
-    };
-    const parseExts = (v?: string) =>
-      (v || "")
-        .split(",")
-        .map((s) => s.trim().toLowerCase())
-        .filter((s) => !!s);
-
-    const exts = new Set<string>();
-
-    if (enabled("thumb_vips_enabled")) {
-      parseExts(settings?.["thumb_vips_exts"]).forEach((e) => exts.add(e));
-    }
-    if (enabled("thumb_ffmpeg_enabled")) {
-      parseExts(settings?.["thumb_ffmpeg_exts"]).forEach((e) => exts.add(e));
-    }
-    if (enabled("thumb_libreoffice_enabled")) {
-      parseExts(settings?.["thumb_libreoffice_exts"]).forEach((e) => exts.add(e));
-    }
-    if (enabled("thumb_music_cover_enabled")) {
-      parseExts(settings?.["thumb_music_cover_exts"]).forEach((e) => exts.add(e));
-    }
-    if (enabled("thumb_libraw_enabled")) {
-      parseExts(settings?.["thumb_libraw_exts"]).forEach((e) => exts.add(e));
-    }
-
-    // Note: builtin generator does not expose explicit extensions list in settings
-    // so we do not add extra exts for it to keep behavior consistent with backend.
-
-    return Array.from(exts);
+    return await dispatch(
+      send<{ thumb_exts?: string[] }>(
+        "/site/config/thumb",
+        {
+          method: "GET",
+        },
+        {
+          ...defaultOpts,
+          noCredential: true,
+        },
+      ),
+    );
   };
-}
-
-// --- Cached supported thumbnail extensions helpers ---
-let __thumbExtsCache: Set<string> | null | undefined = undefined; // undefined: not fetched, null: unknown/fallback
-
-// Prime cache once per page. Safe to call multiple times.
-export function primeThumbExtsCache(): ThunkResponse<void> {
-  return async (dispatch, _getState) => {
-    if (__thumbExtsCache !== undefined) return;
-    try {
-      const exts = await dispatch(getSupportedThumbExts());
-      __thumbExtsCache = new Set(exts.map((e) => e.toLowerCase()));
-    } catch (_e) {
-      // Mark as unknown to fall back to legacy behavior
-      __thumbExtsCache = null;
-    }
-  };
-}
-
-export function getCachedThumbExts(): Set<string> | null | undefined {
-  return __thumbExtsCache;
-}
-
-// Check if a file name is likely supported based on cached exts
-// Returns undefined if cache is not ready (treat as supported by caller).
-export function isThumbExtSupportedSync(fileName: string): boolean | undefined {
-  const cache = __thumbExtsCache;
-  if (cache === undefined) return undefined;
-  if (cache === null) return true; // unknown => allow
-  const idx = fileName.lastIndexOf(".");
-  const ext = idx >= 0 ? fileName.substring(idx + 1).toLowerCase() : "";
-  if (!ext) return false;
-  return cache.has(ext);
 }
 
 export function getUserInfo(uid: string): ThunkResponse<User> {

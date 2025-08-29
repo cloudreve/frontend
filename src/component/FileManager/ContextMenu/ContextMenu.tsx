@@ -22,7 +22,7 @@ import {
 } from "../../../redux/thunks/file.ts";
 import { refreshFileList, uploadClicked, uploadFromClipboard } from "../../../redux/thunks/filemanager.ts";
 import { openViewers } from "../../../redux/thunks/viewer.ts";
-import { primeThumbExtsCache } from "../../../api/api.ts";
+import { primeThumbExtsCache } from "../../../redux/thunks/thumb.ts";
 import AppFolder from "../../Icons/AppFolder.tsx";
 import ArchiveArrow from "../../Icons/ArchiveArrow.tsx";
 import ArrowSync from "../../Icons/ArrowSync.tsx";

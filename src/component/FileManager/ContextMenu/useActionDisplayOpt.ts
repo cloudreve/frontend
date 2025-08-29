@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { FileResponse, FileType, Metadata, NavigatorCapability } from "../../../api/explorer.ts";
-import { getCachedThumbExts } from "../../../api/api.ts";
+import { getCachedThumbExts } from "../../../redux/thunks/thumb.ts";
 import { GroupPermission } from "../../../api/user.ts";
 import { defaultPath } from "../../../hooks/useNavigation.tsx";
 import { ContextMenuTypes } from "../../../redux/fileManagerSlice.ts";

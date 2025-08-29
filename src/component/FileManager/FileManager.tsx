@@ -6,7 +6,7 @@ import { clearSelected } from "../../redux/fileManagerSlice.ts";
 import { resetDialogs } from "../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../redux/hooks.ts";
 import { resetFm, selectAll, shortCutDelete } from "../../redux/thunks/filemanager.ts";
-import { primeThumbExtsCache } from "../../api/api.ts";
+import { primeThumbExtsCache } from "../../redux/thunks/thumb.ts";
 import ImageViewer from "../Viewers/ImageViewer/ImageViewer.tsx";
 import Explorer from "./Explorer/Explorer.tsx";
 import { FmIndexContext } from "./FmIndexContext.tsx";

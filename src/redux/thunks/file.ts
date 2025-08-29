@@ -6,7 +6,6 @@ import {
   getFileEntityUrl,
   getFileList,
   getFileThumb,
-  getCachedThumbExts,
   sendResetFileThumbs,
   sendCreateFile,
   sendDeleteFiles,
@@ -17,6 +16,7 @@ import {
   sendUnlockFiles,
   setCurrentVersion,
 } from "../../api/api.ts";
+import { getCachedThumbExts } from "./thumb.ts";
 import {
   ConflictDetail,
   DirectLink,
