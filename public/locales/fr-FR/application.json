@@ -18,6 +18,7 @@
     "email": "E-mail",
     "password": "Mot de passe",
     "captcha": "CAPTCHA",
+    "captchaError": "Impossible de charger le CAPTCHA : {{message}}",
     "resetThumbnail": "Réinitialiser la miniature",
     "resetThumbnailRequested": "Réinitialisation de la miniature demandée.",
     "noFileCanResetThumbnail": "Aucun fichier pouvant réinitialiser la miniature.",
