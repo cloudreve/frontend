@@ -232,6 +232,12 @@ const Uploader = () => {
         );
       }, 2000);
     }
+
+    return () => {
+      if (uploadManager) {
+        uploadManager.destroy();
+      }
+    };
   }, []);
 
   useEffect(() => {

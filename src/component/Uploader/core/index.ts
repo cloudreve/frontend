@@ -53,6 +53,7 @@ export default class UploadManager {
   private id = ++UploadManager.id;
   // used for proactive upload (drop, paste)
   private currentPath?: string;
+  private options: Option;
 
   constructor(private o: Option) {
     this.logger = new Logger(o.logLevel, "MANAGER");
@@ -62,31 +63,24 @@ export default class UploadManager {
     this.fileInput = getFileInput(this.id, false);
     this.directoryInput = getFileInput(this.id, true);
     this.overwrite = o.overwrite;
+    this.options = o;
 
     if (o.dropZone) {
       this.logger.info(`Drag and drop container set to:`, o.dropZone);
-      o.dropZone.addEventListener("dragenter", (e) => {
-        if (isFileDrop(e) && this.currentPath) {
-          e.preventDefault();
-          if (o.onDropOver) {
-            o.onDropOver(e);
-          }
-        }
-      });
-
-      o.dropZone.addEventListener("dragleave", (e) => {
-        if (isFileDrop(e) && this.currentPath) {
-          e.preventDefault();
-          if (o.onDropLeave) {
-            o.onDropLeave(e);
-          }
-        }
-      });
-
+      o.dropZone.addEventListener("dragenter", this.dragEnter);
+      o.dropZone.addEventListener("dragleave", this.dragLeave);
       o.dropZone.addEventListener("drop", this.onFileDroppedIn);
     }
 
     window.addEventListener("beforeunload", this.beforeLeave);
+  }
+
+  destroy() {
+    if (this.options.dropZone) {
+      this.options.dropZone.removeEventListener("dragenter", this.dragEnter);
+      this.options.dropZone.removeEventListener("dragleave", this.dragLeave);
+      this.options.dropZone.removeEventListener("drop", this.onFileDroppedIn);
+    }
   }
 
   beforeLeave = (e: BeforeUnloadEvent) => {
@@ -215,6 +209,24 @@ export default class UploadManager {
       });
     }
     this.o.onProactiveFileAdded && this.o.onProactiveFileAdded(uploaders);
+  };
+
+  private dragEnter = (e: DragEvent) => {
+    if (isFileDrop(e) && this.currentPath) {
+      e.preventDefault();
+      if (this.options.onDropOver) {
+        this.options.onDropOver(e);
+      }
+    }
+  };
+
+  private dragLeave = (e: DragEvent) => {
+    if (isFileDrop(e) && this.currentPath) {
+      e.preventDefault();
+      if (this.options.onDropLeave) {
+        this.options.onDropLeave(e);
+      }
+    }
   };
 
   private addFiles = (
