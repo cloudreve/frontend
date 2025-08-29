@@ -10,11 +10,13 @@ import {
 } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
 import Archive from "../../Icons/Archive.tsx";
+import RectangleLandscapeSync from "../../Icons/RectangleLandscapeSync.tsx";
 import BranchForkLink from "../../Icons/BranchForkLink.tsx";
 import HistoryOutlined from "../../Icons/HistoryOutlined.tsx";
 import LinkSetting from "../../Icons/LinkSetting.tsx";
 import { CascadingContext, CascadingMenuItem } from "./CascadingMenu.tsx";
 import { SubMenuItemsProps } from "./OrganizeMenuItems.tsx";
+import { resetThumbnails } from "../../../redux/thunks/file.ts";
 
 const MoreMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
   const { rootPopupState } = useContext(CascadingContext);
@@ -103,6 +105,14 @@ const MoreMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
             <Archive fontSize="small" />
           </ListItemIcon>
           <ListItemText>{t("application:fileManager.createArchive")}</ListItemText>
+        </CascadingMenuItem>
+      )}
+      {displayOpt.showResetThumb && (
+        <CascadingMenuItem onClick={onClick(() => dispatch(resetThumbnails(targets)))}>
+          <ListItemIcon>
+            <RectangleLandscapeSync fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>{t("application:fileManager.resetThumbnail")}</ListItemText>
         </CascadingMenuItem>
       )}
     </>

@@ -6,6 +6,8 @@ import {
   getFileEntityUrl,
   getFileList,
   getFileThumb,
+  getCachedThumbExts,
+  sendResetFileThumbs,
   sendCreateFile,
   sendDeleteFiles,
   sendMetadataPatch,
@@ -39,7 +41,7 @@ import { loadingDebounceMs } from "../../constants";
 import { defaultPath } from "../../hooks/useNavigation.tsx";
 import SessionManager, { UserSettings } from "../../session";
 import { addRecentUsedColor, addUsedTags } from "../../session/utils.ts";
-import { getFileLinkedUri } from "../../util";
+import { fileExtension, getFileLinkedUri } from "../../util";
 import Boolset from "../../util/boolset.ts";
 import { canCopyMoveTo } from "../../util/permission.ts";
 import CrUri, { Filesystem } from "../../util/uri.ts";
@@ -1151,6 +1153,66 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
       "modals.generatingSourceLinks",
     );
     dispatch(setDirectLinkDialog({ open: true, res }));
+  };
+}
+
+export function resetThumbnails(files: FileResponse[]): AppThunk {
+  return async (dispatch, _getState) => {
+    const cache = getCachedThumbExts();
+    const uris = files
+      .filter((f) => f.type == FileType.file)
+      .filter((f) =>
+        cache === undefined || cache === null ? true : cache.has((fileExtension(f.name) || "").toLowerCase()),
+      )
+      .map((f) => getFileLinkedUri(f));
+
+    if (uris.length === 0) {
+      enqueueSnackbar({
+        message: i18next.t("application:fileManager.noFileCanResetThumbnail"),
+        preventDuplicate: true,
+        variant: "warning",
+        action: DefaultCloseAction,
+      });
+      return;
+    }
+
+    try {
+      await dispatch(
+        sendResetFileThumbs({
+          uris,
+        }),
+      );
+
+      enqueueSnackbar({
+        message: i18next.t("application:fileManager.resetThumbnailRequested"),
+        variant: "success",
+        action: DefaultCloseAction,
+      });
+    } catch (_e) {
+      // Error snackbar is handled in send()
+    } finally {
+      // Clear cached thumbnails so they will be reloaded next time
+      files
+        .filter((f) => f.type == FileType.file)
+        .forEach((f) =>
+          dispatch(
+            fileUpdated({
+              index: 0,
+              value: [
+                {
+                  file: f,
+                  oldPath: f.path,
+                },
+              ],
+            }),
+          ),
+        );
+
+      // Use the same refresh approach as uploader: refresh after a short delay
+      setTimeout(() => {
+        dispatch(refreshFileList(0));
+      }, 1000);
+    }
   };
 }
 

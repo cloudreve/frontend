@@ -6,6 +6,7 @@ import { clearSelected } from "../../redux/fileManagerSlice.ts";
 import { resetDialogs } from "../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../redux/hooks.ts";
 import { resetFm, selectAll, shortCutDelete } from "../../redux/thunks/filemanager.ts";
+import { primeThumbExtsCache } from "../../api/api.ts";
 import ImageViewer from "../Viewers/ImageViewer/ImageViewer.tsx";
 import Explorer from "./Explorer/Explorer.tsx";
 import { FmIndexContext } from "./FmIndexContext.tsx";
@@ -37,6 +38,8 @@ export const FileManager = ({ index = 0, initialPath, skipRender }: FileManagerP
   useEffect(() => {
     if (index == FileManagerIndex.main) {
       dispatch(resetDialogs());
+      // Prime supported thumbnail extension cache once per page
+      dispatch(primeThumbExtsCache());
       return () => {
         dispatch(resetFm(index));
       };

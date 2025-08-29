@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { FileResponse, FileType, Metadata, NavigatorCapability } from "../../../api/explorer.ts";
+import { getCachedThumbExts } from "../../../api/api.ts";
 import { GroupPermission } from "../../../api/user.ts";
 import { defaultPath } from "../../../hooks/useNavigation.tsx";
 import { ContextMenuTypes } from "../../../redux/fileManagerSlice.ts";
@@ -77,6 +78,7 @@ export interface DisplayOption {
   showDirectLinkManagement?: boolean;
   showManageShares?: boolean;
   showCreateArchive?: boolean;
+  showResetThumb?: boolean;
 
   andCapability?: Boolset;
   orCapability?: Boolset;
@@ -291,11 +293,23 @@ export const getActionOpt = (
     display.orCapability &&
     display.orCapability.enabled(NavigatorCapability.download_file);
 
+  // Reset thumbnail is available when at least one file is selected and
+  // current capability allows generating thumbnails
+  // Show only when at least one selected file has a supported extension,
+  // based on cached supported thumbnail extensions.
+  const cache = getCachedThumbExts();
+  const anySupported =
+    cache instanceof Set
+      ? targets.some((f) => f.type == FileType.file && cache.has((fileExtension(f.name) || "").toLowerCase()))
+      : false;
+  display.showResetThumb = display.hasFile && anySupported;
+
   display.showMore =
     display.showVersionControl ||
     display.showManageShares ||
     display.showCreateArchive ||
-    display.showDirectLinkManagement;
+    display.showDirectLinkManagement ||
+    display.showResetThumb;
   return display;
 };
 

@@ -1,5 +1,5 @@
 import { Box, Divider, ListItemIcon, ListItemText, Menu, MenuItem, styled, Typography, useTheme } from "@mui/material";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { closeContextMenu } from "../../../redux/fileManagerSlice.ts";
 import { CreateNewDialogType } from "../../../redux/globalStateSlice.ts";
@@ -22,6 +22,7 @@ import {
 } from "../../../redux/thunks/file.ts";
 import { refreshFileList, uploadClicked, uploadFromClipboard } from "../../../redux/thunks/filemanager.ts";
 import { openViewers } from "../../../redux/thunks/viewer.ts";
+import { primeThumbExtsCache } from "../../../api/api.ts";
 import AppFolder from "../../Icons/AppFolder.tsx";
 import ArchiveArrow from "../../Icons/ArchiveArrow.tsx";
 import ArrowSync from "../../Icons/ArrowSync.tsx";
@@ -106,6 +107,13 @@ const ContextMenu = ({ fmIndex = 0 }: ContextMenuProps) => {
   const onClose = useCallback(() => {
     dispatch(closeContextMenu({ index: fmIndex, value: undefined }));
   }, [dispatch]);
+
+  // Ensure supported thumbnail extensions are primed when menu opens
+  useEffect(() => {
+    if (contextMenuOpen) {
+      dispatch(primeThumbExtsCache());
+    }
+  }, [contextMenuOpen, dispatch]);
 
   const showOpenWithCascading = displayOpt.showOpenWithCascading && displayOpt.showOpenWithCascading();
   const showOpenWith = displayOpt.showOpenWith && displayOpt.showOpenWith();
