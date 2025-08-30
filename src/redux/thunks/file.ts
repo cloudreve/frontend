@@ -6,7 +6,6 @@ import {
   getFileEntityUrl,
   getFileList,
   getFileThumb,
-  sendResetFileThumbs,
   sendCreateFile,
   sendDeleteFiles,
   sendMetadataPatch,
@@ -1157,7 +1156,7 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
 }
 
 export function resetThumbnails(files: FileResponse[]): AppThunk {
-  return async (dispatch, _getState) => {
+  return async (dispatch, getState) => {
     const cache = getCachedThumbExts();
     const uris = files
       .filter((f) => f.type == FileType.file)
@@ -1177,41 +1176,39 @@ export function resetThumbnails(files: FileResponse[]): AppThunk {
     }
 
     try {
+      // Re-enable thumbnails by removing the disable mark, and update local metadata/cache.
+      const targetFiles = files
+        .filter((f) => f.type == FileType.file)
+        .filter((f) =>
+          cache === undefined || cache === null ? true : cache.has((fileExtension(f.name) || "").toLowerCase()),
+        );
+
       await dispatch(
-        sendResetFileThumbs({
-          uris,
-        }),
+        patchFileMetadata(FileManagerIndex.main, targetFiles, [
+          {
+            key: Metadata.thumbDisabled,
+            remove: true,
+          },
+        ]),
       );
 
+      // 预取：立即为所选文件请求缩略图（不依赖列表刷新或滚动触发）
+      const fm = getState().fileManager[FileManagerIndex.main];
+      const toPrefetch = targetFiles
+        .map((f) => fm.list?.files.find((ff) => ff.path === f.path) || f)
+        .filter((f): f is FileResponse => !!f);
+      // 并发触发 GET /file/thumb
+      await Promise.allSettled(toPrefetch.map((f) => dispatch(loadFileThumb(FileManagerIndex.main, f))));
+
+      // 成功信息
       enqueueSnackbar({
         message: i18next.t("application:fileManager.resetThumbnailRequested"),
         variant: "success",
         action: DefaultCloseAction,
       });
+      // 不再刷新文件列表；组件会基于metadata变化自动重新请求所选文件的缩略图
     } catch (_e) {
       // Error snackbar is handled in send()
-    } finally {
-      // Clear cached thumbnails so they will be reloaded next time
-      files
-        .filter((f) => f.type == FileType.file)
-        .forEach((f) =>
-          dispatch(
-            fileUpdated({
-              index: 0,
-              value: [
-                {
-                  file: f,
-                  oldPath: f.path,
-                },
-              ],
-            }),
-          ),
-        );
-
-      // Use the same refresh approach as uploader: refresh after a short delay
-      setTimeout(() => {
-        dispatch(refreshFileList(0));
-      }, 1000);
     }
   };
 }

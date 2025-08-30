@@ -67,7 +67,6 @@ import {
   VersionControlService,
   ViewerGroup,
   ViewerSessionResponse,
-  ResetThumbRequest,
 } from "./explorer.ts";
 import { AppError, Code, CrHeaders, defaultOpts, send, ThunkResponse } from "./request.ts";
 import { CreateDavAccountService, DavAccount, ListDavAccountsResponse, ListDavAccountsService } from "./setting.ts";
@@ -287,23 +286,6 @@ export function getFileThumb(path: string, contextHint?: string): ThunkResponse<
         {
           ...defaultOpts,
           bypassSnackbar: (_e) => true,
-        },
-      ),
-    );
-  };
-}
-
-export function sendResetFileThumbs(req: ResetThumbRequest): ThunkResponse<void> {
-  return async (dispatch, _getState) => {
-    return await dispatch(
-      send(
-        "/file/thumb/reset",
-        {
-          data: req,
-          method: "POST",
-        },
-        {
-          ...defaultOpts,
         },
       ),
     );

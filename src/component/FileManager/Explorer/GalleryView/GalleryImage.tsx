@@ -93,8 +93,11 @@ const GalleryImage = memo((props: FileBlockProps) => {
       return;
     }
 
+    // Reset to loading state before reloading thumb (e.g., after reset)
+    setImageLoading(true);
+    setThumbSrc(undefined);
     tryLoadThumbSrc();
-  }, [inView]);
+  }, [inView, file, file.metadata?.[Metadata.thumbDisabled]]);
 
   const onIconClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
