@@ -292,6 +292,24 @@ export function getFileThumb(path: string, contextHint?: string): ThunkResponse<
   };
 }
 
+// Thin wrapper to query supported thumbnail extensions from backend
+export function getThumbExts(): ThunkResponse<{ thumb_exts?: string[] }> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send<{ thumb_exts?: string[] }>(
+        "/site/config/thumb",
+        {
+          method: "GET",
+        },
+        {
+          ...defaultOpts,
+          noCredential: true,
+        },
+      ),
+    );
+  };
+}
+
 export function getUserInfo(uid: string): ThunkResponse<User> {
   return async (dispatch, _getState) => {
     return await dispatch(
