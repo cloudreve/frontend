@@ -816,7 +816,7 @@
     "nativeThumbNailsGeneralObs": "Für Huawei Cloud OBS-Speicher wird der <0>Bildverarbeitungsservice</0> verwendet, um Miniaturbilder zu generieren.",
     "nativeThumbNailsGeneralUpyun": "Für Upyun-Speicher wird der <0>Bildverarbeitungsservice</0> verwendet, um Miniaturbilder zu generieren.",
     "preallocate": "Festplattenspeicher vorab zuweisen",
-    "preallocateDes": "Wenn aktiviert, wird der Upload-Anfrage des Benutzers Festplattenspeicher auf dem Speicherknoten vorab zugewiesen, nur wirksam unter Linux oder Darwin.",
+    "preallocateDes": "Wenn aktiviert, wird der Upload-Anfrage des Benutzers Festplattenspeicher auf dem Speicherknoten vorab zugewiesen, und unterstützt auch parallele Chunk-Uploads. Nur wirksam unter Linux oder Darwin.",
     "chunkConcurrency": "Parallele Chunk-Uploads",
     "chunkConcurrencyDes": "Legt die Anzahl der gleichzeitigen Chunk-Uploads beim direkten Web-Upload fest.",
     "sourceWebEdit": "Web-Online-Bearbeitung",

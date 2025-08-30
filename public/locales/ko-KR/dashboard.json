@@ -817,7 +817,7 @@
     "nativeThumbNailsGeneralObs": "Huawei Cloud OBS 스토리지의 경우 <0>이미지 처리</0> 서비스를 사용하여 썸네일을 생성합니다.",
     "nativeThumbNailsGeneralUpyun": "Upyun 스토리지의 경우 <0>이미지 처리</0> 서비스를 사용하여 썸네일을 생성합니다.",
     "preallocate": "하드 디스크 공간 사전 할당",
-    "preallocateDes": "활성화하면 사용자가 파일을 업로드할 때 하드 디스크 공간을 미리 할당하며, Linux 또는 Darwin에서만 유효합니다.",
+    "preallocateDes": "활성화하면 사용자가 파일을 업로드할 때 하드 디스크 공간을 미리 할당하며, 동시에 병렬 청크 업로드도 지원합니다. Linux 또는 Darwin에서만 유효합니다.",
     "chunkConcurrency": "병렬 청크 업로드 수",
     "chunkConcurrencyDes": "웹 직접 업로드 시 동시 진행되는 청크 업로드 수를 설정합니다.",
     "sourceWebEdit": "웹 온라인 편집",

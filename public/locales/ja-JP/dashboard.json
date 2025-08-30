@@ -817,7 +817,7 @@
     "nativeThumbNailsGeneralObs": "Huawei Cloud OBSストレージの場合、<0>画像処理</0>サービスを使用してサムネイルを生成します。",
     "nativeThumbNailsGeneralUpyun": "Upyun ストレージの場合、<0>画像処理</0>サービスを使用してサムネイルを生成します。",
     "preallocate": "ディスク領域の事前割り当て",
-    "preallocateDes": "有効にすると、ユーザーがファイルをアップロードする際にディスク領域が事前に割り当てられます。LinuxまたはDarwinでのみ有効です。",
+    "preallocateDes": "有効にすると、ユーザーがファイルをアップロードする際にディスク領域が事前に割り当てられ、同時に並行チャンクアップロードもサポートします。LinuxまたはDarwinでのみ有効です。",
     "chunkConcurrency": "並行チャンクアップロード数",
     "chunkConcurrencyDes": "Webダイレクトアップロード時の並行チャンクアップロード数を設定します。",
     "sourceWebEdit": "Webオンライン編集",

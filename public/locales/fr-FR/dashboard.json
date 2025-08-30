@@ -816,7 +816,7 @@
     "nativeThumbNailsGeneralObs": "Pour le stockage Huawei Cloud OBS, le service de <0>traitement d'images</0> sera utilisé pour générer des miniatures.",
     "nativeThumbNailsGeneralUpyun": "Pour le stockage Upyun, le service de <0>traitement d'images</0> sera utilisé pour générer des miniatures.",
     "preallocate": "Pré-allouer l'espace disque",
-    "preallocateDes": "Lorsqu'activé, la demande d'upload de l'utilisateur pré-allouera l'espace disque sur le nœud de stockage, efficace seulement sur Linux ou Darwin.",
+    "preallocateDes": "Lorsqu'activé, la demande d'upload de l'utilisateur pré-allouera l'espace disque sur le nœud de stockage, et prend également en charge le téléchargement parallèle de chunks. Efficace seulement sur Linux ou Darwin.",
     "chunkConcurrency": "Uploads de chunks concurrents",
     "chunkConcurrencyDes": "Définit le nombre d'uploads de chunks concurrents lors de l'utilisation de l'upload direct web.",
     "sourceWebEdit": "Édition en ligne Web",

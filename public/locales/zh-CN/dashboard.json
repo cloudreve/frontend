@@ -817,7 +817,7 @@
     "nativeThumbNailsGeneralObs": "对于华为云 OBS 存储，<0>图片处理</0>服务会被用来生成缩略图。",
     "nativeThumbNailsGeneralUpyun": "对于又拍云存储，<0>图片处理</0>服务会被用来生成缩略图。",
     "preallocate": "预分配硬盘空间",
-    "preallocateDes": "开启后，用户上传文件时会预先分配硬盘空间，只在 Linux 或 Darwin 下有效。",
+    "preallocateDes": "开启后，用户上传文件时会预先分配硬盘空间，同时也可支持并行分片上传。只在 Linux 或 Darwin 下有效。",
     "chunkConcurrency": "并行上传分片数",
     "chunkConcurrencyDes": "设定 Web 端直传时，同时进行的分片上传数量。",
     "sourceWebEdit": "Web 在线编辑",

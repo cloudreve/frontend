@@ -1,4 +1,13 @@
-import { FormControl, FormControlLabel, InputAdornment, Link, MenuItem, Switch, Typography } from "@mui/material";
+import {
+  Collapse,
+  FormControl,
+  FormControlLabel,
+  InputAdornment,
+  Link,
+  MenuItem,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { StoragePolicy } from "../../../../../api/dashboard";
@@ -27,6 +36,19 @@ const StorageAndUploadSection = () => {
 
   const showPreallocate = useMemo(() => {
     return values.type === PolicyType.local || values.type === PolicyType.remote;
+  }, [values.type]);
+
+  const showChunkConcurrency = useMemo(() => {
+    return (
+      values.type === PolicyType.s3 ||
+      values.type === PolicyType.local ||
+      values.type === PolicyType.remote ||
+      values.type === PolicyType.ks3 ||
+      values.type === PolicyType.cos ||
+      values.type === PolicyType.obs ||
+      values.type === PolicyType.oss ||
+      values.type === PolicyType.qiniu
+    );
   }, [values.type]);
 
   const onDirNameChange = useCallback(
@@ -362,29 +384,26 @@ const StorageAndUploadSection = () => {
             </FormControl>
           </SettingForm>
         )}
-        {(values.type === PolicyType.s3 ||
-          values.type === PolicyType.ks3 ||
-          values.type === PolicyType.cos ||
-          values.type === PolicyType.obs ||
-          values.type === PolicyType.oss ||
-          values.type === PolicyType.qiniu) && (
-          <SettingForm lgWidth={5} title={t("policy.chunkConcurrency")}>
-            <FormControl fullWidth>
-              <DenseFilledTextField
-                value={values.settings?.chunk_concurrency ?? 1}
-                onChange={onChunkConcurrencyChange}
-                slotProps={{
-                  htmlInput: {
-                    type: "number",
-                    min: 1,
-                    mac: 10,
-                  },
-                }}
-              />
-              <NoMarginHelperText>{t("policy.chunkConcurrencyDes")}</NoMarginHelperText>
-            </FormControl>
-          </SettingForm>
-        )}
+        <Collapse in={(!showPreallocate || values.settings?.pre_allocate) && showChunkConcurrency} unmountOnExit>
+          {showChunkConcurrency && (
+            <SettingForm lgWidth={5} title={t("policy.chunkConcurrency")}>
+              <FormControl fullWidth>
+                <DenseFilledTextField
+                  value={values.settings?.chunk_concurrency ?? 1}
+                  onChange={onChunkConcurrencyChange}
+                  slotProps={{
+                    htmlInput: {
+                      type: "number",
+                      min: 1,
+                      mac: 10,
+                    },
+                  }}
+                />
+                <NoMarginHelperText>{t("policy.chunkConcurrencyDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+          )}
+        </Collapse>
         {values.type !== PolicyType.local && (
           <>
             <SettingForm lgWidth={5}>
