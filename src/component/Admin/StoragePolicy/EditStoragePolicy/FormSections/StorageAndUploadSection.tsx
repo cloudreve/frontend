@@ -188,6 +188,21 @@ const StorageAndUploadSection = () => {
     [setPolicy],
   );
 
+  const onChunkConcurrencyChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      let value: number | undefined = parseInt(e.target.value) ?? 1;
+      if (value <= 1) {
+        value = undefined;
+      }
+
+      setPolicy((p: StoragePolicy) => ({
+        ...p,
+        settings: { ...p.settings, chunk_concurrency: value },
+      }));
+    },
+    [setPolicy],
+  );
+
   return (
     <SettingSection>
       <Typography variant="h6" gutterBottom>
@@ -344,6 +359,29 @@ const StorageAndUploadSection = () => {
                   ]}
                 />
               </NoMarginHelperText>
+            </FormControl>
+          </SettingForm>
+        )}
+        {(values.type === PolicyType.s3 ||
+          values.type === PolicyType.ks3 ||
+          values.type === PolicyType.cos ||
+          values.type === PolicyType.obs ||
+          values.type === PolicyType.oss ||
+          values.type === PolicyType.qiniu) && (
+          <SettingForm lgWidth={5} title={t("policy.chunkConcurrency")}>
+            <FormControl fullWidth>
+              <DenseFilledTextField
+                value={values.settings?.chunk_concurrency ?? 1}
+                onChange={onChunkConcurrencyChange}
+                slotProps={{
+                  htmlInput: {
+                    type: "number",
+                    min: 1,
+                    mac: 10,
+                  },
+                }}
+              />
+              <NoMarginHelperText>{t("policy.chunkConcurrencyDes")}</NoMarginHelperText>
             </FormControl>
           </SettingForm>
         )}

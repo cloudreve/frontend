@@ -817,6 +817,8 @@
     "nativeThumbNailsGeneralUpyun": "Per l'archiviazione Upyun, verrà utilizzato il servizio <0>elaborazione immagini</0> per generare miniature.",
     "preallocate": "Pre-alloca spazio disco",
     "preallocateDes": "Quando abilitato, la richiesta di caricamento dell'utente pre-allocherà spazio disco sul nodo di archiviazione, efficace solo su Linux o Darwin.",
+    "chunkConcurrency": "Caricamenti chunk concorrenti",
+    "chunkConcurrencyDes": "Imposta il numero di caricamenti chunk concorrenti quando si utilizza il caricamento diretto web.",
     "sourceWebEdit": "Modifica online web",
     "uploadRelay": "Relay caricamento",
     "uploadRelayDes": "Se abilitato, le richieste di caricamento degli utenti saranno inoltrate al nodo di archiviazione tramite Cloudreve, a causa dell'impossibilità di eseguire caricamenti in chunk, regola di conseguenza il limite massimo di dimensione caricamento del server web.",

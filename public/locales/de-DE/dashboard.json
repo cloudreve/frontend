@@ -817,6 +817,8 @@
     "nativeThumbNailsGeneralUpyun": "Für Upyun-Speicher wird der <0>Bildverarbeitungsservice</0> verwendet, um Miniaturbilder zu generieren.",
     "preallocate": "Festplattenspeicher vorab zuweisen",
     "preallocateDes": "Wenn aktiviert, wird der Upload-Anfrage des Benutzers Festplattenspeicher auf dem Speicherknoten vorab zugewiesen, nur wirksam unter Linux oder Darwin.",
+    "chunkConcurrency": "Parallele Chunk-Uploads",
+    "chunkConcurrencyDes": "Legt die Anzahl der gleichzeitigen Chunk-Uploads beim direkten Web-Upload fest.",
     "sourceWebEdit": "Web-Online-Bearbeitung",
     "uploadRelay": "Upload-Relay",
     "uploadRelayDes": "Wenn aktiviert, werden die Upload-Anfragen der Benutzer über Cloudreve an den Speicherknoten weitergeleitet. Da keine Chunk-Uploads durchgeführt werden können, passen Sie bitte das maximale Upload-Größenlimit des Webservers entsprechend an.",

@@ -818,6 +818,8 @@
     "nativeThumbNailsGeneralUpyun": "Upyun ストレージの場合、<0>画像処理</0>サービスを使用してサムネイルを生成します。",
     "preallocate": "ディスク領域の事前割り当て",
     "preallocateDes": "有効にすると、ユーザーがファイルをアップロードする際にディスク領域が事前に割り当てられます。LinuxまたはDarwinでのみ有効です。",
+    "chunkConcurrency": "並行チャンクアップロード数",
+    "chunkConcurrencyDes": "Webダイレクトアップロード時の並行チャンクアップロード数を設定します。",
     "sourceWebEdit": "Webオンライン編集",
     "uploadRelay": "中継アップロード",
     "uploadRelayDes": "有効にすると、ユーザーのアップロードリクエストはCloudreveを経由してストレージ側に転送されます。チャンクアップロードができないため、Webサーバー側の最大アップロードサイズ制限を調整してください。",

@@ -818,6 +818,8 @@
     "nativeThumbNailsGeneralUpyun": "For Upyun storage, <0>image processing</0> service will be used to generate thumbnails.",
     "preallocate": "Pre-allocate disk space",
     "preallocateDes": "When enabled, the user's upload request will be pre-allocated disk space on the storage node, only effective on Linux or Darwin.",
+    "chunkConcurrency": "Concurrent chunk uploads",
+    "chunkConcurrencyDes": "Set the number of concurrent chunk uploads when using direct web upload.",
     "sourceWebEdit": "Web online editing",
     "uploadRelay": "Upload relay",
     "uploadRelayDes": "If enabled, users' upload requests will be relayed to the storage node via Cloudreve, due to the inability to perform chunked uploads, please adjust the maximum upload size limit of the web server accordingly.",

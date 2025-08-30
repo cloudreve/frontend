@@ -234,6 +234,7 @@ export interface PolicySetting {
   use_cname?: boolean;
   source_auth?: boolean;
   qiniu_upload_cdn?: boolean;
+  chunk_concurrency?: number;
 }
 
 export interface User extends CommonMixin {

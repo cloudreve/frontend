@@ -115,6 +115,7 @@ export interface StoragePolicy {
   max_size: number;
   type: PolicyType;
   relay?: boolean;
+  chunk_concurrency?: number;
 }
 
 export interface PaginationResults {

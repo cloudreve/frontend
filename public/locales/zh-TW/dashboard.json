@@ -818,6 +818,8 @@
     "nativeThumbNailsGeneralUpyun": "對於又拍雲端儲存，<0>圖片處理</0>服務會被用來生成縮圖。",
     "preallocate": "預分配硬碟空間",
     "preallocateDes": "開啟後，使用者上傳檔案時會預先分配硬碟空間，只在 Linux 或 Darwin 下有效。",
+    "chunkConcurrency": "並行上傳分片數",
+    "chunkConcurrencyDes": "設定 Web 端直傳時，同時進行的分片上傳數量。",
     "sourceWebEdit": "Web 線上編輯",
     "uploadRelay": "中轉上傳",
     "uploadRelayDes": "開啟後，使用者的上傳請求會通過 Cloudreve 中轉到儲存端，因為無法進行分片上傳，請注意調整 Web 伺服器端最大上傳大小限制。",
