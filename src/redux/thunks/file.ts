@@ -1030,6 +1030,12 @@ export function submitCreateNew(index: number, name: string, type: number): AppT
       }),
     );
 
+    // if name does not contain "/", append cache
+    if (name.includes("/")) {
+      dispatch(refreshFileList(index));
+      return newFile;
+    }
+
     const newList = fm.list?.files ? [...fm.list.files, newFile] : [newFile];
     if (newList) {
       dispatch(setFileList({ index: FileManagerIndex.main, value: newList }));
