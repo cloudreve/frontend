@@ -1389,6 +1389,7 @@
     "entity_recycle_routine": "Entity recycle routine",
     "explicit_entity_recycle": "Explicit entity recycle",
     "upload_sentinel_check": "Upload sentinel check",
+    "import": "External import",
     "type": "Type",
     "node": "Distributed node",
     "createdBy": "Created by",

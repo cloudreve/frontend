@@ -1387,6 +1387,7 @@
     "entity_recycle_routine": "Rutina de reciclaje de entidad",
     "explicit_entity_recycle": "Reciclaje explícito de entidad",
     "upload_sentinel_check": "Verificación de centinela de subida",
+    "import": "Importación externa",
     "type": "Tipo",
     "node": "Nodo distribuido",
     "createdBy": "Creado por",

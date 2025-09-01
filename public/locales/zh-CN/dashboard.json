@@ -1389,6 +1389,7 @@
     "entity_recycle_routine": "Blob 扫描回收",
     "explicit_entity_recycle": "显式 Blob 回收",
     "upload_sentinel_check": "上传哨兵检查",
+    "import": "外部导入",
     "type": "类型",
     "node": "处理节点",
     "createdBy": "创建者",

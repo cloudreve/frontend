@@ -1388,6 +1388,7 @@
     "entity_recycle_routine": "Плановая переработка Blob",
     "explicit_entity_recycle": "Явная переработка Blob",
     "upload_sentinel_check": "Проверка загрузки",
+    "import": "Внешний импорт",
     "type": "Тип",
     "node": "Узел обработки",
     "createdBy": "Создано",

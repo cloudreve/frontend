@@ -1389,6 +1389,7 @@
     "entity_recycle_routine": "Blob 掃描回收",
     "explicit_entity_recycle": "顯式 Blob 回收",
     "upload_sentinel_check": "上傳哨兵檢查",
+    "import": "外部匯入",
     "type": "型別",
     "node": "處理節點",
     "createdBy": "建立者",

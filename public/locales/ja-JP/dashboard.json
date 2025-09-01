@@ -1389,6 +1389,7 @@
     "entity_recycle_routine": "Blobスキャン回収",
     "explicit_entity_recycle": "明示的Blob回収",
     "upload_sentinel_check": "アップロード監視チェック",
+    "import": "外部インポート",
     "type": "タイプ",
     "node": "処理ノード",
     "createdBy": "作成者",
