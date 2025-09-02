@@ -872,7 +872,7 @@ export function createShareShortcut(index: number): AppThunk {
     const base = fm?.path_root;
     const isSingleFile = fm?.list?.single_file_view;
     const files = fm?.list?.files;
-    if (!base || !isSingleFile || !files || files.length != 1) {
+    if (!base || !files) {
       return;
     }
 
