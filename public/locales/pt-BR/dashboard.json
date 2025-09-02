@@ -1387,6 +1387,7 @@
     "entity_recycle_routine": "Rotina de reciclagem de entidade",
     "explicit_entity_recycle": "Reciclagem explícita de entidade",
     "upload_sentinel_check": "Verificação de sentinela de upload",
+    "import": "Importação externa",
     "type": "Tipo",
     "node": "Nó distribuído",
     "createdBy": "Criado por",

@@ -1387,6 +1387,7 @@
     "entity_recycle_routine": "Blob 스캔 회수",
     "explicit_entity_recycle": "명시적 Blob 회수",
     "upload_sentinel_check": "업로드 센티넬 확인",
+    "import": "외부 가져오기",
     "type": "유형",
     "node": "처리 노드",
     "createdBy": "생성자",

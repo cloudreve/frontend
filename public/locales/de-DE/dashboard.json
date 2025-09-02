@@ -1394,6 +1394,7 @@
     "entity_recycle_routine": "Entity-Recycling-Routine",
     "explicit_entity_recycle": "Explizites Entity-Recycling",
     "upload_sentinel_check": "Upload-Sentinel-Prüfung",
+    "import": "Externer Import",
     "type": "Typ",
     "node": "Verteilter Knoten",
     "createdBy": "Erstellt von",

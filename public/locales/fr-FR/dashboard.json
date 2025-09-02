@@ -1387,6 +1387,7 @@
     "entity_recycle_routine": "Routine de recyclage d'entité",
     "explicit_entity_recycle": "Recyclage d'entité explicite",
     "upload_sentinel_check": "Vérification de sentinelle de téléchargement",
+    "import": "Importation externe",
     "type": "Type",
     "node": "Nœud distribué",
     "createdBy": "Créé par",
