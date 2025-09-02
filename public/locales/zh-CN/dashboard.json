@@ -1116,7 +1116,7 @@
     "allowWabDAVDes": "关闭后，用户无法通过 WebDAV 协议连接至网盘。",
     "allowWabDAVProxy": "WebDAV 代理",
     "allowWabDAVProxyDes": "启用后，用户可以配置 WebDAV 下载经由 Cloudreve 中转。",
-    "allowCompressTask": "压缩/解压缩任务",
+    "compressTask": "压缩/解压缩任务",
     "compressTaskDes": "开启后，用户可以在线压缩/解压缩文件。",
     "compressSize": "待压缩文件最大大小",
     "compressSizeDes": "用户可创建的压缩任务的文件最大总大小，填写为 0 表示不限制。这一限制在创建压缩任务时不会检查，当执行时已处理原始文件总大小超过此限制时，任务会失败。",

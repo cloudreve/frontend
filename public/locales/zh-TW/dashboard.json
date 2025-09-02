@@ -1116,7 +1116,7 @@
     "allowWabDAVDes": "關閉後，使用者無法通過 WebDAV 協議連線至網盤。",
     "allowWabDAVProxy": "WebDAV 代理",
     "allowWabDAVProxyDes": "啟用後, 使用者可以配置 WebDAV 下載經由 Cloudreve 中轉。",
-    "allowCompressTask": "壓縮/解壓縮任務",
+    "compressTask": "壓縮/解壓縮任務",
     "compressTaskDes": "開啟後，使用者可以線上壓縮/解壓縮檔案。",
     "compressSize": "待壓縮檔案最大大小",
     "compressSizeDes": "使用者可建立的壓縮任務的檔案最大總大小，填寫為 0 表示不限制。這一限制在建立壓縮任務時不會檢查，當執行時已處理原始檔案總大小超過此限制時，任務會失敗。",

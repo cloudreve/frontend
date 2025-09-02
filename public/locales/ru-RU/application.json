@@ -171,6 +171,8 @@
     "googledocs": "Онлайн-просмотрщик Google Docs",
     "m365viewer": "Онлайн-просмотрщик Microsoft Office",
     "pdfViewer": "Просмотрщик PDF",
+    "archivePreview": "Предварительный просмотр архива",
+    "extractSelected": "Извлечь выбранные файлы",
     "viewerFileSizeWarning": "Размер открываемого файла ({{file_size}}) превышает лимит {{app}} ({{max}}), возможно, он не будет работать корректно.",
     "testSubtitleStyle": "Тест стиля субтитров AaBbCc",
     "color": "Цвет",

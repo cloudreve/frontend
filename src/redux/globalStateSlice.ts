@@ -178,6 +178,7 @@ export interface GlobalStateSlice {
   // Extract archive dialog
   extractArchiveDialogOpen?: boolean;
   extractArchiveDialogFile?: FileResponse;
+  extractArchiveDialogMask?: string[];
 
   // Remote download dialog
   remoteDownloadDialogOpen?: boolean;
@@ -221,6 +222,7 @@ export interface GlobalStateSlice {
   epubViewer?: GeneralViewerState;
   musicPlayer?: MusicPlayerState;
   excalidrawViewer?: GeneralViewerState;
+  archiveViewer?: GeneralViewerState;
 
   // Viewer selector
   viewerSelector?: ViewerSelectorState;
@@ -375,13 +377,19 @@ export const globalStateSlice = createSlice({
       state.customViewer = undefined;
       state.epubViewer = undefined;
       state.excalidrawViewer = undefined;
+      state.archiveViewer = undefined;
     },
-    setExtractArchiveDialog: (state, action: PayloadAction<{ open: boolean; file?: FileResponse }>) => {
+    setExtractArchiveDialog: (
+      state,
+      action: PayloadAction<{ open: boolean; file?: FileResponse; mask?: string[] }>,
+    ) => {
       state.extractArchiveDialogOpen = action.payload.open;
       state.extractArchiveDialogFile = action.payload.file;
+      state.extractArchiveDialogMask = action.payload.mask;
     },
     closeExtractArchiveDialog: (state) => {
       state.extractArchiveDialogOpen = false;
+      state.extractArchiveDialogMask = undefined;
     },
     setCreateArchiveDialog: (
       state,
@@ -518,6 +526,12 @@ export const globalStateSlice = createSlice({
     },
     closeExcalidrawViewer: (state) => {
       state.excalidrawViewer && (state.excalidrawViewer.open = false);
+    },
+    setArchiveViewer: (state, action: PayloadAction<GeneralViewerState>) => {
+      state.archiveViewer = action.payload;
+    },
+    closeArchiveViewer: (state) => {
+      state.archiveViewer && (state.archiveViewer.open = false);
     },
     addShareInfo: (state, action: PayloadAction<{ info: Share; id: string }>) => {
       state.shareInfo[action.payload.id] = action.payload.info;
@@ -749,6 +763,8 @@ export const globalStateSlice = createSlice({
 
 export default globalStateSlice.reducer;
 export const {
+  setArchiveViewer,
+  closeArchiveViewer,
   setUploadRawFiles,
   setMobileDrawerOpen,
   setDirectLinkDialog,

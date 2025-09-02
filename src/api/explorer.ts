@@ -447,6 +447,7 @@ export interface Viewer {
   };
   templates?: NewFileTemplate[];
   platform?: ViewerPlatform;
+  required_group_permission?: number[];
 }
 
 export interface NewFileTemplate {
@@ -547,4 +548,20 @@ export enum CustomPropsType {
   user = "user",
   link = "link",
   rating = "rating",
+}
+
+export interface ArchivedFile {
+  name: string;
+  size: number;
+  updated_at?: string;
+  is_directory: boolean;
+}
+
+export interface ArchiveListFilesResponse {
+  files: ArchivedFile[];
+}
+
+export interface ArchiveListFilesService {
+  uri: string;
+  entity?: string;
 }

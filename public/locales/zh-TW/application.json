@@ -171,6 +171,8 @@
     "googledocs": "Google Docs 線上閱讀器",
     "m365viewer": "Microsoft Office 線上閱讀器",
     "pdfViewer": "PDF 閱讀器",
+    "archivePreview": "壓縮包預覽",
+    "extractSelected": "解壓縮選中的檔案",
     "viewerFileSizeWarning": "開啟的檔案大小 ({{file_size}}) 超過了 {{app}} 的限制 ({{max}})，可能無法正常工作。",
     "testSubtitleStyle": "測試字幕樣式 AaBbCc",
     "color": "顏色",

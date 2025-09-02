@@ -171,6 +171,8 @@
     "googledocs": "Google Docs 온라인 뷰어",
     "m365viewer": "Microsoft Office 온라인 뷰어",
     "pdfViewer": "PDF 뷰어",
+    "archivePreview": "아카이브 미리보기",
+    "extractSelected": "선택한 파일 압축 해제",
     "viewerFileSizeWarning": "열린 파일 크기({{file_size}})가 {{app}}의 제한({{max}})을 초과하여 정상적으로 작동하지 않을 수 있습니다.",
     "testSubtitleStyle": "자막 스타일 테스트 AaBbCc",
     "color": "색상",

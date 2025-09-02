@@ -171,6 +171,8 @@
     "googledocs": "Googleドキュメント オンラインリーダー",
     "m365viewer": "Microsoft Office オンラインリーダー",
     "pdfViewer": "PDFリーダー",
+    "archivePreview": "アーカイブプレビュー",
+    "extractSelected": "選択したファイルを展開",
     "viewerFileSizeWarning": "ファイルサイズ({{file_size}})が{{app}}の制限({{max}})を超えているため、正常に動作しない可能性があります。",
     "testSubtitleStyle": "字幕スタイルのテスト AaBbCc",
     "color": "色",

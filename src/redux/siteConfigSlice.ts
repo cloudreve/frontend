@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Viewer, ViewerPlatform } from "../api/explorer.ts";
 import { SiteConfig } from "../api/site.ts";
 import { ExpandedIconSettings, FileTypeIconSetting } from "../component/FileManager/Explorer/FileTypeIcon.tsx";
+import SessionManager from "../session/index.ts";
+import Boolset from "../util/boolset.ts";
 import { ExpandedViewerSetting } from "./thunks/viewer.ts";
-import { Viewer, ViewerPlatform } from "../api/explorer.ts";
 
 declare global {
   interface Window {
@@ -73,6 +75,18 @@ const preProcessors: {
       group.viewers.forEach((viewer) => {
         if (viewer.disabled) {
           return;
+        }
+
+        if (viewer.required_group_permission) {
+          const group = SessionManager.currentUserGroup();
+          if (!group) {
+            return;
+          }
+
+          const groupBs = new Boolset(group.permission);
+          if (viewer.required_group_permission.some((p) => !groupBs.enabled(p))) {
+            return;
+          }
         }
 
         const platform = viewer.platform || ViewerPlatform.all;

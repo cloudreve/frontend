@@ -83,6 +83,7 @@ const ExtractArchive = () => {
   const open = useAppSelector((state) => state.globalState.extractArchiveDialogOpen);
   const target = useAppSelector((state) => state.globalState.extractArchiveDialogFile);
   const current = useAppSelector((state) => state.fileManager[FileManagerIndex.main].pure_path);
+  const mask = useAppSelector((state) => state.globalState.extractArchiveDialogMask);
 
   const showEncodingOption = useMemo(() => {
     const ext = fileExtension(target?.name ?? "");
@@ -116,6 +117,7 @@ const ExtractArchive = () => {
         dst: path,
         encoding: showEncodingOption && encoding != defaultEncodingValue ? encoding : undefined,
         password: showPasswordOption && password ? password : undefined,
+        file_mask: mask ?? undefined,
       }),
     )
       .then(() => {
@@ -129,7 +131,7 @@ const ExtractArchive = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [target, encoding, path, showPasswordOption, showEncodingOption, password]);
+  }, [target, encoding, path, showPasswordOption, showEncodingOption, password, mask]);
 
   return (
     <DraggableDialog

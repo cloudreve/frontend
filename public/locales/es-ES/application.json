@@ -171,6 +171,8 @@
     "googledocs": "Visor de Google Docs",
     "m365viewer": "Visor en línea de Microsoft Office",
     "pdfViewer": "Visor PDF",
+    "archivePreview": "Vista previa del archivo",
+    "extractSelected": "Extraer archivos seleccionados",
     "viewerFileSizeWarning": "El tamaño del archivo abierto ({{file_size}}) excede el límite ({{max}}) de {{app}}, podría no funcionar correctamente.",
     "testSubtitleStyle": "Probar estilo de subtítulos AaBbCc",
     "color": "Color",

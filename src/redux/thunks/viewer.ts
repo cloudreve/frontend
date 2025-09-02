@@ -14,6 +14,7 @@ import CrUri, { CrUriPrefix } from "../../util/uri.ts";
 import { closeContextMenu, ContextMenuTypes, fileUpdated } from "../fileManagerSlice.ts";
 import {
   closeImageEditor,
+  setArchiveViewer,
   setCodeViewer,
   setCustomViewer,
   setDrawIOViewer,
@@ -52,6 +53,7 @@ export const builtInViewers = {
   epub: "epub",
   music: "music",
   excalidraw: "excalidraw",
+  archive: "archive",
 };
 
 export function openViewers(
@@ -227,6 +229,15 @@ export function openViewer(
         case builtInViewers.epub:
           dispatch(
             setEpubViewer({
+              open: true,
+              file,
+              version: preferredVersion,
+            }),
+          );
+          break;
+        case builtInViewers.archive:
+          dispatch(
+            setArchiveViewer({
               open: true,
               file,
               version: preferredVersion,

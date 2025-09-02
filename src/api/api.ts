@@ -40,6 +40,8 @@ import {
   User as UserEnt,
 } from "./dashboard.ts";
 import {
+  ArchiveListFilesResponse,
+  ArchiveListFilesService,
   CreateFileService,
   CreateViewerSessionService,
   DeleteFileService,
@@ -2000,6 +2002,20 @@ export function sendCleanupTask(args: CleanupTaskService): ThunkResponse<void> {
       send(
         `/admin/queue/cleanup`,
         { method: "POST", data: args },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function getArchiveListFiles(args: ArchiveListFilesService): ThunkResponse<ArchiveListFilesResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/file/archive`,
+        { method: "GET", params: args },
         {
           ...defaultOpts,
         },

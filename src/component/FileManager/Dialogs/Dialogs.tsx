@@ -13,6 +13,7 @@ import SaveAs from "./SaveAs.tsx";
 import Photopea from "../../Viewers/Photopea/Photopea.tsx";
 import OpenWith from "./OpenWith.tsx";
 import Wopi from "../../Viewers/Wopi.tsx";
+import ArchivePreview from "../../Viewers/ArchivePreview/ArchivePreview.tsx";
 import CodeViewer from "../../Viewers/CodeViewer/CodeViewer.tsx";
 import DrawIOViewer from "../../Viewers/DrawIO/DrawIOViewer.tsx";
 import MarkdownViewer from "../../Viewers/MarkdownEditor/MarkdownViewer.tsx";
@@ -41,6 +42,7 @@ const Dialogs = () => {
   const directLink = useAppSelector((state) => state.globalState.directLinkDialogOpen);
   const excalidrawViewer = useAppSelector((state) => state.globalState.excalidrawViewer);
   const directLinkManagement = useAppSelector((state) => state.globalState.directLinkManagementDialogOpen);
+  const archivePreview = useAppSelector((state) => state.globalState.archiveViewer);
 
   return (
     <>
@@ -75,6 +77,7 @@ const Dialogs = () => {
       {directLink != undefined && <DirectLinks />}
       {excalidrawViewer != undefined && <ExcalidrawViewer />}
       {directLinkManagement != undefined && <DirectLinksControl />}
+      {archivePreview != undefined && <ArchivePreview />}
     </>
   );
 };

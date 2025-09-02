@@ -25,6 +25,7 @@ import { SecondaryButton } from "../../Common/StyledComponents.tsx";
 import DraggableDialog, { StyledDialogContentText } from "../../Dialogs/DraggableDialog.tsx";
 import Book from "../../Icons/Book.tsx";
 import DocumentPDF from "../../Icons/DocumentPDF.tsx";
+import FolderZip from "../../Icons/FolderZip.tsx";
 import Image from "../../Icons/Image.tsx";
 import Markdown from "../../Icons/Markdown.tsx";
 import MoreHorizontal from "../../Icons/MoreHorizontal.tsx";
@@ -44,6 +45,7 @@ export const ViewerIDWithDefaultIcons = [
   builtInViewers.epub,
   builtInViewers.music,
   builtInViewers.markdown,
+  builtInViewers.archive,
 ];
 
 export const ViewerIcon = ({ viewer, size = 32, py = 0.5 }: ViewerIconProps) => {
@@ -62,6 +64,8 @@ export const ViewerIcon = ({ viewer, size = 32, py = 0.5 }: ViewerIconProps) => 
           return <Book sx={{ width: size, height: size, color: "#81b315" }} />;
         case builtInViewers.music:
           return <MusicNote1 sx={{ width: size, height: size, color: "#651fff" }} />;
+        case builtInViewers.archive:
+          return <FolderZip sx={{ width: size, height: size, color: "#f9a825" }} />;
         case builtInViewers.markdown:
           return (
             <Markdown
