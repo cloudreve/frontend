@@ -68,7 +68,7 @@ const Media = () => {
                   }}
                 />
                 <NoMarginHelperText>
-                  {t("settings.notAppliedToOneDriveNativeGenerator", {
+                  {t("settings.notAppliedToNativeGenerator", {
                     prefix: t("settings.thumbSuffixDes"),
                   })}
                 </NoMarginHelperText>
