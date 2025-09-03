@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
 import AutoHeight from "../Common/AutoHeight.tsx";
 import CircularProgress from "../Common/CircularProgress.tsx";
 import Logo from "../Common/Logo.tsx";
+import LanguageSwitcher from "../Common/LanguageSwitcher.tsx";
 import PoweredBy from "./PoweredBy.tsx";
 
 const Loading = () => {
@@ -54,13 +55,23 @@ const HeadlessFrame = () => {
                 padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,
               }}
             >
-              <Logo
+              <Box
                 sx={{
-                  maxWidth: "40%",
-                  maxHeight: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                   mb: 2,
                 }}
-              />
+              >
+                <Logo
+                  sx={{
+                    maxWidth: "40%",
+                    maxHeight: "40px",
+                  }}
+                />
+                {/* 语言切换按钮 */}
+                <LanguageSwitcher />
+              </Box>
               <AutoHeight>
                 <div>
                   <Box

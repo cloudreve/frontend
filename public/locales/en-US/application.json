@@ -51,7 +51,8 @@
     "logout": "Sign out",
     "signingOut": "Signing out...",
     "loggedOut": "You are signed out now.",
-    "clickToRefresh": "Click to refresh"
+    "clickToRefresh": "Click to refresh",
+    "switchLanguage": "Switch Language"
   },
   "navbar": {
     "notBefore": "Not before",

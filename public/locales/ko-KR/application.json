@@ -51,7 +51,8 @@
     "logout": "로그아웃",
     "signingOut": "로그아웃 중...",
     "loggedOut": "로그아웃되었습니다",
-    "clickToRefresh": "클릭하여 보안문자 새로고침"
+    "clickToRefresh": "클릭하여 보안문자 새로고침",
+    "switchLanguage": "언어 전환"
   },
   "navbar": {
     "notBefore": "이전 아님",

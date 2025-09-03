@@ -51,7 +51,8 @@
     "logout": "Logout",
     "signingOut": "Logout in corso...",
     "loggedOut": "Sei stato disconnesso",
-    "clickToRefresh": "Clicca per aggiornare il CAPTCHA"
+    "clickToRefresh": "Clicca per aggiornare il CAPTCHA",
+    "switchLanguage": "Cambia lingua"
   },
   "navbar": {
     "notBefore": "Non prima di",

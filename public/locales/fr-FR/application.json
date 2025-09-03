@@ -51,7 +51,8 @@
     "logout": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
     "loggedOut": "Vous êtes maintenant déconnecté.",
-    "clickToRefresh": "Cliquez pour actualiser"
+    "clickToRefresh": "Cliquez pour actualiser",
+    "switchLanguage": "Changer de langue"
   },
   "navbar": {
     "notBefore": "Pas avant",

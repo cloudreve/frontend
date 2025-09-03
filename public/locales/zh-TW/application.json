@@ -51,7 +51,8 @@
     "logout": "退出登入",
     "signingOut": "正在退出登入...",
     "loggedOut": "您已退出登入",
-    "clickToRefresh": "點選重新整理驗證碼"
+    "clickToRefresh": "點選重新整理驗證碼",
+    "switchLanguage": "切換語言"
   },
   "navbar": {
     "notBefore": "不早於",

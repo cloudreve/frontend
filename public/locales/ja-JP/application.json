@@ -51,7 +51,8 @@
     "logout": "ログアウト",
     "signingOut": "ログアウト中...",
     "loggedOut": "ログアウトしました",
-    "clickToRefresh": "CAPTCHAを再読み込み"
+    "clickToRefresh": "CAPTCHAを再読み込み",
+    "switchLanguage": "言語を切り替え"
   },
   "navbar": {
     "notBefore": "～より前",

@@ -51,7 +51,8 @@
     "logout": "退出登录",
     "signingOut": "正在退出登录...",
     "loggedOut": "您已退出登录",
-    "clickToRefresh": "点击刷新验证码"
+    "clickToRefresh": "点击刷新验证码",
+    "switchLanguage": "切换语言"
   },
   "navbar": {
     "notBefore": "不早于",

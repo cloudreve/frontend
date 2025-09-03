@@ -51,7 +51,8 @@
     "logout": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
     "loggedOut": "Has cerrado sesión",
-    "clickToRefresh": "Haz clic para actualizar el código de verificación"
+    "clickToRefresh": "Haz clic para actualizar el código de verificación",
+    "switchLanguage": "Cambiar idioma"
   },
   "navbar": {
     "notBefore": "No antes de",
