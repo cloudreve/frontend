@@ -167,6 +167,7 @@
     "musicCover": "曲のジャケット画像",
     "musicCoverDes": "オーディオファイルからアルバムジャケット画像を抽出します。ID3（v1、2.2、2.3、2.4）メタデータコンテナをサポートします。このジェネレーターは、他の画像ジェネレーター（Cloudreve組み込みまたはVIPS）に依存します。",
     "notAppliedToNativeGenerator": "{{prefix}}はストレージポリシーネイティブジェネレーターには適用されません。",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}はOneDriveまたはSharePointストレージポリシーネイティブジェネレーターには適用されません。",
     "fileBlobMargin": "ファイルBlob一時URLキャッシュ冗長性（秒）",
     "fileBlobMarginDes": "同じファイルBlobが複数回リクエストされた場合、元のURLの有効期限が冗長性時間よりも長い場合、同じURLが再利用されます。",
     "fileBlobTimeout": "ファイルBlob一時URL有効期限（秒）",

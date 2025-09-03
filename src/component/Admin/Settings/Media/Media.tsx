@@ -68,7 +68,7 @@ const Media = () => {
                   }}
                 />
                 <NoMarginHelperText>
-                  {t("settings.notAppliedToNativeGenerator", {
+                  {t("settings.notAppliedToOneDriveNativeGenerator", {
                     prefix: t("settings.thumbSuffixDes"),
                   })}
                 </NoMarginHelperText>
@@ -98,7 +98,7 @@ const Media = () => {
                   ))}
                 </DenseSelect>
                 <NoMarginHelperText>
-                  {t("settings.notAppliedToNativeGenerator", { prefix: t("settings.thumbFormatDes") })}
+                  {t("settings.notAppliedToOneDriveNativeGenerator", { prefix: t("settings.thumbFormatDes") })}
                 </NoMarginHelperText>
               </FormControl>
             </SettingForm>
@@ -117,7 +117,7 @@ const Media = () => {
                     }}
                   />
                   <NoMarginHelperText>
-                    {t("settings.notAppliedToNativeGenerator", {
+                    {t("settings.notAppliedToOneDriveNativeGenerator", {
                       prefix: t("settings.thumbQualityDes"),
                     })}
                   </NoMarginHelperText>

@@ -168,6 +168,7 @@
     "musicCover": "Pochette musicale",
     "musicCoverDes": "Extraire la pochette d'album des fichiers musicaux, prend en charge le conteneur ID3 (v1, 2.2, 2.3 et 2.4). Ce générateur dépend de tout autre générateur de miniatures d'images (intégré à Cloudreve ou VIPS).",
     "notAppliedToNativeGenerator": "{{prefix}}Non applicable au générateur natif des politiques de stockage.",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}Non applicable au générateur natif des politiques de stockage OneDrive ou SharePoint.",
     "fileBlobMargin": "Marge du cache d'URL Blob de fichier (secondes)",
     "fileBlobMarginDes": "Lorsque le même Blob de fichier est demandé plusieurs fois, si l'URL initiale a une période de validité restante supérieure à la marge, la même URL sera réutilisée.",
     "fileBlobTimeout": "TTL de l'URL Blob de fichier (secondes)",

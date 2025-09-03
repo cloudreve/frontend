@@ -167,6 +167,7 @@
     "musicCover": "歌曲封面",
     "musicCoverDes": "提取音訊檔案中的專輯封面, 支援 ID3 (v1, 2.2, 2.3, 2.4) 元資料容器。這一生成器依賴於任一其他影象生成器（Cloudreve 內建 或 VIPS）。",
     "notAppliedToNativeGenerator": "{{prefix}}不適用於儲存策略原生生成器。",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}不適用於 OneDrive 或 SharePoint 儲存策略原生生成器。",
     "fileBlobMargin": "檔案 Blob 臨時 URL 快取冗餘（秒）",
     "fileBlobMarginDes": "當相同的檔案 Blob 被多次請求時，如果最初的 URL 剩餘有效期大於冗餘時長，相同的 URL 會被複用。",
     "fileBlobTimeout": "檔案 Blob 臨時 URL 有效期（秒）",

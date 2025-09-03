@@ -168,6 +168,7 @@
     "musicCover": "Musik-Cover",
     "musicCoverDes": "Album-Cover aus Musikdateien extrahieren, unterstützt ID3 (v1, 2.2, 2.3 und 2.4) Container. Dieser Generator hängt von einem anderen Bild-Miniaturansichten-Generator ab (Cloudreve eingebaut oder VIPS).",
     "notAppliedToNativeGenerator": "{{prefix}}Nicht anwendbar auf nativen Generator von Speicherrichtlinien.",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}Nicht anwendbar auf nativen Generator von OneDrive oder SharePoint Speicherrichtlinien.",
     "fileBlobMargin": "Datei-Blob-URL-Cache-Marge (Sekunden)",
     "fileBlobMarginDes": "Wenn derselbe Datei-Blob mehrmals angefordert wird, wird dieselbe URL wiederverwendet, wenn die ursprüngliche URL eine verbleibende Gültigkeitsdauer größer als die Marge hat.",
     "fileBlobTimeout": "Datei-Blob-URL-TTL (Sekunden)",
