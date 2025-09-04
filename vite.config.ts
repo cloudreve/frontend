@@ -21,7 +21,7 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/pdfviewer.html/, /^\/api\/(.+)/, /^\/f\/(.+)/, /^\/s\/(.+)/],
       },
       devOptions: {
-        enabled: true,
+        enabled: process.env.NODE_ENV !== "production",
       },
     }),
     viteStaticCopy({
@@ -58,6 +58,7 @@ export default defineConfig({
   ],
   define: {
     __ASSETS_VERSION__: JSON.stringify(process.env.npm_package_version),
+    __BUILD_TIMESTAMP__: JSON.stringify(Math.floor(Date.now())),
   },
   build: {
     outDir: "build", // keep same as v3 with minimal changes
