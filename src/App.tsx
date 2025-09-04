@@ -207,9 +207,7 @@ export const App = () => {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW(swUrl, r) {
-      removeI18nCache();
-    },
+    onRegisteredSW(swUrl, r) {},
     onRegisterError(error) {
       console.log("SW registration error", error);
     },
@@ -218,7 +216,7 @@ export const App = () => {
   useEffect(() => {
     if (needRefresh) {
       enqueueSnackbar({
-        message: i18next.t("common:newVersionRefresh"),
+        message: t("common:newVersionRefresh"),
         variant: "default",
         persist: true,
         action: ServiceWorkerUpdateAction(() => {
