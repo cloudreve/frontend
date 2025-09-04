@@ -19,7 +19,6 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 10000000,
         navigateFallbackDenylist: [/^\/pdfviewer.html/, /^\/api\/(.+)/, /^\/f\/(.+)/, /^\/s\/(.+)/],
-        globPatterns: ["**/*.{js,css,html}", "locales/**/*.json"],
       },
       devOptions: {
         enabled: true,
