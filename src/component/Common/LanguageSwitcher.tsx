@@ -3,7 +3,7 @@ import i18next from "i18next";
 import { languages } from "../../i18n";
 import { useTranslation } from "react-i18next";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
-import TranslateIcon from "@mui/icons-material/Translate";
+import Translate from "../Icons/Translate.tsx";
 
 const LanguageSwitcher: React.FC = () => {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ const LanguageSwitcher: React.FC = () => {
     <>
       <Tooltip title={t("login.switchLanguage")}>
         <IconButton onClick={handleClick} sx={{ ml: 1 }}>
-          <TranslateIcon />
+          <Translate />
         </IconButton>
       </Tooltip>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
