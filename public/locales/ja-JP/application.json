@@ -53,6 +53,9 @@
     "loggedOut": "ログアウトしました",
     "clickToRefresh": "CAPTCHAを再読み込み"
   },
+  "resetThumbnail": "サムネイルをリセット",
+  "resetThumbnailRequested": "サムネイルのリセットをリクエストしました。",
+  "noFileCanResetThumbnail": "サムネイルをリセットできるファイルがありません。",
   "navbar": {
     "notBefore": "～より前",
     "notAfter": "～より後",
