@@ -215,7 +215,7 @@ export const App = () => {
   useEffect(() => {
     if (needRefresh) {
       enqueueSnackbar({
-        message: i18next.t("common:newVersionRefresh"),
+        message: t("common:newVersionRefresh"),
         variant: "default",
         persist: true,
         action: ServiceWorkerUpdateAction(() => {
