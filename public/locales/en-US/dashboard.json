@@ -167,6 +167,7 @@
     "musicCover": "Music cover",
     "musicCoverDes": "Extract album cover from music files, supports ID3 (v1, 2.2, 2.3 and 2.4) container. This generator depends on any other image thumbnail generator (Cloudreve built-in or VIPS).",
     "notAppliedToNativeGenerator": "{{prefix}}Not applicable to native generator of storage policies.",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}Not applicable to native generator of OneDrive or SharePoint storage policies.",
     "fileBlobMargin": "File Blob URL Cache Margin (seconds)",
     "fileBlobMarginDes": "When the same file Blob is requested multiple times, if the initial URL has a remaining validity period greater than the margin, the same URL will be reused.",
     "fileBlobTimeout": "File Blob URL TTL (seconds)",

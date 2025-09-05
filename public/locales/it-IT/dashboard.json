@@ -168,6 +168,7 @@
     "musicCover": "Copertina musicale",
     "musicCoverDes": "Estrai copertina album dai file musicali, supporta container ID3 (v1, 2.2, 2.3 e 2.4). Questo generatore dipende da qualsiasi altro generatore di miniature immagini (Cloudreve integrato o VIPS).",
     "notAppliedToNativeGenerator": "{{prefix}}Non applicabile al generatore nativo delle policy di archiviazione.",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}Non applicabile al generatore nativo delle policy di archiviazione OneDrive o SharePoint.",
     "fileBlobMargin": "Margine Cache URL Blob File (secondi)",
     "fileBlobMarginDes": "Quando lo stesso Blob file è richiesto più volte, se l'URL iniziale ha un periodo di validità rimanente maggiore del margine, lo stesso URL verrà riutilizzato.",
     "fileBlobTimeout": "TTL URL Blob File (secondi)",

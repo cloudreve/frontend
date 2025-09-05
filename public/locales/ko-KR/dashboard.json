@@ -167,6 +167,7 @@
     "musicCover": "앨범 커버",
     "musicCoverDes": "오디오 파일에서 앨범 커버를 추출하며, ID3 (v1, 2.2, 2.3, 2.4) 메타데이터 컨테이너를 지원합니다. 이 생성기는 다른 이미지 생성기(Cloudreve 내장 또는 VIPS) 중 하나에 의존합니다.",
     "notAppliedToNativeGenerator": "{{prefix}}저장소 정책 네이티브 생성기에는 적용되지 않습니다.",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}OneDrive 또는 SharePoint 저장소 정책 네이티브 생성기에는 적용되지 않습니다.",
     "fileBlobMargin": "파일 Blob 임시 URL 캐시 여유분(초)",
     "fileBlobMarginDes": "동일한 파일 Blob이 여러 번 요청될 때, 초기 URL의 남은 유효 기간이 여유분보다 크면 동일한 URL이 재사용됩니다.",
     "fileBlobTimeout": "파일 Blob 임시 URL 유효 기간",

@@ -168,6 +168,7 @@
     "musicCover": "Capa da música",
     "musicCoverDes": "Extrair capa do álbum de arquivos de música, suporta contêiner ID3 (v1, 2.2, 2.3 e 2.4). Este gerador depende de qualquer outro gerador de miniatura de imagem (Cloudreve integrado ou VIPS).",
     "notAppliedToNativeGenerator": "{{prefix}}Não aplicável ao gerador nativo de políticas de armazenamento.",
+    "notAppliedToOneDriveNativeGenerator": "{{prefix}}Não aplicável ao gerador nativo de políticas de armazenamento OneDrive ou SharePoint.",
     "fileBlobMargin": "Margem do Cache de URL do Blob de Arquivo (segundos)",
     "fileBlobMarginDes": "Quando o mesmo blob de arquivo é solicitado várias vezes, se a URL inicial tiver um período de validade restante maior que a margem, a mesma URL será reutilizada.",
     "fileBlobTimeout": "TTL da URL do Blob de Arquivo (segundos)",
