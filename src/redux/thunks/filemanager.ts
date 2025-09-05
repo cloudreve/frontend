@@ -749,7 +749,7 @@ export function syncViewSettings(
       (parent?.owned || crUri.fs() == Filesystem.trash || crUri.fs() == Filesystem.shared_with_me);
 
     const currentView: ExplorerView = {
-      page_size: pageSize(fm),
+      page_size: Math.max(MinPageSize, pageSize(fm)),
       order: fm.sortBy ?? "created_at",
       order_direction: fm.sortDirection ?? "asc",
       view: fm.layout ?? Layouts.grid,
