@@ -51,7 +51,8 @@
     "logout": "Sair",
     "signingOut": "Saindo...",
     "loggedOut": "Você saiu da conta",
-    "clickToRefresh": "Clique para atualizar o código"
+    "clickToRefresh": "Clique para atualizar o código",
+    "switchLanguage": "Mudar idioma"
   },
   "navbar": {
     "notBefore": "Não antes de",

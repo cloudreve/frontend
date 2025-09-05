@@ -51,7 +51,8 @@
     "logout": "Abmelden",
     "signingOut": "Wird abgemeldet...",
     "loggedOut": "Sie wurden abgemeldet",
-    "clickToRefresh": "Klicken Sie, um das CAPTCHA zu aktualisieren"
+    "clickToRefresh": "Klicken Sie, um das CAPTCHA zu aktualisieren",
+    "switchLanguage": "Sprache wechseln"
   },
   "navbar": {
     "notBefore": "Nicht vor",

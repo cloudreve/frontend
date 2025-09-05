@@ -51,7 +51,8 @@
     "logout": "Выйти",
     "signingOut": "Выход из системы...",
     "loggedOut": "Вы вышли из системы",
-    "clickToRefresh": "Нажмите для обновления капчи"
+    "clickToRefresh": "Нажмите для обновления капчи",
+    "switchLanguage": "Сменить язык"
   },
   "navbar": {
     "notBefore": "Не раньше",
