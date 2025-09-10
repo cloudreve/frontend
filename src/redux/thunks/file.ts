@@ -15,6 +15,7 @@ import {
   sendUnlockFiles,
   setCurrentVersion,
 } from "../../api/api.ts";
+import { getCachedThumbExts } from "./thumb.ts";
 import {
   ConflictDetail,
   DirectLink,
@@ -39,7 +40,7 @@ import { loadingDebounceMs } from "../../constants";
 import { defaultPath } from "../../hooks/useNavigation.tsx";
 import SessionManager, { UserSettings } from "../../session";
 import { addRecentUsedColor, addUsedTags } from "../../session/utils.ts";
-import { getFileLinkedUri } from "../../util";
+import { fileExtension, getFileLinkedUri } from "../../util";
 import Boolset from "../../util/boolset.ts";
 import { canCopyMoveTo } from "../../util/permission.ts";
 import CrUri, { Filesystem } from "../../util/uri.ts";
@@ -1157,6 +1158,64 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
       "modals.generatingSourceLinks",
     );
     dispatch(setDirectLinkDialog({ open: true, res }));
+  };
+}
+
+export function resetThumbnails(files: FileResponse[]): AppThunk {
+  return async (dispatch, getState) => {
+    const cache = getCachedThumbExts();
+    const uris = files
+      .filter((f) => f.type == FileType.file)
+      .filter((f) =>
+        cache === undefined || cache === null ? true : cache.has((fileExtension(f.name) || "").toLowerCase()),
+      )
+      .map((f) => getFileLinkedUri(f));
+
+    if (uris.length === 0) {
+      enqueueSnackbar({
+        message: i18next.t("application:fileManager.noFileCanResetThumbnail"),
+        preventDuplicate: true,
+        variant: "warning",
+        action: DefaultCloseAction,
+      });
+      return;
+    }
+
+    try {
+      // Re-enable thumbnails by removing the disable mark, and update local metadata/cache.
+      const targetFiles = files
+        .filter((f) => f.type == FileType.file)
+        .filter((f) =>
+          cache === undefined || cache === null ? true : cache.has((fileExtension(f.name) || "").toLowerCase()),
+        );
+
+      await dispatch(
+        patchFileMetadata(FileManagerIndex.main, targetFiles, [
+          {
+            key: Metadata.thumbDisabled,
+            remove: true,
+          },
+        ]),
+      );
+
+      // 预取：立即为所选文件请求缩略图（不依赖列表刷新或滚动触发）
+      const fm = getState().fileManager[FileManagerIndex.main];
+      const toPrefetch = targetFiles
+        .map((f) => fm.list?.files.find((ff) => ff.path === f.path) || f)
+        .filter((f): f is FileResponse => !!f);
+      // 并发触发 GET /file/thumb
+      await Promise.allSettled(toPrefetch.map((f) => dispatch(loadFileThumb(FileManagerIndex.main, f))));
+
+      // 成功信息
+      enqueueSnackbar({
+        message: i18next.t("application:fileManager.resetThumbnailRequested"),
+        variant: "success",
+        action: DefaultCloseAction,
+      });
+      // 不再刷新文件列表；组件会基于metadata变化自动重新请求所选文件的缩略图
+    } catch (_e) {
+      // Error snackbar is handled in send()
+    }
   };
 }
 
