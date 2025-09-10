@@ -105,7 +105,44 @@ const ArchivePreview = () => {
     )
       .then((res) => {
         if (res.files) {
-          setFiles(res.files);
+          // 补齐目录
+          const allItems: ArchivedFile[] = [];
+          const allDirs = new Set<string>();
+
+          // 目录项
+          res.files.filter(item => item.is_directory).forEach(item => {
+            allDirs.add(item.name);
+            allItems.push(item);
+          });
+
+          // 文件项，并补齐缺失目录
+          res.files.filter(item => !item.is_directory).forEach(item => {
+            allItems.push(item);
+
+            const dirElements = item.name.split("/");
+            for (let i = 1; i < dirElements.length; i++) {
+              const dirName = dirElements.slice(0, i).join("/");
+              if (!allDirs.has(dirName)) {
+                allDirs.add(dirName);
+                allItems.push({
+                  name: dirName,
+                  size: 0,
+                  updated_at: "1970-01-01T00:00:00Z",
+                  is_directory: true,
+                });
+              }
+            }
+          });
+
+          // 排序文件
+          // 先目录，后文件，分别按名称排序
+          allItems.sort((a, b) => {
+            if (a.is_directory && !b.is_directory) return -1;
+            if (!a.is_directory && b.is_directory) return 1;
+            return a.name.localeCompare(b.name);
+          });
+
+          setFiles(allItems);
         }
       })
       .catch(() => {
