@@ -5,7 +5,7 @@ import { getPolicyOauthRedirectUrl } from "../../../../../api/api";
 import { useAppDispatch } from "../../../../../redux/hooks";
 import { DenseFilledTextField } from "../../../../Common/StyledComponents";
 import DraggableDialog from "../../../../Dialogs/DraggableDialog";
-import { Code } from "../../../Common/Code";
+import { Code } from "../../../../Common/Code.tsx";
 import { NoMarginHelperText } from "../../../Settings/Settings";
 
 interface OneDriveAuthDialogProps {

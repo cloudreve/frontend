@@ -22,6 +22,7 @@ export interface ListDavAccountsResponse {
 export const DavAccountOption = {
   readonly: 0,
   proxy: 1,
+  disable_sys_files: 2,
 };
 
 export interface CreateDavAccountService {
@@ -29,4 +30,5 @@ export interface CreateDavAccountService {
   uri: string;
   readonly?: boolean;
   proxy?: boolean;
+  disable_sys_files?: boolean;
 }

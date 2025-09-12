@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../../../redux/hooks.ts";
 import { DenseFilledTextField } from "../../../Common/StyledComponents.tsx";
 import DraggableDialog from "../../../Dialogs/DraggableDialog.tsx";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
-import { Code } from "../../Common/Code.tsx";
+import { Code } from "../../../Common/Code.tsx";
 import { NoMarginHelperText } from "../../Settings/Settings.tsx";
 
 export interface ImportWopiDialogProps {

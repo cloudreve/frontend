@@ -21,7 +21,7 @@ import { DefaultCloseAction } from "../../../../Common/Snackbar/snackbar";
 import { DenseFilledTextField, DenseSelect, SecondaryButton } from "../../../../Common/StyledComponents";
 import { SquareMenuItem } from "../../../../FileManager/ContextMenu/ContextMenu";
 import SettingForm from "../../../../Pages/Setting/SettingForm";
-import { Code } from "../../../Common/Code";
+import { Code } from "../../../../Common/Code.tsx";
 import { EndpointInput } from "../../../Common/EndpointInput";
 import NodeSelectionInput from "../../../Common/NodeSelectionInput";
 import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../../../Settings/Settings";

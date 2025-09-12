@@ -24,7 +24,7 @@ import { DenseFilledTextField, DenseSelect, SecondaryButton } from "../../../Com
 import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu";
 import QuestionCircle from "../../../Icons/QuestionCircle";
 import SettingForm from "../../../Pages/Setting/SettingForm";
-import { Code } from "../../Common/Code";
+import { Code } from "../../../Common/Code.tsx";
 import { EndpointInput } from "../../Common/EndpointInput";
 import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../../Settings/Settings";
 import { NodeSettingContext } from "./NodeSettingWrapper";

@@ -15,7 +15,7 @@ import ArrowSync from "../../Icons/ArrowSync";
 import PageContainer from "../../Pages/PageContainer";
 import PageHeader from "../../Pages/PageHeader";
 import { BorderedCardClickable } from "../Common/AdminCard";
-import { Code } from "../Common/Code";
+import { Code } from "../../Common/Code.tsx";
 import TablePagination from "../Common/TablePagination";
 import AddWizardDialog, { AddWizardProps } from "./AddWizardDialog";
 import SelectProvider from "./SelectProvider";

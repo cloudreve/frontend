@@ -13,7 +13,7 @@ import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar";
 import { DenseFilledTextField, SecondaryButton } from "../../../Common/StyledComponents";
 import DraggableDialog from "../../../Dialogs/DraggableDialog";
 import SettingForm from "../../../Pages/Setting/SettingForm";
-import { Code } from "../../Common/Code";
+import { Code } from "../../../Common/Code.tsx";
 import { EndpointInput } from "../../Common/EndpointInput";
 import { NoMarginHelperText } from "../../Settings/Settings";
 const MonacoEditor = lazy(() => import("../../../Viewers/CodeViewer/MonacoEditor"));

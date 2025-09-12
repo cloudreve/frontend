@@ -740,6 +740,8 @@
     "connectionInfo": "Connection details",
     "proxyTooltip": "Proxy all file download requests.",
     "readonlyTooltip": "User can only read files through this account.",
+    "blockSysFilesUpload": "Block system files upload",
+    "blockSysFilesUploadTooltip": "When enabled, files starting with <0>.</0> will be blocked from upload.",
     "rootFolderIn": "Select <0></0>",
     "createWebDavAccount": "Create WebDAV account",
     "editWebDavAccount": "Edit {{name}}",

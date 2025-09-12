@@ -16,7 +16,7 @@ import { Trans, useTranslation } from "react-i18next";
 import DraggableDialog, { StyledDialogActions } from "../../Dialogs/DraggableDialog";
 import CheckmarkCircleFilled from "../../Icons/CheckmarkCircleFilled";
 import Gift from "../../Icons/Gift";
-import { Code } from "./Code";
+import { Code } from "../../Common/Code.tsx";
 
 export interface ProDialogProps {
   open: boolean;

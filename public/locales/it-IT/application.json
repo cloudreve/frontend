@@ -810,6 +810,8 @@
     "connectionInfo": "Dettagli connessione",
     "proxyTooltip": "Proxy per tutte le richieste di download dei file.",
     "readonlyTooltip": "L'utente può solo leggere i file attraverso questo account.",
+    "blockSysFilesUpload": "Blocca caricamento file di sistema",
+    "blockSysFilesUploadTooltip": "Quando abilitato, i file che iniziano con <0>.</0> verranno bloccati dal caricamento.",
     "rootFolderIn": "Seleziona <0></0>",
     "createWebDavAccount": "Crea account WebDAV",
     "editWebDavAccount": "Modifica {{name}}",

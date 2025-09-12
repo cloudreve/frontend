@@ -20,7 +20,7 @@ import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { FileResponse, FileType } from "../../../../api/explorer.ts";
-import { Code } from "../../../Admin/Common/Code.tsx";
+import { Code } from "../../../Common/Code.tsx";
 import { FilledTextField, SmallFormControlLabel } from "../../../Common/StyledComponents.tsx";
 import BookInformation from "../../../Icons/BookInformation.tsx";
 import ClockArrowDownload from "../../../Icons/ClockArrowDownload.tsx";

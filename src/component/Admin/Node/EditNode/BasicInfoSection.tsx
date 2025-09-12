@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../../../redux/hooks";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar";
 import { DenseFilledTextField, SecondaryButton } from "../../../Common/StyledComponents";
 import SettingForm from "../../../Pages/Setting/SettingForm";
-import { Code } from "../../Common/Code";
+import { Code } from "../../../Common/Code.tsx";
 import { EndpointInput } from "../../Common/EndpointInput";
 import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../../Settings/Settings";
 import { NodeSettingContext } from "./NodeSettingWrapper";

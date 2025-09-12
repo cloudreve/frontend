@@ -814,6 +814,8 @@
     "connectionInfo": "Détails de connexion",
     "proxyTooltip": "Proxyfier toutes les demandes de téléchargement de fichiers.",
     "readonlyTooltip": "L'utilisateur ne peut que lire les fichiers via ce compte.",
+    "blockSysFilesUpload": "Bloquer le téléversement des fichiers système",
+    "blockSysFilesUploadTooltip": "Lorsqu'activé, les fichiers commençant par <0>.</0> seront bloqués lors du téléversement.",
     "rootFolderIn": "Sélectionner <0></0>",
     "createWebDavAccount": "Créer un compte WebDAV",
     "editWebDavAccount": "Modifier {{name}}",
