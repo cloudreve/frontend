@@ -564,4 +564,5 @@ export interface ArchiveListFilesResponse {
 export interface ArchiveListFilesService {
   uri: string;
   entity?: string;
+  text_encoding?: string;
 }

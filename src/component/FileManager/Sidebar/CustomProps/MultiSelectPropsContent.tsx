@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PropsContentProps } from "./CustomPropsItem.tsx";
 
-const NoLabelFilledSelect = styled(Select)(({ theme }) => ({
+export const NoLabelFilledSelect = styled(Select)(({ theme }) => ({
   "& .MuiSelect-select": {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),

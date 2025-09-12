@@ -179,6 +179,7 @@ export interface GlobalStateSlice {
   extractArchiveDialogOpen?: boolean;
   extractArchiveDialogFile?: FileResponse;
   extractArchiveDialogMask?: string[];
+  extractArchiveDialogEncoding?: string;
 
   // Remote download dialog
   remoteDownloadDialogOpen?: boolean;
@@ -381,15 +382,17 @@ export const globalStateSlice = createSlice({
     },
     setExtractArchiveDialog: (
       state,
-      action: PayloadAction<{ open: boolean; file?: FileResponse; mask?: string[] }>,
+      action: PayloadAction<{ open: boolean; file?: FileResponse; mask?: string[]; encoding?: string }>,
     ) => {
       state.extractArchiveDialogOpen = action.payload.open;
       state.extractArchiveDialogFile = action.payload.file;
       state.extractArchiveDialogMask = action.payload.mask;
+      state.extractArchiveDialogEncoding = action.payload.encoding;
     },
     closeExtractArchiveDialog: (state) => {
       state.extractArchiveDialogOpen = false;
       state.extractArchiveDialogMask = undefined;
+      state.extractArchiveDialogEncoding = undefined;
     },
     setCreateArchiveDialog: (
       state,

@@ -1,15 +1,4 @@
-import {
-  DialogContent,
-  FormControl,
-  Grid2,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { DialogContent, Grid2, InputAdornment, TextField, useMediaQuery, useTheme } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,55 +6,13 @@ import { sendExtractArchive } from "../../../api/api.ts";
 import { closeExtractArchiveDialog } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { fileExtension, getFileLinkedUri } from "../../../util";
+import EncodingSelector, { defaultEncodingValue } from "../../Common/Form/EncodingSelector.tsx";
 import { FileDisplayForm } from "../../Common/Form/FileDisplayForm.tsx";
 import { PathSelectorForm } from "../../Common/Form/PathSelectorForm.tsx";
 import { ViewTaskAction } from "../../Common/Snackbar/snackbar.tsx";
 import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import Password from "../../Icons/Password.tsx";
-import Translate from "../../Icons/Translate.tsx";
 import { FileManagerIndex } from "../FileManager.tsx";
-
-const encodings = [
-  "ibm866",
-  "iso8859_2",
-  "iso8859_3",
-  "iso8859_4",
-  "iso8859_5",
-  "iso8859_6",
-  "iso8859_7",
-  "iso8859_8",
-  "iso8859_8I",
-  "iso8859_10",
-  "iso8859_13",
-  "iso8859_14",
-  "iso8859_15",
-  "iso8859_16",
-  "koi8r",
-  "koi8u",
-  "macintosh",
-  "windows874",
-  "windows1250",
-  "windows1251",
-  "windows1252",
-  "windows1253",
-  "windows1254",
-  "windows1255",
-  "windows1256",
-  "windows1257",
-  "windows1258",
-  "macintoshcyrillic",
-  "gbk",
-  "gb18030",
-  "big5",
-  "eucjp",
-  "iso2022jp",
-  "shiftjis",
-  "euckr",
-  "utf16be",
-  "utf16le",
-];
-
-const defaultEncodingValue = " ";
 
 const ExtractArchive = () => {
   const { t } = useTranslation();
@@ -84,6 +31,11 @@ const ExtractArchive = () => {
   const target = useAppSelector((state) => state.globalState.extractArchiveDialogFile);
   const current = useAppSelector((state) => state.fileManager[FileManagerIndex.main].pure_path);
   const mask = useAppSelector((state) => state.globalState.extractArchiveDialogMask);
+  const predefinedEncoding = useAppSelector((state) => state.globalState.extractArchiveDialogEncoding);
+
+  useEffect(() => {
+    setEncoding(predefinedEncoding ?? defaultEncodingValue);
+  }, [predefinedEncoding]);
 
   const showEncodingOption = useMemo(() => {
     const ext = fileExtension(target?.name ?? "");
@@ -167,31 +119,13 @@ const ExtractArchive = () => {
                 md: 6,
               }}
             >
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel>{t("modals.selectEncoding")}</InputLabel>
-                <Select
-                  variant="outlined"
-                  startAdornment={
-                    !isMobile && (
-                      <InputAdornment position="start">
-                        <Translate />
-                      </InputAdornment>
-                    )
-                  }
-                  label={t("modals.selectEncoding")}
-                  value={encoding}
-                  onChange={(e) => setEncoding(e.target.value)}
-                >
-                  <MenuItem value={defaultEncodingValue}>
-                    <em>{t("modals.defaultEncoding")}</em>
-                  </MenuItem>
-                  {encodings.map((enc) => (
-                    <MenuItem key={enc} value={enc}>
-                      {enc}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <EncodingSelector
+                value={encoding}
+                onChange={setEncoding}
+                variant="outlined"
+                fullWidth
+                showIcon={!isMobile}
+              />
             </Grid2>
           )}
           <Grid2

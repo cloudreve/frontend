@@ -7,7 +7,9 @@ import { getArchiveListFiles } from "../../../api/api.ts";
 import { ArchivedFile, FileType } from "../../../api/explorer.ts";
 import { closeArchiveViewer, setExtractArchiveDialog } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
-import { fileBase, getFileLinkedUri, sizeToString } from "../../../util";
+import { fileBase, fileExtension, getFileLinkedUri, sizeToString } from "../../../util";
+import AutoHeight from "../../Common/AutoHeight.tsx";
+import EncodingSelector, { defaultEncodingValue } from "../../Common/Form/EncodingSelector.tsx";
 import { SecondaryButton, StyledCheckbox, StyledTableContainerPaper } from "../../Common/StyledComponents.tsx";
 import TimeBadge from "../../Common/TimeBadge.tsx";
 import FileIcon from "../../FileManager/Explorer/FileIcon.tsx";
@@ -29,6 +31,11 @@ const ArchivePreview = () => {
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [filterText, setFilterText] = useState("");
   const [height, setHeight] = useState(33);
+  const [encoding, setEncoding] = useState(defaultEncodingValue);
+
+  const isZip = useMemo(() => {
+    return fileExtension(viewerState?.file?.name ?? "") === "zip";
+  }, [viewerState?.file?.name]);
 
   const currentFiles = useMemo(() => {
     if (!files) return [];
@@ -88,6 +95,7 @@ const ArchivePreview = () => {
 
   useEffect(() => {
     if (!viewerState || !viewerState.open) {
+      setEncoding(defaultEncodingValue);
       return;
     }
 
@@ -101,6 +109,7 @@ const ArchivePreview = () => {
       getArchiveListFiles({
         uri: getFileLinkedUri(viewerState.file),
         entity: viewerState.version,
+        text_encoding: encoding !== defaultEncodingValue ? encoding : undefined,
       }),
     )
       .then((res) => {
@@ -110,29 +119,33 @@ const ArchivePreview = () => {
           const allDirs = new Set<string>();
 
           // 目录项
-          res.files.filter(item => item.is_directory).forEach(item => {
-            allDirs.add(item.name);
-            allItems.push(item);
-          });
+          res.files
+            .filter((item) => item.is_directory)
+            .forEach((item) => {
+              allDirs.add(item.name);
+              allItems.push(item);
+            });
 
           // 文件项，并补齐缺失目录
-          res.files.filter(item => !item.is_directory).forEach(item => {
-            allItems.push(item);
+          res.files
+            .filter((item) => !item.is_directory)
+            .forEach((item) => {
+              allItems.push(item);
 
-            const dirElements = item.name.split("/");
-            for (let i = 1; i < dirElements.length; i++) {
-              const dirName = dirElements.slice(0, i).join("/");
-              if (!allDirs.has(dirName)) {
-                allDirs.add(dirName);
-                allItems.push({
-                  name: dirName,
-                  size: 0,
-                  updated_at: "1970-01-01T00:00:00Z",
-                  is_directory: true,
-                });
+              const dirElements = item.name.split("/");
+              for (let i = 1; i < dirElements.length; i++) {
+                const dirName = dirElements.slice(0, i).join("/");
+                if (!allDirs.has(dirName)) {
+                  allDirs.add(dirName);
+                  allItems.push({
+                    name: dirName,
+                    size: 0,
+                    updated_at: "1970-01-01T00:00:00Z",
+                    is_directory: true,
+                  });
+                }
               }
-            }
-          });
+            });
 
           // 排序文件
           // 先目录，后文件，分别按名称排序
@@ -151,7 +164,7 @@ const ArchivePreview = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [viewerState]);
+  }, [viewerState, encoding]);
 
   const onClose = useCallback(() => {
     dispatch(closeArchiveViewer());
@@ -214,15 +227,15 @@ const ArchivePreview = () => {
       return;
     }
 
-    dispatch(setExtractArchiveDialog({ open: true, file: viewerState?.file, mask: selectedFiles }));
-  }, [selectedFiles, t, enqueueSnackbar]);
+    dispatch(setExtractArchiveDialog({ open: true, file: viewerState?.file, mask: selectedFiles, encoding }));
+  }, [selectedFiles, t, enqueueSnackbar, encoding]);
 
   const extractArchive = useCallback(() => {
     if (!viewerState?.file) {
       return;
     }
-    dispatch(setExtractArchiveDialog({ open: true, file: viewerState?.file }));
-  }, [viewerState?.file]);
+    dispatch(setExtractArchiveDialog({ open: true, file: viewerState?.file, encoding }));
+  }, [viewerState?.file, encoding]);
 
   return (
     <>
@@ -236,45 +249,18 @@ const ArchivePreview = () => {
           maxWidth: "lg",
         }}
       >
-        {loading && <ViewerLoading />}
-        {!loading && (
-          <Box sx={{ p: 2 }}>
-            <Box sx={{ mb: 2 }}>
-              <Breadcrumbs separator={<ChevronRight fontSize="small" />}>
-                <Link
-                  component="button"
-                  variant="body2"
-                  color="inherit"
-                  onClick={() => navigateToBreadcrumb(-1)}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textDecoration: "none",
-                    "&:hover": { textDecoration: "underline" },
-                  }}
-                >
-                  <Home fontSize="small" sx={{ mr: 0.5 }} />
-                  {t("fileManager.rootFolder")}
-                </Link>
-                {breadcrumbPaths.map((path, index) => {
-                  const isLast = index === breadcrumbPaths.length - 1;
-                  return isLast ? (
-                    <Typography
-                      variant="body2"
-                      key={index}
-                      color="text.primary"
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <Folder fontSize="small" sx={{ mr: 0.5 }} />
-                      {path}
-                    </Typography>
-                  ) : (
+        <AutoHeight>
+          <div>
+            {loading && <ViewerLoading />}
+            {!loading && (
+              <Box sx={{ p: 2 }}>
+                <Box sx={{ mb: 2 }}>
+                  <Breadcrumbs separator={<ChevronRight fontSize="small" />}>
                     <Link
-                      key={index}
                       component="button"
                       variant="body2"
                       color="inherit"
-                      onClick={() => navigateToBreadcrumb(index)}
+                      onClick={() => navigateToBreadcrumb(-1)}
                       sx={{
                         display: "flex",
                         alignItems: "center",
@@ -282,125 +268,180 @@ const ArchivePreview = () => {
                         "&:hover": { textDecoration: "underline" },
                       }}
                     >
-                      <Folder fontSize="small" sx={{ mr: 0.5 }} />
-                      {path}
+                      <Home fontSize="small" sx={{ mr: 0.5 }} />
+                      {t("fileManager.rootFolder")}
                     </Link>
-                  );
-                })}
-              </Breadcrumbs>
-            </Box>
-
-            {filteredFiles.length > 0 ? (
-              <TableContainer component={StyledTableContainerPaper}>
-                <TableVirtuoso
-                  style={{
-                    height: Math.min(height, 400),
-                    overflow: "auto",
-                  }}
-                  totalListHeightChanged={(h) => {
-                    setHeight(h + 0.5);
-                  }}
-                  components={{
-                    // eslint-disable-next-line react/display-name
-                    Table: (props) => <Table {...props} size="small" />,
-                  }}
-                  data={filteredFiles}
-                  itemContent={(_index, file) => {
-                    const fullPath = currentPath ? currentPath + "/" + file.name : file.name;
-                    const isSelected = selectedFiles.includes(fullPath);
-
-                    return (
-                      <>
-                        <TableCell sx={{ width: 50, padding: "4px 8px" }}>
-                          <StyledCheckbox
-                            checked={isSelected}
-                            onChange={() => toggleFileSelection(file.name)}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell
+                    {breadcrumbPaths.map((path, index) => {
+                      const isLast = index === breadcrumbPaths.length - 1;
+                      return isLast ? (
+                        <Typography
+                          variant="body2"
+                          key={index}
+                          color="text.primary"
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Folder fontSize="small" sx={{ mr: 0.5 }} />
+                          {path}
+                        </Typography>
+                      ) : (
+                        <Link
+                          key={index}
+                          component="button"
+                          variant="body2"
+                          color="inherit"
+                          onClick={() => navigateToBreadcrumb(index)}
                           sx={{
-                            minWidth: 300,
-                            width: "100%",
-                            padding: "4px 8px",
+                            display: "flex",
+                            alignItems: "center",
+                            textDecoration: "none",
+                            "&:hover": { textDecoration: "underline" },
                           }}
                         >
-                          <Typography variant="body2" sx={{ display: "flex", alignItems: "center" }}>
-                            <FileIcon
-                              sx={{ px: 0, py: 0, mr: 1, height: "20px" }}
-                              variant="small"
-                              iconProps={{ fontSize: "small" }}
-                              file={{
-                                type: file.is_directory ? FileType.folder : FileType.file,
-                                name: file.name,
-                              }}
-                            />
-                            {file.is_directory ? (
-                              <Typography
-                                component="button"
-                                variant="inherit"
-                                onClick={() => navigateToDirectory(file.name)}
-                                sx={{
-                                  color: "primary.main",
-                                  fontWeight: 500,
-                                  textDecoration: "none",
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  padding: 0,
-                                  "&:hover": { textDecoration: "underline" },
-                                }}
-                              >
-                                {fileBase(file.name)}
-                              </Typography>
-                            ) : (
-                              <Typography
-                                variant="inherit"
-                                sx={{
-                                  color: "inherit",
-                                  fontWeight: 400,
-                                }}
-                              >
-                                {fileBase(file.name)}
-                              </Typography>
-                            )}
-                          </Typography>
-                        </TableCell>
-                        <TableCell sx={{ minWidth: 100, padding: "4px 8px" }}>
-                          <Typography variant="body2" noWrap>
-                            {file.is_directory ? "-" : sizeToString(file.size)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell sx={{ minWidth: 120, padding: "4px 8px" }}>
-                          <Typography variant="body2" noWrap>
-                            {file.updated_at ? <TimeBadge variant="inherit" datetime={file.updated_at} /> : "-"}
-                          </Typography>
-                        </TableCell>
-                      </>
-                    );
-                  }}
-                />
-              </TableContainer>
-            ) : (
-              <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 4 }}>
-                {t("fileManager.nothingFound")}
-              </Typography>
-            )}
+                          <Folder fontSize="small" sx={{ mr: 0.5 }} />
+                          {path}
+                        </Link>
+                      );
+                    })}
+                  </Breadcrumbs>
+                </Box>
 
-            {!viewerState?.version && (
-              <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 1 }}>
-                <Button variant="contained" onClick={extractArchive} color="primary">
-                  {t("fileManager.extractArchive")}
-                </Button>
-                {selectedFiles.length > 0 && (
-                  <SecondaryButton variant={"contained"} onClick={extractSelectedFiles}>
-                    {t("fileManager.extractSelected")}
-                  </SecondaryButton>
+                {filteredFiles.length > 0 ? (
+                  <TableContainer component={StyledTableContainerPaper}>
+                    <TableVirtuoso
+                      style={{
+                        height: Math.min(height, 400),
+                        overflow: "auto",
+                      }}
+                      totalListHeightChanged={(h) => {
+                        setHeight(h + 0.5);
+                      }}
+                      components={{
+                        // eslint-disable-next-line react/display-name
+                        Table: (props) => <Table {...props} size="small" />,
+                      }}
+                      data={filteredFiles}
+                      itemContent={(_index, file) => {
+                        const fullPath = currentPath ? currentPath + "/" + file.name : file.name;
+                        const isSelected = selectedFiles.includes(fullPath);
+
+                        return (
+                          <>
+                            <TableCell sx={{ width: 50, padding: "4px 8px" }}>
+                              <StyledCheckbox
+                                checked={isSelected}
+                                onChange={() => toggleFileSelection(file.name)}
+                                size="small"
+                              />
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                minWidth: 300,
+                                width: "100%",
+                                padding: "4px 8px",
+                              }}
+                            >
+                              <Typography variant="body2" sx={{ display: "flex", alignItems: "center" }}>
+                                <FileIcon
+                                  sx={{ px: 0, py: 0, mr: 1, height: "20px" }}
+                                  variant="small"
+                                  iconProps={{ fontSize: "small" }}
+                                  file={{
+                                    type: file.is_directory ? FileType.folder : FileType.file,
+                                    name: file.name,
+                                  }}
+                                />
+                                {file.is_directory ? (
+                                  <Typography
+                                    component="button"
+                                    variant="inherit"
+                                    onClick={() => navigateToDirectory(file.name)}
+                                    sx={{
+                                      color: "primary.main",
+                                      fontWeight: 500,
+                                      textDecoration: "none",
+                                      background: "none",
+                                      border: "none",
+                                      cursor: "pointer",
+                                      padding: 0,
+                                      "&:hover": { textDecoration: "underline" },
+                                    }}
+                                  >
+                                    {fileBase(file.name)}
+                                  </Typography>
+                                ) : (
+                                  <Typography
+                                    variant="inherit"
+                                    sx={{
+                                      color: "inherit",
+                                      fontWeight: 400,
+                                    }}
+                                  >
+                                    {fileBase(file.name)}
+                                  </Typography>
+                                )}
+                              </Typography>
+                            </TableCell>
+                            <TableCell sx={{ minWidth: 100, padding: "4px 8px" }}>
+                              <Typography variant="body2" noWrap>
+                                {file.is_directory ? "-" : sizeToString(file.size)}
+                              </Typography>
+                            </TableCell>
+                            <TableCell sx={{ minWidth: 120, padding: "4px 8px" }}>
+                              <Typography variant="body2" noWrap>
+                                {file.updated_at ? <TimeBadge variant="inherit" datetime={file.updated_at} /> : "-"}
+                              </Typography>
+                            </TableCell>
+                          </>
+                        );
+                      }}
+                    />
+                  </TableContainer>
+                ) : (
+                  <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 4 }}>
+                    {t("fileManager.nothingFound")}
+                  </Typography>
+                )}
+
+                {!viewerState?.version && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 1,
+                      justifyContent: "space-between",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                      <Button variant="contained" onClick={extractArchive} color="primary">
+                        {t("fileManager.extractArchive")}
+                      </Button>
+                      {selectedFiles.length > 0 && (
+                        <SecondaryButton variant={"contained"} onClick={extractSelectedFiles}>
+                          {t("fileManager.extractSelected")}
+                        </SecondaryButton>
+                      )}
+                    </Box>
+                    {isZip && (
+                      <Box>
+                        <EncodingSelector
+                          value={encoding}
+                          onChange={setEncoding}
+                          size="small"
+                          variant="filled"
+                          fullWidth
+                          showIcon
+                          label={t("modals.selectEncoding")}
+                        />
+                      </Box>
+                    )}
+                  </Box>
                 )}
               </Box>
             )}
-          </Box>
-        )}
+          </div>
+        </AutoHeight>
       </ViewerDialog>
     </>
   );
