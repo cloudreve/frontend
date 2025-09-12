@@ -473,6 +473,7 @@
     "captchaWidth": "Breite",
     "captchaHeight": "Höhe",
     "captchaLength": "Länge",
+    "captchaLengthDes": "Die Länge der Zeichen im Captcha.",
     "captchaMode": "Modus",
     "captchaModeNumber": "Zahlen",
     "captchaModeLetter": "Buchstaben",

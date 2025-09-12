@@ -472,6 +472,7 @@
     "captchaWidth": "宽度",
     "captchaHeight": "高度",
     "captchaLength": "长度",
+    "captchaLengthDes": "验证码中字符的长度。",
     "captchaMode": "模式",
     "captchaModeNumber": "数字",
     "captchaModeLetter": "字母",

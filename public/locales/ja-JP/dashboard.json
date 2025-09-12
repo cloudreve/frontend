@@ -472,6 +472,7 @@
     "captchaWidth": "幅",
     "captchaHeight": "高さ",
     "captchaLength": "長さ",
+    "captchaLengthDes": "キャプチャ内の文字の長さ。",
     "captchaMode": "モード",
     "captchaModeNumber": "数字",
     "captchaModeLetter": "アルファベット",

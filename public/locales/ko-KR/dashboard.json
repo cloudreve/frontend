@@ -472,6 +472,7 @@
     "captchaWidth": "너비",
     "captchaHeight": "높이",
     "captchaLength": "길이",
+    "captchaLengthDes": "캡차 내 문자의 길이입니다.",
     "captchaMode": "모드",
     "captchaModeNumber": "숫자",
     "captchaModeLetter": "문자",

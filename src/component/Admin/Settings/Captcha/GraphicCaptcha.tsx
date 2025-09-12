@@ -1,10 +1,10 @@
+import { Collapse, FormControl, FormControlLabel, ListItemText, Stack, Switch } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { FormControl, FormControlLabel, ListItemText, Stack, Switch } from "@mui/material";
-import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
-import { DenseSelect } from "../../../Common/StyledComponents.tsx";
-import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
-import * as React from "react";
 import { isTrueVal } from "../../../../session/utils.ts";
+import { DenseFilledTextField, DenseSelect } from "../../../Common/StyledComponents.tsx";
+import { SquareMenuItem } from "../../../FileManager/ContextMenu/ContextMenu.tsx";
+import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
+import { NoMarginHelperText } from "../Settings.tsx";
 
 export interface GraphicCaptchaProps {
   values: {
@@ -41,6 +41,28 @@ const GraphicCaptcha = ({ values, setSettings }: GraphicCaptchaProps) => {
           </DenseSelect>
         </FormControl>
       </SettingForm>
+      <Collapse in={values.captcha_mode !== "2"} unmountOnExit>
+        <SettingForm title={t("settings.captchaLength")} lgWidth={5}>
+          <FormControl>
+            <DenseFilledTextField
+              value={values.captcha_CaptchaLen}
+              slotProps={{
+                htmlInput: {
+                  type: "number",
+                  min: 1,
+                  max: 10,
+                },
+              }}
+              onChange={(e) =>
+                setSettings({
+                  captcha_CaptchaLen: e.target.value,
+                })
+              }
+            />
+            <NoMarginHelperText>{t("settings.captchaLengthDes")}</NoMarginHelperText>
+          </FormControl>
+        </SettingForm>
+      </Collapse>
       {[
         {
           name: "complexOfNoiseText",

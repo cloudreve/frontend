@@ -473,6 +473,7 @@
     "captchaWidth": "Ширина",
     "captchaHeight": "Высота",
     "captchaLength": "Длина",
+    "captchaLengthDes": "Длина символов в капче.",
     "captchaMode": "Режим",
     "captchaModeNumber": "Цифры",
     "captchaModeLetter": "Буквы",
