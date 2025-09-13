@@ -151,7 +151,7 @@ const Home = () => {
                                 ...(summary?.metrics_summary?.shares ?? []),
                               ];
                               const yAxisUpperLimit = yAxisValue.length ? Math.max(...yAxisValue) / 0.8 - 1 : 0;
-                              const yAxisDigits = yAxisUpperLimit > 0 ? Math.floor(Math.log10(yAxisUpperLimit)) + 1 : 1;
+                              const yAxisDigits = yAxisUpperLimit > 1 ? Math.floor(Math.log10(yAxisUpperLimit)) + 1 : 1;
                               return 3 + yAxisDigits * 9;
                             })()}
                           />
