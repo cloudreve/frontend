@@ -122,17 +122,25 @@ const ArchivePreview = () => {
           res.files
             .filter((item) => item.is_directory)
             .forEach((item) => {
-              allDirs.add(item.name);
-              allItems.push(item);
+              let normalizedName = item.name && typeof item.name === "string" && item.name.startsWith("/") ? item.name.slice(1) : item.name;
+              allDirs.add(normalizedName);
+              allItems.push({
+                ...item,
+                name: normalizedName,
+              });
             });
 
           // 文件项，并补齐缺失目录
           res.files
             .filter((item) => !item.is_directory)
             .forEach((item) => {
-              allItems.push(item);
+              let normalizedName = item.name && typeof item.name === "string" && item.name.startsWith("/") ? item.name.slice(1) : item.name;
+              allItems.push({
+                ...item,
+                name: normalizedName,
+              });
 
-              const dirElements = item.name.split("/");
+              const dirElements = normalizedName.split("/");
               for (let i = 1; i < dirElements.length; i++) {
                 const dirName = dirElements.slice(0, i).join("/");
                 if (!allDirs.has(dirName)) {
