@@ -328,8 +328,11 @@ const GridFile = memo((props: FileBlockProps) => {
       return;
     }
 
+    // Reset to loading state before reloading thumb (e.g., after reset)
+    setImageLoading(true);
+    setThumbSrc(undefined);
     tryLoadThumbSrc();
-  }, [inView]);
+  }, [inView, file, file.metadata?.[Metadata.thumbDisabled]]);
 
   const hoverProps = bindDelayedHover(popupState, 800);
   const { open: thumbPopoverOpen, ...rest } = bindPopover(popupState);
