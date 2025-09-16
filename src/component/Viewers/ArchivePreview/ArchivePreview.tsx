@@ -93,6 +93,14 @@ const ArchivePreview = () => {
     return currentPath.split("/").filter(Boolean);
   }, [currentPath]);
 
+  // 规范化路径，去除开头可能存在的 `/`
+  const normalizeName = (name: string) => {
+    if (name && typeof name === "string" && name.startsWith("/")) {
+      return name.slice(1);
+    }
+    return name;
+  };
+
   useEffect(() => {
     if (!viewerState || !viewerState.open) {
       setEncoding(defaultEncodingValue);
@@ -122,17 +130,25 @@ const ArchivePreview = () => {
           res.files
             .filter((item) => item.is_directory)
             .forEach((item) => {
-              allDirs.add(item.name);
-              allItems.push(item);
+              const normalizedName = normalizeName(item.name);
+              allItems.push({
+                ...item,
+                name: normalizedName,
+              });
+              allDirs.add(normalizedName);
             });
 
           // 文件项，并补齐缺失目录
           res.files
             .filter((item) => !item.is_directory)
             .forEach((item) => {
-              allItems.push(item);
+              const normalizedName = normalizeName(item.name);
+              allItems.push({
+                ...item,
+                name: normalizedName,
+              });
 
-              const dirElements = item.name.split("/");
+              const dirElements = normalizedName.split("/");
               for (let i = 1; i < dirElements.length; i++) {
                 const dirName = dirElements.slice(0, i).join("/");
                 if (!allDirs.has(dirName)) {
