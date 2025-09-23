@@ -15,7 +15,6 @@ import {
   sendUnlockFiles,
   setCurrentVersion,
 } from "../../api/api.ts";
-import { getCachedThumbExts } from "./thumb.ts";
 import {
   ConflictDetail,
   DirectLink,
@@ -53,6 +52,7 @@ import {
   ContextMenuTypes,
   fileUpdated,
   removeSelected,
+  removeThumbCache,
   removeTreeCache,
   setContextMenu,
   setFileDeleteModal,
@@ -72,12 +72,13 @@ import {
   setSidebar,
   updateLockConflicts,
 } from "../globalStateSlice.ts";
-import { Viewers } from "../siteConfigSlice.ts";
+import { ConfigLoadState, Viewers } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { confirmOperation, deleteConfirmation, renameForm, requestCreateNew, selectPath } from "./dialog.ts";
 import { downloadSingleFile } from "./download.ts";
 import { navigateToPath, refreshFileList, updateUserCapacity } from "./filemanager.ts";
 import { queueLoadShareInfo } from "./share.ts";
+import { loadSiteConfig } from "./site.ts";
 import { openViewer, openViewers } from "./viewer.ts";
 
 const contextMenuCloseAnimationDelay = 250;
@@ -115,6 +116,18 @@ export function loadFileThumb(index: number, file: FileResponse): AppThunk<Promi
       dispatch(setThumbCache({ index, value: [file.path, thumb] }));
       return thumb.url;
     } catch (e) {
+      dispatch(
+        fileUpdated({
+          index,
+          value: [
+            {
+              file: { ...file, metadata: { ...file.metadata, [Metadata.thumbDisabled]: "" } },
+              oldPath: file.path,
+              includeMetadata: true,
+            },
+          ],
+        }),
+      );
       console.warn("Failed to load thumb", e);
       return null;
     }
@@ -1157,15 +1170,19 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
 
 export function resetThumbnails(files: FileResponse[]): AppThunk {
   return async (dispatch, getState) => {
-    const cache = getCachedThumbExts();
-    const uris = files
-      .filter((f) => f.type == FileType.file)
-      .filter((f) =>
-        cache === undefined || cache === null ? true : cache.has((fileExtension(f.name) || "").toLowerCase()),
-      )
-      .map((f) => getFileLinkedUri(f));
+    const thumbConfigLoaded = getState().siteConfig.thumb.loaded;
+    if (thumbConfigLoaded == ConfigLoadState.NotLoaded) {
+      await dispatch(loadSiteConfig("thumb"));
+    }
 
-    if (uris.length === 0) {
+    const thumbExts = getState().siteConfig.thumb.config.thumb_exts ?? [];
+    const targetFiles = files
+      .filter((f) => f.type == FileType.file)
+      .filter(
+        (f) => f.metadata?.[Metadata.thumbDisabled] !== undefined && thumbExts.includes(fileExtension(f.name) ?? ""),
+      );
+
+    if (targetFiles.length === 0) {
       enqueueSnackbar({
         message: i18next.t("application:fileManager.noFileCanResetThumbnail"),
         preventDuplicate: true,
@@ -1177,12 +1194,6 @@ export function resetThumbnails(files: FileResponse[]): AppThunk {
 
     try {
       // Re-enable thumbnails by removing the disable mark, and update local metadata/cache.
-      const targetFiles = files
-        .filter((f) => f.type == FileType.file)
-        .filter((f) =>
-          cache === undefined || cache === null ? true : cache.has((fileExtension(f.name) || "").toLowerCase()),
-        );
-
       await dispatch(
         patchFileMetadata(FileManagerIndex.main, targetFiles, [
           {
@@ -1192,13 +1203,14 @@ export function resetThumbnails(files: FileResponse[]): AppThunk {
         ]),
       );
 
-      // 预取：立即为所选文件请求缩略图（不依赖列表刷新或滚动触发）
-      const fm = getState().fileManager[FileManagerIndex.main];
-      const toPrefetch = targetFiles
-        .map((f) => fm.list?.files.find((ff) => ff.path === f.path) || f)
-        .filter((f): f is FileResponse => !!f);
-      // 并发触发 GET /file/thumb
-      await Promise.allSettled(toPrefetch.map((f) => dispatch(loadFileThumb(FileManagerIndex.main, f))));
+      dispatch(
+        removeThumbCache({
+          index: FileManagerIndex.main,
+          value: targetFiles.map((file) => file.path),
+        }),
+      );
+      // refresh file list
+      dispatch(refreshFileList(FileManagerIndex.main));
 
       // 成功信息
       enqueueSnackbar({
@@ -1206,7 +1218,6 @@ export function resetThumbnails(files: FileResponse[]): AppThunk {
         variant: "success",
         action: DefaultCloseAction,
       });
-      // 不再刷新文件列表；组件会基于metadata变化自动重新请求所选文件的缩略图
     } catch (_e) {
       // Error snackbar is handled in send()
     }

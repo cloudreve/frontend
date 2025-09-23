@@ -127,6 +127,11 @@ export const fileManagerSlice = createSlice({
         state[index].listViewColumns = action.payload;
       });
     },
+    removeThumbCache: (state, action: PayloadAction<FileManagerArgsBase<string[]>>) => {
+      action.payload.value.forEach((path) => {
+        state[action.payload.index].tree[path].thumb = undefined;
+      });
+    },
     resetFileManager: (state, action: PayloadAction<number>) => {
       state[action.payload].path = undefined;
       state[action.payload].previous_path = undefined;
@@ -498,6 +503,7 @@ export const fileManagerSlice = createSlice({
 
 export default fileManagerSlice.reducer;
 export const {
+  removeThumbCache,
   clearMultiSelectHovered,
   setGalleryWidth,
   setListViewColumns,

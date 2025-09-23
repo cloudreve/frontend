@@ -315,7 +315,7 @@
     "moreActions": "Weitere Aktionen",
     "refresh": "Aktualisieren",
     "createArchive": "Archiv erstellen",
-    "resetThumbnail": "Miniaturansicht zurücksetzen",
+    "resetThumbnail": "Beschädigte Miniaturansicht zurücksetzen",
     "resetThumbnailRequested": "Zurücksetzen der Miniaturansicht angefordert.",
     "noFileCanResetThumbnail": "Keine Dateien zum Zurücksetzen der Miniaturansicht verfügbar.",
     "newFolder": "Neuen Ordner erstellen",

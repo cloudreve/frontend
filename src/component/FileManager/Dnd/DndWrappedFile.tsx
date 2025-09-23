@@ -1,18 +1,18 @@
-import { useDrag, useDrop } from "react-dnd";
 import { memo, useCallback, useContext, useEffect } from "react";
-import { FileResponse, FileType } from "../../../api/explorer.ts";
+import { useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { FileResponse, FileType } from "../../../api/explorer.ts";
 import { setDragging } from "../../../redux/globalStateSlice.ts";
-import { getFileLinkedUri, mergeRefs } from "../../../util";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { processDnd } from "../../../redux/thunks/file.ts";
+import { getFileLinkedUri, mergeRefs } from "../../../util";
 
-import { FmIndexContext } from "../FmIndexContext.tsx";
-import { FileManagerIndex } from "../FileManager.tsx";
-import { FileBlockProps } from "../Explorer/Explorer.tsx";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CrUri, { Filesystem } from "../../../util/uri.ts";
+import { FileBlockProps } from "../Explorer/Explorer.tsx";
+import { FileManagerIndex } from "../FileManager.tsx";
+import { FmIndexContext } from "../FmIndexContext.tsx";
 
 export interface DragItem {
   target: FileResponse;

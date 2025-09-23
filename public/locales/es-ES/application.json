@@ -315,7 +315,7 @@
     "moreActions": "Más acciones",
     "refresh": "Actualizar",
     "createArchive": "Crear archivo comprimido",
-    "resetThumbnail": "Restablecer miniatura",
+    "resetThumbnail": "Restablecer miniatura dañada",
     "resetThumbnailRequested": "Se solicitó restablecer la miniatura.",
     "noFileCanResetThumbnail": "No hay archivos disponibles para restablecer la miniatura.",
     "newFolder": "Nueva carpeta",

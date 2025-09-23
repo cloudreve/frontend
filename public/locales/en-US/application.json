@@ -281,7 +281,7 @@
     "moreActions": "More actions",
     "refresh": "Refresh",
     "createArchive": "Create archive file",
-    "resetThumbnail": "Reset thumbnail",
+    "resetThumbnail": "Reset broken thumbnail",
     "resetThumbnailRequested": "Thumbnail reset requested.",
     "noFileCanResetThumbnail": "No files available for thumbnail reset.",
     "newFolder": "New folder",

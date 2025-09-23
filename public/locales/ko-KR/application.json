@@ -87,7 +87,7 @@
     "photos": "사진",
     "music": "음악",
     "documents": "문서",
-    "resetThumbnail": "썸네일 재설정",
+    "resetThumbnail": "깨진 썸네일 재설정",
     "resetThumbnailRequested": "썸네일 재설정이 요청되었습니다.",
     "noFileCanResetThumbnail": "썸네일을 재설정할 수 있는 파일이 없습니다.",
     "addATag": "태그 추가...",

@@ -53,7 +53,7 @@
     "loggedOut": "Sei stato disconnesso",
     "clickToRefresh": "Clicca per aggiornare il CAPTCHA"
   },
-  "resetThumbnail": "Reimposta miniatura",
+  "resetThumbnail": "Reimposta miniatura danneggiata",
   "resetThumbnailRequested": "Reimpostazione della miniatura richiesta.",
   "noFileCanResetThumbnail": "Nessun file può reimpostare la miniatura.",
   "navbar": {

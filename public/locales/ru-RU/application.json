@@ -67,7 +67,7 @@
     "notNameOpOr": "Должны содержаться все ключевые слова",
     "caseFolding": "Игнорировать регистр",
     "keywords": "Ключевые слова",
-    "resetThumbnail": "Сбросить миниатюру",
+    "resetThumbnail": "Сбросить повреждённую миниатюру",
     "resetThumbnailRequested": "Запрошен сброс миниатюры.",
     "noFileCanResetThumbnail": "Нет файлов для сброса миниатюры.",
     "fileNameKeywordsHelp": "Нажмите Enter для добавления ключевого слова",

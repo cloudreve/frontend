@@ -3,6 +3,8 @@ import i18n from "../i18n.ts";
 import {
   AdminListGroupResponse,
   AdminListService,
+  ListShareResponse as AdminListShareResponse,
+  StoragePolicy as AdminStoragePolicy,
   BatchIDService,
   CleanupTaskService,
   CreateStoragePolicyCorsService,
@@ -17,7 +19,6 @@ import {
   ListEntityResponse,
   ListFileResponse,
   ListNodeResponse,
-  ListShareResponse as AdminListShareResponse,
   ListStoragePolicyResponse,
   ListTaskResponse,
   ListUserResponse,
@@ -26,7 +27,6 @@ import {
   QueueMetric,
   SetSettingService,
   Share as ShareEnt,
-  StoragePolicy as AdminStoragePolicy,
   Task,
   TestNodeDownloaderService,
   TestNodeService,
@@ -76,7 +76,6 @@ import {
   Capacity,
   FinishPasskeyLoginService,
   FinishPasskeyRegistrationService,
-  Group,
   LoginResponse,
   Passkey,
   PasskeyCredentialOption,
@@ -292,24 +291,6 @@ export function getFileThumb(path: string, contextHint?: string): ThunkResponse<
   };
 }
 
-// Thin wrapper to query supported thumbnail extensions from backend
-export function getThumbExts(): ThunkResponse<{ thumb_exts?: string[] }> {
-  return async (dispatch, _getState) => {
-    return await dispatch(
-      send<{ thumb_exts?: string[] }>(
-        "/site/config/thumb",
-        {
-          method: "GET",
-        },
-        {
-          ...defaultOpts,
-          noCredential: true,
-        },
-      ),
-    );
-  };
-}
-
 export function getUserInfo(uid: string): ThunkResponse<User> {
   return async (dispatch, _getState) => {
     return await dispatch(
@@ -320,7 +301,7 @@ export function getUserInfo(uid: string): ThunkResponse<User> {
         },
         {
           ...defaultOpts,
-          bypassSnackbar: (_e) => skipSnackbar,
+          bypassSnackbar: (_e) => true,
         },
       ),
     );

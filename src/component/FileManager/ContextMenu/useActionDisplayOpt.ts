@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { FileResponse, FileType, Metadata, NavigatorCapability } from "../../../api/explorer.ts";
-import { getCachedThumbExts } from "../../../redux/thunks/thumb.ts";
 import { GroupPermission } from "../../../api/user.ts";
 import { defaultPath } from "../../../hooks/useNavigation.tsx";
 import { ContextMenuTypes } from "../../../redux/fileManagerSlice.ts";
@@ -46,6 +45,7 @@ export interface DisplayOption {
   hasFile?: boolean;
   hasFolder?: boolean;
   hasOwned?: boolean;
+  hasFailedThumb?: boolean;
 
   showEnter?: boolean;
   showOpen?: boolean;
@@ -156,8 +156,13 @@ export const getActionOpt = (
       display.hasUpdatable = true;
     }
 
-    if (target.metadata && target.metadata[Metadata.restore_uri]) {
-      display.hasTrashFile = true;
+    if (target.metadata) {
+      if (target.metadata[Metadata.restore_uri]) {
+        display.hasTrashFile = true;
+      }
+      if (target.metadata[Metadata.thumbDisabled] !== undefined) {
+        display.hasFailedThumb = true;
+      }
     }
 
     if (target.type == FileType.file) {
@@ -292,17 +297,13 @@ export const getActionOpt = (
     groupBs.enabled(GroupPermission.archive_task) &&
     display.orCapability &&
     display.orCapability.enabled(NavigatorCapability.download_file);
-
-  // Reset thumbnail is available when at least one file is selected and
-  // current capability allows generating thumbnails
-  // Show only when at least one selected file has a supported extension,
-  // based on cached supported thumbnail extensions.
-  const cache = getCachedThumbExts();
-  const anySupported =
-    cache instanceof Set
-      ? targets.some((f) => f.type == FileType.file && cache.has((fileExtension(f.name) || "").toLowerCase()))
-      : false;
-  display.showResetThumb = display.hasFile && anySupported;
+  display.showResetThumb =
+    display.hasFile &&
+    !display.hasFolder &&
+    display.hasFailedThumb &&
+    display.allUpdatable &&
+    display.orCapability &&
+    display.orCapability.enabled(NavigatorCapability.update_metadata);
 
   display.showMore =
     display.showVersionControl ||

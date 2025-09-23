@@ -53,7 +53,7 @@
     "loggedOut": "ログアウトしました",
     "clickToRefresh": "CAPTCHAを再読み込み"
   },
-  "resetThumbnail": "サムネイルをリセット",
+  "resetThumbnail": "壊れたサムネイルをリセット",
   "resetThumbnailRequested": "サムネイルのリセットをリクエストしました。",
   "noFileCanResetThumbnail": "サムネイルをリセットできるファイルがありません。",
   "navbar": {
