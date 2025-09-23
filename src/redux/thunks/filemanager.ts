@@ -97,7 +97,6 @@ let generation = 0;
 export interface NavigateReconcileOptions {
   next_page?: boolean;
   sync_view?: boolean;
-  min_transition_time?: number; // in ms
 }
 
 const pageSize = (fm: SingleManager) => {
