@@ -9,9 +9,11 @@ import {
   setVersionControlDialog,
 } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
+import { resetThumbnails } from "../../../redux/thunks/file.ts";
 import Archive from "../../Icons/Archive.tsx";
 import BranchForkLink from "../../Icons/BranchForkLink.tsx";
 import HistoryOutlined from "../../Icons/HistoryOutlined.tsx";
+import ImageArrowCounterclockwise from "../../Icons/ImageAarowCounterclockwise.tsx";
 import LinkSetting from "../../Icons/LinkSetting.tsx";
 import { CascadingContext, CascadingMenuItem } from "./CascadingMenu.tsx";
 import { SubMenuItemsProps } from "./OrganizeMenuItems.tsx";
@@ -103,6 +105,14 @@ const MoreMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
             <Archive fontSize="small" />
           </ListItemIcon>
           <ListItemText>{t("application:fileManager.createArchive")}</ListItemText>
+        </CascadingMenuItem>
+      )}
+      {displayOpt.showResetThumb && (
+        <CascadingMenuItem onClick={onClick(() => dispatch(resetThumbnails(targets)))}>
+          <ListItemIcon>
+            <ImageArrowCounterclockwise fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>{t("application:fileManager.resetThumbnail")}</ListItemText>
         </CascadingMenuItem>
       )}
     </>

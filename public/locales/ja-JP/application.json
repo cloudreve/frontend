@@ -54,6 +54,9 @@
     "clickToRefresh": "CAPTCHAを再読み込み",
     "switchLanguage": "言語を切り替え"
   },
+  "resetThumbnail": "壊れたサムネイルをリセット",
+  "resetThumbnailRequested": "サムネイルのリセットをリクエストしました。",
+  "noFileCanResetThumbnail": "サムネイルをリセットできるファイルがありません。",
   "navbar": {
     "notBefore": "～より前",
     "notAfter": "～より後",

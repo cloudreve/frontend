@@ -54,6 +54,9 @@
     "clickToRefresh": "Clicca per aggiornare il CAPTCHA",
     "switchLanguage": "Cambia lingua"
   },
+  "resetThumbnail": "Reimposta miniatura danneggiata",
+  "resetThumbnailRequested": "Reimpostazione della miniatura richiesta.",
+  "noFileCanResetThumbnail": "Nessun file può reimpostare la miniatura.",
   "navbar": {
     "notBefore": "Non prima di",
     "notAfter": "Non dopo",

@@ -39,7 +39,7 @@ import { loadingDebounceMs } from "../../constants";
 import { defaultPath } from "../../hooks/useNavigation.tsx";
 import SessionManager, { UserSettings } from "../../session";
 import { addRecentUsedColor, addUsedTags } from "../../session/utils.ts";
-import { getFileLinkedUri } from "../../util";
+import { fileExtension, getFileLinkedUri } from "../../util";
 import Boolset from "../../util/boolset.ts";
 import { canCopyMoveTo } from "../../util/permission.ts";
 import CrUri, { Filesystem } from "../../util/uri.ts";
@@ -52,6 +52,7 @@ import {
   ContextMenuTypes,
   fileUpdated,
   removeSelected,
+  removeThumbCache,
   removeTreeCache,
   setContextMenu,
   setFileDeleteModal,
@@ -71,12 +72,13 @@ import {
   setSidebar,
   updateLockConflicts,
 } from "../globalStateSlice.ts";
-import { Viewers } from "../siteConfigSlice.ts";
+import { ConfigLoadState, Viewers } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { confirmOperation, deleteConfirmation, renameForm, requestCreateNew, selectPath } from "./dialog.ts";
 import { downloadSingleFile } from "./download.ts";
 import { navigateToPath, refreshFileList, updateUserCapacity } from "./filemanager.ts";
 import { queueLoadShareInfo } from "./share.ts";
+import { loadSiteConfig } from "./site.ts";
 import { openViewer, openViewers } from "./viewer.ts";
 
 const contextMenuCloseAnimationDelay = 250;
@@ -114,6 +116,18 @@ export function loadFileThumb(index: number, file: FileResponse): AppThunk<Promi
       dispatch(setThumbCache({ index, value: [file.path, thumb] }));
       return thumb.url;
     } catch (e) {
+      dispatch(
+        fileUpdated({
+          index,
+          value: [
+            {
+              file: { ...file, metadata: { ...file.metadata, [Metadata.thumbDisabled]: "" } },
+              oldPath: file.path,
+              includeMetadata: true,
+            },
+          ],
+        }),
+      );
       console.warn("Failed to load thumb", e);
       return null;
     }
@@ -1157,6 +1171,62 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
       "modals.generatingSourceLinks",
     );
     dispatch(setDirectLinkDialog({ open: true, res }));
+  };
+}
+
+export function resetThumbnails(files: FileResponse[]): AppThunk {
+  return async (dispatch, getState) => {
+    const thumbConfigLoaded = getState().siteConfig.thumb.loaded;
+    if (thumbConfigLoaded == ConfigLoadState.NotLoaded) {
+      await dispatch(loadSiteConfig("thumb"));
+    }
+
+    const thumbExts = getState().siteConfig.thumb.config.thumb_exts ?? [];
+    const targetFiles = files
+      .filter((f) => f.type == FileType.file)
+      .filter(
+        (f) => f.metadata?.[Metadata.thumbDisabled] !== undefined && thumbExts.includes(fileExtension(f.name) ?? ""),
+      );
+
+    if (targetFiles.length === 0) {
+      enqueueSnackbar({
+        message: i18next.t("application:fileManager.noFileCanResetThumbnail"),
+        preventDuplicate: true,
+        variant: "warning",
+        action: DefaultCloseAction,
+      });
+      return;
+    }
+
+    try {
+      // Re-enable thumbnails by removing the disable mark, and update local metadata/cache.
+      await dispatch(
+        patchFileMetadata(FileManagerIndex.main, targetFiles, [
+          {
+            key: Metadata.thumbDisabled,
+            remove: true,
+          },
+        ]),
+      );
+
+      dispatch(
+        removeThumbCache({
+          index: FileManagerIndex.main,
+          value: targetFiles.map((file) => file.path),
+        }),
+      );
+      // refresh file list
+      dispatch(refreshFileList(FileManagerIndex.main));
+
+      // 成功信息
+      enqueueSnackbar({
+        message: i18next.t("application:fileManager.resetThumbnailRequested"),
+        variant: "success",
+        action: DefaultCloseAction,
+      });
+    } catch (_e) {
+      // Error snackbar is handled in send()
+    }
   };
 }
 

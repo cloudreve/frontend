@@ -45,6 +45,7 @@ export interface DisplayOption {
   hasFile?: boolean;
   hasFolder?: boolean;
   hasOwned?: boolean;
+  hasFailedThumb?: boolean;
 
   showEnter?: boolean;
   showOpen?: boolean;
@@ -77,6 +78,7 @@ export interface DisplayOption {
   showDirectLinkManagement?: boolean;
   showManageShares?: boolean;
   showCreateArchive?: boolean;
+  showResetThumb?: boolean;
 
   andCapability?: Boolset;
   orCapability?: Boolset;
@@ -154,8 +156,13 @@ export const getActionOpt = (
       display.hasUpdatable = true;
     }
 
-    if (target.metadata && target.metadata[Metadata.restore_uri]) {
-      display.hasTrashFile = true;
+    if (target.metadata) {
+      if (target.metadata[Metadata.restore_uri]) {
+        display.hasTrashFile = true;
+      }
+      if (target.metadata[Metadata.thumbDisabled] !== undefined) {
+        display.hasFailedThumb = true;
+      }
     }
 
     if (target.type == FileType.file) {
@@ -290,12 +297,20 @@ export const getActionOpt = (
     groupBs.enabled(GroupPermission.archive_task) &&
     display.orCapability &&
     display.orCapability.enabled(NavigatorCapability.download_file);
+  display.showResetThumb =
+    display.hasFile &&
+    !display.hasFolder &&
+    display.hasFailedThumb &&
+    display.allUpdatable &&
+    display.orCapability &&
+    display.orCapability.enabled(NavigatorCapability.update_metadata);
 
   display.showMore =
     display.showVersionControl ||
     display.showManageShares ||
     display.showCreateArchive ||
-    display.showDirectLinkManagement;
+    display.showDirectLinkManagement ||
+    display.showResetThumb;
   return display;
 };
 

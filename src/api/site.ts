@@ -44,6 +44,7 @@ export interface SiteConfig {
   custom_props?: CustomProps[];
   custom_nav_items?: CustomNavItem[];
   custom_html?: CustomHTML;
+  thumb_exts?: string[];
 }
 
 export interface CaptchaResponse {
