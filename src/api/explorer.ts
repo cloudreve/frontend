@@ -211,6 +211,14 @@ export const Metadata = {
   stream_indexed_bitrate: "bitrate",
   stream_indexed_width: "width",
   stream_indexed_height: "height",
+
+  // Geocoding
+  street: "geocoding:street",
+  locality: "geocoding:locality",
+  place: "geocoding:place",
+  district: "geocoding:district",
+  region: "geocoding:region",
+  country: "geocoding:country",
 };
 
 export interface FileThumbResponse {

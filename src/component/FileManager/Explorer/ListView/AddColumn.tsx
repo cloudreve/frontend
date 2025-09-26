@@ -46,6 +46,13 @@ const mediaInfoOptions: (ColumType | null)[] = [
   ColumType.artist,
   ColumType.album,
   ColumType.duration,
+  null,
+  ColumType.street,
+  ColumType.locality,
+  ColumType.place,
+  ColumType.district,
+  ColumType.region,
+  ColumType.country,
 ];
 
 const AddColumn = (props: AddColumnProps) => {

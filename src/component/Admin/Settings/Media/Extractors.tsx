@@ -76,6 +76,18 @@ const extractors: ExtractorRenderProps[] = [
     maxSizeLocalSetting: "media_meta_ffprobe_size_local",
     maxSizeRemoteSetting: "media_meta_ffprobe_size_remote",
   },
+  {
+    name: "geocoding",
+    des: "geocodingDes",
+    enableFlag: "media_meta_geocoding",
+    additionalSettings: [
+      {
+        name: "media_meta_geocoding_mapbox_ak",
+        label: "mapboxAK",
+        des: "mapboxAKDes",
+      },
+    ],
+  },
 ];
 
 const Extractors = ({ values, setSetting }: ExtractorsProps) => {
@@ -88,6 +100,15 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
     setSetting({
       [name]: e.target.checked ? "1" : "0",
     });
+
+    const newValues = { ...values, [name]: e.target.checked ? "1" : "0" };
+    if (isTrueVal(newValues["media_meta_geocoding"]) && !isTrueVal(newValues["media_meta_exif"])) {
+      enqueueSnackbar({
+        message: t("settings.geocodingDependencyWarning"),
+        variant: "warning",
+        action: DefaultCloseAction,
+      });
+    }
   };
 
   const doTest = (name: string, executable: string) => {
@@ -215,7 +236,8 @@ const Extractors = ({ values, setSetting }: ExtractorsProps) => {
                       />
                     ) : (
                       <DenseFilledTextField
-                        required
+                        label={t(`settings.${setting.label}`)}
+                        required={isTrueVal(values[e.enableFlag ?? ""])}
                         value={values[setting.name]}
                         onChange={(ev) =>
                           setSetting({

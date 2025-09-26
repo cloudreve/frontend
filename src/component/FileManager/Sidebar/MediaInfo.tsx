@@ -13,6 +13,7 @@ import Copyright from "../../Icons/Copyright.tsx";
 import DarkTheme from "../../Icons/DarkTheme.tsx";
 import Image from "../../Icons/Image.tsx";
 import InfoFilled from "../../Icons/InfoFilled.tsx";
+import LocationFilled from "../../Icons/LocationFilled.tsx";
 import MusicNote1 from "../../Icons/MusicNote1.tsx";
 import Notepad from "../../Icons/Notepad.tsx";
 import Person from "../../Icons/Person.tsx";
@@ -232,6 +233,66 @@ export const getDuration = (target: FileResponse): MediaMetaElements | undefined
       display: dayjs.duration(parseFloat(target.metadata[Metadata.stream_duration]), "seconds").format("HH:mm:ss"),
       searchKey: Metadata.stream_duration,
       searchValue: target.metadata[Metadata.stream_duration],
+    };
+  }
+};
+
+export const getStreet = (target: FileResponse): MediaMetaElements | undefined => {
+  if (target.metadata?.[Metadata.street]) {
+    return {
+      display: target.metadata[Metadata.street],
+      searchKey: Metadata.street,
+      searchValue: target.metadata[Metadata.street],
+    };
+  }
+};
+
+export const getLocality = (target: FileResponse): MediaMetaElements | undefined => {
+  if (target.metadata?.[Metadata.locality]) {
+    return {
+      display: target.metadata[Metadata.locality],
+      searchKey: Metadata.locality,
+      searchValue: target.metadata[Metadata.locality],
+    };
+  }
+};
+
+export const getPlace = (target: FileResponse): MediaMetaElements | undefined => {
+  if (target.metadata?.[Metadata.place]) {
+    return {
+      display: target.metadata[Metadata.place],
+      searchKey: Metadata.place,
+      searchValue: target.metadata[Metadata.place],
+    };
+  }
+};
+
+export const getDistrict = (target: FileResponse): MediaMetaElements | undefined => {
+  if (target.metadata?.[Metadata.district]) {
+    return {
+      display: target.metadata[Metadata.district],
+      searchKey: Metadata.district,
+      searchValue: target.metadata[Metadata.district],
+    };
+  }
+};
+
+export const getRegion = (target: FileResponse): MediaMetaElements | undefined => {
+  if (target.metadata?.[Metadata.region]) {
+    return {
+      display: target.metadata[Metadata.region],
+      searchKey: Metadata.region,
+      searchValue: target.metadata[Metadata.region],
+    };
+  }
+};
+
+export const getCountry = (target: FileResponse): MediaMetaElements | undefined => {
+  if (target.metadata?.[Metadata.country]) {
+    return {
+      display: target.metadata[Metadata.country],
+      searchKey: Metadata.country,
+      searchValue: target.metadata[Metadata.country],
     };
   }
 };
@@ -556,6 +617,56 @@ const MediaInfo = ({ target }: MediaInfoProps) => {
     return undefined;
   }, [target, t]);
 
+  const gpsAddressContent = useMemo(() => {
+    let content: (MediaMetaElements | string)[] = [];
+
+    // Build address components in hierarchical order (most specific to least specific)
+    const addressComponents: (MediaMetaElements | undefined)[] = [];
+
+    const street = getStreet(target);
+    if (street) {
+      addressComponents.push(street);
+    }
+    const locality = getLocality(target);
+    if (locality) {
+      addressComponents.push(locality);
+    }
+    const place = getPlace(target);
+    if (place) {
+      addressComponents.push(place);
+    }
+    const district = getDistrict(target);
+    if (district) {
+      addressComponents.push(district);
+    }
+    const region = getRegion(target);
+    if (region) {
+      addressComponents.push(region);
+    }
+    const country = getCountry(target);
+    if (country) {
+      addressComponents.push(country);
+    }
+
+    // Filter out undefined components and join with commas
+    const validComponents = addressComponents.filter(Boolean) as MediaMetaElements[];
+
+    if (validComponents.length > 0) {
+      // Add the first component
+      content.push(validComponents[0]);
+
+      // Add remaining components with comma separators
+      for (let i = 1; i < validComponents.length; i++) {
+        content.push(", ");
+        content.push(validComponents[i]);
+      }
+
+      return { title: [t("fileManager.address")], content };
+    }
+
+    return undefined;
+  }, [target, t]);
+
   const showExifBasic = exifContents.length > 0;
   const showLightInfo = lightInfoContent.length > 0;
   const showCopyRight = !!copyRightContent;
@@ -573,7 +684,8 @@ const MediaInfo = ({ target }: MediaInfoProps) => {
     durationContent ||
     streamFormatContent ||
     singleStreamContents ||
-    mapBoxGps;
+    mapBoxGps ||
+    gpsAddressContent;
 
   if (!showMediaInfo) {
     return undefined;
@@ -592,6 +704,7 @@ const MediaInfo = ({ target }: MediaInfoProps) => {
       {showCopyRight && <MediaMetaCard icon={Copyright} contents={[copyRightContent]} />}
       {softwareContent && <MediaMetaCard icon={WindowApps} contents={[softwareContent]} />}
       {mapBoxGps && <MapLoader height={200} center={mapBoxGps} />}
+      {gpsAddressContent && <MediaMetaCard icon={LocationFilled} contents={[gpsAddressContent]} />}
       {mediaTitleContent && <MediaMetaCard icon={Notepad} contents={[mediaTitleContent]} />}
       {musicArtistContent && <MediaMetaCard icon={Person} contents={[musicArtistContent]} />}
       {albumContent && <MediaMetaCard icon={MusicNote1} contents={[albumContent]} />}

@@ -17,7 +17,7 @@ import Tag from "../../../Icons/Tag.tsx";
 import TextBulletListSquareEdit from "../../../Icons/TextBulletListSquareEdit.tsx";
 import TextCaseTitle from "../../../Icons/TextCaseTitle.tsx";
 import { CascadingSubmenu } from "../../ContextMenu/CascadingMenu.tsx";
-import { SquareMenuItem } from "../../ContextMenu/ContextMenu.tsx";
+import { DenseDivider, SquareMenuItem } from "../../ContextMenu/ContextMenu.tsx";
 import { customPropsMetadataPrefix } from "../../Sidebar/CustomProps/CustomProps.tsx";
 import { Condition, ConditionType } from "./ConditionBox.tsx";
 
@@ -77,7 +77,7 @@ const options: ConditionOption[] = [
   },
 ];
 
-const mediaMetaOptions: ConditionOption[] = [
+const mediaMetaOptions: (ConditionOption | null)[] = [
   {
     name: "application:fileManager.title",
     condition: {
@@ -105,6 +105,7 @@ const mediaMetaOptions: ConditionOption[] = [
       id: Metadata.music_album,
     },
   },
+  null, // divider
   {
     name: "application:fileManager.cameraMake",
     condition: {
@@ -139,6 +140,61 @@ const mediaMetaOptions: ConditionOption[] = [
       metadata_key_readonly: true,
       metadata_key: Metadata.lens_model,
       id: Metadata.lens_model,
+    },
+  },
+  null, // divider
+  {
+    name: "application:fileManager.street",
+    condition: {
+      type: ConditionType.metadata,
+      metadata_key_readonly: true,
+      metadata_key: Metadata.street,
+      id: Metadata.street,
+    },
+  },
+  {
+    name: "application:fileManager.locality",
+    condition: {
+      type: ConditionType.metadata,
+      metadata_key_readonly: true,
+      metadata_key: Metadata.locality,
+      id: Metadata.locality,
+    },
+  },
+  {
+    name: "application:fileManager.place",
+    condition: {
+      type: ConditionType.metadata,
+      metadata_key_readonly: true,
+      metadata_key: Metadata.place,
+      id: Metadata.place,
+    },
+  },
+  {
+    name: "application:fileManager.district",
+    condition: {
+      type: ConditionType.metadata,
+      metadata_key_readonly: true,
+      metadata_key: Metadata.district,
+      id: Metadata.district,
+    },
+  },
+  {
+    name: "application:fileManager.region",
+    condition: {
+      type: ConditionType.metadata,
+      metadata_key_readonly: true,
+      metadata_key: Metadata.region,
+      id: Metadata.region,
+    },
+  },
+  {
+    name: "application:fileManager.country",
+    condition: {
+      type: ConditionType.metadata,
+      metadata_key_readonly: true,
+      metadata_key: Metadata.country,
+      id: Metadata.country,
     },
   },
 ];
@@ -186,17 +242,21 @@ const AddCondition = (props: AddConditionProps) => {
           popupId={"mediaInfo"}
           title={t("application:fileManager.mediaInfo")}
         >
-          {mediaMetaOptions.map((option, index) => (
-            <SquareMenuItem key={index} dense onClick={() => onConditionAdd(option.condition)}>
-              <ListItemText
-                slotProps={{
-                  primary: { variant: "body2" },
-                }}
-              >
-                {t(option.name)}
-              </ListItemText>
-            </SquareMenuItem>
-          ))}
+          {mediaMetaOptions.map((option, index) =>
+            option ? (
+              <SquareMenuItem key={index} dense onClick={() => onConditionAdd(option.condition)}>
+                <ListItemText
+                  slotProps={{
+                    primary: { variant: "body2" },
+                  }}
+                >
+                  {t(option.name)}
+                </ListItemText>
+              </SquareMenuItem>
+            ) : (
+              <DenseDivider />
+            ),
+          )}
         </CascadingSubmenu>
         {customPropsOptions && customPropsOptions.length > 0 && (
           <CascadingSubmenu

@@ -265,6 +265,8 @@ const Settings = () => {
                     "media_meta_ffprobe_path",
                     "media_meta_ffprobe_size_local",
                     "media_meta_ffprobe_size_remote",
+                    "media_meta_geocoding",
+                    "media_meta_geocoding_mapbox_ak",
                   ]}
                 >
                   <Media />

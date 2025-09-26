@@ -30,6 +30,8 @@ import {
   getArtist,
   getCameraMake,
   getCameraModel,
+  getCountry,
+  getDistrict,
   getDuration,
   getExposure,
   getExposureBias,
@@ -39,8 +41,12 @@ import {
   getIso,
   getLensMake,
   getLensModel,
+  getLocality,
   getMediaTitle,
+  getPlace,
+  getRegion,
   getSoftware,
+  getStreet,
   takenAt,
 } from "../../Sidebar/MediaInfo.tsx";
 import { MediaMetaElements } from "../../Sidebar/MediaMetaCard.tsx";
@@ -352,6 +358,18 @@ const Cell = memo((props: CellProps) => {
       return <MediaElementsCell element={getAlbum(file)} />;
     case ColumType.duration:
       return <MediaElementsCell element={getDuration(file)} />;
+    case ColumType.street:
+      return <MediaElementsCell element={getStreet(file)} />;
+    case ColumType.locality:
+      return <MediaElementsCell element={getLocality(file)} />;
+    case ColumType.place:
+      return <MediaElementsCell element={getPlace(file)} />;
+    case ColumType.district:
+      return <MediaElementsCell element={getDistrict(file)} />;
+    case ColumType.region:
+      return <MediaElementsCell element={getRegion(file)} />;
+    case ColumType.country:
+      return <MediaElementsCell element={getCountry(file)} />;
     case ColumType.custom_props:
       if (customProp) {
         return getPropsContent(customProp, () => {}, false, true);
