@@ -277,3 +277,7 @@ export function send<T = any>(
     }
   };
 }
+
+export const isRequestAbortedError = (e: Error) => {
+  return e.message == "Request aborted";
+};

@@ -70,7 +70,7 @@ import {
   ViewerGroup,
   ViewerSessionResponse,
 } from "./explorer.ts";
-import { AppError, Code, CrHeaders, defaultOpts, send, ThunkResponse } from "./request.ts";
+import { AppError, Code, CrHeaders, defaultOpts, isRequestAbortedError, send, ThunkResponse } from "./request.ts";
 import { CreateDavAccountService, DavAccount, ListDavAccountsResponse, ListDavAccountsService } from "./setting.ts";
 import { ListShareResponse, ListShareService } from "./share.ts";
 import { CaptchaResponse, SiteConfig } from "./site.ts";
@@ -115,7 +115,7 @@ export function getSiteConfig(section: string): ThunkResponse<SiteConfig> {
         },
         {
           ...defaultOpts,
-          noCredential: section != "basic",
+          bypassSnackbar: (e) => isRequestAbortedError(e),
           errorSnackbarMsg: (e) => i18n.t("errLoadingSiteConfig", { ns: "common" }) + e.message,
         },
       ),
@@ -373,6 +373,7 @@ export function sendRenameFile(req: RenameFileService): ThunkResponse<FileRespon
         },
         {
           ...defaultOpts,
+          bypassSnackbar: (e) => isRequestAbortedError(e),
         },
       ),
     );
