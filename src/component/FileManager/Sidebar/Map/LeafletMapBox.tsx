@@ -14,9 +14,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "/static/img/marker-shadow.png", // .src removed
 });
 
-/*
-   Majority users of Cloudreve in China prefer not to include Ukraine flag. Feel free to remove it if you want to display it.
- */
 const includeUkraineFlag = false;
 const FlagRemoval = () => {
   const map = useMap();

@@ -17,6 +17,7 @@ export default defineConfig({
       injectRegister: "auto",
       manifest: false,
       workbox: {
+        globIgnores: ["**/*leaflet*", "**/*mapbox*", "**/*Leaflet*", "**/*Mapbox*"],
         maximumFileSizeToCacheInBytes: 10000000,
         navigateFallbackDenylist: [/^\/pdfviewer.html/, /^\/api\/(.+)/, /^\/f\/(.+)/, /^\/s\/(.+)/],
       },
@@ -82,7 +83,9 @@ export default defineConfig({
               "node_modules/pica/",
             ],
             mermaid: ["node_modules/mermaid", "node_modules/katex"],
+            leaflet: ["node_modules/leaflet", "node_modules/react-leaflet"],
             react: ["node_modules/react", "node_modules/react-dom"],
+            mapbox: ["node_modules/mapbox-gl"],
           };
 
           // https://github.com/vitejs/vite/issues/5189#issuecomment-2175410148

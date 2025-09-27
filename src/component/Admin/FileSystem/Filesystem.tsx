@@ -85,6 +85,7 @@ const FileSystem = () => {
                     "max_batched_file",
                     "map_provider",
                     "map_google_tile_type",
+                    "map_mapbox_ak",
                     "mime_mapping",
                     "explorer_category_image_query",
                     "explorer_category_video_query",

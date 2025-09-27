@@ -270,10 +270,38 @@ const Parameters = () => {
                       {t("settings.mapOpenStreetMap")}
                     </ListItemText>
                   </SquareMenuItem>
+                  <SquareMenuItem value={"mapbox"}>
+                    <ListItemText
+                      slotProps={{
+                        primary: { variant: "body2" },
+                      }}
+                    >
+                      {t("settings.mapboxMap")}
+                    </ListItemText>
+                  </SquareMenuItem>
                 </DenseSelect>
                 <NoMarginHelperText>{t("settings.mapProviderDes")}</NoMarginHelperText>
               </FormControl>
             </SettingForm>
+            <Collapse in={values.map_provider === "mapbox"} unmountOnExit>
+              <SettingForm title={t("settings.mapboxAccessToken")} lgWidth={5}>
+                <FormControl fullWidth>
+                  <DenseFilledTextField
+                    fullWidth
+                    required
+                    value={values.map_mapbox_ak ?? ""}
+                    onChange={(e) => setSettings({ map_mapbox_ak: e.target.value })}
+                  />
+                  <NoMarginHelperText>
+                    <Trans
+                      i18nKey="settings.mapboxAccessTokenDes"
+                      ns="dashboard"
+                      components={[<Link href="https://account.mapbox.com/access-tokens" target="_blank" />]}
+                    />
+                  </NoMarginHelperText>
+                </FormControl>
+              </SettingForm>
+            </Collapse>
             <Collapse in={values.map_provider === "google"} unmountOnExit>
               <SettingForm title={t("settings.tileType")} lgWidth={5}>
                 <FormControl>

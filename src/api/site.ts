@@ -35,6 +35,7 @@ export interface SiteConfig {
   icons?: string;
   emoji_preset?: string;
   map_provider?: string;
+  mapbox_ak?: string;
   google_map_tile_type?: string;
   file_viewers?: ViewerGroup[];
   max_batch_size?: number;
