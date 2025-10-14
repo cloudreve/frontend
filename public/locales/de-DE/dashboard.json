@@ -1032,7 +1032,8 @@
     "saveToSharePoint": "Dateien in SharePoint speichern",
     "sharePointUrlDes": "Geben Sie die SharePoint-Site-URL ein. Nach dem Verlust des Fokus konvertiert das System sie automatisch in die korrekte Treiber-Kennung.",
     "ks3selectRegionDes": "Geben Sie den Regionscode des Speicher-Buckets ein, z.B. <0>BEIJING</0>.",
-    "ks3EndpointPathStyle": "Wählen Sie das Format der KS3-Endpoint-Adresse."
+    "ks3EndpointPathStyle": "Wählen Sie das Format der KS3-Endpoint-Adresse.",
+    "ossRegionDes": "Geben Sie den Regionscode ein, in dem sich der Bucket befindet, z.B. <0>cn-hangzhou</0>. Sie können die entsprechende Region in der Tabelle <1>OSS-Regionen und Endpunkte</1> finden und die entsprechende <2>Regions-ID</2> ausfüllen."
   },
   "node": {
     "slave": "Slave",

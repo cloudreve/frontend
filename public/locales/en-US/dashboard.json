@@ -1033,7 +1033,8 @@
     "saveToSharePoint": "Save files to SharePoint",
     "sharePointUrlDes": "Enter the SharePoint site URL. After losing focus, the system will automatically convert it to the correct driver identifier.",
     "ks3selectRegionDes": "Enter the region code of the storage bucket, e.g. <0>BEIJING</0> .",
-    "ks3EndpointPathStyle": "Select the format of the KS3 Endpoint address."
+    "ks3EndpointPathStyle": "Select the format of the KS3 Endpoint address.",
+    "ossRegionDes": "Enter the region code of the storage bucket, e.g. <0>cn-hangzhou</0>. You can find the corresponding region in the <1>OSS regions and endpoints</1> table and fill in the corresponding <2>Region ID</2>."
   },
   "node": {
     "slave": "slave",

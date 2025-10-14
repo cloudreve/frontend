@@ -1,6 +1,6 @@
 import { Button, Collapse, FormControl, Link, Stack } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { createStoragePolicyCors } from "../../../../../api/api";
 import { StoragePolicy } from "../../../../../api/dashboard";
@@ -14,6 +14,7 @@ import { NoMarginHelperText } from "../../../Settings/Settings";
 import { AddWizardProps } from "../../AddWizardDialog";
 import BucketACLInput from "../../EditStoragePolicy/BucketACLInput";
 import BucketCorsTable from "../../EditStoragePolicy/BucketCorsTable";
+import { PolicyPropsMap } from "../../StoragePolicySetting";
 const OssWizard = ({ onSubmit }: AddWizardProps) => {
   const { t } = useTranslation("dashboard");
   const dispatch = useAppDispatch();
@@ -38,6 +39,10 @@ const OssWizard = ({ onSubmit }: AddWizardProps) => {
     file_name_rule: "{uuid}_{originname}",
     edges: {},
   });
+
+  const policyProps = useMemo(() => {
+    return PolicyPropsMap[PolicyType.oss];
+  }, []);
 
   const hamdleCreateCors = () => {
     if (!formRef.current?.checkValidity()) {
@@ -110,6 +115,15 @@ const OssWizard = ({ onSubmit }: AddWizardProps) => {
             <Trans i18nKey="policy.ossEndpointDes" ns="dashboard" components={[<Code />, <Code />, <Code />]} />
             {t("policy.ossEndpointDesInternalHint")}
           </NoMarginHelperText>
+        </SettingForm>
+        <SettingForm title={t(policyProps.regionCode ?? "")} lgWidth={12}>
+          <DenseFilledTextField
+            fullWidth
+            required
+            value={policy.settings?.region}
+            onChange={(e) => setPolicy({ ...policy, settings: { ...policy.settings, region: e.target.value } })}
+          />
+          <NoMarginHelperText>{policyProps.regionCodeDes}</NoMarginHelperText>
         </SettingForm>
         <SettingForm title={t("policy.accessCredential")} lgWidth={12}>
           <FormControl fullWidth>

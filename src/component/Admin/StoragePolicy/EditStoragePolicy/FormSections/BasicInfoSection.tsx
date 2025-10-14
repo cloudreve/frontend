@@ -413,16 +413,10 @@ const BasicInfoSection = () => {
                 </SettingForm>
               </>
             )}
-            {(values.type === PolicyType.s3 || values.type === PolicyType.ks3) && (
-              <SettingForm title={t("policy.s3Region")} lgWidth={5}>
+            {policyProps.regionCode && (
+              <SettingForm title={t(policyProps.regionCode ?? "")} lgWidth={5}>
                 <DenseFilledTextField fullWidth required value={values.settings?.region} onChange={onS3RegionChange} />
-                <NoMarginHelperText>
-                  <Trans
-                    i18nKey={values.type === PolicyType.s3 ? "policy.selectRegionDes" : "policy.ks3selectRegionDes"}
-                    ns="dashboard"
-                    components={[<Code />]}
-                  />
-                </NoMarginHelperText>
+                <NoMarginHelperText>{policyProps.regionCodeDes}</NoMarginHelperText>
               </SettingForm>
             )}
             <SettingForm title={t("policy.accessCredential")} lgWidth={5}>

@@ -1033,7 +1033,8 @@
     "saveToSharePoint": "파일을 SharePoint에 저장",
     "sharePointUrlDes": "SharePoint 사이트 URL을 입력하세요. 포커스를 잃으면 시스템이 자동으로 올바른 드라이브 식별자로 변환합니다.",
     "ks3selectRegionDes": "스토리지 버킷이 위치한 지역 코드를 입력하세요. 예: <0>BEIJING</0>.",
-    "ks3EndpointPathStyle": "경로 형식 Endpoint를 강제로 사용할지 선택하세요."
+    "ks3EndpointPathStyle": "경로 형식 Endpoint를 강제로 사용할지 선택하세요.",
+    "ossRegionDes": "버킷이 위치한 지역 코드를 입력하세요. 예: <0>cn-hangzhou</0>. <1>OSS 지역 및 엔드포인트</1> 표에서 해당 지역을 찾아 해당하는 <2>지역 ID</2>를 입력할 수 있습니다."
   },
   "node": {
     "slave": "슬레이브",

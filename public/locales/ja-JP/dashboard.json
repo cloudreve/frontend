@@ -1033,7 +1033,8 @@
     "saveToSharePoint": "SharePointにファイルを保存",
     "sharePointUrlDes": "SharePointサイトのURLを入力してください。フォーカスが外れると、システムが自動的に正しいドライブ識別子に変換します。",
     "ks3selectRegionDes": "バケットが存在するリージョンコードを入力してください（例：<0>BEIJING</0>）。",
-    "ks3EndpointPathStyle": "パス形式エンドポイントの強制使用を選択してください。"
+    "ks3EndpointPathStyle": "パス形式エンドポイントの強制使用を選択してください。",
+    "ossRegionDes": "バケットが存在するリージョンコードを入力してください（例：<0>cn-hangzhou</0>）。<1>OSSリージョンとエンドポイント</1>の表で対応するリージョンを見つけ、対応する<2>リージョンID</2>を入力できます。"
   },
   "node": {
     "slave": "スレーブ",

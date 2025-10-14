@@ -1,6 +1,6 @@
 import { Button, Checkbox, Collapse, FormControl, FormControlLabel, Stack } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { createStoragePolicyCors } from "../../../../../api/api";
 import { StoragePolicy } from "../../../../../api/dashboard";
@@ -15,6 +15,7 @@ import { NoMarginHelperText } from "../../../Settings/Settings";
 import { AddWizardProps } from "../../AddWizardDialog";
 import BucketACLInput from "../../EditStoragePolicy/BucketACLInput";
 import BucketCorsTable from "../../EditStoragePolicy/BucketCorsTable";
+import { PolicyPropsMap } from "../../StoragePolicySetting";
 
 const S3Wizard = ({ onSubmit }: AddWizardProps) => {
   const { t } = useTranslation("dashboard");
@@ -38,6 +39,10 @@ const S3Wizard = ({ onSubmit }: AddWizardProps) => {
     file_name_rule: "{uuid}_{originname}",
     edges: {},
   });
+
+  const policyProps = useMemo(() => {
+    return PolicyPropsMap[PolicyType.s3];
+  }, []);
 
   const hamdleCreateCors = () => {
     if (!formRef.current?.checkValidity()) {
@@ -130,16 +135,14 @@ const S3Wizard = ({ onSubmit }: AddWizardProps) => {
             <Trans i18nKey="policy.s3EndpointPathStyle" ns="dashboard" components={[<Code />]} />
           </NoMarginHelperText>
         </SettingForm>
-        <SettingForm title={t("policy.s3Region")} lgWidth={12}>
+        <SettingForm title={t(policyProps.regionCode ?? "")} lgWidth={12}>
           <DenseFilledTextField
             fullWidth
             required
             value={policy.settings?.region}
             onChange={(e) => setPolicy({ ...policy, settings: { ...policy.settings, region: e.target.value } })}
           />
-          <NoMarginHelperText>
-            <Trans i18nKey="policy.selectRegionDes" ns="dashboard" components={[<Code />]} />
-          </NoMarginHelperText>
+          <NoMarginHelperText>{policyProps.regionCodeDes}</NoMarginHelperText>
         </SettingForm>
         <SettingForm title={t("policy.accessCredential")} lgWidth={12}>
           <FormControl fullWidth>

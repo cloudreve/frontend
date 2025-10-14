@@ -1033,7 +1033,8 @@
     "saveToSharePoint": "儲存檔案到 SharePoint",
     "sharePointUrlDes": "輸入 SharePoint 站點 URL。失去焦點後，系統將自動轉換為正確的驅動器標識。",
     "ks3selectRegionDes": "輸入儲存桶所在的區域程式碼，如 <0>BEIJING</0>。",
-    "ks3EndpointPathStyle": "選擇是否強制使用路徑格式 Endpoint。"
+    "ks3EndpointPathStyle": "選擇是否強制使用路徑格式 Endpoint。",
+    "ossRegionDes": "輸入儲存桶所在的區域代碼，如 <0>cn-hangzhou</0>。你可以在 <1>OSS地域和訪問域名</1> 的表格中找到對應地域，並填寫對應的 <2>地域ID</2>。"
   },
   "node": {
     "slave": "從機",

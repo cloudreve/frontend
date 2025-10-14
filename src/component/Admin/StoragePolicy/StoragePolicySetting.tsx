@@ -62,6 +62,8 @@ export interface PolicyProps {
   corsExposedHeaders?: string[];
   endpointNotEnforcePrefix?: boolean;
   pro?: boolean;
+  regionCode?: string;
+  regionCodeDes?: React.ReactNode;
 }
 
 export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
@@ -102,6 +104,8 @@ export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
     chunkSizeMin: 5 * 1024 * 1024, //5MB
     chunkSizeMax: 5 * 1024 * 1024 * 1024, //5GB
     chunkSizeDes: "policy.chunkSizeDesS3",
+    regionCode: "policy.s3Region",
+    regionCodeDes: <Trans i18nKey={"policy.selectRegionDes"} ns="dashboard" components={[<Code />]} />,
   },
   [PolicyType.ks3]: {
     name: "policy.ks3",
@@ -118,6 +122,8 @@ export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
     chunkSizeMin: 5 * 1024 * 1024, //5MB
     chunkSizeMax: 5 * 1024 * 1024 * 1024, //5GB
     chunkSizeDes: "policy.chunkSizeDesS3",
+    regionCode: "policy.s3Region",
+    regionCodeDes: <Trans i18nKey={"policy.ks3selectRegionDes"} ns="dashboard" components={[<Code />]} />,
   },
   [PolicyType.cos]: {
     name: "policy.cos",
@@ -191,6 +197,18 @@ export const PolicyPropsMap: Record<PolicyType, PolicyProps> = {
         components={[
           <Link href="https://ram.console.aliyun.com/profile/access-keys" target="_blank" />,
           <Link href="https://ram.console.aliyun.com/ram/overview" target="_blank" />,
+          <Code />,
+        ]}
+      />
+    ),
+    regionCode: "policy.s3Region",
+    regionCodeDes: (
+      <Trans
+        i18nKey={"policy.ossRegionDes"}
+        ns="dashboard"
+        components={[
+          <Code />,
+          <Link href="https://www.alibabacloud.com/help/oss/regions-and-endpoints" target="_blank" />,
           <Code />,
         ]}
       />
