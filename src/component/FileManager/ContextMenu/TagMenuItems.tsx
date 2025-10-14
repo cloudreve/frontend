@@ -1,20 +1,22 @@
-import { getUniqueTagsFromFiles, Tag as TagItem } from "../Dialogs/Tags.tsx";
-import { FileResponse, Metadata } from "../../../api/explorer.ts";
+import { Box, IconButton, ListItemIcon, ListItemText } from "@mui/material";
 import React, { useCallback, useContext, useState } from "react";
-import { CascadingContext, CascadingMenuItem } from "./CascadingMenu.tsx";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch } from "../../../redux/hooks.ts";
+import { FileResponse, Metadata } from "../../../api/explorer.ts";
 import { closeContextMenu } from "../../../redux/fileManagerSlice.ts";
 import { setTagsDialog } from "../../../redux/globalStateSlice.ts";
-import { ListItemIcon, ListItemText } from "@mui/material";
-import Tags from "../../Icons/Tags.tsx";
-import { DenseDivider, SquareMenuItem, SubMenuItemsProps } from "./ContextMenu.tsx";
+import { useAppDispatch } from "../../../redux/hooks.ts";
+import { patchFileMetadata } from "../../../redux/thunks/file.ts";
 import SessionManager, { UserSettings } from "../../../session";
 import { UsedTags } from "../../../session/utils.ts";
 import Checkmark from "../../Icons/Checkmark.tsx";
+import DeleteOutlined from "../../Icons/DeleteOutlined.tsx";
+import Tags from "../../Icons/Tags.tsx";
+import { getUniqueTagsFromFiles, Tag as TagItem } from "../Dialogs/Tags.tsx";
 import FileTag from "../Explorer/FileTag.tsx";
-import { patchFileMetadata } from "../../../redux/thunks/file.ts";
 import { FileManagerIndex } from "../FileManager.tsx";
+import { CascadingContext, CascadingMenuItem } from "./CascadingMenu.tsx";
+import { DenseDivider, SquareMenuItem } from "./ContextMenu.tsx";
+import { SubMenuItemsProps } from "./OrganizeMenuItems.tsx";
 
 interface TagOption extends TagItem {
   selected?: boolean;
@@ -88,6 +90,23 @@ const TagMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
     [targets, setTags],
   );
 
+  const onTagDelete = useCallback(
+    (tag: TagOption, event: React.MouseEvent) => {
+      event.stopPropagation();
+
+      // Remove tag from session cache
+      const existing = SessionManager.get(UserSettings.UsedTags) as UsedTags;
+      if (existing && existing[tag.key] !== undefined) {
+        delete existing[tag.key];
+        SessionManager.set(UserSettings.UsedTags, existing);
+      }
+
+      // Remove tag from local state
+      setTags((tags) => tags.filter((t) => t.key !== tag.key));
+    },
+    [setTags],
+  );
+
   return (
     <>
       <CascadingMenuItem
@@ -119,9 +138,37 @@ const TagMenuItems = ({ displayOpt, targets }: SubMenuItemsProps) => {
             </>
           )}
           {!tag.selected && (
-            <ListItemText inset>
-              <FileTag disableClick spacing={1} label={tag.key} tagColor={tag.color} />
-            </ListItemText>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                "&:hover .delete-button": {
+                  opacity: 1,
+                },
+              }}
+            >
+              <ListItemText inset>
+                <FileTag disableClick spacing={1} label={tag.key} tagColor={tag.color} />
+              </ListItemText>
+              <IconButton
+                className="delete-button"
+                size="small"
+                onClick={(event) => onTagDelete(tag, event)}
+                sx={{
+                  opacity: 0,
+                  transition: "opacity 0.2s",
+                  marginLeft: "auto",
+                  marginRight: 1,
+                  padding: "2px",
+                  "&:hover": {
+                    backgroundColor: "action.hover",
+                  },
+                }}
+              >
+                <DeleteOutlined fontSize="small" />
+              </IconButton>
+            </Box>
           )}
         </SquareMenuItem>
       ))}
