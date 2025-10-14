@@ -35,6 +35,7 @@ const CosWizard = ({ onSubmit }: AddWizardProps) => {
       media_meta_exts: ["jpg", "jpeg", "png", "bmp", "webp", "tiff", "avif", "heif"],
       media_meta_generator_proxy: true,
       thumb_generator_proxy: true,
+      chunk_concurrency: 3,
     },
     file_name_rule: "{uuid}_{originname}",
     edges: {},

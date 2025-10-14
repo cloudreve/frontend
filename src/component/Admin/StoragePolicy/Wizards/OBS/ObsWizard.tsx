@@ -36,6 +36,7 @@ const ObsWizard = ({ onSubmit }: AddWizardProps) => {
       media_meta_exts: ["png", "jpg", "jpeg", "gif", "bmp", "webp", "tiff"],
       media_meta_generator_proxy: true,
       thumb_generator_proxy: true,
+      chunk_concurrency: 3,
     },
     file_name_rule: "{uuid}_{originname}",
     edges: {},

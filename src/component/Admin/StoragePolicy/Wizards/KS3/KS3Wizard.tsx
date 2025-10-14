@@ -35,6 +35,7 @@ const KS3Wizard = ({ onSubmit }: AddWizardProps) => {
       chunk_size: 25 << 20,
       media_meta_generator_proxy: true,
       thumb_generator_proxy: true,
+      chunk_concurrency: 3,
     },
     file_name_rule: "{uuid}_{originname}",
     edges: {},

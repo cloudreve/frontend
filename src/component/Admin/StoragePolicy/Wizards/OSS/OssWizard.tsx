@@ -35,6 +35,7 @@ const OssWizard = ({ onSubmit }: AddWizardProps) => {
       media_meta_exts: ["jpg", "jpeg", "png", "gif", "bmp", "webp", "tiff", "heic", "heif"],
       media_meta_generator_proxy: true,
       thumb_generator_proxy: true,
+      chunk_concurrency: 3,
     },
     file_name_rule: "{uuid}_{originname}",
     edges: {},
