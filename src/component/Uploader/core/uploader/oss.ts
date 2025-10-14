@@ -1,6 +1,6 @@
-import Chunk, { ChunkInfo } from "./chunk";
 import { s3LikeFinishUpload, s3LikeUploadChunk } from "../api";
 import { Status } from "./base";
+import Chunk, { ChunkInfo } from "./chunk";
 
 export default class OSS extends Chunk {
   protected async uploadChunk(chunkInfo: ChunkInfo) {
