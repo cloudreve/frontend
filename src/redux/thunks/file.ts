@@ -1177,7 +1177,7 @@ export function batchGetDirectLinks(index: number, files: FileResponse[]): AppTh
 export function resetThumbnails(files: FileResponse[]): AppThunk {
   return async (dispatch, getState) => {
     const thumbConfigLoaded = getState().siteConfig.thumb.loaded;
-    if (thumbConfigLoaded == ConfigLoadState.NotLoaded) {
+    if (thumbConfigLoaded != ConfigLoadState.Loaded) {
       await dispatch(loadSiteConfig("thumb"));
     }
 

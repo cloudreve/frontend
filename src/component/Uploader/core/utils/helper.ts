@@ -5,7 +5,7 @@ import { Task } from "../types";
 import { ChunkProgress } from "../uploader/chunk";
 
 // 文件分块
-export function getChunks(file: File, chunkByteSize: number | undefined): Blob[] {
+export function getChunks(file: Blob, chunkByteSize: number | undefined): Blob[] {
   // 如果 chunkByteSize 比文件大或为0，则直接取文件的大小
   if (!chunkByteSize || chunkByteSize > file.size || chunkByteSize == 0) {
     chunkByteSize = file.size;

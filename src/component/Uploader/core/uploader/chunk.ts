@@ -1,5 +1,6 @@
 import * as utils from "../utils";
 import Base from "./base";
+import { EncryptedBlob } from "./encrypt/blob";
 
 export interface ChunkProgress {
   loaded: number;
@@ -118,6 +119,9 @@ export default abstract class Chunk extends Base {
     }
 
     try {
+      if (chunkInfo.chunk instanceof EncryptedBlob && !this.task.policy.streaming_encryption) {
+        chunkInfo.chunk = new Blob([await chunkInfo.chunk.bytes()]);
+      }
       await this.uploadChunk(chunkInfo);
       this.logger.info(`Chunk [${chunkInfo.index}] uploaded successfully.`);
       onComplete(); // Call callback immediately after successful upload
@@ -158,7 +162,7 @@ export default abstract class Chunk extends Base {
   }
 
   private initBeforeUploadChunks() {
-    this.chunks = utils.getChunks(this.task.file, this.task.session?.chunk_size);
+    this.chunks = utils.getChunks(this.task.blob, this.task.session?.chunk_size);
     const cachedInfo = utils.getResumeCtx(this.task, this.logger);
     if (cachedInfo == null) {
       this.task.chunkProgress = this.chunks.map(

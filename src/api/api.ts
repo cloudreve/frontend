@@ -1,4 +1,5 @@
 import { AxiosProgressEvent, CancelToken } from "axios";
+import { EncryptedBlob } from "../component/Uploader/core/uploader/encrypt/blob.ts";
 import i18n from "../i18n.ts";
 import {
   AdminListGroupResponse,
@@ -722,16 +723,20 @@ export function sendUploadChunk(
   onProgress?: (progressEvent: AxiosProgressEvent) => void,
 ): ThunkResponse<UploadCredential> {
   return async (dispatch, _getState) => {
+    const streaming = chunk instanceof EncryptedBlob;
+
     return await dispatch(
       send(
         `/file/upload/${sessionID}/${index}`,
         {
-          data: chunk,
+          adapter: streaming ? "fetch" : "xhr",
+          data: streaming ? chunk.stream() : chunk,
           cancelToken: cancel,
           onUploadProgress: onProgress,
           method: "POST",
           headers: {
             "Content-Type": "application/octet-stream",
+            ...(streaming && { "X-Expected-Entity-Length": chunk.size?.toString() ?? "0" }),
           },
         },
         {

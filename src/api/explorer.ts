@@ -116,6 +116,8 @@ export interface StoragePolicy {
   type: PolicyType;
   relay?: boolean;
   chunk_concurrency?: number;
+  encryption?: boolean;
+  streaming_encryption?: boolean;
 }
 
 export interface PaginationResults {
@@ -490,6 +492,10 @@ export interface CreateViewerSessionService {
   version?: string;
 }
 
+export enum EncryptionAlgorithm {
+  aes256ctr = "aes-256-ctr",
+}
+
 export interface UploadSessionRequest {
   uri: string;
   size: number;
@@ -500,6 +506,13 @@ export interface UploadSessionRequest {
     [key: string]: string;
   };
   mime_type?: string;
+  encryption_supported?: EncryptionAlgorithm[];
+}
+
+export interface EncryptMetadata {
+  algorithm: EncryptionAlgorithm;
+  key_plain_text: string;
+  iv: string;
 }
 
 export interface UploadCredential {
@@ -519,6 +532,7 @@ export interface UploadCredential {
   callback_secret: string;
   mime_type?: string;
   upload_policy?: string;
+  encrypt_metadata?: EncryptMetadata;
 }
 
 export interface DeleteUploadSessionService {

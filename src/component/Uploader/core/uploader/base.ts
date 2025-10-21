@@ -1,6 +1,6 @@
 // 所有 Uploader 的基类
 import axios, { CanceledError, CancelTokenSource } from "axios";
-import { PolicyType } from "../../../../api/explorer.ts";
+import { EncryptionAlgorithm, PolicyType } from "../../../../api/explorer.ts";
 import CrUri from "../../../../util/uri.ts";
 import { createUploadSession, deleteUploadSession } from "../api";
 import { UploaderError } from "../errors";
@@ -10,6 +10,7 @@ import { Task } from "../types";
 import * as utils from "../utils";
 import { CancelToken } from "../utils/request";
 import { validate } from "../utils/validator";
+import { EncryptedBlob } from "./encrypt/blob.ts";
 
 export enum Status {
   added,
@@ -146,6 +147,8 @@ export default abstract class Base {
           last_modified: this.task.file.lastModified,
           mime_type: this.task.file.type,
           entity_type: this.task.overwrite ? "version" : undefined,
+          encryption_supported:
+            this.task.policy.encryption && "crypto" in window ? [EncryptionAlgorithm.aes256ctr] : undefined,
         },
         this.cancelToken.token,
       );
@@ -155,6 +158,20 @@ export default abstract class Base {
       this.task.resumed = true;
       this.task.chunkProgress = cachedInfo.chunkProgress;
       this.logger.info("Resume upload from cached ctx:", cachedInfo);
+    }
+
+    if (this.task.session?.encrypt_metadata && !this.task.policy?.relay) {
+      // Check browser support for encryption
+      if (!("crypto" in window)) {
+        this.logger.error("Encryption is not supported in this browser");
+        this.setError(new Error("Web Crypto API is not supported in this browser"));
+        return;
+      }
+
+      const encryptedBlob = new EncryptedBlob(this.task.file, this.task.session?.encrypt_metadata);
+      this.task.blob = encryptedBlob;
+    } else {
+      this.task.blob = this.task.file;
     }
 
     this.transit(Status.processing);

@@ -1,5 +1,5 @@
-import { ChunkProgress } from "./uploader/chunk";
 import { StoragePolicy, UploadCredential } from "../../../api/explorer.ts";
+import { ChunkProgress } from "./uploader/chunk";
 
 export enum TaskType {
   file,
@@ -13,6 +13,7 @@ export interface Task {
   policy: StoragePolicy;
   dst: string;
   file: File;
+  blob: Blob;
   child?: Task[];
   session?: UploadCredential;
   chunkProgress: ChunkProgress[];

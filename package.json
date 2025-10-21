@@ -35,7 +35,7 @@
     "artplayer": "5.2.2",
     "artplayer-plugin-chapter": "^1.0.0",
     "artplayer-plugin-hls-control": "^1.0.1",
-    "axios": "^1.6.2",
+    "axios": "^1.12.2",
     "dayjs": "^1.11.10",
     "fuse.js": "^7.0.0",
     "heic-to": "^1.1.14",
