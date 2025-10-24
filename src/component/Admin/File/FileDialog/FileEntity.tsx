@@ -11,6 +11,7 @@ import {
   StyledTableContainerPaper,
 } from "../../../Common/StyledComponents";
 import TimeBadge from "../../../Common/TimeBadge";
+import { EncryptionStatusText } from "../../../FileManager/Sidebar/BasicInfo";
 import { EntityTypeText } from "../../../FileManager/Sidebar/Data";
 import EntityDialog from "../../Entity/EntityDialog/EntityDialog";
 import UserDialog from "../../User/UserDialog/UserDialog";
@@ -53,6 +54,7 @@ const FileEntity = () => {
             <NoWrapTableCell width={100}>{t("file.size")}</NoWrapTableCell>
             <NoWrapTableCell width={100}>{t("file.storagePolicy")}</NoWrapTableCell>
             <NoWrapTableCell width={200}>{t("file.source")}</NoWrapTableCell>
+            <NoWrapTableCell width={100}>{t("application:fileManager.encryption")}</NoWrapTableCell>
             <NoWrapTableCell width={200}>{t("file.createdAt")}</NoWrapTableCell>
             <NoWrapTableCell width={150}>{t("file.creator")}</NoWrapTableCell>
           </TableRow>
@@ -90,6 +92,18 @@ const FileEntity = () => {
                 <Tooltip title={option.source ?? ""}>
                   <NoWrapTypography variant="inherit">{option.source ?? ""}</NoWrapTypography>
                 </Tooltip>
+              </TableCell>
+              <TableCell>
+                <EncryptionStatusText
+                  flexWrap={false}
+                  simplified
+                  status={{
+                    status: option.props?.encrypt_metadata?.algorithm ? "full" : "none",
+                    cipher: option.props?.encrypt_metadata?.algorithm
+                      ? [option.props?.encrypt_metadata?.algorithm]
+                      : [],
+                  }}
+                />
               </TableCell>
               <TableCell>
                 <NoWrapTypography variant="inherit">

@@ -13,7 +13,7 @@ import PageHeader, { PageTabQuery } from "../../Pages/PageHeader.tsx";
 import SettingsWrapper from "../Settings/SettingWrapper.tsx";
 import CustomPropsSetting from "./CustomProps/CustomPropsSetting.tsx";
 import FileIcons from "./Icons/FileIcons.tsx";
-import Parameters from "./Parameters.tsx";
+import Parameters from "./Parameters/Parameters.tsx";
 import ViewerSetting from "./ViewerSetting/ViewerSetting.tsx";
 
 export enum SettingsPageTab {
@@ -102,6 +102,9 @@ const FileSystem = () => {
                     "viewer_session_timeout",
                     "entity_url_default_ttl",
                     "entity_url_cache_margin",
+                    "encrypt_master_key_vault",
+                    "encrypt_master_key_file",
+                    "show_encryption_status",
                   ]}
                 >
                   <Parameters />

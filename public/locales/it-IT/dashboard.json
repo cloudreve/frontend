@@ -717,7 +717,15 @@
     "blobUrlCache": "Cache URL Blob",
     "clearBlobUrlCache": "Pulisci cache URL Blob",
     "clearBlobUrlCacheDes": "Per aumentare il tasso di hit della cache, Cloudreve memorizza nella cache e riutilizza gli URL Blob. Quando l'indirizzo CDN o altre impostazioni cambiano, pulisci la cache.",
-    "cacheCleared": "Cache pulita."
+    "cacheCleared": "Cache pulita.",
+    "masterEncryptionKeyVault": "Archiviazione chiave di crittografia principale",
+    "masterEncryptionKeyVaultDes": "Scegli come archiviare la chiave di crittografia principale, ha effetto dopo il riavvio. Se è necessario modificare il metodo di archiviazione o la chiave, segui rigorosamente i passaggi nella <0>documentazione</0> per evitare la perdita di dati.",
+    "masterEncryptionKeyVaultSetting": "Database",
+    "masterEncryptionKeyVaultEnv": "Variabile d'ambiente <0>CR_ENCRYPT_MASTER_KEY</0>",
+    "masterEncryptionKeyVaultFile": "File",
+    "masterEncryptionKeyVaultFilePath": "Percorso di archiviazione della chiave",
+    "showEncryptionStatus": "Mostra stato crittografia",
+    "showEncryptionStatusDes": "Quando abilitato, gli utenti possono visualizzare lo stato di crittografia dei file nei dettagli del file."
   },
   "giftCodes": {
     "giftCodesSettings": "Codici Regalo",
@@ -1032,7 +1040,11 @@
     "sharePointUrlDes": "Inserisci l'URL del sito SharePoint. Dopo aver perso il focus, il sistema lo convertirà automaticamente nell'identificatore driver corretto.",
     "ks3selectRegionDes": "Inserisci il codice regione del bucket di archiviazione, ad es. <0>BEIJING</0>.",
     "ks3EndpointPathStyle": "Seleziona il formato dell'indirizzo KS3 Endpoint.",
-    "ossRegionDes": "Inserisci il codice regione dove si trova il bucket, ad es. <0>cn-hangzhou</0>. Puoi trovare la regione corrispondente nella tabella <1>Regioni ed endpoint OSS</1> e inserire il <2>ID regione</2> corrispondente."
+    "ossRegionDes": "Inserisci il codice regione dove si trova il bucket, ad es. <0>cn-hangzhou</0>. Puoi trovare la regione corrispondente nella tabella <1>Regioni ed endpoint OSS</1> e inserire il <2>ID regione</2> corrispondente.",
+    "fileEncryption": "Crittografia file",
+    "enableFileEncryption": "Abilita crittografia file",
+    "enableFileEncryptionDes": "Quando abilitato, i blob dei file verranno archiviati crittografati. La modifica di questa impostazione influisce solo sui file appena aggiunti.",
+    "encryptedFile": "File crittografati"
   },
   "node": {
     "slave": "slave",

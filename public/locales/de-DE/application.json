@@ -436,7 +436,12 @@
     "viewSetting": "Ansichtseinstellungen",
     "saved": "Gespeichert",
     "notSet": "Nicht gesetzt",
-    "deleteViewSetting": "Ansichtseinstellung löschen"
+    "deleteViewSetting": "Ansichtseinstellung löschen",
+    "encryption": "Verschlüsselung",
+    "fullEncryption": "Mit {{cipher}} verschlüsselt",
+    "partialEncryption": "Teilweise verschlüsselt",
+    "partialEncryptionDes": "Einige Versionen oder andere Daten dieser Datei sind nicht verschlüsselt.",
+    "noEncryption": "Nicht verschlüsselt"
   },
   "modals": {
     "includePasswordInShareLink": "Passwort in Link einbeziehen",

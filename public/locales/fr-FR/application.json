@@ -436,7 +436,12 @@
     "viewSetting": "Paramètre de vue",
     "saved": "Enregistré",
     "notSet": "Non défini",
-    "deleteViewSetting": "Supprimer le paramètre de vue"
+    "deleteViewSetting": "Supprimer le paramètre de vue",
+    "encryption": "Chiffrement",
+    "fullEncryption": "Chiffré avec {{cipher}}",
+    "partialEncryption": "Partiellement chiffré",
+    "partialEncryptionDes": "Certaines versions ou autres données de ce fichier ne sont pas chiffrées.",
+    "noEncryption": "Non chiffré"
   },
   "modals": {
     "includePasswordInShareLink": "Inclure le mot de passe dans le lien de partage",

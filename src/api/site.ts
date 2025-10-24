@@ -46,6 +46,7 @@ export interface SiteConfig {
   custom_nav_items?: CustomNavItem[];
   custom_html?: CustomHTML;
   thumb_exts?: string[];
+  show_encryption_status?: boolean;
 }
 
 export interface CaptchaResponse {

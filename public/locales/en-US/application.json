@@ -401,7 +401,12 @@
     "viewSetting": "View setting",
     "saved": "Saved",
     "notSet": "Not set",
-    "deleteViewSetting": "Delete view setting"
+    "deleteViewSetting": "Delete view setting",
+    "encryption": "Encryption",
+    "fullEncryption": "Encrypted with {{cipher}}",
+    "partialEncryption": "Partially encrypted",
+    "partialEncryptionDes": "Some versions or other data of this file are not encrypted.",
+    "noEncryption": "Not encrypted"
   },
   "modals": {
     "includePasswordInShareLink": "Include password in share link",

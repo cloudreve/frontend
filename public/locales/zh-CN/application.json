@@ -401,7 +401,12 @@
     "viewSetting": "视图设置",
     "saved": "已保存",
     "notSet": "未设置",
-    "deleteViewSetting": "删除视图设置"
+    "deleteViewSetting": "删除视图设置",
+    "encryption": "加密",
+    "fullEncryption": "使用 {{cipher}} 加密",
+    "partialEncryption": "部分加密",
+    "partialEncryptionDes": "此文件的某些版本或其他数据未被加密。",
+    "noEncryption": "未加密"
   },
   "modals": {
     "includePasswordInShareLink": "在链接中包含密码",

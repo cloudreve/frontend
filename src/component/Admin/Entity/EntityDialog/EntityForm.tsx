@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../../../redux/hooks";
 import { sizeToString } from "../../../../util";
 import { NoWrapTypography } from "../../../Common/StyledComponents";
 import UserAvatar from "../../../Common/User/UserAvatar";
+import { EncryptionStatusText } from "../../../FileManager/Sidebar/BasicInfo";
 import { EntityTypeText } from "../../../FileManager/Sidebar/Data";
 import SettingForm from "../../../Pages/Setting/SettingForm";
 import UserDialog from "../../User/UserDialog/UserDialog";
@@ -101,6 +102,14 @@ const EntityForm = ({ values }: { values: Entity }) => {
                 {values.edges?.storage_policy?.name}
               </Link>
             </Typography>
+          </SettingForm>
+          <SettingForm title={t("application:fileManager.encryption")} noContainer lgWidth={4}>
+            <EncryptionStatusText
+              status={{
+                status: values.props?.encrypt_metadata?.algorithm ? "full" : "none",
+                cipher: values.props?.encrypt_metadata?.algorithm ? [values.props?.encrypt_metadata?.algorithm] : [],
+              }}
+            />
           </SettingForm>
           <SettingForm title={t("entity.referredFiles")} noContainer lgWidth={12}>
             <EntityFileList files={values.edges?.file ?? []} userHashIDMap={values.user_hash_id_map ?? {}} />

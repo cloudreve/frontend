@@ -401,7 +401,12 @@
     "viewSetting": "ビュー設定",
     "saved": "保存",
     "notSet": "未設定",
-    "deleteViewSetting": "ビュー設定を削除"
+    "deleteViewSetting": "ビュー設定を削除",
+    "encryption": "暗号化",
+    "fullEncryption": "{{cipher}} で暗号化",
+    "partialEncryption": "部分的に暗号化",
+    "partialEncryptionDes": "このファイルの一部のバージョンまたは他のデータは暗号化されていません。",
+    "noEncryption": "暗号化されていません"
   },
   "modals": {
     "includePasswordInShareLink": "共有リンクにパスワードを含める",

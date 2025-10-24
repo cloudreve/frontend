@@ -716,7 +716,15 @@
     "blobUrlCache": "Blob URL cache",
     "clearBlobUrlCache": "Clear Blob URL cache",
     "clearBlobUrlCacheDes": "To increase cache hit rate, Cloudreve caches and reuses Blob URLs. When the CDN address or other settings change, please clear the cache.",
-    "cacheCleared": "Cache cleared."
+    "cacheCleared": "Cache cleared.",
+    "masterEncryptionKeyVault": "Master encryption key storage",
+    "masterEncryptionKeyVaultDes": "Choose how to store the master encryption key, takes effect after restart. If you need to change the storage method or key, strictly follow the steps in the <0>documentation</0> to avoid data loss.",
+    "masterEncryptionKeyVaultSetting": "Database",
+    "masterEncryptionKeyVaultEnv": "Environment variable <0>CR_ENCRYPT_MASTER_KEY</0>",
+    "masterEncryptionKeyVaultFile": "File",
+    "masterEncryptionKeyVaultFilePath": "Key storage path",
+    "showEncryptionStatus": "Show encryption status",
+    "showEncryptionStatusDes": "When enabled, users can view the encryption status of files in file details."
   },
   "giftCodes": {
     "giftCodesSettings": "Gift Codes",
@@ -1034,7 +1042,11 @@
     "sharePointUrlDes": "Enter the SharePoint site URL. After losing focus, the system will automatically convert it to the correct driver identifier.",
     "ks3selectRegionDes": "Enter the region code of the storage bucket, e.g. <0>BEIJING</0> .",
     "ks3EndpointPathStyle": "Select the format of the KS3 Endpoint address.",
-    "ossRegionDes": "Enter the region code of the storage bucket, e.g. <0>cn-hangzhou</0>. You can find the corresponding region in the <1>OSS regions and endpoints</1> table and fill in the corresponding <2>Region ID</2>."
+    "ossRegionDes": "Enter the region code of the storage bucket, e.g. <0>cn-hangzhou</0>. You can find the corresponding region in the <1>OSS regions and endpoints</1> table and fill in the corresponding <2>Region ID</2>.",
+    "fileEncryption": "File encryption",
+    "enableFileEncryption": "Enable file encryption",
+    "enableFileEncryptionDes": "When enabled, file blobs will be stored encrypted. Changing this setting only affects newly added files.",
+    "encryptedFile": "Encrypted files"
   },
   "node": {
     "slave": "slave",

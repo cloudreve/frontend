@@ -25,6 +25,7 @@ enum Source {
   dav = "dav",
   web_edit = "web_edit",
   wopi = "wopi",
+  encrypted_file = "encrypted_file",
 }
 
 enum Node {
@@ -134,7 +135,7 @@ export const TrafficDiagram = ({
         res.push(Node.cloudreve);
       }
     } else {
-      if (proxyed || source == Source.wopi) {
+      if (proxyed || source == Source.wopi || source == Source.encrypted_file) {
         res.push(Node.cloudreve);
       }
 
@@ -145,7 +146,12 @@ export const TrafficDiagram = ({
 
     if (variant == "upload" && internalEndpoint && (source == Source.dav || source == Source.web_edit || proxyed)) {
       res.push(Node.storage_node_internal);
-    } else if (variant == "download" && internalEndpoint && (source == Source.wopi || proxyed) && !cdn) {
+    } else if (
+      variant == "download" &&
+      internalEndpoint &&
+      (source == Source.wopi || proxyed || source == Source.encrypted_file) &&
+      !cdn
+    ) {
       res.push(Node.storage_node_internal);
     } else {
       res.push(Node.storage_node);
@@ -199,6 +205,17 @@ export const TrafficDiagram = ({
               }}
             >
               {t("settings.wopiViewer")}
+            </ListItemText>
+          </SquareMenuItem>
+        )}
+        {variant == "download" && (
+          <SquareMenuItem value={Source.encrypted_file}>
+            <ListItemText
+              slotProps={{
+                primary: { variant: "body2" },
+              }}
+            >
+              {t("policy.encryptedFile")}
             </ListItemText>
           </SquareMenuItem>
         )}

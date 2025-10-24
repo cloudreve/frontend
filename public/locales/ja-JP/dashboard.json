@@ -716,7 +716,15 @@
     "blobUrlCache": "Blob URLキャッシュ",
     "clearBlobUrlCache": "Blob URLキャッシュのクリア",
     "clearBlobUrlCacheDes": "キャッシュヒット率を高めるため、CloudreveはBlob URLをキャッシュして再利用します。CDNアドレスなどの設定が変更された場合は、キャッシュをクリアしてください。",
-    "cacheCleared": "キャッシュをクリアしました"
+    "cacheCleared": "キャッシュをクリアしました",
+    "masterEncryptionKeyVault": "マスター暗号化キーの保存方法",
+    "masterEncryptionKeyVaultDes": "マスター暗号化キーの保存方法を選択します。再起動後に有効になります。保存方法またはキーを変更する必要がある場合は、データ損失を避けるために<0>ドキュメント</0>の手順に厳密に従ってください。",
+    "masterEncryptionKeyVaultSetting": "データベース",
+    "masterEncryptionKeyVaultEnv": "環境変数 <0>CR_ENCRYPT_MASTER_KEY</0>",
+    "masterEncryptionKeyVaultFile": "ファイル",
+    "masterEncryptionKeyVaultFilePath": "キー保存パス",
+    "showEncryptionStatus": "暗号化状態を表示",
+    "showEncryptionStatusDes": "有効にすると、ユーザーはファイル詳細でファイルの暗号化状態を確認できます。"
   },
   "giftCodes": {
     "giftCodesSettings": "ギフトコード",
@@ -1034,7 +1042,11 @@
     "sharePointUrlDes": "SharePointサイトのURLを入力してください。フォーカスが外れると、システムが自動的に正しいドライブ識別子に変換します。",
     "ks3selectRegionDes": "バケットが存在するリージョンコードを入力してください（例：<0>BEIJING</0>）。",
     "ks3EndpointPathStyle": "パス形式エンドポイントの強制使用を選択してください。",
-    "ossRegionDes": "バケットが存在するリージョンコードを入力してください（例：<0>cn-hangzhou</0>）。<1>OSSリージョンとエンドポイント</1>の表で対応するリージョンを見つけ、対応する<2>リージョンID</2>を入力できます。"
+    "ossRegionDes": "バケットが存在するリージョンコードを入力してください（例：<0>cn-hangzhou</0>）。<1>OSSリージョンとエンドポイント</1>の表で対応するリージョンを見つけ、対応する<2>リージョンID</2>を入力できます。",
+    "fileEncryption": "ファイル暗号化",
+    "enableFileEncryption": "ファイル暗号化を有効にする",
+    "enableFileEncryptionDes": "有効にすると、ファイルのBlobが暗号化されて保存されます。この設定の変更は新しく追加されたファイルにのみ有効です。",
+    "encryptedFile": "暗号化されたファイル"
   },
   "node": {
     "slave": "スレーブ",

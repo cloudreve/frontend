@@ -401,7 +401,12 @@
     "viewSetting": "檢視設定",
     "saved": "已保存",
     "notSet": "未設定",
-    "deleteViewSetting": "刪除檢視設定"
+    "deleteViewSetting": "刪除檢視設定",
+    "encryption": "加密",
+    "fullEncryption": "使用 {{cipher}} 加密",
+    "partialEncryption": "部分加密",
+    "partialEncryptionDes": "此檔案的某些版本或其他資料未被加密。",
+    "noEncryption": "未加密"
   },
   "modals": {
     "includePasswordInShareLink": "在連結中包含密碼",

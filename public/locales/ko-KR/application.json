@@ -436,7 +436,12 @@
     "viewSetting": "보기 설정",
     "saved": "저장됨",
     "notSet": "설정되지 않음",
-    "deleteViewSetting": "보기 설정 삭제"
+    "deleteViewSetting": "보기 설정 삭제",
+    "encryption": "암호화",
+    "fullEncryption": "{{cipher}}로 암호화됨",
+    "partialEncryption": "부분 암호화",
+    "partialEncryptionDes": "이 파일의 일부 버전 또는 기타 데이터가 암호화되지 않았습니다.",
+    "noEncryption": "암호화되지 않음"
   },
   "modals": {
     "includePasswordInShareLink": "공유 링크에 비밀번호 포함",

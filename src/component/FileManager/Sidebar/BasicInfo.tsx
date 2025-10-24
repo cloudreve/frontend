@@ -1,14 +1,23 @@
-import { Link, Skeleton, Typography } from "@mui/material";
+import { Box, Link, Skeleton, Tooltip, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getFileInfo, sendPatchViewSync } from "../../../api/api.ts";
-import { ExplorerView, FileResponse, FileType, FolderSummary, Metadata } from "../../../api/explorer.ts";
-import { useAppDispatch } from "../../../redux/hooks.ts";
+import {
+  EncryptionCipher,
+  ExplorerView,
+  FileResponse,
+  FileType,
+  FolderSummary,
+  Metadata,
+} from "../../../api/explorer.ts";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import SessionManager from "../../../session/index.ts";
 import { sizeToString } from "../../../util";
 import CrUri from "../../../util/uri.ts";
 import TimeBadge from "../../Common/TimeBadge.tsx";
+import ShieldDismiss from "../../Icons/ShieldDismiss.tsx";
+import ShieldLockFilled from "../../Icons/ShieldLockFilled.tsx";
 import FileBadge from "../FileBadge.tsx";
 import InfoRow from "./InfoRow.tsx";
 
@@ -16,9 +25,94 @@ export interface BasicInfoProps {
   target: FileResponse;
 }
 
+export interface EncryptionStatus {
+  status: "full" | "partial" | "none";
+  cipher: EncryptionCipher[];
+}
+
+export const cipherDisplayName = (cipher: EncryptionCipher): string => {
+  switch (cipher) {
+    case EncryptionCipher.aes256ctr:
+      return "AES-256-CTR";
+    default:
+      return cipher;
+  }
+};
+
+export const EncryptionStatusText = ({
+  status,
+  simplified = false,
+  flexWrap = true,
+}: {
+  status: EncryptionStatus;
+  simplified?: boolean;
+  flexWrap?: boolean;
+}) => {
+  const { t } = useTranslation();
+  const title = useMemo(() => {
+    switch (status.status) {
+      case "full":
+        return t("application:fileManager.fullEncryption", {
+          cipher: status.cipher.map(cipherDisplayName).join(", "),
+        });
+      case "partial":
+        return t("application:fileManager.partialEncryption");
+    }
+    return t("application:fileManager.noEncryption");
+  }, [status.status, t]);
+
+  const tooltipTitle = useMemo(() => {
+    if (simplified) {
+      return title;
+    }
+    return status.status === "partial" ? t("application:fileManager.partialEncryptionDes") : "";
+  }, [status.status, t, simplified]);
+
+  return (
+    <Tooltip title={tooltipTitle}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: flexWrap ? "wrap" : "nowrap" }}>
+        {status.status === "full" ? (
+          <ShieldLockFilled
+            sx={{
+              width: "20px",
+              height: "20px",
+              color: (theme) => theme.palette.success.main,
+            }}
+          />
+        ) : status.status === "partial" ? (
+          <ShieldLockFilled
+            sx={{
+              width: "20px",
+              height: "20px",
+              color: (theme) => theme.palette.action.disabled,
+            }}
+          />
+        ) : (
+          <ShieldDismiss
+            sx={{
+              width: "20px",
+              height: "20px",
+              color: (theme) => theme.palette.action.disabled,
+            }}
+          />
+        )}
+        {!simplified && (
+          <>
+            <Typography variant={"body2"} color={"text.secondary"}>
+              {title}
+            </Typography>
+          </>
+        )}
+      </Box>
+    </Tooltip>
+  );
+};
+
 const BasicInfo = ({ target }: BasicInfoProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+
+  const showEncryptionStatus = useAppSelector((state) => state.siteConfig?.explorer?.config?.show_encryption_status);
 
   // null: not valid, undefined: not loaded, FolderSummary: loaded
   const [folderSummary, setFolderSummary] = useState<FolderSummary | undefined | null>(null);
@@ -128,6 +222,27 @@ const BasicInfo = ({ target }: BasicInfoProps) => {
     });
   }, [folderSummary, t]);
 
+  const encryptionStatus = useMemo(() => {
+    if (target.extended_info) {
+      const status: EncryptionStatus = { status: "none", cipher: [] };
+      let encrypted = 0;
+      target.extended_info.entities?.forEach((entity) => {
+        if (entity.encrypted_with) {
+          encrypted++;
+          if (!status.cipher.includes(entity.encrypted_with)) {
+            status.cipher.push(entity.encrypted_with);
+          }
+        }
+      });
+
+      if (encrypted > 0) {
+        status.status = encrypted === target.extended_info.entities?.length ? "full" : "partial";
+      }
+      return <EncryptionStatusText status={status} />;
+    }
+    return <Skeleton variant={"text"} width={75} />;
+  }, [target.extended_info, t]);
+
   const handleDeleteViewSetting = useCallback(() => {
     dispatch(sendPatchViewSync({ uri: target.path }))
       .then(() => {
@@ -226,6 +341,9 @@ const BasicInfo = ({ target }: BasicInfoProps) => {
               )
             }
           />
+          {showEncryptionStatus && encryptionStatus && (
+            <InfoRow title={t("application:fileManager.encryption")} content={encryptionStatus} />
+          )}
         </>
       )}
       <InfoRow

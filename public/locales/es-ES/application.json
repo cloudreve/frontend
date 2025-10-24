@@ -436,7 +436,12 @@
     "viewSetting": "Configuración de vista",
     "saved": "Guardado",
     "notSet": "Sin establecer",
-    "deleteViewSetting": "Eliminar configuración de vista"
+    "deleteViewSetting": "Eliminar configuración de vista",
+    "encryption": "Cifrado",
+    "fullEncryption": "Cifrado con {{cipher}}",
+    "partialEncryption": "Parcialmente cifrado",
+    "partialEncryptionDes": "Algunas versiones u otros datos de este archivo no están cifrados.",
+    "noEncryption": "No cifrado"
   },
   "modals": {
     "includePasswordInShareLink": "Incluir contraseña en enlace compartido",

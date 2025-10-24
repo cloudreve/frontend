@@ -436,7 +436,12 @@
     "viewSetting": "Настройки просмотра",
     "saved": "Сохранено",
     "notSet": "Не установлено",
-    "deleteViewSetting": "Удалить настройки просмотра"
+    "deleteViewSetting": "Удалить настройки просмотра",
+    "encryption": "Шифрование",
+    "fullEncryption": "Зашифровано с помощью {{cipher}}",
+    "partialEncryption": "Частично зашифровано",
+    "partialEncryptionDes": "Некоторые версии или другие данные этого файла не зашифрованы.",
+    "noEncryption": "Не зашифровано"
   },
   "modals": {
     "includePasswordInShareLink": "Включить пароль в ссылку на публикацию",

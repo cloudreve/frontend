@@ -5,6 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   BasicInfoSection,
   DownloadSection,
+  EncryptionSection,
   MediaMetadataSection,
   StorageAndUploadSection,
   ThumbnailsSection,
@@ -32,6 +33,7 @@ const StoragePolicyForm = () => {
         <DownloadSection />
         <ThumbnailsSection />
         <MediaMetadataSection />
+        <EncryptionSection />
       </Stack>
     </Box>
   );

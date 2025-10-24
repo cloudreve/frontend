@@ -1,6 +1,6 @@
 // 所有 Uploader 的基类
 import axios, { CanceledError, CancelTokenSource } from "axios";
-import { EncryptionAlgorithm, PolicyType } from "../../../../api/explorer.ts";
+import { EncryptionCipher, PolicyType } from "../../../../api/explorer.ts";
 import CrUri from "../../../../util/uri.ts";
 import { createUploadSession, deleteUploadSession } from "../api";
 import { UploaderError } from "../errors";
@@ -148,7 +148,7 @@ export default abstract class Base {
           mime_type: this.task.file.type,
           entity_type: this.task.overwrite ? "version" : undefined,
           encryption_supported:
-            this.task.policy.encryption && "crypto" in window ? [EncryptionAlgorithm.aes256ctr] : undefined,
+            this.task.policy.encryption && "crypto" in window ? [EncryptionCipher.aes256ctr] : undefined,
         },
         this.cancelToken.token,
       );

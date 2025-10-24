@@ -436,7 +436,12 @@
     "viewSetting": "Configuração de visualização",
     "saved": "Salvo",
     "notSet": "Não definido",
-    "deleteViewSetting": "Excluir configuração de visualização"
+    "deleteViewSetting": "Excluir configuração de visualização",
+    "encryption": "Criptografia",
+    "fullEncryption": "Criptografado com {{cipher}}",
+    "partialEncryption": "Parcialmente criptografado",
+    "partialEncryptionDes": "Algumas versões ou outros dados deste arquivo não estão criptografados.",
+    "noEncryption": "Não criptografado"
   },
   "modals": {
     "includePasswordInShareLink": "Incluir senha no link de compartilhamento",

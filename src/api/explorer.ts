@@ -68,6 +68,7 @@ export interface Entity {
   storage_policy?: StoragePolicy;
   size: number;
   created_by?: User;
+  encrypted_with?: EncryptionCipher;
 }
 
 export interface Share {
@@ -492,7 +493,7 @@ export interface CreateViewerSessionService {
   version?: string;
 }
 
-export enum EncryptionAlgorithm {
+export enum EncryptionCipher {
   aes256ctr = "aes-256-ctr",
 }
 
@@ -506,11 +507,11 @@ export interface UploadSessionRequest {
     [key: string]: string;
   };
   mime_type?: string;
-  encryption_supported?: EncryptionAlgorithm[];
+  encryption_supported?: EncryptionCipher[];
 }
 
 export interface EncryptMetadata {
-  algorithm: EncryptionAlgorithm;
+  algorithm: EncryptionCipher;
   key_plain_text: string;
   iv: string;
 }

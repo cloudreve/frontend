@@ -1,4 +1,4 @@
-import { EncryptMetadata, EncryptionAlgorithm } from "../../../../../api/explorer";
+import { EncryptionCipher, EncryptMetadata } from "../../../../../api/explorer";
 
 /**
  * EncryptedBlob wraps a Blob and encrypts its stream on-the-fly using the provided encryption metadata.
@@ -107,7 +107,7 @@ export class EncryptedBlob implements Blob {
     const keyBytes = this.stringToUint8Array(this.metadata.key_plain_text);
 
     switch (this.metadata.algorithm) {
-      case EncryptionAlgorithm.aes256ctr:
+      case EncryptionCipher.aes256ctr:
         this.cryptoKey = await crypto.subtle.importKey("raw", keyBytes, { name: "AES-CTR" }, false, ["encrypt"]);
         break;
       default:

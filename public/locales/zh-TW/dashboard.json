@@ -716,7 +716,15 @@
     "blobUrlCache": "Blob URL 快取",
     "clearBlobUrlCache": "清除 Blob URL 快取",
     "clearBlobUrlCacheDes": "為了增加快取命中率，Cloudreve 會快取並復用 Blob URL。當 CDN 地址等設定發生變更時，請清除快取。",
-    "cacheCleared": "快取已清除"
+    "cacheCleared": "快取已清除",
+    "masterEncryptionKeyVault": "主加密金鑰儲存方式",
+    "masterEncryptionKeyVaultDes": "選擇主加密金鑰的儲存方式，重啟後生效。如果需要更換儲存方式或金鑰，請嚴格遵循<0>文件</0>中的步驟，避免資料遺失。",
+    "masterEncryptionKeyVaultSetting": "資料庫",
+    "masterEncryptionKeyVaultEnv": "環境變數 <0>CR_ENCRYPT_MASTER_KEY</0>",
+    "masterEncryptionKeyVaultFile": "檔案",
+    "masterEncryptionKeyVaultFilePath": "金鑰儲存路徑",
+    "showEncryptionStatus": "顯示加密狀態",
+    "showEncryptionStatusDes": "開啟後，使用者在檔案詳情中可以查看檔案的加密狀態。"
   },
   "giftCodes": {
     "giftCodesSettings": "禮品碼",
@@ -1034,7 +1042,11 @@
     "sharePointUrlDes": "輸入 SharePoint 站點 URL。失去焦點後，系統將自動轉換為正確的驅動器標識。",
     "ks3selectRegionDes": "輸入儲存桶所在的區域程式碼，如 <0>BEIJING</0>。",
     "ks3EndpointPathStyle": "選擇是否強制使用路徑格式 Endpoint。",
-    "ossRegionDes": "輸入儲存桶所在的區域代碼，如 <0>cn-hangzhou</0>。你可以在 <1>OSS地域和訪問域名</1> 的表格中找到對應地域，並填寫對應的 <2>地域ID</2>。"
+    "ossRegionDes": "輸入儲存桶所在的區域代碼，如 <0>cn-hangzhou</0>。你可以在 <1>OSS地域和訪問域名</1> 的表格中找到對應地域，並填寫對應的 <2>地域ID</2>。",
+    "fileEncryption": "檔案加密",
+    "enableFileEncryption": "啟用檔案加密",
+    "enableFileEncryptionDes": "開啟後，檔案 Blob 會被加密儲存。更改此設定只對新增的檔案有效。",
+    "encryptedFile": "加密的檔案"
   },
   "node": {
     "slave": "從機",

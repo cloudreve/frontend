@@ -717,7 +717,15 @@
     "blobUrlCache": "Cache d'URL Blob",
     "clearBlobUrlCache": "Vider le cache d'URL Blob",
     "clearBlobUrlCacheDes": "Pour augmenter le taux de réussite du cache, Cloudreve met en cache et réutilise les URL Blob. Lorsque l'adresse CDN ou d'autres paramètres changent, veuillez vider le cache.",
-    "cacheCleared": "Cache vidé."
+    "cacheCleared": "Cache vidé.",
+    "masterEncryptionKeyVault": "Stockage de la clé de chiffrement principale",
+    "masterEncryptionKeyVaultDes": "Choisissez comment stocker la clé de chiffrement principale, prend effet après le redémarrage. Si vous devez changer la méthode de stockage ou la clé, suivez strictement les étapes de la <0>documentation</0> pour éviter la perte de données.",
+    "masterEncryptionKeyVaultSetting": "Base de données",
+    "masterEncryptionKeyVaultEnv": "Variable d'environnement <0>CR_ENCRYPT_MASTER_KEY</0>",
+    "masterEncryptionKeyVaultFile": "Fichier",
+    "masterEncryptionKeyVaultFilePath": "Chemin de stockage de la clé",
+    "showEncryptionStatus": "Afficher l'état du chiffrement",
+    "showEncryptionStatusDes": "Lorsqu'il est activé, les utilisateurs peuvent consulter l'état du chiffrement des fichiers dans les détails du fichier."
   },
   "giftCodes": {
     "giftCodesSettings": "Codes cadeaux",
@@ -1033,7 +1041,11 @@
     "sharePointUrlDes": "Entrez l'URL du site SharePoint. Après avoir perdu le focus, le système convertira automatiquement vers l'identifiant de pilote correct.",
     "ks3selectRegionDes": "Entrez le code de région du bucket de stockage, par ex. <0>BEIJING</0> .",
     "ks3EndpointPathStyle": "Sélectionnez le format de l'adresse Endpoint KS3.",
-    "ossRegionDes": "Entrez le code de région où se trouve le bucket, par ex. <0>cn-hangzhou</0>. Vous pouvez trouver la région correspondante dans le tableau <1>Régions et points de terminaison OSS</1> et remplir l'<2>ID de région</2> correspondant."
+    "ossRegionDes": "Entrez le code de région où se trouve le bucket, par ex. <0>cn-hangzhou</0>. Vous pouvez trouver la région correspondante dans le tableau <1>Régions et points de terminaison OSS</1> et remplir l'<2>ID de région</2> correspondant.",
+    "fileEncryption": "Chiffrement des fichiers",
+    "enableFileEncryption": "Activer le chiffrement des fichiers",
+    "enableFileEncryptionDes": "Lorsqu'il est activé, les blobs de fichiers seront stockés chiffrés. La modification de ce paramètre n'affecte que les fichiers nouvellement ajoutés.",
+    "encryptedFile": "Fichiers chiffrés"
   },
   "node": {
     "slave": "esclave",

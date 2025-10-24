@@ -34,6 +34,7 @@ import DraggableDialog from "../../Dialogs/DraggableDialog.tsx";
 import MoreVertical from "../../Icons/MoreVertical.tsx";
 import { SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
 import { FileManagerIndex } from "../FileManager.tsx";
+import { EncryptionStatusText } from "../Sidebar/BasicInfo.tsx";
 
 const VersionControl = () => {
   const { t } = useTranslation();
@@ -47,6 +48,7 @@ const VersionControl = () => {
   const open = useAppSelector((state) => state.globalState.versionControlDialogOpen);
   const target = useAppSelector((state) => state.globalState.versionControlDialogFile);
   const highlight = useAppSelector((state) => state.globalState.versionControlHighlight);
+  const showEncryptionStatus = useAppSelector((state) => state.siteConfig?.explorer?.config?.show_encryption_status);
 
   const onClose = useCallback(() => {
     if (!loading) {
@@ -216,6 +218,9 @@ const VersionControl = () => {
                     <NoWrapTableCell>{t("fileManager.size")}</NoWrapTableCell>
                     <NoWrapTableCell>{t("fileManager.createdBy")}</NoWrapTableCell>
                     <NoWrapTableCell>{t("application:fileManager.storagePolicy")}</NoWrapTableCell>
+                    {showEncryptionStatus && (
+                      <NoWrapTableCell>{t("application:fileManager.encryption")}</NoWrapTableCell>
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -264,6 +269,17 @@ const VersionControl = () => {
                           />
                         </TableCell>
                         <NoWrapTableCell>{e.storage_policy?.name}</NoWrapTableCell>
+                        {showEncryptionStatus && (
+                          <NoWrapTableCell>
+                            <EncryptionStatusText
+                              flexWrap={false}
+                              status={{
+                                status: e.encrypted_with ? "full" : "none",
+                                cipher: e.encrypted_with ? [e.encrypted_with] : [],
+                              }}
+                            />
+                          </NoWrapTableCell>
+                        )}
                       </TableRow>
                     ))}
                 </TableBody>
