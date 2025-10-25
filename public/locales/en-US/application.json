@@ -365,6 +365,7 @@
     "listRepeat": "List Repeat",
     "singleRepeat": "Single Repeat",
     "shuffle": "Shuffle",
+    "playOnce": "Play Once",
     "playbackSpeed": "Playback Speed",
     "searchResult": "Search Results",
     "preparingBathDownload": "Preparing batch download...",

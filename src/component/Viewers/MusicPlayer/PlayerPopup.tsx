@@ -29,6 +29,7 @@ import { MediaMetaElements } from "../../FileManager/Sidebar/MediaMetaCard.tsx";
 import AppsList from "../../Icons/AppsList.tsx";
 import ArrowRepeatAll from "../../Icons/ArrowRepeatAll.tsx";
 import ArrowRepeatOne from "../../Icons/ArrowRepeatOne.tsx";
+import ArrowRepeatOff from "../../Icons/ArrowRepeatOff.tsx";
 import ArrowShuffle from "../../Icons/ArrowShuffle.tsx";
 import MusicNote1 from "../../Icons/MusicNote1.tsx";
 import { LoopMode } from "./MusicPlayer.tsx";
@@ -396,6 +397,7 @@ export const PlayerPopup = ({
             {loopMode == LoopMode.list_repeat && <ArrowRepeatAll fontSize={"medium"} htmlColor={mainIconColor} />}
             {loopMode == LoopMode.single_repeat && <ArrowRepeatOne fontSize={"medium"} htmlColor={mainIconColor} />}
             {loopMode == LoopMode.shuffle && <ArrowShuffle fontSize={"medium"} htmlColor={mainIconColor} />}
+            {loopMode == LoopMode.play_once && <ArrowRepeatOff fontSize={"medium"} htmlColor={mainIconColor} />}
           </IconButton>
           <Box
             sx={{

@@ -365,6 +365,7 @@
     "listRepeat": "列表循环",
     "singleRepeat": "单曲循环",
     "shuffle": "随机播放",
+    "playOnce": "单次播放",
     "playbackSpeed": "播放速度",
     "searchResult": "搜索结果",
     "preparingBathDownload": "正在准备打包下载...",
