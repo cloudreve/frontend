@@ -79,8 +79,6 @@ const MusicPlayer = () => {
         return;
       }
 
-      playHistory.current.push(index ?? 0);
-
       switch (loopMode) {
         case LoopMode.list_repeat:
         case LoopMode.play_once:
@@ -95,6 +93,7 @@ const MusicPlayer = () => {
           break;
         case LoopMode.shuffle:
           if (isNext) {
+            playHistory.current.push(index ?? 0);
             const nextIndex = Math.floor(Math.random() * playerState?.files.length);
             playIndex(nextIndex);
           } else {
