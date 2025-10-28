@@ -106,6 +106,25 @@ const MusicPlayer = () => {
     [loopMode, playIndex, playerState, index],
   );
 
+  const manualNavigate = useCallback(
+    (isNext: boolean) => {
+      if (!playerState) {
+        return;
+      }
+
+      if (loopMode === LoopMode.single_repeat) {
+        if (isNext) {
+          playIndex(((index ?? 0) + 1) % playerState?.files.length);
+        } else {
+          playIndex(((index ?? 0) - 1 + playerState?.files.length) % playerState?.files.length);
+        }
+      } else {
+        loopProceed(isNext);
+      }
+    },
+    [loopMode, playIndex, playerState, index, loopProceed],
+  );
+
   const onPlayEnded = useCallback(() => {
     if (loopMode !== LoopMode.play_once) {
       loopProceed(true);
@@ -181,6 +200,7 @@ const MusicPlayer = () => {
         <PlayerPopup
           playIndex={playIndex}
           loopProceed={loopProceed}
+          manualNavigate={manualNavigate}
           file={playerState?.files[index]}
           duration={duration}
           current={current}
