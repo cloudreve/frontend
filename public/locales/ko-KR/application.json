@@ -400,6 +400,7 @@
     "listRepeat": "목록 반복",
     "singleRepeat": "한 곡 반복",
     "shuffle": "무작위 재생",
+    "playOnce": "한 번 재생",
     "playbackSpeed": "재생 속도",
     "searchResult": "검색 결과",
     "preparingBathDownload": "일괄 다운로드 준비 중...",

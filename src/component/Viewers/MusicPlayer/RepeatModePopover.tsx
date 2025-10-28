@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import ArrowRepeatAll from "../../Icons/ArrowRepeatAll.tsx";
 import ArrowRepeatOne from "../../Icons/ArrowRepeatOne.tsx";
+import ArrowRepeatOff from "../../Icons/ArrowRepeatOff.tsx";
 import ArrowShuffle from "../../Icons/ArrowShuffle.tsx";
 import { LoopMode } from "./MusicPlayer.tsx";
 
@@ -39,6 +40,8 @@ export const RepeatModePopover = ({
         return "single_repeat";
       case LoopMode.shuffle:
         return "shuffle";
+      case LoopMode.play_once:
+        return "play_once";
       default:
         return "list_repeat";
     }
@@ -61,6 +64,9 @@ export const RepeatModePopover = ({
         break;
       case "shuffle":
         newLoopMode = LoopMode.shuffle;
+        break;
+      case "play_once":
+        newLoopMode = LoopMode.play_once;
         break;
       default:
         return;
@@ -114,6 +120,10 @@ export const RepeatModePopover = ({
           <NoWrapToggleButton value="shuffle">
             <ArrowShuffle fontSize="small" sx={{ mr: 1 }} />
             {t("fileManager.shuffle")}
+          </NoWrapToggleButton>
+          <NoWrapToggleButton value="play_once">
+            <ArrowRepeatOff fontSize="small" sx={{ mr: 1 }} />
+            {t("fileManager.playOnce")}
           </NoWrapToggleButton>
         </ToggleButtonGroup>
 

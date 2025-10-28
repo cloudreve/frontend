@@ -12,6 +12,7 @@ export const LoopMode = {
   list_repeat: 0,
   single_repeat: 1,
   shuffle: 2,
+  play_once: 3,
 };
 
 const MusicPlayer = () => {
@@ -78,10 +79,9 @@ const MusicPlayer = () => {
         return;
       }
 
-      playHistory.current.push(index ?? 0);
-
       switch (loopMode) {
         case LoopMode.list_repeat:
+        case LoopMode.play_once:
           if (isNext) {
             playIndex(((index ?? 0) + 1) % playerState?.files.length);
           } else {
@@ -93,6 +93,7 @@ const MusicPlayer = () => {
           break;
         case LoopMode.shuffle:
           if (isNext) {
+            playHistory.current.push(index ?? 0);
             const nextIndex = Math.floor(Math.random() * playerState?.files.length);
             playIndex(nextIndex);
           } else {
@@ -106,8 +107,10 @@ const MusicPlayer = () => {
   );
 
   const onPlayEnded = useCallback(() => {
-    loopProceed(true);
-  }, []);
+    if (loopMode !== LoopMode.play_once) {
+      loopProceed(true);
+    }
+  }, [loopMode, loopProceed]);
 
   const timeUpdate = useCallback(() => {
     setCurrent(Math.floor(audio.current?.currentTime || 0));
@@ -152,7 +155,7 @@ const MusicPlayer = () => {
   }, []);
 
   const toggleLoopMode = useCallback(() => {
-    setLoopMode((loopMode) => (loopMode + 1) % 3);
+    setLoopMode((loopMode) => (loopMode + 1) % 4);
   }, []);
 
   const setLoopModeHandler = useCallback((mode: number) => {
@@ -168,12 +171,7 @@ const MusicPlayer = () => {
 
   return (
     <>
-      <audio
-        ref={audio}
-        onPause={() => setPlaying(false)}
-        onPlay={() => setPlaying(true)}
-        onEnded={() => loopProceed(true)}
-      />
+      <audio ref={audio} onPause={() => setPlaying(false)} onPlay={() => setPlaying(true)} onEnded={onPlayEnded} />
       <Tooltip title={playingTooltip} enterDelay={0}>
         <IconButton ref={icon} onClick={onPlayerPopoverOpen} size="large">
           {playing ? <MusicNote2Play /> : <MusicNote2 />}
