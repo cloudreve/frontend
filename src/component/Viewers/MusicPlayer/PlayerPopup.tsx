@@ -174,6 +174,7 @@ export interface PlayerPopupProps extends PopoverProps {
   setVolumeLevel: (volume: number) => void;
   volume: number;
   loopProceed: (isNext: boolean) => void;
+  manualNavigate: (isNext: boolean) => void;
   loopMode: number;
   toggleLoopMode: () => void;
   setLoopMode: (mode: number) => void;
@@ -195,6 +196,7 @@ export const PlayerPopup = ({
   setVolumeLevel,
   loopMode,
   loopProceed,
+  manualNavigate,
   toggleLoopMode,
   setLoopMode,
   playbackSpeed,
@@ -253,8 +255,8 @@ export const PlayerPopup = ({
     thumbSrc,
     onPlay: togglePause,
     onPause: togglePause,
-    onPrevious: () => loopProceed(false),
-    onNext: () => loopProceed(true),
+    onPrevious: () => manualNavigate(false),
+    onNext: () => manualNavigate(true),
     onSeek,
   });
 
@@ -406,7 +408,7 @@ export const PlayerPopup = ({
               justifyContent: "center",
             }}
           >
-            <IconButton aria-label="previous song" onClick={() => loopProceed(false)}>
+            <IconButton aria-label="previous song" onClick={() => manualNavigate(false)}>
               <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
             </IconButton>
             <IconButton aria-label={!playing ? "play" : "pause"} onClick={togglePause}>
@@ -416,7 +418,7 @@ export const PlayerPopup = ({
                 <PauseRounded sx={{ fontSize: "3rem" }} htmlColor={mainIconColor} />
               )}
             </IconButton>
-            <IconButton aria-label="next song" onClick={() => loopProceed(true)}>
+            <IconButton aria-label="next song" onClick={() => manualNavigate(true)}>
               <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
             </IconButton>
           </Box>
