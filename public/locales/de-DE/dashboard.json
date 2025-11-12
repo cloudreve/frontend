@@ -450,8 +450,8 @@
     "proxyPolicyListDes": "Mehrfach auswählbar. Wenn aktiviert, werden Dateien, deren Speicherrichtlinie keine native Generierung unterstützt, ihre Miniaturansichten von Cloudreve proxy-generiert.",
     "thumbWidth": "Max. Breite",
     "thumbHeight": "Max. Höhe",
-    "thumbSuffix": "Blob-Datei-Suffix",
-    "thumbSuffixDes": "Das Suffix, das an den ursprünglichen Blob-Dateinamen für die generierte Miniaturansicht angehängt wird, ",
+    "thumbPath": "Miniaturansicht-Pfad",
+    "thumbPathDes": "Der vollständige Dateipfad für die Generierung von Miniaturansicht-Blobs. Sie können <0>magische Variablen</0> verwenden. Stellen Sie sicher, dass er absolut eindeutig ist, auch bei mehreren Uploads derselben Datei in kurzer Zeit.",
     "thumbFormat": "Bildformat",
     "thumbFormatDes": "Bevorzugtes Bildformat, wenn der Generator es nicht unterstützt, wird es automatisch auf jpg-Format herabgestuft.",
     "thumbQuality": "Qualität",
@@ -932,7 +932,10 @@
       "hour": "Stunde",
       "minute": "Minute",
       "second": "Sekunde",
-      "path": "Der ursprüngliche Pfad beim Hochladen der Datei durch den Benutzer"
+      "path": "Der ursprüngliche Pfad beim Hochladen der Datei durch den Benutzer",
+      "blobPath": "Der vollständige Pfad der Datei-Blob",
+      "blobName": "Der Name der Datei-Blob",
+      "blobNameNoext": "Datei-Blob-Name ohne Erweiterung"
     },
     "storageBucket": "Speicher-Bucket",
     "wanSiteURLDes": "Bevor Sie diese Richtlinie verwenden, stellen Sie bitte sicher, dass die Adresse, die Sie in Grundeinstellungen - Site-Informationen - Site-URL eingegeben haben, mit der tatsächlichen Adresse übereinstimmt und <0>ordnungsgemäß über WAN zugänglich</0> ist.",

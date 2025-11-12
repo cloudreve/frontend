@@ -449,8 +449,8 @@
     "proxyPolicyListDes": "다중 선택 가능. 선택하면 저장소 정책에서 네이티브 썸네일 생성을 지원하지 않는 유형은 Cloudreve에서 프록시 생성됩니다.",
     "thumbWidth": "최대 너비",
     "thumbHeight": "최대 높이",
-    "thumbSuffix": "Blob 파일 접미사",
-    "thumbSuffixDes": "생성된 썸네일 Blob이 원본 Blob에 대해 추가되는 접미사",
+    "thumbPath": "썸네일 경로",
+    "thumbPathDes": "썸네일 Blob을 생성하는 완전한 파일 경로로, <0>매직 변수</0>를 사용할 수 있으며, 짧은 시간 내에 같은 파일을 여러 번 업로드하는 경우에도 절대적으로 고유해야 합니다.",
     "thumbFormat": "썸네일 형식",
     "thumbFormatDes": "우선 사용할 썸네일 형식으로, 생성기에서 지원하지 않으면 자동으로 jpg 형식으로 다운그레이드됩니다.",
     "thumbQuality": "이미지 품질",
@@ -933,7 +933,10 @@
       "hour": "시간",
       "minute": "분",
       "second": "초",
-      "path": "사용자가 파일을 업로드할 때의 초기 경로"
+      "path": "사용자가 파일을 업로드할 때의 초기 경로",
+      "blobPath": "파일 Blob의 완전한 경로",
+      "blobName": "파일 Blob의 이름",
+      "blobNameNoext": "확장자 없는 파일 Blob 이름"
     },
     "storageBucket": "스토리지 공간",
     "wanSiteURLDes": "이 스토리지 정책을 사용하기 전에 매개변수 설정 - 사이트 정보 - 사이트 URL에 입력한 주소가 실제와 일치하고 <0>외부 네트워크에서 정상적으로 액세스할 수 있는지</0> 확인하세요.",

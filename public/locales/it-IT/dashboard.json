@@ -450,8 +450,8 @@
     "proxyPolicyListDes": "Multi-selezionabile. Se abilitato, i file la cui policy di archiviazione non supporta la generazione nativa, le loro miniature saranno generate tramite proxy da Cloudreve.",
     "thumbWidth": "Larghezza massima",
     "thumbHeight": "Altezza massima",
-    "thumbSuffix": "Suffisso file blob",
-    "thumbSuffixDes": "Il suffisso aggiunto al nome del file Blob originale per la miniatura generata, ",
+    "thumbPath": "Percorso Miniatura",
+    "thumbPathDes": "Il percorso completo del file per generare Blob di miniatura, puoi usare <0>variabili magiche</0>, assicurati che sia assolutamente univoco, anche per caricamenti multipli dello stesso file in poco tempo.",
     "thumbFormat": "Formato immagine",
     "thumbFormatDes": "Formato immagine preferito, se il generatore non lo supporta, verrà automaticamente retrocesso al formato jpg.",
     "thumbQuality": "Qualità",
@@ -932,7 +932,10 @@
       "hour": "Ora",
       "minute": "Minuto",
       "second": "Secondo",
-      "path": "Il percorso iniziale durante il caricamento del file da parte dell'utente"
+      "path": "Il percorso iniziale durante il caricamento del file da parte dell'utente",
+      "blobPath": "Il percorso completo del file Blob",
+      "blobName": "Il nome del file Blob",
+      "blobNameNoext": "Nome del file Blob senza estensione"
     },
     "storageBucket": "Bucket di archiviazione",
     "wanSiteURLDes": "Prima di utilizzare questa politica, assicurati che l'indirizzo inserito in Impostazioni di base - Informazioni sito - URL del sito corrisponda all'indirizzo effettivo e <0>possa essere accessibile correttamente dalla WAN</0>.",
