@@ -450,7 +450,7 @@
     "thumbWidth": "Max width",
     "thumbHeight": "Max height",
     "thumbPath": "Image path",
-    "thumbPathDes": "The complete file path for generating thumbnail Blob, you can use <0>magic variables</0>, make sure it's absolutely unique, even for multiple uploads of the same file in a short time.",
+    "thumbPathDes": "The complete file path for generating thumbnail Blobs, you can use <0>magic variables</0>, make sure it's absolutely unique, even for multiple uploads of the same file in a short time.",
     "thumbFormat": "Image format",
     "thumbFormatDes": "Preferred image format, if the generator does not support it, it will automatically downgrade to jpg format.",
     "thumbQuality": "Quality",
