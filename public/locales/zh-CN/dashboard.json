@@ -449,8 +449,8 @@
     "proxyPolicyListDes": "可多选。选中后，存储策略不支持原生生成缩略图的类型会由 Cloudreve 代理生成。",
     "thumbWidth": "最大宽度",
     "thumbHeight": "最大高度",
-    "thumbSuffix": "Blob 文件后缀",
-    "thumbSuffixDes": "生成的缩略图 Blob 相对于原始 Blob 增加的后缀，",
+    "thumbPath": "缩略图路径",
+    "thumbPathDes": "生成缩略图 Blob 的完整文件路径，可以使用 <0>魔法变量</0>，需要确保为绝对唯一，即使在短时间内多次上传同一文件。",
     "thumbFormat": "缩略图格式",
     "thumbFormatDes": "优先使用的缩略图格式，如果生成器不支持，会自动降级为 jpg 格式。",
     "thumbQuality": "图像质量",
@@ -933,7 +933,10 @@
       "hour": "小时",
       "minute": "分钟",
       "second": "秒",
-      "path": "用户上传文件时的初始路径"
+      "path": "用户上传文件时的初始路径",
+      "blobPath": "文件 Blob 的完整路径",
+      "blobName": "文件 Blob 的名称",
+      "blobNameNoext": "无扩展名的文件 Blob 名称"
     },
     "storageBucket": "存储空间",
     "wanSiteURLDes": "在使用此存储策略前，请确保你在 参数设置 - 站点信息 - 站点URL 中填写的 地址与实际相符，并且 <0>能够被外网正常访问</0>。",

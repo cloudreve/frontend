@@ -1,6 +1,6 @@
 import { Alert, Box, Collapse, FormControlLabel, Link, ListItemText, Stack, Switch, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import { useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { isTrueVal } from "../../../../session/utils.ts";
 import { DenseFilledTextField, DenseSelect } from "../../../Common/StyledComponents.tsx";
@@ -10,10 +10,18 @@ import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../Se
 import { SettingContext } from "../SettingWrapper.tsx";
 import Extractors from "./Extractors.tsx";
 import Generators from "./Generators.tsx";
+import MagicVarDialog from "../../Common/MagicVarDialog";
+import { thumbnailMagicVars } from "../../StoragePolicy/EditStoragePolicy/FormSections/magicVars.ts";
 
 const Media = () => {
   const { t } = useTranslation("dashboard");
   const { formRef, setSettings, values } = useContext(SettingContext);
+  const [magicVarDialogOpen, setMagicVarDialogOpen] = useState(false);
+
+  const handleThumbMagicVarClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setMagicVarDialogOpen(true);
+  }, []);
 
   return (
     <Box component={"form"} ref={formRef} onSubmit={(e) => e.preventDefault()}>
@@ -56,7 +64,7 @@ const Media = () => {
                 />
               </FormControl>
             </SettingForm>
-            <SettingForm title={t("settings.thumbSuffix")} lgWidth={5}>
+            <SettingForm title={t("settings.thumbPath")} lgWidth={5}>
               <FormControl fullWidth>
                 <DenseFilledTextField
                   required
@@ -68,9 +76,12 @@ const Media = () => {
                   }}
                 />
                 <NoMarginHelperText>
-                  {t("settings.notAppliedToNativeGenerator", {
-                    prefix: t("settings.thumbSuffixDes"),
-                  })}
+                  <Trans
+                    i18nKey="settings.notAppliedToNativeGenerator"
+                    ns="dashboard"
+                    values={{ prefix: t("settings.thumbPathDes") }}
+                    components={[<Link href="#" onClick={handleThumbMagicVarClick} />]}
+                  />
                 </NoMarginHelperText>
               </FormControl>
             </SettingForm>
@@ -143,6 +154,11 @@ const Media = () => {
               </FormControl>
             </SettingForm>
           </SettingSectionContent>
+          <MagicVarDialog
+            open={magicVarDialogOpen}
+            onClose={() => setMagicVarDialogOpen(false)}
+            vars={thumbnailMagicVars}
+          />
           <Typography variant="subtitle1" gutterBottom sx={{ mt: 1 }}>
             {t("settings.generators")}
           </Typography>
