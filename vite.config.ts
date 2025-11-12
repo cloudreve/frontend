@@ -34,6 +34,15 @@ export default defineConfig({
       ],
     }),
     {
+      name: "load-js-error-handler",
+      transformIndexHtml(html) {
+        return html.replace(
+          /<script async type="module" crossorigin src="(.+?)"><\/script>/g,
+          `<script async type="module" crossorigin src="$1" onerror="handleLoadingError(event)"></script>`,
+        );
+      },
+    },
+    {
       name: "load-stylesheet-async",
       transformIndexHtml(html) {
         return html.replace(
