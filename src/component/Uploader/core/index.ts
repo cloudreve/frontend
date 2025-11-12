@@ -31,7 +31,8 @@ export interface Option {
   overwrite?: boolean;
   dropZone: HTMLElement | null;
   onDropOver?: (e: DragEvent) => void;
-  onDropLeave?: (e: DragEvent) => void;
+  // retuen if current dopped file should be accepted.
+  onDropLeave?: (e: DragEvent) => boolean;
   onToast: (type: MessageColor, msg: string) => void;
   onPoolEmpty?: () => void;
   onProactiveFileAdded?: (uploaders: Base[]) => void;
@@ -276,7 +277,10 @@ export default class UploadManager {
     }
     const containFile = e.dataTransfer && e.dataTransfer.types.includes("Files");
     if (containFile) {
-      this.o.onDropLeave && this.o.onDropLeave(e);
+      const shouldAccept = this.o.onDropLeave && this.o.onDropLeave(e);
+      if (!shouldAccept) {
+        return;
+      }
       const items = await getAllFileEntries(e.dataTransfer!.items);
       const uploaders = await new Promise<Base[]>((resolve, reject) =>
         this.addFiles(items, this.currentPath as string, resolve, reject),

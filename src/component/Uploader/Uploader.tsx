@@ -47,14 +47,15 @@ const Uploader = () => {
   const uploadRawFiles = useAppSelector((state) => state.globalState.uploadRawFiles);
 
   const displayOpt = useActionDisplayOpt([], ContextMenuTypes.empty, parent, FileManagerIndex.main);
+  const exclidrawOpen = useAppSelector((state) => state.globalState.excalidrawViewer?.open);
 
   useEffect(() => {
-    if (!parent) {
+    if (!parent || exclidrawOpen) {
       uploadEnabled.current = false;
       return;
     }
     uploadEnabled.current = displayOpt.showUpload ?? false;
-  }, [parent, displayOpt.showUpload]);
+  }, [parent, displayOpt.showUpload, exclidrawOpen]);
 
   const taskAdded = useCallback(
     (original?: Base) => (tasks: Base[]) => {
@@ -99,10 +100,11 @@ const Uploader = () => {
       },
       onDropLeave: (_e) => {
         if (!uploadEnabled.current) {
-          return;
+          return false;
         }
         dragCounter--;
         setDropBgOpen((value) => !value);
+        return true;
       },
       onProactiveFileAdded: taskAdded(),
       onPoolEmpty: () => {
