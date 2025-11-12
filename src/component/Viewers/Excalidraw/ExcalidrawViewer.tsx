@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, ButtonGroup, ListItemText, Menu, useTheme } from "@mui/material";
+import { Box, Button, ButtonGroup, Fade, ListItemText, Menu, useTheme } from "@mui/material";
+import { TransitionProps } from "@mui/material/transitions";
 import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18next from "../../../i18n.ts";
@@ -13,6 +14,15 @@ import CaretDown from "../../Icons/CaretDown.tsx";
 import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
 
 const Excalidraw = lazy(() => import("./Excalidraw.tsx"));
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Fade ref={ref} {...props} />;
+});
 
 const ExcalidrawViewer = () => {
   const { t } = useTranslation();
@@ -130,6 +140,7 @@ const ExcalidrawViewer = () => {
         onClose: onClose,
         fullWidth: true,
         maxWidth: "lg",
+        TransitionComponent: Transition,
       }}
     >
       <Menu
