@@ -154,6 +154,7 @@ const Wopi = () => {
           sandbox={
             "allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-popups-to-escape-sandbox allow-downloads allow-modals"
           }
+          allow="clipboard-read *; clipboard-write *"
           allowFullScreen={true}
           sx={{
             width: "100%",
