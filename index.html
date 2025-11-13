@@ -112,6 +112,24 @@
         });
         observer.observe(appRoot, { childList: true });
       });
+
+      async function handleLoadingError(event) {
+        try {
+          const resType = (await fetch(event.target.src)).headers.get("content-type") || "";
+          if (!resType.includes("javascript")) {
+            alert("A new version of the current page is available and ready to be refreshed.");
+            if ("caches" in window) {
+              const cacheNames = await caches.keys();
+              await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+            }
+            if ("serviceWorker" in navigator) {
+              const registrations = await navigator.serviceWorker.getRegistrations();
+              await Promise.all(registrations.map(registration => registration.unregister()));
+            }
+            window.location.reload();
+          }
+        } catch (e) {}
+      }
     </script>
   </body>
   {siteScript}
