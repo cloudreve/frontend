@@ -465,13 +465,13 @@ const StoragePolicySetting = () => {
               <Typography variant="h6">{t("policy.newStoragePolicy")}</Typography>
             </BorderedCardClickable>
           </Grid>
-          {!loading && policies.map((p) => <StoragePolicyCard key={p.name} policy={p} onRefresh={fetchPolicies} />)}
+          {!loading && policies.map((p) => <StoragePolicyCard key={p.id} policy={p} onRefresh={fetchPolicies} />)}
           {loading &&
             policies.length > 0 &&
-            policies.map((p) => <StoragePolicyCard key={`loading-${p.name}`} loading={true} />)}
+            policies.map((p) => <StoragePolicyCard key={`loading-${p.id}`} loading={true} />)}
           {loading &&
             policies.length === 0 &&
-            Array.from(Array(5)).map((_, index) => <StoragePolicyCard key={`loading-${index}`} loading={true} />)}
+            Array.from(Array(5)).map((_, index) => <StoragePolicyCard key={`loading-placeholder-${index}`} loading={true} />)}
         </Grid>
         {count > 0 && (
           <Box sx={{ mt: 1 }}>
