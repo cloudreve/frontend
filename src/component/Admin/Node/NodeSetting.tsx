@@ -105,11 +105,11 @@ const NodeSetting = () => {
               <Typography variant="h6">{t("node.addNewNode")}</Typography>
             </BorderedCardClickable>
           </Grid>
-          {!loading && nodes.map((n) => <NodeCard key={n.name} node={n} onRefresh={fetchNodes} />)}
-          {loading && nodes.length > 0 && nodes.map((n) => <NodeCard key={`loading-${n.name}`} loading={true} />)}
+          {!loading && nodes.map((n) => <NodeCard key={n.id} node={n} onRefresh={fetchNodes} />)}
+          {loading && nodes.length > 0 && nodes.map((n) => <NodeCard key={`loading-${n.id}`} loading={true} />)}
           {loading &&
             nodes.length === 0 &&
-            Array.from(Array(5)).map((_, index) => <NodeCard key={`loading-${index}`} loading={true} />)}
+            Array.from(Array(5)).map((_, index) => <NodeCard key={`loading-placeholder-${index}`} loading={true} />)}
         </Grid>
         {count > 0 && (
           <Box sx={{ mt: 1 }}>
