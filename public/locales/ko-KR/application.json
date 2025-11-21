@@ -18,7 +18,7 @@
     "email": "이메일",
     "password": "비밀번호",
     "captcha": "보안문자",
-    "captchaError": "보안문자 로드 실패: {{message}}",
+    "captchaError": "보안문자 로드 실패: ",
     "signIn": "로그인",
     "signUp": "가입",
     "signUpAccount": "계정 가입",

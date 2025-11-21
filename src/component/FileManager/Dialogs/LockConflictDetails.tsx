@@ -77,7 +77,7 @@ const ErrorTable = (props: ErrorTableProps) => {
                 {conflict.owner?.application && <Application app={conflict.owner?.application} />}
               </NoWrapTableCell>
               <NoWrapTableCell>
-                <Tooltip title={!conflict.token ? t("application:modals:onlyOwner") : ""}>
+                <Tooltip title={!conflict.token ? t("application:modals.onlyOwner") : ""}>
                   <span>
                     <Button
                       disabled={!conflict.token || props.loading}

@@ -67,7 +67,7 @@ const getSpeedText = (speed: number, speedAvg: number, useSpeedAvg: boolean) => 
     displayedSpeed = speed;
   }
 
-  return `${sizeToString(displayedSpeed ? displayedSpeed : 0)} /s`;
+  return `${sizeToString(displayedSpeed ? displayedSpeed : 0)}/s`;
 };
 
 const getErrMsg = (error?: Error) => {
