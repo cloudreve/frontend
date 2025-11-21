@@ -86,7 +86,7 @@ const TaskSummaryStatus = ({ type, status, summary, error, simplified }: TaskSum
               }}
             >
               {!simplified &&
-                `${sizeToString(downloadStatus.download_speed)} /s - ${sizeToString(
+                `${sizeToString(downloadStatus.download_speed)}/s - ${sizeToString(
                   downloadStatus.downloaded,
                 )} / ${sizeToString(downloadStatus.total)}`}
               <TaskStatusContent

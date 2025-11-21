@@ -54,7 +54,7 @@ const FileMetadata = () => {
       <Table size="small" stickyHeader sx={{ width: "100%", tableLayout: "fixed" }}>
         <TableHead>
           <TableRow>
-            <NoWrapTableCell width={150}>{t("file.name")}</NoWrapTableCell>
+            <NoWrapTableCell width={150}>{t("file.key")}</NoWrapTableCell>
             <NoWrapTableCell width={150}>{t("file.value")}</NoWrapTableCell>
             <NoWrapTableCell width={50}>{t("file.isPublic")}</NoWrapTableCell>
             <NoWrapTableCell width={90}>{t("group.#")}</NoWrapTableCell>

@@ -157,7 +157,7 @@ export function getCaptcha(): ThunkResponse<CaptchaResponse> {
         {
           ...defaultOpts,
           noCredential: true,
-          errorSnackbarMsg: (e) => i18n.t("captchaError", { ns: "common" }) + e.message,
+          errorSnackbarMsg: (e) => i18n.t("login.captchaError", { ns: "application" }) + e.message,
         },
       ),
     );

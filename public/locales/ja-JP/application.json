@@ -18,7 +18,7 @@
     "email": "メールアドレス",
     "password": "パスワード",
     "captcha": "認証コード",
-    "captchaError": "認証コード読み込み失敗：{{message}}",
+    "captchaError": "認証コード読み込み失敗：",
     "signIn": "ログイン",
     "signUp": "登録",
     "signUpAccount": "アカウント登録",

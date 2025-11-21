@@ -172,7 +172,7 @@ const TaskProps = ({ task }: TaskPropsProps) => {
       {!!task.summary?.props.download?.upload_speed && (
         <TaskPropsBlock
           label={t("download.uploadSpeed")}
-          value={`${sizeToString(task.summary?.props.download?.upload_speed)} / s`}
+          value={`${sizeToString(task.summary?.props.download?.upload_speed)}/s`}
         />
       )}
       {!!task.summary?.props.download?.hash && (

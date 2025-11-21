@@ -18,7 +18,7 @@
     "useOtherAccount": "Use another account",
     "password": "Password",
     "captcha": "CAPTCHA",
-    "captchaError": "Cannot load CAPTCHA: {{message}}",
+    "captchaError": "Cannot load CAPTCHA: ",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signUpAccount": "Sign up",
