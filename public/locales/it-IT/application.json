@@ -18,7 +18,7 @@
     "email": "Email",
     "password": "Password",
     "captcha": "CAPTCHA",
-    "captchaError": "Impossibile caricare il CAPTCHA: {{message}}",
+    "captchaError": "Impossibile caricare il CAPTCHA: ",
     "signIn": "Accedi",
     "signUp": "Registrati",
     "signUpAccount": "Registra account",

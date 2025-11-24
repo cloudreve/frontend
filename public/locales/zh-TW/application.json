@@ -18,7 +18,7 @@
     "email": "電子郵箱",
     "password": "密碼",
     "captcha": "驗證碼",
-    "captchaError": "驗證碼載入失敗: {{message}}",
+    "captchaError": "驗證碼載入失敗：",
     "signIn": "登入",
     "signUp": "注冊",
     "signUpAccount": "注冊賬號",

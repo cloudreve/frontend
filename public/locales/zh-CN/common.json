@@ -20,7 +20,7 @@
   "timeAgoLocaleCode": "zh_CN",
   "forEditorLocaleCode": "zh-CN",
   "artPlayerLocaleCode": "zh-cn",
-  "requestID": "请求 ID: {{id}}",
+  "requestID": "请求 ID：{{id}}",
   "object": "对象",
   "error": "错误",
   "areYouSure": "确认",

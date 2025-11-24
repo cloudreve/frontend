@@ -243,6 +243,7 @@ const Settings = () => {
                     "thumb_ffmpeg_max_size",
                     "thumb_ffmpeg_exts",
                     "thumb_ffmpeg_seek",
+                    "thumb_ffmpeg_extra_args",
                     "thumb_libreoffice_path",
                     "thumb_libreoffice_max_size",
                     "thumb_libreoffice_enabled",
