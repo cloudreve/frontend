@@ -424,6 +424,7 @@
     "conflictDes2": "<0>該檔案在你開啟後被從它處更新了新版本。</0><1>如果你另存為了新檔名或新位置，可能已有同名檔案存在。</1>",
     "saveAs": "另存為",
     "versionConflict": "版本衝突",
+    "discardUnsavedConfirm": "有未儲存的變更，確定要關閉嗎？",
     "overwrite": "覆蓋",
     "editShareLink": "編輯分享連結",
     "clearPermissions": "清除許可權設定",

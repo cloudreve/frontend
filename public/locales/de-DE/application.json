@@ -459,6 +459,7 @@
     "conflictDes2": "<0>Die Datei wurde nach dem Öffnen von anderer Stelle mit einer neuen Version aktualisiert.</0><1>Wenn Sie unter einem neuen Dateinamen oder an einem neuen Ort gespeichert haben, existiert möglicherweise bereits eine Datei mit demselben Namen.</1>",
     "saveAs": "Speichern unter",
     "versionConflict": "Versionskonflikt",
+    "discardUnsavedConfirm": "Sie haben ungespeicherte Änderungen. Möchten Sie sie verwerfen?",
     "overwrite": "Überschreiben",
     "editShareLink": "Freigabe-Link bearbeiten",
     "clearPermissions": "Berechtigungseinstellungen löschen",

@@ -44,7 +44,7 @@ const ViewerDialog = (props: ViewerDialogProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [fullScreen, setFullScreen] = useState(props.fullScreen || isMobile);
   const onClose = useCallback(() => {
-    props.dialogProps.onClose && props.dialogProps.onClose({}, "backdropClick");
+    props.dialogProps.onClose && props.dialogProps.onClose({}, "closeButtonClick" as any);
   }, [props.dialogProps.onClose]);
   return (
     <Dialog

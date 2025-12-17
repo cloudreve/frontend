@@ -459,6 +459,7 @@
     "conflictDes2": "<0>O arquivo foi atualizado para uma nova versão de outro lugar depois que você o abriu.</0><1>Se você o salvou com um novo nome ou novo local, o nome do arquivo já existe.</1>",
     "saveAs": "Salvar como",
     "versionConflict": "Conflito de versão",
+    "discardUnsavedConfirm": "Você tem alterações não salvas. Descartá-las?",
     "overwrite": "Sobrescrever",
     "editShareLink": "Editar link de compartilhamento",
     "clearPermissions": "Limpar configurações de permissão",

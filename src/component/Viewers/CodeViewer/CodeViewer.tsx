@@ -15,6 +15,7 @@ import CaretDown from "../../Icons/CaretDown.tsx";
 import Checkmark from "../../Icons/Checkmark.tsx";
 import Setting from "../../Icons/Setting.tsx";
 import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
+import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 
 const MonacoEditor = lazy(() => import("./MonacoEditor.tsx"));
 
@@ -109,6 +110,31 @@ const CodeViewer = () => {
   const [wordWrap, setWordWrap] = useState<"off" | "on" | "wordWrapColumn" | "bounded">("off");
   const saveFunction = useRef<() => void>(() => {});
 
+  const closeViewer = useCallback(() => {
+    dispatch(closeCodeViewer());
+  }, [dispatch]);
+
+  const handleDialogClose = useCallback(
+    (_: React.SyntheticEvent | object, reason?: "backdropClick" | "escapeKeyDown") => {
+      if (!saved && supportUpdate && (reason === "backdropClick" || reason === "escapeKeyDown")) {
+        dispatch(
+          confirmOperation(
+            t("application:modals.discardUnsavedConfirm"),
+          ),
+        )
+          .then(() => {
+            closeViewer();
+          })
+          .catch(() => {});
+
+        return;
+      }
+
+      closeViewer();
+    },
+    [closeViewer, saved, supportUpdate, t, dispatch],
+  );
+
   const loadContent = useCallback(
     (charset?: string) => {
       if (!viewerState || !viewerState.open) {
@@ -123,10 +149,10 @@ const CodeViewer = () => {
           setLoaded(true);
         })
         .catch(() => {
-          onClose();
+          closeViewer();
         });
     },
-    [viewerState],
+    [viewerState, closeViewer],
   );
 
   useEffect(() => {
@@ -139,10 +165,6 @@ const CodeViewer = () => {
     setLng(codePreviewSuffix[fileExtension(viewerState.file.name) ?? ""] ?? "");
     loadContent();
   }, [viewerState?.open]);
-
-  const onClose = useCallback(() => {
-    dispatch(closeCodeViewer());
-  }, [dispatch]);
 
   const openMore = useCallback(
     (e: React.MouseEvent<any>) => {
@@ -227,7 +249,7 @@ const CodeViewer = () => {
       fullScreenToggle
       dialogProps={{
         open: !!(viewerState && viewerState.open),
-        onClose: onClose,
+        onClose: handleDialogClose,
         fullWidth: true,
         maxWidth: "lg",
       }}

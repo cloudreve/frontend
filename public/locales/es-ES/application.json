@@ -459,6 +459,7 @@
     "conflictDes2": "<0>El archivo fue actualizado a una nueva versión desde otro lugar después de que lo abrieras.</0><1>Si lo guardaste con un nuevo nombre o nueva ubicación, el nombre de archivo ya existe.</1>",
     "saveAs": "Guardar como",
     "versionConflict": "Conflicto de versión",
+    "discardUnsavedConfirm": "Tienes cambios sin guardar. ¿Deseas descartarlos?",
     "overwrite": "Sobrescribir",
     "editShareLink": "Editar enlace compartido",
     "clearPermissions": "Limpiar configuración de permisos",

@@ -459,6 +459,7 @@
     "conflictDes2": "<0>Le fichier a été mis à jour vers une nouvelle version depuis ailleurs après que vous l'ayez ouvert.</0><1>Si vous l'avez enregistré avec un nouveau nom ou un nouvel emplacement, le nom de fichier existe déjà.</1>",
     "saveAs": "Enregistrer sous",
     "versionConflict": "Conflit de version",
+    "discardUnsavedConfirm": "Vous avez des modifications non enregistrées. Les abandonner ?",
     "overwrite": "Écraser",
     "editShareLink": "Modifier le lien de partage",
     "clearPermissions": "Effacer les paramètres d'autorisation",
