@@ -1184,7 +1184,7 @@
     "reuseDirectLink": "Reuse existing direct link",
     "reuseDirectLinkDes": "When enabled, multiple requests for the same file's direct link will reuse the existing redirect link.",
     "downloadSpeedLimit": "Max download speed",
-    "downloadSpeedLimitDes": "Fill in 0 to indicate no limit. When the restriction is turned on, the maximum download speed will be limited when users download all files under the storage policy that supports the speed limit.",
+    "downloadSpeedLimitDes": "Fill in 0 to indicate no limit. When the restriction is turned on, the maximum per-thread download speed will be limited when users download files under storage policies that support throttling.",
     "anonymousHint": "This user group corresponds to the anonymous visitor who is not signed in.",
     "create": "Create",
     "copyFromExisting": "Copy from existing group?",

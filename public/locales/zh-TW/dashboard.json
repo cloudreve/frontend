@@ -1184,7 +1184,7 @@
     "reuseDirectLink": "重用已有直鏈",
     "reuseDirectLinkDes": "開啟後，多次請求同一個檔案的直鏈時，會重用已創建的中轉直鏈。",
     "downloadSpeedLimit": "下載限速",
-    "downloadSpeedLimitDes": "填寫為 0 表示不限制。開啟限制後，使用者下載所有支援限速的儲存策略下的檔案時，下載最大速度會被限制。",
+    "downloadSpeedLimitDes": "填寫為 0 表示不限制。開啟限制後，使用者下載所有支援限速的儲存策略下的檔案時，每個執行緒的下載最大速度會被限制。",
     "anonymousHint": "此使用者組對應著未登入的匿名訪客。",
     "create": "新建",
     "copyFromExisting": "從現有使用者組復制?",
