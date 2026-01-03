@@ -1181,7 +1181,7 @@
     "reuseDirectLink": "Riutilizza link diretto esistente",
     "reuseDirectLinkDes": "Quando abilitato, più richieste per il link diretto dello stesso file riutilizzeranno il link di reindirizzamento esistente.",
     "downloadSpeedLimit": "Velocità massima download",
-    "downloadSpeedLimitDes": "Inserisci 0 per indicare nessun limite. Quando la restrizione è attivata, la velocità massima di download sarà limitata quando gli utenti scaricano tutti i file sotto la politica di archiviazione che supporta il limite di velocità.",
+    "downloadSpeedLimitDes": "Inserisci 0 per indicare nessun limite. Quando la restrizione è attivata, la velocità massima di download per thread sarà limitata quando gli utenti scaricano file sotto le politiche di archiviazione che supportano la limitazione della velocità.",
     "anonymousHint": "Questo gruppo utenti corrisponde al visitatore anonimo che non è autenticato.",
     "create": "Crea",
     "copyFromExisting": "Copia da gruppo esistente?",
