@@ -424,6 +424,7 @@
     "conflictDes2": "<0>The file was updated to a new version from elsewhere after you opened it.</0><1>If you saved it with a new name or a new location, the file name already exists.</1>",
     "saveAs": "Save as",
     "versionConflict": "Version conflict",
+    "discardUnsavedConfirm": "You have unsaved changes. Still discard?",
     "overwrite": "Overwrite",
     "editShareLink": "Edit share link",
     "clearPermissions": "Clear permission settings",
