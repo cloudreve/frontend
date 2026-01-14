@@ -5,6 +5,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useTranslation } from "react-i18next";
 import { closeCodeViewer } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { getEntityContent } from "../../../redux/thunks/file.ts";
 import { saveCode } from "../../../redux/thunks/viewer.ts";
 import { fileExtension } from "../../../util";
@@ -15,7 +16,6 @@ import CaretDown from "../../Icons/CaretDown.tsx";
 import Checkmark from "../../Icons/Checkmark.tsx";
 import Setting from "../../Icons/Setting.tsx";
 import ViewerDialog, { ViewerLoading } from "../ViewerDialog.tsx";
-import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 
 const MonacoEditor = lazy(() => import("./MonacoEditor.tsx"));
 
@@ -115,13 +115,9 @@ const CodeViewer = () => {
   }, [dispatch]);
 
   const handleDialogClose = useCallback(
-    (_: React.SyntheticEvent | object, reason?: "backdropClick" | "escapeKeyDown") => {
-      if (!saved && supportUpdate && (reason === "backdropClick" || reason === "escapeKeyDown")) {
-        dispatch(
-          confirmOperation(
-            t("application:modals.discardUnsavedConfirm"),
-          ),
-        )
+    (_: React.SyntheticEvent | object, _reason?: string) => {
+      if (!saved && supportUpdate) {
+        dispatch(confirmOperation(t("application:modals.discardUnsavedConfirm")))
           .then(() => {
             closeViewer();
           })

@@ -4,6 +4,7 @@ import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useStat
 import { useTranslation } from "react-i18next";
 import { closeMarkdownViewer } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { getEntityContent } from "../../../redux/thunks/file.ts";
 import {
   markdownImageAutocompleteSuggestions,
@@ -11,7 +12,6 @@ import {
   saveMarkdown,
   uploadMarkdownImage,
 } from "../../../redux/thunks/viewer.ts";
-import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import useActionDisplayOpt, { canUpdate } from "../../FileManager/ContextMenu/useActionDisplayOpt.ts";
 import CaretDown from "../../Icons/CaretDown.tsx";
@@ -41,13 +41,9 @@ const MarkdownViewer = () => {
   }, [dispatch]);
 
   const handleDialogClose = useCallback(
-    (_: React.SyntheticEvent | object, reason?: "backdropClick" | "escapeKeyDown") => {
-      if (!saved && supportUpdate && (reason === "backdropClick" || reason === "escapeKeyDown")) {
-        dispatch(
-          confirmOperation(
-            t("application:modals.discardUnsavedConfirm"),
-          ),
-        )
+    (_: React.SyntheticEvent | object, _reason?: string) => {
+      if (!saved && supportUpdate) {
+        dispatch(confirmOperation(t("application:modals.discardUnsavedConfirm")))
           .then(() => {
             closeViewer();
           })
