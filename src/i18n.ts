@@ -83,6 +83,10 @@ export const languages = [
     code: "ko-KR",
     displayName: "한국어",
   },
+  {
+    code: "pl-PL",
+    displayName: "Polski",
+  },
 ];
 
 export default i18n;
