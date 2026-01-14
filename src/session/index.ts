@@ -93,7 +93,44 @@ export class Manager {
     if (cached) {
       this.state = JSON.parse(cached);
     }
+
+    // Get user ID `user_hint` from query, find the user and set it as current.
+    // if not found, redirect to login page/session, set redirect query to current url without user_hint
+    this.handleUserHint();
   }
+
+  private handleUserHint = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userHint = urlParams.get("user_hint");
+
+    if (!userHint) {
+      return;
+    }
+
+    // Remove user_hint from URL to build clean path
+    urlParams.delete("user_hint");
+    const cleanPath = urlParams.toString()
+      ? `${window.location.pathname}?${urlParams.toString()}${window.location.hash}`
+      : `${window.location.pathname}${window.location.hash}`;
+
+    // Check if we have a valid session for this user
+    const session = this.state.sessions[userHint];
+    const isValidSession = session && !session.signedOut && !dayjs(session.token.refresh_expires).isBefore(dayjs());
+
+    if (isValidSession && this.state.current === userHint) {
+      // Remove user_hint from URL without causing a page reload
+      window.history.replaceState({}, "", cleanPath);
+    } else {
+      // No valid session found, redirect to login/session page
+      // Skip if already on session page to avoid infinite redirect
+      if (window.location.pathname.startsWith("/session")) {
+        window.history.replaceState({}, "", cleanPath);
+        return;
+      }
+
+      window.location.href = `/session?redirect=${encodeURIComponent(cleanPath)}`;
+    }
+  };
 
   public set(key: string, value: any) {
     try {
