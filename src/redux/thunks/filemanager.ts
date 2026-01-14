@@ -56,7 +56,7 @@ import {
 import { Viewers, ViewersByID } from "../siteConfigSlice.ts";
 import { AppThunk } from "../store.ts";
 import { promiseId } from "./dialog.ts";
-import { deleteFile, openFileContextMenu } from "./file.ts";
+import { deleteFile, openFile, openFileContextMenu } from "./file.ts";
 import { queueLoadShareInfo } from "./share.ts";
 import { openViewer } from "./viewer.ts";
 
@@ -149,21 +149,24 @@ export function checkOpenViewerQuery(index: number): AppThunk {
     currentUrl.searchParams.delete("size");
     window.history.replaceState({}, "", currentUrl.toString());
 
-    if (!fileId || !viewer || !ViewersByID[viewer]) {
+    if (!fileId) {
       return;
     }
 
     const { files: list, pagination } = getState().fileManager[index]?.list ?? {};
     if (list) {
+      debugger;
       // Find readme file from highest to lowest priority
-      const found = list.find((file) => file.id === fileId);
+      const found = list.find((file) => file.id === fileId || file.path === fileId);
       if (found) {
-        dispatch(openViewer(found, ViewersByID[viewer], parseInt(size ?? "0"), version ?? undefined, true));
+        if (viewer && ViewersByID[viewer]) {
+          dispatch(openViewer(found, ViewersByID[viewer], parseInt(size ?? "0"), version ?? undefined, true));
+        } else {
+          dispatch(openFile(index, found));
+        }
         return;
       }
     }
-
-    alert("openViewer");
   };
 }
 
