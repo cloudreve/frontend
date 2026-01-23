@@ -1,6 +1,6 @@
 import { Divider, FormControl, Link, Stack, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { PrepareLoginResponse } from "../../../../api/user.ts";
+import { LoginResponse, PrepareLoginResponse } from "../../../../api/user.ts";
 import { useAppSelector } from "../../../../redux/hooks.ts";
 import { Captcha, CaptchaParams } from "../../../Common/Captcha/Captcha.tsx";
 import { OutlineIconTextField } from "../../../Common/Form/OutlineIconTextField.tsx";
@@ -17,6 +17,7 @@ interface PhaseCollectPasswordProps {
   captchaGen: number;
   setCaptchaState: (state: CaptchaParams) => void;
   onForget?: () => void;
+  onOAuthPasskeyLogin?: (response: LoginResponse) => void;
 }
 
 const PhaseCollectPassword = ({
@@ -28,6 +29,7 @@ const PhaseCollectPassword = ({
   captchaGen,
   setCaptchaState,
   onForget,
+  onOAuthPasskeyLogin,
 }: PhaseCollectPasswordProps) => {
   const { t } = useTranslation();
   const { login_captcha, authn } = useAppSelector((state) => state.siteConfig.login.config);
@@ -80,7 +82,9 @@ const PhaseCollectPassword = ({
           {t("login.paswordlessHint", { email: email })}
         </Typography>
       )}
-      <Stack spacing={1}>{loginOptions?.webauthn_enabled && authn && <PasskeyLoginButton />}</Stack>
+      <Stack spacing={1}>
+        {loginOptions?.webauthn_enabled && authn && <PasskeyLoginButton onLoginSuccess={onOAuthPasskeyLogin} />}
+      </Stack>
       {control?.back}
     </>
   );

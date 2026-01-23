@@ -4,6 +4,8 @@ import i18n from "../i18n.ts";
 import {
   AdminListGroupResponse,
   AdminListService,
+  ListShareResponse as AdminListShareResponse,
+  StoragePolicy as AdminStoragePolicy,
   BatchIDService,
   CleanupTaskService,
   CreateStoragePolicyCorsService,
@@ -18,8 +20,6 @@ import {
   ListEntityResponse,
   ListFileResponse,
   ListNodeResponse,
-  ListPaymentResponse as AdminListPaymentResponse,
-  ListShareResponse as AdminListShareResponse,
   ListStoragePolicyResponse,
   ListTaskResponse,
   ListUserResponse,
@@ -28,7 +28,6 @@ import {
   QueueMetric,
   SetSettingService,
   Share as ShareEnt,
-  StoragePolicy as AdminStoragePolicy,
   Task,
   TestNodeDownloaderService,
   TestNodeService,
@@ -77,9 +76,12 @@ import { CreateDavAccountService, DavAccount, ListDavAccountsResponse, ListDavAc
 import { ListShareResponse, ListShareService } from "./share.ts";
 import { CaptchaResponse, SiteConfig } from "./site.ts";
 import {
+  AppRegistration,
   Capacity,
   FinishPasskeyLoginService,
   FinishPasskeyRegistrationService,
+  GrantResponse,
+  GrantService,
   LoginResponse,
   Passkey,
   PasskeyCredentialOption,
@@ -2025,6 +2027,20 @@ export function getArchiveListFiles(args: ArchiveListFilesService): ThunkRespons
           ...defaultOpts,
         },
       ),
+    );
+  };
+}
+
+export function getOauthAppRegistration(app_id: string): ThunkResponse<AppRegistration> {
+  return async (dispatch, _getState) => {
+    return await dispatch(send(`/session/oauth/app/${app_id}`, { method: "GET" }, { ...defaultOpts }));
+  };
+}
+
+export function sendConsentOauthApp(args: GrantService): ThunkResponse<GrantResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(`/session/oauth/consent`, { method: "POST", data: args }, { bypassSnackbar: (e) => true, ...defaultOpts }),
     );
   };
 }

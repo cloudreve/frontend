@@ -54,6 +54,37 @@
     "clickToRefresh": "Kliknij, aby odświeżyć",
     "switchLanguage": "Zmień język"
   },
+  "oauth": {
+    "authorize": "Autoryzuj aplikację",
+    "wantsToConnect": "chce połączyć się z Twoim kontem",
+    "invalidClientId": "Nieprawidłowy identyfikator klienta",
+    "appNotFound": "Nie znaleziono aplikacji",
+    "reviewPermissions": "Sprawdź uprawnienia",
+    "appRequestsAccess": "{{appName}} prosi o dostęp do Twojego konta",
+    "consentDescription": "Autoryzujesz <0>{{appName}}</0> do dostępu do informacji na koncie <1>{{userEmail}}</1>:",
+    "deny": "Anuluj",
+    "desktop": "Klient desktopowy Cloudreve",
+    "scope": {
+      "readonly": "Tylko do odczytu",
+      "readwrite": "Odczyt i zapis",
+      "profile": "Profil",
+      "profileDesc": "Twoje podstawowe informacje profilowe, takie jak pseudonim, e-mail, awatar itp.",
+      "offlineAccess": "Dostęp offline",
+      "offlineAccessDesc": "Utrzymaj dostęp, gdy nie używasz aktywnie aplikacji.",
+      "userSecurityInfo": "Informacje o bezpieczeństwie",
+      "userSecurityInfoDesc": "Wrażliwe informacje bezpieczeństwa Twojego konta, takie jak klucze dostępu, uwierzytelnianie dwuskładnikowe, historia logowania itp.",
+      "workflowDesc": "Zadania w tle związane z przetwarzaniem plików, takie jak pobieranie offline, wypakowywanie plików itp.",
+      "admin": "Uprawnienia administratora",
+      "adminDesc": "Ustawienia witryny i wszystkie dane wszystkich użytkowników.",
+      "files": "Pliki",
+      "filesDesc": "Pliki, które posiadasz, oraz pliki innych użytkowników, do których masz dostęp.",
+      "shares": "Linki udostępniania",
+      "sharesDesc": "Linki udostępniania plików.",
+      "financeDesc": "Kredyty, kody wymiany, zamówienia itp.",
+      "davAccount": "Konto WebDAV",
+      "davAccountDesc": "Twoje konto WebDAV."
+    }
+  },
   "navbar": {
     "notBefore": "Nie wcześniej niż",
     "notAfter": "Nie później niż",
@@ -114,6 +145,9 @@
     "dashboard": "Panel sterowania"
   },
   "fileManager": {
+    "continueInDesktop": "Autoryzacja zakończona pomyślnie, kontynuuj w kliencie desktopowym.",
+    "desktopMountSetup": "Zamontuj do klienta desktopowego",
+    "desktopMountSetupDescription": "Wybierz katalog do zamontowania w kliencie desktopowym.",
     "customProps": "Właściwości niestandardowe",
     "rating": "Ocena",
     "description": "Opis",

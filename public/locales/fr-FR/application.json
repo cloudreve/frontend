@@ -57,6 +57,37 @@
     "clickToRefresh": "Cliquez pour actualiser",
     "switchLanguage": "Changer de langue"
   },
+  "oauth": {
+    "authorize": "Autoriser l'application",
+    "wantsToConnect": "souhaite se connecter à votre compte",
+    "invalidClientId": "ID client invalide",
+    "appNotFound": "Application non trouvée",
+    "reviewPermissions": "Vérifier les autorisations",
+    "appRequestsAccess": "{{appName}} demande l'accès à votre compte",
+    "consentDescription": "Vous autorisez <0>{{appName}}</0> à accéder aux informations du compte <1>{{userEmail}}</1> :",
+    "deny": "Annuler",
+    "desktop": "Client de bureau Cloudreve",
+    "scope": {
+      "readonly": "Lecture seule",
+      "readwrite": "Lecture et écriture",
+      "profile": "Profil",
+      "profileDesc": "Vos informations de profil de base, telles que pseudo, e-mail, avatar, etc.",
+      "offlineAccess": "Accès hors ligne",
+      "offlineAccessDesc": "Maintenir l'accès lorsque vous n'utilisez pas activement l'application.",
+      "userSecurityInfo": "Informations de sécurité",
+      "userSecurityInfoDesc": "Informations de sécurité sensibles de votre compte, telles que les passkeys, l'authentification à deux facteurs, l'historique de connexion, etc.",
+      "workflowDesc": "Tâches en arrière-plan liées au traitement des fichiers, comme les téléchargements hors ligne, l'extraction de fichiers, etc.",
+      "admin": "Privilèges administrateur",
+      "adminDesc": "Paramètres du site et toutes les données de tous les utilisateurs.",
+      "files": "Fichiers",
+      "filesDesc": "Fichiers que vous possédez et fichiers d'autres utilisateurs auxquels vous avez accès.",
+      "shares": "Liens de partage",
+      "sharesDesc": "Liens de partage pour les fichiers.",
+      "financeDesc": "Crédits, codes de remboursement, commandes, etc.",
+      "davAccount": "Compte WebDAV",
+      "davAccountDesc": "Votre compte WebDAV."
+    }
+  },
   "navbar": {
     "notBefore": "Pas avant",
     "notAfter": "Pas après",
@@ -117,6 +148,9 @@
     "dashboard": "Tableau de bord"
   },
   "fileManager": {
+    "continueInDesktop": "Autorisation réussie, veuillez continuer dans le client de bureau.",
+    "desktopMountSetup": "Monter sur le client de bureau",
+    "desktopMountSetupDescription": "Sélectionnez le répertoire à monter sur le client de bureau.",
     "currentStoragePolicy": "Stratégie de stockage actuelle : {{policy}}",
     "customProps": "Propriétés personnalisées",
     "rating": "Évaluation",

@@ -54,6 +54,37 @@
     "clickToRefresh": "Clique para atualizar o código",
     "switchLanguage": "Mudar idioma"
   },
+  "oauth": {
+    "authorize": "Autorizar aplicativo",
+    "wantsToConnect": "quer se conectar à sua conta",
+    "invalidClientId": "ID do cliente inválido",
+    "appNotFound": "Aplicativo não encontrado",
+    "reviewPermissions": "Revisar permissões",
+    "appRequestsAccess": "{{appName}} está solicitando acesso à sua conta",
+    "consentDescription": "Você está autorizando <0>{{appName}}</0> a acessar informações da conta <1>{{userEmail}}</1>:",
+    "deny": "Cancelar",
+    "desktop": "Cliente desktop Cloudreve",
+    "scope": {
+      "readonly": "Somente leitura",
+      "readwrite": "Leitura e escrita",
+      "profile": "Perfil",
+      "profileDesc": "Suas informações básicas de perfil, como apelido, e-mail, avatar, etc.",
+      "offlineAccess": "Acesso offline",
+      "offlineAccessDesc": "Manter acesso quando você não estiver usando ativamente o aplicativo.",
+      "userSecurityInfo": "Informações de segurança",
+      "userSecurityInfoDesc": "Informações de segurança sensíveis da sua conta, como chaves de acesso, autenticação de dois fatores, histórico de login, etc.",
+      "workflowDesc": "Tarefas em segundo plano relacionadas ao processamento de arquivos, como downloads offline, extração de arquivos, etc.",
+      "admin": "Privilégios de administrador",
+      "adminDesc": "Configurações do site e todos os dados de todos os usuários.",
+      "files": "Arquivos",
+      "filesDesc": "Arquivos que você possui e arquivos de outros usuários aos quais você tem permissão de acesso.",
+      "shares": "Links de compartilhamento",
+      "sharesDesc": "Links de compartilhamento de arquivos.",
+      "financeDesc": "Créditos, códigos de resgate, pedidos, etc.",
+      "davAccount": "Conta WebDAV",
+      "davAccountDesc": "Sua conta WebDAV."
+    }
+  },
   "navbar": {
     "notBefore": "Não antes de",
     "notAfter": "Não depois de",
@@ -117,6 +148,9 @@
     "dashboard": "Painel de controle"
   },
   "fileManager": {
+    "continueInDesktop": "Autorização bem-sucedida, continue no cliente desktop.",
+    "desktopMountSetup": "Montar no cliente desktop",
+    "desktopMountSetupDescription": "Selecione o diretório para montar no cliente desktop.",
     "currentStoragePolicy": "Política de armazenamento atual: {{policy}}",
     "customProps": "Propriedades personalizadas",
     "rating": "Avaliação",

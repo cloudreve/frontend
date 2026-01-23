@@ -54,6 +54,37 @@
     "clickToRefresh": "Clicca per aggiornare il CAPTCHA",
     "switchLanguage": "Cambia lingua"
   },
+  "oauth": {
+    "authorize": "Autorizza applicazione",
+    "wantsToConnect": "vuole connettersi al tuo account",
+    "invalidClientId": "ID client non valido",
+    "appNotFound": "Applicazione non trovata",
+    "reviewPermissions": "Verifica autorizzazioni",
+    "appRequestsAccess": "{{appName}} sta richiedendo l'accesso al tuo account",
+    "consentDescription": "Stai autorizzando <0>{{appName}}</0> ad accedere alle informazioni dell'account <1>{{userEmail}}</1>:",
+    "deny": "Annulla",
+    "desktop": "Client desktop Cloudreve",
+    "scope": {
+      "readonly": "Solo lettura",
+      "readwrite": "Lettura e scrittura",
+      "profile": "Profilo",
+      "profileDesc": "Le tue informazioni di base del profilo, come nickname, email, avatar, ecc.",
+      "offlineAccess": "Accesso offline",
+      "offlineAccessDesc": "Mantieni l'accesso quando non stai usando attivamente l'applicazione.",
+      "userSecurityInfo": "Informazioni di sicurezza",
+      "userSecurityInfoDesc": "Informazioni di sicurezza sensibili del tuo account, come passkey, autenticazione a due fattori, cronologia accessi, ecc.",
+      "workflowDesc": "Attività in background relative all'elaborazione dei file, come download offline, estrazione file, ecc.",
+      "admin": "Privilegi amministratore",
+      "adminDesc": "Impostazioni del sito e tutti i dati di tutti gli utenti.",
+      "files": "File",
+      "filesDesc": "File che possiedi e file di altri utenti a cui hai accesso.",
+      "shares": "Link di condivisione",
+      "sharesDesc": "Link di condivisione per i file.",
+      "financeDesc": "Crediti, codici di riscatto, ordini, ecc.",
+      "davAccount": "Account WebDAV",
+      "davAccountDesc": "Il tuo account WebDAV."
+    }
+  },
   "resetThumbnail": "Reimposta miniatura danneggiata",
   "resetThumbnailRequested": "Reimpostazione della miniatura richiesta.",
   "noFileCanResetThumbnail": "Nessun file può reimpostare la miniatura.",
@@ -117,6 +148,9 @@
     "dashboard": "Dashboard"
   },
   "fileManager": {
+    "continueInDesktop": "Autorizzazione riuscita, continua nel client desktop.",
+    "desktopMountSetup": "Monta su client desktop",
+    "desktopMountSetupDescription": "Seleziona la directory da montare sul client desktop.",
     "currentStoragePolicy": "Policy di archiviazione corrente: {{policy}}",
     "customProps": "Proprietà personalizzate",
     "rating": "Valutazione",

@@ -9,7 +9,7 @@ import {
   ViewerSession,
 } from "../api/explorer.ts";
 import { Response } from "../api/request.ts";
-import { User } from "../api/user.ts";
+import { AppRegistration, User } from "../api/user.ts";
 import { SelectType } from "../component/Uploader/core";
 import SessionManager, { UserSettings } from "../session";
 
@@ -69,6 +69,11 @@ export interface DialogSelectOption {
   name: string;
   description: string;
   value: any;
+}
+
+export interface DesktopCallbackState {
+  code: string;
+  state: string;
 }
 
 export interface GlobalStateSlice {
@@ -197,6 +202,10 @@ export interface GlobalStateSlice {
   directLinkManagementDialogFile?: FileResponse;
   directLinkHighlight?: string;
 
+  // Desktop mount setup dialog
+  desktopMountSetupDialogOpen?: boolean;
+  desktopMountSetupState?: DesktopCallbackState;
+
   // DnD
   dndState: DndState;
 
@@ -252,6 +261,10 @@ export interface GlobalStateSlice {
   shareReadmeDetect?: number;
   shareReadmeOpen?: boolean;
   shareReadmeTarget?: FileResponse;
+
+  // OAuth consent flow
+  oauthApp?: AppRegistration;
+  oauthAppLoading?: boolean;
 }
 
 let preferred_theme: string | undefined = undefined;
@@ -277,6 +290,14 @@ export const globalStateSlice = createSlice({
   name: "globalState",
   initialState,
   reducers: {
+    setDesktopMountSetupDialog: (state, action: PayloadAction<{ open: boolean; state?: DesktopCallbackState }>) => {
+      state.desktopMountSetupDialogOpen = action.payload.open;
+      state.desktopMountSetupState = action.payload.state;
+    },
+    closeDesktopMountSetupDialog: (state) => {
+      state.desktopMountSetupDialogOpen = false;
+      state.desktopMountSetupState = undefined;
+    },
     setUploadRawFiles: (
       state,
       action: PayloadAction<{
@@ -286,6 +307,16 @@ export const globalStateSlice = createSlice({
     ) => {
       state.uploadRawFiles = action.payload.files ?? [];
       state.uploadRawPromiseId = action.payload.promiseId ?? [];
+    },
+    setOAuthApp: (state, action: PayloadAction<AppRegistration>) => {
+      state.oauthApp = action.payload;
+    },
+    setOAuthAppLoading: (state, action: PayloadAction<boolean>) => {
+      state.oauthAppLoading = action.payload;
+    },
+    clearOAuthApp: (state) => {
+      state.oauthApp = undefined;
+      state.oauthAppLoading = undefined;
     },
     setShareReadmeDetect: (state, action: PayloadAction<boolean>) => {
       state.shareReadmeDetect = action.payload ? (state.shareReadmeDetect ?? 0) + 1 : 0;
@@ -865,4 +896,9 @@ export const {
   setShareReadmeDetect,
   closeShareReadme,
   setShareReadmeOpen,
+  setOAuthApp,
+  setOAuthAppLoading,
+  clearOAuthApp,
+  setDesktopMountSetupDialog,
+  closeDesktopMountSetupDialog,
 } = globalStateSlice.actions;

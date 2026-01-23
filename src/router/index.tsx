@@ -4,8 +4,11 @@ import ErrorBoundary from "../component/Common/ErrorBoundary.tsx";
 import HeadlessFrame from "../component/Frame/HeadlessFrame.tsx";
 import { HomeRedirect } from "../component/Pages/HomeRedirect.tsx";
 import Activate from "../component/Pages/Login/Activate.tsx";
+import Authorize from "../component/Pages/Login/Authorize.tsx";
 import Reset from "../component/Pages/Login/Reset.tsx";
 import SessionIntro from "../component/Pages/Login/SessionIntro.tsx";
+import DesktopCallback from "../component/Pages/Login/Signin/DesktopCallback.tsx";
+import MobileCallback from "../component/Pages/Login/Signin/MobileCallback.tsx";
 import SignIn from "../component/Pages/Login/Signin/SignIn.tsx";
 import SignUp from "../component/Pages/Login/Signup.tsx";
 import NoMatch from "../component/Pages/NoMatch.tsx";
@@ -41,11 +44,29 @@ export const router = createBrowserRouter([
                 path: "reset",
                 element: <Reset />,
               },
+              {
+                path: "authorize",
+                element: <Authorize />,
+              },
             ],
           },
           {
             path: "*",
             element: <NoMatch />,
+          },
+        ],
+      },
+      {
+        path: "/callback",
+        element: <HeadlessFrame />,
+        children: [
+          {
+            path: "desktop",
+            element: <DesktopCallback />,
+          },
+          {
+            path: "ios",
+            element: <MobileCallback />,
           },
         ],
       },

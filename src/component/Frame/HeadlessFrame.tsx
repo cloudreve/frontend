@@ -1,11 +1,12 @@
 import { Box, Container, Grid, Paper } from "@mui/material";
 import { Outlet, useNavigation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
+import { useAppSelector } from "../../redux/hooks.ts";
 import AutoHeight from "../Common/AutoHeight.tsx";
 import CircularProgress from "../Common/CircularProgress.tsx";
-import Logo from "../Common/Logo.tsx";
 import LanguageSwitcher from "../Common/LanguageSwitcher.tsx";
 import PoweredBy from "./PoweredBy.tsx";
+import Logo from "../Common/Logo.tsx";
+import { ConnectingLine, OAuthAppCard } from "./OauthAppCard.tsx";
 
 const Loading = () => {
   return (
@@ -24,11 +25,14 @@ const Loading = () => {
 
 const HeadlessFrame = () => {
   const loading = useAppSelector((state) => state.globalState.loading.headlessFrame);
-  const { headless_footer, headless_bottom, sidebar_bottom } = useAppSelector(
+  const { headless_footer, headless_bottom } = useAppSelector(
     (state) => state.siteConfig.basic?.config?.custom_html ?? {},
   );
-  const dispatch = useAppDispatch();
+  const oauthApp = useAppSelector((state) => state.globalState.oauthApp);
+  const oauthAppLoading = useAppSelector((state) => state.globalState.oauthAppLoading);
   let navigation = useNavigation();
+
+  const showOAuthCard = oauthApp || oauthAppLoading;
 
   return (
     <Box
@@ -50,6 +54,13 @@ const HeadlessFrame = () => {
           sx={{ minHeight: "100vh" }}
         >
           <Box sx={{ width: "100%", py: 2 }}>
+            {/* OAuth App Card - shown above the login panel */}
+            {showOAuthCard && (
+              <>
+                <OAuthAppCard app={oauthApp} loading={!!oauthAppLoading && !oauthApp} />
+                <ConnectingLine />
+              </>
+            )}
             <Paper
               sx={{
                 padding: (theme) => `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,

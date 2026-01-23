@@ -54,6 +54,37 @@
     "clickToRefresh": "點選重新整理驗證碼",
     "switchLanguage": "切換語言"
   },
+  "oauth": {
+    "authorize": "授權應用",
+    "wantsToConnect": "想要連接到你的帳號",
+    "invalidClientId": "無效的客戶端 ID",
+    "appNotFound": "應用未找到",
+    "reviewPermissions": "確認授權權限",
+    "appRequestsAccess": "{{appName}} 正在請求存取你的帳號",
+    "consentDescription": "你正在授權 <0>{{appName}}</0> 存取帳號 <1>{{userEmail}}</1> 下的資訊：",
+    "deny": "取消",
+    "desktop": "Cloudreve 桌面客戶端",
+    "scope": {
+      "readonly": "唯讀",
+      "readwrite": "讀寫",
+      "profile": "個人資料",
+      "profileDesc": "你的基本個人資料資訊，如暱稱、郵箱、頭像等。",
+      "offlineAccess": "離線存取",
+      "offlineAccessDesc": "在你未主動使用應用時保持存取權限。",
+      "userSecurityInfo": "安全資訊",
+      "userSecurityInfoDesc": "帳戶的敏感安全資訊，如通行密鑰、二步驗證、登入日誌等。",
+      "workflowDesc": "檔案處理相關的後台任務，如離線下載、檔案解壓縮等。",
+      "admin": "管理員權限",
+      "adminDesc": "站點設定和全部使用者的全部資料。",
+      "files": "檔案",
+      "filesDesc": "你擁有的檔案和有權限存取的其他使用者的檔案。",
+      "shares": "分享連結",
+      "sharesDesc": "檔案的分享連結。",
+      "financeDesc": "積分、兌換碼、訂單等。",
+      "davAccount": "WebDAV 帳號",
+      "davAccountDesc": "你的 WebDAV 帳號。"
+    }
+  },
   "navbar": {
     "notBefore": "不早於",
     "notAfter": "不晚於",
@@ -117,6 +148,9 @@
     "dashboard": "管理面板"
   },
   "fileManager": {
+    "continueInDesktop": "授權成功，請在桌面客戶端中繼續操作。",
+    "desktopMountSetup": "掛載到桌面客戶端",
+    "desktopMountSetupDescription": "選擇要掛載到桌面客戶端的目錄。",
     "customProps": "自定義屬性",
     "rating": "評級",
     "description": "描述",

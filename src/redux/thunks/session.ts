@@ -1,11 +1,14 @@
 import i18next from "i18next";
+import { enqueueSnackbar } from "notistack";
 import { getUserInfo, sendSignout } from "../../api/api.ts";
 import { LoginResponse, User } from "../../api/user.ts";
+import { DefaultCloseAction } from "../../component/Common/Snackbar/snackbar.tsx";
 import { router } from "../../router";
 import SessionManager, { UserSettings } from "../../session";
 import { refreshTimeZone } from "../../util/datetime.ts";
 import { clearSessionCache } from "../fileManagerSlice.ts";
 import {
+  closeDesktopMountSetupDialog,
   closeMusicPlayer,
   setDarkMode,
   setDrawerWidth,
@@ -74,5 +77,31 @@ export function signout(): AppThunk<void> {
     router.navigate("/session");
     dispatch(closeMusicPlayer());
     SessionManager.signOutCurrent();
+  };
+}
+
+export function openDesktopCallback(code: string, state: string, displayName?: string, path?: string): AppThunk<void> {
+  return async (dispatch, _getState) => {
+    // Only add params if they are defined, to avoid undefined values in URLSearchParams
+    const params: Record<string, string> = {
+      state,
+      code,
+      user_id: SessionManager.currentLoginOrNull()?.user.id ?? "",
+    };
+    if (path !== undefined) {
+      params["path"] = path;
+    }
+    if (displayName !== undefined) {
+      params["name"] = displayName;
+    }
+
+    const search = new URLSearchParams(params);
+    window.location.href = `cloudreve://mount?${search.toString()}`;
+    dispatch(closeDesktopMountSetupDialog());
+    enqueueSnackbar({
+      message: i18next.t("fileManager.continueInDesktop"),
+      variant: "default",
+      action: DefaultCloseAction,
+    });
   };
 }

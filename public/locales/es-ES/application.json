@@ -54,6 +54,37 @@
     "clickToRefresh": "Haz clic para actualizar el código de verificación",
     "switchLanguage": "Cambiar idioma"
   },
+  "oauth": {
+    "authorize": "Autorizar aplicación",
+    "wantsToConnect": "quiere conectarse a tu cuenta",
+    "invalidClientId": "ID de cliente inválido",
+    "appNotFound": "Aplicación no encontrada",
+    "reviewPermissions": "Revisar permisos",
+    "appRequestsAccess": "{{appName}} está solicitando acceso a tu cuenta",
+    "consentDescription": "Estás autorizando a <0>{{appName}}</0> a acceder a la información de la cuenta <1>{{userEmail}}</1>:",
+    "deny": "Cancelar",
+    "desktop": "Cliente de escritorio Cloudreve",
+    "scope": {
+      "readonly": "Solo lectura",
+      "readwrite": "Lectura y escritura",
+      "profile": "Perfil",
+      "profileDesc": "Tu información básica de perfil, como apodo, correo electrónico, avatar, etc.",
+      "offlineAccess": "Acceso sin conexión",
+      "offlineAccessDesc": "Mantener el acceso cuando no estés usando activamente la aplicación.",
+      "userSecurityInfo": "Información de seguridad",
+      "userSecurityInfoDesc": "Información de seguridad sensible de tu cuenta, como passkeys, autenticación de dos factores, historial de inicio de sesión, etc.",
+      "workflowDesc": "Tareas en segundo plano relacionadas con el procesamiento de archivos, como descargas sin conexión, extracción de archivos, etc.",
+      "admin": "Privilegios de administrador",
+      "adminDesc": "Configuración del sitio y todos los datos de todos los usuarios.",
+      "files": "Archivos",
+      "filesDesc": "Archivos que posees y archivos de otros usuarios a los que tienes permiso de acceso.",
+      "shares": "Enlaces para compartir",
+      "sharesDesc": "Enlaces para compartir archivos.",
+      "financeDesc": "Créditos, códigos de canje, pedidos, etc.",
+      "davAccount": "Cuenta WebDAV",
+      "davAccountDesc": "Tu cuenta WebDAV."
+    }
+  },
   "navbar": {
     "notBefore": "No antes de",
     "notAfter": "No después de",
@@ -114,6 +145,9 @@
     "dashboard": "Panel de control"
   },
   "fileManager": {
+    "continueInDesktop": "Autorización exitosa, por favor continúa en el cliente de escritorio.",
+    "desktopMountSetup": "Montar en cliente de escritorio",
+    "desktopMountSetupDescription": "Selecciona el directorio a montar en el cliente de escritorio.",
     "currentStoragePolicy": "Política de almacenamiento actual: {{policy}}",
     "customProps": "Propiedades personalizadas",
     "rating": "Calificación",

@@ -54,6 +54,37 @@
     "clickToRefresh": "Click to refresh",
     "switchLanguage": "Switch Language"
   },
+  "oauth": {
+    "authorize": "Authorize Application",
+    "wantsToConnect": "wants to connect to your account",
+    "invalidClientId": "Invalid client ID",
+    "appNotFound": "Application not found",
+    "reviewPermissions": "Review Permissions",
+    "appRequestsAccess": "{{appName}} is requesting access to your account",
+    "consentDescription": "You are authorizing <0>{{appName}}</0> to access information under account <1>{{userEmail}}</1>:",
+    "deny": "Cancel",
+    "desktop": "Cloudreve Desktop Client",
+    "scope": {
+      "readonly": "Read-only",
+      "readwrite": "Read & Write",
+      "profile": "Profile",
+      "profileDesc": "Your basic profile information, such as nickname, email, avatar, etc.",
+      "offlineAccess": "Offline Access",
+      "offlineAccessDesc": "Maintain access when you are not actively using the application.",
+      "userSecurityInfo": "Security Information",
+      "userSecurityInfoDesc": "Sensitive security information of your account, such as passkeys, two-factor authentication, login history, etc.",
+      "workflowDesc": "Background tasks related to file processing, such as offline downloads, file extraction, etc.",
+      "admin": "Administrator Privileges",
+      "adminDesc": "Site settings and all data of all users.",
+      "files": "Files",
+      "filesDesc": "Files you own and files of other users you have permission to access.",
+      "shares": "Share Links",
+      "sharesDesc": "Share links for files.",
+      "financeDesc": "Credits, redemption codes, orders, etc.",
+      "davAccount": "WebDAV Account",
+      "davAccountDesc": "Your WebDAV account."
+    }
+  },
   "navbar": {
     "notBefore": "Not before",
     "notAfter": "Not after",
@@ -114,6 +145,9 @@
     "dashboard": "Dashboard"
   },
   "fileManager": {
+    "continueInDesktop": "Authorization successful, please continue in the desktop client.",
+    "desktopMountSetup": "Mount to Desktop Client",
+    "desktopMountSetupDescription": "Select the directory to mount to the desktop client.",
     "customProps": "Custom properties",
     "rating": "Rating",
     "description": "Description",

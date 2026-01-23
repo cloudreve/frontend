@@ -54,6 +54,37 @@
     "clickToRefresh": "클릭하여 보안문자 새로고침",
     "switchLanguage": "언어 전환"
   },
+  "oauth": {
+    "authorize": "애플리케이션 인증",
+    "wantsToConnect": "귀하의 계정에 연결하려고 합니다",
+    "invalidClientId": "유효하지 않은 클라이언트 ID",
+    "appNotFound": "애플리케이션을 찾을 수 없습니다",
+    "reviewPermissions": "권한 검토",
+    "appRequestsAccess": "{{appName}}이(가) 귀하의 계정에 대한 액세스를 요청하고 있습니다",
+    "consentDescription": "<0>{{appName}}</0>에 계정 <1>{{userEmail}}</1>의 정보에 대한 액세스를 허용하려고 합니다:",
+    "deny": "취소",
+    "desktop": "Cloudreve 데스크톱 클라이언트",
+    "scope": {
+      "readonly": "읽기 전용",
+      "readwrite": "읽기 및 쓰기",
+      "profile": "프로필",
+      "profileDesc": "닉네임, 이메일, 아바타 등 기본 프로필 정보.",
+      "offlineAccess": "오프라인 액세스",
+      "offlineAccessDesc": "애플리케이션을 적극적으로 사용하지 않을 때도 액세스를 유지합니다.",
+      "userSecurityInfo": "보안 정보",
+      "userSecurityInfoDesc": "패스키, 2단계 인증, 로그인 기록 등 계정의 민감한 보안 정보.",
+      "workflowDesc": "오프라인 다운로드, 파일 압축 해제 등 파일 처리와 관련된 백그라운드 작업.",
+      "admin": "관리자 권한",
+      "adminDesc": "사이트 설정 및 모든 사용자의 모든 데이터.",
+      "files": "파일",
+      "filesDesc": "귀하가 소유한 파일과 액세스 권한이 있는 다른 사용자의 파일.",
+      "shares": "공유 링크",
+      "sharesDesc": "파일 공유 링크.",
+      "financeDesc": "크레딧, 교환 코드, 주문 등.",
+      "davAccount": "WebDAV 계정",
+      "davAccountDesc": "귀하의 WebDAV 계정."
+    }
+  },
   "navbar": {
     "notBefore": "이전 아님",
     "notAfter": "이후 아님",
@@ -117,6 +148,9 @@
     "dashboard": "관리 패널"
   },
   "fileManager": {
+    "continueInDesktop": "인증 성공, 데스크톱 클라이언트에서 계속하세요.",
+    "desktopMountSetup": "데스크톱 클라이언트에 마운트",
+    "desktopMountSetupDescription": "데스크톱 클라이언트에 마운트할 디렉토리를 선택하세요.",
     "currentStoragePolicy": "현재 저장 정책: {{policy}}",
     "customProps": "사용자 정의 속성",
     "rating": "평점",

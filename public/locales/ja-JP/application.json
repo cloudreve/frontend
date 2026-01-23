@@ -54,6 +54,37 @@
     "clickToRefresh": "CAPTCHAを再読み込み",
     "switchLanguage": "言語を切り替え"
   },
+  "oauth": {
+    "authorize": "アプリケーションを認証",
+    "wantsToConnect": "があなたのアカウントに接続しようとしています",
+    "invalidClientId": "無効なクライアントID",
+    "appNotFound": "アプリケーションが見つかりません",
+    "reviewPermissions": "権限を確認",
+    "appRequestsAccess": "{{appName}} があなたのアカウントへのアクセスを要求しています",
+    "consentDescription": "<0>{{appName}}</0> にアカウント <1>{{userEmail}}</1> の情報へのアクセスを許可しようとしています：",
+    "deny": "キャンセル",
+    "desktop": "Cloudreve デスクトップクライアント",
+    "scope": {
+      "readonly": "読み取り専用",
+      "readwrite": "読み取りと書き込み",
+      "profile": "プロフィール",
+      "profileDesc": "ニックネーム、メール、アバターなどの基本的なプロフィール情報。",
+      "offlineAccess": "オフラインアクセス",
+      "offlineAccessDesc": "アプリケーションを積極的に使用していないときもアクセスを維持します。",
+      "userSecurityInfo": "セキュリティ情報",
+      "userSecurityInfoDesc": "パスキー、二要素認証、ログイン履歴などのアカウントの機密セキュリティ情報。",
+      "workflowDesc": "オフラインダウンロード、ファイル解凍などのファイル処理に関連するバックグラウンドタスク。",
+      "admin": "管理者権限",
+      "adminDesc": "サイト設定とすべてのユーザーのすべてのデータ。",
+      "files": "ファイル",
+      "filesDesc": "あなたが所有するファイルとアクセス権限のある他のユーザーのファイル。",
+      "shares": "共有リンク",
+      "sharesDesc": "ファイルの共有リンク。",
+      "financeDesc": "クレジット、引き換えコード、注文など。",
+      "davAccount": "WebDAVアカウント",
+      "davAccountDesc": "あなたのWebDAVアカウント。"
+    }
+  },
   "resetThumbnail": "壊れたサムネイルをリセット",
   "resetThumbnailRequested": "サムネイルのリセットをリクエストしました。",
   "noFileCanResetThumbnail": "サムネイルをリセットできるファイルがありません。",
@@ -117,6 +148,9 @@
     "dashboard": "管理パネル"
   },
   "fileManager": {
+    "continueInDesktop": "認証に成功しました。デスクトップクライアントで操作を続けてください。",
+    "desktopMountSetup": "デスクトップクライアントにマウント",
+    "desktopMountSetupDescription": "デスクトップクライアントにマウントするディレクトリを選択してください。",
     "customProps": "カスタム属性",
     "rating": "評価",
     "description": "説明",

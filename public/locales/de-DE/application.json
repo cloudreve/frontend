@@ -54,6 +54,37 @@
     "clickToRefresh": "Klicken Sie, um das CAPTCHA zu aktualisieren",
     "switchLanguage": "Sprache wechseln"
   },
+  "oauth": {
+    "authorize": "Anwendung autorisieren",
+    "wantsToConnect": "möchte sich mit Ihrem Konto verbinden",
+    "invalidClientId": "Ungültige Client-ID",
+    "appNotFound": "Anwendung nicht gefunden",
+    "reviewPermissions": "Berechtigungen überprüfen",
+    "appRequestsAccess": "{{appName}} fordert Zugriff auf Ihr Konto an",
+    "consentDescription": "Sie autorisieren <0>{{appName}}</0>, auf Informationen unter dem Konto <1>{{userEmail}}</1> zuzugreifen:",
+    "deny": "Abbrechen",
+    "desktop": "Cloudreve Desktop-Client",
+    "scope": {
+      "readonly": "Nur lesen",
+      "readwrite": "Lesen & Schreiben",
+      "profile": "Profil",
+      "profileDesc": "Ihre grundlegenden Profilinformationen wie Nickname, E-Mail, Avatar usw.",
+      "offlineAccess": "Offline-Zugriff",
+      "offlineAccessDesc": "Zugriff beibehalten, wenn Sie die Anwendung nicht aktiv nutzen.",
+      "userSecurityInfo": "Sicherheitsinformationen",
+      "userSecurityInfoDesc": "Sensible Sicherheitsinformationen Ihres Kontos wie Passkeys, Zwei-Faktor-Authentifizierung, Anmeldeverlauf usw.",
+      "workflowDesc": "Hintergrundaufgaben im Zusammenhang mit Dateiverarbeitung wie Offline-Downloads, Dateiextraktion usw.",
+      "admin": "Administratorrechte",
+      "adminDesc": "Website-Einstellungen und alle Daten aller Benutzer.",
+      "files": "Dateien",
+      "filesDesc": "Dateien, die Sie besitzen, und Dateien anderer Benutzer, auf die Sie Zugriff haben.",
+      "shares": "Freigabelinks",
+      "sharesDesc": "Freigabelinks für Dateien.",
+      "financeDesc": "Guthaben, Einlösecodes, Bestellungen usw.",
+      "davAccount": "WebDAV-Konto",
+      "davAccountDesc": "Ihr WebDAV-Konto."
+    }
+  },
   "navbar": {
     "notBefore": "Nicht vor",
     "notAfter": "Nicht nach",
@@ -114,6 +145,9 @@
     "dashboard": "Dashboard"
   },
   "fileManager": {
+    "continueInDesktop": "Autorisierung erfolgreich, bitte fahren Sie im Desktop-Client fort.",
+    "desktopMountSetup": "Zum Desktop-Client einbinden",
+    "desktopMountSetupDescription": "Wählen Sie das Verzeichnis aus, das im Desktop-Client eingebunden werden soll.",
     "currentStoragePolicy": "Aktuelle Speicherrichtlinie: {{policy}}",
     "customProps": "Benutzerdefinierte Eigenschaften",
     "rating": "Bewertung",

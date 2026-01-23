@@ -54,6 +54,37 @@
     "clickToRefresh": "点击刷新验证码",
     "switchLanguage": "切换语言"
   },
+  "oauth": {
+    "authorize": "授权应用",
+    "wantsToConnect": "想要连接到你的账号",
+    "invalidClientId": "无效的客户端 ID",
+    "appNotFound": "应用未找到",
+    "reviewPermissions": "确认授权权限",
+    "appRequestsAccess": "{{appName}} 正在请求访问你的账号",
+    "consentDescription": "你正在授权 <0>{{appName}}</0> 访问账号 <1>{{userEmail}}</1> 下的信息：",
+    "deny": "取消",
+    "desktop": "Cloudreve 桌面客户端",
+    "scope": {
+      "readonly": "只读",
+      "readwrite": "读写",
+      "profile": "个人资料",
+      "profileDesc": "你的基本个人资料信息，如昵称、邮箱、头像等。",
+      "offlineAccess": "离线访问",
+      "offlineAccessDesc": "在你未主动使用应用时保持访问权限。",
+      "userSecurityInfo": "安全信息",
+      "userSecurityInfoDesc": "账户的敏感安全信息，如通行密钥、二步验证、登录日志等。",
+      "workflowDesc": "文件处理相关的后台任务，如离线下载、文件解压缩等。",
+      "admin": "管理员权限",
+      "adminDesc": "站点设置和全部用户的全部数据。",
+      "files": "文件",
+      "filesDesc": "你拥有的文件和有权限访问的其他用户的文件。",
+      "shares": "分享链接",
+      "sharesDesc": "文件的分享链接。",
+      "financeDesc": "积分、兑换码、订单等。",
+      "davAccount": "WebDAV 账号",
+      "davAccountDesc": "你的 WebDAV 账号。"
+    }
+  },
   "navbar": {
     "notBefore": "不早于",
     "notAfter": "不晚于",
@@ -114,6 +145,9 @@
     "dashboard": "管理面板"
   },
   "fileManager": {
+    "continueInDesktop": "授权成功，请在桌面客户端中继续操作。",
+    "desktopMountSetup": "挂载到桌面客户端",
+    "desktopMountSetupDescription": "选择要挂载到桌面客户端的目录。",
     "customProps": "自定义属性",
     "rating": "评级",
     "description": "描述",

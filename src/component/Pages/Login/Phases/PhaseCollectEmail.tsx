@@ -2,6 +2,7 @@ import { Box, Divider, FormControl, Link, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
+import { LoginResponse } from "../../../../api/user.ts";
 import { useAppSelector } from "../../../../redux/hooks.ts";
 import { useQuery } from "../../../../util";
 import { OutlineIconTextField } from "../../../Common/Form/OutlineIconTextField.tsx";
@@ -45,9 +46,10 @@ interface PhaseCollectEmailProps {
   email: string;
   setEmail: (email: string) => void;
   control?: Control;
+  onOAuthPasskeyLogin?: (response: LoginResponse) => void;
 }
 
-const PhaseCollectEmail = ({ email, setEmail, control }: PhaseCollectEmailProps) => {
+const PhaseCollectEmail = ({ email, setEmail, control, onOAuthPasskeyLogin }: PhaseCollectEmailProps) => {
   const { t } = useTranslation();
   const query = useQuery();
   const { register_enabled, authn } = useAppSelector((state) => state.siteConfig.login.config);
@@ -95,7 +97,7 @@ const PhaseCollectEmail = ({ email, setEmail, control }: PhaseCollectEmailProps)
       {showFooter && (
         <>
           <Divider sx={{ my: 2 }} />
-          <Stack spacing={1}>{authn && <PasskeyLoginButton autoComplete />}</Stack>
+          <Stack spacing={1}>{authn && <PasskeyLoginButton autoComplete onLoginSuccess={onOAuthPasskeyLogin} />}</Stack>
           <LegalLinks />
         </>
       )}

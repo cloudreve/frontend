@@ -10,12 +10,14 @@ import { refreshUserSession } from "../../../../redux/thunks/session.ts";
 import { bufferEncode, urlBase64BufferDecode, useQuery } from "../../../../util";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
 import Fingerprint from "../../../Icons/Fingerprint.tsx";
+import { LoginResponse } from "../../../../api/user.ts";
 
 export interface PasskeyLoginButtonProps extends ButtonProps {
   autoComplete?: boolean;
+  onLoginSuccess?: (response: LoginResponse) => void;
 }
 
-export default function PasskeyLoginButton({ autoComplete, ...rest }: PasskeyLoginButtonProps) {
+export default function PasskeyLoginButton({ autoComplete, onLoginSuccess, ...rest }: PasskeyLoginButtonProps) {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useAppDispatch();
@@ -92,7 +94,11 @@ export default function PasskeyLoginButton({ autoComplete, ...rest }: PasskeyLog
             }),
           }),
         );
-        dispatch(refreshUserSession(response, query.get("redirect")));
+        if (onLoginSuccess) {
+          onLoginSuccess(response);
+        } else {
+          dispatch(refreshUserSession(response, query.get("redirect")));
+        }
       }
     } catch (e) {
       console.log(e);
