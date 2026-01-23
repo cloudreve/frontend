@@ -263,18 +263,21 @@ const FileIconList = memo(({ config, onChange }: FileIconListProps) => {
                       ) : (
                         <HexColorInput
                           currentColor={r.color_dark ?? ""}
-                          onColorChange={(color) =>
+                          onColorChange={(color) => {
+                            const updatedItem = { ...r };
+                            if (color) {
+                              updatedItem.color_dark = color;
+                            } else {
+                              delete updatedItem.color_dark;
+                            }
                             onChange(
                               JSON.stringify([
                                 ...configParsed.slice(0, i),
-                                {
-                                  ...r,
-                                  color_dark: color,
-                                },
+                                updatedItem,
                                 ...configParsed.slice(i + 1),
                               ]),
                             )
-                          }
+                          }}
                         />
                       )}
                     </NoWrapCell>
