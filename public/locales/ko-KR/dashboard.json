@@ -770,7 +770,14 @@
     "masterEncryptionKeyVaultFile": "파일",
     "masterEncryptionKeyVaultFilePath": "키 저장 경로",
     "showEncryptionStatus": "암호화 상태 표시",
-    "showEncryptionStatusDes": "활성화하면 사용자가 파일 상세 정보에서 파일의 암호화 상태를 볼 수 있습니다."
+    "showEncryptionStatusDes": "활성화하면 사용자가 파일 상세 정보에서 파일의 암호화 상태를 볼 수 있습니다.",
+    "fileEventPush": "파일 이벤트 푸시",
+    "enableFileEventPush": "파일 이벤트 푸시 활성화",
+    "enableFileEventPushDes": "활성화하면 동기화 클라이언트가 파일 이벤트 변경 알림을 구독하고 신속하게 처리할 수 있습니다.",
+    "fileEventPushMaxAge": "오프라인 유효 기간(초)",
+    "fileEventPushMaxAgeDes": "구독자가 오프라인 상태가 된 후, 지정된 시간 내의 이벤트는 캐시되며 다시 온라인 상태가 되면 모든 변경 알림을 받을 수 있습니다.",
+    "fileEventPushDebounce": "디바운스 지연(초)",
+    "fileEventPushDebounceDes": "이벤트 발생 후, 더 많은 이벤트를 일괄 푸시로 병합하기 위해 지정된 시간 동안 대기합니다."
   },
   "giftCodes": {
     "giftCodesSettings": "기프트 코드",

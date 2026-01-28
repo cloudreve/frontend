@@ -770,7 +770,14 @@
     "masterEncryptionKeyVaultFile": "Plik",
     "masterEncryptionKeyVaultFilePath": "Ścieżka przechowywania klucza",
     "showEncryptionStatus": "Pokaż status szyfrowania",
-    "showEncryptionStatusDes": "Gdy włączone, użytkownicy mogą zobaczyć status szyfrowania plików w szczegółach pliku."
+    "showEncryptionStatusDes": "Gdy włączone, użytkownicy mogą zobaczyć status szyfrowania plików w szczegółach pliku.",
+    "fileEventPush": "Powiadomienia o zdarzeniach plików",
+    "enableFileEventPush": "Włącz powiadomienia o zdarzeniach plików",
+    "enableFileEventPushDes": "Gdy włączone, klienci synchronizacji mogą subskrybować powiadomienia o zmianach zdarzeń plików i obsługiwać je natychmiast.",
+    "fileEventPushMaxAge": "Okres ważności offline (sekundy)",
+    "fileEventPushMaxAgeDes": "Po przejściu subskrybenta w tryb offline, zdarzenia w podanym czasie zostaną buforowane, a wszystkie powiadomienia o zmianach będą dostępne po ponownym połączeniu.",
+    "fileEventPushDebounce": "Opóźnienie debounce (sekundy)",
+    "fileEventPushDebounceDes": "Po zdarzeniu czeka podany czas, aby połączyć więcej zdarzeń w jeden pakiet powiadomień."
   },
   "giftCodes": {
     "giftCodesSettings": "Kody podarunkowe",

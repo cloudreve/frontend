@@ -771,7 +771,14 @@
     "masterEncryptionKeyVaultFile": "Archivo",
     "masterEncryptionKeyVaultFilePath": "Ruta de almacenamiento de clave",
     "showEncryptionStatus": "Mostrar estado de cifrado",
-    "showEncryptionStatusDes": "Cuando está habilitado, los usuarios pueden ver el estado de cifrado de los archivos en los detalles del archivo."
+    "showEncryptionStatusDes": "Cuando está habilitado, los usuarios pueden ver el estado de cifrado de los archivos en los detalles del archivo.",
+    "fileEventPush": "Envío de Eventos de Archivo",
+    "enableFileEventPush": "Habilitar Envío de Eventos de Archivo",
+    "enableFileEventPushDes": "Cuando está habilitado, los clientes de sincronización pueden suscribirse a las notificaciones de cambios de eventos de archivo y procesarlas rápidamente.",
+    "fileEventPushMaxAge": "Período de Validez Offline (segundos)",
+    "fileEventPushMaxAgeDes": "Después de que un suscriptor se desconecte, los eventos dentro del tiempo dado se almacenarán en caché y todas las notificaciones de cambios se podrán recibir al volver a conectarse.",
+    "fileEventPushDebounce": "Retraso de Antirrebote (segundos)",
+    "fileEventPushDebounceDes": "Después de un evento, esperar el tiempo dado para combinar más eventos en un envío por lotes."
   },
   "giftCodes": {
     "giftCodesSettings": "Códigos de Regalo",

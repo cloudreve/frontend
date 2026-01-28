@@ -770,7 +770,14 @@
     "masterEncryptionKeyVaultFile": "ファイル",
     "masterEncryptionKeyVaultFilePath": "キー保存パス",
     "showEncryptionStatus": "暗号化状態を表示",
-    "showEncryptionStatusDes": "有効にすると、ユーザーはファイル詳細でファイルの暗号化状態を確認できます。"
+    "showEncryptionStatusDes": "有効にすると、ユーザーはファイル詳細でファイルの暗号化状態を確認できます。",
+    "fileEventPush": "ファイルイベントプッシュ",
+    "enableFileEventPush": "ファイルイベントプッシュを有効にする",
+    "enableFileEventPushDes": "有効にすると、同期クライアントはファイルイベント変更通知を購読し、迅速に処理できます。",
+    "fileEventPushMaxAge": "オフライン有効期間（秒）",
+    "fileEventPushMaxAgeDes": "購読者がオフラインになった後、指定時間内のイベントはキャッシュされ、オンラインに戻った際にすべての変更通知を受け取ることができます。",
+    "fileEventPushDebounce": "デバウンス遅延（秒）",
+    "fileEventPushDebounceDes": "イベント発生後、指定時間待機してより多くのイベントをまとめてプッシュします。"
   },
   "giftCodes": {
     "giftCodesSettings": "ギフトコード",

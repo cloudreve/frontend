@@ -771,7 +771,14 @@
     "masterEncryptionKeyVaultFile": "Fichier",
     "masterEncryptionKeyVaultFilePath": "Chemin de stockage de la clé",
     "showEncryptionStatus": "Afficher l'état du chiffrement",
-    "showEncryptionStatusDes": "Lorsqu'il est activé, les utilisateurs peuvent consulter l'état du chiffrement des fichiers dans les détails du fichier."
+    "showEncryptionStatusDes": "Lorsqu'il est activé, les utilisateurs peuvent consulter l'état du chiffrement des fichiers dans les détails du fichier.",
+    "fileEventPush": "Push des événements de fichier",
+    "enableFileEventPush": "Activer le push des événements de fichier",
+    "enableFileEventPushDes": "Lorsqu'il est activé, les clients de synchronisation peuvent s'abonner aux notifications de changement d'événements de fichier et les traiter rapidement.",
+    "fileEventPushMaxAge": "Période de validité hors ligne (secondes)",
+    "fileEventPushMaxAgeDes": "Après qu'un abonné se déconnecte, les événements dans le délai donné seront mis en cache et toutes les notifications de changement pourront être reçues lors de la reconnexion.",
+    "fileEventPushDebounce": "Délai d'anti-rebond (secondes)",
+    "fileEventPushDebounceDes": "Après un événement, attendre le temps donné pour fusionner plus d'événements pour un envoi groupé."
   },
   "giftCodes": {
     "giftCodesSettings": "Codes cadeaux",

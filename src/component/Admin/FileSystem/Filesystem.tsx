@@ -105,6 +105,9 @@ const FileSystem = () => {
                     "encrypt_master_key_vault",
                     "encrypt_master_key_file",
                     "show_encryption_status",
+                    "fs_event_push_enabled",
+                    "fs_event_push_max_age",
+                    "fs_event_push_debounce",
                   ]}
                 >
                   <Parameters />

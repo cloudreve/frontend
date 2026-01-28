@@ -770,7 +770,14 @@
     "masterEncryptionKeyVaultFile": "文件",
     "masterEncryptionKeyVaultFilePath": "密钥存储路径",
     "showEncryptionStatus": "显示加密状态",
-    "showEncryptionStatusDes": "开启后，用户在文件详情中可以查看文件的加密状态。"
+    "showEncryptionStatusDes": "开启后，用户在文件详情中可以查看文件的加密状态。",
+    "fileEventPush": "文件事件推送",
+    "enableFileEventPush": "启用文件事件推送",
+    "enableFileEventPushDes": "开启后，同步客户端可订阅文件事件变更通知并及时处理。",
+    "fileEventPushMaxAge": "离线有效期 (秒)",
+    "fileEventPushMaxAgeDes": "订阅者离线后，在给定时间内的事件会被暂存，重新上线后仍可获得所有变更推送。",
+    "fileEventPushDebounce": "防抖动延时 (秒)",
+    "fileEventPushDebounceDes": "事件发生后，等待给定时间以合并更多事件打包推送。"
   },
   "giftCodes": {
     "giftCodesSettings": "礼品码",

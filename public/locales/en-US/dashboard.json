@@ -770,7 +770,14 @@
     "masterEncryptionKeyVaultFile": "File",
     "masterEncryptionKeyVaultFilePath": "Key storage path",
     "showEncryptionStatus": "Show encryption status",
-    "showEncryptionStatusDes": "When enabled, users can view the encryption status of files in file details."
+    "showEncryptionStatusDes": "When enabled, users can view the encryption status of files in file details.",
+    "fileEventPush": "File Event Push",
+    "enableFileEventPush": "Enable File Event Push",
+    "enableFileEventPushDes": "When enabled, sync clients can subscribe to file event change notifications and handle them promptly.",
+    "fileEventPushMaxAge": "Offline Validity Period (seconds)",
+    "fileEventPushMaxAgeDes": "After a subscriber goes offline, events within the given time will be cached, and all change notifications can still be received when back online.",
+    "fileEventPushDebounce": "Debounce Delay (seconds)",
+    "fileEventPushDebounceDes": "After an event occurs, wait for the given time to merge more events for batch push."
   },
   "giftCodes": {
     "giftCodesSettings": "Gift Codes",

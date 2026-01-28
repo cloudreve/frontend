@@ -771,7 +771,14 @@
     "masterEncryptionKeyVaultFile": "Datei",
     "masterEncryptionKeyVaultFilePath": "Schlüsselspeicherpfad",
     "showEncryptionStatus": "Verschlüsselungsstatus anzeigen",
-    "showEncryptionStatusDes": "Wenn aktiviert, können Benutzer den Verschlüsselungsstatus von Dateien in den Dateidetails anzeigen."
+    "showEncryptionStatusDes": "Wenn aktiviert, können Benutzer den Verschlüsselungsstatus von Dateien in den Dateidetails anzeigen.",
+    "fileEventPush": "Dateiereignis-Push",
+    "enableFileEventPush": "Dateiereignis-Push aktivieren",
+    "enableFileEventPushDes": "Wenn aktiviert, können Sync-Clients Dateiereignis-Änderungsbenachrichtigungen abonnieren und diese zeitnah verarbeiten.",
+    "fileEventPushMaxAge": "Offline-Gültigkeitsdauer (Sekunden)",
+    "fileEventPushMaxAgeDes": "Nachdem ein Abonnent offline geht, werden Ereignisse innerhalb der angegebenen Zeit zwischengespeichert und alle Änderungsbenachrichtigungen können nach der Rückkehr online weiterhin empfangen werden.",
+    "fileEventPushDebounce": "Entprellungsverzögerung (Sekunden)",
+    "fileEventPushDebounceDes": "Nach einem Ereignis wird die angegebene Zeit gewartet, um weitere Ereignisse für einen gebündelten Push zusammenzufassen."
   },
   "giftCodes": {
     "giftCodesSettings": "Geschenkcodes",

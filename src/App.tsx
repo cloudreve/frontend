@@ -318,6 +318,11 @@ const AppContent = () => {
     },
   };
 
+  useEffect(() => {
+    const loader = document.getElementById("app-loader");
+    if (loader) loader.style.display = "none";
+  }, []);
+
   return (
     <>
       <CssBaseline />
