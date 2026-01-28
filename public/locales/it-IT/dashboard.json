@@ -737,7 +737,10 @@
       "redeem_gift_code": "Riscatta codice regalo",
       "update_view": "Impostazione vista modificata",
       "delete_direct_link": "Elimina link diretto",
-      "report_abuse": "Segnala abuso"
+      "report_abuse": "Segnala abuso",
+      "oauth_grant_create": "Autorizzazione app OAuth",
+      "oauth_token_exchange": "Scambio token OAuth",
+      "oauth_grant_revoke": "Revoca autorizzazione app OAuth"
     },
     "server": "Server",
     "tempPath": "Percorso temporaneo",

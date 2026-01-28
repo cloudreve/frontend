@@ -737,7 +737,10 @@
       "redeem_gift_code": "Utiliser le code cadeau",
       "update_view": "Paramètre de vue modifié",
       "delete_direct_link": "Supprimer le lien direct",
-      "report_abuse": "Signaler un abus"
+      "report_abuse": "Signaler un abus",
+      "oauth_grant_create": "Autorisation de l'application OAuth",
+      "oauth_token_exchange": "Échange de jeton OAuth",
+      "oauth_grant_revoke": "Révocation de l'autorisation OAuth"
     },
     "server": "Serveur",
     "tempPath": "Chemin temporaire",

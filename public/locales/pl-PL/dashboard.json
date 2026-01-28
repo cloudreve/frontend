@@ -736,7 +736,10 @@
       "redeem_gift_code": "Zrealizuj kod podarunkowy",
       "update_view": "Zmieniono ustawienia widoku",
       "delete_direct_link": "Usuń link bezpośredni",
-      "report_abuse": "Zgłoś nadużycie"
+      "report_abuse": "Zgłoś nadużycie",
+      "oauth_grant_create": "Autoryzacja aplikacji OAuth",
+      "oauth_token_exchange": "Wymiana tokenów OAuth",
+      "oauth_grant_revoke": "Cofnięcie autoryzacji aplikacji OAuth"
     },
     "server": "Serwer",
     "tempPath": "Ścieżka tymczasowa",

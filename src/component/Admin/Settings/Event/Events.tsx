@@ -45,6 +45,9 @@ export const eventCategories = {
       AuditLogType.link_account,
       AuditLogType.unlink_account,
       AuditLogType.report_abuse,
+      AuditLogType.oauth_grant_create,
+      AuditLogType.oauth_token_exchange,
+      AuditLogType.oauth_grant_revoke,
     ],
   },
   file: {

@@ -737,7 +737,10 @@
       "redeem_gift_code": "Geschenkcode einlösen",
       "update_view": "Ansichtseinstellung geändert",
       "delete_direct_link": "Direktlink löschen",
-      "report_abuse": "Missbrauch melden"
+      "report_abuse": "Missbrauch melden",
+      "oauth_grant_create": "OAuth-App-Berechtigung",
+      "oauth_token_exchange": "OAuth-Token-Austausch",
+      "oauth_grant_revoke": "OAuth-App-Berechtigung widerrufen"
     },
     "server": "Server",
     "tempPath": "Temporärer Pfad",

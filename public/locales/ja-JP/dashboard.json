@@ -736,7 +736,10 @@
       "redeem_gift_code": "ギフトコード交換",
       "update_view": "ビュー設定変更",
       "delete_direct_link": "直鏈削除",
-      "report_abuse": "不正利用報告"
+      "report_abuse": "不正利用報告",
+      "oauth_grant_create": "OAuthアプリ認可",
+      "oauth_token_exchange": "OAuthトークン交換",
+      "oauth_grant_revoke": "OAuthアプリ認可取り消し"
     },
     "server": "サーバー設定",
     "tempPath": "一時パス",

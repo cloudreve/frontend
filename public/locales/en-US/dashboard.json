@@ -736,7 +736,10 @@
       "redeem_gift_code": "Redeem gift code",
       "update_view": "Changed view setting",
       "delete_direct_link": "Delete direct link",
-      "report_abuse": "Report abuse"
+      "report_abuse": "Report abuse",
+      "oauth_grant_create": "OAuth App Authorization",
+      "oauth_token_exchange": "OAuth Token Exchange",
+      "oauth_grant_revoke": "OAuth App Authorization Revoke"
     },
     "server": "Server",
     "tempPath": "Temporary path",

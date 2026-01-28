@@ -737,7 +737,10 @@
       "redeem_gift_code": "Активация подарочного кода",
       "update_view": "Изменение настроек просмотра",
       "delete_direct_link": "Удаление прямой ссылки",
-      "report_abuse": "Сообщение о нарушении"
+      "report_abuse": "Сообщение о нарушении",
+      "oauth_grant_create": "Авторизация приложения OAuth",
+      "oauth_token_exchange": "Обмен токенами OAuth",
+      "oauth_grant_revoke": "Отзыв авторизации приложения OAuth"
     },
     "server": "Настройки сервера",
     "tempPath": "Временный путь",

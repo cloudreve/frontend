@@ -13,6 +13,7 @@ import {
   FetchWOPIDiscoveryService,
   File as FileEnt,
   FinishOauthCallbackService,
+  GetOAuthClientResponse,
   GetOauthRedirectService,
   GetSettingService,
   GroupEnt,
@@ -20,6 +21,7 @@ import {
   ListEntityResponse,
   ListFileResponse,
   ListNodeResponse,
+  ListOAuthClientResponse,
   ListStoragePolicyResponse,
   ListTaskResponse,
   ListUserResponse,
@@ -36,12 +38,10 @@ import {
   UpsertFileService,
   UpsertGroupService,
   UpsertNodeService,
+  UpsertOAuthClientService,
   UpsertStoragePolicyService,
   UpsertUserService,
   User as UserEnt,
-  ListOAuthClientResponse,
-  GetOAuthClientResponse,
-  UpsertOAuthClientService,
 } from "./dashboard.ts";
 import {
   ArchiveListFilesResponse,
@@ -2110,6 +2110,22 @@ export function batchDeleteOAuthClients(args: BatchIDService): ThunkResponse<voi
       send(
         `/admin/oauthClient/batch/delete`,
         { method: "POST", data: args },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function sendRevokeOAuthGrant(grant_id: string): ThunkResponse {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/session/oauth/grant/${grant_id}`,
+        {
+          method: "DELETE",
+        },
         {
           ...defaultOpts,
         },

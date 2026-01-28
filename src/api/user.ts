@@ -104,6 +104,15 @@ export interface UserSettings {
   passkeys?: Passkey[];
   disable_view_sync: boolean;
   share_links_in_profile: ShareLinksInProfileLevel;
+  oauth_grants?: OAuthGrant[];
+}
+
+export interface OAuthGrant {
+  client_id: string;
+  client_name: string;
+  client_logo: string;
+  scopes?: string[];
+  last_used_at?: string;
 }
 
 export interface PatchUserSetting {

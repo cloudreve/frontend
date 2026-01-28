@@ -736,7 +736,10 @@
       "redeem_gift_code": "기프트 코드 사용",
       "update_view": "보기 설정 변경",
       "delete_direct_link": "직접 링크 삭제",
-      "report_abuse": "남용 신고"
+      "report_abuse": "남용 신고",
+      "oauth_grant_create": "OAuth 앱 권한 부여",
+      "oauth_token_exchange": "OAuth 토큰 교환",
+      "oauth_grant_revoke": "OAuth 앱 권한 취소"
     },
     "server": "서버 설정",
     "tempPath": "임시 경로",

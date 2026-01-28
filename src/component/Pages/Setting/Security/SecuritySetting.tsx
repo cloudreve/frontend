@@ -1,15 +1,37 @@
+import { Icon } from "@iconify/react";
 import { LoadingButton } from "@mui/lab";
-import { Box, Collapse, Stack, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Collapse,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemSecondaryAction,
+  Stack,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { sendUpdateUserSetting } from "../../../../api/api.ts";
-import { Passkey, UserSettings } from "../../../../api/user.ts";
+import { sendRevokeOAuthGrant, sendUpdateUserSetting } from "../../../../api/api.ts";
+import { OAuthGrant, Passkey, UserSettings } from "../../../../api/user.ts";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks.ts";
+import { confirmOperation } from "../../../../redux/thunks/dialog.ts";
 import SessionManager from "../../../../session";
 import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
-import { DenseFilledTextField, SecondaryButton, SquareChip } from "../../../Common/StyledComponents.tsx";
+import {
+  DenseFilledTextField,
+  SecondaryButton,
+  SquareChip,
+  StyledListItemText,
+} from "../../../Common/StyledComponents.tsx";
+import TimeBadge from "../../../Common/TimeBadge.tsx";
+import AppsListOutlined from "../../../Icons/AppsListOutlined.tsx";
+import Dismiss from "../../../Icons/Dismiss.tsx";
 import Edit from "../../../Icons/Edit.tsx";
 import Open from "../../../Icons/Open.tsx";
 import { ProfileSettingProps } from "../ProfileSetting.tsx";
@@ -22,6 +44,121 @@ export interface SecuritySettingProps {
   setting: UserSettings;
   setSetting: (setting: UserSettings) => void;
 }
+
+const StyledOAuthGrantListItem = styled(ListItem)(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius,
+  border: `1px solid ${theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.23)" : "rgba(255, 255, 255, 0.23)"}`,
+  marginTop: theme.spacing(1),
+  paddingBottom: theme.spacing(0.5),
+  paddingTop: theme.spacing(0.5),
+}));
+
+const isUrl = (str: string) =>
+  str.startsWith("http://") || str.startsWith("https://") || str.startsWith("data:") || str.startsWith("/");
+
+const OAuthGrantItem = ({ grant, onRevoked }: { grant: OAuthGrant; onRevoked: (clientId: string) => void }) => {
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const onRevoke = () => {
+    dispatch(confirmOperation(t("setting.revokeOAuthGrantConfirm"))).then(() => {
+      setLoading(true);
+      dispatch(sendRevokeOAuthGrant(grant.client_id))
+        .then(() => {
+          onRevoked(grant.client_id);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
+
+  const renderIcon = () => {
+    if (!grant.client_logo) {
+      return (
+        <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
+          <AppsListOutlined />
+        </Avatar>
+      );
+    }
+
+    if (isUrl(grant.client_logo)) {
+      return (
+        <Box
+          component="img"
+          src={grant.client_logo}
+          sx={{
+            width: 40,
+            display: "block",
+            height: 40,
+            maxWidth: 40,
+            maxHeight: 40,
+            objectFit: "contain",
+            borderRadius: 1,
+            bgcolor: theme.palette.background.paper,
+          }}
+        />
+      );
+    }
+
+    return (
+      <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
+        <Icon icon={grant.client_logo} style={{ fontSize: 24 }} />
+      </Avatar>
+    );
+  };
+
+  return (
+    <StyledOAuthGrantListItem sx={{ pr: "150px" }}>
+      <ListItemAvatar>{renderIcon()}</ListItemAvatar>
+      <StyledListItemText
+        primary={t(grant.client_name)}
+        secondaryTypographyProps={{
+          variant: "caption",
+          sx: {
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          },
+        }}
+        secondary={
+          <Box
+            component="span"
+            sx={{
+              color:
+                grant.last_used_at && dayjs().diff(dayjs(grant.last_used_at), "day") < 7
+                  ? theme.palette.success.main
+                  : theme.palette.text.secondary,
+            }}
+          >
+            {grant.last_used_at ? (
+              <Trans
+                i18nKey={"setting.oauthGrantLastUsed"}
+                ns={"application"}
+                components={[<TimeBadge datetime={grant.last_used_at} variant={"inherit"} />]}
+              />
+            ) : (
+              t("setting.neverUsed")
+            )}
+          </Box>
+        }
+      />
+      <ListItemSecondaryAction>
+        <LoadingButton
+          loading={loading}
+          variant={"outlined"}
+          onClick={onRevoke}
+          startIcon={<Dismiss />}
+          color={"error"}
+        >
+          <span>{t("setting.revokeOAuthGrant")}</span>
+        </LoadingButton>
+      </ListItemSecondaryAction>
+    </StyledOAuthGrantListItem>
+  );
+};
 
 const SecuritySetting = ({ setting, setSetting }: ProfileSettingProps) => {
   const { t } = useTranslation();
@@ -100,6 +237,13 @@ const SecuritySetting = ({ setting, setSetting }: ProfileSettingProps) => {
     setSetting({
       ...setting,
       passkeys: setting.passkeys?.filter((p) => p.id !== passkeyID),
+    });
+  };
+
+  const onOAuthGrantRevoked = (clientId: string) => {
+    setSetting({
+      ...setting,
+      oauth_grants: setting.oauth_grants?.filter((x) => x.client_id != clientId),
     });
   };
 
@@ -197,6 +341,15 @@ const SecuritySetting = ({ setting, setSetting }: ProfileSettingProps) => {
       {authEnabled && (
         <SettingForm title={t("setting.hardwareAuthenticator")}>
           <PasskeyList setting={setting} onPasskeyAdded={onPasskeyAdded} onPasskeyDeleted={onPasskeyDeleted} />
+        </SettingForm>
+      )}
+      {setting.oauth_grants && setting.oauth_grants.length > 0 && (
+        <SettingForm title={t("setting.externalApps")}>
+          <List disablePadding>
+            {setting.oauth_grants.map((grant) => (
+              <OAuthGrantItem key={grant.client_id} grant={grant} onRevoked={onOAuthGrantRevoked} />
+            ))}
+          </List>
         </SettingForm>
       )}
       <Enable2FADialog open={enable2FAOpen} onClose={() => setEnable2FAOpen(false)} on2FAEnabled={on2FAChange(true)} />

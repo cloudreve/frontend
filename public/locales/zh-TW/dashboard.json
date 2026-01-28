@@ -736,7 +736,10 @@
       "redeem_gift_code": "兌換禮品碼",
       "update_view": "更改檢視設定",
       "delete_direct_link": "刪除直鏈",
-      "report_abuse": "舉報濫用"
+      "report_abuse": "舉報濫用",
+      "oauth_grant_create": "OAuth 應用授權",
+      "oauth_token_exchange": "OAuth 令牌交換",
+      "oauth_grant_revoke": "OAuth 應用授權撤銷"
     },
     "server": "伺服器設定",
     "tempPath": "臨時路徑",
