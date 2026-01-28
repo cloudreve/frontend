@@ -1,10 +1,11 @@
-import { useRouteError } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useRouteError } from "react-router-dom";
 
 function ErrorBoundary() {
   let error = useRouteError();
   const { t } = useTranslation();
-  console.log(error);
+  const loader = document.getElementById("app-loader");
+  if (loader) loader.style.display = "none";
   // Uncaught ReferenceError: path is not defined
   return (
     <div style={{ padding: 16 }}>
