@@ -121,6 +121,27 @@ export const router = createBrowserRouter([
                 },
               },
               {
+                path: "oauth",
+                async lazy() {
+                  let { OAuthClientSetting } = await import("../component/Admin/AdminBundle.tsx");
+                  return { Component: OAuthClientSetting };
+                },
+              },
+              {
+                path: "oauth/new",
+                async lazy() {
+                  let { EditOAuthClient } = await import("../component/Admin/AdminBundle.tsx");
+                  return { Component: EditOAuthClient };
+                },
+              },
+              {
+                path: "oauth/:id",
+                async lazy() {
+                  let { EditOAuthClient } = await import("../component/Admin/AdminBundle.tsx");
+                  return { Component: EditOAuthClient };
+                },
+              },
+              {
                 path: "group",
                 async lazy() {
                   let { GroupSetting } = await import("../component/Admin/AdminBundle.tsx");

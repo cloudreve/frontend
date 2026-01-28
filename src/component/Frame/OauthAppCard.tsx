@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import { Avatar, Box, Paper, Skeleton, styled, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { AppRegistration } from "../../api/user";

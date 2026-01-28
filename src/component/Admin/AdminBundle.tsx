@@ -6,6 +6,8 @@ import GroupSetting from "./Group/GroupSetting";
 import Home from "./Home/Home";
 import EditNode from "./Node/EditNode";
 import NodeSetting from "./Node/NodeSetting";
+import EditOAuthClient from "./OAuthClient/EditOAuthClient/EditOAuthClient";
+import OAuthClientSetting from "./OAuthClient/OAuthClientSetting";
 import Settings from "./Settings/Settings";
 import ShareList from "./Share/ShareList";
 import EditStoragePolicy from "./StoragePolicy/EditStoragePolicy/EditStoragePolicy";
@@ -17,6 +19,7 @@ import UserSetting from "./User/UserSetting";
 export {
   EditGroup,
   EditNode,
+  EditOAuthClient,
   EditStoragePolicy,
   EntitySetting,
   FileSetting,
@@ -24,6 +27,7 @@ export {
   GroupSetting,
   Home,
   NodeSetting,
+  OAuthClientSetting,
   OauthCallback,
   Settings,
   ShareList,

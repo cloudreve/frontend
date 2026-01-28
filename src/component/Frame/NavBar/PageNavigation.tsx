@@ -38,6 +38,8 @@ import Setting from "../../Icons/Setting.tsx";
 import SettingsOutlined from "../../Icons/SettingsOutlined.tsx";
 import ShareAndroid from "../../Icons/ShareAndroid.tsx";
 import ShareOutlined from "../../Icons/ShareOutlined.tsx";
+import ShieldLock from "../../Icons/ShieldLock.tsx";
+import ShieldLockFilled from "../../Icons/ShieldLockFilled.tsx";
 import Storage from "../../Icons/Storage.tsx";
 import StorageOutlined from "../../Icons/StorageOutlined.tsx";
 import Warning from "../../Icons/Warning.tsx";
@@ -222,6 +224,11 @@ AdminNavigationItems = [
     icon: [Warning, WarningOutlined],
     path: "/admin/abuse",
     pro: true,
+  },
+  {
+    label: "dashboard:nav.oauthClients",
+    icon: [ShieldLockFilled, ShieldLock],
+    path: "/admin/oauth",
   },
 ];
 

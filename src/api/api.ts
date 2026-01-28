@@ -39,6 +39,9 @@ import {
   UpsertStoragePolicyService,
   UpsertUserService,
   User as UserEnt,
+  ListOAuthClientResponse,
+  GetOAuthClientResponse,
+  UpsertOAuthClientService,
 } from "./dashboard.ts";
 import {
   ArchiveListFilesResponse,
@@ -2041,6 +2044,76 @@ export function sendConsentOauthApp(args: GrantService): ThunkResponse<GrantResp
   return async (dispatch, _getState) => {
     return await dispatch(
       send(`/session/oauth/consent`, { method: "POST", data: args }, { bypassSnackbar: (e) => true, ...defaultOpts }),
+    );
+  };
+}
+
+export function getOAuthClientList(args: AdminListService): ThunkResponse<ListOAuthClientResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/admin/oauthClient`,
+        { method: "POST", data: args },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function getOAuthClientDetail(id: number): ThunkResponse<GetOAuthClientResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/admin/oauthClient/${id}`,
+        { method: "GET" },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function upsertOAuthClient(args: UpsertOAuthClientService): ThunkResponse<GetOAuthClientResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/admin/oauthClient${args.client.id ? `/${args.client.id}` : ""}`,
+        { method: "PUT", data: args },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function deleteOAuthClient(id: number): ThunkResponse<void> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/admin/oauthClient/${id}`,
+        { method: "DELETE" },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function batchDeleteOAuthClients(args: BatchIDService): ThunkResponse<void> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        `/admin/oauthClient/batch/delete`,
+        { method: "POST", data: args },
+        {
+          ...defaultOpts,
+        },
+      ),
     );
   };
 }
