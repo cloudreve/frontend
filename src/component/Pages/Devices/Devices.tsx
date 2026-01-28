@@ -14,11 +14,13 @@ import SessionManager from "../../../session";
 import Boolset from "../../../util/boolset.ts";
 import { GroupPermission } from "../../../api/user.ts";
 import AppPromotion from "./AppPromotion.tsx";
+import DesktopAppPromotion from "./DesktopAppPromotion.tsx";
 import PageContainer from "../PageContainer.tsx";
 
 export enum DevicePageTab {
   Dav = "dav",
   App = "app",
+  DesktopApp = "desktop",
 }
 
 const Devices = () => {
@@ -27,6 +29,7 @@ const Devices = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [creatAccountDialog, setCreateAccountDialog] = useState(false);
   const appPromotion = useAppSelector((state) => state.siteConfig.app.config?.app_promotion);
+  const desktopAppPromotion = useAppSelector((state) => state.siteConfig.app.config?.desktop_app_promotion);
 
   const webDavEnabled = useMemo(() => {
     const user = SessionManager.currentLoginOrNull();
@@ -53,8 +56,14 @@ const Devices = () => {
         value: DevicePageTab.App,
       });
     }
+    if (desktopAppPromotion) {
+      res.push({
+        label: t("application:setting.desktopApp"),
+        value: DevicePageTab.DesktopApp,
+      });
+    }
     return res;
-  }, [webDavEnabled, appPromotion]);
+  }, [webDavEnabled, appPromotion, desktopAppPromotion]);
 
   const [tab, setTab] = useState(
     searchParams.get(PageTabQuery) ?? (webDavEnabled ? DevicePageTab.Dav : DevicePageTab.App),
@@ -82,8 +91,9 @@ const Devices = () => {
           <DavAccountList creatAccountDialog={creatAccountDialog} setCreateAccountDialog={setCreateAccountDialog} />
         )}
         {tab == DevicePageTab.App && appPromotion && <AppPromotion />}
+        {tab == DevicePageTab.DesktopApp && desktopAppPromotion && <DesktopAppPromotion />}
 
-        {!webDavEnabled && !appPromotion && <Nothing primary={t("setting.deviceNothing")} />}
+        {!webDavEnabled && !appPromotion && !desktopAppPromotion && <Nothing primary={t("setting.deviceNothing")} />}
       </Container>
     </PageContainer>
   );

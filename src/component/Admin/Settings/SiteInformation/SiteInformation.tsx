@@ -250,6 +250,31 @@ const SiteInformation = () => {
             </SettingForm>
           </SettingSectionContent>
         </SettingSection>
+        <SettingSection>
+          <Typography variant="h6" gutterBottom>
+            {t("vas.desktopApp")}
+          </Typography>
+          <SettingSectionContent>
+            <SettingForm lgWidth={5}>
+              <FormControl fullWidth>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isTrueVal(values.show_desktop_app_promotion)}
+                      onChange={(e) =>
+                        setSettings({
+                          show_desktop_app_promotion: e.target.checked ? "1" : "0",
+                        })
+                      }
+                    />
+                  }
+                  label={t("vas.showDesktopAppPromotion")}
+                />
+                <NoMarginHelperText>{t("vas.showDesktopAppPromotionDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+          </SettingSectionContent>
+        </SettingSection>
       </Stack>
     </Box>
   );

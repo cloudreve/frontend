@@ -173,6 +173,7 @@ const Settings = () => {
                     "tos_url",
                     "privacy_policy_url",
                     "show_app_promotion",
+                    "show_desktop_app_promotion",
                   ]}
                 >
                   <SiteInformation />
