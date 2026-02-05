@@ -1,26 +1,26 @@
 import React, { useCallback, useContext, useMemo, useState } from "react";
 
 import { Fade, IconButton, Skeleton, styled, Tooltip } from "@mui/material";
-import { SideNavItemBase } from "../../Frame/NavBar/SideNavItem.tsx";
-import clsx from "clsx";
-import FileIcon from "../Explorer/FileIcon.tsx";
-import { FileResponse } from "../../../api/explorer.ts";
 import { TreeItem, treeItemClasses, TreeItemContentProps, TreeItemProps, useTreeItem } from "@mui/x-tree-view";
-import NavIconTransition from "../../Frame/NavBar/NavIconTransition.tsx";
-import { mergeRefs } from "../../../util";
-import { useAppDispatch } from "../../../redux/hooks.ts";
-import { loadChild, navigateToPath } from "../../../redux/thunks/filemanager.ts";
-import FacebookCircularProgress from "../../Common/CircularProgress.tsx";
-import CaretDown from "../../Icons/CaretDown.tsx";
-import { StartIcon } from "../TopBar/BreadcrumbButton.tsx";
-import { openFileContextMenu } from "../../../redux/thunks/file.ts";
-import Dismiss from "../../Icons/Dismiss.tsx";
+import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import { FileResponse } from "../../../api/explorer.ts";
+import { useAppDispatch } from "../../../redux/hooks.ts";
+import { openFileContextMenu } from "../../../redux/thunks/file.ts";
+import { loadChild, navigateToPath } from "../../../redux/thunks/filemanager.ts";
 import { unPinFromSidebar } from "../../../redux/thunks/settings.ts";
-import { pinedPrefix } from "./TreeFiles.tsx";
-import { useFileDrag } from "../Dnd/DndWrappedFile.tsx";
-import { FmIndexContext } from "../FmIndexContext.tsx";
+import { mergeRefs } from "../../../util";
+import FacebookCircularProgress from "../../Common/CircularProgress.tsx";
 import { NoWrapTypography } from "../../Common/StyledComponents.tsx";
+import NavIconTransition from "../../Frame/NavBar/NavIconTransition.tsx";
+import { SideNavItemBase } from "../../Frame/NavBar/SideNavItem.tsx";
+import CaretDown from "../../Icons/CaretDown.tsx";
+import Dismiss from "../../Icons/Dismiss.tsx";
+import { useFileDrag } from "../Dnd/DndWrappedFile.tsx";
+import FileIcon from "../Explorer/FileIcon.tsx";
+import { FmIndexContext } from "../FmIndexContext.tsx";
+import { StartIcon } from "../TopBar/BreadcrumbButton.tsx";
+import { pinedPrefix } from "./TreeFiles.tsx";
 
 const CustomContentRoot = styled(SideNavItemBase)<{
   isDragging?: boolean;
@@ -207,7 +207,7 @@ const CustomContent = React.memo(
 
     const fileName = useMemo(
       () => (
-        <Tooltip title={label}>
+        <Tooltip title={label} disableInteractive>
           <NoWrapTypography
             onClick={handleSelectionClick}
             component="div"

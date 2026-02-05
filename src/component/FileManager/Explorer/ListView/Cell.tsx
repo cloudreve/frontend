@@ -185,7 +185,7 @@ const FileNameCell = memo((props: CellProps) => {
           <FileSmallIcon variant={"list"} selected={!!isSelected} file={file} />
         </Box>
 
-        <Tooltip title={file.name}>
+        <Tooltip title={file.name} disableInteractive>
           <NoWrapBox>
             {search?.name ? (
               <Highlighter
