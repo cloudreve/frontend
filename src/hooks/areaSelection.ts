@@ -19,14 +19,12 @@ interface Candidates extends Coordinates {
   bottom: number;
   right: number;
 }
-interface DrawnArea {
-  start: undefined | Coordinates;
-  end: undefined | Coordinates;
+
+interface DrawnAreaRef {
+  start: Coordinates | null;
+  end: Coordinates | null;
   ctrlKey: boolean;
   metaKey: boolean;
-}
-interface UseAreaSelectionProps {
-  container: React.RefObject<HTMLElement> | undefined;
 }
 
 // Smallest value >= target
@@ -34,7 +32,7 @@ function binarySearchTop(list: Candidates[][], target: number) {
   let start = 0;
   let end = list.length - 1;
   while (start <= end) {
-    let mid = Math.floor((start + end) / 2);
+    const mid = Math.floor((start + end) / 2);
     if (list[mid][0].y < target) start = mid + 1;
     else end = mid - 1;
   }
@@ -46,7 +44,7 @@ function binarySearchBottom(list: Candidates[][], target: number) {
   let start = 0;
   let end = list.length - 1;
   while (start <= end) {
-    let mid = Math.floor((start + end) / 2);
+    const mid = Math.floor((start + end) / 2);
     if (list[mid][0].y <= target) start = mid + 1;
     else end = mid - 1;
   }
@@ -62,53 +60,25 @@ export function useAreaSelection(container: React.RefObject<HTMLElement>, explor
   const theme = useTheme();
   const fmIndex = useContext(FmIndexContext);
   const dispatch = useAppDispatch();
-  const boxRef = React.useRef<HTMLDivElement>(boxNode);
+  const boxRef = useRef<HTMLDivElement>(boxNode);
   const fileList = useAppSelector((state) => state.fileManager[explorerIndex]?.list?.files);
-  const boxElement = boxRef;
+
   const [mouseDown, setMouseDown] = React.useState<boolean>(false);
   const mouseMoving = useRef(false);
   const selectCandidates = useRef<Candidates[][]>([]);
-  const elementsCache = useRef<string[] | null>(null);
-  const [drawArea, setDrawArea] = React.useState<DrawnArea>({
-    start: undefined,
-    end: undefined,
+  const elementsCacheRef = useRef<string | null>(null);
+  const rafIdRef = useRef<number | null>(null);
+  const drawAreaRef = useRef<DrawnAreaRef>({
+    start: null,
+    end: null,
     ctrlKey: false,
     metaKey: false,
   });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (!mouseMoving.current || fmIndex == FileManagerIndex.selector || !enabled) {
-      return;
-    }
-
-    document.body.style.userSelect = "none";
-    const containerElement = container.current;
-    if (containerElement) {
-      const pos = getPosition(containerElement, e);
-      setDrawArea((prev) => ({
-        ...prev,
-        end: {
-          ...pos,
-        },
-        ctrlKey: e.ctrlKey,
-        metaKey: e.metaKey,
-      }));
-
-      const containerBox = containerElement.getBoundingClientRect();
-      const containerHeight = containerBox.bottom - containerBox.top;
-      const scrollMargin = containerHeight * 0.1;
-      if (containerHeight - e.clientY + containerBox.top < scrollMargin) {
-        containerElement.scrollTop += 10;
-      } else if (e.clientY - containerBox.top < scrollMargin) {
-        containerElement.scrollTop -= 10;
-      }
-    }
-  };
-
-  const getPosition = useCallback((containerElement: HTMLElement, e: React.MouseEvent<HTMLElement>): Coordinates => {
+  const getPosition = useCallback((containerElement: HTMLElement, clientX: number, clientY: number): Coordinates => {
     const containerBox = containerElement.getBoundingClientRect();
-    const y = containerElement.scrollTop + e.clientY - containerBox.top;
-    const x = containerElement.scrollLeft + e.clientX - containerBox.left;
+    const y = containerElement.scrollTop + clientY - containerBox.top;
+    const x = containerElement.scrollLeft + clientX - containerBox.left;
     return { x, y };
   }, []);
 
@@ -128,154 +98,217 @@ export function useAreaSelection(container: React.RefObject<HTMLElement>, explor
   );
 
   const updateCandidate = useCallback((containerElement: HTMLElement) => {
-    // query all child with data-rect-id attr
-    selectCandidates.current = [];
+    const rows: Candidates[][] = [];
     const containerBox = containerElement.getBoundingClientRect();
-    let currentY = 0;
+    const scrollTop = containerElement.scrollTop;
+    let currentY = -Infinity;
     let currentRow: Candidates[] = [];
-    containerElement.querySelectorAll("[data-rect-id]").forEach((el) => {
+
+    const elements = containerElement.querySelectorAll("[data-rect-id]");
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i];
       if (el instanceof HTMLElement) {
         const rectId = el.getAttribute(dataRectId);
-        const rect = el.getBoundingClientRect();
         if (rectId) {
-          const candidate = {
-            index: rectId,
-            x: rect.x - containerBox.x,
-            y: containerElement.scrollTop + rect.y - containerBox.y,
-            bottom: containerElement.scrollTop + rect.bottom - containerBox.y,
-            right: rect.right - containerBox.x,
-          };
-          if (candidate.y > currentY) {
-            currentY = candidate.y;
+          const rect = el.getBoundingClientRect();
+          const y = scrollTop + rect.y - containerBox.y;
+          if (y > currentY) {
+            currentY = y;
             if (currentRow.length > 0) {
-              selectCandidates.current.push(currentRow);
+              rows.push(currentRow);
             }
             currentRow = [];
           }
-          currentRow.push(candidate);
+          currentRow.push({
+            index: rectId,
+            x: rect.x - containerBox.x,
+            y,
+            bottom: scrollTop + rect.bottom - containerBox.y,
+            right: rect.right - containerBox.x,
+          });
         }
       }
-    });
-    if (currentRow.length > 0) {
-      selectCandidates.current.push(currentRow);
     }
+    if (currentRow.length > 0) {
+      rows.push(currentRow);
+    }
+    selectCandidates.current = rows;
   }, []);
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    if (e.button != 0 || !enabled) {
+  const processSelection = useCallback(() => {
+    const { start, end, ctrlKey, metaKey } = drawAreaRef.current;
+    const containerElement = container.current;
+    const boxElement = boxRef.current;
+
+    if (!start || !end || !boxElement || !containerElement) {
       return;
     }
 
-    if (fmIndex == FileManagerIndex.selector) {
-      return dispatch(clearSelected({ index: fmIndex, value: undefined }));
+    const containerBox = containerElement.getBoundingClientRect();
+    drawSelectionBox(
+      boxElement,
+      getDrawPosition(containerElement, containerBox, start),
+      getDrawPosition(containerElement, containerBox, end),
+    );
+
+    const startX = Math.min(start.x, end.x);
+    const startY = Math.min(start.y, end.y);
+    const endX = Math.max(start.x, end.x);
+    const endY = Math.max(start.y, end.y);
+
+    const candidates = selectCandidates.current;
+    if (candidates.length === 0) {
+      return;
     }
 
-    const containerElement = container.current;
-    setMouseDown(true);
-    mouseMoving.current = true;
-    elementsCache.current = null;
+    // Use binary search to find interest area in candidates
+    const top = Math.max(0, binarySearchTop(candidates, startY));
+    const bottom = binarySearchBottom(candidates, endY);
 
-    if (containerElement && containerElement.contains(e.target as HTMLElement)) {
-      const pos = getPosition(containerElement, e);
-      updateCandidate(containerElement);
-      setDrawArea({
-        start: {
-          ...pos,
-        },
-        end: {
-          ...pos,
-        },
-        ctrlKey: e.ctrlKey,
-        metaKey: e.metaKey,
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    if (mouseMoving.current) {
-      const containerElement = container.current;
-      if (containerElement) {
-        updateCandidate(containerElement);
+    // Collect matching elements without creating intermediate arrays
+    const activeElements: string[] = [];
+    for (let i = top; i <= bottom; i++) {
+      const row = candidates[i];
+      for (let j = 0; j < row.length; j++) {
+        const el = row[j];
+        if (!(el.x > endX || el.right < startX || el.y > endY || el.bottom < startY)) {
+          activeElements.push(el.index);
+        }
       }
     }
-  }, [fileList]);
 
-  const handleMouseUp = (_e: React.MouseEvent<HTMLElement>) => {
+    // Use string key for fast comparison
+    const cacheKey = activeElements.join(",");
+    if (elementsCacheRef.current === cacheKey) {
+      return;
+    }
+    elementsCacheRef.current = cacheKey;
+
+    dispatch(selectionFromDragBox(0, activeElements, ctrlKey, metaKey));
+  }, [container, dispatch, getDrawPosition]);
+
+  const scheduleSelectionUpdate = useCallback(() => {
+    if (rafIdRef.current !== null) {
+      return;
+    }
+    rafIdRef.current = requestAnimationFrame(() => {
+      rafIdRef.current = null;
+      if (mouseMoving.current) {
+        processSelection();
+      }
+    });
+  }, [processSelection]);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      if (!mouseMoving.current || fmIndex === FileManagerIndex.selector || !enabled) {
+        return;
+      }
+
+      document.body.style.userSelect = "none";
+      const containerElement = container.current;
+      if (!containerElement) {
+        return;
+      }
+
+      const pos = getPosition(containerElement, e.clientX, e.clientY);
+      drawAreaRef.current.end = pos;
+      drawAreaRef.current.ctrlKey = e.ctrlKey;
+      drawAreaRef.current.metaKey = e.metaKey;
+
+      // Auto-scroll when near edges
+      const containerBox = containerElement.getBoundingClientRect();
+      const containerHeight = containerBox.height;
+      const scrollMargin = containerHeight * 0.1;
+      const distanceFromBottom = containerBox.bottom - e.clientY;
+      const distanceFromTop = e.clientY - containerBox.top;
+
+      if (distanceFromBottom < scrollMargin) {
+        containerElement.scrollTop += 10;
+      } else if (distanceFromTop < scrollMargin) {
+        containerElement.scrollTop -= 10;
+      }
+
+      scheduleSelectionUpdate();
+    },
+    [container, enabled, fmIndex, getPosition, scheduleSelectionUpdate],
+  );
+
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      if (e.button !== 0 || !enabled) {
+        return;
+      }
+
+      if (fmIndex === FileManagerIndex.selector) {
+        return dispatch(clearSelected({ index: fmIndex, value: undefined }));
+      }
+
+      const containerElement = container.current;
+      if (!containerElement || !containerElement.contains(e.target as HTMLElement)) {
+        return;
+      }
+
+      setMouseDown(true);
+      mouseMoving.current = true;
+      elementsCacheRef.current = null;
+
+      const pos = getPosition(containerElement, e.clientX, e.clientY);
+      updateCandidate(containerElement);
+      drawAreaRef.current = {
+        start: pos,
+        end: pos,
+        ctrlKey: e.ctrlKey,
+        metaKey: e.metaKey,
+      };
+
+      // Process selection immediately on mouse down to handle click-to-clear
+      processSelection();
+    },
+    [container, dispatch, enabled, fmIndex, getPosition, updateCandidate, processSelection],
+  );
+
+  const handleMouseUp = useCallback(() => {
     document.body.style.userSelect = "initial";
     setMouseDown(false);
     mouseMoving.current = false;
-  };
-
-  React.useEffect(() => {
-    const { start, end } = drawArea;
-    const containerElement = container.current;
-    if (start && end && boxElement.current && containerElement) {
-      const containerBox = containerElement.getBoundingClientRect();
-      drawSelectionBox(
-        boxElement.current,
-        getDrawPosition(containerElement, containerBox, start),
-        getDrawPosition(containerElement, containerBox, end),
-      );
-
-      const startX = Math.min(start.x, end.x);
-      const startY = Math.min(start.y, end.y);
-      const endX = Math.max(start.x, end.x);
-      const endY = Math.max(start.y, end.y);
-
-      // use binary search to find interest area in candidates
-      const top = Math.max(0, binarySearchTop(selectCandidates.current, startY));
-      const bottom = binarySearchBottom(selectCandidates.current, endY);
-
-      const interestCandidates = selectCandidates.current.slice(top, bottom + 1);
-      // find all candidates that are within the selection box
-      const elements = interestCandidates.flat().filter((el) => {
-        return !(el.x > endX || el.right < startX || el.y > endY || el.bottom < startY);
-      });
-
-      const activeElements = elements.map((el) => el.index);
-      if (elementsCache.current != null) {
-        // Compare if selection is changed
-        if (
-          elementsCache.current.length === activeElements.length &&
-          elementsCache.current.every((el, index) => (activeElements[index] = el))
-        ) {
-          // No change
-          return;
-        }
-      }
-
-      elementsCache.current = activeElements;
-
-      dispatch(
-        selectionFromDragBox(
-          0,
-          elements.map((el) => el.index),
-          drawArea.ctrlKey,
-          drawArea.metaKey,
-        ),
-      );
+    if (rafIdRef.current !== null) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
     }
-  }, [drawArea, boxElement, dispatch, container]);
+  }, []);
 
-  React.useEffect(() => {
-    const containerElement = container.current;
-    const selectionBoxElement = boxElement.current;
-    if (containerElement && selectionBoxElement) {
-      if (mouseDown) {
-        if (!document.body.contains(selectionBoxElement)) {
-          containerElement.appendChild(selectionBoxElement);
-        }
-      } else {
-        if (containerElement.contains(selectionBoxElement)) {
-          containerElement.removeChild(selectionBoxElement);
-        }
-      }
-    }
-  }, [mouseDown, container, boxElement]);
-
+  // Update candidates when file list changes during drag
   useEffect(() => {
-    const selectionBoxElement = boxElement.current;
+    if (mouseMoving.current && container.current) {
+      updateCandidate(container.current);
+      scheduleSelectionUpdate();
+    }
+  }, [fileList, container, updateCandidate, scheduleSelectionUpdate]);
+
+  // Handle box element attachment/detachment
+  useEffect(() => {
+    const containerElement = container.current;
+    const selectionBoxElement = boxRef.current;
+    if (!containerElement || !selectionBoxElement) {
+      return;
+    }
+
+    if (mouseDown) {
+      if (!document.body.contains(selectionBoxElement)) {
+        containerElement.appendChild(selectionBoxElement);
+      }
+    } else {
+      if (containerElement.contains(selectionBoxElement)) {
+        containerElement.removeChild(selectionBoxElement);
+      }
+    }
+  }, [mouseDown, container]);
+
+  // Update box styling when theme changes
+  useEffect(() => {
+    const selectionBoxElement = boxRef.current;
     if (selectionBoxElement) {
       if (theme.palette.mode === "dark") {
         selectionBoxElement.style.background = alpha(lighten(theme.palette.primary.main, 0.3), 0.2);
@@ -284,7 +317,16 @@ export function useAreaSelection(container: React.RefObject<HTMLElement>, explor
       }
       selectionBoxElement.style.boxShadow = `inset 0 0 0 2px ${theme.palette.primary.light}`;
     }
-  }, [theme, boxElement]);
+  }, [theme]);
+
+  // Cleanup RAF on unmount
+  useEffect(() => {
+    return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, []);
 
   return [handleMouseDown, handleMouseUp, handleMouseMove] as const;
 }
