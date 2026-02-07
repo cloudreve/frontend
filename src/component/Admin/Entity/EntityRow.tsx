@@ -141,7 +141,7 @@ const EntityRow = ({
       </NoWrapTableCell>
       <NoWrapTableCell>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Tooltip title={entity?.source || ""}>
+          <Tooltip title={entity?.source || ""} disableInteractive>
             <NoWrapTypography variant="inherit">{entity?.source || "-"}</NoWrapTypography>
           </Tooltip>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
