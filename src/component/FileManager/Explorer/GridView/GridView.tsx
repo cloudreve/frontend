@@ -96,7 +96,7 @@ const GridView = React.forwardRef(({ ...rest }: GridViewProps, ref) => {
                 showThumb={list.Files.length > 0 ? showThumb : mixedType}
                 file={{
                   ...files[0],
-                  path: files[0].path + "/" + id,
+                  path: "/" + id,
                   id: `loadingPlaceholder-${pagination.next_token}-${i}`,
                   first: i == 0,
                   placeholder: true,

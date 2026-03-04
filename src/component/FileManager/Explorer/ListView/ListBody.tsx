@@ -1,11 +1,11 @@
-import { ListViewColumn } from "./Column.tsx";
-import React, { useContext, useMemo } from "react";
-import { FmIndexContext } from "../../FmIndexContext.tsx";
-import { useAppSelector } from "../../../../redux/hooks.ts";
+import { useContext, useMemo } from "react";
 import { Virtuoso } from "react-virtuoso";
+import { useAppSelector } from "../../../../redux/hooks.ts";
 import DndWrappedFile from "../../Dnd/DndWrappedFile.tsx";
-import Row from "./Row.tsx";
+import { FmIndexContext } from "../../FmIndexContext.tsx";
 import { FmFile, loadingPlaceHolderNumb } from "../GridView/GridView.tsx";
+import { ListViewColumn } from "./Column.tsx";
+import Row from "./Row.tsx";
 
 export interface ListBodyProps {
   columns: ListViewColumn[];
@@ -34,7 +34,7 @@ const ListBody = ({ columns }: ListBodyProps) => {
         const id = `loadingPlaceholder-${pagination.next_token}-${i}`;
         list.push({
           ...files[0],
-          path: files[0].path + "/" + id,
+          path: "/" + id,
           id: `loadingPlaceholder-${pagination.next_token}-${i}`,
           first: i == 0,
           placeholder: true,

@@ -52,7 +52,7 @@ const GalleryView = React.forwardRef(
           const id = `loadingPlaceholder-${pagination.next_token}-${i}`;
           list.push({
             ...files[0],
-            path: files[0].path + "/" + id,
+            path: "/" + id,
             id: `loadingPlaceholder-${pagination.next_token}-${i}`,
             first: i == 0,
             placeholder: true,
