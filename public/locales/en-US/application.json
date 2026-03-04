@@ -777,7 +777,7 @@
     "syncViewOff": "Do not sync",
     "folderClickAction": "Folder click action",
     "folderClickActionDes": "Choose what happens when you click a folder. \"Open\" navigates into the folder, \"Select\" selects it (double-click to open).",
-    "folderClickOpen": "Enter",
+    "folderClickOpen": "Open",
     "folderClickSelect": "Select",
     "noAuthenticator": "Add a passkey to sign in using fingerprint, face or USB key.",
     "neverUsed": "Never used",

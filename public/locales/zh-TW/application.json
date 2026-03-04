@@ -776,7 +776,7 @@
     "syncViewOn": "同步到服務器",
     "syncViewOff": "不同步",
     "folderClickAction": "資料夾點擊操作",
-    "folderClickActionDes": "選擇點擊資料夾時的行為。「開啟」將進入資料夾，「選取」將選中資料夾（雙擊開啟）。",
+    "folderClickActionDes": "選擇點擊資料夾時的行為。「進入」將進入資料夾，「選取」將選中資料夾（雙擊開啟）。",
     "folderClickOpen": "進入",
     "folderClickSelect": "選取",
     "noAuthenticator": "新增通行金鑰以使用人臉、指紋或 USB 金鑰登入賬號",
