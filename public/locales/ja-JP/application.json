@@ -512,6 +512,8 @@
     "linkCopied": "リンクをコピーしました",
     "getSourceLinkTitle": "ファイルのダイレクトリンクを取得",
     "sourceLink": "ファイルダイレクトリンク",
+    "relativePathPlaceholder": "相対パス",
+    "textView": "テキスト",
     "folderName": "フォルダ名",
     "create": "作成",
     "fileName": "ファイル名",

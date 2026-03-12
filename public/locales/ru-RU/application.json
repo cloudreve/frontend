@@ -565,6 +565,8 @@
     "linkCopied": "Ссылка скопирована",
     "getSourceLinkTitle": "Получить прямую ссылку на файл",
     "sourceLink": "Прямая ссылка на файл",
+    "relativePathPlaceholder": "относительный_путь",
+    "textView": "Текст",
     "folderName": "Имя папки",
     "create": "Создать",
     "fileName": "Имя файла",

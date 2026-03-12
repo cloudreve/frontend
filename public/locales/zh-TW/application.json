@@ -512,6 +512,8 @@
     "linkCopied": "連結已復制",
     "getSourceLinkTitle": "獲取檔案直鏈",
     "sourceLink": "檔案直鏈",
+    "relativePathPlaceholder": "子檔案的相對路徑",
+    "textView": "文字",
     "folderName": "資料夾名稱",
     "create": "建立",
     "fileName": "檔名",

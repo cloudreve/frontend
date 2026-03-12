@@ -512,6 +512,8 @@
     "linkCopied": "Link copied.",
     "getSourceLinkTitle": "Get direct link",
     "sourceLink": "Direct link",
+    "relativePathPlaceholder": "relative_path",
+    "textView": "Text",
     "folderName": "Folder name",
     "create": "Create",
     "fileName": "File name",

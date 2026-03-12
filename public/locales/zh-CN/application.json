@@ -512,6 +512,8 @@
     "linkCopied": "链接已复制",
     "getSourceLinkTitle": "获取文件直链",
     "sourceLink": "文件直链",
+    "relativePathPlaceholder": "子文件的相对路径",
+    "textView": "文本",
     "folderName": "文件夹名称",
     "create": "创建",
     "fileName": "文件名",

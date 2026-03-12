@@ -512,6 +512,8 @@
     "linkCopied": "Link skopiowany.",
     "getSourceLinkTitle": "Pobierz link bezpośredni",
     "sourceLink": "Link bezpośredni",
+    "relativePathPlaceholder": "ścieżka_względna",
+    "textView": "Tekst",
     "folderName": "Nazwa folderu",
     "create": "Utwórz",
     "fileName": "Nazwa pliku",

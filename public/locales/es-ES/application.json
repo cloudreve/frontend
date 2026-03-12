@@ -565,6 +565,8 @@
     "linkCopied": "Enlace copiado.",
     "getSourceLinkTitle": "Obtener enlace directo",
     "sourceLink": "Enlace directo",
+    "relativePathPlaceholder": "ruta_relativa",
+    "textView": "Texto",
     "folderName": "Nombre de carpeta",
     "create": "Crear",
     "fileName": "Nombre de archivo",

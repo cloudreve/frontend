@@ -565,6 +565,8 @@
     "linkCopied": "링크가 복사되었습니다",
     "getSourceLinkTitle": "파일 직접 링크 가져오기",
     "sourceLink": "파일 직접 링크",
+    "relativePathPlaceholder": "상대_경로",
+    "textView": "텍스트",
     "folderName": "폴더 이름",
     "create": "생성",
     "fileName": "파일명",
