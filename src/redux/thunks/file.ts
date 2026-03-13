@@ -788,7 +788,7 @@ export function patchCustomProp(
   value: string,
   remove?: boolean,
 ): AppThunk<Promise<void>> {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     const patches: MetadataPatch[] = [
       {
         key: `props:${propId}`,
@@ -796,7 +796,12 @@ export function patchCustomProp(
         remove,
       },
     ];
-    await dispatch(patchFileMetadata(index, [file], patches));
+    const selected = getState().fileManager[index]?.selected ?? {};
+    const targets: { [path: string]: FileResponse } = { [file.path]: file };
+    for (const path in selected) {
+      targets[path] = selected[path];
+    }
+    await dispatch(patchFileMetadata(index, Object.values(targets), patches));
   };
 }
 

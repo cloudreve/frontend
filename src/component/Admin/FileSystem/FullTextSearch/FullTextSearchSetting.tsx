@@ -1,7 +1,6 @@
 import { BuildOutlined } from "@mui/icons-material";
 import {
   Box,
-  Chip,
   CircularProgress,
   Collapse,
   FormControl,
@@ -19,9 +18,9 @@ import { useTranslation } from "react-i18next";
 import { sendRebuildFTSIndex } from "../../../../api/api.ts";
 import { useAppDispatch } from "../../../../redux/hooks.ts";
 import { confirmOperation } from "../../../../redux/thunks/dialog.ts";
-import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
 import { isTrueVal } from "../../../../session/utils.ts";
 import SizeInput from "../../../Common/SizeInput.tsx";
+import { DefaultCloseAction } from "../../../Common/Snackbar/snackbar.tsx";
 import { DenseFilledTextField, SecondaryButton } from "../../../Common/StyledComponents.tsx";
 import QuestionCircle from "../../../Icons/QuestionCircle.tsx";
 import SettingForm from "../../../Pages/Setting/SettingForm.tsx";
@@ -68,12 +67,7 @@ const FullTextSearchSetting = () => {
                       }
                     />
                   }
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {t("settings.ftsEnable")}
-                      <Chip label="Preview" size="small" color="primary" variant="outlined" />
-                    </Box>
-                  }
+                  label={t("settings.ftsEnable")}
                 />
                 <NoMarginHelperText>{t("settings.ftsEnableDes")}</NoMarginHelperText>
               </FormControl>
