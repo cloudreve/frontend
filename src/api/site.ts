@@ -38,6 +38,9 @@ export interface SiteConfig {
   mapbox_ak?: string;
   google_map_tile_type?: string;
   file_viewers?: ViewerGroup[];
+  default_viewer_mapping?: {
+    [ext: string]: string;
+  };
   max_batch_size?: number;
   app_promotion?: boolean;
   desktop_app_promotion?: boolean;

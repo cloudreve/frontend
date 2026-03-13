@@ -145,7 +145,7 @@ const FileSystem = () => {
                 </SettingsWrapper>
               )}
               {tab === SettingsPageTab.FileApp && (
-                <SettingsWrapper settings={["file_viewers"]}>
+                <SettingsWrapper settings={["file_viewers", "viewer_default_apps"]}>
                   <ViewerSetting />
                 </SettingsWrapper>
               )}

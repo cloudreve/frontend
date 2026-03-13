@@ -66,9 +66,7 @@ export function openViewers(
   return async (dispatch, getState) => {
     dispatch(closeContextMenu({ index, value: undefined }));
     const {
-      siteConfig: {
-        explorer: { typed },
-      },
+      siteConfig: { explorer },
     } = getState();
 
     const ext = fileExtension(file.name) ?? "";
@@ -85,6 +83,12 @@ export function openViewers(
 
     if (!ignorePreference && viewerOptions.length == 1) {
       dispatch(openViewer(file, viewerOptions[0], entitySize, preferredVersion));
+      return;
+    }
+
+    const globalDefaultViewer = explorer?.config?.default_viewer_mapping?.[ext];
+    if (!ignorePreference && globalDefaultViewer && ViewersByID[globalDefaultViewer]) {
+      dispatch(openViewer(file, ViewersByID[globalDefaultViewer], entitySize, preferredVersion));
       return;
     }
 
