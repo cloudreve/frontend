@@ -1275,6 +1275,8 @@
     "redirectedSourceDes": "Zalecane włączenie. Gdy włączone, bezpośredni link do pliku uzyskany przez użytkownika będzie przekierowany przez Cloudreve krótszym linkiem. Gdy wyłączone, bezpośredni link do pliku uzyskany przez użytkownika staje się oryginalnym adresem URL do pliku i jest powiązany z wersją pliku. Niektóre polityki generują nieprzekierowane linki bezpośrednie, które nie są trwałe; zobacz dokumenty Cloudreve po szczegóły.",
     "reuseDirectLink": "Użyj ponownie istniejącego linku bezpośredniego",
     "reuseDirectLinkDes": "Gdy włączone, wiele żądań o bezpośredni link do tego samego pliku użyje ponownie istniejącego linku przekierowania.",
+    "folderDirectLink": "Zezwalaj na bezpośrednie linki folderów",
+    "folderDirectLinkDes": "Gdy włączone, użytkownicy mogą generować bezpośrednie linki do folderów. Te linki zapewniają bezpośredni dostęp do całej zawartości folderu, pomijając ustawienia uprawnień plików.",
     "downloadSpeedLimit": "Maks. prędkość pobierania",
     "downloadSpeedLimitDes": "Wpisz 0, aby wskazać brak limitu. Gdy ograniczenie jest włączone, maksymalna prędkość pobierania będzie ograniczona, gdy użytkownicy pobierają wszystkie pliki w ramach polityki przechowywania obsługującej limit prędkości.",
     "anonymousHint": "Ta grupa użytkowników odpowiada anonimowemu odwiedzającemu, który nie jest zalogowany.",

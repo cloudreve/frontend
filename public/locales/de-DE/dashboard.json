@@ -1280,6 +1280,8 @@
     "redirectedSourceDes": "Empfohlen zu aktivieren. Wenn aktiviert, wird der direkte Link zur Datei, den der Benutzer erhält, von Cloudreve mit einem kürzeren Link umgeleitet. Wenn deaktiviert, wird der direkte Link zur Datei, den der Benutzer erhält, zur ursprünglichen URL zur Datei und ist an die Dateiversion gebunden. Einige Richtlinien erzeugen nicht-umgeleitete direkte Links, die nicht persistent bleiben; siehe Cloudreve-Dokumente für Details.",
     "reuseDirectLink": "Vorhandenen direkten Link wiederverwenden",
     "reuseDirectLinkDes": "Wenn aktiviert, verwenden mehrere Anfragen für den direkten Link derselben Datei den vorhandenen Umleitungslink wieder.",
+    "folderDirectLink": "Ordner-Direktlinks erlauben",
+    "folderDirectLinkDes": "Wenn aktiviert, können Benutzer Direktlinks für Ordner generieren. Diese Links ermöglichen den direkten Zugriff auf alle Inhalte im Ordner und ignorieren die Dateiberechtigungseinstellungen.",
     "downloadSpeedLimit": "Max. Download-Geschwindigkeit",
     "downloadSpeedLimitDes": "Geben Sie 0 ein, um kein Limit anzugeben. Wenn die Beschränkung aktiviert ist, wird die maximale Download-Geschwindigkeit pro Thread begrenzt, wenn Benutzer Dateien unter Speicherrichtlinien herunterladen, die eine Geschwindigkeitsbegrenzung unterstützen.",
     "anonymousHint": "Diese Benutzergruppe entspricht dem anonymen Besucher, der nicht angemeldet ist.",

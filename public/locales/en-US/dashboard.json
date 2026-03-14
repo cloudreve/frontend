@@ -1275,6 +1275,8 @@
     "redirectedSourceDes": "Recommended to enable. When enabled, the direct link to the file obtained by the user will be redirected by Cloudreve with a shorter link. When disabled, the direct link to the file obtained by the user becomes the original URL to the file, and is bound to the file version. Some policies produce non-redirected direct links that do not remain persistent; see Cloudreve documents for details.",
     "reuseDirectLink": "Reuse existing direct link",
     "reuseDirectLinkDes": "When enabled, multiple requests for the same file's direct link will reuse the existing redirect link.",
+    "folderDirectLink": "Allow folder direct links",
+    "folderDirectLinkDes": "When enabled, users can generate direct links for folders. These links provide direct access to all contents within the folder, bypassing file permission settings.",
     "downloadSpeedLimit": "Max download speed",
     "downloadSpeedLimitDes": "Fill in 0 to indicate no limit. When the restriction is turned on, the maximum per-thread download speed will be limited when users download files under storage policies that support throttling.",
     "anonymousHint": "This user group corresponds to the anonymous visitor who is not signed in.",

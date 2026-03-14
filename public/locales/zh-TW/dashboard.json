@@ -1275,6 +1275,8 @@
     "redirectedSourceDes": "推薦開啟。開啟後，使用者獲取的檔案直鏈將由 Cloudreve 中轉，連結較短。關閉後，使用者獲取的檔案直鏈會變成檔案的原始連結，且與檔案版本綁定。部分儲存策略在某些設定下獲取的非中轉直鏈無法保持永久有效，請參閱 Cloudreve 檔案。",
     "reuseDirectLink": "重用已有直鏈",
     "reuseDirectLinkDes": "開啟後，多次請求同一個檔案的直鏈時，會重用已創建的中轉直鏈。",
+    "folderDirectLink": "允許目錄直鏈",
+    "folderDirectLinkDes": "開啟後，使用者可針對目錄生成直鏈，透過此直鏈可以直接存取目錄下的所有內容，且忽略檔案權限設定。",
     "downloadSpeedLimit": "下載限速",
     "downloadSpeedLimitDes": "填寫為 0 表示不限制。開啟限制後，使用者下載所有支援限速的儲存策略下的檔案時，每個執行緒的下載最大速度會被限制。",
     "anonymousHint": "此使用者組對應著未登入的匿名訪客。",

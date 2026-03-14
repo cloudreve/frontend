@@ -1273,6 +1273,8 @@
     "redirectedSourceDes": "Recomendado habilitar. Quando habilitado, o link direto para o arquivo obtido pelo usuário será redirecionado pelo Cloudreve com um link mais curto. Quando desabilitado, o link direto para o arquivo obtido pelo usuário torna-se a URL original para o arquivo, e é vinculado à versão do arquivo. Algumas políticas produzem links diretos não redirecionados que não permanecem persistentes; veja documentos do Cloudreve para detalhes.",
     "reuseDirectLink": "Reutilizar link direto existente",
     "reuseDirectLinkDes": "Quando habilitado, múltiplas solicitações para o link direto do mesmo arquivo reutilizarão o link de redirecionamento existente.",
+    "folderDirectLink": "Permitir links diretos de pastas",
+    "folderDirectLinkDes": "Quando habilitado, os usuários podem gerar links diretos para pastas. Esses links fornecem acesso direto a todo o conteúdo dentro da pasta, ignorando as configurações de permissão de arquivos.",
     "downloadSpeedLimit": "Velocidade máxima de download",
     "downloadSpeedLimitDes": "Preencha 0 para indicar sem limite. Quando a restrição estiver ativada, a velocidade máxima de download por thread será limitada quando os usuários baixarem arquivos em políticas de armazenamento que suportam limitação de velocidade.",
     "anonymousHint": "Este grupo de usuários corresponde ao visitante anônimo que não está logado.",

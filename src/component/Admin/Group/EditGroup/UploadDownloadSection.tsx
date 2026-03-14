@@ -1,4 +1,4 @@
-import { Collapse, FormControl, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
+import { Box, Collapse, FormControl, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
 import { useCallback, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { GroupEnt } from "../../../../api/dashboard";
@@ -6,7 +6,7 @@ import { GroupPermission } from "../../../../api/user";
 import Boolset from "../../../../util/boolset";
 import SizeInput from "../../../Common/SizeInput";
 import { DenseFilledTextField } from "../../../Common/StyledComponents";
-import SettingForm from "../../../Pages/Setting/SettingForm";
+import SettingForm, { ProChip } from "../../../Pages/Setting/SettingForm";
 import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../../Settings/Settings";
 import { AnonymousGroupID } from "../GroupRow";
 import { GroupSettingContext } from "./GroupSettingWrapper";
@@ -145,20 +145,36 @@ const UploadDownloadSection = () => {
                 </SettingForm>
               </Stack>
               <Collapse in={values?.settings?.redirected_source} unmountOnExit>
-                <SettingForm lgWidth={5}>
-                  <FormControl fullWidth sx={{ mt: 3 }}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={!permission.enabled(GroupPermission.unique_direct_link)}
-                          onChange={onReuseDirectLinkChange}
-                        />
-                      }
-                      label={t("group.reuseDirectLink")}
-                    />
-                    <NoMarginHelperText>{t("group.reuseDirectLinkDes")}</NoMarginHelperText>
-                  </FormControl>
-                </SettingForm>
+                <Stack spacing={3}>
+                  <SettingForm lgWidth={5}>
+                    <FormControl fullWidth sx={{ mt: 3 }}>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={!permission.enabled(GroupPermission.unique_direct_link)}
+                            onChange={onReuseDirectLinkChange}
+                          />
+                        }
+                        label={t("group.reuseDirectLink")}
+                      />
+                      <NoMarginHelperText>{t("group.reuseDirectLinkDes")}</NoMarginHelperText>
+                    </FormControl>
+                  </SettingForm>
+                  <SettingForm lgWidth={5} pro>
+                    <FormControl fullWidth>
+                      <FormControlLabel
+                        control={<Switch checked={false} />}
+                        label={
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            {t("group.folderDirectLink")}
+                            <ProChip size="small" label="Pro" />
+                          </Box>
+                        }
+                      />
+                      <NoMarginHelperText>{t("group.folderDirectLinkDes")}</NoMarginHelperText>
+                    </FormControl>
+                  </SettingForm>
+                </Stack>
               </Collapse>
             </Collapse>
           </>
