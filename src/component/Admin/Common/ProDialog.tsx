@@ -44,10 +44,10 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 // TODO: fetch from cloudreve.org
 const currentPromotion = {
-  code: "FI5Q9668YV",
+  code: "LX8YL9QP0",
   discount: 15,
-  start: "2025-08-12T00:00:00Z",
-  end: "2025-10-12T23:59:59Z",
+  start: "2026-03-14T02:00:00Z",
+  end: "2026-06-14T02:00:00Z",
 };
 
 const ProDialog = ({ open, onClose }: ProDialogProps) => {
