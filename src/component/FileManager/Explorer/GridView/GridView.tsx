@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { FileResponse, FileType } from "../../../../api/explorer.ts";
 import { useAppSelector } from "../../../../redux/hooks.ts";
 import DndWrappedFile from "../../Dnd/DndWrappedFile.tsx";
-
 import { FmIndexContext } from "../../FmIndexContext.tsx";
 import GridFile from "./GridFile.tsx";
+import { CrUriPrefix } from "../../../../util/uri.ts";
 
 export interface GridViewProps {
   [key: string]: any;
@@ -96,8 +96,8 @@ const GridView = React.forwardRef(({ ...rest }: GridViewProps, ref) => {
                 showThumb={list.Files.length > 0 ? showThumb : mixedType}
                 file={{
                   ...files[0],
-                  path: "/" + id,
-                  id: `loadingPlaceholder-${pagination.next_token}-${i}`,
+                  path: `${CrUriPrefix}${id}`,
+                  id: id,
                   first: i == 0,
                   placeholder: true,
                 }}
