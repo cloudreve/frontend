@@ -7,6 +7,7 @@ import DndWrappedFile from "../../Dnd/DndWrappedFile.tsx";
 import { FmIndexContext } from "../../FmIndexContext.tsx";
 import { FmFile, loadingPlaceHolderNumb } from "../GridView/GridView.tsx";
 import GalleryImage from "./GalleryImage.tsx";
+import { CrUriPrefix } from "../../../../util/uri.ts";
 
 const GalleryView = React.forwardRef(
   (
@@ -52,8 +53,8 @@ const GalleryView = React.forwardRef(
           const id = `loadingPlaceholder-${pagination.next_token}-${i}`;
           list.push({
             ...files[0],
-            path: "/" + id,
-            id: `loadingPlaceholder-${pagination.next_token}-${i}`,
+            path: `${CrUriPrefix}${id}`,
+            id: id,
             first: i == 0,
             placeholder: true,
           });
