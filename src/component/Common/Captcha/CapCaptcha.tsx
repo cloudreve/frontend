@@ -5,8 +5,8 @@ import { CaptchaParams } from "./Captcha.tsx";
 import { Box, useTheme } from "@mui/material";
 
 // Cap Widget URLs
-const CAP_WASM_UNPKG_URL = "https://unpkg.com/@cap.js/wasm@0.0.4/browser/cap_wasm.js";
-const CAP_WASM_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/wasm@0.0.4/browser/cap_wasm.min.js";
+const CAP_WASM_UNPKG_URL = "https://unpkg.com/@cap.js/wasm/browser/cap_wasm_bg.wasm";
+const CAP_WASM_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/wasm/browser/cap_wasm_bg.wasm";
 const CAP_WIDGET_UNPKG_URL = "https://unpkg.com/@cap.js/widget";
 const CAP_WIDGET_JSDELIVR_URL = "https://cdn.jsdelivr.net/npm/@cap.js/widget";
 
@@ -136,7 +136,7 @@ const CapCaptcha = ({ onStateChange, generation, fullWidth, ...rest }: CapProps 
 
     // 在加载 widget 脚本之前设置 WASM URL
     if (capAssetServer === "instance") {
-      (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm.js`;
+      (window as any).CAP_CUSTOM_WASM_URL = `${capInstanceURL.replace(/\/$/, "")}/assets/cap_wasm_bg.wasm`;
     } else if (capAssetServer === "unpkg") {
       (window as any).CAP_CUSTOM_WASM_URL = CAP_WASM_UNPKG_URL;
     } else {
