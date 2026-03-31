@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import MuiSnackbarContent from "@mui/material/SnackbarContent";
-import { CustomContentProps } from "notistack";
+import { CustomContentProps, SnackbarAction } from "notistack";
 import * as React from "react";
 import { forwardRef, useEffect, useState } from "react";
 import CircularProgress from "../CircularProgress.tsx";
@@ -9,25 +9,19 @@ declare module "notistack" {
   interface VariantOverrides {
     loading: {
       getProgress?: () => number;
+      secondaryAction?: SnackbarAction;
     };
   }
 }
 
 interface LoadingSnackbarProps extends CustomContentProps {
   getProgress?: () => number;
+  secondaryAction?: SnackbarAction;
 }
 
 const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props, ref) => {
   const [progress, setProgress] = useState(0);
-  const {
-    // You have access to notistack props and options 👇🏼
-    message,
-    action,
-    id,
-    getProgress,
-    // as well as your own custom props 👇🏼
-    ...other
-  } = props;
+  const { message, action, id, getProgress, secondaryAction, ...other } = props;
 
   useEffect(() => {
     var intervalId: NodeJS.Timeout;
@@ -42,22 +36,25 @@ const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props,
     };
   }, [getProgress]);
 
-  let componentOrFunctionAction: React.ReactNode = undefined;
-  if (typeof action === "function") {
-    componentOrFunctionAction = action(id);
-  } else {
-    componentOrFunctionAction = action;
-  }
+  const resolveAction = (a: SnackbarAction): React.ReactNode => {
+    if (typeof a === "function") return a(id);
+    return a;
+  };
+
+  const primaryNode = resolveAction(action);
+  const secondaryNode = resolveAction(secondaryAction);
 
   return (
     <MuiSnackbarContent
       ref={ref}
-      sx={{ borderRadius: "12px" }}
+      sx={{ borderRadius: "12px", maxWidth: 600 }}
       message={
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
+            flexWrap: "wrap",
+            width: "100%",
           }}
         >
           <Box>
@@ -68,8 +65,8 @@ const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props,
               value={progress}
             />
           </Box>
-          <Box>{message}</Box>
-          {componentOrFunctionAction && (
+          <Box sx={{ flex: 1 }}>{message}</Box>
+          {primaryNode && (
             <Box
               sx={{
                 display: "flex",
@@ -79,9 +76,10 @@ const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props,
                 marginRight: "-8px",
               }}
             >
-              {componentOrFunctionAction}
+              {primaryNode}
             </Box>
           )}
+          {secondaryNode && <Box sx={{ width: "100%" }}>{secondaryNode}</Box>}
         </Box>
       }
     />
