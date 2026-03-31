@@ -44,7 +44,7 @@ const SelectOption = () => {
       <DialogContent>
         <List component="nav">
           {options?.map((o) => (
-            <ListItemButton key={o.value} onClick={() => onAccept(o.value)}>
+            <ListItemButton key={o.value} disabled={o.disabled} onClick={() => onAccept(o.value)}>
               <ListItemText
                 primary={o.name}
                 secondary={o.description}

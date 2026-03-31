@@ -79,6 +79,7 @@ export interface DialogSelectOption {
   name: string;
   description: string;
   value: any;
+  disabled?: boolean;
 }
 
 export interface DesktopCallbackState {
