@@ -5,7 +5,12 @@ import streamSaver from "streamsaver";
 import { getFileEntityUrl } from "../../api/api.ts";
 import { FileResponse, FileType, Metadata } from "../../api/explorer.ts";
 import { GroupPermission } from "../../api/user.ts";
-import { ViewDownloadLogAction } from "../../component/Common/Snackbar/snackbar.tsx";
+import {
+  DefaultCloseAction,
+  ViewDownloadLogAction,
+  BatchDownloadProgressAction,
+  BatchDownloadCompleteAction,
+} from "../../component/Common/Snackbar/snackbar.tsx";
 import SessionManager from "../../session";
 import { getFileLinkedUri } from "../../util";
 import Boolset from "../../util/boolset.ts";
@@ -17,7 +22,7 @@ import {
 } from "../../util/filesystem.ts";
 import "../../util/zip.js";
 import { closeContextMenu } from "../fileManagerSlice.ts";
-import { DialogSelectOption, setBatchDownloadLog } from "../globalStateSlice.ts";
+import { DialogSelectOption, setBatchDownloadLog, setBatchDownloadProgress } from "../globalStateSlice.ts";
 import { AppThunk } from "../store.ts";
 import { promiseId, selectOption } from "./dialog.ts";
 import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks, walk, walkAll } from "./file.ts";
@@ -106,7 +111,7 @@ export const cancelSignals: {
 } = {};
 
 export function browserBatchDownload(files: FileResponse[]): AppThunk {
-  return async (dispatch, _getState) => {
+  return async (dispatch, getState) => {
     const downloadId = promiseId();
     cancelSignals[downloadId] = new AbortController();
 
@@ -133,11 +138,73 @@ export function browserBatchDownload(files: FileResponse[]): AppThunk {
       return;
     }
 
-    await longRunningTaskWithSnackbar(
-      dispatch(startBrowserBatchDownloadTo(handle, downloadId, files)),
-      "fileManager.batchDownloadStarted",
-      ViewDownloadLogAction(downloadId),
+    dispatch(
+      setBatchDownloadProgress({
+        id: downloadId,
+        progress: {
+          isDownloading: true,
+          filesCompleted: 0,
+          totalFiles: 0,
+          totalBytes: 0,
+          totalExpectedBytes: 0,
+          currentFile: "",
+          speed: 0,
+        },
+      }),
     );
+
+    const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", beforeUnloadHandler);
+
+    const snackbarId = enqueueSnackbar({
+      message: i18next.t("fileManager.batchDownloadStarted"),
+      variant: "loading",
+      persist: true,
+      action: BatchDownloadProgressAction(downloadId),
+      getProgress: () => {
+        const progress = getState().globalState.batchDownloadProgress?.[downloadId];
+        if (!progress || progress.totalExpectedBytes === 0) return 0;
+        return Math.min(100, Math.round((progress.totalBytes / progress.totalExpectedBytes) * 100));
+      },
+    });
+
+    // Track cancellation locally because walk() catches and swallows AbortError
+    // rather than re-throwing it, so the download resolves normally after cancel.
+    let cancelled = false;
+    const origAbort = cancelSignals[downloadId].abort.bind(cancelSignals[downloadId]);
+    cancelSignals[downloadId].abort = () => {
+      cancelled = true;
+      origAbort();
+    };
+
+    try {
+      await dispatch(startBrowserBatchDownloadTo(handle, downloadId, files));
+      dispatch(setBatchDownloadProgress({ id: downloadId, progress: { isDownloading: false } }));
+      closeSnackbar(snackbarId);
+      if (!cancelled) {
+        enqueueSnackbar({
+          message: i18next.t("fileManager.downloadComplete", { defaultValue: "Download complete!" }),
+          variant: "success",
+          autoHideDuration: 5000,
+          action: BatchDownloadCompleteAction(downloadId),
+        });
+      } else {
+        enqueueSnackbar({
+          message: i18next.t("fileManager.downloadCancelled", { defaultValue: "Download cancelled" }),
+          variant: "warning",
+          autoHideDuration: 3000,
+          action: DefaultCloseAction,
+        });
+      }
+    } catch (e) {
+      closeSnackbar(snackbarId);
+      dispatch(setBatchDownloadProgress({ id: downloadId, progress: { isDownloading: false } }));
+    } finally {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+    }
   };
 }
 
@@ -151,13 +218,75 @@ function startBrowserBatchDownloadTo(
     let failed = 0;
     let skipAll = false;
     let overwriteAll = false;
+    let filesCompleted = 0;
+    let totalBytes = 0;
+    let totalFiles = 0;
+    let totalExpectedBytes = 0;
+
+    // Speed tracking
+    let lastBytes = 0;
+    let lastTime = Date.now();
+    const speedSamples: number[] = [];
+
+    let lastDispatchTime = 0;
+    let currentFile = "";
 
     const appendLog = (msg: string) => {
       log = log + msg + "\n";
       dispatch(setBatchDownloadLog({ id: downloadId, logs: log }));
     };
+
+    const dispatchProgress = () => {
+      const speed = speedSamples.length > 0 ? speedSamples.reduce((a, b) => a + b, 0) / speedSamples.length : 0;
+
+      dispatch(
+        setBatchDownloadProgress({
+          id: downloadId,
+          progress: {
+            filesCompleted,
+            totalFiles,
+            totalBytes,
+            totalExpectedBytes,
+            currentFile,
+            speed,
+            isDownloading: true,
+          },
+        }),
+      );
+      lastDispatchTime = Date.now();
+    };
+
+    const updateProgress = (force?: boolean) => {
+      // Calculate speed (rolling 5-sample average, sampled every 500ms)
+      const now = Date.now();
+      const elapsed = (now - lastTime) / 1000;
+      if (elapsed >= 0.5) {
+        const recentBytes = totalBytes - lastBytes;
+        const instantSpeed = recentBytes / elapsed;
+        speedSamples.push(instantSpeed);
+        if (speedSamples.length > 5) speedSamples.shift();
+        lastBytes = totalBytes;
+        lastTime = now;
+      }
+
+      // Throttle dispatches to at most every 500ms unless forced (file complete, etc.)
+      if (force || now - lastDispatchTime >= 500) {
+        dispatchProgress();
+      }
+    };
+
+    // Count total files and total expected bytes by walking the tree
+    await dispatch(
+      walk(files, async (children) => {
+        const childFiles = children.filter((f) => f.type == FileType.file);
+        totalFiles += childFiles.length;
+        totalExpectedBytes += childFiles.reduce((sum, f) => sum + (f.size || 0), 0);
+      }),
+    );
+
+    updateProgress(true);
+
     // get the files in the directory to compare with queue files
-    // parent: ""
     const fsPaths = await getFileSystemDirectoryPaths(handle, "");
 
     await dispatch(
@@ -181,6 +310,8 @@ function startBrowserBatchDownloadTo(
                 }),
               );
               failed++;
+              filesCompleted++;
+              updateProgress(true);
               continue;
             }
             const name = (relativePath == "" ? "" : relativePath + "/") + childFiles[i].name;
@@ -191,6 +322,8 @@ function startBrowserBatchDownloadTo(
                     name,
                   }),
                 );
+                filesCompleted++;
+                updateProgress(true);
                 continue;
               }
 
@@ -218,6 +351,8 @@ function startBrowserBatchDownloadTo(
                       name,
                     }),
                   );
+                  filesCompleted++;
+                  updateProgress(true);
                   continue;
                 } else if (overwriteOption == DownloadOverwriteOption.SkipAll) {
                   appendLog(
@@ -226,6 +361,8 @@ function startBrowserBatchDownloadTo(
                     }),
                   );
                   skipAll = true;
+                  filesCompleted++;
+                  updateProgress(true);
                   continue;
                 } else if (overwriteOption == DownloadOverwriteOption.OverwriteAll) {
                   appendLog(
@@ -245,11 +382,36 @@ function startBrowserBatchDownloadTo(
             }
 
             appendLog(i18next.t("modals.directoryDownloadStarted", { name }));
+            currentFile = name;
+
+            updateProgress(true);
             try {
               const res = await fetch(entityUrls.urls[i].url, {
                 signal: cancelSignals[downloadId].signal,
               });
-              await saveFileToFileSystemDirectory(handle, await res.blob(), name);
+
+              // Stream the response to track bytes in real-time
+              const reader = res.body?.getReader();
+              if (!reader) {
+                throw new Error("Response body is not readable");
+              }
+              const chunks: Uint8Array[] = [];
+
+              for (;;) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                totalBytes += value.byteLength;
+
+                updateProgress();
+              }
+              const blob = new Blob(chunks);
+
+              currentFile = name + " (saving...)";
+              updateProgress(true);
+              await saveFileToFileSystemDirectory(handle, blob, name);
+              filesCompleted++;
+              updateProgress(true);
               appendLog(i18next.t("modals.directoryDownloadFinished", { name }));
             } catch (e) {
               // User cancel download
@@ -258,6 +420,8 @@ function startBrowserBatchDownloadTo(
                 throw e;
               }
               failed++;
+              filesCompleted++;
+              updateProgress(true);
               appendLog(
                 i18next.t("modals.directoryDownloadErrorNotification", {
                   name: name,
@@ -271,6 +435,8 @@ function startBrowserBatchDownloadTo(
             throw e;
           }
           failed += childFiles.length;
+          filesCompleted += childFiles.length;
+          updateProgress(true);
           appendLog(
             i18next.t("modals.directoryDownloadError", {
               msg: (e as Error).message,

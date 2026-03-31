@@ -13,6 +13,16 @@ import { AppRegistration, User } from "../api/user.ts";
 import { SelectType } from "../component/Uploader/core";
 import SessionManager, { UserSettings } from "../session";
 
+export interface BatchDownloadProgress {
+  filesCompleted: number;
+  totalFiles: number;
+  totalBytes: number;
+  totalExpectedBytes: number;
+  currentFile: string;
+  speed: number;
+  isDownloading: boolean;
+}
+
 export interface DndState {
   dragging?: boolean;
   draggingWithSelected?: boolean;
@@ -174,6 +184,11 @@ export interface GlobalStateSlice {
   batchDownloadLogDialogId?: string;
   batchDownloadLogDialogLogs?: {
     [key: string]: string;
+  };
+
+  // Batch download progress tracking
+  batchDownloadProgress?: {
+    [key: string]: BatchDownloadProgress;
   };
 
   // Create archive dialog
@@ -462,6 +477,35 @@ export const globalStateSlice = createSlice({
         state.batchDownloadLogDialogLogs = {};
       }
       state.batchDownloadLogDialogLogs[action.payload.id] = action.payload.logs;
+    },
+    setBatchDownloadProgress: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        progress: Partial<BatchDownloadProgress>;
+      }>,
+    ) => {
+      if (!state.batchDownloadProgress) {
+        state.batchDownloadProgress = {};
+      }
+      const existing: BatchDownloadProgress = state.batchDownloadProgress[action.payload.id] ?? {
+        filesCompleted: 0,
+        totalFiles: 0,
+        totalBytes: 0,
+        totalExpectedBytes: 0,
+        currentFile: "",
+        speed: 0,
+        isDownloading: false,
+      };
+      state.batchDownloadProgress[action.payload.id] = {
+        ...existing,
+        ...action.payload.progress,
+      };
+    },
+    clearBatchDownloadProgress: (state, action: PayloadAction<string>) => {
+      if (state.batchDownloadProgress) {
+        delete state.batchDownloadProgress[action.payload];
+      }
     },
     setSelectOptionDialog: (
       state,
@@ -815,6 +859,8 @@ export const {
   setBatchDownloadLogDialog,
   closeBatchDownloadLogDialog,
   setBatchDownloadLog,
+  setBatchDownloadProgress,
+  clearBatchDownloadProgress,
   setSelectOptionDialog,
   closeSelectOptionDialog,
   setUploadFromClipboardDialog,

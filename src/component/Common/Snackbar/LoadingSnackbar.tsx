@@ -52,12 +52,14 @@ const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props,
   return (
     <MuiSnackbarContent
       ref={ref}
-      sx={{ borderRadius: "12px" }}
+      sx={{ borderRadius: "12px", maxWidth: 600 }}
       message={
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
+            flexWrap: "wrap",
+            width: "100%",
           }}
         >
           <Box>
@@ -68,7 +70,7 @@ const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props,
               value={progress}
             />
           </Box>
-          <Box>{message}</Box>
+          <Box sx={{ flex: 1 }}>{message}</Box>
           {componentOrFunctionAction && (
             <Box
               sx={{
@@ -77,6 +79,7 @@ const LoadingSnackbar = forwardRef<HTMLDivElement, LoadingSnackbarProps>((props,
                 marginLeft: "auto",
                 paddingLeft: "16px",
                 marginRight: "-8px",
+                width: "100%",
               }}
             >
               {componentOrFunctionAction}

@@ -725,6 +725,7 @@ export async function longRunningTaskWithSnackbar<T>(
   task: Promise<T>,
   textKey: string,
   action?: SnackbarAction,
+  getProgress?: () => number,
 ): Promise<T> {
   let loadingId: SnackbarKey | undefined = undefined;
   const delayedLoading = setTimeout(() => {
@@ -733,6 +734,7 @@ export async function longRunningTaskWithSnackbar<T>(
       variant: "loading",
       persist: true,
       action: action,
+      getProgress: getProgress,
     });
   }, loadingDebounceMs);
   let result: T;
