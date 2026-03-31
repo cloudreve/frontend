@@ -7,8 +7,8 @@ import { FileResponse, FileType, Metadata } from "../../api/explorer.ts";
 import { GroupPermission } from "../../api/user.ts";
 import {
   DefaultCloseAction,
-  ViewDownloadLogAction,
   BatchDownloadProgressAction,
+  BatchDownloadSecondaryAction,
   BatchDownloadCompleteAction,
 } from "../../component/Common/Snackbar/snackbar.tsx";
 import SessionManager from "../../session";
@@ -17,7 +17,7 @@ import Boolset from "../../util/boolset.ts";
 import { formatLocalTime } from "../../util/datetime.ts";
 import {
   getFileSystemDirectoryPaths,
-  saveFileToFileSystemDirectory,
+  streamFileToFileSystemDirectory,
   verifyFileSystemRWPermission,
 } from "../../util/filesystem.ts";
 import "../../util/zip.js";
@@ -164,6 +164,7 @@ export function browserBatchDownload(files: FileResponse[]): AppThunk {
       variant: "loading",
       persist: true,
       action: BatchDownloadProgressAction(downloadId),
+      secondaryAction: BatchDownloadSecondaryAction(downloadId),
       getProgress: () => {
         const progress = getState().globalState.batchDownloadProgress?.[downloadId];
         if (!progress || progress.totalExpectedBytes === 0) return 0;
@@ -186,14 +187,14 @@ export function browserBatchDownload(files: FileResponse[]): AppThunk {
       closeSnackbar(snackbarId);
       if (!cancelled) {
         enqueueSnackbar({
-          message: i18next.t("fileManager.downloadComplete", { defaultValue: "Download complete!" }),
+          message: i18next.t("fileManager.downloadComplete"),
           variant: "success",
           autoHideDuration: 5000,
           action: BatchDownloadCompleteAction(downloadId),
         });
       } else {
         enqueueSnackbar({
-          message: i18next.t("fileManager.downloadCancelled", { defaultValue: "Download cancelled" }),
+          message: i18next.t("modals.directoryDownloadCancelled"),
           variant: "warning",
           autoHideDuration: 3000,
           action: DefaultCloseAction,
@@ -390,26 +391,17 @@ function startBrowserBatchDownloadTo(
                 signal: cancelSignals[downloadId].signal,
               });
 
-              // Stream the response to track bytes in real-time
+              // Stream the response directly to disk to avoid buffering
+              // the entire file in memory
               const reader = res.body?.getReader();
               if (!reader) {
                 throw new Error("Response body is not readable");
               }
-              const chunks: Uint8Array[] = [];
 
-              for (;;) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                chunks.push(value);
-                totalBytes += value.byteLength;
-
+              await streamFileToFileSystemDirectory(handle, reader, name, (bytes) => {
+                totalBytes += bytes;
                 updateProgress();
-              }
-              const blob = new Blob(chunks);
-
-              currentFile = name + " (saving...)";
-              updateProgress(true);
-              await saveFileToFileSystemDirectory(handle, blob, name);
+              });
               filesCompleted++;
               updateProgress(true);
               appendLog(i18next.t("modals.directoryDownloadFinished", { name }));

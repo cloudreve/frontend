@@ -416,6 +416,7 @@
     "batchDownloadStarted": "Batch download has started, please do not close this tab...",
     "downloadProgress": "{{completed}} / {{total}} files downloaded ({{percent}}%)",
     "downloadComplete": "Download complete!",
+    "downloadCompleteSummary": "{{count}} files · {{size}}",
     "downloaded": "downloaded",
     "batchDownloadError": "Failed to archive: {{msg}}",
     "userDenied": "User denied.",

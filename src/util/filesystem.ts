@@ -54,6 +54,36 @@ export const saveFileToFileSystemDirectory = async (
   await writable.close();
 };
 
+// stream response body directly to a file in the dst directory,
+// calling onProgress for each chunk written
+export const streamFileToFileSystemDirectory = async (
+  handle: FileSystemDirectoryHandle,
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  path: string,
+  onProgress: (bytesWritten: number) => void,
+  create = true,
+) => {
+  const paths = path.split("/");
+  const fileName = paths.pop();
+  if (!fileName) return;
+
+  const dir = await createFileSystemDirectory(handle, paths);
+  const file = await dir.getFileHandle(fileName, { create });
+  const writable = await file.createWritable();
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      await writable.write(value as unknown as FileSystemWriteChunkType);
+      onProgress(value.byteLength);
+    }
+    await writable.close();
+  } catch (e) {
+    await writable.abort();
+    throw e;
+  }
+};
+
 // verify or request the permission of the readwrite permission
 export async function verifyFileSystemRWPermission(fileHandle: FileSystemDirectoryHandle) {
   const opts = { mode: "readwrite" as FileSystemPermissionMode };

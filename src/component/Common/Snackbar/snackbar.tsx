@@ -16,6 +16,8 @@ import { showAggregatedErrorDialog } from "../../../redux/thunks/dialog.ts";
 import { cancelSignals } from "../../../redux/thunks/download.ts";
 import { navigateToPath } from "../../../redux/thunks/filemanager.ts";
 import { FileManagerIndex } from "../../FileManager/FileManager.tsx";
+import Dismiss from "../../Icons/Dismiss.tsx";
+import { sizeToString } from "../../../util/index.ts";
 
 export const DefaultCloseAction = (snackbarId: SnackbarKey | undefined) => {
   const { t } = useTranslation();
@@ -92,33 +94,42 @@ export const ViewDstAction = (dst: string) => (snackbarId: SnackbarKey | undefin
   );
 };
 
-export const ViewDownloadLogAction = (downloadId: string) => (_snackbarId: SnackbarKey | undefined) => {
-  const { t } = useTranslation();
+const BatchDownloadToolbar = ({ downloadId }: { downloadId: string }) => {
+  const { t } = useTranslation("application");
   const dispatch = useAppDispatch();
 
-  const viewLogs = useCallback(() => {
+  const onCancel = () => {
+    try {
+      cancelSignals[downloadId]?.abort();
+    } catch {
+      // AbortError is expected when cancelling an active download
+    }
+  };
+
+  const onViewDetails = () => {
     dispatch(setBatchDownloadLogDialog({ open: true, id: downloadId }));
-  }, [dispatch, downloadId]);
+  };
 
   return (
     <>
-      <Button onClick={viewLogs} color="inherit" size="small">
-        {t("application:fileManager.details")}
+      <Button onClick={onViewDetails} color="inherit" size="small">
+        {t("fileManager.details")}
       </Button>
+      <IconButton
+        size="small"
+        onClick={onCancel}
+        color="inherit"
+        sx={{ opacity: 0.7 }}
+        aria-label={t("cancel", { ns: "common" })}
+      >
+        <Dismiss fontSize="small" />
+      </IconButton>
     </>
   );
 };
 
-function formatBytes(bytes: number): string {
-  if (bytes >= 1073741824) return (bytes / 1073741824).toFixed(1) + " GB";
-  if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + " MB";
-  if (bytes >= 1024) return (bytes / 1024).toFixed(0) + " KB";
-  return bytes + " B";
-}
-
 const BatchDownloadProgressContent = ({ downloadId }: { downloadId: string }) => {
   const { t } = useTranslation("application");
-  const dispatch = useAppDispatch();
   const progressRef = useRef<BatchDownloadProgress | undefined>(undefined);
   const [, forceUpdate] = useState(0);
 
@@ -139,44 +150,13 @@ const BatchDownloadProgressContent = ({ downloadId }: { downloadId: string }) =>
 
   const pct = p.totalExpectedBytes > 0 ? Math.min(100, Math.round((p.totalBytes / p.totalExpectedBytes) * 100)) : 0;
 
-  const onCancel = () => {
-    try {
-      cancelSignals[downloadId]?.abort();
-    } catch {
-      // AbortError is expected when cancelling an active download
-    }
-  };
-
-  const onViewDetails = () => {
-    dispatch(setBatchDownloadLogDialog({ open: true, id: downloadId }));
-  };
-
   return (
     <Box sx={{ width: "100%", mt: 1 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
-        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-          {t("fileManager.downloadProgress", {
-            completed: p.filesCompleted,
-            total: p.totalFiles,
-            percent: pct,
-          })}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-          {p.speed > 0 && (
-            <Typography variant="caption" sx={{ opacity: 0.6 }}>
-              {formatBytes(p.speed)}/s
-            </Typography>
-          )}
-          <IconButton size="small" onClick={onCancel} color="error" sx={{ p: 0.25 }} aria-label="Cancel download">
-            <CloseIcon fontSize="small" />
-          </IconButton>
-        </Box>
-      </Box>
       {p.currentFile && (
         <Typography
           variant="caption"
           sx={{
-            opacity: 0.5,
+            opacity: 0.7,
             display: "block",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -188,20 +168,25 @@ const BatchDownloadProgressContent = ({ downloadId }: { downloadId: string }) =>
           {p.currentFile}
         </Typography>
       )}
-      <LinearProgress variant="determinate" value={pct} sx={{ mb: 0.5, borderRadius: 1 }} />
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="caption" sx={{ opacity: 0.5 }}>
-          {formatBytes(p.totalBytes)} {t("fileManager.downloaded", { defaultValue: "downloaded" })}
-        </Typography>
-        <Button onClick={onViewDetails} color="inherit" size="small" sx={{ minWidth: "auto", p: 0 }}>
-          {t("fileManager.details")}
-        </Button>
-      </Box>
+      <LinearProgress variant="determinate" value={pct} sx={{ borderRadius: 1 }} />
+      <Typography variant="caption" sx={{ opacity: 0.5, display: "block", mt: 0.5 }}>
+        {t("fileManager.downloadProgress", {
+          completed: p.filesCompleted,
+          total: p.totalFiles,
+          percent: pct,
+        })}
+        {p.speed > 0 && ` · ${sizeToString(p.speed)}/s`}
+        {` · ${sizeToString(p.totalBytes)}`}
+      </Typography>
     </Box>
   );
 };
 
 export const BatchDownloadProgressAction = (downloadId: string) => (_snackbarId: SnackbarKey | undefined) => {
+  return <BatchDownloadToolbar downloadId={downloadId} />;
+};
+
+export const BatchDownloadSecondaryAction = (downloadId: string) => (_snackbarId: SnackbarKey | undefined) => {
   return <BatchDownloadProgressContent downloadId={downloadId} />;
 };
 
@@ -219,7 +204,10 @@ const BatchDownloadCompleteContent = ({
     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
       {progress && (
         <Typography variant="caption" sx={{ opacity: 0.7 }}>
-          {progress.totalFiles} files · {formatBytes(progress.totalBytes)}
+          {t("fileManager.downloadCompleteSummary", {
+            count: progress.totalFiles,
+            size: sizeToString(progress.totalBytes),
+          })}
         </Typography>
       )}
       <Button onClick={() => closeSnackbar(snackbarId)} color="inherit" size="small">
