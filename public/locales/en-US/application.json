@@ -412,7 +412,7 @@
     "browserDownloadDescription": "Your browser downloads files one by one and retain the folder structure to the local directory you specified.",
     "browserBatchDownload": "Browser-side archiving",
     "browserBatchDownloadDescription": "Downloaded and packaged to a Zip file by the browser in real time, it cannot handle data more than 4GB.",
-    "browserBatchDownloadSizeExceeded": "Total size {{size}} exceeds the 4 GB browser archive limit.",
+    "browserBatchDownloadSizeExceededDescription": "Total size {{size}} exceeds the 4GB browser-side archiving limit.",
     "serverBatchDownload": "Server-side archiving",
     "serverBatchDownloadDescription": "Archive by the server to a Zip file and sent to the client for download on-the-fly, share link shortcut is not supported.",
     "selectArchiveMethod": "Select archive method",
