@@ -1,4 +1,4 @@
-import { Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Collapse, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
@@ -20,6 +20,7 @@ const NavHeader = () => {
   const fmIndex = useContext(FmIndexContext);
   const fs = useAppSelector((state) => state.fileManager[fmIndex].current_fs);
   const isSingleFileView = useAppSelector((state) => state.fileManager[fmIndex].list?.single_file_view);
+  const hasSelection = useAppSelector((state) => Object.keys(state.fileManager[fmIndex].selected).length > 0);
   const showDownloadFolder = fs == Filesystem.share && !isSingleFileView;
   return (
     <Stack
@@ -49,19 +50,24 @@ const NavHeader = () => {
       <RadiusFrame>
         <TopActions />
       </RadiusFrame>
-      {showDownloadFolder && (
+      <Collapse
+        in={showDownloadFolder && !hasSelection}
+        orientation="horizontal"
+        unmountOnExit
+        sx={{ "& .MuiCollapse-wrapperInner": { display: "flex" } }}
+      >
         <RadiusFrame>
           <ActionButtonGroup variant="outlined">
             <ActionButton
               startIcon={!isMobile && <Download />}
               onClick={() => dispatch(downloadAllFiles(fmIndex))}
-              sx={{ color: "primary.main" }}
+              sx={{ color: "primary.main", whiteSpace: "nowrap" }}
             >
               {isMobile ? <Download fontSize={"small"} /> : t("application:fileManager.downloadFolder")}
             </ActionButton>
           </ActionButtonGroup>
         </RadiusFrame>
-      )}
+      </Collapse>
     </Stack>
   );
 };

@@ -122,8 +122,16 @@ export function downloadMultipleFiles(files: FileResponse[]): AppThunk {
     let finalOption = options[0];
     if (options.length > 1) {
       try {
+        const fileCount = files.filter((f) => f.type === FileType.file).length;
+        const folderCount = files.filter((f) => f.type === FileType.folder).length;
+        const subtitle =
+          (fileCount > 0 ? fileCount + " " + i18next.t("fileManager.filesCount") : "") +
+          (fileCount > 0 && folderCount > 0 ? ", " : "") +
+          (folderCount > 0 ? folderCount + " " + i18next.t("fileManager.foldersCount") : "") +
+          " · " +
+          sizeToString(totalSize);
         finalOption = (await dispatch(
-          selectOption(getDownloadSelectOption(options, totalSize), "fileManager.selectArchiveMethod"),
+          selectOption(getDownloadSelectOption(options, totalSize), "fileManager.selectArchiveMethod", subtitle),
         )) as MultipleDownloadOption;
       } catch (e) {
         // User cancel selection

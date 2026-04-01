@@ -317,6 +317,8 @@
     "download": "Download",
     "downloadAll": "Download all",
     "downloadFolder": "Download folder",
+    "filesCount": "files",
+    "foldersCount": "folders",
     "batchDownload": "Download in batch",
     "share": "Share",
     "rename": "Rename",

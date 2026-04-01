@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { DialogContent, List, ListItemButton, ListItemText } from "@mui/material";
+import { DialogContent, List, ListItemButton, ListItemText, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks.ts";
 import React, { useCallback } from "react";
 import DraggableDialog from "./DraggableDialog.tsx";
@@ -12,6 +12,7 @@ const SelectOption = () => {
 
   const open = useAppSelector((state) => state.globalState.selectOptionDialogOpen);
   const title = useAppSelector((state) => state.globalState.selectOptionTitle);
+  const subtitle = useAppSelector((state) => state.globalState.selectOptionSubtitle);
   const promiseId = useAppSelector((state) => state.globalState.selectOptionPromiseId);
   const options = useAppSelector((state) => state.globalState.selectOptionDialogOptions);
 
@@ -34,7 +35,16 @@ const SelectOption = () => {
 
   return (
     <DraggableDialog
-      title={t(title ?? "")}
+      title={
+        <>
+          {t(title ?? "")}
+          {subtitle && (
+            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: "normal" }}>
+              {subtitle}
+            </Typography>
+          )}
+        </>
+      }
       dialogProps={{
         open: open ?? false,
         onClose: onClose,
