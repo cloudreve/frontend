@@ -53,11 +53,11 @@ const NavHeader = () => {
         <RadiusFrame>
           <ActionButtonGroup variant="outlined">
             <ActionButton
-              startIcon={<Download />}
+              startIcon={!isMobile && <Download />}
               onClick={() => dispatch(downloadAllFiles(fmIndex))}
               sx={{ color: "primary.main" }}
             >
-              {t("application:fileManager.downloadFolder")}
+              {isMobile ? <Download fontSize={"small"} /> : t("application:fileManager.downloadFolder")}
             </ActionButton>
           </ActionButtonGroup>
         </RadiusFrame>
