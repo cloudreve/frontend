@@ -628,9 +628,8 @@ const getDownloadSelectOption = (options: MultipleDownloadOption[], totalSize: n
           value: MultipleDownloadOption.StreamSaver,
           name: i18next.t("fileManager.browserBatchDownload"),
           description: exceedsLimit
-            ? i18next.t("fileManager.browserBatchDownloadSizeExceeded", {
+            ? i18next.t("fileManager.browserBatchDownloadSizeExceededDescription", {
                 size: sizeToString(totalSize),
-                defaultValue: "Total size {{size}} exceeds the 4 GB browser archive limit",
               })
             : i18next.t("fileManager.browserBatchDownloadDescription"),
           disabled: exceedsLimit,
