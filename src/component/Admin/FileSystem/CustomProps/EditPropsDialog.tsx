@@ -119,7 +119,7 @@ const EditPropsDialog = ({ open, onClose, onSave, isNew, props }: EditPropsDialo
                     <DenseFilledTextField
                       type="number"
                       value={editProps?.min || ""}
-                      onChange={(e) => setEditProps({ ...editProps, min: parseInt(e.target.value) } as CustomProps)}
+                      onChange={(e) => setEditProps({ ...editProps, min: e.target.value === "" ? undefined : parseInt(e.target.value) } as CustomProps)}
                     />
                     {fieldType.minDes && <NoMarginHelperText>{t(fieldType.minDes)}</NoMarginHelperText>}
                   </FormControl>
@@ -132,7 +132,7 @@ const EditPropsDialog = ({ open, onClose, onSave, isNew, props }: EditPropsDialo
                       type="number"
                       required={fieldType.maxRequired}
                       value={editProps?.max || ""}
-                      onChange={(e) => setEditProps({ ...editProps, max: parseInt(e.target.value) } as CustomProps)}
+                      onChange={(e) => setEditProps({ ...editProps, max: e.target.value === "" ? undefined : parseInt(e.target.value) } as CustomProps)}
                     />
                     {fieldType.maxDes && <NoMarginHelperText>{t(fieldType.maxDes)}</NoMarginHelperText>}
                   </FormControl>
