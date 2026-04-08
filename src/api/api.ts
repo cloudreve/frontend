@@ -271,7 +271,7 @@ export function getFileList(req: ListFileService, skipSnackbar = true): ThunkRes
         },
         {
           ...defaultOpts,
-          bypassSnackbar: (_e) => true,
+          bypassSnackbar: (_e) => skipSnackbar,
         },
       ),
     );
