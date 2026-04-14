@@ -7,6 +7,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 const backend = "http://localhost:5212";
+const backendProxyOption = { target: backend, headers: { host: new URL(backend).host } };
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -102,10 +103,10 @@ export default defineConfig({
     host: "0.0.0.0",
     cors: false,
     proxy: {
-      "/api": { target: backend },
-      "/s/": { target: backend },
-      "/f/": { target: backend },
-      "/manifest.json": { target: backend },
+      "/api": backendProxyOption,
+      "/s/": backendProxyOption,
+      "/f/": backendProxyOption,
+      "/manifest.json": backendProxyOption,
     },
   },
 });
