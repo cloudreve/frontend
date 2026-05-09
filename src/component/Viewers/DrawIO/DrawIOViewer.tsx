@@ -183,6 +183,7 @@ const DrawIOViewer = () => {
           onLoad={handleIframeOnload}
           src={src}
           component={"iframe"}
+          allow="clipboard-read; clipboard-write"
           sx={{
             width: "100%",
             height: loaded ? "100%" : 0,
