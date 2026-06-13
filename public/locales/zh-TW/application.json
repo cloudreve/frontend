@@ -89,9 +89,6 @@
     "notBefore": "不早於",
     "notAfter": "不晚於",
     "minimum": "最小",
-    "resetThumbnail": "重設失敗的縮圖",
-    "resetThumbnailRequested": "已請求重設縮圖。",
-    "noFileCanResetThumbnail": "沒有可重設縮圖的檔案。",
     "maximum": "最大",
     "fileSize": "檔案大小",
     "searchBase": "搜尋路徑",
@@ -330,6 +327,9 @@
     "moreActions": "更多操作",
     "refresh": "重新整理",
     "createArchive": "建立壓縮檔案",
+    "resetThumbnail": "重設失敗的縮圖",
+    "resetThumbnailRequested": "已請求重設縮圖。",
+    "noFileCanResetThumbnail": "沒有可重設縮圖的檔案。",
     "newFolder": "建立資料夾",
     "newFile": "建立檔案",
     "showFullPath": "顯示路徑",
@@ -988,7 +988,12 @@
     "validDurationDays": "{{num}} 天",
     "reportTarget": "舉報對象",
     "reportReason": "原因",
-    "reportReasonOptions": ["侵權", "有害內容", "垃圾訊息", "其他"],
+    "reportReasonOptions": [
+      "侵權",
+      "有害內容",
+      "垃圾訊息",
+      "其他"
+    ],
     "reportDescription": "補充說明",
     "reportAbuseSuccess": "舉報已提交"
   }

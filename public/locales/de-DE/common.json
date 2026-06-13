@@ -102,19 +102,5 @@
     "50005": "Interner Fehler.",
     "50010": "Gewünschter Knoten ist nicht verfügbar.",
     "50011": "Fehler beim Abfragen der Datei-Metadaten."
-  },
-  "vasErrors": {
-    "40031": "Dieser E-Mail-Anbieter ist verboten. Bitte wechseln Sie zu einem anderen.",
-    "40059": "Sie können Ihre eigene Freigabe nicht speichern.",
-    "40062": "Unzureichende Credits.",
-    "40063": "Ihre aktuelle Mitgliedschaft ist noch nicht abgelaufen. Bitte gehen Sie zur Einstellungsseite, um die Mitgliedschaft manuell zu kündigen.",
-    "40064": "Sie befinden sich bereits in dieser Mitgliedschaft.",
-    "40065": "Ungültiger Geschenkcode.",
-    "40066": "Sie haben bereits eine verknüpfte Identität. Bitte entfernen Sie diese zuerst.",
-    "40067": "Diese Identität ist bereits mit einem anderen Konto verknüpft.",
-    "40068": "Diese Identität ist mit keinem Konto verknüpft.",
-    "40072": "Sie sind Administrator und können keine andere Gruppe erwerben.",
-    "40084": "Ihr Konto ist passwortlos. Sie müssen mindestens ein verknüpftes Konto behalten.",
-    "40085": "Der Gesamtbetrag dieser Bestellung ist zu gering für den Checkout."
   }
 }

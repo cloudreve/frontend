@@ -102,19 +102,5 @@
     "50005": "Erro interno.",
     "50010": "Nó desejado não está disponível.",
     "50011": "Falha ao consultar metadados do arquivo."
-  },
-  "vasErrors": {
-    "40031": "Este provedor de e-mail é proibido, mude para outro.",
-    "40059": "Você não pode salvar seu próprio compartilhamento.",
-    "40062": "Créditos insuficientes.",
-    "40063": "Sua assinatura atual ainda não expirou, vá para a página de configurações para cancelar manualmente a assinatura primeiro.",
-    "40064": "Você já está nesta assinatura.",
-    "40065": "Código de presente inválido.",
-    "40066": "Você já tem uma identidade vinculada, desvincule-a primeiro.",
-    "40067": "Esta identidade já está vinculada a outra conta.",
-    "40068": "Esta identidade não está vinculada a nenhuma conta.",
-    "40072": "Você é administrador, não pode comprar outro grupo.",
-    "40084": "Sua conta não possui senha, você deve manter pelo menos uma conta vinculada.",
-    "40085": "O valor total deste pedido é muito pequeno para checkout."
   }
 }

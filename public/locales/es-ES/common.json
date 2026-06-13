@@ -102,19 +102,5 @@
     "50005": "Error interno. ({{message}})",
     "50010": "El nodo deseado no está disponible.",
     "50011": "Error al consultar metadatos del archivo."
-  },
-  "vasErrors": {
-    "40031": "Este proveedor de correo electrónico está prohibido, por favor cambia a otro.",
-    "40059": "No puedes guardar tu propio recurso compartido.",
-    "40062": "Créditos insuficientes.",
-    "40063": "Tu membresía actual aún no ha expirado, por favor ve a la página de configuración para cancelar manualmente la membresía primero.",
-    "40064": "Ya estás en esta membresía.",
-    "40065": "Código de regalo inválido.",
-    "40066": "Ya tienes una identidad vinculada, por favor desvínculala primero.",
-    "40067": "Esta identidad ya está vinculada a otra cuenta.",
-    "40068": "Esta identidad no está vinculada a ninguna cuenta.",
-    "40072": "Eres administrador, no puedes comprar otro grupo.",
-    "40084": "Tu cuenta no tiene contraseña, debes mantener al menos una cuenta vinculada.",
-    "40085": "El monto total de esta orden es demasiado pequeño para el pago."
   }
 }

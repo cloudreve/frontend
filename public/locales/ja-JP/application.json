@@ -85,9 +85,6 @@
       "davAccountDesc": "あなたのWebDAVアカウント。"
     }
   },
-  "resetThumbnail": "壊れたサムネイルをリセット",
-  "resetThumbnailRequested": "サムネイルのリセットをリクエストしました。",
-  "noFileCanResetThumbnail": "サムネイルをリセットできるファイルがありません。",
   "navbar": {
     "notBefore": "～より前",
     "notAfter": "～より後",
@@ -330,6 +327,9 @@
     "moreActions": "その他",
     "refresh": "更新",
     "createArchive": "圧縮ファイルを作成",
+    "resetThumbnail": "壊れたサムネイルをリセット",
+    "resetThumbnailRequested": "サムネイルのリセットをリクエストしました。",
+    "noFileCanResetThumbnail": "サムネイルをリセットできるファイルがありません。",
     "newFolder": "フォルダを作成",
     "newFile": "ファイルを作成",
     "showFullPath": "パス表示",
@@ -803,9 +803,6 @@
     "versionRetention": "バージョン保持",
     "languageDes": "表示言語とメールの優先言語の設定",
     "timezoneDes": "表示タイムゾーンの設定、デフォルトはシステムタイムゾーンに準拠",
-    "notLinked": "未連携",
-    "linkedAt": "<0></0> に連携済み",
-    "accountLinking": "アカウント連携",
     "externalApps": "外部アプリ",
     "oauthGrantLastUsed": "最終使用: <0></0>",
     "revokeOAuthGrant": "認可を取り消す",
@@ -991,7 +988,12 @@
     "validDurationDays": "{{num}} 日",
     "reportTarget": "報告対象",
     "reportReason": "理由",
-    "reportReasonOptions": ["著作権侵害", "有害なコンテンツ", "スパム", "その他"],
+    "reportReasonOptions": [
+      "著作権侵害",
+      "有害なコンテンツ",
+      "スパム",
+      "その他"
+    ],
     "reportDescription": "詳細説明",
     "reportAbuseSuccess": "報告を受け付けました"
   }

@@ -102,19 +102,5 @@
     "50005": "Erreur interne.",
     "50010": "Le nœud désiré n'est pas disponible.",
     "50011": "Échec de la requête des métadonnées du fichier."
-  },
-  "vasErrors": {
-    "40031": "Ce fournisseur d'e-mail est interdit, veuillez en changer pour un autre.",
-    "40059": "Vous ne pouvez pas sauvegarder votre propre partage.",
-    "40062": "Crédits insuffisants.",
-    "40063": "Votre abonnement actuel n'a pas encore expiré, veuillez aller à la page des paramètres pour désabonner manuellement l'abonnement d'abord.",
-    "40064": "Vous êtes déjà dans cet abonnement.",
-    "40065": "Code cadeau non valide.",
-    "40066": "Vous avez déjà une identité liée, veuillez la dissocier d'abord.",
-    "40067": "Cette identité est déjà liée à un autre compte.",
-    "40068": "Cette identité n'est liée à aucun compte.",
-    "40072": "Vous êtes administrateur, vous ne pouvez pas acheter d'autre groupe.",
-    "40084": "Votre compte est sans mot de passe, vous devez conserver au moins un compte lié.",
-    "40085": "Le montant total de cette commande est trop petit pour le paiement."
   }
 }

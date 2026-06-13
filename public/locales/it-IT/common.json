@@ -102,19 +102,5 @@
     "50005": "Errore interno.",
     "50010": "Il nodo desiderato non è disponibile.",
     "50011": "Impossibile interrogare i metadati del file."
-  },
-  "vasErrors": {
-    "40031": "Questo provider email è vietato, cambia con un altro.",
-    "40059": "Non puoi salvare la tua stessa condivisione.",
-    "40062": "Crediti insufficienti.",
-    "40063": "La tua iscrizione corrente non è ancora scaduta, vai nella pagina delle impostazioni per disdire manualmente l'iscrizione prima.",
-    "40064": "Sei già in questa iscrizione.",
-    "40065": "Codice regalo non valido.",
-    "40066": "Hai già un'identità collegata, scollegala prima.",
-    "40067": "Questa identità è già collegata a un altro account.",
-    "40068": "Questa identità non è collegata ad alcun account.",
-    "40072": "Sei amministratore, non puoi acquistare altri gruppi.",
-    "40084": "Il tuo account è senza password, devi mantenere almeno un account collegato.",
-    "40085": "L'importo totale di questo ordine è troppo piccolo per il checkout."
   }
 }
