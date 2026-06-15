@@ -64,6 +64,7 @@ export interface OAuthConsentProps {
   redirectUri: string;
   state: string;
   scope: string;
+  nonce?: string;
   codeChallenge?: string;
   codeChallengeMethod?: string;
 }
@@ -133,6 +134,7 @@ const EmailLogin = ({ oauthConsent }: SignInProps) => {
         redirect_uri: oauthConsent.redirectUri,
         state: oauthConsent.state,
         scope: oauthConsent.scope,
+        nonce: oauthConsent.nonce,
         code_challenge: oauthConsent.codeChallenge,
         code_challenge_method: oauthConsent.codeChallengeMethod,
       };
