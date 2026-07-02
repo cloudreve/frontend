@@ -1,5 +1,5 @@
 import { Box, InputAdornment, Skeleton, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getCaptcha } from "../../../api/api.ts";
 import { useAppDispatch } from "../../../redux/hooks.ts";
@@ -16,19 +16,36 @@ const DefaultCaptcha = ({ onStateChange, generation, noLabel, ...rest }: Default
   const dispatch = useAppDispatch();
 
   const [captcha, setCaptcha] = useState("");
-  const [sessionId, setSessionID] = useState("");
+  const [sessionId, setSessionId] = useState("");
   const [captchaData, setCaptchaData] = useState<string>();
 
-  const refreshCaptcha = async () => {
+  const isFirstMount = useRef(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [shouldFocus, setShouldFocus] = useState(false);
+
+  const refreshCaptcha = async (resetInput = false) => {
     setCaptchaData(undefined);
     const captchaResponse = await dispatch(getCaptcha());
     setCaptchaData(captchaResponse.image);
-    setSessionID(captchaResponse.ticket);
+    setSessionId(captchaResponse.ticket);
+
+    if (resetInput) {
+      setCaptcha("");
+      setShouldFocus(true);
+    }
   };
 
   useEffect(() => {
-    refreshCaptcha();
+    refreshCaptcha(!isFirstMount.current);
+    isFirstMount.current = false;
   }, [generation]);
+
+  useEffect(() => {
+    if (shouldFocus) {
+      inputRef.current?.focus();
+      setShouldFocus(false);
+    }
+  }, [shouldFocus]);
 
   useEffect(() => {
     onStateChange({ captcha, ticket: sessionId });
@@ -36,6 +53,7 @@ const DefaultCaptcha = ({ onStateChange, generation, noLabel, ...rest }: Default
 
   return (
     <TextField
+      inputRef={inputRef}
       sx={{
         "& .MuiOutlinedInput-root": {
           pr: 0.5,
@@ -78,7 +96,7 @@ const DefaultCaptcha = ({ onStateChange, generation, noLabel, ...rest }: Default
                     }}
                     src={captchaData}
                     alt="captcha"
-                    onClick={refreshCaptcha}
+                    onClick={() => refreshCaptcha(true)}
                   />
                 )}
               </Box>
