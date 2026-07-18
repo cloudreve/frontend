@@ -1597,7 +1597,7 @@
     "filterEmailProviderBlacklist": "黑名單",
     "filterEmailProviderDes": "只允許使用特定的郵箱注冊站點，第三方 SSO 登入不受此限制。",
     "filterEmailProviderRule": "郵箱域過濾規則",
-    "filterEmailProviderRuleDes": "多個域請使用半形逗號隔開。",
+    "filterEmailProviderRuleDes": "多個域請使用半形逗號 , 隔開。",
     "qqConnect": "QQ 互聯",
     "qqConnectHint": "在 <0>QQ 互聯開放平臺</0> 建立應用時，回撥地址請填寫：<0>{{url}}</0>。",
     "enableQQConnect": "開啟 QQ 互聯",

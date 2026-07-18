@@ -1597,7 +1597,7 @@
     "filterEmailProviderBlacklist": "ブラックリスト",
     "filterEmailProviderDes": "特定メールアドレスのみ登録可。サードパーティSSOログインは制限対象外。",
     "filterEmailProviderRule": "メールドメインフィルタリングルール",
-    "filterEmailProviderRuleDes": "複数のドメインを指定する場合は、半角カンマで区切ってください。",
+    "filterEmailProviderRuleDes": "複数のドメインを指定する場合は、半角カンマ「,」で区切ってください。",
     "qqConnect": "QQ連携",
     "qqConnectHint": "<0>QQ互換オープン平台</0>でアプリを作成する際、コールバックURLに{{url}}<を入力してください。",
     "enableQQConnect": "QQ連携の有効化",
