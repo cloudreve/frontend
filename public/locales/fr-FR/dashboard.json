@@ -267,6 +267,8 @@
     "fileIdVar": "ID de fichier",
     "userIdVar": "ID utilisateur, vide lorsque non connecté.",
     "userDisplayNameVar": "Nom d'affichage utilisateur encodé en URL.",
+    "themeVar": "Thème actuel, \"light\" ou \"dark\".",
+    "darkVar": "Indique si le thème sombre est actif, \"1\" ou \"0\".",
     "fileViewers": "Applications de fichier",
     "viewerList": "Liste des applications",
     "defaultViewerApps": "Applications par défaut",

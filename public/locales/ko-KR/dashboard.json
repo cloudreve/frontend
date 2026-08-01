@@ -266,6 +266,8 @@
     "fileIdVar": "파일 ID",
     "userIdVar": "사용자 ID, 로그인하지 않은 경우 비어있음",
     "userDisplayNameVar": "URL 인코딩된 사용자 닉네임",
+    "themeVar": "현재 테마, \"light\" 또는 \"dark\"",
+    "darkVar": "다크 테마 활성화 여부, \"1\" 또는 \"0\"",
     "fileViewers": "파일 브라우저 애플리케이션",
     "viewerList": "애플리케이션 목록",
     "defaultViewerApps": "기본 열기 방식",

@@ -266,6 +266,8 @@
     "fileIdVar": "文件 ID",
     "userIdVar": "用户 ID，未登录时为空",
     "userDisplayNameVar": "经过 URL 编码后的用户昵称",
+    "themeVar": "当前主题，\"light\" 或 \"dark\"",
+    "darkVar": "是否为深色主题，\"1\" 或 \"0\"",
     "fileViewers": "文件浏览应用",
     "viewerList": "应用列表",
     "defaultViewerApps": "默认打开方式",
