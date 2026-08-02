@@ -93,6 +93,16 @@ const magicVars: MagicVar[] = [
     value: "settings.userDisplayNameVar",
     example: "Aaron%20Liu",
   },
+  {
+    name: "{$theme}",
+    value: "settings.themeVar",
+    example: "dark",
+  },
+  {
+    name: "{$dark}",
+    value: "settings.darkVar",
+    example: "1",
+  },
 ];
 
 const DND_TYPE = "template-row";

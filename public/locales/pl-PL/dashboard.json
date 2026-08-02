@@ -266,6 +266,8 @@
     "fileIdVar": "ID pliku",
     "userIdVar": "ID użytkownika, puste gdy nie jest zalogowany.",
     "userDisplayNameVar": "Zakodowana w URL wyświetlana nazwa użytkownika.",
+    "themeVar": "Bieżący motyw, \"light\" lub \"dark\".",
+    "darkVar": "Czy ciemny motyw jest aktywny, \"1\" lub \"0\".",
     "fileViewers": "Aplikacje plików",
     "viewerList": "Lista aplikacji",
     "defaultViewerApps": "Domyślne aplikacje",
