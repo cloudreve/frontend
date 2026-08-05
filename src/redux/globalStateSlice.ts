@@ -79,6 +79,7 @@ export interface DialogSelectOption {
   name: string;
   description: string;
   value: any;
+  disabled?: boolean;
 }
 
 export interface DesktopCallbackState {
@@ -178,6 +179,7 @@ export interface GlobalStateSlice {
   selectOptionDialogOptions?: DialogSelectOption[];
   selectOptionPromiseId?: string;
   selectOptionTitle?: string;
+  selectOptionSubtitle?: string;
 
   // Batch download log dialog
   batchDownloadLogDialogOpen?: boolean;
@@ -514,12 +516,14 @@ export const globalStateSlice = createSlice({
         options?: DialogSelectOption[];
         promiseId: string;
         title?: string;
+        subtitle?: string;
       }>,
     ) => {
       state.selectOptionDialogOpen = action.payload.open;
       state.selectOptionDialogOptions = action.payload.options;
       state.selectOptionPromiseId = action.payload.promiseId;
       state.selectOptionTitle = action.payload.title;
+      state.selectOptionSubtitle = action.payload.subtitle;
     },
     closeSelectOptionDialog: (state) => {
       state.selectOptionDialogOpen = false;

@@ -4,6 +4,7 @@ import { useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { clearSelected } from "../../../redux/fileManagerSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
+import { downloadAllFiles } from "../../../redux/thunks/download.ts";
 import { createShareShortcut, isMacbook } from "../../../redux/thunks/file.ts";
 import { inverseSelection, pinCurrentView, refreshFileList, selectAll } from "../../../redux/thunks/filemanager.ts";
 import SessionManager from "../../../session";
@@ -13,6 +14,7 @@ import ArrowSync from "../../Icons/ArrowSync.tsx";
 import Border from "../../Icons/Border.tsx";
 import BorderAll from "../../Icons/BorderAll.tsx";
 import BorderInside from "../../Icons/BorderInside.tsx";
+import Download from "../../Icons/Download.tsx";
 import FolderLink from "../../Icons/FolderLink.tsx";
 import PinOutlined from "../../Icons/PinOutlined.tsx";
 import { DenseDivider, SquareMenu, SquareMenuItem } from "../ContextMenu/ContextMenu.tsx";
@@ -55,6 +57,11 @@ const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
   const onInverseSelectionClicked = useCallback(() => {
     onClose && onClose({}, "escapeKeyDown");
     dispatch(inverseSelection(fmIndex));
+  }, [dispatch, onClose, fmIndex]);
+
+  const onDownloadAllClicked = useCallback(() => {
+    onClose && onClose({}, "escapeKeyDown");
+    dispatch(downloadAllFiles(fmIndex));
   }, [dispatch, onClose, fmIndex]);
 
   const onRefreshClicked = useCallback(() => {
@@ -126,6 +133,17 @@ const MoreActionMenu = ({ onClose, ...rest }: MenuProps) => {
         </ListItemIcon>
         <ListItemText>{t("application:fileManager.invertSelection")}</ListItemText>
       </SquareMenuItem>
+      {fs != Filesystem.trash && fs != Filesystem.share && (
+        <>
+          <DenseDivider />
+          <SquareMenuItem onClick={onDownloadAllClicked}>
+            <ListItemIcon>
+              <Download fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>{t("application:fileManager.downloadAll")}</ListItemText>
+          </SquareMenuItem>
+        </>
+      )}
     </SquareMenu>
   );
 };

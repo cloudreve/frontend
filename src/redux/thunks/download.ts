@@ -2,8 +2,8 @@ import dayjs from "dayjs";
 import i18next from "i18next";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import streamSaver from "streamsaver";
-import { getFileEntityUrl } from "../../api/api.ts";
-import { FileResponse, FileType, Metadata } from "../../api/explorer.ts";
+import { getFileEntityUrl, getFileList } from "../../api/api.ts";
+import { FileResponse, FileType, ListResponse, Metadata } from "../../api/explorer.ts";
 import { GroupPermission } from "../../api/user.ts";
 import {
   DefaultCloseAction,
@@ -12,7 +12,7 @@ import {
   BatchDownloadCompleteAction,
 } from "../../component/Common/Snackbar/snackbar.tsx";
 import SessionManager from "../../session";
-import { getFileLinkedUri } from "../../util";
+import { getFileLinkedUri, sizeToString } from "../../util";
 import Boolset from "../../util/boolset.ts";
 import { formatLocalTime } from "../../util/datetime.ts";
 import {
@@ -25,6 +25,7 @@ import { closeContextMenu } from "../fileManagerSlice.ts";
 import { DialogSelectOption, setBatchDownloadLog, setBatchDownloadProgress } from "../globalStateSlice.ts";
 import { AppThunk } from "../store.ts";
 import { promiseId, selectOption } from "./dialog.ts";
+import { MinPageSize } from "../../component/FileManager/TopBar/ViewOptionPopover.tsx";
 import { longRunningTaskWithSnackbar, refreshSingleFileSymbolicLinks, walk, walkAll } from "./file.ts";
 
 enum MultipleDownloadOption {
@@ -51,6 +52,54 @@ export function downloadFiles(index: number, files: FileResponse[]): AppThunk {
   };
 }
 
+export function downloadAllFiles(index: number): AppThunk {
+  return async (dispatch, getState) => {
+    const fm = getState().fileManager[index];
+    const uri = fm.pure_path;
+    if (!uri) {
+      return;
+    }
+
+    // Fetch all files in the current folder, bypassing pagination
+    const allFiles: FileResponse[] = [];
+    let nextToken: string | undefined = undefined;
+    let page: number | undefined = undefined;
+    while (true) {
+      const res: ListResponse = await dispatch(
+        getFileList({
+          uri,
+          next_page_token: nextToken,
+          page,
+          page_size: 1000,
+        }),
+      );
+      allFiles.push(...res.files);
+      if (res.pagination.total_items) {
+        page = (page ?? 0) + 1;
+      } else if (res.pagination.next_token) {
+        nextToken = res.pagination.next_token;
+      }
+
+      const pageSize = res.pagination?.page_size;
+      const totalPages = Math.ceil(
+        (res.pagination.total_items ?? 1) / (pageSize && pageSize > 0 ? pageSize : MinPageSize),
+      );
+      const usePagination = totalPages > 1;
+      const loadMore = nextToken || (usePagination && (page ?? 0) < totalPages);
+
+      if (!loadMore) {
+        break;
+      }
+    }
+
+    if (allFiles.length === 0) {
+      return;
+    }
+
+    await dispatch(downloadMultipleFiles(allFiles));
+  };
+}
+
 export function downloadMultipleFiles(files: FileResponse[]): AppThunk {
   return async (dispatch, _getState) => {
     // Prepare download options
@@ -68,11 +117,21 @@ export function downloadMultipleFiles(files: FileResponse[]): AppThunk {
       options.push(MultipleDownloadOption.Backend);
     }
 
+    const totalSize = files.reduce((sum, f) => sum + (f.size || 0), 0);
+
     let finalOption = options[0];
     if (options.length > 1) {
       try {
+        const fileCount = files.filter((f) => f.type === FileType.file).length;
+        const folderCount = files.filter((f) => f.type === FileType.folder).length;
+        const subtitle =
+          (fileCount > 0 ? fileCount + " " + i18next.t("fileManager.filesCount") : "") +
+          (fileCount > 0 && folderCount > 0 ? ", " : "") +
+          (folderCount > 0 ? folderCount + " " + i18next.t("fileManager.foldersCount") : "") +
+          " · " +
+          sizeToString(totalSize);
         finalOption = (await dispatch(
-          selectOption(getDownloadSelectOption(options), "fileManager.selectArchiveMethod"),
+          selectOption(getDownloadSelectOption(options, totalSize), "fileManager.selectArchiveMethod", subtitle),
         )) as MultipleDownloadOption;
       } catch (e) {
         // User cancel selection
@@ -554,7 +613,10 @@ export function downloadSingleFile(file: FileResponse, preferredEntity?: string)
   };
 }
 
-const getDownloadSelectOption = (options: MultipleDownloadOption[]): DialogSelectOption[] => {
+const BROWSER_ARCHIVE_SIZE_LIMIT = 4 * 1024 * 1024 * 1024; // 4 GB
+
+const getDownloadSelectOption = (options: MultipleDownloadOption[], totalSize: number): DialogSelectOption[] => {
+  const exceedsLimit = totalSize > BROWSER_ARCHIVE_SIZE_LIMIT;
   return options.map((option): DialogSelectOption => {
     switch (option) {
       case MultipleDownloadOption.Backend:
@@ -573,7 +635,12 @@ const getDownloadSelectOption = (options: MultipleDownloadOption[]): DialogSelec
         return {
           value: MultipleDownloadOption.StreamSaver,
           name: i18next.t("fileManager.browserBatchDownload"),
-          description: i18next.t("fileManager.browserBatchDownloadDescription"),
+          description: exceedsLimit
+            ? i18next.t("fileManager.browserBatchDownloadSizeExceededDescription", {
+                size: sizeToString(totalSize),
+              })
+            : i18next.t("fileManager.browserBatchDownloadDescription"),
+          disabled: exceedsLimit,
         };
     }
   });

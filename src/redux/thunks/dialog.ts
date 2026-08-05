@@ -249,7 +249,11 @@ export function requestCreateNew(fmIndex: number, type: string, defaultName?: st
   };
 }
 
-export function selectOption(options: DialogSelectOption[], title: string): AppThunk<Promise<any> | Promise<void>> {
+export function selectOption(
+  options: DialogSelectOption[],
+  title: string,
+  subtitle?: string,
+): AppThunk<Promise<any> | Promise<void>> {
   return async (dispatch) => {
     const id = promiseId();
     return new Promise<any>((resolve, reject) => {
@@ -260,6 +264,7 @@ export function selectOption(options: DialogSelectOption[], title: string): AppT
           title,
           options,
           promiseId: id,
+          subtitle,
         }),
       );
     });
