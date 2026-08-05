@@ -225,6 +225,7 @@ export interface GrantService {
   redirect_uri: string;
   state: string;
   scope: string;
+  nonce?: string;
   code_challenge?: string;
   code_challenge_method?: string;
 }

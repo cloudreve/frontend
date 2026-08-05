@@ -10,6 +10,7 @@ const Authorize = () => {
     redirectUri: query.get("redirect_uri") || "",
     state: query.get("state") || "",
     scope: query.get("scope") || "",
+    nonce: query.get("nonce") || undefined,
     codeChallenge: query.get("code_challenge") || undefined,
     codeChallengeMethod: query.get("code_challenge_method") || undefined,
   };
