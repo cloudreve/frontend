@@ -2,6 +2,7 @@ import { CancelToken } from "axios";
 import {
   sendCreateUploadSession,
   sendDeleteUploadSession,
+  sendObsCompleteUpload,
   sendOneDriveCompleteUpload,
   sendS3LikeCompleteUpload,
   sendUploadChunk,
@@ -375,6 +376,18 @@ export async function upyunFormUploadChunk(
 export async function s3LikeUploadCallback(sessionID: string, sessionKey: string, policyType: string): Promise<any> {
   try {
     return await store.dispatch(sendS3LikeCompleteUpload(policyType, sessionID, sessionKey));
+  } catch (e) {
+    if (e instanceof AppError) {
+      throw new S3LikeUploadCallbackError(e.response);
+    }
+
+    throw e;
+  }
+}
+
+export async function obsUploadCallback(sessionID: string, sessionKey: string): Promise<any> {
+  try {
+    return await store.dispatch(sendObsCompleteUpload(sessionID, sessionKey));
   } catch (e) {
     if (e instanceof AppError) {
       throw new S3LikeUploadCallbackError(e.response);
