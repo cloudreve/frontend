@@ -13,9 +13,10 @@ const MobileCallback = () => {
     dispatch(setHeadlessFrameLoading(true));
     const code = query.get("code");
     const state = query.get("state");
+    const error = query.get("error");
     const params: Record<string, string> = {
       state: state ?? "",
-      code: code ?? "",
+      ...(error ? { error } : { code: code ?? "" }),
       user_id: SessionManager.currentLoginOrNull()?.user.id ?? "",
     };
     const search = new URLSearchParams(params);

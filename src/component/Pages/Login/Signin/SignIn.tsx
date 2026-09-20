@@ -122,42 +122,53 @@ const EmailLogin = ({ oauthConsent }: SignInProps) => {
   }, [oauthConsent?.clientId, dispatch, t]);
 
   // Send consent and redirect
-  const sendConsent = useCallback(async () => {
-    if (!oauthConsent) return;
+  const sendConsent = useCallback(
+    async (deny = false) => {
+      if (!oauthConsent) return;
 
-    try {
-      setLoading(true);
-      const grantService: GrantService = {
-        client_id: oauthConsent.clientId,
-        response_type: oauthConsent.responseType,
-        redirect_uri: oauthConsent.redirectUri,
-        state: oauthConsent.state,
-        scope: oauthConsent.scope,
-        code_challenge: oauthConsent.codeChallenge,
-        code_challenge_method: oauthConsent.codeChallengeMethod,
-      };
-      const response = await dispatch(sendConsentOauthApp(grantService));
+      try {
+        setLoading(true);
+        const grantService: GrantService = {
+          client_id: oauthConsent.clientId,
+          response_type: oauthConsent.responseType,
+          redirect_uri: oauthConsent.redirectUri,
+          state: oauthConsent.state,
+          scope: oauthConsent.scope,
+          code_challenge: oauthConsent.codeChallenge,
+          code_challenge_method: oauthConsent.codeChallengeMethod,
+        };
+        const response = await dispatch(sendConsentOauthApp(grantService, deny));
 
-      // Clear OAuth state before redirecting
-      dispatch(clearOAuthApp());
-      localStorage.removeItem(OAUTH_REDIRECT_KEY);
+        // Clear OAuth state before redirecting
+        dispatch(clearOAuthApp());
+        localStorage.removeItem(OAUTH_REDIRECT_KEY);
 
-      // Redirect to the app with the authorization code
-      // Handle both absolute URLs and relative paths
-      const redirectUrl =
-        oauthConsent.redirectUri.startsWith("http://") || oauthConsent.redirectUri.startsWith("https://")
-          ? new URL(oauthConsent.redirectUri)
-          : new URL(oauthConsent.redirectUri, window.location.origin);
-      redirectUrl.searchParams.set("code", response.code);
-      if (response.state) {
-        redirectUrl.searchParams.set("state", response.state);
+        // Redirect to the app with the authorization code
+        // Handle both absolute URLs and relative paths
+        const redirectUrl =
+          oauthConsent.redirectUri.startsWith("http://") || oauthConsent.redirectUri.startsWith("https://")
+            ? new URL(oauthConsent.redirectUri)
+            : new URL(oauthConsent.redirectUri, window.location.origin);
+        redirectUrl.searchParams.delete("code");
+        redirectUrl.searchParams.delete("error");
+        if (response.error) {
+          redirectUrl.searchParams.set("error", response.error);
+        } else if (!deny && response.code) {
+          redirectUrl.searchParams.set("code", response.code);
+        } else {
+          throw new Error("Invalid OAuth consent response");
+        }
+        if (response.state) {
+          redirectUrl.searchParams.set("state", response.state);
+        }
+        window.location.assign(redirectUrl.toString());
+      } catch (e: unknown) {
+        setOauthError(e instanceof AppError ? e.message : String(e));
+        setLoading(false);
       }
-      window.location.assign(redirectUrl.toString());
-    } catch (e: unknown) {
-      setOauthError(e instanceof AppError ? e.message : String(e));
-      setLoading(false);
-    }
-  }, [oauthConsent, dispatch, t]);
+    },
+    [oauthConsent, dispatch, t],
+  );
 
   // Check if all requested scopes are already consented
   const checkAndProceed = useCallback(
@@ -400,17 +411,21 @@ const EmailLogin = ({ oauthConsent }: SignInProps) => {
               disabled={loading}
               color="primary"
               onClick={() => {
-                phaseSetting.previous != undefined && setPhase(phaseSetting.previous);
+                if (phase === EmailLoginPhase.Consent) {
+                  sendConsent(true);
+                } else {
+                  phaseSetting.previous != undefined && setPhase(phaseSetting.previous);
+                }
               }}
             >
-              {t("login.back")}
+              {t(phase === EmailLoginPhase.Consent ? "oauth.deny" : "login.back")}
             </Button>
           )}
         </>
       ),
     };
     return phaseSetting;
-  }, [phase, t, loading]);
+  }, [phase, t, loading, sendConsent]);
 
   // Render OAuth error state
   if (oauthError) {

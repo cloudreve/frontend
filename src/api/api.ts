@@ -2057,10 +2057,14 @@ export function getOauthAppRegistration(app_id: string): ThunkResponse<AppRegist
   };
 }
 
-export function sendConsentOauthApp(args: GrantService): ThunkResponse<GrantResponse> {
+export function sendConsentOauthApp(args: GrantService, deny = false): ThunkResponse<GrantResponse> {
   return async (dispatch, _getState) => {
     return await dispatch(
-      send(`/session/oauth/consent`, { method: "POST", data: args }, { bypassSnackbar: (e) => true, ...defaultOpts }),
+      send(
+        `/session/oauth/consent${deny ? "/deny" : ""}`,
+        { method: "POST", data: args },
+        { bypassSnackbar: (e) => true, ...defaultOpts },
+      ),
     );
   };
 }
