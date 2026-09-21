@@ -15,7 +15,13 @@ const DesktopCallback = () => {
     dispatch(setHeadlessFrameLoading(true));
     const code = query.get("code");
     const state = query.get("state");
+    const error = query.get("error");
     navigate("/home");
+    if (error) {
+      const search = new URLSearchParams({ error, state: state ?? "" });
+      window.location.href = `cloudreve://mount?${search.toString()}`;
+      return;
+    }
     if (code) {
       if (state && state.startsWith("reauthorize:")) {
         dispatch(openDesktopCallback(code, state));

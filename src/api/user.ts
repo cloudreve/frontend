@@ -230,6 +230,7 @@ export interface GrantService {
 }
 
 export interface GrantResponse {
-  code: string;
+  code?: string;
+  error?: string;
   state: string;
 }
