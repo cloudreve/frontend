@@ -1,5 +1,5 @@
 import Chunk, { ChunkInfo } from "./chunk";
-import { obsFinishUpload, s3LikeUploadChunk } from "../api";
+import { obsFinishUpload, obsUploadCallback, s3LikeUploadChunk } from "../api";
 import { Status } from "./base";
 
 export default class OBS extends Chunk {
@@ -19,6 +19,9 @@ export default class OBS extends Chunk {
   protected async afterUpload(): Promise<any> {
     this.logger.info(`Finishing multipart upload...`);
     this.transit(Status.finishing);
-    return obsFinishUpload(this.task.session!.completeURL, this.task.chunkProgress, this.cancelToken.token);
+    await obsFinishUpload(this.task.session!.completeURL, this.task.chunkProgress, this.cancelToken.token);
+
+    this.logger.info(`Sending OBS upload callback...`);
+    return obsUploadCallback(this.task.session!.session_id, this.task.session!.callback_secret);
   }
 }
