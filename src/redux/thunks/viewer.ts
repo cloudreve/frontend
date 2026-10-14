@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { enqueueSnackbar } from "notistack";
 import { getFileEntityUrl, getFileInfo, sendCreateViewerSession, sendUpdateFile } from "../../api/api.ts";
-import { FileResponse, Metadata, Viewer, ViewerAction, ViewerType } from "../../api/explorer.ts";
+import { FileResponse, Metadata, Viewer, ViewerAction, ViewerSessionResponse, ViewerType } from "../../api/explorer.ts";
 import { AppError, Code } from "../../api/request.ts";
 import { DefaultCloseAction } from "../../component/Common/Snackbar/snackbar.tsx";
 import { canUpdate, getActionOpt } from "../../component/FileManager/ContextMenu/useActionDisplayOpt.ts";
@@ -113,7 +113,12 @@ export function openViewer(
   forceNotOpenInNew?: boolean,
 ): AppThunk {
   return async (dispatch, getState) => {
-    if (!forceNotOpenInNew && viewer.type != ViewerType.custom && isTrueVal(viewer.props?.openInNew ?? "")) {
+    if (
+      !forceNotOpenInNew &&
+      viewer.type != ViewerType.custom &&
+      viewer.type != ViewerType.wopi &&
+      isTrueVal(viewer.props?.openInNew ?? "")
+    ) {
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("viewer", viewer.id ?? "");
       currentUrl.searchParams.set("version", preferredVersion ?? "");
@@ -281,14 +286,19 @@ export function openViewer(
         }
       }
     } else if (viewer.type == ViewerType.wopi) {
-      return dispatch(openWopiViewer(file, viewer, preferredVersion));
+      return dispatch(openWopiViewer(file, viewer, preferredVersion, forceNotOpenInNew));
     } else if (viewer.type == ViewerType.custom) {
-      return dispatch(openCustomViewer(file, viewer, preferredVersion));
+      return dispatch(openCustomViewer(file, viewer, preferredVersion, forceNotOpenInNew));
     }
   };
 }
 
-export function openCustomViewer(file: FileResponse, viewer: Viewer, preferredVersion?: string): AppThunk {
+export function openCustomViewer(
+  file: FileResponse,
+  viewer: Viewer,
+  preferredVersion?: string,
+  forceNotOpenInNew?: boolean,
+): AppThunk {
   return async (dispatch, getState) => {
     const entityUrl = await longRunningTaskWithSnackbar(
       dispatch(
@@ -340,8 +350,8 @@ export function openCustomViewer(file: FileResponse, viewer: Viewer, preferredVe
       return;
     }
 
-    if (isTrueVal(viewer.props?.openInNew ?? "")) {
-      window.window.open(url);
+    if (!forceNotOpenInNew && isTrueVal(viewer.props?.openInNew ?? "")) {
+      window.open(url);
       return;
     }
 
@@ -350,26 +360,91 @@ export function openCustomViewer(file: FileResponse, viewer: Viewer, preferredVe
   };
 }
 
-export function openWopiViewer(file: FileResponse, viewer: Viewer, preferredVersion?: string): AppThunk {
-  return async (dispatch, _getState) => {
+export function openWopiViewer(
+  file: FileResponse,
+  viewer: Viewer,
+  preferredVersion?: string,
+  forceNotOpenInNew?: boolean,
+): AppThunk {
+  return async (dispatch, getState) => {
+    const openInNew = !forceNotOpenInNew && isTrueVal(viewer.props?.openInNew ?? "");
+    let newWindow: Window | null = null;
+    const windowName = `wopi_${Date.now()}`;
+    if (openInNew) {
+      newWindow = window.open("about:blank", windowName);
+      try {
+        if (newWindow?.document) {
+          newWindow.document.title = file.name;
+        }
+      } catch (e) {
+        // ignore cross-origin error if any
+      }
+    }
+
     const displayOpt = getActionOpt([file], Viewers, ContextMenuTypes.file);
     const action = !preferredVersion && canUpdate(displayOpt) ? ViewerAction.edit : ViewerAction.view;
 
-    const viewerSession = await longRunningTaskWithSnackbar(
-      dispatch(
-        sendCreateViewerSession({
-          uri: getFileLinkedUri(file),
-          viewer_id: viewer.id,
-          preferred_action: action,
-          version: preferredVersion,
-        }),
-      ),
-      "fileManager.preparingOpenFile",
-    );
+    let viewerSession: ViewerSessionResponse;
+    try {
+      viewerSession = await longRunningTaskWithSnackbar(
+        dispatch(
+          sendCreateViewerSession({
+            uri: getFileLinkedUri(file),
+            viewer_id: viewer.id,
+            preferred_action: action,
+            version: preferredVersion,
+          }),
+        ),
+        "fileManager.preparingOpenFile",
+      );
+    } catch (e) {
+      if (newWindow) {
+        newWindow.close();
+      }
+      throw e;
+    }
 
-    if (!viewerSession.wopi_src) {
+    if (!viewerSession?.wopi_src) {
+      if (newWindow) {
+        newWindow.close();
+      }
       return;
     }
+
+    if (openInNew) {
+      const darkModePreference = getState().globalState.darkMode;
+      const isDarkMode =
+        darkModePreference === undefined
+          ? window.matchMedia?.("(prefers-color-scheme: dark)").matches
+          : darkModePreference;
+
+      const replacedSrc = viewerSession.wopi_src
+        .replace("lng", i18next.resolvedLanguage?.toLowerCase() ?? "")
+        .replace("darkmode", isDarkMode ? "2" : "1");
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = replacedSrc;
+      form.target = newWindow ? windowName : "_blank";
+
+      const tokenInput = document.createElement("input");
+      tokenInput.type = "hidden";
+      tokenInput.name = "access_token";
+      tokenInput.value = viewerSession.session.access_token;
+      form.appendChild(tokenInput);
+
+      const ttlInput = document.createElement("input");
+      ttlInput.type = "hidden";
+      ttlInput.name = "access_token_ttl";
+      ttlInput.value = viewerSession.session.expires.toString();
+      form.appendChild(ttlInput);
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+      return;
+    }
+
     dispatch(
       setWopiViewer({
         open: true,
